@@ -27,15 +27,6 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Sync the Sequelize models
-sequelize.sync()
-  .then(() => {
-    console.log('Database connected');
-  })
-  .catch(err => {
-    console.error('Unable to connect the database:', err);
-  });
-
 // Routes
 const apiRoutes = require('./routes/api');
 app.use('/hommlieserver/api/', apiRoutes);
@@ -44,6 +35,21 @@ app.use('/hommlieserver/api/', apiRoutes);
 app.use('*', (req, res) => {
   res.status(404).send('404 Not Found');
 });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Sync the Sequelize models
+sequelize.sync()
+  .then(() => {
+    console.log('Database connected');
+  })
+  .catch(err => {
+    console.error('Unable to connect the database:', err);
+  });
 
 app.listen(PORT, () => {
   console.log(`Server connected at ${PORT}`);

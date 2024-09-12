@@ -1,20 +1,20 @@
 {
   "development": {
-    "username": "root",
+    "username": "hommlie",
     "password": "Hommlie@000",
     "database": "hommlie",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
+    "username": "hommlie",
     "password": "Hommlie@000",
     "database": "hommlie",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
+    "username": "hommlie",
     "password": "Hommlie@000",
     "database": "hommlie",
     "host": "localhost",
