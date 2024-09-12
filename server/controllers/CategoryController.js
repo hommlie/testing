@@ -17,7 +17,7 @@ exports.getCategory = async (req, res) => {
       return res.status(200).json({ status: 0, message: 'No data found' });
     }
   } catch (error) {
-    return res.status(500).json({ status: 0, message: 'Error occurred', error: error.message });
+    return res.status(500).json({ status: 0, message: 'Error occurred', error: error });
   }
 };
 
