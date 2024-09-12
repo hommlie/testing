@@ -1,0 +1,182 @@
+[
+    {
+        "id": 1,
+        "name": "Pest Control",
+        "subTitle": "SAVE ₹200 PER SERVICE",
+        "title": "Pest Control Service",
+        "pdImg": "/src/assets/images/pest-control.png",
+        "reviewStar": 4.9,
+        "reviewCount": "10.5K",
+        "OfferPrice": 500,
+        "price": 700,
+        "duration": "60 mins",
+        "types": ["1 BHK", "2 BHK"],
+        "packages": [
+            {
+                "label": "4 Weeks - 2 Services",
+                "priceTag": "₹2,000 (₹1,000/per visit)",
+                "price": 2000,
+                "value": "4 Weeks",
+                "bestValue": true
+            },
+            {
+                "label": "8 Weeks - 4 Services",
+                "priceTag": "₹3,600 (₹900/per visit)",
+                "price": 3600,
+                "value": "8 Weeks",
+                "bestValue": false
+            }
+        ],
+        "features": ["Comprehensive pest control treatment", "Eco-friendly and safe solutions"]
+    },
+    {
+        "id": 2,
+        "name": "Home Cleaning",
+        "subTitle": "SAVE ₹150 PER HOME",
+        "title": "Home Cleaning Service",
+        "pdImg": "/src/assets/images/home-cleaning.png",
+        "reviewStar": 4.85,
+        "reviewCount": "25.1K",
+        "OfferPrice": 1000,
+        "price": 1300,
+        "duration": "120 mins",
+        "types": ["1 BHK", "2 BHK", "3 BHK"],
+        "packages": [
+            {
+                "label": "4 Weeks - 2 Services",
+                "priceTag": "₹4,000 (₹2,000/per visit)",
+                "price": 4000,
+                "value": "4 Weeks",
+                "bestValue": true
+            },
+            {
+                "label": "8 Weeks - 4 Services",
+                "priceTag": "₹7,200 (₹1,800/per visit)",
+                "price": 7200,
+                "value": "8 Weeks",
+                "bestValue": false
+            }
+        ],
+        "features": ["Deep cleaning of all rooms", "Use of specialized cleaning agents"]
+    },
+    {
+        "id": 3,
+        "name": "Painting Renovation",
+        "subTitle": "SAVE ₹300 PER ROOM",
+        "title": "Painting & Renovation",
+        "pdImg": "/src/assets/images/painting-renovation.png",
+        "reviewStar": 4.7,
+        "reviewCount": "15.4K",
+        "OfferPrice": 1500,
+        "price": 1800,
+        "duration": "180 mins",
+        "types": ["1 BHK", "2 BHK", "3 BHK"],
+        "packages": [
+            {
+                "label": "4 Weeks - 2 Services",
+                "priceTag": "₹6,000 (₹3,000/per visit)",
+                "price": 6000,
+                "value": "4 Weeks",
+                "bestValue": true
+            },
+            {
+                "label": "8 Weeks - 4 Services",
+                "priceTag": "₹10,800 (₹2,700/per visit)",
+                "price": 10800,
+                "value": "8 Weeks",
+                "bestValue": false
+            }
+        ],
+        "features": ["High-quality painting", "Includes minor renovations and repairs"]
+    },
+    {
+        "id": 4,
+        "name": "Beauty Salon",
+        "subTitle": "SAVE ₹100 PER SESSION",
+        "title": "Home Beauty Salon",
+        "pdImg": "/src/assets/images/beauty-salon.png",
+        "reviewStar": 4.82,
+        "reviewCount": "22.3K",
+        "OfferPrice": 800,
+        "price": 900,
+        "duration": "90 mins",
+        "types": ["1 BHK", "2 BHK"],
+        "packages": [
+            {
+                "label": "4 Weeks - 2 Services",
+                "priceTag": "₹3,200 (₹1,600/per visit)",
+                "price": 3200,
+                "value": "4 Weeks",
+                "bestValue": true
+            },
+            {
+                "label": "8 Weeks - 4 Services",
+                "priceTag": "₹5,600 (₹1,400/per visit)",
+                "price": 5600,
+                "value": "8 Weeks",
+                "bestValue": false
+            }
+        ],
+        "features": ["Professional salon services at home", "Use of high-quality beauty products"]
+    },
+    {
+        "id": 5,
+        "name": "AC Repairing",
+        "subTitle": "SAVE ₹150 PER SERVICE",
+        "title": "AC Repairing Service",
+        "pdImg": "/src/assets/images/ac-repairing.png",
+        "reviewStar": 4.75,
+        "reviewCount": "18.5K",
+        "OfferPrice": 700,
+        "price": 850,
+        "duration": "60 mins",
+        "types": ["Window AC", "Split AC"],
+        "packages": [
+            {
+                "label": "4 Weeks - 2 Services",
+                "priceTag": "₹2,800 (₹1,400/per visit)",
+                "price": 2800,
+                "value": "4 Weeks",
+                "bestValue": true
+            },
+            {
+                "label": "8 Weeks - 4 Services",
+                "priceTag": "₹5,000 (₹1,250/per visit)",
+                "price": 5000,
+                "value": "8 Weeks",
+                "bestValue": false
+            }
+        ],
+        "features": ["Comprehensive AC repair and maintenance", "Gas refilling and leak check included"]
+    },
+    {
+        "id": 6,
+        "name": "Plumber",
+        "subTitle": "SAVE ₹50 PER VISIT",
+        "title": "Plumbing Services",
+        "pdImg": "/src/assets/images/plumber.png",
+        "reviewStar": 4.9,
+        "reviewCount": "12.7K",
+        "OfferPrice": 350,
+        "price": 400,
+        "duration": "45 mins",
+        "types": ["Minor Repairs", "Major Repairs"],
+        "packages": [
+            {
+                "label": "4 Weeks - 2 Services",
+                "priceTag": "₹1,400 (₹700/per visit)",
+                "price": 1400,
+                "value": "4 Weeks",
+                "bestValue": true
+            },
+            {
+                "label": "8 Weeks - 4 Services",
+                "priceTag": "₹2,400 (₹600/per visit)",
+                "price": 2400,
+                "value": "8 Weeks",
+                "bestValue": false
+            }
+        ],
+        "features": ["All types of plumbing repairs", "Quick response and reliable service"]
+    }
+]

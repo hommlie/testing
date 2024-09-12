@@ -1,0 +1,74 @@
+section {
+    margin-top: 40px;
+}
+
+.pd-imgs {
+    transition: transform 0.3s ease-in-out;
+}
+
+.pd-imgs:hover {
+    transform: scale(1.05);
+}
+
+.power-saver-bnr {
+    background: url("/src/assets/images/power-saver-banner.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.explore-icon {
+    font-size: 20px;
+}
+
+.why-sec {
+    background-color: #F8F9FF;
+}
+
+.app-bnr {
+    background-image: linear-gradient( to right, #10847E, #67D8BE);
+}
+
+/* slider animations */
+  /* Slider container */
+  .slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  /* Slider content */
+  .slider-content {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  /* Individual slide */
+  .slide {
+    min-width: 100%;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  /* Arrow buttons */
+  .arrow-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .arrow-left {
+    left: 10px;
+  }
+  
+  .arrow-right {
+    right: 10px;
+  }
+  
+  
+  

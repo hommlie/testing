@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "hommlie",
+    "password": "hommlie@123",
+    "database": "hommlie",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "hommlie",
+    "password": "hommlie@123",
+    "database": "hommlie",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "hommlie",
+    "password": "hommlie@123",
+    "database": "hommlie",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}

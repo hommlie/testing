@@ -1,0 +1,27 @@
+.header {
+    border-bottom: 1px solid #D7DFE5;
+}
+
+.line-div {
+    background-color: #8897A2;
+}
+
+.search-bar {
+    border-radius: 50px;
+    border: 1px solid #D7DFE5;
+}
+
+.search-icon {
+    color: #8897A2;
+}
+
+.search-btn {
+    background-color: #10847E;
+    border-radius: 100px;
+}
+
+.app-down-div {
+    background-color: #EEF4FF;
+    border-radius: 8px;
+    padding: 8px;
+}
