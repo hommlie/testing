@@ -14,7 +14,7 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
+    "username": "hommlie",
     "password": "Hommlie@000",
     "database": "hommlie",
     "host": "localhost",
