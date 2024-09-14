@@ -10,11 +10,11 @@ const app = express();
 
 app.use('/hommlieserver', express.static('public'));
 
-const corsOptions = {
-  origin: ['https://tmhecom.xyz', 'https://www.tmhecom.xyz'],
-  credentials: true,
-  optionsSuccessStatus: 204
-};
+// const corsOptions = {
+//   origin: ['https://tmhecom.xyz', 'https://www.tmhecom.xyz'],
+//   credentials: true,
+//   optionsSuccessStatus: 204
+// };
 
 app.use(cors());
 

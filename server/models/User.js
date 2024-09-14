@@ -112,7 +112,7 @@ User.init({
 }, {
     sequelize,
     modelName: 'User',
-    tableName: 'users',
+    tableName: 'customers',
     timestamps: true,
     underscored: true,
     createdAt: 'created_at',

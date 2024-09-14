@@ -212,19 +212,19 @@ exports.homeFeeds = async (req, res) => {
             }
         });
 
-        const vendors = await User.findAll({
-            attributes: [
-                'id',
-                'name',
-                [literal(`CONCAT('${process.env.BASE_URL}/storage/app/public/images/profile/', profile_pic)`), 'image_url']
-            ],
-            where: {
-                type: 3,
-                is_available: 1
-            },
-            order: Sequelize.literal('RAND()'),
-            limit: 10
-        });
+        // const vendors = await User.findAll({
+        //     attributes: [
+        //         'id',
+        //         'name',
+        //         [literal(`CONCAT('${process.env.BASE_URL}/storage/app/public/images/profile/', profile_pic)`), 'image_url']
+        //     ],
+        //     where: {
+        //         type: 3,
+        //         is_available: 1
+        //     },
+        //     order: Sequelize.literal('RAND()'),
+        //     limit: 10
+        // });
 
         const brands = await Brand.findAll({
             attributes: [
@@ -281,7 +281,7 @@ exports.homeFeeds = async (req, res) => {
             // shop_now.length > 0 &&
             // videos.length > 0 &&
             // testimonials.length > 0 &&
-            vendors.length > 0 &&
+            // vendors.length > 0 &&
             brands.length > 0
         ) {
             res.status(200).json({
@@ -300,7 +300,7 @@ exports.homeFeeds = async (req, res) => {
                 shop_now: shop_now,
                 videos: videos,
                 testimonials: testimonials,
-                vendors: vendors,
+                // vendors: vendors,
                 brands: brands,
                 notifications: notifications
             });
