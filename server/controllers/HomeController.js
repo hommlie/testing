@@ -17,18 +17,18 @@ exports.homeFeeds = async (req, res) => {
         ];
 
         const commonIncludes = [
-            // {
-            //     model: ProductImage,
-            //     attributes: [
-            //         'id',
-            //         'product_id', 
-            //         [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
-            //     ],
-            //     where: {
-            //         media: 'Image'
-            //     },
-            //     as: 'productimage'
-            // },
+            {
+                model: ProductImage,
+                attributes: [
+                    'id',
+                    'product_id', 
+                    [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+                ],
+                where: {
+                    media: 'Image'
+                },
+                as: 'productimage'
+            },
             {
                 model: Variation,
                 attributes: ['id','product_id','price', 'discounted_variation_price', 'variation', 'qty'],

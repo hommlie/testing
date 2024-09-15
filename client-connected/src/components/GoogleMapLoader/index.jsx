@@ -8,7 +8,7 @@ const GoogleMapsLoader = ({ children }) => {
   useEffect(() => {
     if (!window.google) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GMAP_KEY}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GMAP_KEY}&libraries=places&loading=async`;
       script.async = true;
       script.defer = true;
       
@@ -18,7 +18,7 @@ const GoogleMapsLoader = ({ children }) => {
       script.addEventListener('load', handleScriptLoad);
       script.addEventListener('error', handleScriptError);
 
-      document.body.appendChild(script);
+      document.head.appendChild(script);
 
       return () => {
         script.removeEventListener('load', handleScriptLoad);
