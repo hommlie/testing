@@ -95,7 +95,7 @@ export default function Header({ logo, logoAlt }) {
   }, [searchPlaceholderData, currentPlaceholderIndex, currentPlaceholder, isTyping]);
 
   const getCurrentLocation = () => {
-    if (navigator.geolocation) {
+    if (navigator.geolocation && window.isSecureContext) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
@@ -114,8 +114,8 @@ export default function Header({ logo, logoAlt }) {
         }
       );
     } else {
-      console.error("Geolocation is not supported by this browser.");
-      setCurrentLocation("Geolocation not supported");
+      console.error("Geolocation is not supported or not in a secure context.");
+      setCurrentLocation("Location services unavailable");
     }
   };
 

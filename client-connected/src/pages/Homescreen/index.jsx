@@ -15,7 +15,7 @@ import { useCont } from "../../context/MyContext";
 import "./index.css";
 import Cookies from 'js-cookie';
 // import { jwtDecode } from 'jwt-decode';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 // import { RxDotFilled } from "react-icons/rx";
 import config from "../../config/config";
 import downloadApp from '../../assets/images/app-bnr-bg/download-app.png';

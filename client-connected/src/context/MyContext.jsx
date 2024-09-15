@@ -5,6 +5,19 @@ import { jwtDecode } from "jwt-decode";
 import config from '../config/config';
 import LoadingWrapper from '../components/Loading/LoadingWrapper';
 
+const constructSafeUrl = (base, path, params = {}) => {
+  try {
+    const url = new URL(path, base);
+    Object.keys(params).forEach(key => 
+      url.searchParams.append(key, params[key])
+    );
+    return url.toString();
+  } catch (error) {
+    console.error("Error constructing URL:", error);
+    return null;
+  }
+};
+
 const getLocalStorageItem = (key, defaultValue) => {
   const item = localStorage.getItem(key);
   try {
@@ -70,7 +83,17 @@ export function ContProvider({ children }) {
     const fetchData = useCallback(async (url, body, setter, localStorageKey) => {
       // incrementApiCall();
       try {
-        const response = await axios.post(`${config.API_URL}${url}`, body);
+        const safeUrl = constructSafeUrl(config.API_URL, url);
+        if (!safeUrl) {
+          throw new Error('Invalid URL construction');
+        }
+        const response = await axios.post(safeUrl, body, {
+          withCredentials: true, // This helps with CORS issues
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Cookies.get('HommlieUserjwtToken')}`,
+          },
+        });
         if (response.data.status === 1) {
           setter(response.data.data || response.data);
           if (localStorageKey) {
@@ -83,7 +106,7 @@ export function ContProvider({ children }) {
           }
         }
       } catch (err) {
-        console.log(`Error in ${url}:`, err);
+        console.error(`Error in ${url}:`, err);
         setter([]);
         if (localStorageKey) {
           localStorage.setItem(localStorageKey, JSON.stringify([]));
