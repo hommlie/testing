@@ -15,6 +15,8 @@ exports.index = async (req, res) => {
             attributes: ['terms_conditions']
         });
 
+        console.log('Terms and Conditions:', termsconditions); // Add this line for debugging
+
         return res.status(200).json({
             status: 1,
             message: 'Success',
@@ -27,7 +29,7 @@ exports.index = async (req, res) => {
         return res.status(500).json({
             status: 0,
             message: 'Failed to fetch CMS content',
-            error
+            error: error.message
         });
     }
 };
