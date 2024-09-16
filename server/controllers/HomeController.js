@@ -191,7 +191,7 @@ exports.homeFeeds = async (req, res) => {
             attributes: [
                   'id',
                   'media', 
-                  'thumbnail',
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('thumbnail')), 'thumbnail'],
                   [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'video_url']
             ],
             where: {
