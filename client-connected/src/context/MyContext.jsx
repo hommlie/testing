@@ -96,6 +96,7 @@ export function ContProvider({ children }) {
 
     const getCategoryData = useCallback(async () => {
       // incrementApiCall();
+      
       try {
         const response = await axios.get(`${config.API_URL}/api/category`);
         setCategoryData(response.data);
