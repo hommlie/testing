@@ -6,6 +6,7 @@ export default function TermsConditions() {
 
   useEffect(() => {
     if (!termsConditionsData) getCMSPagesData();
+    console.log(termsConditionsData);
   }, []);
 
   return (
