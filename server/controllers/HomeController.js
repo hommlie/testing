@@ -196,7 +196,8 @@ exports.homeFeeds = async (req, res) => {
             ],
             where: {
                 media: 'Video'
-            }
+            },
+            limit: 4
         });
 
         const testimonials = await Testimonials.findAll({
