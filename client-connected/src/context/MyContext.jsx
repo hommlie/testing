@@ -80,46 +80,19 @@ export function ContProvider({ children }) {
       });
     }, []);
 
-    const fetchData = useCallback(async (url, body, setter, localStorageKey) => {
+    const getHomeFeeds = useCallback(async () => {
       // incrementApiCall();
+      const user_id = 10001;
       try {
-        const safeUrl = constructSafeUrl(config.API_URL, url);
-        if (!safeUrl) {
-          throw new Error('Invalid URL construction');
-        }
-        const response = await axios.post(safeUrl, body, {
-          withCredentials: true, // This helps with CORS issues
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Cookies.get('HommlieUserjwtToken')}`,
-          },
-        });
-        if (response.data.status === 1) {
-          setter(response.data.data || response.data);
-          if (localStorageKey) {
-            localStorage.setItem(localStorageKey, JSON.stringify(response.data.data || response.data));
-          }
-        } else {
-          setter([]);
-          if (localStorageKey) {
-            localStorage.setItem(localStorageKey, JSON.stringify([]));
-          }
-        }
+        const response = await axios.post(`${config.API_URL}/api/homefeeds`, { user_id });
+        setHomeFeedData(response.data);
+        localStorage.setItem("HommliehomeFeedData", JSON.stringify(response.data));
       } catch (err) {
-        console.error(`Error in ${url}:`, err);
-        setter([]);
-        if (localStorageKey) {
-          localStorage.setItem(localStorageKey, JSON.stringify([]));
-        }
+        console.log("error: " + err);
       } finally {
         // decrementApiCall();
       }
-    }, [incrementApiCall, decrementApiCall]);
-
-    const getHomeFeeds = useCallback(async () => {
-      const user_id = 10001;
-      await fetchData('/api/homefeeds', { user_id }, setHomeFeedData, `HommliehomeFeedData`);
-    }, [fetchData]);
+    }, []);
 
     const getCategoryData = useCallback(async () => {
       // incrementApiCall();
@@ -303,7 +276,7 @@ export function ContProvider({ children }) {
         if(response.data.status === 1) {
           setPrivacyPolicyData(response.data.privacypolicy);
           setAboutData(response.data.about);
-          setTermsConditionsData(response.data.termsconditions.terms_conditions);
+          setTermsConditionsData(response.data.termsconditions);
         }
       })
       .catch(error => {

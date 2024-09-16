@@ -8,7 +8,8 @@ exports.getCategory = async (req, res) => {
   try {
     const categoryData = await Category.findAll({
       attributes: ['id', 'category_name', [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url']],
-      where: { status: 1 }
+      where: { status: 1 },
+      limit: 6
     });
 
     if (categoryData.length > 0) {

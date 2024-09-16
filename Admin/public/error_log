@@ -1,0 +1,33 @@
+[08-Aug-2024 06:53:39 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+#1 /home/techmonk/public_html/HommlieAdmin/vendor/composer/ClassLoader.php(576): include('/home/techmonk/...')
+#2 /home/techmonk/public_html/HommlieAdmin/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}()
+#3 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\Autoload\ClassLoader->loadClass()
+#4 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config()
+#6 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap()
+#8 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith()
+#9 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#11 /home/techmonk/public_html/HommlieAdmin/public/index.php(55): Illuminate\Foundation\Http\Kernel->handle()
+#12 {main} in /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[31-Aug-2024 10:19:49 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 10:20:04 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 10:22:31 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 10:23:52 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 10:25:33 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 10:25:52 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 10:25:54 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 13:25:07 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[31-Aug-2024 14:40:17 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/Customers.php on line 10
+[31-Aug-2024 14:42:25 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/Customers.php on line 10
+[31-Aug-2024 14:45:34 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:04:26 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:05:59 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:21:49 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:21:52 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:23:34 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:24:06 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10
+[03-Sep-2024 08:25:29 UTC] PHP Fatal error:  Trait "Spatie\Permission\Traits\HasRoles" not found in /home/techmonk/public_html/HommlieAdmin/app/Models/User.php on line 10

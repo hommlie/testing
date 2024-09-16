@@ -20,7 +20,7 @@ exports.index = async (req, res) => {
             message: 'Success',
             privacypolicy: privacypolicy ? privacypolicy.privacypolicy_content : null,
             about: about ? about.about_content : null,
-            termsconditions: termsconditions
+            termsconditions: termsconditions ? termsconditions.terms_conditions : null
         });
     } catch (error) {
         console.error("Error fetching CMS content:", error);
