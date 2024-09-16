@@ -95,25 +95,13 @@ exports.homeFeeds = async (req, res) => {
                     'order_count'
                 ]
             ],
-            include: [
-                {
-                    ...commonIncludes[0],
-                    attributes: [
-                        'id',
-                        'product_id', 
-                        [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
-                    ],
-                    separate: true,
-                    limit: 1
-                },
-                ...commonIncludes.slice(1)
-            ],
+            include: commonIncludes,
             where: {
                 status: 1
             },
             order: [[sequelize.literal('order_count'), 'DESC']],
+            // group: ['Product.id'],
             limit: 10,
-            subQuery: false
         });
 
         const cleaning_services = await Product.findAll({
