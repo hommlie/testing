@@ -276,7 +276,7 @@ export function ContProvider({ children }) {
         if(response.data.status === 1) {
           setPrivacyPolicyData(response.data.privacypolicy);
           setAboutData(response.data.about);
-          setTermsConditionsData(response.data.termsconditions?.terms_conditions);
+          setTermsConditionsData(response.data.termsconditions?.terms_conditions);          
         }
       })
       .catch(error => {
