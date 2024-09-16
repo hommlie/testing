@@ -99,42 +99,21 @@ exports.homeFeeds = async (req, res) => {
                 {
                     ...commonIncludes[0],
                     attributes: [
-                        [sequelize.fn('MIN', sequelize.col('productimage.id')), 'id'],
-                        'product_id',
-                        [sequelize.fn('MIN', sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image'))), 'image_url']
+                        'id',
+                        'product_id', 
+                        [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
                     ],
+                    separate: true,
+                    limit: 1
                 },
                 ...commonIncludes.slice(1)
             ],
             where: {
                 status: 1
             },
-            group: [
-                'Product.id',
-                'Product.product_name',
-                'Product.product_price',
-                'Product.discounted_price',
-                'Product.is_variation',
-                'Product.sku',
-                'variation.id',
-                'variation.product_id',
-                'variation.price',
-                'variation.discounted_variation_price',
-                'variation.variation',
-                'variation.qty',
-                'rattings.id',
-                'rattings.product_id',
-                'rattings.vendor_id',
-                'rattings.user_id',
-                'rattings.emp_id',
-                'rattings.emp_name',
-                'rattings.ratting',
-                'rattings.comment',
-                'rattings.created_at',
-                'rattings.updated_at'
-            ],
             order: [[sequelize.literal('order_count'), 'DESC']],
             limit: 10,
+            subQuery: false
         });
 
         const cleaning_services = await Product.findAll({
