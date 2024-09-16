@@ -11,19 +11,27 @@ exports.index = async (req, res) => {
             attributes: ['about_content']
         });
 
-        const termsconditions = await TermsConditions.findOne({
-            attributes: ['terms_conditions']
-        });
+        let termsconditions = null;
+        try {
+            termsconditions = await TermsConditions.findOne({
+                attributes: ['terms_conditions']
+            });
+            console.log('Terms and Conditions query result:', termsconditions);
+        } catch (termsError) {
+            console.error('Error fetching Terms and Conditions:', termsError);
+        }
 
-        console.log('Terms and Conditions:', termsconditions); // Add this line for debugging
-
-        return res.status(200).json({
+        const response = {
             status: 1,
             message: 'Success',
             privacypolicy: privacypolicy ? privacypolicy.privacypolicy_content : null,
             about: about ? about.about_content : null,
             termsconditions: termsconditions ? termsconditions.terms_conditions : null
-        });
+        };
+
+        console.log('Full response object:', response);
+
+        return res.status(200).json(response);
     } catch (error) {
         console.error("Error fetching CMS content:", error);
         return res.status(500).json({
