@@ -157,6 +157,8 @@ export function ContProvider({ children }) {
       const jwtToken = Cookies.get(`HommlieUserjwtToken`);
       if (jwtToken) {
         const id = jwtDecode(jwtToken);
+        console.log(id.id);
+        
         try {
           const response = await axios.post(`${config.API_URL}/api/getcart`, {
             user_id: id.id,
