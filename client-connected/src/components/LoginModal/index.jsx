@@ -122,6 +122,8 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 setToken(jwtToken);
                 const decodedToken = jwtDecode(jwtToken);
                 setUser(decodedToken);
+                console.log(decodedToken);
+                
                 localStorage.setItem("HommlieUser", JSON.stringify(decodedToken));
                 successNotify("Welcome to Hommlie");
                 getUser();
