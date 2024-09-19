@@ -1,9 +1,10 @@
 <?php
 use App\Http\Controllers\Admin\QuestionsController;
 
-Route::redirect('/', '/login');
 
-Route::redirect('/home', '/admin');
+Route::redirect('/', 'public/login');
+
+Route::redirect('/home', 'admin');
 
 Auth::routes(['register' => false]);
 
