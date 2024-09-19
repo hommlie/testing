@@ -1,0 +1,610 @@
+[2024-06-03 08:13:51] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Driver [bugsnag] is not supported. at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:188)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('bugsnag')
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('bugsnag')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(86): Illuminate\\Log\\LogManager->driver('bugsnag')
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(224): Illuminate\\Log\\LogManager->channel('bugsnag')
+#4 [internal function]: Illuminate\\Log\\LogManager->Illuminate\\Log\\{closure}('bugsnag', 1)
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(638): array_map(Object(Closure), Array, Array)
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Traits\\EnumeratesValues.php(285): Illuminate\\Support\\Collection->map(Object(Closure))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(225): Illuminate\\Support\\Collection->flatMap(Object(Closure))
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(185): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('stack')
+#10 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('stack')
+#11 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(507): Illuminate\\Log\\LogManager->driver()
+#12 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(118): Illuminate\\Log\\LogManager->error('Undefined index...', Array)
+#13 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(ErrorException))
+#14 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(376): App\\Exceptions\\Handler->report(Object(ErrorException))
+#15 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(133): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(ErrorException))
+#16 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 {main}
+"} 
+[2024-06-03 08:13:51] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:13:51] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:14:52] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Driver [bugsnag] is not supported. at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:188)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('bugsnag')
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('bugsnag')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(86): Illuminate\\Log\\LogManager->driver('bugsnag')
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(224): Illuminate\\Log\\LogManager->channel('bugsnag')
+#4 [internal function]: Illuminate\\Log\\LogManager->Illuminate\\Log\\{closure}('bugsnag', 1)
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(638): array_map(Object(Closure), Array, Array)
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Traits\\EnumeratesValues.php(285): Illuminate\\Support\\Collection->map(Object(Closure))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(225): Illuminate\\Support\\Collection->flatMap(Object(Closure))
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(185): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('stack')
+#10 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('stack')
+#11 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(507): Illuminate\\Log\\LogManager->driver()
+#12 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(118): Illuminate\\Log\\LogManager->error('Undefined index...', Array)
+#13 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(ErrorException))
+#14 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(376): App\\Exceptions\\Handler->report(Object(ErrorException))
+#15 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(133): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(ErrorException))
+#16 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 {main}
+"} 
+[2024-06-03 08:14:52] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:14:52] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:15:52] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Driver [bugsnag] is not supported. at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:188)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('bugsnag')
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('bugsnag')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(86): Illuminate\\Log\\LogManager->driver('bugsnag')
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(224): Illuminate\\Log\\LogManager->channel('bugsnag')
+#4 [internal function]: Illuminate\\Log\\LogManager->Illuminate\\Log\\{closure}('bugsnag', 1)
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(638): array_map(Object(Closure), Array, Array)
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Traits\\EnumeratesValues.php(285): Illuminate\\Support\\Collection->map(Object(Closure))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(225): Illuminate\\Support\\Collection->flatMap(Object(Closure))
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(185): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('stack')
+#10 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('stack')
+#11 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(507): Illuminate\\Log\\LogManager->driver()
+#12 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(118): Illuminate\\Log\\LogManager->error('Undefined index...', Array)
+#13 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(ErrorException))
+#14 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(376): App\\Exceptions\\Handler->report(Object(ErrorException))
+#15 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(133): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(ErrorException))
+#16 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 {main}
+"} 
+[2024-06-03 08:15:52] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:15:52] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:20:45] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Driver [bugsnag] is not supported. at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:188)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('bugsnag')
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('bugsnag')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(86): Illuminate\\Log\\LogManager->driver('bugsnag')
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(224): Illuminate\\Log\\LogManager->channel('bugsnag')
+#4 [internal function]: Illuminate\\Log\\LogManager->Illuminate\\Log\\{closure}('bugsnag', 1)
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(638): array_map(Object(Closure), Array, Array)
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Traits\\EnumeratesValues.php(285): Illuminate\\Support\\Collection->map(Object(Closure))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(225): Illuminate\\Support\\Collection->flatMap(Object(Closure))
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(185): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(109): Illuminate\\Log\\LogManager->resolve('stack')
+#10 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(97): Illuminate\\Log\\LogManager->get('stack')
+#11 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(507): Illuminate\\Log\\LogManager->driver()
+#12 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(118): Illuminate\\Log\\LogManager->error('Undefined index...', Array)
+#13 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(ErrorException))
+#14 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(376): App\\Exceptions\\Handler->report(Object(ErrorException))
+#15 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(133): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(ErrorException))
+#16 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 {main}
+"} 
+[2024-06-03 08:20:45] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-06-03 08:20:45] local.ERROR: Undefined index: name {"exception":"[object] (ErrorException(code: 0): Undefined index: name at C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php:122)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(122): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'C:\\\\xampp\\\\htdocs...', 122, Array)
+#1 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(685): Illuminate\\Foundation\\PackageManifest->Illuminate\\Foundation\\{closure}(Array, 'packages')
+#2 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(123): Illuminate\\Support\\Collection->mapWithKeys(Object(Closure))
+#3 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(97): Illuminate\\Foundation\\PackageManifest->build()
+#4 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(80): Illuminate\\Foundation\\PackageManifest->getManifest()
+#5 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#6 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(211): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#7 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#8 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#9 C:\\xampp\\htdocs\\Laravel-AdminLTE3-Boilerplate-master\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 {main}
+"} 
+[2024-08-08 05:49:04] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php:109)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(240): collect(Array)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(118): Illuminate\\Log\\LogManager->resolve('stack')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(98): Illuminate\\Log\\LogManager->get('stack')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(119): Illuminate\\Log\\LogManager->error('During inherita...', Array)
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(92): App\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-08-08 05:49:04] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Support\Collection.php:1277
+Stack trace:
+#0 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Support\Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\xampp\\htdocs...', 1277)
+#1 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\composer\ClassLoader.php(576): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\composer\ClassLoader.php(427): Composer\Autoload\{closure}('C:\\xampp\\htdocs...')
+#3 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Support\helpers.php(109): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(89): collect(Array)
+#5 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\HommlieAdmin\HommlieAdmin\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1277
+Stack trace:
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\\\xampp\\\\htdocs...', 1277)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\composer\\ClassLoader.php(576): include('C:\\\\xampp\\\\htdocs...')
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\composer\\ClassLoader.php(427): Composer\\Autoload\\{closure}('C:\\\\xampp\\\\htdocs...')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass('Illuminate\\\\Supp...')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(89): collect(Array)
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config('aliases')
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#9 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#11 C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\public\\index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#12 {main} at C:\\xampp\\htdocs\\HommlieAdmin\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-08-08 05:49:39] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php:109)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(240): collect(Array)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(118): Illuminate\\Log\\LogManager->resolve('stack')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(98): Illuminate\\Log\\LogManager->get('stack')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(119): Illuminate\\Log\\LogManager->error('During inherita...', Array)
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(92): App\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-08-08 05:49:39] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Support\Collection.php:1277
+Stack trace:
+#0 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Support\Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\xampp\\htdocs...', 1277)
+#1 C:\xampp\htdocs\HommlieAdmin\vendor\composer\ClassLoader.php(576): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\HommlieAdmin\vendor\composer\ClassLoader.php(427): Composer\Autoload\{closure}('C:\\xampp\\htdocs...')
+#3 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Support\helpers.php(109): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(89): collect(Array)
+#5 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(320): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 C:\xampp\htdocs\HommlieAdmin\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(129): Illuminate\Foundation\Console\Kernel->bootstrap()
+#10 C:\xampp\htdocs\HommlieAdmin\artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#11 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1277
+Stack trace:
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\\\xampp\\\\htdocs...', 1277)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\composer\\ClassLoader.php(576): include('C:\\\\xampp\\\\htdocs...')
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\composer\\ClassLoader.php(427): Composer\\Autoload\\{closure}('C:\\\\xampp\\\\htdocs...')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass('Illuminate\\\\Supp...')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(89): collect(Array)
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config('aliases')
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#9 C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#10 C:\\xampp\\htdocs\\HommlieAdmin\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main} at C:\\xampp\\htdocs\\HommlieAdmin\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-08-08 06:53:39] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/helpers.php:109)
+[stacktrace]
+#0 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(240): collect()
+#1 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver()
+#2 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(118): Illuminate\\Log\\LogManager->resolve()
+#3 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\\Log\\LogManager->get()
+#4 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(124): Illuminate\\Log\\LogManager->error()
+#6 /home/techmonk/public_html/HommlieAdmin/app/Exceptions/Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#7 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(92): App\\Exceptions\\Handler->report()
+#8 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException()
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-08-08 06:53:39] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+#1 /home/techmonk/public_html/HommlieAdmin/vendor/composer/ClassLoader.php(576): include('/home/techmonk/...')
+#2 /home/techmonk/public_html/HommlieAdmin/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}()
+#3 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\Autoload\ClassLoader->loadClass()
+#4 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config()
+#6 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap()
+#8 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith()
+#9 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#11 /home/techmonk/public_html/HommlieAdmin/public/index.php(55): Illuminate\Foundation\Http\Kernel->handle()
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /home/techmonk/public_html/HommlieAdmin/vendor/composer/ClassLoader.php(576): include('/home/techmonk/...')
+#2 /home/techmonk/public_html/HommlieAdmin/vendor/composer/ClassLoader.php(427): Composer\\Autoload\\{closure}()
+#3 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass()
+#4 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config()
+#6 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap()
+#8 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith()
+#9 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#11 /home/techmonk/public_html/HommlieAdmin/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle()
+#12 {main} at /home/techmonk/public_html/HommlieAdmin/vendor/laravel/framework/src/Illuminate/Support/Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-09-04 04:04:53] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php:109)
+[stacktrace]
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(240): collect()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver()
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(118): Illuminate\\Log\\LogManager->resolve()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\\Log\\LogManager->get()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(124): Illuminate\\Log\\LogManager->error()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/app/Exceptions/Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(92): App\\Exceptions\\Handler->report()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException()
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-09-04 04:04:53] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\Autoload\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\Foundation\Http\Kernel->handle()
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\\Autoload\\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle()
+#12 {main} at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-09-04 04:06:09] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php:109)
+[stacktrace]
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(240): collect()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver()
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(118): Illuminate\\Log\\LogManager->resolve()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\\Log\\LogManager->get()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(124): Illuminate\\Log\\LogManager->error()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/app/Exceptions/Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(92): App\\Exceptions\\Handler->report()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException()
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-09-04 04:06:09] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\Autoload\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\Foundation\Http\Kernel->handle()
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\\Autoload\\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle()
+#12 {main} at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-09-04 04:06:10] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php:109)
+[stacktrace]
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(240): collect()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver()
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(118): Illuminate\\Log\\LogManager->resolve()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\\Log\\LogManager->get()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(124): Illuminate\\Log\\LogManager->error()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/app/Exceptions/Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(92): App\\Exceptions\\Handler->report()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException()
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-09-04 04:06:10] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\Autoload\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\Foundation\Http\Kernel->handle()
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\\Autoload\\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle()
+#12 {main} at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-09-04 04:08:59] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php:109)
+[stacktrace]
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(240): collect()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver()
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(118): Illuminate\\Log\\LogManager->resolve()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\\Log\\LogManager->get()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(124): Illuminate\\Log\\LogManager->error()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/app/Exceptions/Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(92): App\\Exceptions\\Handler->report()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException()
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-09-04 04:08:59] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\Autoload\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\Foundation\Http\Kernel->handle()
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1277
+Stack trace:
+#0 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(576): include('/home/u63086041...')
+#2 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/composer/ClassLoader.php(427): Composer\\Autoload\\{closure}()
+#3 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass()
+#4 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect()
+#5 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config()
+#6 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap()
+#8 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith()
+#9 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#11 /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle()
+#12 {main} at /home/u630860416/domains/snow-mantis-931632.hostingersite.com/public_html/vendor/laravel/framework/src/Illuminate/Support/Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-09-19 05:58:39] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php:109)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(240): collect(Array)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(118): Illuminate\\Log\\LogManager->resolve('stack')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(98): Illuminate\\Log\\LogManager->get('stack')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(119): Illuminate\\Log\\LogManager->error('During inherita...', Array)
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(92): App\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-09-19 05:58:39] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Support\Collection.php:1277
+Stack trace:
+#0 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Support\Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\xampp\\htdocs...', 1277)
+#1 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\composer\ClassLoader.php(576): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\composer\ClassLoader.php(427): Composer\Autoload\{closure}('C:\\xampp\\htdocs...')
+#3 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Support\helpers.php(109): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(89): collect(Array)
+#5 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(156): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(140): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(110): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\HommlieAdmin\public_html\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1277
+Stack trace:
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\\\xampp\\\\htdocs...', 1277)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\composer\\ClassLoader.php(576): include('C:\\\\xampp\\\\htdocs...')
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\composer\\ClassLoader.php(427): Composer\\Autoload\\{closure}('C:\\\\xampp\\\\htdocs...')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass('Illuminate\\\\Supp...')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(89): collect(Array)
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config('aliases')
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(156): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#9 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(140): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#10 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(110): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#11 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\public\\index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#12 {main} at C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-09-19 06:31:14] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Support\\Collection\" not found at C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php:109)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(240): collect(Array)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(202): Illuminate\\Log\\LogManager->createStackDriver(Array)
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(118): Illuminate\\Log\\LogManager->resolve('stack')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(98): Illuminate\\Log\\LogManager->get('stack')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(543): Illuminate\\Log\\LogManager->driver()
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(119): Illuminate\\Log\\LogManager->error('During inherita...', Array)
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(92): App\\Exceptions\\Handler->report(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(134): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException(Object(Symfony\\Component\\Debug\\Exception\\FatalErrorException))
+#9 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#10 {main}
+"} 
+[2024-09-19 06:31:14] laravel.ERROR: During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Support\Collection.php:1277
+Stack trace:
+#0 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Support\Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\xampp\\htdocs...', 1277)
+#1 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\composer\ClassLoader.php(576): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\composer\ClassLoader.php(427): Composer\Autoload\{closure}('C:\\xampp\\htdocs...')
+#3 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Support\helpers.php(109): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(130): collect(Array)
+#5 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(219): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(320): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 C:\xampp\htdocs\HommlieAdmin\public_html\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(129): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 C:\xampp\htdocs\HommlieAdmin\public_html\artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\\Support\\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1277
+Stack trace:
+#0 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(11): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8192, 'Return type of ...', 'C:\\\\xampp\\\\htdocs...', 1277)
+#1 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\composer\\ClassLoader.php(576): include('C:\\\\xampp\\\\htdocs...')
+#2 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\composer\\ClassLoader.php(427): Composer\\Autoload\\{closure}('C:\\\\xampp\\\\htdocs...')
+#3 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php(109): Composer\\Autoload\\ClassLoader->loadClass('Illuminate\\\\Supp...')
+#4 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(130): collect(Array)
+#5 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(106): Illuminate\\Foundation\\PackageManifest->build()
+#6 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(89): Illuminate\\Foundation\\PackageManifest->getManifest()
+#7 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\PackageManifest.php(78): Illuminate\\Foundation\\PackageManifest->config('aliases')
+#8 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterFacades.php(26): Illuminate\\Foundation\\PackageManifest->aliases()
+#9 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(219): Illuminate\\Foundation\\Bootstrap\\RegisterFacades->bootstrap(Object(Illuminate\\Foundation\\Application))
+#10 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(320): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#11 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#12 C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#13 {main} at C:\\xampp\\htdocs\\HommlieAdmin\\public_html\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:11)
+[stacktrace]
+#0 {main}
+"} 
