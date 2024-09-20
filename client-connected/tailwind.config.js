@@ -21,6 +21,15 @@ export default {
         'gr-6-b': '#FFFFFF',
         'gr-7-t': '#FEC5B5',
         'gr-7-b': '#FFFFFF',
+      },
+      keyframes: {
+        'loading-full-width': {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' }
+        }
+      },
+      animation: {
+        'loading-full-width': 'loading-full-width 1.5s ease-in-out infinite',
       }
     },
   },

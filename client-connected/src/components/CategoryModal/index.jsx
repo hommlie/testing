@@ -15,32 +15,12 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
     const [subCategoryData, setSubCategoryData] = useState([]);
     const [subCatId, setSubCatId] = useState(null);
     const [subCatTitle, setSubCatTitle] = useState(null);
-    const [filteredCategories, setFilteredCategories] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
 
     useEffect(() => {
         if (category?.length > 0) {
             getSubCategoryData();
         }
     }, [category]);
-
-    useEffect(() => {
-        const filterItems = () => {
-            const categories = [];
-            const products = [];
-            data.forEach(ct => {
-                ct.productsData && ct.productsData.length === 1 ?
-                products.push(ct) :
-                categories.push(ct)
-            });
-            console.log(products);
-            
-            setFilteredProducts(products);
-            setFilteredCategories(categories);
-        }
-
-        filterItems();
-    },[isOpen, data]);
 
     async function getSubCategoryData() {
         if (category?.length > 0) {
@@ -73,15 +53,9 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
     }
 
     const handleCategoryClick = (cat) => {
-        if (cat.productsData && cat.productsData.length === 1) {
-            setSubCategoryData(cat.productsData);
-            setSubCatId(cat.subcat_id);
-            setSubCatTitle(cat.subcategory_name);
-        } else {
-            setSubCatId(cat.subcat_id);
-            setSubCatTitle(cat.subcategory_name);
-            getSubCategoryItems(cat.subcat_id);
-        }
+        setSubCatId(cat.subcat_id);
+        setSubCatTitle(cat.subcategory_name);
+        getSubCategoryItems(cat.subcat_id);
     };
 
     const handleBackClick = () => {
@@ -94,19 +68,6 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
         const slug = item.product_name.toLowerCase().replace(/ /g, '-');
         navigate(`${config.VITE_BASE_URL}/product/${slug}`, { state: { id: item.id, title: item.title } });
     };
-
-    const renderProductItem = (item) => (
-        <div onClick={() => handleProductClick(item)} key={item.id} className="max-w-xs w-full mx-auto flex flex-col gap-2 p-4 justify-between shadow hover:shadow-xl transition-shadow duration-300">
-            <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
-                <img className="w-full h-full object-cover" src={item.productimage.image_url} alt="item" />
-            </div>
-            <h5 className="text-base font-semibold text-gray-900 w-full truncate">{item.product_name}</h5>
-            <p className="text-sm lg:font-semibold flex flex-row gap-2">
-                <span>₹{item.discounted_price}</span>
-                <span className="line-through font-normal text-gray-400">₹{item.product_price}</span>
-            </p>
-        </div>
-    );
 
     return (
         <>
@@ -133,39 +94,30 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
                                     <button onClick={handleBackClick} className="text-2xl"><IoIosArrowDropleftCircle color='grey' /></button>
                                 </div>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                    {
-                                        subCategoryData ? 
-                                        subCategoryData.map(renderProductItem) : 
-                                        <div>No Products</div>
-                                    }
+                                    {subCategoryData.map((item) => (
+                                        <div onClick={() => handleProductClick(item)} key={item.id} className="max-w-xs w-full mx-auto flex flex-col gap-2 p-4 justify-between shadow hover:shadow-xl transition-shadow duration-300">
+                                            <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
+                                                <img className="w-full h-full object-cover" src={item.productimage.image_url} alt="item" />
+                                            </div>
+                                            <h5 className="text-base font-semibold text-gray-900 w-full truncate">{item.product_name}</h5>
+                                            <p className="text-sm lg:font-semibold flex flex-row gap-2">
+                                                <span>₹{item.discounted_price}</span>
+                                                <span className="line-through font-normal text-gray-400">₹{item.product_price}</span>
+                                            </p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ) : (
-                            <div className='flex flex-col gap-6'>
-                                <div className="flex flex-col gap-4">
-                                    <h2 className='text-lg font-bold'>Categories</h2>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                        {filteredCategories?.map((ct, index) => (
-                                            <div onClick={() => handleCategoryClick(ct)} key={index} className="flex flex-col items-center gap-2 cursor-pointer">
-                                                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
-                                                    <img className="w-full h-full object-cover" src={ct?.subcategory_icon} alt="category" />
-                                                </div>
-                                                <h5 className="text-sm md:text-base font-semibold text-gray-900 text-center">{ct?.subcategory_name}</h5>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                {
-                                    filteredProducts && filteredProducts.length > 0 &&
-                                    <div className="flex flex-col gap-4">
-                                        <h2 className='text-lg font-bold'>Products</h2>
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                            {filteredProducts?.map((item) => (
-                                                renderProductItem(item?.productsData[0])
-                                            ))}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                {data.map((ct, index) => (
+                                    <div onClick={() => handleCategoryClick(ct)} key={index} className="flex flex-col items-center gap-2 cursor-pointer">
+                                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
+                                            <img className="w-full h-full object-cover" src={ct?.subcategory_icon} alt="category" />
                                         </div>
+                                        <h5 className="text-sm md:text-base font-semibold text-gray-900 text-center">{ct?.subcategory_name}</h5>
                                     </div>
-                                }
+                                ))}
                             </div>
                         )}
                     </div>

@@ -69,6 +69,21 @@ section {
   .arrow-right {
     right: 10px;
   }
+
+  @keyframes wave {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(15deg);
+    }
+  }
+  
+  .waving-hand {
+    display: inline-block;
+    animation: wave 1s infinite;
+  }
+  
   
   
   

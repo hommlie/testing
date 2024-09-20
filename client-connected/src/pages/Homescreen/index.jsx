@@ -4,6 +4,8 @@ import { NavLink } from "react-router-dom";
 import { FaStar, FaUsers, FaMoneyBillWave } from "react-icons/fa";
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight  } from "react-icons/md";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { RxDotFilled } from "react-icons/rx";
 import ProdSection from "../../components/ProdSection";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -35,6 +37,9 @@ import whyHommlie7 from '../../assets/images/why-hommlie-7.png';
 import InspectionModal from "../../components/InspectionModal";
 import ReferAndEarn from "../../components/ReferAndEarnModal";
 import TestimonialSection from "../../components/TestimonialSection";
+import DefaultThumbnail from '../../assets/images/thumb-default.svg';
+import Loading from "../../components/Loading";
+import LoadingWrapper from "../../components/Loading/LoadingWrapper";
 
 const HomePageFirstSection = () => {
 
@@ -68,34 +73,6 @@ const HomePageFirstSection = () => {
       title: "Health, Safety and Eco Friendly service and products",
     },
   ];
-
-  const videoItems = [
-    { thumbnail: "https://picsum.photos/300/200?random=1", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-    { thumbnail: "https://picsum.photos/300/200?random=2", videoUrl: "https://www.w3schools.com/html/movie.mp4" },
-    { thumbnail: "https://picsum.photos/300/200?random=3", videoUrl: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4" },
-    { thumbnail: "https://picsum.photos/300/200?random=4", videoUrl: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4" }
-  ];
-
-  const testimonials = [
-    {
-      name: "Shalini Bhiyani",
-      location: "Bangalore",
-      text: "Amazing services by Hommlie Team, on time, reliable and trustworthy Mechanics.",
-      image: "https://randomuser.me/api/portraits/women/1.jpg"
-    },
-    {
-      name: "Rahul Sharma",
-      location: "Mumbai",
-      text: "Excellent service! The team was professional and efficient.",
-      image: "https://randomuser.me/api/portraits/men/1.jpg"
-    },
-    {
-      name: "Priya Patel",
-      location: "Delhi",
-      text: "Highly recommend Hommlie for their quality work and customer service.",
-      image: "https://randomuser.me/api/portraits/women/2.jpg"
-    }
-  ];
   
   const facts = [
     { label: "App Users", value: "2 Millions+" },
@@ -113,6 +90,19 @@ const HomePageFirstSection = () => {
   const [playingVideo, setPlayingVideo] = useState(null);
   const [isInspectionModalOpen, setIsInspectionModalOpen]= useState(false);
   const [isReferModalOpen, setIsReferModalOpen]= useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    AOS.init({ duration: 1000 });
+    fetchAllData();
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1400);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const openCatModal = (category, items) => {
     setSelectedCat(category);
@@ -165,6 +155,14 @@ const HomePageFirstSection = () => {
     
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <main className="content w-full px-8 bg-white scroll-smooth">
 
@@ -172,9 +170,34 @@ const HomePageFirstSection = () => {
       <ExploreModal isOpen={isExploreModalOpen} onClose={closeExploreModal} title={selectedTitle} items={selectedItems} />
       <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
+
+      <section className="w-full my-16 relative group">
+        <div style={{backgroundImage: `url(${bannerData ? bannerData?.sliders[currentIndexTopSlider].image_url : ""})`}} className="w-full h-40 lg:h-96 rounded-xl bg-center bg-cover bg-no-repeat duration-500"></div>
+        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+          <IoIosArrowBack onClick={prevSlideTopSlider} size={30} color="grey" />
+        </div>
+        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+          <IoIosArrowForward onClick={nextSlideTopSlider} size={30} color="grey" />
+        </div>
+        <div className="flex top-4 justify-center py-2">
+          {
+            bannerData?.sliders?.map((slide, index) => (
+              <div key={index} onClick={() => goToSlideTopSlider(index)} className="text-2xl cursor-pointer">
+                <RxDotFilled />
+              </div>
+            ))
+          }
+        </div>
+      </section>
       
       <section className="w-full mx-auto section">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
+        {/* {user?.name ?  */}
+        <h1 className="text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
+          HELLO {user?.name ? user.name : null} <span className="waving-hand">👋</span>
+        </h1>        
+        {/* :null} */}
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">What you are looking for today</h1>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
           {categoryData.data?.map((ct, index) => {
               if(index === 6) {
                 return null
@@ -312,7 +335,7 @@ const HomePageFirstSection = () => {
       {homeFeedData?.videos?.length &&
         <section className="mt-12">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">Thoughtful Curations</h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {homeFeedData?.videos?.map((item, index) => (
               <div key={index} className="relative rounded-lg overflow-hidden">
                 {playingVideo === index ? (
@@ -326,7 +349,7 @@ const HomePageFirstSection = () => {
                 ) : (
                   <>
                     <img 
-                      src={item.thumbnail} 
+                      src={item.thumbnail || DefaultThumbnail} 
                       alt="Video thumbnail" 
                       className="w-full h-48 object-cover"
                     />

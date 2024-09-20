@@ -736,9 +736,9 @@ export default function ProductPage() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
+                {/* <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                     <img src="https://hommlie.com/images/certificates/iso.png" alt="" />
-                </div>
+                </div> */}
             </div>
             </>
             )}
