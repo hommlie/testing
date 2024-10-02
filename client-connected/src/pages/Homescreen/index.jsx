@@ -172,7 +172,7 @@ const HomePageFirstSection = () => {
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
       <section className="w-full my-16 relative group">
-        <div style={{backgroundImage: `url(${bannerData ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} className="w-full h-40 lg:h-96 rounded-xl bg-center bg-cover bg-no-repeat duration-500"></div>
+        <div style={{backgroundImage: `url(${bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} className="w-full h-40 lg:h-96 rounded-xl bg-center bg-cover bg-no-repeat duration-500"></div>
         <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
           <IoIosArrowBack onClick={prevSlideTopSlider} size={30} color="grey" />
         </div>
