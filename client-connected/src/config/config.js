@@ -1,5 +1,5 @@
 const config = {
-    API_URL: "https://hommlie.com/hommlieserver",
+    API_URL: "https://www.hommlie.com/hommlieserver",
     GMAP_KEY: "AIzaSyCwqf4NpjMnz8J-LuEwgJAdVrn_1_5Zt6g&libraries=places",
     VITE_BASE_URL: "",
     RAZORPAY_KEY_ID: "rzp_live_ziQnMov0ucEqGL",
