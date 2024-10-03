@@ -35,7 +35,7 @@ exports.registerOrLogin = async (req, res) => {
         if (response.data.type === 'success') {
           const newresponse = {
             status: 1,
-            message: response.data.message,
+            message: response.data,
             mobile: mobile,
           };
           return res.status(200).json(newresponse);
