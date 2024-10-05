@@ -1,6 +1,6 @@
 const sequelize = require('../config/connection');
 const { Sequelize, Op, fn, col, literal, where } = require('sequelize');
-const { Product, User, Banner, Brand, Category, Subcategory, Innersubcategory, Attribute, ProductImage, Variation, Ratting, Wishlist, Testimonials } = require('../models');
+const { Product, User, Banner, Brand, Category, Subcategory, Innersubcategory, Attribute, ProductImage, Variation, Ratting, Testimonials } = require('../models');
 const apiUrl = process.env.apiUrl;
 
 exports.viewAllListing = async(req, res) => {
@@ -42,26 +42,6 @@ exports.viewAllListing = async(req, res) => {
               as: 'rattings',
               required: false
           },
-          // {
-          //     model: Wishlist,
-          //     attributes: [
-          //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-          //     ],
-          //     where: {
-          //         user_id: user_id
-          //     },
-          //     required: false,
-          //     as: 'wishlist'
-          // },
-          // {
-          //     model: User,
-          //     attributes: [],
-          //     where: {
-          //         is_available: 1
-          //     },
-          //     required: true,
-          //     as: 'vendor'
-          // }
       ];
 
       switch (type) {
@@ -215,22 +195,6 @@ exports.viewAllListing = async(req, res) => {
           });
           break;
 
-        case "vendors":
-          products = await User.findAll({
-              attributes: [
-                  'id',
-                  'name',
-                  [literal(`CONCAT('${process.env.BASE_URL}/storage/app/public/images/profile/', profile_pic)`), 'image_url']
-              ],
-              where: {
-                  type: 3,
-                  is_available: 1
-              },
-              order: Sequelize.literal('RAND()'),
-              limit: 10
-          });
-          break;
-
         case "brands":
           products = await Brand.findAll({
               attributes: [
@@ -271,7 +235,7 @@ exports.productDetails = async (req, res) => {
     const product = await Product.findOne({
       where: { id: product_id, status: 1 },
       attributes: [
-        'id', 'product_name', 'product_price', 'cat_id', 'discounted_price', 'description', 'product_qty', 'is_variation', 'vendor_id', 'sku',
+        'id', 'product_name', 'product_price', 'cat_id', 'discounted_price', 'description', 'product_qty', 'is_variation', 'sku',
         'free_shipping', 'shipping_cost', 'tax_type', 'tax', 'est_shipping_days', 'is_return', 'return_days',
       ],
       include: [
@@ -315,21 +279,9 @@ exports.productDetails = async (req, res) => {
           as: 'rattings',
           required: false
         },
-        // {
-        //   model: Wishlist,
-        //   attributes: [
-        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-        //   ],
-        //   where: {
-        //     user_id: user_id
-        //   },
-        //   required: false,
-        //   as: 'wishlist'
-        // },
         { model: Category, attributes: ['category_name'], as: 'category' },
         { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' },
         { model: Innersubcategory, attributes: ['innersubcategory_name'], as: 'innersubcategory' },
-        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
     });
 
@@ -367,12 +319,6 @@ exports.productDetails = async (req, res) => {
     // // Replace the original variations with the restructured ones
     // product.variations = restructuredVariations;
 
-    const vendors = await User.findOne({
-      where: { id: product.vendor_id, type: 3, is_available: 1 },
-      attributes: ['id', 'name', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('profile_pic')), 'image_url']],
-      include: [{ model: Ratting, as: "rattings" }]
-    });
-
     const related_products = await Product.findAll({
       where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product_id } },
       attributes: [
@@ -396,18 +342,6 @@ exports.productDetails = async (req, res) => {
           as: 'rattings',
           required: false
         },
-        // {
-        //   model: Wishlist,
-        //   attributes: [
-        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-        //   ],
-        //   where: {
-        //     user_id: user_id
-        //   },
-        //   required: false,
-        //   as: 'wishlist'
-        // },
-        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
       order: [['id', 'DESC']],
       limit: 10
@@ -418,64 +352,12 @@ exports.productDetails = async (req, res) => {
       attributes: ['return_policies']
     });
 
-    return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, vendors, related_products, returnpolicy });
+    return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, related_products, returnpolicy });
   } catch (error) {
     console.error("Error fetching product details:", error);
     return res.status(500).json({ status: 0, message: 'Failed to fetch product details', error });
   }
 };
-
-exports.vendorProducts = async(req, res) => {
-    const { vendor_id, user_id } = req.query;
-
-    try {
-      const products = await Product.findAll({
-        where: {
-          vendor_id,
-          status: 1
-        },
-        include: [
-          { model: ProductImage, where: {media: 'Image'}, as: 'productimage' },
-          { model: Variation, as: 'variations' },
-          { model: Ratting, as: 'rattings' }
-        ],
-        order: [['id', 'DESC']],
-        limit: 10
-      });
-
-      if (!products.length) {
-        return res.status(404).json({ status: 0, message: 'No products found for this vendor' });
-      }
-
-      const vendorDetails = await User.findOne({
-        where: {
-          id: vendor_id,
-          type: '3',
-          is_available: 1
-        },
-        attributes: ['mobile', 'email', 'store_address', 'id']
-      });
-
-      const banners = await Banner.findAll({
-        where: {
-          vendor_id,
-          positions: 'store'
-        },
-        attributes: ['id', [sequelize.literal(`CONCAT('${process.env.BASE_URL}/storage/app/public/images/banner/', image)`), 'image_url']]
-      });
-
-      return res.status(200).json({
-        status: 1,
-        message: 'Success',
-        data: products,
-        vendor_details: vendorDetails,
-        banners
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      return res.status(500).json({ status: 0, message: 'Something went wrong', error });
-    }
-}
 
 exports.products = async (req, res) => {
   const { subcategory_id } = req.body;
@@ -510,26 +392,6 @@ exports.products = async (req, res) => {
                   model: Ratting,
                   as: 'rattings'
               },
-              // {
-              //     model: Wishlist,
-              //     attributes: [
-              //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-              //     ],
-              //     where: {
-              //         user_id: user_id
-              //     },
-              //     required: false,
-              //     as: 'wishlist'
-              // },
-              // {
-              //     model: User,
-              //     attributes: [],
-              //     where: {
-              //         is_available: 1
-              //     },
-              //     required: true,
-              //     as: 'vendor'
-              // }
           ],
           where: {
               subcat_id: subcategory_id,
@@ -623,14 +485,6 @@ exports.filter = async(req, res) => {
                   as: 'rattings'
               }
             ],
-            attributes: {
-              include: [
-                [
-                  sequelize.literal(`(CASE WHEN wishlists.product_id IS NULL THEN 0 ELSE 1 END)`),
-                  'is_wishlist'
-                ]
-              ]
-            },
             order: [['product_price', 'DESC']],
             limit: 12
           });
@@ -657,14 +511,6 @@ exports.filter = async(req, res) => {
                   as: 'rattings'
               }
             ],
-            attributes: {
-              include: [
-                [
-                  sequelize.literal(`(CASE WHEN wishlists.product_id IS NULL THEN 0 ELSE 1 END)`),
-                  'is_wishlist'
-                ]
-              ]
-            },
             order: [['product_price', 'ASC']],
             limit: 12
           });

@@ -50,14 +50,8 @@ app.post("/homefeeds", HomeController.homeFeeds);
 app.post("/products", ProductsController.products);
 app.post("/viewalllisting", ProductsController.viewAllListing);
 app.post("/productdetails", ProductsController.productDetails);
-app.post("/vendorproducts", ProductsController.vendorProducts);
 app.get("/searchproducts", ProductsController.searchProducts);
 app.post("/filter", ProductsController.filter);
-
-//Wishlist
-app.post('/addtowishlist', WishlistController.addToWishlist);
-app.post('/removefromwishlist', WishlistController.removeFromWishlist);
-app.post('/getwishlist', WishlistController.getWishlist);
 
 //Rattings
 app.post('/addratting', RattingController.addRatting);
