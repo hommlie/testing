@@ -9,6 +9,7 @@ const ProductsController = require('../controllers/ProductsController ');
 const HomeController = require('../controllers/HomeController');
 const CategoryController = require('../controllers/CategoryController');
 const BannerController = require('../controllers/BannerController');
+const WishlistController = require('../controllers/WishlistController');
 const RattingController = require('../controllers/RattingController');
 const BrandController = require('../controllers/BrandController');
 const AddressController = require('../controllers/AddressController');
@@ -49,8 +50,14 @@ app.post("/homefeeds", HomeController.homeFeeds);
 app.post("/products", ProductsController.products);
 app.post("/viewalllisting", ProductsController.viewAllListing);
 app.post("/productdetails", ProductsController.productDetails);
+app.post("/vendorproducts", ProductsController.vendorProducts);
 app.get("/searchproducts", ProductsController.searchProducts);
 app.post("/filter", ProductsController.filter);
+
+//Wishlist
+app.post('/addtowishlist', WishlistController.addToWishlist);
+app.post('/removefromwishlist', WishlistController.removeFromWishlist);
+app.post('/getwishlist', WishlistController.getWishlist);
 
 //Rattings
 app.post('/addratting', RattingController.addRatting);
