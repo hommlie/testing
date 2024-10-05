@@ -9,6 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 import config from '../../config/config';
 import { useToast } from "../../context/ToastProvider";
 import hommlieLogo from '../../assets/images/hommlie-logo.png';
+import { useNavigate } from 'react-router-dom';
 
 const LoginSignup = ({ isOpen, onClose }) => {
     const [phone, setPhone] = useState('');
@@ -18,6 +19,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
     const [counter, setCounter] = useState(60);
     const [referralCode, setReferralCode] = useState('');
     const otpRefs = useRef([]);
+    const navigate = useNavigate();
     
     const notify = useToast();
     const successNotify = (success) => notify(success, 'success');
@@ -243,7 +245,10 @@ const LoginSignup = ({ isOpen, onClose }) => {
                                 className="mr-2 form-checkbox h-4 w-4 text-[#035240] transition duration-150 ease-in-out"
                             />
                             <label htmlFor="terms" className="text-sm text-gray-600">
-                                I accept the <a href="#" className="text-[#035240] hover:underline">Terms of Use</a> & <a href="#" className="text-[#035240] hover:underline">Privacy Policy</a>
+                                I accept the 
+                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)} className="text-[#035240] hover:underline">
+                                Terms of Use</button> & 
+                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/terms-condition`)} className="text-[#035240] hover:underline">Privacy Policy</button>
                             </label>
                         </div>
                     </>
