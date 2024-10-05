@@ -315,17 +315,17 @@ exports.productDetails = async (req, res) => {
           as: 'rattings',
           required: false
         },
-        {
-          model: Wishlist,
-          attributes: [
-            [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-          ],
-          where: {
-            user_id: user_id
-          },
-          required: false,
-          as: 'wishlist'
-        },
+        // {
+        //   model: Wishlist,
+        //   attributes: [
+        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
+        //   ],
+        //   where: {
+        //     user_id: user_id
+        //   },
+        //   required: false,
+        //   as: 'wishlist'
+        // },
         { model: Category, attributes: ['category_name'], as: 'category' },
         { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' },
         { model: Innersubcategory, attributes: ['innersubcategory_name'], as: 'innersubcategory' },
@@ -396,17 +396,17 @@ exports.productDetails = async (req, res) => {
           as: 'rattings',
           required: false
         },
-        {
-          model: Wishlist,
-          attributes: [
-            [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-          ],
-          where: {
-            user_id: user_id
-          },
-          required: false,
-          as: 'wishlist'
-        },
+        // {
+        //   model: Wishlist,
+        //   attributes: [
+        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
+        //   ],
+        //   where: {
+        //     user_id: user_id
+        //   },
+        //   required: false,
+        //   as: 'wishlist'
+        // },
         { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
       order: [['id', 'DESC']],
@@ -510,17 +510,17 @@ exports.products = async (req, res) => {
                   model: Ratting,
                   as: 'rattings'
               },
-              {
-                  model: Wishlist,
-                  attributes: [
-                      [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-                  ],
-                  where: {
-                      user_id: user_id
-                  },
-                  required: false,
-                  as: 'wishlist'
-              },
+              // {
+              //     model: Wishlist,
+              //     attributes: [
+              //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
+              //     ],
+              //     where: {
+              //         user_id: user_id
+              //     },
+              //     required: false,
+              //     as: 'wishlist'
+              // },
               {
                   model: User,
                   attributes: [],

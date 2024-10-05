@@ -94,7 +94,7 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
                                     <button onClick={handleBackClick} className="text-2xl"><IoIosArrowDropleftCircle color='grey' /></button>
                                 </div>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                    {subCategoryData.map((item) => (
+                                    {subCategoryData?.map((item) => (
                                         <div onClick={() => handleProductClick(item)} key={item.id} className="max-w-xs w-full mx-auto flex flex-col gap-2 p-4 justify-between shadow hover:shadow-xl transition-shadow duration-300">
                                             <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
                                                 <img className="w-full h-full object-cover" src={item.productimage.image_url} alt="item" />
