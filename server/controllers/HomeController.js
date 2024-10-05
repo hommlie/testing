@@ -7,6 +7,7 @@ exports.homeFeeds = async (req, res) => {
     const { user_id } = req.body;
 
     try {
+
         const commonProductAttributes = [
             'id',
             'product_name',
@@ -108,7 +109,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: commonProductAttributes,
             include: commonIncludes,
             where: {
-                cat_id: 19
+                cat_id: 19,
+                status: 1
             },
             order: [['id', 'DESC']],
             limit: 10,
@@ -118,7 +120,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: commonProductAttributes,
             include: commonIncludes,
             where: {
-                cat_id: 18
+                cat_id: 18,
+                status: 1
             },
             order: [['id', 'DESC']],
             limit: 10,
@@ -128,7 +131,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: commonProductAttributes,
             include: commonIncludes,
             where: {
-                cat_id: 30
+                cat_id: 30,
+                status: 1
             },
             order: [['id', 'DESC']],
             limit: 10,
@@ -138,7 +142,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: commonProductAttributes,
             include: commonIncludes,
             where: {
-                cat_id: 29
+                cat_id: 29,
+                status: 1
             },
             order: [['id', 'DESC']],
             limit: 10,
@@ -181,7 +186,8 @@ exports.homeFeeds = async (req, res) => {
                 }
             ],
             where: {
-                cat_id: 38
+                cat_id: 38,
+                status: 1
             },
             // order: [['id', 'DESC']],
             limit: 10,
