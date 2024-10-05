@@ -245,10 +245,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
                                 className="mr-2 form-checkbox h-4 w-4 text-[#035240] transition duration-150 ease-in-out"
                             />
                             <label htmlFor="terms" className="text-sm text-gray-600">
-                                I accept the 
-                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/terms-conditions`)} className="text-[#035240] hover:underline">
-                                Terms of Use</button> & 
-                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)} className="text-[#035240] hover:underline">Privacy Policy</button>
+                                I accept the <button onClick={() => navigate(`${config.VITE_BASE_URL}/terms-conditions`)} className="text-[#035240] hover:underline"> Terms of Use</button> & <button onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)} className="text-[#035240] hover:underline">Privacy Policy</button>
                             </label>
                         </div>
                     </>
