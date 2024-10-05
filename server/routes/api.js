@@ -9,7 +9,6 @@ const ProductsController = require('../controllers/ProductsController ');
 const HomeController = require('../controllers/HomeController');
 const CategoryController = require('../controllers/CategoryController');
 const BannerController = require('../controllers/BannerController');
-const WishlistController = require('../controllers/WishlistController');
 const RattingController = require('../controllers/RattingController');
 const BrandController = require('../controllers/BrandController');
 const AddressController = require('../controllers/AddressController');

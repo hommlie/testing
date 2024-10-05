@@ -14,7 +14,6 @@ const Innersubcategory = require('./Innersubcategory');
 const Order = require('./Order');
 const ProductImage = require('./ProductImages');
 const Variation = require('./Variation');
-const Wishlist = require('./Wishlist');
 const Brand = require('./Brand');
 const Notification = require('./Notification');
 const Settings = require('./Settings');
@@ -71,10 +70,6 @@ Product.hasMany(Ratting, {
 Product.hasMany(Ratting, {
   foreignKey: 'product_id',
   as: 'reviews'
-});
-Product.hasMany(Wishlist, {
-  foreignKey: 'product_id',
-  as: 'wishlist'
 });
 Product.hasMany(Order, {
   foreignKey: 'product_id',
@@ -151,9 +146,6 @@ Ratting.belongsTo(User, {
   ]
 });
 
-// Wishlist.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
-Wishlist.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-
 module.exports = {
   sequelize,
   About,
@@ -172,7 +164,6 @@ module.exports = {
   Innersubcategory,
   ProductImage,
   Variation,
-  Wishlist,
   Brand,
   Notification,
   Settings,
