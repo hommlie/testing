@@ -495,42 +495,42 @@ exports.products = async (req, res) => {
               'is_variation',
               'sku'
           ],
-          include: [
-              {
-                  model: ProductImage,
-                  attributes: ['id','product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']],
-                  where: {media: 'Image'},
-                  as: 'productimage'
-              },
-              {
-                  model: Variation,
-                  as: 'variations'
-              },
-              {
-                  model: Ratting,
-                  as: 'rattings'
-              },
-              // {
-              //     model: Wishlist,
-              //     attributes: [
-              //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-              //     ],
-              //     where: {
-              //         user_id: user_id
-              //     },
-              //     required: false,
-              //     as: 'wishlist'
-              // },
-              {
-                  model: User,
-                  attributes: [],
-                  where: {
-                      is_available: 1
-                  },
-                  required: true,
-                  as: 'vendor'
-              }
-          ],
+          // include: [
+          //     {
+          //         model: ProductImage,
+          //         attributes: ['id','product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']],
+          //         where: {media: 'Image'},
+          //         as: 'productimage'
+          //     },
+          //     {
+          //         model: Variation,
+          //         as: 'variations'
+          //     },
+          //     {
+          //         model: Ratting,
+          //         as: 'rattings'
+          //     },
+          //     // {
+          //     //     model: Wishlist,
+          //     //     attributes: [
+          //     //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
+          //     //     ],
+          //     //     where: {
+          //     //         user_id: user_id
+          //     //     },
+          //     //     required: false,
+          //     //     as: 'wishlist'
+          //     // },
+          //     {
+          //         model: User,
+          //         attributes: [],
+          //         where: {
+          //             is_available: 1
+          //         },
+          //         required: true,
+          //         as: 'vendor'
+          //     }
+          // ],
           where: {
               subcat_id: subcategory_id,
               status: 1,
