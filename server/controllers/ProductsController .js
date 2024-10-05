@@ -347,12 +347,8 @@ exports.productDetails = async (req, res) => {
       limit: 10
     });
 
-    const returnpolicy = await User.findOne({
-      where: { id: product.vendor_id },
-      attributes: ['return_policies']
-    });
 
-    return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, related_products, returnpolicy });
+    return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, returnpolicy });
   } catch (error) {
     console.error("Error fetching product details:", error);
     return res.status(500).json({ status: 0, message: 'Failed to fetch product details', error });
