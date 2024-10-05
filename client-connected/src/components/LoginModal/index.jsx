@@ -246,9 +246,9 @@ const LoginSignup = ({ isOpen, onClose }) => {
                             />
                             <label htmlFor="terms" className="text-sm text-gray-600">
                                 I accept the 
-                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)} className="text-[#035240] hover:underline">
+                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/terms-conditions`)} className="text-[#035240] hover:underline">
                                 Terms of Use</button> & 
-                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/terms-condition`)} className="text-[#035240] hover:underline">Privacy Policy</button>
+                                <button onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)} className="text-[#035240] hover:underline">Privacy Policy</button>
                             </label>
                         </div>
                     </>
