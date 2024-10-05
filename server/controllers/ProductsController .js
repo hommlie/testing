@@ -53,15 +53,15 @@ exports.viewAllListing = async(req, res) => {
           //     required: false,
           //     as: 'wishlist'
           // },
-          {
-              model: User,
-              attributes: [],
-              where: {
-                  is_available: 1
-              },
-              required: true,
-              as: 'vendor'
-          }
+          // {
+          //     model: User,
+          //     attributes: [],
+          //     where: {
+          //         is_available: 1
+          //     },
+          //     required: true,
+          //     as: 'vendor'
+          // }
       ];
 
       switch (type) {
@@ -329,7 +329,7 @@ exports.productDetails = async (req, res) => {
         { model: Category, attributes: ['category_name'], as: 'category' },
         { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' },
         { model: Innersubcategory, attributes: ['innersubcategory_name'], as: 'innersubcategory' },
-        { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
+        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
     });
 
@@ -407,7 +407,7 @@ exports.productDetails = async (req, res) => {
         //   required: false,
         //   as: 'wishlist'
         // },
-        { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
+        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
       order: [['id', 'DESC']],
       limit: 10
