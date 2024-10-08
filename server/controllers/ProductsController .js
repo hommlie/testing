@@ -490,6 +490,7 @@ exports.products = async (req, res) => {
           attributes: [
               'id',
               'product_name',
+              'description',
               'product_price',
               'discounted_price',
               'is_variation',
