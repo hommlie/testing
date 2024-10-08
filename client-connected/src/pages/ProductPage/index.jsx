@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { MdStars } from "react-icons/md";
-import { IoCheckmarkCircleSharp, IoCheckmarkCircleOutline, IoCheckmark } from "react-icons/io5";
+import { IoCheckmarkCircleSharp, IoCheckmarkCircleOutline, IoCheckmark, IoCheckmarkCircle } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { CiClock1 } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
@@ -16,9 +16,24 @@ import { jwtDecode } from "jwt-decode";
 import { useToast } from "../../context/ToastProvider";
 import Loading from "../../components/Loading";
 import ProdSection from "../../components/ProdSection";
+import CouponModal from "../../components/CouponModal";
+import { BiSolidOffer } from "react-icons/bi";
 
 export default function ProductPage() {
-    const { cart, setCart, user, getUser, getCart, cartLength, checkoutPd, setCheckoutPd } = useCont();
+    const { 
+        cart, 
+        setCart, 
+        user, 
+        getUser, 
+        getCart, 
+        cartLength, 
+        checkoutPd, 
+        setCheckoutPd,
+        selectedCoupon, 
+        setSelectedCoupon, 
+        coupons,
+        getCoupons 
+    } = useCont();
     const location = useLocation();
     const { id, title } = location.state;
     const prod_id = id;
@@ -53,6 +68,8 @@ export default function ProductPage() {
     const [variations, setVariations] = useState([]);
     const [selectedVariation, setSelectedVariation] = useState(null);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
+    const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+    const [couponDiscount, setCouponDiscount] = useState(0);
     
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
@@ -61,6 +78,33 @@ export default function ProductPage() {
         if (typeof(proceedBtn) == undefined) {
             navigate(`${config.VITE_BASE_URL}/add-to-cart`);
         }
+    };
+    const openCouponModal = () => setIsCouponModalOpen(true);
+    const closeCouponModal = () => {        
+        setIsCouponModalOpen(false);
+    };
+
+    useEffect(() => {        
+        calculateCouponDiscount();
+    }, [selectedCoupon, cart]);
+
+    const calculateCouponDiscount = () => {
+        if (selectedCoupon) {
+            if (selectedCoupon.amount) {
+                setCouponDiscount(Number(selectedCoupon.amount));
+            } else if (selectedCoupon.percentage) {
+                const discount = (totalAmount * Number(selectedCoupon.percentage)) / 100;
+                setCouponDiscount(discount);
+            }
+        } else {
+            setCouponDiscount(0);
+        }
+    };
+
+    const handleRemoveCoupon = () => {
+        setSelectedCoupon(null);
+        localStorage.removeItem('HommlieselectedCoupon');
+        setCouponDiscount(0);
     };
 
     const toggleExpansion = () => {
@@ -611,7 +655,7 @@ export default function ProductPage() {
 
                 {variations.length > 0 && (
                     <div className="bg-white rounded-lg p-4 space-y-4">
-                        <h3 className="text-xl font-semibold">Select Packages</h3>
+                        <h3 className="text-xl font-semibold">Select Frequency</h3>
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 {attributes.map((attr) => (
@@ -701,6 +745,34 @@ export default function ProductPage() {
                 )}
 
                 <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center">
+                            <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
+                            <h2 className="text-lg font-semibold">Coupons</h2>
+                        </div>
+                        <button onClick={openCouponModal} style={{border: "1px solid #249370", color: "#249370"}} className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                            Explore Now
+                        </button>
+                    </div>
+                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div style={{color: "rgba(0,0,0,0.4)"}}>
+                        {selectedCoupon && Object.keys(selectedCoupon).length ? (
+                            <div className="flex justify-between items-center">
+                                <div className="flex items-center">
+                                    <IoCheckmarkCircle className="text-[#249370] mr-2" />
+                                    <span className="font-semibold">{selectedCoupon?.coupon_name}</span>
+                                </div>
+                                <button onClick={handleRemoveCoupon} className="text-red-500">Remove</button>
+                            </div>
+                        ) : (
+                            coupons?.length ? (
+                                <p className="font-semibold">You have unlocked <span className="text-[#249370]">{coupons?.length} new coupons</span></p>
+                            ) : null
+                        )}
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                     <h3 className="text-xl font-semibold">Payment Summary</h3>
                     <div className="space-y-2">
                         <div className="flex flex-row justify-between">
@@ -709,8 +781,15 @@ export default function ProductPage() {
                         </div>
                         {discountPercentage ?
                             <div className="flex flex-row justify-between">
-                                <p className="text-base font-normal" style={{color: "#606571"}}>Discount</p>
+                                <p className="text-base font-normal" style={{color: "#606571"}}>Service Discount</p>
                                 <p className="text-base font-semibold">{discountPercentage}%</p>
+                            </div>
+                            : null
+                        }
+                        {couponDiscount ?
+                            <div className="flex flex-row justify-between">
+                                <p className="text-base font-normal" style={{color: "#606571"}}>Coupon Discount</p>
+                                <p className="text-base font-semibold">₹{couponDiscount}</p>
                             </div>
                             : null
                         }
@@ -722,7 +801,7 @@ export default function ProductPage() {
                         <div className="flex flex-row justify-between">
                             <p className="text-base font-normal text-xl font-semibold">Total Amount</p>
                             <div className="text-right">
-                                <p className="text-base font-semibold">₹{totalAmount + taxAmount}</p>
+                                <p className="text-base font-semibold">₹{(totalAmount + taxAmount - couponDiscount).toFixed(2)}</p>
                             </div>
                         </div>
                         <button 
@@ -742,6 +821,9 @@ export default function ProductPage() {
             </div>
             </>
             )}
+
+            <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalAmount + taxAmount} />
+        
         </main>
     );
 }

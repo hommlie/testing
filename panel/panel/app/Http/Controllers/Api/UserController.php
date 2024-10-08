@@ -568,6 +568,7 @@ class UserController extends Controller
         if (!empty($user)) {
         $arrayName = [
         'id' => $user->id,
+        'upi' => $user->upi,
         'bank_name' => $user->bank_name,
         'bank_branch' => $user->bank_branch,
         'bank_ifsc' => $user->bank_ifsc,
@@ -614,6 +615,7 @@ class UserController extends Controller
         $user->bank_ifsc = $request->input('bank_ifsc', $user->bank_ifsc);
         $user->bank_acc_no = $request->input('bank_acc_no', $user->bank_acc_no);
         $user->name_as_per_bank = $request->input('name_as_per_bank', $user->name_as_per_bank);
+        $user->upi = $request->input('upi', $user->upi);
         $user->bank_book_image = $request->input('bank_book_image', $user->bank_book_image);
     
         $user->save();
@@ -624,6 +626,7 @@ class UserController extends Controller
         if (!empty($user)) {
         $arrayName = [
         'id' => $user->id,
+        'upi' => $user->upi,
         'bank_name' => $user->bank_name,
         'bank_branch' => $user->bank_branch,
         'bank_ifsc' => $user->bank_ifsc,

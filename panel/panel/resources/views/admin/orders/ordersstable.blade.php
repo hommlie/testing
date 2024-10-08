@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th class="d-none"></th>
-            <th>#</th>
+            <!-- <th>#</th> -->
             <th class="text-center">{{ trans('labels.order_number') }}</th>
             <th class="text-center">{{ trans('labels.no_of_products') }}</th>
             <th class="text-center">{{ trans('labels.customer') }}</th>
@@ -18,7 +18,7 @@
         @forelse($data as $row)
         <tr id="del-{{$row->id}}">
             <th class="d-none"></th>
-            <td class="text-center">{{++$n}}</td>
+            <!-- <td class="text-center">{{++$n}}</td> -->
             <td class="text-center">{{$row->order_number}}</td>
             <td class="text-center">{{$row->no_products}}</td>
             <td class="text-center">{{$row->full_name}}</td>
@@ -43,7 +43,7 @@
                             $n=1
                             @endphp
                             @foreach(explode(',', $row->order_ids) as $id)
-                                <a class="dropdown-item" href="{{ URL::to('admin/orders/editorder/'.$id) }}">Edit ID: {{ $n++ }}</a>
+                                <a class="dropdown-item" href="{{ URL::to('admin/orders/editorder/'.$id) }}">Service ID: {{ $n++ }}</a>
                             @endforeach
                         </div>
                     </div>

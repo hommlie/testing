@@ -59,8 +59,8 @@ export function ContProvider({ children }) {
     const [paymentList, setPaymentList] = useState(() => getLocalStorageItem(`HommliepaymentList`, []));
     const [paymentType, setPaymentType] = useState();
     const [bookings, setBookings] = useState([]);
-    const [selectedCoupon, setSelectedCoupon] = useState(() => getLocalStorageItem(`HommlieselectedCoupon`, []));
-    const [coupons, setCoupons] = useState();
+    const [selectedCoupon, setSelectedCoupon] = useState(() => getLocalStorageItem(`HommlieselectedCoupon`, {}));
+    const [coupons, setCoupons] = useState(() => getLocalStorageItem(`HommlieCoupons`, []));
 
     const incrementApiCall = useCallback(() => {
       setActiveApiCalls(prev => prev + 1);
@@ -231,23 +231,16 @@ export function ContProvider({ children }) {
     }
 
     async function getCoupons() {
-      const jwtToken = Cookies.get("HommlieUserjwtToken");
-      if (jwtToken) {
-          await axios.get(`${config.API_URL}/api/coupons`, 
-          {
-              headers: {
-                  Authorization: `Bearer ${jwtToken}`,
-              },
-          })
-          .then(response => {
-              if(response.data.status === 1) {
-                  setCoupons(response.data.data);
-              }
-          })
-          .catch(error => {
-              console.log("error getting coupons:", error);
-          })
-      }
+      await axios.get(`${config.API_URL}/api/coupons`)
+      .then(response => {        
+          if(response.data.status === 1) {
+              setCoupons(response.data.data);
+              localStorage.setItem(`HommlieCoupons`, JSON.stringify(response.data.data));
+          }
+      })
+      .catch(error => {
+          console.log("error getting coupons:", error);
+      })
     }
 
     async function getPaymentList() {

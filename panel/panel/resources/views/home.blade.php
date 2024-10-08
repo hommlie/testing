@@ -130,7 +130,7 @@
                             $n=1
                             @endphp
                             @foreach(explode(',', $row->order_ids) as $id)
-                                <a class="dropdown-item" href="{{ URL::to('admin/orders/editorder/'.$id) }}">Edit ID: {{ $n++ }}</a>
+                                <a class="dropdown-item" href="{{ URL::to('admin/orders/editorder/'.$id) }}">Service ID: {{ $n++ }}</a>
                             @endforeach
                         </div>
                     </div>

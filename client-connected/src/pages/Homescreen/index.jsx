@@ -171,8 +171,18 @@ const HomePageFirstSection = () => {
       <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
-      <section className="w-full my-16 relative group">
-        <div style={{backgroundImage: `url(${bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} className="w-full h-40 lg:h-96 rounded-xl bg-center bg-cover bg-no-repeat duration-500"></div>
+      <section className="w-full my-7 relative group">
+        {/* <div 
+          style={{backgroundImage: `url(${bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} 
+          className="w-full h-40 lg:h-[32rem] rounded-xl bg-center bg-cover bg-no-repeat duration-500"
+        >
+        </div> */}
+        <div className="w-full h-40 lg:h-[32rem] rounded-xl">
+          <img
+            src={bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""}
+            className="w-full h-full"
+          />
+        </div>
         <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
           <IoIosArrowBack onClick={prevSlideTopSlider} size={30} color="grey" />
         </div>
@@ -191,11 +201,9 @@ const HomePageFirstSection = () => {
       </section>
       
       <section className="w-full mx-auto section">
-        {/* {user?.name ?  */}
         <h1 className="text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
           HELLO {user?.name ? user.name : null} <span className="waving-hand">👋</span>
         </h1>        
-        {/* :null} */}
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">What you are looking for today</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
           {categoryData?.data?.map((ct, index) => {
@@ -204,7 +212,7 @@ const HomePageFirstSection = () => {
               } else {
                 return (
                   <div key={index} onClick={() => openCatModal([ct?.id, ct?.category_name])} className="p-2 cursor-pointer">
-                    <div className="w-max mx-auto h-32 sm:h-36 md:h-48 lg:h-52 flex flex-col justify-center">
+                    <div className="mx-auto w-32 h-32 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
                         <NavLink className="flex justify-end items-end h-full">
                           <img className="w-max h-full object-cover" src={ct?.image_url} alt={ct?.category_name} />
                         </NavLink>
