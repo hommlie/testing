@@ -542,7 +542,10 @@ export default function ProductPage() {
                     </ul>
                     <div>
                         {activeTab === 1 && (
-                            <div className="space-y-4">{prodData?.description}</div>
+                            <div 
+                                className="space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
+                                dangerouslySetInnerHTML={{ __html: prodData?.description }} 
+                            />
                         )}
                         {activeTab === 2 && (
                             <div className="p-4">
@@ -610,12 +613,12 @@ export default function ProductPage() {
                         className="flex justify-between items-center cursor-pointer"
                         onClick={toggleExpansion}
                     >
-                        <h2 className="text-base lg:text-2xl font-semibold">Cancellation & Reschedule Policy</h2>
+                        <h2 className="text-base lg:text-2xl font-semibold">Keywords</h2>
                         {isExpanded ? <IoIosArrowUp size={24} /> : <IoIosArrowDown size={24} />}
                     </div>
                     {isExpanded && (
                         <div className="mt-4 transition-all duration-300 ease-in-out">
-                        <p className="mb-2">{prodReturnPolicy?.return_policies}</p>
+                            <p className="mb-2">{prodReturnPolicy?.return_policies}</p>
                         </div>
                     )}
                 </section>

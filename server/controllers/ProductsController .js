@@ -281,6 +281,7 @@ exports.productDetails = async (req, res) => {
             'id',
             'product_id',
             'media', 
+            'thumbnail',
             [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
           ],
           as: 'productimages'

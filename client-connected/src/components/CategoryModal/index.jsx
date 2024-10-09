@@ -80,7 +80,12 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-60" onClick={() => {setSubCatId(null);onClose();}}></div>
                 <div className="relative bg-white w-[95%] md:w-full max-w-[75rem] h-[90vh] rounded-2xl shadow-lg overflow-hidden z-30 flex flex-col">
                     <div className="sticky top-0 bg-white z-10 p-4 md:p-6 flex justify-between items-center border-b">
-                        <h2 className='text-xl font-bold'>
+                        {subCatId &&
+                            <div className='flex justify-start'>
+                                <button onClick={handleBackClick} className="text-2xl"><IoIosArrowDropleftCircle color='grey' /></button>
+                            </div>
+                        }
+                        <h2 className='w-full text-xl font-bold text-center'>
                             {subCatId ? subCatTitle : (category?.length > 0 ? category[1] : "")}
                         </h2>
                         <button onClick={() => {setSubCatId(null);onClose();}} className="text-2xl">
@@ -89,21 +94,42 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
                     </div>
                     <div className="flex-grow overflow-y-auto p-4 md:p-6 space-y-6 scrollbar-hide">
                         {subCatId ? (
-                            <div>
-                                <div className='flex justify-end mb-4'>
-                                    <button onClick={handleBackClick} className="text-2xl"><IoIosArrowDropleftCircle color='grey' /></button>
-                                </div>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            <div className=''>
+                                {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> */}
+                                <div className="max-w-full flex flex-wrap justify-center gap-6">
                                     {subCategoryData?.map((item) => (
-                                        <div onClick={() => handleProductClick(item)} key={item.id} className="max-w-xs w-full mx-auto flex flex-col gap-2 p-4 justify-between shadow hover:shadow-xl transition-shadow duration-300">
-                                            <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
-                                                <img className="w-full h-full object-cover" src={item.productimage.image_url} alt="item" />
+                                        <div key={item.id} className="flex w-full md:w-1/3 lg:w-1/4 flex-col bg-white border border-[#10847E] rounded-lg p-4 hover:shadow-xl transition-shadow duration-300">
+                                            <div className="flex justify-center items-center mb-2 md:mb-4">
+                                                <img
+                                                    className="h-40 w-40 object-contain"
+                                                    src={item.productimage?.image_url} 
+                                                    alt={item.product_name}
+                                                />
                                             </div>
-                                            <h5 className="text-base font-semibold text-gray-900 w-full truncate">{item.product_name}</h5>
-                                            <p className="text-sm lg:font-semibold flex flex-row gap-2">
-                                                <span>₹{item.discounted_price}</span>
-                                                <span className="line-through font-normal text-gray-400">₹{item.product_price}</span>
-                                            </p>
+                                            <h5 className="md:h-14 text-sm md:text-lg font-bold text-gray-900 text-center mb-2">
+                                                {item.product_name}
+                                            </h5>
+                                            <div className="flex items-center justify-center mb-4">
+                                                <span className="text-base md:text-xl font-semibold text-[#10847E]">₹{item.discounted_price}</span>
+                                                <span className="text-xs md:text-sm text-gray-400 line-through ml-2">₹{item.product_price}</span>
+                                            </div>
+                                            <p 
+                                                className="text-[10px] md:text-xs text-gray-500 text-justify mb-4 overflow-hidden text-ellipsis"
+                                                style={{
+                                                    display: '-webkit-box',
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden',
+                                                    WebkitLineClamp: 10,
+                                                }}
+                                                dangerouslySetInnerHTML={{ __html: item.description }} 
+                                            />
+
+                                            <button
+                                                onClick={() => handleProductClick(item)}
+                                                className="w-full py-2 text-center text-white bg-[#10847E] hover:shadow-lg rounded-md transition-colors"
+                                            >
+                                                View Details
+                                            </button>
                                         </div>
                                     ))}
                                 </div>

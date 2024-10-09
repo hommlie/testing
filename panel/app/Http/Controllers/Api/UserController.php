@@ -568,7 +568,7 @@ class UserController extends Controller
         if (!empty($user)) {
         $arrayName = [
         'id' => $user->id,
-        'upi' => $user->upi,
+        'upi' => $user->upi ?? "",
         'bank_name' => $user->bank_name,
         'bank_branch' => $user->bank_branch,
         'bank_ifsc' => $user->bank_ifsc,
