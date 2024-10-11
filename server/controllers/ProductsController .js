@@ -424,7 +424,7 @@ exports.productDetails = async (req, res) => {
       attributes: ['is_form']
     });
 
-    plainProduct.is_form = isForm.is_form;
+    plainProduct.is_form = isForm?.get('is_form');
 
     return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, vendors, related_products, returnpolicy, isForm });
   } catch (error) {

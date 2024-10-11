@@ -765,7 +765,7 @@ export default function ProductPage() {
                         </div>
                     )}
 
-                    {prodData?.is_form?.is_form === 0 &&
+                    {prodData?.is_form === 0 &&
 
                     <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                         <div className="flex justify-between items-center mb-4">
@@ -797,7 +797,7 @@ export default function ProductPage() {
 
                     }
 
-                    {prodData?.is_form?.is_form === 0 &&
+                    {prodData?.is_form === 0 &&
                         
                     <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                         <h3 className="text-xl font-semibold">Payment Summary</h3>
@@ -844,15 +844,9 @@ export default function ProductPage() {
 
                     }
 
-                    {prodData?.is_form?.is_form === 1 &&
+                    {prodData?.is_form === 1 &&
 
                     <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
-                        {/* <button 
-                            onClick={() => setIsInspectionModalOpen(true)}
-                            className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
-                        >
-                            Book an Inspection
-                        </button> */}
                         <h3 className="text-xl font-semibold">Book an Inspection</h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
