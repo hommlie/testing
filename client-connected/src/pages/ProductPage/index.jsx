@@ -884,6 +884,15 @@ export default function ProductPage() {
             </div>
 
             <div className="w-full lg:w-2/3">
+
+                <section className="container mx-auto section">
+                    <ProdSection
+                        title = "Similar Services"
+                        items = {visibleItems ? visibleItems : []}
+                        btnHidden
+                    />
+                </section>
+
                 <section className="bg-white rounded-lg p-4 space-y-4">
                     <div 
                         className="flex justify-between items-center cursor-pointer"
@@ -898,14 +907,7 @@ export default function ProductPage() {
                         </div>
                     )}
                 </section>
-
-                <section className="container mx-auto section">
-                    <ProdSection
-                        title = "Similar Services"
-                        items = {visibleItems ? visibleItems : []}
-                        btnHidden
-                    />
-                </section>
+                
             </div>
             </>
             )}

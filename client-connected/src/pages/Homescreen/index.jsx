@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { FaStar, FaUsers, FaMoneyBillWave } from "react-icons/fa";
@@ -136,11 +136,11 @@ const HomePageFirstSection = () => {
     setCurrentIndexTopSlider(newIndex);
   }
 
-  const nextSlideTopSlider = () => {
-    const isLastSlide = currentIndexTopSlider === bannerData.sliders.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndexTopSlider + 1;
-    setCurrentIndexTopSlider(newIndex);
-  }
+  const nextSlideTopSlider = useCallback(() => {
+    setCurrentIndexTopSlider((prevIndex) => 
+      (prevIndex + 1) % bannerData.sliders.length
+    );
+  }, [bannerData.sliders]);
 
   const goToSlideTopSlider = (slideIndex) => {
     setCurrentIndexTopSlider(slideIndex);
@@ -152,15 +152,30 @@ const HomePageFirstSection = () => {
     setCurrentIndexBottomSlider(newIndex);
   }
 
-  const nextSlideBottomSlider = () => {
-    const isLastSlide = currentIndexBottomSlider === bannerData.bottombanner?.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndexBottomSlider + 1;
-    setCurrentIndexBottomSlider(newIndex);
-  }
+  const nextSlideBottomSlider = useCallback(() => {
+    setCurrentIndexBottomSlider((prevIndex) => 
+      (prevIndex + 1) % bannerData.bottombanner.length
+    );
+  }, [bannerData.bottombanner]);
 
   const goToSlideBottomSlider = (slideIndex) => {
     setCurrentIndexBottomSlider(slideIndex);
   }
+
+  useEffect(() => {
+    const topInterval = setInterval(() => {
+      nextSlideTopSlider();
+    }, 4000);
+
+    const bottomInterval = setInterval(() => {
+      nextSlideBottomSlider();
+    }, 4000);
+
+    return () => {
+      clearInterval(topInterval);
+      clearInterval(bottomInterval);
+    };
+  }, [nextSlideTopSlider, nextSlideBottomSlider]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -214,31 +229,40 @@ const HomePageFirstSection = () => {
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
       <section className="w-full my-7 relative group">
-        {/* <div 
-          style={{backgroundImage: `url(${bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} 
-          className="w-full h-40 lg:h-[32rem] rounded-xl bg-center bg-cover bg-no-repeat duration-500"
-        >
-        </div> */}
-        <div className="w-full h-40 lg:h-[32rem] rounded-xl">
-          <img
-            src={bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""}
-            className="w-full h-full"
-          />
+        <div className="w-full h-40 lg:h-[32rem] rounded-xl overflow-hidden">
+          {bannerData?.sliders?.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${
+                index === currentIndexTopSlider ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img
+                src={slide.image_url}
+                className="w-full h-full object-contain"
+                alt={`Slide ${index + 1}`}
+              />
+            </div>
+          ))}
         </div>
-        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+        <div className="hidden lg:group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
           <IoIosArrowBack onClick={prevSlideTopSlider} size={30} color="grey" />
         </div>
-        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+        <div className="hidden lg:group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
           <IoIosArrowForward onClick={nextSlideTopSlider} size={30} color="grey" />
         </div>
         <div className="flex top-4 justify-center py-2">
-          {
-            bannerData?.sliders?.map((slide, index) => (
-              <div key={index} onClick={() => goToSlideTopSlider(index)} className="text-2xl cursor-pointer">
-                <RxDotFilled />
-              </div>
-            ))
-          }
+          {bannerData?.sliders?.map((_, index) => (
+            <div
+              key={index}
+              onClick={() => goToSlideTopSlider(index)}
+              className={`text-2xl cursor-pointer ${
+                index === currentIndexTopSlider ? "text-gray-800" : "text-gray-400"
+              }`}
+            >
+              <RxDotFilled />
+            </div>
+          ))}
         </div>
       </section>
       
@@ -295,31 +319,40 @@ const HomePageFirstSection = () => {
       }
 
       <section className="w-full my-7 relative group">
-        {/* <div 
-          style={{backgroundImage: `url(${bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} 
-          className="w-full h-40 lg:h-[32rem] rounded-xl bg-center bg-cover bg-no-repeat duration-500"
-        >
-        </div> */}
-        <div className="w-full h-40 lg:h-[32rem] rounded-xl">
-          <img
-            src={bannerData && bannerData?.bottombanner?.length ? bannerData?.bottombanner[currentIndexBottomSlider]?.image_url : ""}
-            className="w-full h-full"
-          />
+        <div className="w-full h-40 lg:h-[32rem] rounded-xl overflow-hidden">
+          {bannerData?.bottombanner?.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${
+                index === currentIndexBottomSlider ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img
+                src={slide.image_url}
+                className="w-full h-full object-cover"
+                alt={`Slide ${index + 1}`}
+              />
+            </div>
+          ))}
         </div>
-        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+        <div className="hidden lg:group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
           <IoIosArrowBack onClick={prevSlideBottomSlider} size={30} color="grey" />
         </div>
-        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+        <div className="hidden lg:group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
           <IoIosArrowForward onClick={nextSlideBottomSlider} size={30} color="grey" />
         </div>
         <div className="flex top-4 justify-center py-2">
-          {
-            bannerData?.bottombanner?.map((slide, index) => (
-              <div key={index} onClick={() => goToSlideBottomSlider(index)} className="text-2xl cursor-pointer">
-                <RxDotFilled />
-              </div>
-            ))
-          }
+          {bannerData?.bottombanner?.map((_, index) => (
+            <div
+              key={index}
+              onClick={() => goToSlideBottomSlider(index)}
+              className={`text-2xl cursor-pointer ${
+                index === currentIndexBottomSlider ? "text-gray-800" : "text-gray-400"
+              }`}
+            >
+              <RxDotFilled />
+            </div>
+          ))}
         </div>
       </section>
 

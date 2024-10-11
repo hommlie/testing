@@ -22,6 +22,7 @@ exports.settings = async (req, res) => {
                 'twitter',
                 'instagram',
                 'linkedin',
+                'youtube',
             ],
         });
 

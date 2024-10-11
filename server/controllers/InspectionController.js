@@ -2,7 +2,17 @@ const { Inspection } = require('../models');
 
 exports.createInspection = async (req, res) => {
     try {
-        const { product_id, fullName, address, latitude, longitude, mobile, email, date, time } = req.body;
+        const { 
+            product_id, 
+            fullName, 
+            address, 
+            latitude, 
+            longitude, 
+            mobile, 
+            email, 
+            date, 
+            time 
+        } = req.body;
         console.log(req.body);
 
         const newInspection = await Inspection.create({

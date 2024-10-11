@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { BsArrowRightCircle } from "react-icons/bs";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -7,6 +7,10 @@ import config from "../../config/config";
 export default function ProdSection({ openExploreModal, title, items, btnHidden, id }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visibleItemsCount, setVisibleItemsCount] = useState(5);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const sliderRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,7 +25,6 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
         };
 
         updateVisibleItemsCount();
-
         window.addEventListener("resize", updateVisibleItemsCount);
 
         return () => {
@@ -33,12 +36,14 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
         setCurrentIndex((prevIndex) =>
             prevIndex === 0 ? items.length - visibleItemsCount : prevIndex - 1
         );
+        sliderRef.current.scrollBy({ left: -200, behavior: 'smooth' });
     };
 
     const handleNextClick = () => {
         setCurrentIndex((prevIndex) =>
             prevIndex === items.length - visibleItemsCount ? 0 : prevIndex + 1
         );
+        sliderRef.current.scrollBy({ left: 200, behavior: 'smooth' });
     };
 
     const calculateDiscountPercentage = (originalPrice, discountedPrice) => {
@@ -53,7 +58,23 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
         navigate(`${config.VITE_BASE_URL}/product/${slug}`, { state: { id: item.id, title: item.title } });
     };
 
-    const visibleItems = items?.slice(currentIndex, currentIndex + visibleItemsCount);
+    const startDragging = (e) => {
+        setIsDragging(true);
+        setStartX(e.pageX - sliderRef.current.offsetLeft);
+        setScrollLeft(sliderRef.current.scrollLeft);
+    };
+
+    const stopDragging = () => {
+        setIsDragging(false);
+    };
+
+    const onDrag = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - sliderRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        sliderRef.current.scrollLeft = scrollLeft - walk;
+    };
 
     return (
         <section className="w-full mx-auto section" id={id}>
@@ -66,15 +87,23 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                 </div>
             </div>
             <div className="relative group">
-                <div className="relative w-full flex justify-center overflow-hidden lg:gap-10">
-                    {visibleItems?.map((item, index) => {
+                <div 
+                    ref={sliderRef}
+                    className="relative w-full flex overflow-x-auto scrollbar-hide scroll-smooth"
+                    onMouseDown={startDragging}
+                    onMouseLeave={stopDragging}
+                    onMouseUp={stopDragging}
+                    onMouseMove={onDrag}
+                    style={{ scrollSnapType: 'x mandatory' }}
+                >
+                    {items?.map((item, index) => {
                         const discountPercentage = calculateDiscountPercentage(item.product_price, item.discounted_price);
                         return (
-                            <div key={index} className="p-2 w-full sm:w-auto mt-4">
+                            <div key={index} className="p-2 lg:px-4 w-28 md:w-40 lg:w-60 flex-shrink-0 scroll-snap-align-start">
                                 <div onClick={() => handleProductClick(item)} className="block cursor-pointer">
                                     <div className="relative">
                                         <img
-                                            className="pd-imgs w-60 h-[100px] sm:h-56 object-cover rounded-lg"
+                                            className="pd-imgs w-60 h-[100px] md:h-40 lg:h-56 object-cover rounded-lg"
                                             src={item.productimage?.image_url}
                                             alt={item.product_name}
                                         />
@@ -98,19 +127,19 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                             </div>
                         )
                     })}
-                    <button
-                        onClick={handlePrevClick}
-                        className={`${items?.length > 4 ? "bg-white shadow-md lg:hidden lg:group-hover:block" : "hidden" } absolute top-1/2 -translate-x-0 translate-y-[-50%] left-2 lg:left-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
-                    >
-                        <IoIosArrowBack color="grey" />
-                    </button>
-                    <button
-                        onClick={handleNextClick}
-                        className={`${items?.length > 4 ? "bg-white shadow-md lg:hidden lg:group-hover:block" : "hidden" } absolute top-1/2 -translate-x-0 translate-y-[-50%] right-2 lg:right-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
-                    >
-                        <IoIosArrowForward color="grey" />
-                    </button>
                 </div>
+                <button
+                    onClick={handlePrevClick}
+                    className={`${items?.length > 4 ? "bg-white shadow-md hidden lg:group-hover:block" : "hidden" } absolute top-1/2 -translate-x-0 translate-y-[-50%] left-2 lg:left-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
+                >
+                    <IoIosArrowBack color="grey" />
+                </button>
+                <button
+                    onClick={handleNextClick}
+                    className={`${items?.length > 4 ? "bg-white shadow-md hidden lg:group-hover:block" : "hidden" } absolute top-1/2 -translate-x-0 translate-y-[-50%] right-2 lg:right-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
+                >
+                    <IoIosArrowForward color="grey" />
+                </button>
             </div>
         </section>
     );
