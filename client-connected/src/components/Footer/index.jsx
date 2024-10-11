@@ -21,50 +21,53 @@ export default function Footer({ logo, logoAlt, copyright, facebook, instagram, 
               <SocialIcon Icon={FaYoutube} link={youtube} />
             </div>
           </div>
-          <FooterSection
-            title="Our Brands"
-            links={[
-              { title: "Hommlie", link: "https://www.hommlie.com/" },
-              { title: "Hompure", link: "https://www.hompure.in/" },
-              { title: "Hoy Smart", link: "https://www.hompure.in/" },
-              { title: "RoachX", link: "https://www.hompure.in/" },
-              { title: "Pink Store", link: "https://www.hompure.in/" }
-            ]}
-          />
 
-          <FooterSection
-            title="Company Info"
-            links={[
-              { title: "About us", link: `${config.VITE_BASE_URL}/about-us` },
-              // { title: "Why Hygiene", link: "#" },
-              // { title: "Mission", link: "#" },
-              // { title: "FAQs", link: "#" },
-              { title: "Careers", link: `${config.VITE_BASE_URL}/careers` },
-              { title: "Partner us", link: `${config.VITE_BASE_URL}/partner-us` }
-            ]}
-          />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <FooterSection
+              title="Our Brands"
+              links={[
+                { title: "Hommlie", link: "https://www.hommlie.com/" },
+                { title: "Hompure", link: "https://www.hompure.in/" },
+                { title: "Hoy Smart", link: "https://www.hompure.in/" },
+                { title: "RoachX", link: "https://www.hompure.in/" },
+                { title: "Pink Store", link: "https://www.hompure.in/" }
+              ]}
+            />
 
-          {/* <FooterSection
-            title="Our Services"
-            links={[
-              { title: "Pest Control", link: "#" },
-              { title: "Cleaning Services", link: "#" },
-              { title: "Sanitization", link: "#" },
-              { title: "Bird Netting", link: "#" },
-              { title: "Mosquito Mesh", link: "#" }
-            ]}
-          /> */}
+            <FooterSection
+              title="Company Info"
+              links={[
+                { title: "About us", link: `${config.VITE_BASE_URL}/about-us` },
+                // { title: "Why Hygiene", link: "#" },
+                // { title: "Mission", link: "#" },
+                // { title: "FAQs", link: "#" },
+                { title: "Careers", link: `${config.VITE_BASE_URL}/careers` },
+                { title: "Partner us", link: `${config.VITE_BASE_URL}/partner-us` }
+              ]}
+            />
 
-          <FooterSection
-            title="For Commercial Services"
-            links={[
-              { title: "Industries", link: "https://b2b.hommlie.com/Industries.html" },
-              { title: "Commercial Pest Management", link: "https://b2b.hommlie.com/" },
-              { title: "Commercial Cleaning Services", link: "https://b2b.hommlie.com/" },
-              { title: "Why Hommlie", link: `${config.VITE_BASE_URL}/about-us` },
-              { title: "Contact Us", link: `${config.VITE_BASE_URL}/contact-us` }
-            ]}
-          />
+            {/* <FooterSection
+              title="Our Services"
+              links={[
+                { title: "Pest Control", link: "#" },
+                { title: "Cleaning Services", link: "#" },
+                { title: "Sanitization", link: "#" },
+                { title: "Bird Netting", link: "#" },
+                { title: "Mosquito Mesh", link: "#" }
+              ]}
+            /> */}
+
+            <FooterSection
+              title="For Commercial Services"
+              links={[
+                { title: "Industries", link: "https://b2b.hommlie.com/Industries.html" },
+                { title: "Commercial Pest Management", link: "https://b2b.hommlie.com/" },
+                { title: "Commercial Cleaning Services", link: "https://b2b.hommlie.com/" },
+                { title: "Why Hommlie", link: `${config.VITE_BASE_URL}/about-us` },
+                { title: "Contact Us", link: `${config.VITE_BASE_URL}/contact-us` }
+              ]}
+            />
+          </div>
 
           <div className="hidden lg:block">
             <p className="capitalize text-[19px] font-medium !text-gray-900_03">Get the app</p>

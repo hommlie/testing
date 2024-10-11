@@ -57,8 +57,8 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
 
     return (
         <section className="w-full mx-auto section" id={id}>
-            <div className="flex flex-row justify-between items-center mb-4">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold">{title}</h2>
+            <div className="px-2 md:px-0 flex flex-row justify-between items-center mb-4">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#10847E]">{title}</h2>
                 <div className="flex items-center space-x-2 cursor-pointer">
                     <div onClick={() => openExploreModal(items, title)} className={`flex items-center ${btnHidden ? 'hidden' : ''}`}>
                         <button className="text-base" style={{color: "#035240"}}>See all</button>
@@ -66,7 +66,7 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                 </div>
             </div>
             <div className="relative group">
-                <div className="relative w-full flex justify-center overflow-hidden lg:gap-12">
+                <div className="relative w-full flex justify-center overflow-hidden lg:gap-10">
                     {visibleItems?.map((item, index) => {
                         const discountPercentage = calculateDiscountPercentage(item.product_price, item.discounted_price);
                         return (
@@ -87,7 +87,7 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                                             </span>
                                         )}
                                     </div>
-                                    <h5 className="text-sm lg:text-md lg:font-semibold text-gray-900 text-wrap mt-2">
+                                    <h5 className="text-sm lg:text-md lg:font-semibold text-gray-500 text-wrap mt-2">
                                         {item.product_name}
                                     </h5>
                                     <p className="text-sm lg:font-semibold flex flex-row gap-2">

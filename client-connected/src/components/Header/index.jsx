@@ -216,7 +216,7 @@ export default function Header({ logo, logoAlt }) {
 
   return (
     <GoogleMapLoader>
-      <header ref={headerRef} className="sticky top-0 z-20 bg-white shadow-md">
+      <header ref={headerRef} className="sticky bg-[#eefafb] top-0 z-20 shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-4">
@@ -225,12 +225,12 @@ export default function Header({ logo, logoAlt }) {
               </NavLink>
               <button
                 onClick={getCurrentLocation}
-                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-full"
+                className="flex items-center space-x-2 px-3 py-2 rounded-full"
               >
-                <MdLocationOn size={24} color="#32A071" />
+                <MdLocationOn className="text-sm md:text-xl" color="#32A071" />
                 <div className="flex flex-col text-left">
-                  <span className="text-sm font-medium">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
-                  <span className="text-xs">{currentLocation?.address?.state_district} {currentLocation?.address?.state}</span>
+                  <span className="text-[10px] md:text-sm font-medium">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
+                  <span className="text-[10px] md:text-xs">{currentLocation?.address?.state_district} {currentLocation?.address?.state}</span>
                 </div>
               </button>
             </div>
@@ -336,7 +336,7 @@ export default function Header({ logo, logoAlt }) {
               <input
                 type="text"
                 placeholder={`Search for ${currentPlaceholder}`}
-                className="w-full text-[10px] lg:text-base pl-5 lg:pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-[#eefafb] w-full text-[10px] lg:text-base pl-5 lg:pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />

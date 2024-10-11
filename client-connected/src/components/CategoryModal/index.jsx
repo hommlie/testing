@@ -138,7 +138,7 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                 {data?.map((ct, index) => (
                                     <div onClick={() => handleCategoryClick(ct)} key={index} className="flex flex-col items-center gap-2 cursor-pointer">
-                                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
+                                        <div className="w-24 h-24 md:w-40 md:h-40 rounded overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
                                             <img className="w-full h-full object-cover" src={ct?.subcategory_icon} alt="category" />
                                         </div>
                                         <h5 className="text-sm md:text-base font-semibold text-gray-900 text-center">{ct?.subcategory_name}</h5>

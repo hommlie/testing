@@ -87,6 +87,7 @@ const HomePageFirstSection = () => {
   const [selectedItems, setSelectedItems] = useState();
   const [selectedTitle, setSelectedTitle] = useState();
   const [currentIndexTopSlider, setCurrentIndexTopSlider] = useState(0);
+  const [currentIndexBottomSlider, setCurrentIndexBottomSlider] = useState(0);
   const [playingVideo, setPlayingVideo] = useState(null);
   const [isInspectionModalOpen, setIsInspectionModalOpen]= useState(false);
   const [isReferModalOpen, setIsReferModalOpen]= useState(false);
@@ -144,6 +145,22 @@ const HomePageFirstSection = () => {
     setCurrentIndexTopSlider(slideIndex);
   }
 
+  const prevSlideBottomSlider = () => {
+    const isFirstSlide = currentIndexBottomSlider === 0;
+    const newIndex = isFirstSlide ? bannerData.bottombanner?.length - 1 : currentIndexBottomSlider - 1;
+    setCurrentIndexBottomSlider(newIndex);
+  }
+
+  const nextSlideBottomSlider = () => {
+    const isLastSlide = currentIndexBottomSlider === bannerData.bottombanner?.length - 1;
+    const newIndex = isLastSlide ? 0 : currentIndexBottomSlider + 1;
+    setCurrentIndexBottomSlider(newIndex);
+  }
+
+  const goToSlideBottomSlider = (slideIndex) => {
+    setCurrentIndexBottomSlider(slideIndex);
+  }
+
   useEffect(() => {
     window.scrollTo(0, 0);
     AOS.init({ duration: 1000 });
@@ -164,7 +181,7 @@ const HomePageFirstSection = () => {
   }
 
   return (
-    <main className="content w-full px-8 bg-white scroll-smooth">
+    <main className="content w-full md:px-8 bg-white scroll-smooth">
 
       <CategoryModal isOpen={isCatModalOpen} onClose={closeCatModal} category={selectedCat} />
       <ExploreModal isOpen={isExploreModalOpen} onClose={closeExploreModal} title={selectedTitle} items={selectedItems} />
@@ -201,10 +218,10 @@ const HomePageFirstSection = () => {
       </section>
       
       <section className="w-full mx-auto section">
-        <h1 className="text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
+        <h1 className="px-2 md:px-0 text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
           HELLO {user?.name ? user.name : null} <span className="waving-hand">👋</span>
         </h1>        
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">What you are looking for today</h1>
+        <h1 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">What you are looking for today</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
           {categoryData?.data?.map((ct, index) => {
               if(index === 6) {
@@ -236,6 +253,14 @@ const HomePageFirstSection = () => {
         </div>
       </section> */}
 
+      {homeFeedData?.pest_control?.length ?
+        <ProdSection
+          openExploreModal = {openExploreModal}
+          title = "Pest Control"
+          items = {homeFeedData ? homeFeedData?.pest_control : []}
+        /> : null
+      }
+
       {homeFeedData?.cleaning_services?.length ?
         <ProdSection
           openExploreModal = {openExploreModal}
@@ -244,13 +269,34 @@ const HomePageFirstSection = () => {
         /> : null
       }
 
-      {homeFeedData?.pest_control?.length ?
-        <ProdSection
-          openExploreModal = {openExploreModal}
-          title = "Pest Control"
-          items = {homeFeedData ? homeFeedData?.pest_control : []}
-        /> : null
-      }
+      <section className="w-full my-7 relative group">
+        {/* <div 
+          style={{backgroundImage: `url(${bannerData && bannerData?.sliders?.length ? bannerData?.sliders[currentIndexTopSlider]?.image_url : ""})`}} 
+          className="w-full h-40 lg:h-[32rem] rounded-xl bg-center bg-cover bg-no-repeat duration-500"
+        >
+        </div> */}
+        <div className="w-full h-40 lg:h-[32rem] rounded-xl">
+          <img
+            src={bannerData && bannerData?.bottombanner?.length ? bannerData?.bottombanner[currentIndexBottomSlider]?.image_url : ""}
+            className="w-full h-full"
+          />
+        </div>
+        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+          <IoIosArrowBack onClick={prevSlideBottomSlider} size={30} color="grey" />
+        </div>
+        <div className="hidden group-hover:block absolute top-1/2 -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 cursor-pointer" style={{backgroundColor: "rgba(0,0,0,0.1)"}}>
+          <IoIosArrowForward onClick={nextSlideBottomSlider} size={30} color="grey" />
+        </div>
+        <div className="flex top-4 justify-center py-2">
+          {
+            bannerData?.bottombanner?.map((slide, index) => (
+              <div key={index} onClick={() => goToSlideBottomSlider(index)} className="text-2xl cursor-pointer">
+                <RxDotFilled />
+              </div>
+            ))
+          }
+        </div>
+      </section>
 
       {/* <section className="w-full my-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Hommlie Bike Home Parcel Delivery</h2>
@@ -305,7 +351,7 @@ const HomePageFirstSection = () => {
       }
 
       <section className="mt-12">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">Discover</h2>
+        <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Discover</h2>
         <div className="grid grid-cols-2 md:grid-cols-4">
           <NavLink to={`${config.VITE_BASE_URL}/my-bookings`} className="flex flex-col gap-2 items-center group">
             <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
@@ -342,7 +388,7 @@ const HomePageFirstSection = () => {
 
       {homeFeedData?.videos?.length &&
         <section className="mt-12">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">Thoughtful Curations</h2>
+          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Thoughtful Curations</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {homeFeedData?.videos?.map((item, index) => (
               <div key={index} className="relative rounded-lg overflow-hidden">
@@ -381,7 +427,7 @@ const HomePageFirstSection = () => {
       }
 
       <section className="w-full mx-auto section px-4 py-8">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6">Why Hommlie</h2>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6 text-[#10847E]">Why Hommlie</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {whyChoose.map((item, index) => (
             <div key={index} className="flex flex-row items-center p-4 rounded-lg gap-4">

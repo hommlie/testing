@@ -271,7 +271,7 @@ exports.productDetails = async (req, res) => {
     const product = await Product.findOne({
       where: { id: product_id, status: 1 },
       attributes: [
-        'id', 'product_name', 'product_price', 'cat_id', 'discounted_price', 'description', 'product_qty', 'is_variation', 'vendor_id', 'sku',
+        'id', 'product_name', 'product_price', 'cat_id', 'discounted_price', 'description', 'tags', 'product_qty', 'is_variation', 'vendor_id', 'sku',
         'free_shipping', 'shipping_cost', 'tax_type', 'tax', 'est_shipping_days', 'is_return', 'return_days',
       ],
       include: [
@@ -419,7 +419,14 @@ exports.productDetails = async (req, res) => {
       attributes: ['return_policies']
     });
 
-    return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, vendors, related_products, returnpolicy });
+    const isForm = await Category.findOne({
+      where: { id: product.cat_id },
+      attributes: ['is_form']
+    });
+
+    plainProduct.is_form = isForm;
+
+    return res.status(200).json({ status: 1, message: 'Success', data: plainProduct, vendors, related_products, returnpolicy, isForm });
   } catch (error) {
     console.error("Error fetching product details:", error);
     return res.status(500).json({ status: 0, message: 'Failed to fetch product details', error });
