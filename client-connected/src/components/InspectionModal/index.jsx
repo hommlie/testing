@@ -125,7 +125,7 @@ const InspectionModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden">
         <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-600 p-8 text-white">
+          <div className="md:w-1/2 bg-gradient-to-br from-green-500 to-[#249370] p-8 text-white">
             <h2 className="text-4xl font-bold mb-6">Schedule an Inspection</h2>
             <p className="mb-4">Fill out the form to request an inspection. We'll get back to you as soon as possible.</p>
             <ul className="space-y-2">

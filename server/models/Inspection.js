@@ -4,6 +4,9 @@ const sequelize = require('../config/connection');
 class Inspection extends Model {}
 
 Inspection.init({
+    product_id: {
+        type: DataTypes.INTEGER,
+    },
     fullName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -14,11 +17,11 @@ Inspection.init({
     },
     latitude: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
     },
     longitude: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
     },
     mobile: {
         type: DataTypes.STRING,
@@ -30,11 +33,11 @@ Inspection.init({
     },
     date: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
     },
     time: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
   }, {
     sequelize,

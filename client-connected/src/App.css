@@ -30,7 +30,7 @@ header {
 }
 
 .footer {
-  background-color: rgba(215, 250, 248, 32%);
+  background-color: #c5dbca;
   z-index: 1000;
   padding: 1rem;
   width: 100%;

@@ -17,6 +17,7 @@ import { useToast } from "../../context/ToastProvider";
 import Loading from "../../components/Loading";
 import ProdSection from "../../components/ProdSection";
 import CouponModal from "../../components/CouponModal";
+import InspectionModal from "../../components/InspectionModal";
 import { BiSolidOffer } from "react-icons/bi";
 
 export default function ProductPage() {
@@ -70,6 +71,7 @@ export default function ProductPage() {
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
     const [couponDiscount, setCouponDiscount] = useState(0);
+    const [isInspectionModalOpen, setIsInspectionModalOpen]= useState(false);
     
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
@@ -213,6 +215,40 @@ export default function ProductPage() {
         }
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const dataToSend = {
+            product_id: prodData.id,
+            address: formData.get('address'),
+            fullName: formData.get('fullName'),
+            email: formData.get('email'),
+            mobile: formData.get('mobile'),
+        };
+      
+        try {
+            const response = await axios.post(
+              `${config.API_URL}/api/createInspection`,
+              dataToSend,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+      
+            if (response.data.status === 1) {
+              successNotify('Inspection request submitted successfully!');
+            } else {
+              errorNotify('Failed to submit inspection request. Please try again.');
+            }
+          } catch (error) {
+            console.error('Error:', error.response?.data || error.message);
+            errorNotify('An error occurred. Please check the console for details.');
+          }
+    };
+
     useEffect(() => {
         window.scrollTo(0, 0);
         setIsLoading(true);
@@ -234,6 +270,8 @@ export default function ProductPage() {
             setIsLoading(true);
             await axios.post(`${config.API_URL}/api/productdetails`, { product_id: id })
             .then(response => {
+                console.log(response.data);
+                
                 setProdData(response.data.data);
 
                 setProdVendors(response.data.vendors);
@@ -362,7 +400,7 @@ export default function ProductPage() {
             <div className="relative w-full h-full">
               <video 
                 ref={videoRef}
-                className="w-full h-full rounded-lg object-cover"
+                className="w-full h-full rounded-lg object-contain"
                 src={item.image_url}
                 // onLoadedData={() => setIsLoading(false)}
                 onTimeUpdate={handleProgress}
@@ -381,7 +419,7 @@ export default function ProductPage() {
         } else {
           return (
             <img
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-contain rounded-lg"
               src={item.image_url}
               alt="Product"
               onLoad={() => {console.log("loaded")}}
@@ -455,7 +493,7 @@ export default function ProductPage() {
                     <section className="bg-white md:p-4 mb-6">
                         <div className="relative">
                             {mediaItems.length > 0 && (
-                                <div className="w-full h-[250px] lg:h-[450px] rounded-lg bg-gray-200">
+                                <div className="w-full h-[250px] lg:h-[450px] rounded-lg">
                                     {renderMedia(mediaItems[currentMediaIndex])}
                                 </div>
                             )}
@@ -727,6 +765,8 @@ export default function ProductPage() {
                         </div>
                     )}
 
+                    {prodData?.is_form?.is_form === 0 &&
+
                     <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                         <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center">
@@ -755,6 +795,10 @@ export default function ProductPage() {
                         </div>
                     </div>
 
+                    }
+
+                    {prodData?.is_form?.is_form === 0 &&
+                        
                     <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                         <h3 className="text-xl font-semibold">Payment Summary</h3>
                         <div className="space-y-2">
@@ -798,6 +842,46 @@ export default function ProductPage() {
                         </div>
                     </div>
 
+                    }
+
+                    {prodData?.is_form?.is_form === 1 &&
+
+                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
+                        {/* <button 
+                            onClick={() => setIsInspectionModalOpen(true)}
+                            className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
+                        >
+                            Book an Inspection
+                        </button> */}
+                        <h3 className="text-xl font-semibold">Book an Inspection</h3>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                                <input type="text" id="address" name="address" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
+                            </div>
+                            <div>
+                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
+                                <input type="text" id="fullName" name="fullName" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
+                            </div>
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="email" name="email" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
+                            </div>
+                            <div>
+                                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile</label>
+                                <input type="tel" id="mobile" name="mobile" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
+                            </div>
+                            <button 
+                                type="submit"
+                                className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
+                            >
+                                Call Back
+                            </button>
+                        </form>
+                    </div>
+
+                    }
+
                     {/* <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
                         <img src="https://hommlie.com/images/certificates/iso.png" alt="" />
                     </div> */}
@@ -833,6 +917,7 @@ export default function ProductPage() {
             )}
 
             <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalAmount + taxAmount} />
+            <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
         
         </main>
     );

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { FaStar, FaUsers, FaMoneyBillWave } from "react-icons/fa";
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight  } from "react-icons/md";
@@ -182,6 +183,30 @@ const HomePageFirstSection = () => {
 
   return (
     <main className="content w-full md:px-8 bg-white scroll-smooth">
+
+      <Helmet>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16578324784"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-16578324784');
+          `}
+        </script>
+        <script>
+          {`
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:5110081,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+          `}
+        </script>
+      </Helmet>
 
       <CategoryModal isOpen={isCatModalOpen} onClose={closeCatModal} category={selectedCat} />
       <ExploreModal isOpen={isExploreModalOpen} onClose={closeExploreModal} title={selectedTitle} items={selectedItems} />

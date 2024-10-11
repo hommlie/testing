@@ -216,7 +216,7 @@ export default function Header({ logo, logoAlt }) {
 
   return (
     <GoogleMapLoader>
-      <header ref={headerRef} className="sticky bg-[#eefafb] top-0 z-20 shadow-md">
+      <header ref={headerRef} className="sticky bg-[#c5dbca] top-0 z-20 shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-4">
