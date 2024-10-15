@@ -6,11 +6,11 @@ import config from "../../config/config";
 export default function Footer({ logo, logoAlt, copyright, facebook, instagram, linkedin, twitter, youtube }) {
   return (
     <footer className="footer rounded-lg mt-[40px] z-10">
-      <div className="container-sm pt-24 pb-5 space-y-8">
+      <div className="container-sm pt-5 lg:pt-24 pb-5 space-y-8">
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">
-            <img src={logo} alt={logoAlt} className="h-14 w-max" />
-            <p className="text-sm text-gray-400 max-w-[300px]">
+            <img src={logo} alt={logoAlt} className="h-10 lg:h-14 w-max" />
+            <p className="text-sm text-gray-500 max-w-[300px]">
               One click to transform your home into a sparkling haven with our professional cleaning services. From deep cleans.
             </p>
             <div className="flex gap-4">
@@ -22,7 +22,7 @@ export default function Footer({ logo, logoAlt, copyright, facebook, instagram, 
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-2 md:gap-4">
             <FooterSection
               title="Our Brands"
               links={[
@@ -105,11 +105,11 @@ export default function Footer({ logo, logoAlt, copyright, facebook, instagram, 
 
 const FooterSection = ({ title, links }) => (
   <div>
-    <p className="capitalize text-[19px] font-medium !text-gray-900_03 mb-4">{title}</p>
-    <ul className="flex flex-col gap-2">
+    <p className="capitalize text-sm lg:text-[19px] font-medium !text-gray-900_03 mb-4">{title}</p>
+    <ul className="flex flex-col gap-1 lg:gap-2">
       {links.map((link, index) => (
         <li key={index}>
-          <a href={link.link} className="text-sm text-[#035240]">
+          <a href={link.link} className="text-xs lg:text-sm text-[#035240]">
             {link.title}
           </a>
         </li>

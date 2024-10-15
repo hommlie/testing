@@ -76,7 +76,7 @@ export default function ProductPage() {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
         setIsModalOpen(false);
-        const proceedBtn = document.getElementById('proceed-btn').onClick;
+        const proceedBtn = document.getElementById('proceed-btn')?.onClick;
         if (typeof(proceedBtn) == undefined) {
             navigate(`${config.VITE_BASE_URL}/add-to-cart`);
         }

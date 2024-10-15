@@ -184,16 +184,16 @@ export default function TrackOrder() {
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold mb-4">Order Details</h2>
                         <div className="flex items-start space-x-4 mb-4">
-                            <img src={trackingDetails?.image} alt="" className="w-32 h-32 object-cover rounded-md" />
+                            <img src={trackingDetails?.image} alt="" className="w-20 lg:w-32 h-20 lg:h-32 object-cover rounded-md" />
                             <div className="flex-1 space-y-1">
-                                <h3 className="text-lg font-semibold">{trackingDetails?.product_name}</h3>
-                                <p className="text-gray-600">{trackingDetails?.attribute}</p>
-                                <p className="text-gray-600">{trackingDetails?.variation}</p>
-                                <p>Quantity: {trackingDetails?.qty}</p>
-                                <p>Price: ₹{trackingDetails?.price}</p>
+                                <h3 className="text-sm lg:text-lg font-semibold">{trackingDetails?.product_name}</h3>
+                                <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.attribute}</p>
+                                <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.variation}</p>
+                                <p className="text-xs lg:text-base">Quantity: {trackingDetails?.qty}</p>
+                                <p className="text-xs lg:text-base">Price: ₹{trackingDetails?.price}</p>
                             </div>
-                            <div className="text-right">
-                                <p className="text-xl font-bold">₹{trackingDetails?.order_total}</p>
+                            <div className="lg:text-right">
+                                <p className="text-sm lg:text-xl font-bold">₹{trackingDetails?.order_total}</p>
                             </div>
                         </div>
                         <div className="border-t border-gray-200 pt-4">
