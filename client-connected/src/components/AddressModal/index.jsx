@@ -37,12 +37,12 @@ const AddressModal = ({ isOpen, onClose }) => {
   const autocompleteRef = useRef(null);
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (addresses) {
-      setSelectedAddrs(addresses ? addresses[0] : {});
-      setSelected(addresses ? addresses[0] : {});
-    }
-  }, [addresses]);
+  // useEffect(() => {
+  //   if (addresses) {
+  //     setSelectedAddrs(addresses ? addresses[0] : {});
+  //     setSelected(addresses ? addresses[0] : {});
+  //   }
+  // }, [addresses]);
 
   useEffect(() => {
     if (window.google && inputRef.current && formClicked && !autocompleteRef.current) {
@@ -122,7 +122,10 @@ const AddressModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleProceed = () => {
-    setSelectedAddrs(selected);
+    console.log(selected);
+    
+    setSelectedAddrs(selected);    
+    localStorage.setItem('HommlieselectedAddrs', JSON.stringify(selected));
     onClose();
   }
 

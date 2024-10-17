@@ -208,9 +208,7 @@ export default function ProductPage() {
         if (user.length === 0) {
             openModal();
         } else {
-            if (cart.length === 0) {
-                await handleAddToCart();    
-            }
+            await handleAddToCart();
             navigate(`${config.VITE_BASE_URL}/add-to-cart`);
         }
     };

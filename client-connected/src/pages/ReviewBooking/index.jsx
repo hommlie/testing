@@ -99,7 +99,7 @@ export default function ReviewBooking() {
             if (paymentType?.payment_name === "Online") {
                 try {
                     const orderResponse = await axios.post(`${config.API_URL}/api/initiatePayment`, {
-                        amount: totalAmount * 100,
+                        amount: totalAmount,
                         currency: "INR",
                         user_id: user.id,
                         coupon_id: selectedCoupon ? selectedCoupon.id : null,

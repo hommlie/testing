@@ -45,7 +45,7 @@ export default function MyBookings() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        // getBookings();
+        // getBookings();        
     }, []);
 
     useEffect(() => {        
@@ -114,7 +114,7 @@ export default function MyBookings() {
 
     const handleProductClick = (item) => {        
         const slug = item.product_name.toLowerCase().replace(/ /g, '-');
-        navigate(`${config.VITE_BASE_URL}/product/${item.id}/${slug}`);
+        navigate(`${config.VITE_BASE_URL}/product/${item.product_id}/${slug}`);
     };
 
     return (
