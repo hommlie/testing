@@ -66,7 +66,7 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
 
     const handleProductClick = (item) => {
         const slug = item.product_name.toLowerCase().replace(/ /g, '-');
-        navigate(`${config.VITE_BASE_URL}/product/${slug}`, { state: { id: item.id, title: item.title } });
+        navigate(`${config.VITE_BASE_URL}/product/${item.id}/${slug}`);
     };
 
     return (

@@ -53,7 +53,10 @@ const ProjectRoutes = () => {
     { path: "*", element: <NotFound /> },
     { path: `${config.VITE_BASE_URL}/`, element: <Homescreen /> },
     { path: `${config.VITE_BASE_URL}/home`, element: <Homescreen /> },
-    { path: `${config.VITE_BASE_URL}/product/:id`, element: <ProductPage /> },
+    // { path: `${config.VITE_BASE_URL}/product/:id`, element: <ProductPage /> },
+    { path: `${config.VITE_BASE_URL}/product/:id/:slug`, element: <ProductPage /> },
+    { path: `${config.VITE_BASE_URL}/product/:id/:slug/tag/:tag`, element: <ProductPage /> },
+
     { 
       path: `${config.VITE_BASE_URL}/add-to-cart`, 
       element: <ProtectedRoute><AddtoCart /></ProtectedRoute> 

@@ -373,7 +373,7 @@ const HomePageFirstSection = () => {
       {homeFeedData?.safety_pro_netting?.length ?
         <ProdSection
           openExploreModal = {openExploreModal}
-          title = "Safety-Pro Netting"
+          title = "Bird Control"
           items = {homeFeedData ? homeFeedData?.safety_pro_netting : []}
         /> : null
       }

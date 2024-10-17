@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { MdStars } from "react-icons/md";
 import { IoCheckmarkCircleSharp, IoCheckmarkCircleOutline, IoCheckmark, IoCheckmarkCircle } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -36,7 +36,7 @@ export default function ProductPage() {
         getCoupons 
     } = useCont();
     const location = useLocation();
-    const { id, title } = location.state;
+    const { id, tag } = useParams();
     const prod_id = id;
     const navigate = useNavigate();
 
@@ -111,7 +111,7 @@ export default function ProductPage() {
 
     const toggleExpansion = () => {
         setIsExpanded(!isExpanded);
-    };
+    };      
 
     const handleAddToCart = async () => {
 
@@ -435,6 +435,12 @@ export default function ProductPage() {
         }
     };
 
+    const handleTagClick = (tag) => {
+        const slug = prodData?.product_name?.toLowerCase().replace(/ /g, '-');
+        navigate(`${config.VITE_BASE_URL}/product/${prod_id}/${slug}/tag/${tag.trim()}`);
+        window.location.reload();
+    };
+
     const visibleItems = prodRelatedProds?.slice(currentIndex, currentIndex + visibleItemsCount);
 
     const addBtn = () => {
@@ -486,11 +492,31 @@ export default function ProductPage() {
                 </div>
             ) : (
             <>
+
+            <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">
+                <NavLink to="/" className="text-blue-500">Home</NavLink>
+                <span>/</span>
+                <span>Product</span>
+                {tag ? (
+                    <>
+                        <span>/</span>
+                        <span>{tag}</span>
+                    </>
+                ) : (
+                    <>
+                        <span>/</span>
+                        <span>{prodData?.product_name}</span>
+                    </>
+                )}
+            </nav>
+
             <div className="flex flex-col lg:flex-row lg:space-x-4 scroll-smooth">
 
                 <div className="flex-1 space-y-6">
+                    
                     <LoginSignup isOpen={isModalOpen} onClose={closeModal} checkoutPd={checkoutPd} />
-                    <section className="bg-white md:p-4 mb-6">
+
+                    <section className="bg-white rounded-lg md:p-4 mb-6">
                         <div className="relative">
                             {mediaItems.length > 0 && (
                                 <div className="w-full h-[250px] lg:h-[450px] rounded-lg">
@@ -901,12 +927,22 @@ export default function ProductPage() {
                         <h2 className="text-base lg:text-2xl font-semibold">Keywords</h2>
                         {isExpanded ? <IoIosArrowUp size={24} /> : <IoIosArrowDown size={24} />}
                     </div>
-                    {isExpanded && (
+                    
+                    {isExpanded && prodData?.tags && (
                         <div className="mt-4 transition-all duration-300 ease-in-out">
-                            <p className="mb-2">{prodReturnPolicy?.return_policies}</p>
+                        {prodData.tags.split(',').map((tag, index) => (
+                            <a
+                                key={index}
+                                onClick={() => handleTagClick(tag)}
+                                className="text-blue-500 hover:underline cursor-pointer mr-2"
+                            >
+                                #{tag.trim()}
+                            </a>
+                        ))}
                         </div>
                     )}
                 </section>
+
                 
             </div>
             </>

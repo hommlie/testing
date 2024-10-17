@@ -131,7 +131,7 @@ exports.homeFeeds = async (req, res) => {
             attributes: commonProductAttributes,
             include: commonIncludes,
             where: {
-                cat_id: 30,
+                cat_id: 28,
                 status: 1
             },
             order: [['id', 'DESC']],
