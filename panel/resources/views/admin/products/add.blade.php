@@ -36,7 +36,7 @@
                                     <div class="form-group row">
                                       <label for="cat_id" class="col-sm-2 col-form-label">{{ trans('labels.category') }}</label>
                                       <div class="col-sm-10">
-                                        <select class="form-control" name="cat_id" id="cat_id">
+                                        <select class="form-control" name="cat_id" id="cat_id" required>
                                             <option value="">{{ trans('placeholder.select_category') }}</option>
                                             @foreach ($data as $category)
                                             <option value="{{$category->id}}" {{ old('cat_id') == $category->id ? 'selected' : ''}}>{{$category->category_name}}</option>
@@ -72,7 +72,7 @@
                                     <div class="form-group row">
                                       <label for="product_name" class="col-sm-2 col-form-label">{{ trans('Service Name') }}</label>
                                       <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="product_name" name="product_name" placeholder="{{ trans('Enter Service Name') }}" value="{{old('product_name')}}">
+                                        <input type="text" class="form-control" id="product_name" name="product_name" required placeholder="{{ trans('Enter Service Name') }}" value="{{old('product_name')}}">
                                         @if ($errors->has('product_name'))
                                             <span class="text-danger">{{ $errors->first('product_name') }}</span>
                                         @endif
@@ -107,7 +107,7 @@
                                     <div class="form-group row">
                                       <label for="image" class="col-sm-2 col-form-label">{{ trans('Images') }}</label>
                                       <div class="col-sm-10">
-                                        <input type="file" class="form-control" id="prod_image" name="image[]" multiple="true">
+                                        <input type="file" required class="form-control" id="prod_image" name="image[]" multiple="true">
                                         @if ($errors->has('image'))
                                             <span class="text-danger">{{ $errors->first('image') }}</span>
                                         @endif
@@ -121,16 +121,17 @@
                           <div class="col-lg-8">
                             <div class="card">
                               <div class="card-header">
-                                  <h6 class="card-title mb-0">Product Video with Thumbnail</h6>
+                                  <h6 class="card-title mb-0">Product's Video YouTube URL</h6>
                               </div>
                               <div class="card-body">
                                   <div class="px-3">
                                       <div class="row">
-                                        <div class="col-lg-6">
-                                          <label for="video">Video</label>
-                                          <input type="file" name="video" class="form-control" id="video">
+                                        <div class="col-lg-12">
+                                          <label for="video">YouTube Video URL (With https://)</label>
+                                          <input type="url" name="video" class="form-control" id="video" placeholder="https://youtube.com" />
+                                          <!-- <input type="file" name="video" class="form-control" id="video"> -->
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 d-none">
                                           <label for="video_thumbnail">VideoThumbnail</label>
                                           <input type="file" name="video_thumbnail" class="form-control" id="video_thumbnail">
                                         </div>
@@ -170,25 +171,121 @@
                           </div>
                         </div>
 
-                        <!-- <div class="card">
-                            <div class="card-header">
-                                <h6 class="card-title mb-0">Tags</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="px-3">
-                                  <div class="form-group row">
-                                    <label for="tags" class="col-sm-2 col-form-label">Tags</label>
-                                    <div class="col-sm-10">
-                                      <div class="edit-on-delete form-control" data-tags-input-name="tags"></div>
-                                      <p class="text-muted">Type any word related to your product & enter space. This will create tag & use for search your product based on this.</p>
-                                      @if ($errors->has('tags'))
-                                          <span class="text-danger">{{ $errors->first('tags') }}</span>
-                                      @endif
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                        </div> -->
+                        <div class="card">
+    <div class="card-header">
+        <h6 class="card-title mb-0">Tags</h6>
+    </div>
+    <div class="card-body">
+        <div class="px-3">
+            <div class="form-group row">
+                <label for="tags" class="col-sm-2 col-form-label">Tags</label>
+                <div class="col-sm-10">
+                    <div class="tags-input-container" id="tags-container">
+                        <input type="text" id="tag-input" placeholder="Add a tag..." class="form-control">
+                    </div>
+                    <input type="hidden" name="tags" id="tags-hidden" value="">
+                    <p class="text-muted">Type a word and press enter to add a tag. Click a tag to remove it.</p>
+                    @if ($errors->has('tags'))
+                        <span class="text-danger">{{ $errors->first('tags') }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tagInput = document.getElementById('tag-input');
+        const tagsContainer = document.getElementById('tags-container');
+        const hiddenInput = document.getElementById('tags-hidden');
+        let tags = [];
+
+        // Listen for Enter key to add tags
+        tagInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && tagInput.value.trim() !== '') {
+                e.preventDefault();
+                addTag(tagInput.value.trim());
+                tagInput.value = ''; // Clear the input field after adding tag
+            }
+        });
+
+        // Add a tag
+        function addTag(tagText) {
+            if (tags.includes(tagText)) return; // Avoid duplicate tags
+            tags.push(tagText);
+
+            // Create the tag element (button-like)
+            const tagElement = document.createElement('span');
+            tagElement.classList.add('tag-item');
+            tagElement.textContent = tagText;
+
+            // Add a remove option when clicking on the tag
+            tagElement.addEventListener('click', function () {
+                removeTag(tagText);
+            });
+
+            // Append the new tag to the container
+            tagsContainer.insertBefore(tagElement, tagInput);
+
+            updateHiddenInput();
+        }
+
+        // Remove a tag
+        function removeTag(tagText) {
+            tags = tags.filter(tag => tag !== tagText);
+
+            // Remove the tag element from the DOM
+            const tagElements = document.querySelectorAll('.tag-item');
+            tagElements.forEach(tagElement => {
+                if (tagElement.textContent === tagText) {
+                    tagsContainer.removeChild(tagElement);
+                }
+            });
+
+            updateHiddenInput();
+        }
+
+        // Update hidden input with comma-separated values
+        function updateHiddenInput() {
+            hiddenInput.value = tags.join(',');
+        }
+    });
+</script>
+
+<style>
+    .tags-input-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        border: 1px solid #ced4da;
+        padding: 5px;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    .tags-input-container input {
+        border: none;
+        outline: none;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .tag-item {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .tag-item:hover {
+        background-color: #0056b3;
+    }
+</style>
+
 
                     </div>
 
@@ -613,7 +710,7 @@
                                   <div class="form-group row">
                                     <label for="description" class="col-sm-2 col-form-label">{{ trans('labels.description') }}</label>
                                     <div class="col-sm-10">
-                                      <textarea class="form-control d-none" id="description" name="description" rows="8" placeholder="{{ trans('Service description') }}">{{old('description')}}</textarea>
+                                      <textarea class="form-control d-none" required id="description" name="description" rows="8" placeholder="{{ trans('Service description') }}">{{old('description')}}</textarea>
                                       <div id="editor"></div>
                                       @if ($errors->has('description'))
                                           <span class="text-danger">{{ $errors->first('description') }}</span>

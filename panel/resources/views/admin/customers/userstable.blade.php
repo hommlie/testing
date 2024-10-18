@@ -8,7 +8,7 @@
             <th>{{ trans('Email') }}</th>
             <th>{{ trans('Mobile') }}</th>
             <th>{{ trans('Date') }}</th>
-            <th>{{ trans('Status') }}</th>
+            <!-- <th>{{ trans('Status') }}</th> -->
         </tr>
     </thead>
     <tbody> 
@@ -24,7 +24,7 @@
             <td>{{$row->email ? $row->email : "NA" }}</td>
             <td>{{$row->mobile }}</td>
             <td>{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
-            <td> 
+            <!-- <td> 
                 @if($row->is_available=='1') 
                     <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus" data-status="2" data-id="{{$row->id}}">
                       <span class="green-text">{{ trans('Active') }}</span>
@@ -34,7 +34,7 @@
                         <span class="red-text">{{ trans('Deactive') }}</span>
                     </span>
                 @endif
-            </td>
+            </td> -->
             
         </tr>
 

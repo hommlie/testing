@@ -225,54 +225,73 @@
         });
     }
 
-    function do_delete(id,page_name,name,titles)
-    {
-        Swal.fire({
-            title: '{{ trans('labels.are_you_sure') }}',
-            text: "{{ trans('labels.delete_text') }} "+name+"!",
-            type: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '{{ trans('labels.yes') }}',
-            cancelButtonText: '{{ trans('labels.no') }}'
-        }).then((t) => {
-            if(t.value==true){  
-                $('#preloader').show();
-                $.ajax({
-                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: page_name,
-                    type: "POST",
-                    data : {'id':id},
+    function do_delete(id, page_name, name, titles) {
+    console.log("Delete function called with params - ID:", id, "Page:", page_name, "Name:", name, "Titles:", titles); // Log the initial parameters
+    
+    Swal.fire({
+        title: '{{ trans('labels.are_you_sure') }}',
+        text: "{{ trans('labels.delete_text') }} " + name + "!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '{{ trans('labels.yes') }}',
+        cancelButtonText: '{{ trans('labels.no') }}'
+    }).then((result) => {
+        console.log("Swal result:", result); // Log the result from Swal.fire
 
-                    success:function(data)
-                    { 
-                        $('#preloader').hide();
-                        if(data == 1000)
-                        {
-                            $('#del-'+id).remove();
-                            Swal.fire({type: 'success',title: '{{ trans('labels.success') }}',showConfirmButton: false,timer: 1500});    
-                        }
-                        else
-                        {
-                            Swal.fire({type: 'error',title: '{{ trans('labels.cancelled') }}',showConfirmButton: false,timer: 1500});
-                        }    
-                    },error:function(data){
-                        $('#preloader').hide();
-                        console.log("AJAX error in request: " + JSON.stringify(data, null, 2));
+        if (result.isConfirmed) {
+            console.log("Confirmed delete action."); // Log confirmation action
+            $('#preloader').show();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: page_name,
+                type: "POST",
+                data: { 'id': id },
+
+                success: function (data) {
+                    console.log("AJAX Success Response:", data); // Log success response
+                    $('#preloader').hide();
+
+                    if (data == 2000) {
+                        $('#del-' + id).remove();
+                        Swal.fire({
+                            icon: 'success',
+                            title: '{{ trans('labels.success') }}',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ trans('labels.cancelled') }}',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
-                });
-            }
-            else
-            {
-                Swal.fire({type: 'error',title: '{{ trans('labels.cancelled') }}',showConfirmButton: false,timer: 1500});
+                },
+                error: function (data) {
+                    $('#preloader').hide();
+                    console.log("AJAX error in request:", data); // Log the error response
+                }
+            });
+        } else {
+            console.log("Delete action was cancelled."); // Log cancellation
+            Swal.fire({
+                icon: 'error',
+                title: '{{ trans('labels.cancelled') }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    }).catch((error) => {
+        console.log("Swal error:", error); // Log any errors with Swal.fire itself
+    });
+}
 
-            }
-        });
-
-    }
     
     //Change Status
     $('body').on('click','.changeStatus',function() {

@@ -157,7 +157,7 @@ class ProductController extends Controller
 
         
 
-        $tags = "na";
+        // $tags = "na";
 
         $dataval=array(
             'vendor_id'=>'7',
@@ -185,7 +185,7 @@ class ProductController extends Controller
             'est_shipping_days'=>$request->est_shipping_days,
             'tax'=>$request->tax,
             'tax_type'=>$request->tax_type,
-            'tags'=>$tags,
+            'tags'=>$request->tags,
             'video'=>'NA',
             'video_thumbnail'=>'NA',
         );
@@ -236,26 +236,35 @@ class ProductController extends Controller
             }
         }
 
-        // Handling the video file
-        if ($request->hasFile('video') && $request->hasFile('video_thumbnail')) {
-            $video = $request->file('video');
-            $videoName = 'video-' . uniqid() . '.' . $video->getClientOriginalExtension();
+        
+        // if ($request->hasFile('video') && $request->hasFile('video_thumbnail')) {
+        //     $video = $request->file('video');
+        //     $videoName = 'video-' . uniqid() . '.' . $video->getClientOriginalExtension();
 
-            // Move the file to the desired location
-            $video->move('storage/app/public/images/products', $videoName);
+            
+        //     $video->move('storage/app/public/images/products', $videoName);
 
-            $video_thumbnail = $request->file('video_thumbnail');
-            $videoThumbnail = 'thumbnail-' . uniqid() . '.' . $video_thumbnail->getClientOriginalExtension();
+        //     $video_thumbnail = $request->file('video_thumbnail');
+        //     $videoThumbnail = 'thumbnail-' . uniqid() . '.' . $video_thumbnail->getClientOriginalExtension();
 
-            // Move the file to the desired location
-            $video_thumbnail->move('storage/app/public/images/products', $videoThumbnail);
+        //     $video_thumbnail->move('storage/app/public/images/products', $videoThumbnail);
 
-            // Save the video information to the database
+        //     $productimage = new ProductImages;
+        //     $productimage->product_id = $data->id;
+        //     $productimage->image = $videoName;
+        //     $productimage->media = 'Video';
+        //     $productimage->thumbnail = $videoThumbnail;
+        //     $productimage->save();
+        // }
+
+        // Store Youtue URL
+        if (!empty($request->video)) {
+            
+
             $productimage = new ProductImages;
             $productimage->product_id = $data->id;
-            $productimage->image = $videoName;
+            $productimage->image = $request->video;
             $productimage->media = 'Video';
-            $productimage->thumbnail = $videoThumbnail;
             $productimage->save();
         }
 
@@ -306,11 +315,21 @@ class ProductController extends Controller
         $subcategory=Subcategory::select('id','subcategory_name')->where('status','1')->get();
         $innersubcategory=Innersubcategory::select('id','innersubcategory_name')->where('status','1')->get();
         $attribute=Attribute::select('id','attribute')->where('status','1')->get();
-        $images=ProductImages::select('id','product_id',\DB::raw("CONCAT('".url('/storage/app/public/images/products/')."/', image) AS image_url"))->where('product_id',$id)->get();
+        $images = ProductImages::select('id', 'product_id', \DB::raw("CONCAT('".url('/storage/app/public/images/products/')."/', image) AS image_url"))
+            ->where('product_id', $id)
+            ->where('media', 'image') // Filter only images
+            ->get();
+        $video = ProductImages::select('id', 'product_id', 'image') // Select the raw 'image' value
+            ->where('product_id', $id)
+            ->where('media', 'video') // Filter for videos only
+            ->first(); // Retrieve only one record
+
+
+
         $brands=Brand::select('id','brand_name')->where('status','1')->get();
         $variations=Variation::where('product_id',$id)->get();
         
-        return view('admin.products.show',compact('data','category','subcategory','innersubcategory','attribute','images','brands','variations'));
+        return view('admin.products.show',compact('data','category','subcategory','innersubcategory','attribute','images','brands','variations','video'));
     }
 
     public function showimage(Request $request)
@@ -404,6 +423,25 @@ class ProductController extends Controller
             // Delete existing variations as product is now non-variant
             Variation::where('product_id', $request->product_id)->delete();
         }
+
+        if (!empty($request->video)) {
+            // Check if video_id is provided in the request for update
+            if (!empty($request->video_id)) {
+                // Update the existing video record
+                $productimage = ProductImages::find($request->video_id);
+                if ($productimage) {
+                    $productimage->image = $request->video; // Update the video file name or path
+                    $productimage->save(); // Save changes
+                }
+            }else{
+                $productimage = new ProductImages;
+                $productimage->product_id = $request->product_id;
+                $productimage->image = $request->video;
+                $productimage->media = 'Video';
+                $productimage->save();
+            }
+        }
+        
     
         $free_shipping = $request->free_shipping == "on" ? 1 : 2;
         $is_hot = $request->is_hot == "on" ? 1 : 2;
@@ -412,7 +450,8 @@ class ProductController extends Controller
         $is_return = $request->is_return == "on" ? 1 : 2;
         $return_days = $is_return == 1 ? $request->return_days : 0;
         $is_featured = $request->is_featured == "on" ? 1 : 2;
-        $tags = $request->tags ? implode(', ', $request->tags) : '';
+        // $tags = $request->tags ? implode(', ', $request->tags) : '';
+        $tags = $request->tags;
         
         $data = [
             'vendor_id' => '6',

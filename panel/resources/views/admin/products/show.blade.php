@@ -132,29 +132,186 @@
                             </div>
                         </div> -->
 
-                        <div class="card">
-                            <div class="card-header">
-                                <h6 class="card-title mb-0">Vat & TAX</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="px-3">
-                                    <div class="form-group row">
-                                      <label for="tax" class="col-sm-4 col-form-label">Tax</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="tax" name="tax" placeholder="{{ trans('placeholder.tax') }}" value="{{$data->tax}}">
-                                        @if ($errors->has('tax'))
-                                            <span class="text-danger">{{ $errors->first('tax') }}</span>
-                                        @endif
-
-                                        <select class="form-control mt-3" name="tax_type" id="tax_type">
-                                            <option value="amount" {{ $data->tax_type == 'amount' ? 'selected' : ''}}>Flat</option>
-                                            <option value="percent" {{ $data->tax_type == 'percent' ? 'selected' : ''}}>Percent</option>
-                                        </select>
+                        <div class="row">
+                          <div class="col-lg-8">
+                            <div class="card">
+                              <div class="card-header">
+                                  <h6 class="card-title mb-0">Product's Video YouTube URL</h6>
+                              </div>
+                              <div class="card-body">
+                                  <div class="px-3">
+                                      <div class="row">
+                                        <div class="col-lg-12">
+                                          <label for="video">YouTube Video URL (With https://)</label>
+                                            <input type="hidden" name="video_id" value="{{ $video ? $video->id : '' }}" id="">
+                                          <input type="url" name="video" class="form-control" id="video" value="{{ $video ? $video->image : '' }}" placeholder="https://youtube.com" />
+                                            <iframe width="100%" height="300px" class="p-3" 
+                                            src="https://www.youtube.com/embed/9oKSSjZMUTU?si=rbP4Z8nDKPyLszUO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                          <!-- <input type="file" name="video" class="form-control" id="video"> -->
+                                        </div>
+                                        <div class="col-lg-6 d-none">
+                                          <label for="video_thumbnail">VideoThumbnail</label>
+                                          <input type="file" name="video_thumbnail" class="form-control" id="video_thumbnail">
+                                        </div>
                                       </div>
-                                    </div>
-                                </div>
+                                      <!-- <div class="form-group row">
+                                        <label for="est_shipping_days" class="col-sm-6 col-form-label">Duration(in mins)</label>
+                                        <div class="col-sm-6">
+                                          <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days" placeholder="{{ trans('placeholder.est_shipping_days') }}" value="0">
+                                          @if ($errors->has('est_shipping_days'))
+                                              <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
+                                          @endif
+                                        </div>
+                                      </div> -->
+                                  </div>
+                              </div>
                             </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="card">
+                              <div class="card-header">
+                                  <h6 class="card-title mb-0">Service Duration</h6>
+                              </div>
+                              <div class="card-body">
+                                  <div class="px-3">
+                                      
+                                        <label for="est_shipping_days">In mins</label>
+                                        
+                                          <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days" placeholder="{{ trans('placeholder.est_shipping_days') }}" value="{{$data->est_shipping_days}}">
+                                          @if ($errors->has('est_shipping_days'))
+                                              <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
+                                          @endif
+                                        
+                                      
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+
+<div class="card">
+    <div class="card-header">
+        <h6 class="card-title mb-0">Tags</h6>
+    </div>
+    <div class="card-body">
+        <div class="px-3">
+            <div class="form-group row">
+                <label for="tags" class="col-sm-2 col-form-label">Tags</label>
+                <div class="col-sm-10">
+                    <div class="tags-input-container" id="tags-container">
+                        <input type="text" id="tag-input" placeholder="Add a tag..." class="form-control">
+                    </div>
+                    <input type="hidden" name="tags" id="tags-hidden" value="{{$data->tags}}">
+                    <p class="text-muted">Type a word and press enter to add a tag. Click a tag to remove it.</p>
+                    @if ($errors->has('tags'))
+                        <span class="text-danger">{{ $errors->first('tags') }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tagInput = document.getElementById('tag-input');
+        const tagsContainer = document.getElementById('tags-container');
+        const hiddenInput = document.getElementById('tags-hidden');
+        let tags = [];
+
+        // Split the existing tags from the database into an array (if available)
+        const initialTags = hiddenInput.value ? hiddenInput.value.split(',') : [];
+
+        // Pre-populate the tags from the initialTags array
+        initialTags.forEach(tag => addTag(tag.trim()));
+
+        // Listen for Enter key to add new tags
+        tagInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && tagInput.value.trim() !== '') {
+                e.preventDefault();
+                addTag(tagInput.value.trim());
+                tagInput.value = ''; // Clear the input field after adding tag
+            }
+        });
+
+        // Add a tag
+        function addTag(tagText) {
+            if (tags.includes(tagText)) return; // Avoid duplicate tags
+            tags.push(tagText);
+
+            // Create the tag element (button-like)
+            const tagElement = document.createElement('span');
+            tagElement.classList.add('tag-item');
+            tagElement.textContent = tagText;
+
+            // Add a remove option when clicking on the tag
+            tagElement.addEventListener('click', function () {
+                removeTag(tagText);
+            });
+
+            // Append the new tag to the container
+            tagsContainer.insertBefore(tagElement, tagInput);
+
+            updateHiddenInput();
+        }
+
+        // Remove a tag
+        function removeTag(tagText) {
+            tags = tags.filter(tag => tag !== tagText);
+
+            // Remove the tag element from the DOM
+            const tagElements = document.querySelectorAll('.tag-item');
+            tagElements.forEach(tagElement => {
+                if (tagElement.textContent === tagText) {
+                    tagsContainer.removeChild(tagElement);
+                }
+            });
+
+            updateHiddenInput();
+        }
+
+        // Update hidden input with comma-separated values
+        function updateHiddenInput() {
+            hiddenInput.value = tags.join(',');
+        }
+    });
+</script>
+
+<style>
+    .tags-input-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        border: 1px solid #ced4da;
+        padding: 5px;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    .tags-input-container input {
+        border: none;
+        outline: none;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .tag-item {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .tag-item:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+
+                        
                     </div>
 
                     <div class="col-md-4">
@@ -268,7 +425,7 @@
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card d-none">
                             <div class="card-header">
                                 <h6 class="card-title mb-0">Hot Deals</h6>
                             </div>
@@ -289,22 +446,31 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h6 class="card-title mb-0">Estimate Service Time</h6>
+                                <h6 class="card-title mb-0">Vat & TAX</h6>
                             </div>
                             <div class="card-body">
                                 <div class="px-3">
                                     <div class="form-group row">
-                                      <label for="est_shipping_days" class="col-sm-4 col-form-label">Service Duration</label>
-                                      <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days" placeholder="{{ trans('placeholder.est_shipping_days') }}" value="{{$data->est_shipping_days}}">
-                                        @if ($errors->has('est_shipping_days'))
-                                            <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="tax" name="tax" placeholder="{{ trans('placeholder.tax') }}" value="{{$data->tax}}">
+                                        @if ($errors->has('tax'))
+                                            <span class="text-danger">{{ $errors->first('tax') }}</span>
                                         @endif
+                                      </div>
+                                      <div class="col-lg-6">
+
+                                        <select class="form-control" name="tax_type" id="tax_type">
+                                          <option value="amount" {{ $data->tax_type == 'amount' ? 'selected' : ''}}>Flat</option>
+                                          <option value="percent" {{ $data->tax_type == 'percent' ? 'selected' : ''}}>Percent</option>
+                                        </select>
                                       </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
+                       
 
                         
 
