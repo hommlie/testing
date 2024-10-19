@@ -299,7 +299,7 @@ export function ContProvider({ children }) {
       getCart();
       getBookings();
       getAddresses();
-      getCoupons();
+      // getCoupons();
       getPaymentList();
       getCMSPagesData();
       getSearchProdData();

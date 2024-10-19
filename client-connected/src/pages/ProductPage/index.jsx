@@ -404,8 +404,20 @@ export default function ProductPage() {
         );
     };
 
+    const extractYouTubeVideoId = (url) => {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    };
+
     const renderYouTubeVideo = (url) => {
-        const videoId = url.split('v=')[1];
+        const videoId = extractYouTubeVideoId(url);
+        
+        if (!videoId) {
+            console.error('Invalid YouTube URL:', url);
+            return <p>Invalid YouTube URL</p>;
+        }
+    
         return (
             <iframe
                 width="100%"
@@ -665,11 +677,11 @@ export default function ProductPage() {
                         </div>
                     </section>
 
-                    {videoItems.length > 0 && (
+                    {videoItems?.length > 0 && (
                         <section className="bg-white rounded-lg p-4 mt-6">
                             <h2 className="text-2xl font-semibold mb-4">Product Videos</h2>
-                            <div className="space-y-4">
-                                {videoItems.map((video, index) => (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                {videoItems?.map((video, index) => (
                                     <div key={index} className="video-container">
                                         {renderYouTubeVideo(video.image_url)}
                                     </div>

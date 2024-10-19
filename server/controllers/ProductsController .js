@@ -284,15 +284,13 @@ exports.productDetails = async (req, res) => {
             'thumbnail',
             // [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
             [
-              sequelize.fn('CASE',
-                sequelize.when(sequelize.col('media').eq('Image'), 
-                  sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image'))
-                ),
-                sequelize.when(sequelize.col('media').eq('Video'), 
-                  sequelize.col('image')
-                ),
-                sequelize.literal('NULL')
-              ),
+              sequelize.literal(`
+                CASE 
+                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', image)
+                  WHEN media = 'Video' THEN image
+                  ELSE NULL
+                END
+              `),
               'image_url'
             ]
           ],

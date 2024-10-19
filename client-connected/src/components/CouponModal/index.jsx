@@ -15,19 +15,6 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
     const [enableLottie, setEnableLottie] = useState(false);
     const [appliedCoupon, setAppliedCoupon] = useState(null);
 
-    useEffect(() => {
-        getCoupons();
-        if (coupons?.length) {
-            setFilteredCoupons(coupons);
-        } else {
-            setFilteredCoupons([]);
-        }
-    }, []);
-
-    useEffect(() => {
-        handleSearch(searchTerm);
-    }, [searchTerm, coupons]);
-
     async function getCoupons() {
         await axios.post(`${config.API_URL}/api/coupons`,
             {
@@ -44,6 +31,19 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
             console.log("error getting coupons:", error);
         })
     }
+
+    useEffect(() => {
+        getCoupons();
+        if (coupons?.length) {
+            setFilteredCoupons(coupons);
+        } else {
+            setFilteredCoupons([]);
+        }
+    }, []);
+
+    useEffect(() => {
+        handleSearch(searchTerm);
+    }, [searchTerm, coupons]);
 
     const handleSearch = (value) => {
         setSearchTerm(value);
