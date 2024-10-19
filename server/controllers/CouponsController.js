@@ -5,33 +5,70 @@ const moment = require('moment');
 const apiUrl = process.env.apiUrl;
 
 exports.coupons = async (req, res) => {
+
+    const cat_id = req.body.cat_id;
+
     const now = new Date().toISOString().split('T')[0];
 
     try {
-        const coupons = await Coupons.findAll({
-            attributes: [
-                'id',
-                'coupon_name',
-                'type',
-                'percentage',
-                'amount',
-                [sequelize.fn('DATE_FORMAT', sequelize.col('start_date'), '%d-%m-%Y'), 'start_date'],
-                [sequelize.fn('DATE_FORMAT', sequelize.col('end_date'), '%d-%m-%Y'), 'end_date']
-            ],
-            where: {
-                status: 1,
-                start_date: { [Op.lte]: now },
-                end_date: { [Op.gte]: now }
-            },
-            order: [['id', 'DESC']],
-            limit: 10
-        });
 
-        if (coupons.length > 0) {
-            return res.status(200).json({ status: 1, message: 'Success', data: coupons });
+        if (cat_id) {
+            
+            const coupons = await Coupons.findAll({
+                attributes: [
+                    'id',
+                    'coupon_name',
+                    'type',
+                    'percentage',
+                    'amount',
+                    [sequelize.fn('DATE_FORMAT', sequelize.col('start_date'), '%d-%m-%Y'), 'start_date'],
+                    [sequelize.fn('DATE_FORMAT', sequelize.col('end_date'), '%d-%m-%Y'), 'end_date']
+                ],
+                where: {
+                    status: 1,
+                    start_date: { [Op.lte]: now },
+                    end_date: { [Op.gte]: now },
+                    cat_id: cat_id
+                },
+                order: [['id', 'DESC']],
+                limit: 10
+            });
+
+            if (coupons.length > 0) {
+                return res.status(200).json({ status: 1, message: 'Success', data: coupons });
+            } else {
+                return res.status(200).json({ status: 0, message: 'No data found' });
+            }
+
         } else {
-            return res.status(200).json({ status: 0, message: 'No data found' });
+
+            const coupons = await Coupons.findAll({
+                attributes: [
+                    'id',
+                    'coupon_name',
+                    'type',
+                    'percentage',
+                    'amount',
+                    [sequelize.fn('DATE_FORMAT', sequelize.col('start_date'), '%d-%m-%Y'), 'start_date'],
+                    [sequelize.fn('DATE_FORMAT', sequelize.col('end_date'), '%d-%m-%Y'), 'end_date']
+                ],
+                where: {
+                    status: 1,
+                    start_date: { [Op.lte]: now },
+                    end_date: { [Op.gte]: now }
+                },
+                order: [['id', 'DESC']],
+                limit: 10
+            });
+
+            if (coupons.length > 0) {
+                return res.status(200).json({ status: 1, message: 'Success', data: coupons });
+            } else {
+                return res.status(200).json({ status: 0, message: 'No data found' });
+            }
+
         }
+
     } catch (error) {
         console.error("Error fetching coupons:", error);
         return res.status(500).json({ status: 0, message: "Failed to fetch coupons", error });

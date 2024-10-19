@@ -111,7 +111,8 @@ app.post("/notification", NotificationController.notification);
 app.post("/notificationread", NotificationController.notificationread);
 
 //Coupons
-app.get("/coupons", CouponsController.coupons);
+// app.get("/coupons", CouponsController.coupons);
+app.post("/coupons", CouponsController.coupons);
 app.post("/applycoupons", CouponsController.applycoupons);
 app.get("/getcoupons", CouponsController.getCoupons);
 

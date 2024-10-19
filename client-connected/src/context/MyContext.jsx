@@ -60,7 +60,7 @@ export function ContProvider({ children }) {
     const [paymentType, setPaymentType] = useState();
     const [bookings, setBookings] = useState([]);
     const [selectedCoupon, setSelectedCoupon] = useState(() => getLocalStorageItem(`HommlieselectedCoupon`, {}));
-    const [coupons, setCoupons] = useState(() => getLocalStorageItem(`HommlieCoupons`, []));
+    // const [coupons, setCoupons] = useState(() => getLocalStorageItem(`HommlieCoupons`, []));
 
     const incrementApiCall = useCallback(() => {
       setActiveApiCalls(prev => prev + 1);
@@ -230,18 +230,18 @@ export function ContProvider({ children }) {
       }
     }
 
-    async function getCoupons() {
-      await axios.get(`${config.API_URL}/api/coupons`)
-      .then(response => {        
-          if(response.data.status === 1) {
-              setCoupons(response.data.data);
-              localStorage.setItem(`HommlieCoupons`, JSON.stringify(response.data.data));
-          }
-      })
-      .catch(error => {
-          console.log("error getting coupons:", error);
-      })
-    }
+    // async function getCoupons() {
+    //   await axios.get(`${config.API_URL}/api/coupons`)
+    //   .then(response => {        
+    //       if(response.data.status === 1) {
+    //           setCoupons(response.data.data);
+    //           localStorage.setItem(`HommlieCoupons`, JSON.stringify(response.data.data));
+    //       }
+    //   })
+    //   .catch(error => {
+    //       console.log("error getting coupons:", error);
+    //   })
+    // }
 
     async function getPaymentList() {
       const jwtToken = Cookies.get("HommlieUserjwtToken");
@@ -328,7 +328,8 @@ export function ContProvider({ children }) {
       cartProds, setCartProds, orders, setOrders, checkoutPd, setCheckoutPd, getUser, totalPrice, setTotalPrice,
       addresses, setAddresses, getAddresses, selectedAddrs, setSelectedAddrs, selectedDayTime, setSelectedDayTime,
       paymentList, setPaymentList, getPaymentList, paymentType, setPaymentType, rescheduleDayTime, setRescheduleDayTime,
-      bookings, setBookings, selectedCoupon, setSelectedCoupon, coupons, setCoupons, getCoupons,
+      bookings, setBookings, selectedCoupon, setSelectedCoupon, 
+      // coupons, setCoupons, getCoupons,
       prodData, setData, getSearchProdData, getHomeFeeds, getCategoryData, getBannerData, getCart, getBookings, fetchAllData,
       startLoading: () => setIsLoading(true),
       stopLoading: () => setIsLoading(false),

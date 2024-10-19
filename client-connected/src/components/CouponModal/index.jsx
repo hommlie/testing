@@ -3,11 +3,14 @@ import 'react-phone-input-2/lib/style.css';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useCont } from '../../context/MyContext';
 import { Player } from '@lottiefiles/react-lottie-player';
+import axios from 'axios';
+import config from '../../config/config';
 import couponSucess from '../Lotties/couponSuccess.json';
 
-const CouponModal = ({ isOpen, onClose, totalAmount }) => {
-    const { selectedCoupon, setSelectedCoupon, coupons, getCoupons } = useCont();
+const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
+    const { selectedCoupon, setSelectedCoupon } = useCont();
     const [searchTerm, setSearchTerm] = useState("");
+    const [coupons, setCoupons] = useState([]);
     const [filteredCoupons, setFilteredCoupons] = useState([]);
     const [enableLottie, setEnableLottie] = useState(false);
     const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -24,6 +27,23 @@ const CouponModal = ({ isOpen, onClose, totalAmount }) => {
     useEffect(() => {
         handleSearch(searchTerm);
     }, [searchTerm, coupons]);
+
+    async function getCoupons() {
+        await axios.post(`${config.API_URL}/api/coupons`,
+            {
+                cat_id,
+            }
+        )
+        .then(response => {        
+            if(response.data.status === 1) {
+                setCoupons(response.data.data);
+                // localStorage.setItem(`HommlieCoupons`, JSON.stringify(response.data.data));
+            }
+        })
+        .catch(error => {
+            console.log("error getting coupons:", error);
+        })
+    }
 
     const handleSearch = (value) => {
         setSearchTerm(value);

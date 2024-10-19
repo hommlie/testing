@@ -58,6 +58,8 @@ export default function ProductPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visibleItemsCount, setVisibleItemsCount] = useState(5);
     const [mediaItems, setMediaItems] = useState([]);
+    const [imageItems, setImageItems] = useState([]);
+    const [videoItems, setVideoItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState(0);
@@ -374,56 +376,47 @@ export default function ProductPage() {
 
     const handlePrevMedia = () => {
         setCurrentMediaIndex((prevIndex) =>
-            prevIndex === 0 ? mediaItems.length - 1 : prevIndex - 1
+            prevIndex === 0 ? imageItems.length - 1 : prevIndex - 1
         );
     };
 
     const handleNextMedia = () => {
         setCurrentMediaIndex((prevIndex) =>
-            prevIndex === mediaItems.length - 1 ? 0 : prevIndex + 1
+            prevIndex === imageItems.length - 1 ? 0 : prevIndex + 1
         );
     };
 
     useEffect(() => {
-        // setIsLoading(true);
-        setProgress(0);
-        if (videoRef.current && mediaItems[currentMediaIndex]?.media === "Video") {
-          videoRef.current.currentTime = 0;
+        if (mediaItems) {
+            setImageItems(mediaItems.filter(item => item.media === "Image"));            
+            setVideoItems(mediaItems.filter(item => item.media === "Video"));
         }
-    }, [currentMediaIndex, mediaItems]);
+    }, [mediaItems]);
 
     const renderMedia = (item) => {
-        if (item.media === "Video") {
-          return (
-            <div className="relative w-full h-full">
-              <video 
-                ref={videoRef}
-                className="w-full h-full rounded-lg object-contain"
-                src={item.image_url}
-                // onLoadedData={() => setIsLoading(false)}
-                onTimeUpdate={handleProgress}
-                autoPlay
-                loop
-                muted
-              />
-              <div className="absolute rounded-xl bottom-3 left-5 w-[96%] h-1 bg-white bg-opacity-30">
-                <div 
-                  className="h-1 rounded-xl bg-white" 
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
-          );
-        } else {
-          return (
+        return (
             <img
-              className="w-full h-full object-contain rounded-lg"
-              src={item.image_url}
-              alt="Product"
-              onLoad={() => {console.log("loaded")}}
+                className="w-full h-full object-contain rounded-lg"
+                src={item?.image_url}
+                alt="Product"
+                onLoad={() => {console.log("loaded")}}
             />
-          );
-        }
+        );
+    };
+
+    const renderYouTubeVideo = (url) => {
+        const videoId = url.split('v=')[1];
+        return (
+            <iframe
+                width="100%"
+                height="315"
+                src={`https://www.youtube.com/embed/${videoId}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Product Video"
+            ></iframe>
+        );
     };
 
     const handleProgress = () => {
@@ -516,12 +509,12 @@ export default function ProductPage() {
 
                     <section className="bg-white rounded-lg md:p-4 mb-6">
                         <div className="relative">
-                            {mediaItems.length > 0 && (
+                            {imageItems.length > 0 && (
                                 <div className="w-full h-[250px] lg:h-[450px] rounded-lg">
-                                    {renderMedia(mediaItems[currentMediaIndex])}
+                                    {renderMedia(imageItems[currentMediaIndex])}
                                 </div>
                             )}
-                            {mediaItems.length > 1 && (
+                            {imageItems.length > 1 && (
                             <>
                                 <button onClick={handlePrevMedia} className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full">
                                     <IoIosArrowBack />
@@ -671,6 +664,19 @@ export default function ProductPage() {
                             )}
                         </div>
                     </section>
+
+                    {videoItems.length > 0 && (
+                        <section className="bg-white rounded-lg p-4 mt-6">
+                            <h2 className="text-2xl font-semibold mb-4">Product Videos</h2>
+                            <div className="space-y-4">
+                                {videoItems.map((video, index) => (
+                                    <div key={index} className="video-container">
+                                        {renderYouTubeVideo(video.image_url)}
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
             
                 </div>
 
@@ -946,7 +952,7 @@ export default function ProductPage() {
             </>
             )}
 
-            <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalAmount + taxAmount} />
+            <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalAmount + taxAmount} cat_id={prodData.cat_id} />
             <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
         
         </main>
