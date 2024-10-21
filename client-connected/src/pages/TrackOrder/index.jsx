@@ -183,20 +183,21 @@ export default function TrackOrder() {
 
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold mb-4">Order Details</h2>
-                        <div className="flex items-start space-x-4 mb-4">
+                        <div className="flex items-start space-x-4 mb-4 h-40">
                             <img src={trackingDetails?.image} alt="" className="w-20 lg:w-32 h-20 lg:h-32 object-cover rounded-md" />
                             <div className="flex-1 space-y-1">
                                 <h3 className="text-sm lg:text-lg font-semibold">{trackingDetails?.product_name}</h3>
                                 <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.attribute}</p>
                                 <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.variation}</p>
                                 <p className="text-xs lg:text-base">Quantity: {trackingDetails?.qty}</p>
-                                <p className="text-xs lg:text-base">Price: ₹{trackingDetails?.price}</p>
+                                <p className="text-xs lg:text-base">Price: ₹{(trackingDetails?.price)}</p>
                                 {trackingDetails?.discount_amount !== 0 &&
                                     <p className="text-xs lg:text-base">Discount: ₹{trackingDetails?.discount_amount}</p>
                                 }
                             </div>
-                            <div className="lg:text-right">
+                            <div className="flex flex-col justify-end h-full text-center">
                                 <p className="text-sm lg:text-xl font-bold">₹{trackingDetails?.grand_total}</p>
+                                <span className="text-[10px] font-medium opacity-[50%]">(Including tax)</span>
                             </div>
                         </div>
                         <div className="border-t border-gray-200 pt-4">

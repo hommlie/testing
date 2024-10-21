@@ -269,7 +269,14 @@ export default function BookingSuccess() {
                                 {orderInfo?.discount_amount != 0 ?
                                     <div className="flex flex-row justify-between text-md">
                                         <p>Discount:</p>
-                                        <p>{orderInfo?.discount_amount}</p>
+                                        <p>₹{orderInfo?.discount_amount}</p>
+                                    </div>
+                                    : null
+                                }
+                                {orderInfo?.tax != 0 ?
+                                    <div className="flex flex-row justify-between text-md">
+                                        <p>Tax:</p>
+                                        <p>₹{orderInfo?.tax}</p>
                                     </div>
                                     : null
                                 }

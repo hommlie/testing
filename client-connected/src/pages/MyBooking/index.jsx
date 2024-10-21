@@ -150,7 +150,7 @@ export default function MyBookings() {
                                             <span className="inline-block px-3 py-1 rounded font-medium text-xs" style={getStatusStyles(od?.order_status)}>{OrderStatuses[od?.order_status]}</span>
                                             <p className="font-bold">{od?.product_name}</p>
                                             <p className="font-bold">{od?.attribute} {od?.variation ? `(${od?.variation})` : null}</p>
-                                            <p>Quantity: {od?.qty} - Price: ₹{od?.price}</p>
+                                            <p className="flex items-center gap-1">Quantity: {od?.qty} - Price: ₹{od?.price} <span className="text-[10px] font-medium opacity-[50%]">(Including tax)</span> </p>
                                             <p className="font-semibold">Total: ₹{od?.grand_total}</p>
                                             <p className="text-sm">Scheduled: {od?.desired_date} at {od?.desired_time}</p>
                                         </div>

@@ -7,11 +7,6 @@ const moment = require('moment');
 const apiUrl = process.env.apiUrl;
 const { sendEmail } = require('../middleware/mailMiddleware');
 
-exports.paymentSuccess = async (req, res) => {
-    // Redirect logic
-    res.redirect('https://techmonkshub.com/e-commerce/success');
-}
-
 exports.initiatePayment = async (req, res) => {
   try {
     const instance = new Razorpay({
@@ -83,47 +78,6 @@ exports.verifyPayment = async (req, res) => {
   }
 };
 
-exports.initiatePaymentApp = async (req, res) => {
-    const { user_id, grand_total } = req.body;
-
-    if (!user_id) {
-      return res.status(400).json({ status: 0, message: "Please login to save address" });
-    }
-
-    const cartid = Math.random().toString(36).substring(7);
-    const paymentData = {
-      tran_type: "sale",
-      tran_class: "ecom",
-      cart_id: cartid,
-      cart_currency: "SAR",
-      cart_amount: 1,
-      cart_description: "Description of the items/services",
-      callback: "https://techmonkshub.com/e-commerce/checkout",
-      return: `https://techmonkshub.com/e-commerce/paymentSuccess/${user_id}`,
-      profile_id: 87366, // Adjust as per your logic
-    };
-
-    try {
-      // Example of making HTTP request to external service using 'axios' or 'node-fetch'
-      // Replace this with your actual API request logic
-      // const response = await axios.post("https://secure.paytabs.sa/payment/request", paymentData, {
-      //   headers: {
-      //     authorization: "S9JNBLM2W2-JD2ZM2HZGN-KBMZ9BT6WM",
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-
-      // Example response handling
-      // return res.status(200).json(response.data);
-
-      // For demonstration purpose, returning dummy data
-      return res.status(200).json({ status: 1, message: "Payment initiated successfully", payment_data: paymentData });
-    } catch (error) {
-      console.error("Error initiating payment:", error);
-      return res.status(500).json({ status: 0, message: "Failed to initiate payment" });
-    }
-}
-
 exports.order = async (req, res) => {
   const { 
     user_id, 
@@ -175,6 +129,8 @@ exports.order = async (req, res) => {
     for (const cartItem of cartItems) {
       const { vendor_id, product_id, product_name, image, qty, price, attribute, variation, tax, shipping_cost } = cartItem;
 
+      const 
+
       const variationDetails = await Variation.findOne({
         where: { id: variation, product_id }
       });
@@ -190,42 +146,7 @@ exports.order = async (req, res) => {
 
         for (let i = 0; i < variation_times; i++) {
           const orderDate = moment(desired_date).add(i * variation_interval, 'days').format('YYYY-MM-DD');
-
-          console.log(
-            {
-              user_id,
-              vendor_id,
-              product_id,
-              order_number,
-              payment_id,
-              product_name,
-              image,
-              qty,
-              price: pricePerOrder,
-              attribute,
-              variation,
-              tax: (tax * qty) / variation_times,
-              coupon_name,
-              shipping_cost: shipping_cost,
-              order_total: grand_total,
-              order_notes,
-              payment_type,
-              full_name,
-              email,
-              mobile,
-              landmark,
-              street_address,
-              pincode,
-              latitude,
-              longitude,
-              discount_amount,
-              order_status: 1,
-              desired_time: formattedTime,
-              desired_date: orderDate,
-            }
-          );
-          
-
+        
           const order = await Order.create({
             user_id,
             vendor_id,
@@ -261,41 +182,6 @@ exports.order = async (req, res) => {
           orders.push(order);
         }
       } else {
-
-        console.log(
-          {
-            user_id,
-            vendor_id,
-            product_id,
-            order_number,
-            payment_id,
-            product_name,
-            image,
-            qty,
-            price,
-            attribute,
-            variation,
-            tax: tax * qty,
-            coupon_name,
-            shipping_cost,
-            order_total: grand_total,
-            order_notes,
-            payment_type,
-            full_name,
-            email,
-            mobile,
-            landmark,
-            street_address,
-            pincode,
-            latitude,
-            longitude,
-            discount_amount,
-            order_status: 1,
-            desired_time: formattedTime,
-            desired_date,
-          }
-        );
-        
           
         const order = await Order.create({
           user_id,

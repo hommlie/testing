@@ -93,10 +93,10 @@ app.post("/checkout", CheckoutController.checkout);
 app.post("/paymentlist", PaymentController.paymentlist);
 
 //Order
-app.post("/initiatePaymentApp", OrderController.initiatePaymentApp);
+// app.post("/initiatePaymentApp", OrderController.initiatePaymentApp);
 app.post("/initiatePayment", OrderController.initiatePayment);
 app.post("/verifyPayment", OrderController.verifyPayment);
-app.post("/paymentSuccess/{category}/{slug}", OrderController.paymentSuccess);
+// app.post("/paymentSuccess/{category}/{slug}", OrderController.paymentSuccess);
 app.post("/order", OrderController.order);
 app.post("/orderhistory", OrderController.orderhistory);
 app.post("/orderdetails", OrderController.orderdetails);
