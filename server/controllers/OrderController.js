@@ -129,7 +129,7 @@ exports.order = async (req, res) => {
     for (const cartItem of cartItems) {
       const { vendor_id, product_id, product_name, image, qty, price, attribute, variation, tax, shipping_cost } = cartItem;
 
-      const 
+      const discountAmount = discount_amount/cartItems.length;
 
       const variationDetails = await Variation.findOne({
         where: { id: variation, product_id }
@@ -173,7 +173,7 @@ exports.order = async (req, res) => {
             pincode,
             latitude,
             longitude,
-            discount_amount,
+            discount_amount: discountAmount,
             order_status: 1,
             desired_time: formattedTime,
             desired_date: orderDate,
