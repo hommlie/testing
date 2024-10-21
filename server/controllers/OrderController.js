@@ -586,7 +586,13 @@ exports.trackOrder = async (req, res) => {
         'desired_time',
         'desired_date',
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/products/', image)`), 'image'],
-        [sequelize.fn('DATE_FORMAT', sequelize.col('Order.created_at'), '%d-%m-%Y'), 'date']
+        [sequelize.fn('DATE_FORMAT', sequelize.col('Order.created_at'), '%d-%m-%Y'), 'date'],
+        [sequelize.literal(`
+          CASE 
+            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost)
+            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(discount_amount)
+          END
+        `), 'grand_total']
       ],
       include: [
         {

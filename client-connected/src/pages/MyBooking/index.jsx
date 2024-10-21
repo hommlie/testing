@@ -45,7 +45,9 @@ export default function MyBookings() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        // getBookings();        
+        // getBookings();  
+        console.log(bookings);
+              
     }, []);
 
     useEffect(() => {        
@@ -149,7 +151,7 @@ export default function MyBookings() {
                                             <p className="font-bold">{od?.product_name}</p>
                                             <p className="font-bold">{od?.attribute} {od?.variation ? `(${od?.variation})` : null}</p>
                                             <p>Quantity: {od?.qty} - Price: ₹{od?.price}</p>
-                                            <p className="font-semibold">Total: ₹{od?.order_total}</p>
+                                            <p className="font-semibold">Total: ₹{od?.grand_total}</p>
                                             <p className="text-sm">Scheduled: {od?.desired_date} at {od?.desired_time}</p>
                                         </div>
                                         <div className="w-full md:w-1/4 flex flex-col justify-between gap-2">
