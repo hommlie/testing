@@ -209,7 +209,7 @@ exports.order = async (req, res) => {
           pincode,
           latitude,
           longitude,
-          discount_amount,
+          discount_amount: discountAmount,
           order_status: 1,
           desired_time: formattedTime,
           desired_date,
