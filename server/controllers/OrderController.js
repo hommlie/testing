@@ -310,7 +310,7 @@ exports.orderhistory = async (req, res) => {
         'discount_amount', 'shipping_cost', 'order_total', 'full_name', 'email', 'mobile', 'payment_type',
         'status', 'image'
       ],
-      order: [['id', 'DESC']],
+      order: [['order_number', 'DESC'], ['id', 'DESC']],
       limit: 10
     });
 

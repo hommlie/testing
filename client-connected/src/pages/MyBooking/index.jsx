@@ -119,6 +119,12 @@ export default function MyBookings() {
         navigate(`${config.VITE_BASE_URL}/product/${item.product_id}/${slug}`);
     };
 
+    const findTotalDiscount = (orders) => {
+        return orders.reduce((total, order) => {
+            return total + parseFloat(order.discount_amount);
+        }, 0);
+    }
+
     return (
         <main className="flex justify-center bg-gray-100 min-h-screen py-8">
             <section className="w-[90%] md:w-[70%] space-y-6">
@@ -193,7 +199,7 @@ export default function MyBookings() {
                                     }
                                     {orders[0]?.discount_amount && orders[0]?.discount_amount != 0 ?
                                         <p className="text-sm mb-1">
-                                            <span className="font-medium">Discount:</span> ₹{orders[0]?.discount_amount}
+                                            <span className="font-medium">Discount:</span> ₹{findTotalDiscount(orders)}
                                         </p>
                                         : null
                                     }
