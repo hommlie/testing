@@ -13,6 +13,7 @@ const sequelize = new Sequelize(
       ssl: {
         rejectUnauthorized: false
       }
+      // ssl: false // No SSL connection since XAMPP doesn't support it
     }
   }
 );

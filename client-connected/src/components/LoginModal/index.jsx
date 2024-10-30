@@ -26,7 +26,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
     const errorNotify = (error) => notify(error, 'error');
     const warningNotify = (warning) => notify(warning, 'warning');
     
-    const { token, setToken, user, setUser, getUser, getCart, getBookings, getAddresses, getCoupons, getPaymentList } = useCont();
+    const { token, setToken, user, setUser, getUser, getCart, getBookings, getAddresses, getPaymentList } = useCont();
 
     useEffect(() => {
         if (user?.length !== 0) onClose();
@@ -90,6 +90,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 errorNotify(response.data.message);
             }
         } catch (error) {
+            console.log(error);
             errorNotify(error.response?.data?.message || "An error occurred");
         }
     };
@@ -132,13 +133,14 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 getCart();
                 getBookings();
                 getAddresses();
-                getCoupons();
+                // getCoupons();
                 getPaymentList();
                 onClose();
             } else {
                 errorNotify(response.data.message);
             }
         } catch (error) {
+            console.log(error);
             errorNotify(error.response?.data?.message || "An error occurred");
             setOtp(['', '', '', '']);
         }

@@ -113,6 +113,8 @@ export function ContProvider({ children }) {
         const response = await axios.get(`${config.API_URL}/api/banner`);
         if (response.data.status === 1) {          
           setBannerData(response.data);
+          console.log(response.data);
+          
           localStorage.setItem("HommliebannerData", JSON.stringify(response.data));
         }
       } catch (err) {

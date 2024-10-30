@@ -45,48 +45,56 @@ const AddressModal = ({ isOpen, onClose }) => {
   // }, [addresses]);
 
   useEffect(() => {
-    if (window.google && inputRef.current && formClicked && !autocompleteRef.current) {
+    if (window.google && inputRef.current && formClicked) {
       initAutocomplete();
     }
   }, [formClicked]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setFormClicked(false);
+    }
+  }, [isOpen]);
+
   const initAutocomplete = () => {
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-      types: ['address'],
-      componentRestrictions: { country: 'in' }
-    });
+    if (!autocompleteRef.current) {
+      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+        types: ['address'],
+        componentRestrictions: { country: 'in' }
+      });
 
-    autocompleteRef.current.addListener('place_changed', () => {
-      const place = autocompleteRef.current.getPlace();
-      if (!place.geometry) {
-        warningNotify('No details available for this place');
-        return;
-      }
+      autocompleteRef.current.addListener('place_changed', () => {
+        const place = autocompleteRef.current.getPlace();
+        if (!place.geometry) {
+          warningNotify('No details available for this place');
+          return;
+        }
 
-      let address = '';
-      let postcode = '';
-      let lat = place.geometry.location.lat();
-      let lng = place.geometry.location.lng();
+        let address = '';
+        let postcode = '';
+        let lat = place.geometry.location.lat();
+        let lng = place.geometry.location.lng();
 
-      if (place.address_components) {
-        address = place.formatted_address;
+        if (place.address_components) {
+          address = place.formatted_address;
 
-        for (let component of place.address_components) {
-          if (component.types.includes('postal_code')) {
-            postcode = component.long_name;
-            break;
+          for (let component of place.address_components) {
+            if (component.types.includes('postal_code')) {
+              postcode = component.long_name;
+              break;
+            }
           }
         }
-      }
 
-      setFormData(prevState => ({
-        ...prevState,
-        address: address,
-        pincode: postcode,
-        latitude: lat.toString(),
-        longitude: lng.toString()
-      }));
-    });
+        setFormData(prevState => ({
+          ...prevState,
+          address: address,
+          pincode: postcode,
+          latitude: lat.toString(),
+          longitude: lng.toString()
+        }));
+      });
+    }
   };
 
   const getCurrentLocation = () => {

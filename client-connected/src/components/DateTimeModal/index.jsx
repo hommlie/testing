@@ -53,22 +53,22 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
         const todayDate = today.getDate();
         if (selectedDate.date === todayDate) {
             if (currentTime < 9 * 60) {
-                for (let hour = 9; hour < 18; hour += 2) {
+                for (let hour = 9; hour < 20; hour += 1) {
                     addTimeSlot(hour, 0);
                 }
-            } else if (currentTime >= 9 * 60 && currentTime < 18 * 60) {
-                let nextHour = currentHour + 2;
+            } else if (currentTime >= 9 * 60 && currentTime < 20 * 60) {
+                let nextHour = currentHour + 1;
                 while (nextHour < 18) {
                     addTimeSlot(nextHour, 0);
-                    nextHour += 2;
+                    nextHour += 1;
                 }
             } else {
-                for (let hour = 9; hour < 18; hour += 2) {
+                for (let hour = 9; hour < 20; hour += 1) {
                     addTimeSlot(hour, 0);
                 }
             }
         } else {
-            for (let hour = 9; hour < 18; hour += 2) {
+            for (let hour = 9; hour < 20; hour += 1) {
                 addTimeSlot(hour, 0);
             }
         }

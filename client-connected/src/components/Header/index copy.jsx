@@ -8,21 +8,20 @@ import { PiBuildingApartmentFill } from "react-icons/pi";
 import { FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import "./index.css";
-import cartIcon from "../../assets/images/cart-icon.svg";
-import womenEmpLogo from "../../assets/images/women-emp-icon.png";
-import commercialIcon from "../../assets/images/commercial-icon.svg";
-import userIcon from "../../assets/images/user-icon.svg";
+import cartIcon from '../../assets/images/cart-icon.svg';
+import womenEmpLogo from '../../assets/images/women-emp-icon.png';
+import commercialIcon from '../../assets/images/commercial-icon.svg';
+import userIcon from '../../assets/images/user-icon.svg';
 import Loading from "../Loading";
-import emptyCart from "../../assets/images/illustrator/empty_cart.png";
-import emptySearch from "../../assets/images/illustrator/empty_search.png";
+import emptyCart from '../../assets/images/illustrator/empty_cart.png';
+import emptySearch from '../../assets/images/illustrator/empty_search.png';
 import LoginSignup from "../LoginModal";
 import AddressModal from "../AddressModal";
 import ReferAndEarn from "../ReferAndEarnModal";
-import GoogleMapLoader from "../GoogleMapLoader";
-// import LocationModal from "../LocationModal";
+import GoogleMapLoader from '../GoogleMapLoader';
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/config";
 import { jwtDecode } from "jwt-decode";
@@ -42,26 +41,18 @@ export default function Header({ logo, logoAlt }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [isReferAndEarnOpen, setIsReferAndEarnOpen] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState("Get Current Location");
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState("Set Location");
+
   const navigate = useNavigate();
   const notify = useToast();
   const headerRef = useRef(null);
   const loginDropdownRef = useRef(null);
   const cartDropdownRef = useRef(null);
 
-  const openPage = () => {
-    setIsLocationModalOpen(true);
-  };
-
-  const closePage = () => {
-    setIsLocationModalOpen(false);
-  };
-
   useEffect(() => {
     console.log(user);
-
-    const handleClickOutside = event => {
+    
+    const handleClickOutside = (event) => {
       if (loginDropdownRef.current && !loginDropdownRef.current.contains(event.target)) {
         setIsLoginOpen(false);
       }
@@ -93,7 +84,7 @@ export default function Header({ logo, logoAlt }) {
             setTimeout(() => {
               setIsTyping(true);
               setCurrentPlaceholder("");
-              setCurrentPlaceholderIndex(prev => (prev + 1) % searchPlaceholderData.length);
+              setCurrentPlaceholderIndex((prev) => (prev + 1) % searchPlaceholderData.length);
             }, 2000);
           }
         }
@@ -106,7 +97,7 @@ export default function Header({ logo, logoAlt }) {
   const getCurrentLocation = () => {
     if (navigator.geolocation && window.isSecureContext) {
       navigator.geolocation.getCurrentPosition(
-        async position => {
+        async (position) => {
           const { latitude, longitude } = position.coords;
           try {
             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
@@ -117,9 +108,9 @@ export default function Header({ logo, logoAlt }) {
             setCurrentLocation("Location not found");
           }
         },
-        error => {
+        (error) => {
           console.error("Error getting location:", error);
-          setCurrentLocation("Enable location service");
+          setCurrentLocation("Unable to get location");
         }
       );
     } else {
@@ -129,7 +120,7 @@ export default function Header({ logo, logoAlt }) {
   };
 
   const openWhatsApp = () => {
-    window.open(`https://wa.link/8whe95`, "_blank");
+    window.open(`https://wa.link/8whe95`, '_blank');
   };
 
   const callNumber = () => {
@@ -138,10 +129,10 @@ export default function Header({ logo, logoAlt }) {
 
   const handleLogout = () => {
     setUser([]);
-    Cookies.remove("HommlieUserjwtToken");
-    localStorage.removeItem("Hommlieuser");
-    localStorage.removeItem("HommlieselectedAddrs");
-    localStorage.removeItem("Hommliecart");
+    Cookies.remove('HommlieUserjwtToken');
+    localStorage.removeItem('Hommlieuser');
+    localStorage.removeItem('HommlieselectedAddrs');
+    localStorage.removeItem('Hommliecart');
     getUser();
     getCart();
     setCart([]);
@@ -152,16 +143,15 @@ export default function Header({ logo, logoAlt }) {
     navigate(`${config.VITE_BASE_URL}`);
   };
 
-  const handleRemoveFromCart = async id => {
+  const handleRemoveFromCart = async(id) => {
     const jwtToken = Cookies.get("HommlieUserjwtToken");
     if (jwtToken) {
       const user_id = jwtDecode(jwtToken);
       try {
-        const response = await axios.post(
-          `${config.API_URL}/api/deleteproduct`,
+        const response = await axios.post(`${config.API_URL}/api/deleteproduct`, 
           {
-            user_id: user_id.id,
-            cart_id: id,
+            user_id: user_id.id, 
+            cart_id: id
           },
           {
             headers: {
@@ -169,7 +159,7 @@ export default function Header({ logo, logoAlt }) {
             },
           }
         );
-        if (response.data.status === 1) {
+        if(response.data.status === 1) {
           console.log(response.data.message);
           getCart();
         }
@@ -188,11 +178,10 @@ export default function Header({ logo, logoAlt }) {
         handleRemoveFromCart(id);
       } else {
         try {
-          const response = await axios.post(
-            `${config.API_URL}/api/qtyUpdate`,
+          const response = await axios.post(`${config.API_URL}/api/qtyUpdate`,
             {
               qty,
-              cart_id: id,
+              cart_id: id
             },
             {
               headers: {
@@ -200,7 +189,7 @@ export default function Header({ logo, logoAlt }) {
               },
             }
           );
-          if (response.data.status === 1) {
+          if(response.data.status === 1) {
             console.log(response.data.message);
             getCart();
           }
@@ -211,19 +200,19 @@ export default function Header({ logo, logoAlt }) {
     }
   };
 
-  const handleSearchChange = e => {
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
     if (e.target.value === "") {
       setIsSearchOpen(false);
       setSearchResults([]);
     } else {
       setIsSearchOpen(true);
-      const results = prodData.filter(product => product.product_name.toLowerCase().includes(e.target.value.toLowerCase()));
+      const results = prodData.filter(product =>
+        product.product_name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
       setSearchResults(results);
     }
   };
-
-  const location = useLocation();
 
   return (
     <GoogleMapLoader>
@@ -234,33 +223,16 @@ export default function Header({ logo, logoAlt }) {
               <NavLink to={`${config.VITE_BASE_URL}/`}>
                 <img src={logo} alt={logoAlt} className="h-10 w-32 object-contain" />
               </NavLink>
-
-              {/* <button
+              <button
                 onClick={getCurrentLocation}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg border-[1px] border-gray-700"
+                className="flex items-center space-x-2 px-3 py-2 rounded-full"
               >
                 <MdLocationOn className="text-sm md:text-xl" color="#32A071" />
                 <div className="flex flex-col text-left">
                   <span className="text-[10px] md:text-sm font-medium">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
                   <span className="text-[10px] md:text-xs">{currentLocation?.address?.state_district} {currentLocation?.address?.state}</span>
                 </div>
-              </button> */}
-              <div className="">
-                <button 
-                  // onClick={openPage} 
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg glow-border"
-                >
-                  <MdLocationOn className="text-sm md:text-xl" color="#32A071" />
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] md:text-sm font-medium">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
-                    <span className="text-[10px] md:text-xs">
-                      {currentLocation?.address?.state_district} {currentLocation?.address?.state}
-                    </span>
-                  </div>
-                </button>
-
-                {/* {isLocationModalOpen && <LocationModal onClose={closePage} />} */}
-              </div>
+              </button>
             </div>
 
             <div className="hidden md:flex items-center space-x-6">
@@ -268,67 +240,39 @@ export default function Header({ logo, logoAlt }) {
                 <img src={womenEmpLogo} className="h-6" alt="Women Empowerment" />
                 <span className="text-sm font-medium">Women Empowerment</span>
               </NavLink>
-              <NavLink to="https://b2b.hommlie.com/" className="flex flex-col items-center ">
+              <NavLink to="https://b2b.hommlie.com/" className="flex flex-col items-center space-x-2">
                 <img src={commercialIcon} className="h-6" alt="Women Empowerment" />
                 <span className="text-sm font-medium">Commercial</span>
               </NavLink>
               <div className="relative">
-                <button className="flex flex-col items-center " onClick={() => (user?.length !== 0 ? setIsLoginOpen(!isLoginOpen) : setIsModalOpen(true))}>
-                  <img src={user?.profileImage || userIcon} alt="user icon" className="h-6 w-6 rounded-full object-cover " />
+                <button
+                  className="flex flex-col items-center space-x-2"
+                  onClick={() => user?.length !== 0 ? setIsLoginOpen(!isLoginOpen) : setIsModalOpen(true)}
+                >
+                  <img src={user?.profileImage || userIcon} alt="user icon" className="h-6 w-6 rounded-full object-cover" />
                   <span className="text-sm font-medium">{user?.length !== 0 ? user.name : "Profile"}</span>
                 </button>
                 {isLoginOpen && (
                   <div ref={loginDropdownRef} className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30">
-                    <NavLink
-                      onClick={() => setIsLoginOpen(false)}
-                      to={`${config.VITE_BASE_URL}/my-bookings`}
-                      className={`block px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/my-bookings` ? "bg-[#c5dbca]" : "hover:bg-gray-100"}`}
-                    >
-                      My Bookings
-                    </NavLink>
-                    <NavLink
-                      onClick={() => setIsLoginOpen(false)}
-                      to={`${config.VITE_BASE_URL}/edit-profile`}
-                      className={`block px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/edit-profile` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
-                    >
-                      Edit Profile
-                    </NavLink>
-                    <button
-                      onClick={() => {
-                        setIsAddressModalOpen(true);
-                        setIsLoginOpen(false);
-                      }}
-                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/your-addresses` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
-                    >
-                      Your Addresses
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIsReferAndEarnOpen(true);
-                        setIsLoginOpen(false);
-                      }}
-                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/refer-and-earn` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
-                    >
-                      Refer & Earn
-                    </button>
-                    <NavLink
-                      onClick={() => setIsLoginOpen(false)}
-                      to={`${config.VITE_BASE_URL}/contact-us`}
-                      className={`block px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/contact-us` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
-                    >
-                      Help Center
-                    </NavLink>
-                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Log out
-                    </button>
+                    <NavLink to={`${config.VITE_BASE_URL}/my-bookings`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Bookings</NavLink>
+                    <NavLink to={`${config.VITE_BASE_URL}/edit-profile`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Profile</NavLink>
+                    <button onClick={() => {setIsAddressModalOpen(true); setIsLoginOpen(false);}} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Addresses</button>
+                    <button onClick={() => {setIsReferAndEarnOpen(true); setIsLoginOpen(false);}} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Refer & Earn</button>
+                    <NavLink to={`${config.VITE_BASE_URL}/contact-us`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Help Center</NavLink>
+                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log out</button>
                   </div>
                 )}
               </div>
               <div className="relative">
-                <button className="flex flex-col items-center space-x-2" onClick={() => setIsCartOpen(!isCartOpen)}>
+                <button
+                  className="flex flex-col items-center space-x-2"
+                  onClick={() => setIsCartOpen(!isCartOpen)}
+                >
                   <img src={cartIcon} alt="cart icon" className="h-7" />
                   <span className="text-sm font-medium">Bag</span>
-                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{cartLength || 0}</span>
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartLength || 0}
+                  </span>
                 </button>
                 {isCartOpen && (
                   <div ref={cartDropdownRef} className="absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-white rounded-lg shadow-xl py-2 z-30 max-h-[80vh] overflow-y-auto">
@@ -347,19 +291,9 @@ export default function Header({ logo, logoAlt }) {
                             </div>
                             <div className="flex flex-col items-end space-y-2">
                               <div className="flex items-center space-x-2 bg-gray-100 rounded-full p-1">
-                                <button
-                                  onClick={() => handleQtyUpdate(item.id, item.qty - 1)}
-                                  className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
-                                >
-                                  -
-                                </button>
+                              <button onClick={() => handleQtyUpdate(item.id, item.qty - 1)} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors">-</button>
                                 <span className="text-sm font-medium w-6 text-center">{item.qty}</span>
-                                <button
-                                  onClick={() => handleQtyUpdate(item.id, item.qty + 1)}
-                                  className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
-                                >
-                                  +
-                                </button>
+                                <button onClick={() => handleQtyUpdate(item.id, item.qty + 1)} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors">+</button>
                               </div>
                               <button onClick={() => handleRemoveFromCart(item.id)} className="text-red-500 hover:text-red-700 transition-colors">
                                 <RiDeleteBin5Line size={18} />
@@ -388,7 +322,10 @@ export default function Header({ logo, logoAlt }) {
               </div>
             </div>
 
-            <button className="md:hidden text-2xl" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <button
+              className="md:hidden text-2xl"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
               {isMobileMenuOpen ? <RxCross1 /> : <AiOutlineMenu />}
             </button>
           </div>
@@ -411,8 +348,13 @@ export default function Header({ logo, logoAlt }) {
               </button>
               {isSearchOpen && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg z-20 max-h-96 overflow-y-auto lg:grid lg:grid-cols-4 py-4">
-                  {searchResults.map(product => (
-                    <NavLink key={product.id} to={`${config.VITE_BASE_URL}/product/${product.id}`} className="block px-4 py-2 hover:bg-gray-100" onClick={() => setIsSearchOpen(false)}>
+                  {searchResults.map((product) => (
+                    <NavLink
+                      key={product.id}
+                      to={`${config.VITE_BASE_URL}/product/${product.id}`}
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={() => setIsSearchOpen(false)}
+                    >
                       <div className="flex items-center space-x-2">
                         <img src={product.productimage.image_url} alt={product.product_name} className="w-24 h-24 object-cover rounded" />
                         <div className="space-y-2">
@@ -427,19 +369,25 @@ export default function Header({ logo, logoAlt }) {
                   ))}
                 </div>
               )}
-              {isSearchOpen && searchResults.length === 0 && (
+              {isSearchOpen && searchResults.length === 0 &&
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg z-20 max-h-96 overflow-y-auto flex justify-center">
                   <img src={emptySearch} className="h-72 mb-4" alt="" />
                 </div>
-              )}
+              }
             </div>
 
             <div className="flex items-center space-x-4">
-              <button onClick={openWhatsApp} className="bg-[#249370] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-pulse">
+              <button 
+                onClick={openWhatsApp} 
+                className="bg-[#249370] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-pulse"
+              >
                 <FaWhatsapp />
                 <span className="hidden lg:inline">WhatsApp</span>
               </button>
-              <button onClick={callNumber} className="bg-[#FF3269] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-bounce">
+              <button 
+                onClick={callNumber} 
+                className="bg-[#FF3269] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-bounce"
+              >
                 <FaPhoneAlt />
                 <span className="hidden lg:inline">Call Us</span>
               </button>
@@ -459,55 +407,20 @@ export default function Header({ logo, logoAlt }) {
             </NavLink>
             {Object.keys(user).length ? (
               <>
-                <NavLink
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  to={`${config.VITE_BASE_URL}/my-bookings`}
-                  className={`block py-2 ${location.pathname === `${config.VITE_BASE_URL}/my-bookings` ? "bg-[#c5dbca]" : ""} `}
-                >
-                  My Bookings
-                </NavLink>
-                <NavLink
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  to={`${config.VITE_BASE_URL}/edit-profile`}
-                  className={`block py-2 ${location.pathname === `${config.VITE_BASE_URL}/edit-profile` ? "bg-[#c5dbca]" : ""} `}
-                >
-                  Edit Profile
-                </NavLink>
-                <button
-                  onClick={() => {
-                    setIsAddressModalOpen(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`block w-full text-left py-2 ${location.pathname === `${config.VITE_BASE_URL}/your-addresses` ? "bg-[#c5dbca]" : ""} `}
-                >
-                  Your Addresses
-                </button>
-                <button
-                  onClick={() => {
-                    setIsReferAndEarnOpen(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`block w-full text-left py-2 ${location.pathname === `${config.VITE_BASE_URL}/refer-and-earn` ? "bg-[#c5dbca]" : ""} `}
-                >
-                  Refer & Earn
-                </button>
-                <NavLink
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  to={`${config.VITE_BASE_URL}/contact-us`}
-                  className={`block py-2 ${location.pathname === `${config.VITE_BASE_URL}/contact-us` ? "bg-[#c5dbca]" : ""} `}
-                >
-                  Help Center
-                </NavLink>
-                <button onClick={handleLogout} className="block w-full text-left py-2">
-                  Log out
-                </button>
+                <NavLink to={`${config.VITE_BASE_URL}/my-bookings`} className="block py-2">My Bookings</NavLink>
+                <NavLink to={`${config.VITE_BASE_URL}/edit-profile`} className="block py-2">Edit Profile</NavLink>
+                <button onClick={() => setIsAddressModalOpen(true)} className="block w-full text-left py-2">Your Addresses</button>
+                <button onClick={() => setIsReferAndEarnOpen(true)} className="block w-full text-left py-2">Refer & Earn</button>
+                <NavLink to={`${config.VITE_BASE_URL}/contact-us`} className="block py-2">Help Center</NavLink>
+                <button onClick={handleLogout} className="block w-full text-left py-2">Log out</button>
               </>
             ) : (
-              <button onClick={() => setIsModalOpen(true)} className="block w-full text-left py-2">
-                Login / Sign Up
-              </button>
+              <button onClick={() => setIsModalOpen(true)} className="block w-full text-left py-2">Login / Sign Up</button>
             )}
-            <button className="flex items-center space-x-2 py-2" onClick={() => setIsCartOpen(!isCartOpen)}>
+            <button
+              className="flex items-center space-x-2 py-2"
+              onClick={() => setIsCartOpen(!isCartOpen)}
+            >
               <img src={cartIcon} alt="cart icon" className="h-6" />
               <span className="text-sm font-medium">Bag ({cartLength || 0})</span>
             </button>
@@ -538,21 +451,24 @@ export default function Header({ logo, logoAlt }) {
                       </div>
                       <div className="flex flex-col items-end space-y-2">
                         <div className="flex items-center space-x-2 bg-gray-100 rounded-full p-1">
-                          <button
-                            onClick={() => handleQtyUpdate(item.id, item.qty - 1)}
+                          <button 
+                            onClick={() => handleQtyUpdate(item.id, item.qty - 1)} 
                             className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
                           >
                             -
                           </button>
                           <span className="text-sm font-medium w-6 text-center">{item.qty}</span>
-                          <button
-                            onClick={() => handleQtyUpdate(item.id, item.qty + 1)}
+                          <button 
+                            onClick={() => handleQtyUpdate(item.id, item.qty + 1)} 
                             className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
                           >
                             +
                           </button>
                         </div>
-                        <button onClick={() => handleRemoveFromCart(item.id)} className="text-red-500 hover:text-red-700 transition-colors">
+                        <button 
+                          onClick={() => handleRemoveFromCart(item.id)} 
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
                           <RiDeleteBin5Line size={18} />
                         </button>
                       </div>

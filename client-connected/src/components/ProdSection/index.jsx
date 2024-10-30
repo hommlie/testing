@@ -13,7 +13,7 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
     const sliderRef = useRef(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(() => {        
         const updateVisibleItemsCount = () => {
             if (window.innerWidth >= 1024) {
                 setVisibleItemsCount(5);

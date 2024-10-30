@@ -7,7 +7,7 @@ import axios from 'axios';
 import Loading from '../Loading';
 import { IoIosArrowDropleftCircle, IoMdClose } from 'react-icons/io';
 
-const CategoryModal = ({ isOpen, onClose, category = [] }) => {
+const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
     const navigate = useNavigate();
     const { startLoading, stopLoading } = useCont();
     const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +21,13 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
             getSubCategoryData();
         }
     }, [category]);
+
+    useEffect(() => {
+        if (ClickedSubId) {
+            setSubCatId(ClickedSubId);
+            getSubCategoryItems(ClickedSubId);
+        }
+    }, [isOpen]);
 
     async function getSubCategoryData() {
         if (category?.length > 0) {
@@ -41,6 +48,7 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
 
     async function getSubCategoryItems(subCatId) {
         setIsLoading(true);
+        
         try {
             const response = await axios.post(`${config.API_URL}/api/products`, { subcategory_id: subCatId });
             setSubCategoryData(response.data.data);
@@ -78,9 +86,9 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
         ) : (
             <div className="fixed inset-0 z-20 flex items-center justify-center">
                 <div className="fixed inset-0 bg-black bg-opacity-60" onClick={() => {setSubCatId(null);onClose();}}></div>
-                <div className="relative bg-white w-[95%] md:w-full max-w-[75rem] h-[90vh] rounded-2xl shadow-lg overflow-hidden z-30 flex flex-col">
+                <div className="relative bg-white w-[95%] md:w-full max-w-[80rem] h-[90vh] rounded-2xl shadow-lg overflow-hidden z-30 flex flex-col">
                     <div className="sticky top-0 bg-white z-10 p-4 md:p-6 flex justify-between items-center border-b">
-                        {subCatId &&
+                        {subCatId && !ClickedSubId &&
                             <div className='flex justify-start'>
                                 <button onClick={handleBackClick} className="text-2xl"><IoIosArrowDropleftCircle color='grey' /></button>
                             </div>
@@ -98,7 +106,7 @@ const CategoryModal = ({ isOpen, onClose, category = [] }) => {
                                 {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> */}
                                 <div className="max-w-full flex flex-wrap justify-center gap-6">
                                     {subCategoryData?.map((item) => (
-                                        <div key={item.id} className="flex w-full md:w-1/3 lg:w-1/4 flex-col bg-white border border-[#10847E] rounded-lg p-4 hover:shadow-xl transition-shadow duration-300">
+                                        <div key={item.id} className="flex w-full md:w-1/3 lg:w-1/5 flex-col bg-white border border-[#10847E] rounded-lg p-4 hover:shadow-xl transition-shadow duration-300">
                                             <div className="flex justify-center items-center mb-2 md:mb-4">
                                                 <img
                                                     className="h-40 w-40 object-contain"

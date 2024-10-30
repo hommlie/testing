@@ -1,0 +1,63 @@
+import React, { useState, useRef } from 'react';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+
+const bannerDatalider = ({ bannerData }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const sliderRef = useRef(null);
+
+  const prevSlide = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      sliderRef.current.scrollTo({
+        left: (currentIndex - 1) * sliderRef.current.offsetWidth,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const nextSlide = () => {
+    if (currentIndex < bannerData.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      sliderRef.current.scrollTo({
+        left: (currentIndex + 1) * sliderRef.current.offsetWidth,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  return (
+    <div className="relative w-full h-[150px] md:h-[300px] lg:h-[400px] overflow-hidden">
+      <div
+        className="flex w-[100vw] h-full overflow-x-auto scroll-smooth gap-3 md:gap-5 md:gap-10 scrollbar-hide"
+        ref={sliderRef}
+      >
+        {bannerData?.map((banner, index) => (
+          <div
+            key={index}
+            className="shrink-0 h-full flex-col justify-center items-center"
+          >
+            <img
+              src={banner.image_url}
+              alt={`Banner ${index}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+      <button
+        className="hidden md:block absolute top-1/2 -translate-y-1/2 left-4 text-2xl rounded-full p-2 bg-gray-400 hover:bg-gray-500 text-white"
+        onClick={prevSlide}
+      >
+        <IoIosArrowBack />
+      </button>
+      <button
+        className="hidden md:block absolute top-1/2 -translate-y-1/2 right-4 text-2xl rounded-full p-2 bg-gray-400 hover:bg-gray-500 text-white"
+        onClick={nextSlide}
+      >
+        <IoIosArrowForward />
+      </button>
+    </div>
+  );
+};
+
+export default bannerDatalider;

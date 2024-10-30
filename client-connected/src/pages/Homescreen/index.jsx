@@ -8,6 +8,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight  } from "react-icons/md";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RxDotFilled } from "react-icons/rx";
 import ProdSection from "../../components/ProdSection";
+import CategorySlider from "../../components/CatSection";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 // import { Carousel } from "@material-tailwind/react";
@@ -41,6 +42,8 @@ import TestimonialSection from "../../components/TestimonialSection";
 import DefaultThumbnail from '../../assets/images/thumb-default.svg';
 import Loading from "../../components/Loading";
 import LoadingWrapper from "../../components/Loading/LoadingWrapper";
+import BannerSlider from "../../components/BannerSection";
+import BannerSection from "../../components/BannerSection";
 
 const HomePageFirstSection = () => {
 
@@ -93,6 +96,7 @@ const HomePageFirstSection = () => {
   const [isInspectionModalOpen, setIsInspectionModalOpen]= useState(false);
   const [isReferModalOpen, setIsReferModalOpen]= useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [ClickedSubId, setClickedSubId] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -106,8 +110,14 @@ const HomePageFirstSection = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const openCatModal = (category, items) => {
+  const openCatModal = (category, items) => {    
     setSelectedCat(category);
+    setSelectedItems(items);
+    setIsCatModalOpen(true);
+  }
+
+  const openSubCatModal = (category, items) => {        
+    setClickedSubId(category[0]);
     setSelectedItems(items);
     setIsCatModalOpen(true);
   }
@@ -197,7 +207,7 @@ const HomePageFirstSection = () => {
   }
 
   return (
-    <main className="content w-full md:px-8 bg-white scroll-smooth">
+    <main className="content w-full md:px-8 bg-white scroll-smooth space-y-3 lg:space-y-10">
 
       <Helmet>
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16578324784"></script>
@@ -223,12 +233,12 @@ const HomePageFirstSection = () => {
         </script>
       </Helmet>
 
-      <CategoryModal isOpen={isCatModalOpen} onClose={closeCatModal} category={selectedCat} />
+      <CategoryModal isOpen={isCatModalOpen} onClose={() => {setClickedSubId(null);closeCatModal()}} category={selectedCat} ClickedSubId={ClickedSubId} />
       <ExploreModal isOpen={isExploreModalOpen} onClose={closeExploreModal} title={selectedTitle} items={selectedItems} />
       <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
-      <section className="w-full my-7 relative group">
+      <section className="w-full md:my-7 relative group">
         <div className="w-full h-40 lg:h-[32rem] rounded-xl overflow-hidden">
           {bannerData?.sliders?.map((slide, index) => (
             <div
@@ -237,11 +247,13 @@ const HomePageFirstSection = () => {
                 index === currentIndexTopSlider ? "opacity-100" : "opacity-0"
               }`}
             >
-              <img
-                src={slide.image_url}
-                className="w-full h-full object-contain"
-                alt={`Slide ${index + 1}`}
-              />
+              <a href={slide?.link}>
+                <img
+                  src={slide.image_url}
+                  className="w-full h-full object-contain"
+                  alt={`Slide ${index + 1}`}
+                />
+              </a>
             </div>
           ))}
         </div>
@@ -303,22 +315,22 @@ const HomePageFirstSection = () => {
       </section> */}
 
       {homeFeedData?.pest_control?.length ?
-        <ProdSection
-          openExploreModal = {openExploreModal}
+        <CategorySlider
+          openSubCatModal = {openSubCatModal}
           title = "Pest Control"
-          items = {homeFeedData ? homeFeedData?.pest_control : []}
+          categories = {homeFeedData ? homeFeedData?.pest_control : []}
         /> : null
       }
 
       {homeFeedData?.cleaning_services?.length ?
-        <ProdSection
-          openExploreModal = {openExploreModal}
+        <CategorySlider
+          openSubCatModal = {openSubCatModal}
           title = "Cleaning Services"
-          items = {homeFeedData ? homeFeedData?.cleaning_services : []}
+          categories = {homeFeedData ? homeFeedData?.cleaning_services : []}
         /> : null
       }
 
-      <section className="w-full my-7 relative group">
+      {/* <section className="w-full my-7 relative group">
         <div className="w-full h-40 lg:h-[32rem] rounded-xl overflow-hidden">
           {bannerData?.bottombanner?.map((slide, index) => (
             <div
@@ -354,7 +366,12 @@ const HomePageFirstSection = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
+
+      {bannerData?.bottombanner &&
+        <BannerSection bannerData={bannerData?.bottombanner} />
+      }
+
 
       {/* <section className="w-full my-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Hommlie Bike Home Parcel Delivery</h2>
@@ -371,18 +388,18 @@ const HomePageFirstSection = () => {
       </section> */}
 
       {homeFeedData?.safety_pro_netting?.length ?
-        <ProdSection
-          openExploreModal = {openExploreModal}
+        <CategorySlider
+          openSubCatModal = {openSubCatModal}
           title = "Bird Control"
-          items = {homeFeedData ? homeFeedData?.safety_pro_netting : []}
+          categories = {homeFeedData ? homeFeedData?.safety_pro_netting : []}
         /> : null
       }
 
       {homeFeedData?.mosquito_mesh?.length ?
-        <ProdSection
-          openExploreModal = {openExploreModal}
+        <CategorySlider
+          openSubCatModal = {openSubCatModal}
           title = "Mosquito Mesh"
-          items = {homeFeedData ? homeFeedData?.mosquito_mesh : []}
+          categories = {homeFeedData ? homeFeedData?.mosquito_mesh : []}
         /> : null
       }
 

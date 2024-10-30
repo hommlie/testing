@@ -351,6 +351,12 @@ export default function ProductPage() {
 
                 const discount = originalPrice - price;
                 const discountPercentage = (discount / originalPrice) * 100;
+                console.log("base price:",selectedVariation.price);
+                console.log("discounted price:",selectedVariation.discounted_variation_price);
+                console.log("original:",originalPrice);
+                console.log("discount:",discount);
+                console.log("discount perce:",discountPercentage);
+                
                 setDiscountPercentage(Math.round(discountPercentage));
             } else {
                 setTotalAmount(Number(prodData?.discounted_price));
@@ -488,7 +494,7 @@ export default function ProductPage() {
     };
 
     return (
-        <main className="main-div flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth">
+        <main className="main-div flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
             {isLoading ? (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <Loading />
@@ -519,7 +525,7 @@ export default function ProductPage() {
                     
                     <LoginSignup isOpen={isModalOpen} onClose={closeModal} checkoutPd={checkoutPd} />
 
-                    <section className="bg-white rounded-lg md:p-4 mb-6">
+                    <section className="bg-white rounded-lg md:p-4 mb-6 glow-border mt-5 md:mt-10">
                         <div className="relative">
                             {imageItems.length > 0 && (
                                 <div className="w-full h-[250px] lg:h-[450px] rounded-lg">
@@ -565,7 +571,7 @@ export default function ProductPage() {
                             </div> */}
                         </div>
                     </section>
-                    <section className="bg-white rounded-lg p-4">
+                    <section className="bg-white rounded-lg p-4 glow-border">
                         <ul className="flex mb-3" style={{borderBottom: "1px solid rgba(0, 0, 0, 0.1)"}}>
                             <li className={`mr-1 ${activeTab === 1 ? 'border-[#035240]' : ''}`}>
                                 <button
@@ -678,7 +684,7 @@ export default function ProductPage() {
                     </section>
 
                     {videoItems?.length > 0 && (
-                        <section className="bg-white rounded-lg p-4 mt-6">
+                        <section className="bg-white rounded-lg p-4 mt-6 glow-border">
                             <h2 className="text-2xl font-semibold mb-4">Product Videos</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 {videoItems?.map((video, index) => (
@@ -693,7 +699,7 @@ export default function ProductPage() {
                 </div>
 
                 <div className="lg:w-1/3 space-y-4 mt-[40px]">
-                    <div className="bg-white rounded-lg p-4 mb-4">
+                    <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                         <div className="flex justify-between items-center">
                             <div className="flex flex-row items-center">
                                 <img 
@@ -717,7 +723,7 @@ export default function ProductPage() {
                     </div>
 
                     {variations.length > 0 && (
-                        <div className="bg-white rounded-lg p-4 space-y-4">
+                        <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
                             <h3 className="text-xl font-semibold">Select Frequency</h3>
                             <div className="space-y-4">
                                 <div className="grid grid-cols-2 gap-2">
@@ -809,7 +815,7 @@ export default function ProductPage() {
 
                     {prodData?.is_form === 0 &&
 
-                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
+                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
                         <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center">
                                 <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
@@ -841,17 +847,21 @@ export default function ProductPage() {
 
                     {prodData?.is_form === 0 &&
                         
-                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
+                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
                         <h3 className="text-xl font-semibold">Payment Summary</h3>
                         <div className="space-y-2">
                             <div className="flex flex-row justify-between">
-                                <p className="text-base font-normal" style={{color: "#606571"}}>Service Charge</p>
+                                <p className="text-base font-normal" style={{color: "#606571"}}>Service Price</p>
+                                <p className="text-base font-semibold">₹{selectedVariation ? selectedVariation.price : prodData?.product_price}</p>
+                            </div>
+                            <div className="flex flex-row justify-between">
+                                <p className="text-base font-normal" style={{color: "#606571"}}>Discounted Price</p>
                                 <p className="text-base font-semibold">₹{totalAmount}</p>
                             </div>
                             {discountPercentage ?
                                 <div className="flex flex-row justify-between">
                                     <p className="text-base font-normal" style={{color: "#606571"}}>Service Discount</p>
-                                    <p className="text-base font-semibold">{discountPercentage}%</p>
+                                    <p className="text-base font-semibold">{`₹${Math.floor(((selectedVariation ? selectedVariation.price : prodData?.product_price) * discountPercentage) / 100)} (${discountPercentage}%)`}</p>
                                 </div>
                                 : null
                             }
@@ -925,7 +935,7 @@ export default function ProductPage() {
 
             </div>
 
-            <div className="w-full lg:w-2/3">
+            <div className="w-full lg:w-2/3 mt-4">
 
                 <section className="container mx-auto section">
                     <ProdSection

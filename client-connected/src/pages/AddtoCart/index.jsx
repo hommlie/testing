@@ -305,9 +305,11 @@ export default function AddtoCart() {
                 ) : ( 
                     cart?.map((pd, index) => (
                         <div key={index} className="bg-white rounded-lg shadow p-4 md:p-6 flex items-center">
-                                <div onClick={() => handleProductClick(pd)}>
-                                    <img src={pd.image_url} alt="" className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg mr-4" />
-                                </div>
+                                {pd.image_url &&
+                                    <div onClick={() => handleProductClick(pd)}>
+                                        <img src={pd.image_url} alt="" className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg mr-4" />
+                                    </div>
+                                }
                                 <div className="flex-grow">
                                     <h3 className="font-bold text-lg md:text-xl mb-2">{pd.product_name}</h3>
                                     <p className="text-gray-600 mb-2">{pd?.attribute_name}</p>
