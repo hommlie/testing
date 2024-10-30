@@ -719,6 +719,51 @@
                     </li>
                 @endcan
 
+
+                   <!-- ========================================================================= -->
+
+                 @can('banner_management_access')
+                    <li class="nav-item has-treeview {{ request()->is('admin/thoughtful-curations*') ? 'menu-open' : '' }} {{ request()->is('admin/thoughtful-curations/add*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fa fa-video mr-2">
+
+                            </i>
+                            <p>
+                                <span>{{ trans('Thoughtful Curations') }}</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('banner_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.thoughtful-curations") }}" class="nav-link {{ request()->is('admin/
+                                    thoughtful-curations')  ? 'active' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>{{ trans('View Thoughtful') }}</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('banner_add_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.thoughtful-curations.add") }}" class="nav-link {{ request()->is('admin/thoughtful-curations/add')  ? 'active' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>{{ trans('Add Thoughtful') }}</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+                <!-- ========================================================================= -->
+
                 @can('attribute_management_access')
                     <li class="nav-item has-treeview {{ request()->is('admin/attribute*') ? 'menu-open' : '' }} {{ request()->is('admin/attribute/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">

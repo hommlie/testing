@@ -38,10 +38,10 @@ exports.getSubcategory = async (req, res) => {
 
     const subcategory = await Promise.all(subcategoryData.map(async (sub) => {
       
-      const innersubcategoryData = await Innersubcategory.findAll({
-        attributes: ['id', 'innersubcategory_name'],
-        where: { subcat_id: sub.id, status: 1 }
-      });
+      // const innersubcategoryData = await Innersubcategory.findAll({
+      //   attributes: ['id', 'innersubcategory_name'],
+      //   where: { subcat_id: sub.id, status: 1 }
+      // });
 
       const productsData = await Product.findAll({
         attributes: [

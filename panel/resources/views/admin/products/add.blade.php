@@ -181,9 +181,9 @@
                 <label for="tags" class="col-sm-2 col-form-label">Tags</label>
                 <div class="col-sm-10">
                     <div class="tags-input-container" id="tags-container">
-                        <input type="text" id="tag-input" placeholder="Add a tag..." class="form-control">
+                        <input type="text" id="tag-input" placeholder="Add a tag..." class="form-control" name="tags">
                     </div>
-                    <input type="hidden" name="tags" id="tags-hidden" value="">
+                    <input type="hidden"  id="tags-hidden" value="">
                     <p class="text-muted">Type a word and press enter to add a tag. Click a tag to remove it.</p>
                     @if ($errors->has('tags'))
                         <span class="text-danger">{{ $errors->first('tags') }}</span>
@@ -195,63 +195,69 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tagInput = document.getElementById('tag-input');
-        const tagsContainer = document.getElementById('tags-container');
-        const hiddenInput = document.getElementById('tags-hidden');
-        let tags = [];
+            document.addEventListener('DOMContentLoaded', function () {
+              const tagInput = document.getElementById('tag-input');
+              const tagsContainer = document.getElementById('tags-container');
+              const hiddenInput = document.getElementById('tags-hidden');
+              let tags = [];
 
-        // Listen for Enter key to add tags
-        tagInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' && tagInput.value.trim() !== '') {
-                e.preventDefault();
-                addTag(tagInput.value.trim());
-                tagInput.value = ''; // Clear the input field after adding tag
-            }
-        });
+              // Split the existing tags from the database into an array (if available)
+              const initialTags = hiddenInput.value ? hiddenInput.value.split(',') : [];
 
-        // Add a tag
-        function addTag(tagText) {
-            if (tags.includes(tagText)) return; // Avoid duplicate tags
-            tags.push(tagText);
+              // Pre-populate the tags from the initialTags array
+              initialTags.forEach(tag => addTag(tag.trim()));
 
-            // Create the tag element (button-like)
-            const tagElement = document.createElement('span');
-            tagElement.classList.add('tag-item');
-            tagElement.textContent = tagText;
-
-            // Add a remove option when clicking on the tag
-            tagElement.addEventListener('click', function () {
-                removeTag(tagText);
-            });
-
-            // Append the new tag to the container
-            tagsContainer.insertBefore(tagElement, tagInput);
-
-            updateHiddenInput();
-        }
-
-        // Remove a tag
-        function removeTag(tagText) {
-            tags = tags.filter(tag => tag !== tagText);
-
-            // Remove the tag element from the DOM
-            const tagElements = document.querySelectorAll('.tag-item');
-            tagElements.forEach(tagElement => {
-                if (tagElement.textContent === tagText) {
-                    tagsContainer.removeChild(tagElement);
+              // Listen for Enter key to add new tags
+              tagInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && tagInput.value.trim() !== '') {
+                  e.preventDefault();
+                  addTag(tagInput.value.trim());
+                  tagInput.value = ''; // Clear the input field after adding tag
                 }
+              });
+
+              // Add a tag
+              function addTag(tagText) {
+                if (tags.includes(tagText)) return; // Avoid duplicate tags
+                tags.push(tagText);
+
+                // Create the tag element (button-like)
+                const tagElement = document.createElement('span');
+                tagElement.classList.add('tag-item');
+                tagElement.textContent = tagText;
+
+                // Add a remove option when clicking on the tag
+                tagElement.addEventListener('click', function () {
+                  removeTag(tagText);
+                });
+
+                // Append the new tag to the container
+                tagsContainer.insertBefore(tagElement, tagInput);
+
+                updateHiddenInput();
+              }
+
+              // Remove a tag
+              function removeTag(tagText) {
+                tags = tags.filter(tag => tag !== tagText);
+
+                // Remove the tag element from the DOM
+                const tagElements = document.querySelectorAll('.tag-item');
+                tagElements.forEach(tagElement => {
+                  if (tagElement.textContent === tagText) {
+                    tagsContainer.removeChild(tagElement);
+                  }
+                });
+
+                updateHiddenInput();
+              }
+
+              // Update hidden input with comma-separated values
+              function updateHiddenInput() {
+                hiddenInput.value = tags.join(',');
+              }
             });
-
-            updateHiddenInput();
-        }
-
-        // Update hidden input with comma-separated values
-        function updateHiddenInput() {
-            hiddenInput.value = tags.join(',');
-        }
-    });
-</script>
+          </script>
 
 <style>
     .tags-input-container {

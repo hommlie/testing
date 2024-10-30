@@ -425,6 +425,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     });
 
 
+    Route::group(['prefix'=> 'thoughtful-curations'], function () {
+        Route::get('/', 'ThoughtfulCurationController@index')->name('thoughtful-curations');
+        Route::get('/add', 'ThoughtfulCurationController@create')->name('thoughtful-curations.add');
+        Route::post('/store', 'ThoughtfulCurationController@store')->name('thoughtful-curations.store');
+        Route::get('/edit{id}', 'ThoughtfulCurationController@edit')->name('thoughtful-curations.edit');
+        Route::post('/update/{id}', 'ThoughtfulCurationController@update')->name('thoughtful-curations.update'); 
+        Route::delete('/thoughtful-curations/{id}/delete', 'ThoughtfulCurationController@destroy')->name('thoughtful-curations.delete');
+
+
+        
+        
+    });
+
+
 
 
     

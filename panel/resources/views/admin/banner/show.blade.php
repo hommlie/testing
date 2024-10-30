@@ -67,6 +67,11 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="link">{{ trans('labels.link') }}</label>
+                                            <input type="url" id="link" class="form-control" name="link" placeholder="https://example.com" value="{{$data->link}}">
+                                         
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="image">{{ trans('labels.image') }} (800X450)</label>

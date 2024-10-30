@@ -66,6 +66,13 @@
                                           </div>
                                       </div>
 
+                                      <div class="product gravity">
+                                          <div class="form-group">
+                                              <label for="link" class="col-form-label">{{ trans('labels.link') }}:</label>
+                                            <input type="url" class="form-control" name="link"placeholder="https://example.com" required >
+                                          </div>
+                                      </div>
+
                                       <div class="form-group">
                                           <label for="image">{{ trans('labels.image') }}:</label>
                                           <input type="file" id="image" class="form-control" name="image" >

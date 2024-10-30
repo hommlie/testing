@@ -56,12 +56,13 @@ class BannerController extends Controller
 
         $this->validate($request,[
             'image' => 'required|mimes:jpeg,png,jpg',
+            
         ]);
         
         $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
         $request->image->move('storage/app/public/images/banner', $image);
 
-        $dataval=array('image'=>$image,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type,'positions'=>"banner");
+        $dataval=array('image'=>$image,'link'=>$request->link,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type,'positions'=>"banner");
         $data=Banner::create($dataval);
         if ($data) {
              return redirect('admin/banner')->with('success', trans('messages.success'));
@@ -110,11 +111,11 @@ class BannerController extends Controller
                 $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
                 $request->image->move('storage/app/public/images/banner', $image);
 
-                $data=array('image'=>$image,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
+                $data=array('image'=>$image,'link'=>$request->link,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
                 $brand=Banner::find($request->brand_id)->update($data);
             }
         } else {
-            $data=array('product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
+            $data=array('link'=>$request->link,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
             $brand=Banner::find($request->brand_id)->update($data);
         }
         

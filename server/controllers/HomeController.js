@@ -1,6 +1,6 @@
 const sequelize = require('../config/connection');
 const { Sequelize, Op, fn, col, literal, where } = require('sequelize');
-const { User, Product, ProductImage, Order, Variation, Ratting, Wishlist, Brand, Notification, Settings, Testimonials } = require('../models');
+const { User, Product, ProductImage, Order, Variation, Ratting, Wishlist, Brand, Notification, Settings, Testimonials, Subcategory } = require('../models');
 const apiUrl = process.env.apiUrl;
 
 exports.homeFeeds = async (req, res) => {
@@ -105,48 +105,84 @@ exports.homeFeeds = async (req, res) => {
             limit: 10,
         });
 
-        const cleaning_services = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                cat_id: 19,
-                status: 1
-            },
-            order: [['id', 'DESC']],
-            limit: 10,
+        // const cleaning_services = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         cat_id: 19,
+        //         status: 1
+        //     },
+        //     order: [['id', 'DESC']],
+        //     limit: 10,
+        // });
+
+        // const pest_control = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         cat_id: 18,
+        //         status: 1
+        //     },
+        //     order: [['id', 'DESC']],
+        //     limit: 10,
+        // });
+
+        // const safety_pro_netting = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         cat_id: 28,
+        //         status: 1
+        //     },
+        //     order: [['id', 'DESC']],
+        //     limit: 10,
+        // });
+
+        // const mosquito_mesh = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         cat_id: 29,
+        //         status: 1
+        //     },
+        //     order: [['id', 'DESC']],
+        //     limit: 10,
+        // });
+
+        const cleaning_services = await Subcategory.findAll({
+            attributes: [
+              'id',
+              'subcategory_name',
+              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+            ],
+            where: { cat_id: 19, status: 1 }
         });
 
-        const pest_control = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                cat_id: 18,
-                status: 1
-            },
-            order: [['id', 'DESC']],
-            limit: 10,
+        const pest_control = await Subcategory.findAll({
+            attributes: [
+              'id',
+              'subcategory_name',
+              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+            ],
+            where: { cat_id: 18, status: 1 }
         });
 
-        const safety_pro_netting = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                cat_id: 28,
-                status: 1
-            },
-            order: [['id', 'DESC']],
-            limit: 10,
+        const safety_pro_netting = await Subcategory.findAll({
+            attributes: [
+              'id',
+              'subcategory_name',
+              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+            ],
+            where: { cat_id: 28, status: 1 }
         });
 
-        const mosquito_mesh = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                cat_id: 29,
-                status: 1
-            },
-            order: [['id', 'DESC']],
-            limit: 10,
+        const mosquito_mesh = await Subcategory.findAll({
+            attributes: [
+              'id',
+              'subcategory_name',
+              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+            ],
+            where: { cat_id: 29, status: 1 }
         });
 
         const shop_now = await Product.findAll({
@@ -175,15 +211,6 @@ exports.homeFeeds = async (req, res) => {
                     as: 'rattings',
                     required: false
                 },
-                {
-                    model: User,
-                    attributes: [],
-                    where: {
-                        is_available: 1
-                    },
-                    required: true,
-                    as: 'vendor'
-                }
             ],
             where: {
                 cat_id: 38,
@@ -191,7 +218,7 @@ exports.homeFeeds = async (req, res) => {
             },
             // order: [['id', 'DESC']],
             limit: 10,
-        });        
+        });
 
         const videos = await ProductImage.findAll({
             attributes: [
