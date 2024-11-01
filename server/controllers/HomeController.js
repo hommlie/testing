@@ -223,7 +223,7 @@ exports.homeFeeds = async (req, res) => {
         const videos = await ThoughtfulCurations.findAll({
             attributes: [
                   'id',
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-thumbnail/'`), sequelize.col('thumbnail')), 'thumbnail'],
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-thumbnails/'`), sequelize.col('thumbnail')), 'thumbnail'],
                   [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-videos/'`), sequelize.col('image')), 'video']
             ],
             limit: 4
@@ -328,7 +328,7 @@ exports.homeFeeds = async (req, res) => {
                 safety_pro_netting: safety_pro_netting,
                 mosquito_mesh: mosquito_mesh,
                 shop_now: shop_now,
-                videos: videos,
+                videos: [],
                 testimonials: testimonials,
                 // vendors: vendors,
                 brands: brands,
