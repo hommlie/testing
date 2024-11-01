@@ -199,9 +199,9 @@
                 <label for="tags" class="col-sm-2 col-form-label">Tags</label>
                 <div class="col-sm-10">
                     <div class="tags-input-container" id="tags-container">
-                        <input type="text" id="tag-input" placeholder="Add a tag..." class="form-control" >
+                        <input type="text" id="tag-input" placeholder="Add a tag..." class="form-control">
                     </div>
-                     <input type="hidden" name="tags"  id="tags-hidden" value="{{$data->tags}}" > 
+                    <input type="hidden" name="tags" id="tags-hidden" value="{{$data->tags}}">
                     <p class="text-muted">Type a word and press enter to add a tag. Click a tag to remove it.</p>
                     @if ($errors->has('tags'))
                         <span class="text-danger">{{ $errors->first('tags') }}</span>
@@ -212,7 +212,7 @@
     </div>
 </div>
 
- <script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         const tagInput = document.getElementById('tag-input');
         const tagsContainer = document.getElementById('tags-container');

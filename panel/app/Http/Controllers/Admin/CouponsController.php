@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Category;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupons;
@@ -24,11 +24,7 @@ class CouponsController extends Controller
 
     public function add()
     {
-     
-            $data = Category::select('id', 'category_name')->get(); // Fetch data first
-            return view('admin.coupons.add', compact('data')); // Pass $data to the view
-       
-        
+        return view('admin.coupons.add');
     }
 
     public function list()
@@ -57,43 +53,23 @@ class CouponsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation rules
-        $this->validate($request, [
+        $this->validate($request,[
             'coupon_name' => 'required',
-            'cat_id' => 'nullable', 
             'type' => 'required',
             'quantity' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
-    
-        // Handle 'cat_id' to store null if "Common" is selected
-        $categoryId = $request->cat_id === 'null' ? null : $request->cat_id;
-    
-        // Data array with conditional cat_id
-        $dataval = [
-            'cat_id' => $categoryId,
-            'coupon_name' => $request->coupon_name,
-            'type' => $request->type,
-            'quantity' => $request->quantity,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'percentage' => $request->percentage,
-            'amount' => $request->amount,
-            'times' => $request->times
-        ];
-    
-        // Save data
-        $data = Coupons::create($dataval);
-    
-        // Redirect with success or error message
+
+        $dataval=array('coupon_name'=>$request->coupon_name,'type'=>$request->type,'quantity'=>$request->quantity,'start_date'=>$request->start_date,'end_date'=>$request->end_date,'percentage'=>$request->percentage,'amount'=>$request->amount,'times'=>$request->times);
+        $data=Coupons::create($dataval);
         if ($data) {
-            return redirect('admin/coupons')->with('success', trans('messages.success'));
+             return redirect('admin/coupons')->with('success', trans('messages.success'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -102,11 +78,8 @@ class CouponsController extends Controller
      */
     public function show($id)
     {
-        $data = Coupons::find($id); // Fetch coupon details
-        $category = Category::select('id', 'category_name')->get(); // Fetch active categories
-    
-        return view('admin.coupons.show', compact('data', 'category'));
-        
+        $data=Coupons::find($id);
+        return view('admin.coupons.show',compact('data'));
     }
 
     /**
@@ -117,44 +90,25 @@ class CouponsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
-{
-    // Validation rules
-    $this->validate($request, [
-        'coupon_name' => 'required',
-        'cat_id' => 'nullable', // Allow 'cat_id' to be null if 'Common' is selected
-        'type' => 'required',
-        'quantity' => 'required',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date',
-    ]);
+    {
 
-    // Set cat_id to null if "Common" is selected
-    $categoryId = $request->cat_id === 'null' ? null : $request->cat_id;
+        $this->validate($request,[
+            'coupon_name' => 'required',
+            'type' => 'required',
+            'quantity' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
 
-    // Data array with conditional cat_id
-    $data = [
-        'cat_id' => $categoryId,
-        'coupon_name' => $request->coupon_name,
-        'type' => $request->type,
-        'quantity' => $request->quantity,
-        'start_date' => $request->start_date,
-        'end_date' => $request->end_date,
-        'percentage' => $request->percentage,
-        'amount' => $request->amount,
-        'times' => $request->times
-    ];
+        $data=array('coupon_name'=>$request->coupon_name,'type'=>$request->type,'quantity'=>$request->quantity,'start_date'=>$request->start_date,'end_date'=>$request->end_date,'percentage'=>$request->percentage,'amount'=>$request->amount,'times'=>$request->times);
 
-    // Find and update the coupon
-    $coupons = Coupons::find($request->coupon_id)->update($data);
-
-    // Redirect with success or error message
-    if ($coupons) {
-        return redirect('admin/coupons')->with('success', trans('messages.update'));
-    } else {
-        return redirect()->back()->with('danger', trans('messages.fail'));
+        $coupons=Coupons::find($request->coupon_id)->update($data);
+        if ($coupons) {
+             return redirect('admin/coupons')->with('success', trans('messages.update'));
+        } else {
+            return redirect()->back()->with('danger', trans('messages.fail'));
+        }
     }
-}
-
 
     /**
      * Remove the specified resource from storage.

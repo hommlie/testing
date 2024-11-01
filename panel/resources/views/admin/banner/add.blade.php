@@ -65,11 +65,10 @@
                                               </select>
                                           </div>
                                       </div>
-
                                       <div class="product gravity">
                                           <div class="form-group">
                                               <label for="link" class="col-form-label">{{ trans('labels.link') }}:</label>
-                                            <input type="url" class="form-control" name="link"placeholder="https://example.com" required >
+                                            <input type="url" class="form-control" name="link"placeholder="https://youtube.com" required >
                                           </div>
                                       </div>
 

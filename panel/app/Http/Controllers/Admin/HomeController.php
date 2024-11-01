@@ -12,7 +12,9 @@ class HomeController
 
     public function index()
     {
-        abort_unless(\Gate::allows('home_access'), 403);
+
+       // echo "Hello World";
+        //abort_unless(\Gate::allows('home_access'), 403);
         
         // Get the count of customers, orders, employees, and products
         $customerCount = Customers::count();

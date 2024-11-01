@@ -192,9 +192,15 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request, User $user)
     {
-          
+        abort_unless(\Gate::allows('user_edit'), 403);
+
+        $user->update($request->all());
+        $user->roles()->sync($request->input('roles', []));
+
+        return redirect()->route('admin.users.index');
+        
     }
 
     /**

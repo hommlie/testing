@@ -1,6 +1,6 @@
 const sequelize = require('../config/connection');
 const { Sequelize, Op, fn, col, literal, where } = require('sequelize');
-const { User, Product, ProductImage, Order, Variation, Ratting, Wishlist, Brand, Notification, Settings, Testimonials, Subcategory } = require('../models');
+const { User, Product, ProductImage, Order, Variation, Ratting, Wishlist, Brand, Notification, Settings, Testimonials, Subcategory, ThoughtfulCurations } = require('../models');
 const apiUrl = process.env.apiUrl;
 
 exports.homeFeeds = async (req, res) => {
@@ -220,16 +220,12 @@ exports.homeFeeds = async (req, res) => {
             limit: 10,
         });
 
-        const videos = await ProductImage.findAll({
+        const videos = await ThoughtfulCurations.findAll({
             attributes: [
                   'id',
-                  'media', 
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('thumbnail')), 'thumbnail'],
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'video_url']
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-thumbnail/'`), sequelize.col('thumbnail')), 'thumbnail'],
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-videos/'`), sequelize.col('image')), 'video']
             ],
-            where: {
-                media: 'Video'
-            },
             limit: 4
         });
 

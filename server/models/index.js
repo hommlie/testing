@@ -30,6 +30,7 @@ const PartnerForm = require('./PartnerForm');
 const Inspection = require('./Inspection');
 const Testimonials = require('./Testimonials');
 const Employee = require('./Employee');
+const ThoughtfulCurations = require('./ThoughtfulCuration');
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -186,5 +187,6 @@ module.exports = {
   PartnerForm,
   Inspection,
   Testimonials,
-  Employee
+  Employee,
+  ThoughtfulCurations
 };

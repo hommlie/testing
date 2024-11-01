@@ -56,7 +56,6 @@ class BannerController extends Controller
 
         $this->validate($request,[
             'image' => 'required|mimes:jpeg,png,jpg',
-            
         ]);
         
         $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();

@@ -6,7 +6,7 @@
             <th>{{ trans('labels.link') }}</th>
             <th>{{ trans('labels.type') }}</th>
             <th>{{ trans('labels.category') }}</th>
-            <th>{{ trans('labels.product') }}</th>  
+            <th>{{ trans('labels.product') }}</th>
             <th>{{ trans('labels.action') }}</th>
         </tr>
     </thead>

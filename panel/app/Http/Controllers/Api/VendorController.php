@@ -350,10 +350,13 @@ class VendorController extends Controller
             'order_id' => 'required',
             'order_status' => 'required',
             'otp' => 'required|integer',
-            'emp_onsite_image' => 'nullable', // Ensuring the image is valid
-            'chemical' => 'required', // Ensuring the image is valid
-            'signature' => 'nullable', // Ensuring the image is valid
+            'emp_onsite_image' => 'nullable', 
+            'signature' => 'nullable', 
         ]);
+
+        $validator->sometimes('chemical', 'required', function ($input) {
+            return $input->order_status == 4;
+        });
     
         if ($validator->fails()) {
             return response()->json(["status" => 0, "message" => $validator->errors()->first()], 400);
@@ -367,7 +370,7 @@ class VendorController extends Controller
             ->first();
     
         if (!$serviceCompletion) {
-            return response()->json(["status" => 0, "message" => "Invalid OTP"], 400);
+            return response()->json(["status" => 0, "message" => "Invalid OTP"], 200);
         }
     
         // Fetch the order
@@ -376,7 +379,7 @@ class VendorController extends Controller
             ->first();
     
         if (!$order) {
-            return response()->json(["status" => 0, "message" => "No Orders Found"], 400);
+            return response()->json(["status" => 0, "message" => "No Orders Found"], 200);
         }
     
         // Check if the order status is already the same as the requested status

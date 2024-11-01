@@ -424,6 +424,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/delete', 'VariationController@destroy')->name('variation.delete');
     });
 
+//  thoughtful-curations
+
 
     Route::group(['prefix'=> 'thoughtful-curations'], function () {
         Route::get('/', 'ThoughtfulCurationController@index')->name('thoughtful-curations');
@@ -437,11 +439,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         
         
     });
-
-
-
-
-    
 
 
 });
