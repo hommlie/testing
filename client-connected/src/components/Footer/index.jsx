@@ -119,7 +119,7 @@ const FooterSection = ({ title, links }) => (
 );
 
 const SocialIcon = ({ Icon, link }) => (
-  <a href={link} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-600">
+  <a href={link} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white">
     <Icon className="text-[#035240] text-sm" />
   </a>
 );

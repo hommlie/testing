@@ -106,7 +106,7 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
                                 {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> */}
                                 <div className="max-w-full flex flex-wrap justify-center gap-6">
                                     {subCategoryData?.map((item) => (
-                                        <div key={item.id} className="flex w-full md:w-1/3 lg:w-1/5 flex-col bg-white border border-[#10847E] rounded-lg p-4 hover:shadow-xl transition-shadow duration-300">
+                                        <div key={item.id} className="flex w-full md:w-1/3 lg:w-1/4 flex-col bg-white border border-[#10847E] rounded-lg p-4 hover:shadow-xl transition-shadow duration-300">
                                             <div className="flex justify-center items-center mb-2 md:mb-4">
                                                 <img
                                                     className="h-40 w-40 object-contain"
@@ -122,7 +122,7 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
                                                 <span className="text-xs md:text-sm text-gray-400 line-through ml-2">₹{item.product_price}</span>
                                             </div>
                                             <p 
-                                                className="text-[10px] md:text-xs text-gray-500 text-justify mb-4 overflow-hidden text-ellipsis"
+                                                className="h-40 text-[10px] md:text-xs text-gray-500 text-justify mb-4 overflow-hidden text-ellipsis py-3 md:py-0"
                                                 style={{
                                                     display: '-webkit-box',
                                                     WebkitBoxOrient: 'vertical',

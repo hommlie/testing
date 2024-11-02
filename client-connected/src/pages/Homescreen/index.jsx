@@ -238,8 +238,8 @@ const HomePageFirstSection = () => {
       <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
-      <section className="w-full md:my-7 relative group">
-        <div className="w-full h-40 lg:h-[32rem] rounded-xl overflow-hidden">
+      <section className="w-full relative group">
+        <div className="w-full h-40 lg:h-[500px] rounded-xl overflow-hidden">
           {bannerData?.sliders?.map((slide, index) => (
             <div
               key={index}
@@ -368,8 +368,8 @@ const HomePageFirstSection = () => {
         </div>
       </section> */}
 
-      {bannerData?.bottombanner &&
-        <BannerSection bannerData={bannerData?.bottombanner} />
+      {bannerData?.topbanner &&
+        <BannerSection bannerData={bannerData?.topbanner} />
       }
 
 
@@ -461,7 +461,7 @@ const HomePageFirstSection = () => {
         </div>
       </section>
 
-      {homeFeedData?.videos?.length &&
+      {homeFeedData?.videos?.length ?
         <section className="mt-12">
           <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Thoughtful Curations</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -499,6 +499,7 @@ const HomePageFirstSection = () => {
             ))}
           </div>
         </section> 
+        : null
       }
 
       <section className="w-full mx-auto section px-4 py-8">
