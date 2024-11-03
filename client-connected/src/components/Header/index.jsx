@@ -19,7 +19,7 @@ import LoginSignup from "../LoginModal";
 import AddressModal from "../AddressModal";
 import ReferAndEarn from "../ReferAndEarnModal";
 import GoogleMapLoader from "../GoogleMapLoader";
-// import LocationModal from "../LocationModal";
+import LocationModal from "../LocationModal";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -119,7 +119,7 @@ export default function Header({ logo, logoAlt }) {
         },
         error => {
           console.error("Error getting location:", error);
-          setCurrentLocation("Enable location service");
+          setCurrentLocation("Bannerghatta, Bangalore");
         }
       );
     } else {
@@ -253,7 +253,7 @@ export default function Header({ logo, logoAlt }) {
               </button> */}
               <div className="">
                 <button 
-                  // onClick={openPage} 
+                  onClick={openPage} 
                   className="flex items-center space-x-2 px-3 py-2 rounded-lg glow-border"
                 >
                   <MdLocationOn className="text-sm md:text-xl" color="#32A071" />
@@ -265,7 +265,7 @@ export default function Header({ logo, logoAlt }) {
                   </div>
                 </button>
 
-                {/* {isLocationModalOpen && <LocationModal onClose={closePage} />} */}
+                {isLocationModalOpen && <LocationModal onClose={closePage} />}
               </div>
             </div>
 

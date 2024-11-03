@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 import { BsArrowLeftCircle } from 'react-icons/bs';
 import { useCont } from '../../context/MyContext';
 import axios from 'axios';
@@ -13,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginSignup = ({ isOpen, onClose }) => {
     const [phone, setPhone] = useState('');
+    const [name, setName] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(true);
     const [isOtpSent, setIsOtpSent] = useState(false);
     const [otp, setOtp] = useState(['', '', '', '']);
@@ -48,11 +47,14 @@ const LoginSignup = ({ isOpen, onClose }) => {
 
     if (!isOpen) return null;
 
-    const isLoginButtonEnabled = phone && termsAccepted;
-    const isOtpButtonEnabled = otp.every(digit => digit);
+    const isLoginButtonEnabled = phone.length === 10 && termsAccepted;
+    const isOtpButtonEnabled = otp.every(digit => digit) && name.trim() !== '';
 
-    const handlePhoneChange = (phone) => {
-        setPhone(phone.startsWith('+') ? phone : `+${phone}`);
+    const handlePhoneChange = (e) => {
+        const value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 10) {
+            setPhone(value);
+        }
     };
 
     const handleOtpChange = (value, index) => {
@@ -79,10 +81,13 @@ const LoginSignup = ({ isOpen, onClose }) => {
 
     const handleSendOtp = async () => {
         try {
-            const response = await axios.post(`${config.API_URL}/api/register`, { mobile: phone });
-            if (response.data.status === 1) {
-                console.log(response);
-                
+            const response = await axios.post(`${config.API_URL}/api/register`, { 
+                mobile: `+91${phone}`
+            });
+            if (response.data.status === 1) {                
+                if (response.data?.user_name) {
+                    setName(response.data?.user_name);
+                }
                 setIsOtpSent(true);
                 setCounter(60);
                 warningNotify("OTP has been sent!");
@@ -97,7 +102,9 @@ const LoginSignup = ({ isOpen, onClose }) => {
 
     const handleResendOtp = async () => {
         try {
-            const response = await axios.post(`${config.API_URL}/api/resendotp`, { mobile: phone });
+            const response = await axios.post(`${config.API_URL}/api/resendotp`, { 
+                mobile: `+91${phone}`
+            });
             if (response.data.status === 1) {
                 setCounter(60);
                 setIsOtpSent(true);
@@ -115,8 +122,9 @@ const LoginSignup = ({ isOpen, onClose }) => {
         try {
             const newOtp = Number(otp.join(""));
             const response = await axios.post(`${config.API_URL}/api/verifyotp`, { 
-                mobile: phone, 
+                mobile: `+91${phone}`, 
                 otp: newOtp,
+                name: name.trim(),
                 referral_code: referralCode 
             });
             if (response.data.status === 1) {
@@ -125,7 +133,6 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 setToken(jwtToken);
                 const decodedToken = jwtDecode(jwtToken);
                 setUser(decodedToken);
-                console.log(decodedToken);
                 
                 localStorage.setItem("HommlieUser", JSON.stringify(decodedToken));
                 successNotify("Welcome to Hommlie");
@@ -133,7 +140,6 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 getCart();
                 getBookings();
                 getAddresses();
-                // getCoupons();
                 getPaymentList();
                 onClose();
             } else {
@@ -166,13 +172,17 @@ const LoginSignup = ({ isOpen, onClose }) => {
                     <>
                         <button 
                             className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
-                            onClick={() => {setOtp(['', '', '', '']); setIsOtpSent(false);}}
+                            onClick={() => {
+                                setOtp(['', '', '', '']);
+                                setName('');
+                                setIsOtpSent(false);
+                            }}
                         >
                             <BsArrowLeftCircle className="w-6 h-6" />
                         </button>
                         <h3 className="text-xl font-semibold mb-4 text-gray-700">Enter OTP</h3>
                         <p className="text-sm text-gray-600 mb-6">
-                            Please enter the 4 digit code sent to <span className="font-medium text-[#035240]">{phone}</span>
+                            Please enter the 4 digit code sent to <span className="font-medium text-[#035240]">+91 {phone}</span>
                         </p>
                         <div className="flex space-x-4 mb-6" onPaste={handlePaste}>
                             {otp.map((digit, index) => (
@@ -187,6 +197,24 @@ const LoginSignup = ({ isOpen, onClose }) => {
                                 />
                             ))}
                         </div>
+                        {
+                            !name &&
+                            
+                            <div className="mb-6">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Full Name <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="w-full p-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Enter your full name"
+                                    required
+                                />
+                            </div>
+                        }
                         <div className="mb-6">
                             <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
                                 Referral Code (Optional)
@@ -221,15 +249,28 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 ) : (
                     <>
                         <p className="text-sm text-gray-600 mb-6">Enter your phone number to get started</p>
-                        <div className="mb-6 w-full">
-                            <PhoneInput
-                                country={'in'}
-                                value={phone}
-                                onChange={handlePhoneChange}
-                                inputClass="w-full p-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                buttonClass="bg-gray-100 hover:bg-gray-200 rounded-l-lg"
-                                dropdownClass="bg-white"
-                            />
+                        <div className="mb-6">
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <span className="flex items-center">
+                                        <img 
+                                            src="https://flagcdn.com/w20/in.png" 
+                                            alt="India" 
+                                            className="h-4 mr-1"
+                                        />
+                                        <span className="text-gray-700">+91</span>
+                                    </span>
+                                </div>
+                                <input
+                                    type="tel"
+                                    value={phone}
+                                    onChange={handlePhoneChange}
+                                    className="w-full pl-24 p-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Enter mobile number"
+                                    maxLength="10"
+                                    minLength="10"
+                                />
+                            </div>
                         </div>
                         <button
                             className={`w-full py-3 rounded-lg text-white font-semibold mb-4 transition-colors ${isLoginButtonEnabled ? 'bg-[#035240] hover:bg-green-700' : 'bg-gray-300'}`}

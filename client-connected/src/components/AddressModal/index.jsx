@@ -12,6 +12,51 @@ import config from '../../config/config';
 import { useToast } from "../../context/ToastProvider";
 import { IoMdClose } from 'react-icons/io';
 
+// Create a function to load Google Maps script
+const loadGoogleMapsApi = (() => {
+  let promise = null;
+
+  return () => {
+    if (!promise) {
+      promise = new Promise((resolve, reject) => {
+        // Remove any existing Google Maps scripts
+        const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api"]');
+        if (existingScript) {
+          existingScript.remove();
+        }
+
+        // Clear any existing Google objects
+        window.google = undefined;
+
+        // Create new script
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GMAP_KEY}&libraries=places`;
+        script.async = true;
+        script.defer = true;
+
+        script.onload = () => {
+          // Give time for Places library to initialize
+          setTimeout(() => {
+            if (window.google && window.google.maps && window.google.maps.places) {
+              resolve(window.google);
+            } else {
+              reject(new Error('Google Maps Places library failed to load'));
+            }
+          }, 100);
+        };
+
+        script.onerror = () => {
+          reject(new Error('Failed to load Google Maps script'));
+          promise = null; // Allow retry on error
+        };
+
+        document.head.appendChild(script);
+      });
+    }
+    return promise;
+  };
+})();
+
 const AddressModal = ({ isOpen, onClose }) => {
   const { addresses, setAddresses, selectedAddrs, setSelectedAddrs, getAddresses, getUser } = useCont();
   const notify = useToast();
@@ -33,69 +78,131 @@ const AddressModal = ({ isOpen, onClose }) => {
   const [errors, setErrors] = useState({});
   const [editId, setEditId] = useState(null);
   const [currentLocationName, setCurrentLocationName] = useState("");
+  const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const autocompleteRef = useRef(null);
   const inputRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (addresses) {
-  //     setSelectedAddrs(addresses ? addresses[0] : {});
-  //     setSelected(addresses ? addresses[0] : {});
-  //   }
-  // }, [addresses]);
-
   useEffect(() => {
-    if (window.google && inputRef.current && formClicked) {
-      initAutocomplete();
-    }
+    let mounted = true;
+
+    const initializeGoogleMaps = async () => {
+      if (!formClicked || !inputRef.current) return;
+
+      setIsLoading(true);
+      try {
+        await loadGoogleMapsApi();
+        
+        if (!mounted) return;
+
+        // Initialize autocomplete only if component is still mounted
+        if (inputRef.current && window.google && window.google.maps && window.google.maps.places) {
+          // Clear any existing autocomplete
+          if (autocompleteRef.current) {
+            window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+          }
+
+          autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+            types: ['geocode'],
+            componentRestrictions: { country: 'in' },
+            fields: ['address_components', 'formatted_address', 'geometry', 'name']
+          });
+
+          autocompleteRef.current.addListener('place_changed', () => {
+            const place = autocompleteRef.current.getPlace();
+            
+            if (!place.geometry) {
+              warningNotify('Please select an address from the dropdown');
+              return;
+            }
+
+            let address = place.formatted_address || '';
+            let postcode = '';
+            let locality = '';
+
+            place.address_components.forEach(component => {
+              const types = component.types;
+              
+              if (types.includes('postal_code')) {
+                postcode = component.long_name;
+              }
+              if (types.includes('sublocality_level_1') || types.includes('locality')) {
+                locality = component.long_name;
+              }
+            });
+
+            setFormData(prev => ({
+              ...prev,
+              address: address,
+              pincode: postcode || prev.pincode,
+              landmark: locality || prev.landmark,
+              latitude: place.geometry.location.lat().toString(),
+              longitude: place.geometry.location.lng().toString()
+            }));
+          });
+        }
+      } catch (error) {
+        console.error('Error initializing Google Maps:', error);
+        if (mounted) {
+          errorNotify('Failed to initialize address search. Please try again.');
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    initializeGoogleMaps();
+
+    return () => {
+      mounted = false;
+      if (autocompleteRef.current && window.google) {
+        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+      }
+    };
   }, [formClicked]);
 
-  useEffect(() => {
-    if (isOpen) {
-      setFormClicked(false);
-    }
-  }, [isOpen]);
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData(prev => ({ ...prev, [name]: value }));
+  // };
 
-  const initAutocomplete = () => {
-    if (!autocompleteRef.current) {
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-        types: ['address'],
-        componentRestrictions: { country: 'in' }
-      });
-
-      autocompleteRef.current.addListener('place_changed', () => {
-        const place = autocompleteRef.current.getPlace();
-        if (!place.geometry) {
-          warningNotify('No details available for this place');
-          return;
-        }
-
-        let address = '';
-        let postcode = '';
-        let lat = place.geometry.location.lat();
-        let lng = place.geometry.location.lng();
-
-        if (place.address_components) {
-          address = place.formatted_address;
-
-          for (let component of place.address_components) {
-            if (component.types.includes('postal_code')) {
-              postcode = component.long_name;
-              break;
-            }
-          }
-        }
-
-        setFormData(prevState => ({
-          ...prevState,
-          address: address,
-          pincode: postcode,
-          latitude: lat.toString(),
-          longitude: lng.toString()
-        }));
-      });
-    }
-  };
+  const renderAddressInput = () => (
+    <div className="relative">
+      <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+        Address *
+      </label>
+      <div className="relative">
+        <input
+          ref={inputRef}
+          type="text"
+          id="address"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+          placeholder="Type to search address..."
+          autoComplete="off"
+          disabled={isLoading}
+          className={`mt-1 block w-full rounded-md p-2 border shadow ${
+            errors.address 
+              ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' 
+              : 'border-gray-300 focus:border-green-500 focus:ring-green-500'
+          } ${isLoading ? 'bg-gray-100' : ''}`}
+        />
+        {isLoading && (
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-500"></div>
+          </div>
+        )}
+      </div>
+      {errors.address && (
+        <p className="mt-2 text-sm text-red-600">{errors.address}</p>
+      )}
+    </div>
+  );
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -320,19 +427,7 @@ const AddressModal = ({ isOpen, onClose }) => {
                 />
                 {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
               </div>
-              <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address *</label>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.address ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                />
-                {errors.address && <p className="mt-2 text-sm text-red-600">{errors.address}</p>}
-              </div>
+              {formClicked && renderAddressInput()}
               <div>
                 <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
                 <input

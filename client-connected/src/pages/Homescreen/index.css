@@ -1,5 +1,11 @@
 
 
+section {
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .pd-imgs {
     transition: transform 0.3s ease-in-out;
 }

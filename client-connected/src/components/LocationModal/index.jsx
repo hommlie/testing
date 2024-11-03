@@ -1,23 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import { MdLocationOn } from "react-icons/md";
-import { GrLocation } from "react-icons/gr";
-import { IoMdClose } from "react-icons/io";
+import React, { useState, useRef, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 
-// import { RiDeleteBin5Line } from "react-icons/ri";
-// import { MdEdit, MdCall } from "react-icons/md";
-
-// import { useCont } from "../../context/MyContext";
-
-// import axios from "axios";
-// import Cookies from "js-cookie";
-// import { jwtDecode } from "jwt-decode";
-// import config from "../../config/config";
-// import { useToast } from "../../context/ToastProvider";
-// import { IoMdClose } from "react-icons/io";
-
-function LocationPage({ onClose }) {
-  // const [currentLocation, setCurrentLocation] = useState("Set Location");
-  const [currentLocationName, setCurrentLocationName] = useState("");
+const LocationModal = ({ onClose }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [locationError, setLocationError] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
   const inputRef = useRef(null);
   const autocompleteRef = useRef(null);
 
@@ -29,76 +17,183 @@ function LocationPage({ onClose }) {
 
   const initAutocomplete = () => {
     autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-      types: ["address"],
-      componentRestrictions: { country: "in" },
+      types: ['geocode', 'establishment'],
+      componentRestrictions: { country: 'in' }
     });
 
-    autocompleteRef.current.addListener("place_changed", () => {
+    autocompleteRef.current.addListener('place_changed', () => {
       const place = autocompleteRef.current.getPlace();
       if (!place.geometry) {
-        alert("No details available for this place.");
+        setLocationError('Location could not be fetched');
         return;
       }
-
-      const address = place.formatted_address;
-      setCurrentLocationName(address);
+      
+      handleLocationSelect({
+        name: place.name,
+        address: place.formatted_address,
+        location: {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        }
+      });
     });
+  };
+
+  const handleLocationSelect = (location) => {
+    // Handle the selected location
+    console.log('Selected location:', location);
+    // You can call a parent callback here
+    // onLocationSelect(location);
   };
 
   const getCurrentLocation = () => {
-    if (navigator.geolocation && window.isSecureContext) {
-      navigator.geolocation.getCurrentPosition(
-        async position => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-            const data = await response.json();
-            setCurrentLocationName(data.display_name);
-          } catch (error) {
-            console.error("Error fetching location data:", error);
-            alert("Failed to fetch current location.");
-          }
-        },
-        error => {
-          console.error("Error getting location:", error);
-          alert("Unable to get location.");
-        }
-      );
-    } else {
-      alert("Geolocation is not supported or not in a secure context.");
+    setIsLoading(true);
+    setLocationError(null);
+
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by your browser');
+      setIsLoading(false);
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_GOOGLE_API_KEY`
+          );
+          const data = await response.json();
+          
+          if (data.results && data.results[0]) {
+            handleLocationSelect({
+              name: data.results[0].formatted_address,
+              address: data.results[0].formatted_address,
+              location: {
+                lat: latitude,
+                lng: longitude
+              }
+            });
+          } else {
+            setLocationError('Location could not be fetched');
+          }
+        } catch (error) {
+          setLocationError('Failed to fetch location details');
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      (error) => {
+        setLocationError(
+          error.code === 1
+            ? 'Location access denied. Please enable location services.'
+            : 'Failed to get location'
+        );
+        setIsLoading(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    );
   };
+
   return (
-    <div className="">
-    
+    <div className="fixed inset-0 z-20 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg w-full max-w-md">
+        <div className="flex justify-between items-center p-4 border-b">
+          <div className="flex-1" />
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
 
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50  ">
-        <div className="relative flex flex-col items-center gap-4 p-4 rounded-lg bg-gray-100 w-[500px] ">
-        
-          <IoMdClose onClick={onClose} className="absolute  top-[-33px] right-[1px] text-gray-600 cursor-pointer bg-gray-100 rounded-full" size={24} />
-
-          {/* Input box with auto-suggest */}
-          <div className="w-full max-w-lg">
+        <div className="p-4">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
             <input
               ref={inputRef}
               type="text"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
               placeholder="Search for your location/society/apartment"
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-3 flex items-center"
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
+        </div>
 
-          {/* Button to use current location */}
-          <button className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 rounded-lg shadow hover:bg-green-700 focus:outline-none" onClick={getCurrentLocation}>
-            <GrLocation className="text-lg" />
-            Use current location
-          </button>
+        <button
+          onClick={getCurrentLocation}
+          className="flex items-center px-4 py-3 text-blue-600 hover:bg-gray-50 w-full"
+        >
+          <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Use current location
+        </button>
 
-          {/* Display selected/current location */}
-          <p className="text-gray-600 text-center">{currentLocationName ? `Current Location: ${currentLocationName}` : "No location selected"}</p>
+        {/* Loading state */}
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center p-8">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <p className="mt-2 text-gray-600">Fetching location...</p>
+          </div>
+        )}
+
+        {locationError && (
+          <div className="p-4 flex flex-col items-center">
+            <div className="mb-4">
+              <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Location could not be fetched</h3>
+            <p className="mt-1 text-gray-500">Please try searching again</p>
+          </div>
+        )}
+
+        <div className="max-h-64 overflow-y-auto">
+          {searchResults.map((result, index) => (
+            <button
+              key={index}
+              onClick={() => handleLocationSelect(result)}
+              className="w-full px-4 py-3 flex items-start hover:bg-gray-50 border-t first:border-t-0"
+            >
+              <svg className="w-5 h-5 mr-3 mt-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              <div className="text-left">
+                <div className="font-medium text-gray-900">{result.name}</div>
+                <div className="text-sm text-gray-500">{result.address}</div>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default LocationPage;
+export default LocationModal;

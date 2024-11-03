@@ -351,11 +351,6 @@ export default function ProductPage() {
 
                 const discount = originalPrice - price;
                 const discountPercentage = (discount / originalPrice) * 100;
-                console.log("base price:",selectedVariation.price);
-                console.log("discounted price:",selectedVariation.discounted_variation_price);
-                console.log("original:",originalPrice);
-                console.log("discount:",discount);
-                console.log("discount perce:",discountPercentage);
                 
                 setDiscountPercentage(Math.round(discountPercentage));
             } else {

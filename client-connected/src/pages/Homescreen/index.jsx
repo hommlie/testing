@@ -207,7 +207,7 @@ const HomePageFirstSection = () => {
   }
 
   return (
-    <main className="content w-full md:px-8 bg-white scroll-smooth space-y-3 lg:space-y-10">
+    <main className="content w-full bg-[#f5f5f5] scroll-smooth space-y-3 lg:space-y-8">
 
       <Helmet>
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16578324784"></script>
@@ -238,7 +238,7 @@ const HomePageFirstSection = () => {
       <InspectionModal isOpen={isInspectionModalOpen} onClose={() => setIsInspectionModalOpen(false)} />
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
-      <section className="w-full relative group">
+      <section className="w-full relative group py-0">
         <div className="w-full h-40 lg:h-[500px] rounded-xl overflow-hidden">
           {bannerData?.sliders?.map((slide, index) => (
             <div
@@ -250,7 +250,7 @@ const HomePageFirstSection = () => {
               <a href={slide?.link}>
                 <img
                   src={slide.image_url}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                   alt={`Slide ${index + 1}`}
                 />
               </a>
@@ -278,7 +278,7 @@ const HomePageFirstSection = () => {
         </div>
       </section>
       
-      <section className="w-full mx-auto section">
+      <section className="w-full mx-auto section px-8">
         <h1 className="px-2 md:px-0 text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
           HELLO {user?.name ? user.name : null} <span className="waving-hand">👋</span>
         </h1>        
@@ -368,8 +368,9 @@ const HomePageFirstSection = () => {
         </div>
       </section> */}
 
-      {bannerData?.topbanner &&
+      {bannerData?.topbanner?.length ?
         <BannerSection bannerData={bannerData?.topbanner} />
+        : null
       }
 
 
@@ -403,20 +404,21 @@ const HomePageFirstSection = () => {
         /> : null
       }
 
-      <section id="offer-scroller" className="w-full overflow-hidden py-4" style={{ backgroundColor: '#FAF9F6' }}>
+      <div id="offer-scroller" className="w-full overflow-hidden py-4 px-8" style={{ backgroundColor: 'white' }}>
         <div className="flex animate-scroll whitespace-nowrap">
           {[...Array(20)].map((_, index) => (
             <span key={index} className="relative inline-flex items-center mx-4">
               <span className="text-xl font-semibold" style={{ color: '#035240' }}>
                 lowest price ever
               </span>
-              <span className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full"></span>
-              <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full"></span>
+              <span className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#f5f5f5] rounded-full"></span>
+              <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#f5f5f5] rounded-full"></span>
             </span>
           ))}
         </div>
-      </section>
+      </div>
 
+      <section className="px-8">
       {homeFeedData?.most_booked_services?.length ?
         <ProdSection
           openExploreModal = {openExploreModal}
@@ -424,8 +426,9 @@ const HomePageFirstSection = () => {
           items = {homeFeedData ? homeFeedData?.most_booked_services : []}
         /> : null
       }
+      </section>
 
-      <section className="mt-12">
+      <section className="mt-12 px-8">
         <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Discover</h2>
         <div className="grid grid-cols-2 md:grid-cols-4">
           <NavLink to={`${config.VITE_BASE_URL}/my-bookings`} className="flex flex-col gap-2 items-center group">
@@ -462,7 +465,7 @@ const HomePageFirstSection = () => {
       </section>
 
       {homeFeedData?.videos?.length ?
-        <section className="mt-12">
+        <section className="mt-12 px-8">
           <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Thoughtful Curations</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {homeFeedData?.videos?.map((item, index) => (
@@ -502,7 +505,7 @@ const HomePageFirstSection = () => {
         : null
       }
 
-      <section className="w-full mx-auto section px-4 py-8">
+      <section className="w-full mx-auto section px-4 py-8 px-8">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6 text-[#10847E]">Why Hommlie</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {whyChoose.map((item, index) => (
@@ -521,7 +524,7 @@ const HomePageFirstSection = () => {
             setIsReferModalOpen(true) 
           }
         }}
-        className="w-full mx-auto section px-4 py-8 rounded-lg mt-8" 
+        className="w-full mx-auto section px-4 py-8 rounded-lg mt-8 px-8" 
         style={{backgroundColor: "#D9EFDE"}}
       >
         <div className="flex flex-col sm:flex-row items-center">
@@ -549,7 +552,7 @@ const HomePageFirstSection = () => {
         <TestimonialSection testimonials={homeFeedData.testimonials} />
       )}
 
-      <section className="w-full mx-auto py-10" style={{ background: '#f8f9fa' }}>
+      <section className="w-full mx-auto py-10">
         <div className="max-w-4xl mx-auto px-4">
           <motion.h2 
             className="text-2xl font-semibold text-center mb-8"
@@ -585,7 +588,7 @@ const HomePageFirstSection = () => {
         </div>
       </section>
 
-      <section className="hidden lg:block relative w-full overflow-hidden">
+      <section className="hidden lg:block relative w-full overflow-hidden px-8 bg-transparent">
         <div className="w-full h-full">
           <img 
             src={downloadApp} 

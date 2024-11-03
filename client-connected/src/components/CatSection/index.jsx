@@ -54,7 +54,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
     };
 
     return (
-        <section className="w-full mx-auto section">
+        <section className="w-full mx-auto section px-8">
             <div className="px-2 md:px-0 flex flex-row justify-between items-center mb-4">
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#10847E]">{title}</h2>
             </div>
@@ -82,7 +82,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
                                         alt={category.subcategory_name}
                                     />
                                 </div>
-                                <h5 className="text-sm lg:text-base font-medium text-gray-700 text-center mt-2">
+                                <h5 className="text-sm h-12 line-clamp-2 lg:text-base font-medium text-gray-700 text-center mt-2">
                                     {category.subcategory_name}
                                 </h5>
                             </div>

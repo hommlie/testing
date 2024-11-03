@@ -26,7 +26,7 @@ const bannerDatalider = ({ bannerData }) => {
   };
 
   return (
-    <div className="relative w-full h-[150px] md:h-[300px] lg:h-[500px] overflow-hidden">
+    <div className="relative w-full h-[150px] md:h-[300px] lg:h-[500px] overflow-hidden px-8">
       <div
         className="flex w-[100vw] h-full overflow-x-auto scroll-smooth gap-3 md:gap-5 md:gap-10 scrollbar-hide"
         ref={sliderRef}

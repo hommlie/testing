@@ -15,7 +15,13 @@ const MSG91_AUTH_KEY = process.env.MSG91_AUTH_KEY;
 exports.registerOrLogin = async (req, res) => {
   const { mobile } = req.body;
 
-  try {    
+  try {  
+
+      if (!mobile) {
+        return res.status(200).json({ status: 0, message: 'Mobile is required' });
+      }
+    
+      let user = await User.findOne({ where: { mobile } });
 
       var options = {
         method: 'POST',
@@ -31,12 +37,12 @@ exports.registerOrLogin = async (req, res) => {
       };
       
       axios.request(options).then(function (response) {
-        console.log(response.data);
         if (response.data.type === 'success') {
           const newresponse = {
             status: 1,
             message: response.data,
             mobile: mobile,
+            user_name: user ? user.name : null
           };
           return res.status(200).json(newresponse);
         } else {
@@ -62,7 +68,7 @@ function generateReferralCode() {
 }
 
 exports.verifyOtp = async (req, res) => {
-  const { mobile, otp, referral_code } = req.body;
+  const { mobile, otp, referral_code, name } = req.body;
 
   if (!mobile || !otp) {
     return res.status(200).json({ status: 0, message: 'Mobile and OTP are required' });
@@ -77,13 +83,13 @@ exports.verifyOtp = async (req, res) => {
       if (!referringUser) {
         return res.status(200).json({ status: 0, message: 'Invalid referral code' });
       }
-    } 
+    }
 
     if (!user) {
       const newReferralCode = generateReferralCode();
       
       user = await User.create({
-        name: 'User',
+        name,
         mobile,
         profile_pic: 'default.png',
         type: 2,

@@ -116,7 +116,7 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                                             </span>
                                         )}
                                     </div>
-                                    <h5 className="text-[12px] lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
+                                    <h5 className="text-[12px] h-12 line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
                                         {item.product_name}
                                     </h5>
                                     <p className="text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2">
