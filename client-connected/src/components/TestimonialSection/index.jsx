@@ -51,7 +51,7 @@ const TestimonialSection = ({ testimonials }) => {
           >
             <FaChevronRight className="h-5 w-5 text-[#035240]" />
           </button> */}
-          <div className="overflow-hidden">
+          <div className="overflow-hidden py-2">
             <AnimatePresence initial={false} mode="wait">
               <motion.div
                 key={activeIndex}
@@ -59,7 +59,7 @@ const TestimonialSection = ({ testimonials }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="flex space-x-8"
+                className="flex space-x-8 lg:px-10"
               >
                 {[0, 1].map((offset) => {
                   const testimonial = testimonials[(activeIndex + offset) % testimonials.length];

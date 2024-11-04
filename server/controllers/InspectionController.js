@@ -11,7 +11,11 @@ exports.createInspection = async (req, res) => {
             mobile, 
             email, 
             date, 
-            time 
+            time ,
+            width,
+            length,
+            sqft,
+            total_amount,
         } = req.body;
         console.log(req.body);
 
@@ -25,6 +29,10 @@ exports.createInspection = async (req, res) => {
             email,
             date,
             time,
+            width,
+            length,
+            sqft,
+            total_amount,
         });
 
         res.status(200).json({

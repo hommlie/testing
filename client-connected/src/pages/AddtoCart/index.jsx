@@ -260,7 +260,7 @@ export default function AddtoCart() {
 
     return (
         <main className="flex justify-center bg-gray-100">
-            <div className="w-full max-w-5xl my-6 md:my-16 space-y-6 px-4">
+            <div className="relative w-full max-w-5xl my-6 md:my-16 space-y-6 px-4">
                 <DateTimeModal isOpen={isDateTimeModalOpen} onClose={closeDateTimeModal} order_type="AMC" />
                 <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} />
                 <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalItemPrice + tax} />
@@ -350,6 +350,32 @@ export default function AddtoCart() {
                         </div>
                     ))      
                 )}
+
+                <div className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-lg font-semibold mb-4">Price Details ({itemCount} items)</h2>
+                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div className="space-y-2 mb-4" style={{color: "rgba(0,0,0,0.4)"}}>
+                        <div className="flex justify-between text-gray-600">
+                            <span>Price ({itemCount} items)</span>
+                            <span>₹{totalItemPrice}</span>
+                        </div>
+                        <div className="flex justify-between text-gray-600">
+                            <span>Tax & Fees</span>
+                            <span>₹{tax}</span>
+                        </div>
+                        {couponDiscount > 0 && (
+                            <div className="flex justify-between text-green-600">
+                                <span>Coupon Discount</span>
+                                <span>-₹{couponDiscount.toFixed(2)}</span>
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div className="flex justify-between text-xl font-semibold">
+                        <span>Total</span>
+                        <span>₹{totalAmount}</span>
+                    </div>
+                </div>
 
                 <div className="bg-white rounded-lg shadow p-6">
                     <div className="flex justify-between items-center mb-4">
@@ -530,37 +556,24 @@ export default function AddtoCart() {
                     </div> */}
                 </section>
 
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h2 className="text-lg font-semibold mb-4">Price Details ({itemCount} items)</h2>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div className="space-y-2 mb-4" style={{color: "rgba(0,0,0,0.4)"}}>
-                        <div className="flex justify-between text-gray-600">
-                            <span>Price ({itemCount} items)</span>
-                            <span>₹{totalItemPrice}</span>
-                        </div>
-                        <div className="flex justify-between text-gray-600">
-                            <span>Tax & Fees</span>
-                            <span>₹{tax}</span>
-                        </div>
-                        {couponDiscount > 0 && (
-                            <div className="flex justify-between text-green-600">
-                                <span>Coupon Discount</span>
-                                <span>-₹{couponDiscount.toFixed(2)}</span>
-                            </div>
-                        )}
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div className="flex justify-between text-xl font-semibold">
-                        <span>Total</span>
-                        <span>₹{totalAmount}</span>
-                    </div>
-                </div>
-
                 <div className="flex flex-col items-center gap-4 mt-8">
                     <img src={secureIcon} alt="Secure payment" className="w-12 h-12" />
                     <p className="text-sm text-center text-gray-500">
                         Safe and Secure Payments. Easy Returns.<br />100% Authentic Products.
                     </p>
+                    {/* <button 
+                        onClick={cart.length === 0 ? handleEmptyCartClick : handleProceed} 
+                        className={`w-full max-w-md py-3 text-white font-semibold transition duration-300 ${
+                            cart.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#249370] hover:bg-green-700'
+                        }`}
+                        style={{backgroundColor: cart.length === 0 ? "#cccccc" : "#035240"}}
+                        // disabled={cart.length === 0}
+                    >
+                        PROCEED TO PAYMENT
+                    </button> */}
+                </div>
+
+                <div className="sticky bottom-2 z-20 transition-transform duration-300 flex justify-center">
                     <button 
                         onClick={cart.length === 0 ? handleEmptyCartClick : handleProceed} 
                         className={`w-full max-w-md py-3 text-white font-semibold transition duration-300 ${

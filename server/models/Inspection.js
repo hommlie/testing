@@ -39,6 +39,22 @@ Inspection.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
+    width: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    length: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    sqft: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    total_amount: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
   }, {
     sequelize,
     modelName: 'Inspection',

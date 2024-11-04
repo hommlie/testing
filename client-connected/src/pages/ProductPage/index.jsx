@@ -74,6 +74,16 @@ export default function ProductPage() {
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
     const [couponDiscount, setCouponDiscount] = useState(0);
     const [isInspectionModalOpen, setIsInspectionModalOpen]= useState(false);
+    const [formData, setState] = useState({
+        address: '',
+        fullName: '',
+        email: '',
+        mobile: '',
+        width: null,
+        length: null,
+        sqft: null,
+        total_amount: 0
+    });
     
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
@@ -160,7 +170,6 @@ export default function ProductPage() {
         setIsAddingToCart(true);
         const jwtToken = Cookies.get("HommlieUserjwtToken");
         if (jwtToken) {
-            console.log(id);
             
             const user_id = jwtDecode(jwtToken).id;
             try {
@@ -215,22 +224,37 @@ export default function ProductPage() {
         }
     };
 
+    useEffect(() => {
+        const { width, length } = formData;
+        
+        if (width && length) {
+          const squareFeet = (width * length).toFixed(2);
+          
+          const total = (squareFeet * totalAmount).toFixed(2);
+    
+          setState(prev => ({
+            ...prev,
+            sqft: squareFeet,
+            total_amount: total
+          }));
+        }
+    }, [formData.width, formData.length, totalAmount]);
+
+    const handleFormChange = (e) => {        
+        const { name, value } = e.target;
+        setState(prev => ({
+          ...prev,
+          [name]: value
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const formData = new FormData(e.target);
-        const dataToSend = {
-            product_id: prodData.id,
-            address: formData.get('address'),
-            fullName: formData.get('fullName'),
-            email: formData.get('email'),
-            mobile: formData.get('mobile'),
-        };
       
         try {
             const response = await axios.post(
               `${config.API_URL}/api/createInspection`,
-              dataToSend,
+              formData,
               {
                 headers: {
                   'Content-Type': 'application/json',
@@ -243,10 +267,10 @@ export default function ProductPage() {
             } else {
               errorNotify('Failed to submit inspection request. Please try again.');
             }
-          } catch (error) {
+        } catch (error) {
             console.error('Error:', error.response?.data || error.message);
             errorNotify('An error occurred. Please check the console for details.');
-          }
+        }
     };
 
     useEffect(() => {
@@ -348,6 +372,10 @@ export default function ProductPage() {
                 
                 setTaxAmount(tax);
                 setTotalAmount(price);
+                setState(prev => ({
+                    ...prev,
+                    total_amount: price
+                }));
 
                 const discount = originalPrice - price;
                 const discountPercentage = (discount / originalPrice) * 100;
@@ -355,6 +383,10 @@ export default function ProductPage() {
                 setDiscountPercentage(Math.round(discountPercentage));
             } else {
                 setTotalAmount(Number(prodData?.discounted_price));
+                setState(prev => ({
+                    ...prev,
+                    total_amount: Number(prodData?.discounted_price)
+                }));
                 setDiscountPercentage(0);
             }
         };
@@ -783,14 +815,14 @@ export default function ProductPage() {
                                 <div className="mt-4 p-4 bg-gray-100 rounded-lg">
                                     <div className="flex justify-between items-center">
                                         <h4 className="font-semibold mb-2">{selectedAttribute} ({selectedVariation.variation})</h4>
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <span className="text-lg font-bold text-[#249370]">
-                                                ₹{selectedVariation.discounted_variation_price}
-                                            </span>
-                                            <span className="text-sm line-through text-gray-500">
-                                                ₹{selectedVariation.price}
-                                            </span>
-                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <span className="text-lg font-bold text-[#249370]">
+                                            ₹{selectedVariation.discounted_variation_price}
+                                        </span>
+                                        <span className="text-sm line-through text-gray-500">
+                                            ₹{selectedVariation.price}
+                                        </span>
                                     </div>
                                     <p className="text-sm text-gray-600 mb-2">{selectedVariation.description}</p>
                                     {selectedVariation.variation_times && selectedVariation.variation_interval && (
@@ -841,91 +873,172 @@ export default function ProductPage() {
                     }
 
                     {prodData?.is_form === 0 &&
-                        
-                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
-                        <h3 className="text-xl font-semibold">Payment Summary</h3>
-                        <div className="space-y-2">
-                            <div className="flex flex-row justify-between">
-                                <p className="text-base font-normal" style={{color: "#606571"}}>Service Price</p>
-                                <p className="text-base font-semibold">₹{selectedVariation ? selectedVariation.price : prodData?.product_price}</p>
-                            </div>
-                            <div className="flex flex-row justify-between">
-                                <p className="text-base font-normal" style={{color: "#606571"}}>Discounted Price</p>
-                                <p className="text-base font-semibold">₹{totalAmount}</p>
-                            </div>
-                            {discountPercentage ?
+                        <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                            <h3 className="text-xl font-semibold">Payment Summary</h3>
+                            <div className="space-y-2">
                                 <div className="flex flex-row justify-between">
-                                    <p className="text-base font-normal" style={{color: "#606571"}}>Service Discount</p>
-                                    <p className="text-base font-semibold">{`₹${Math.floor(((selectedVariation ? selectedVariation.price : prodData?.product_price) * discountPercentage) / 100)} (${discountPercentage}%)`}</p>
+                                    <p className="text-base font-normal" style={{color: "#606571"}}>Service Price</p>
+                                    <p className="text-base font-semibold">₹{selectedVariation ? selectedVariation.price : prodData?.product_price}</p>
                                 </div>
-                                : null
-                            }
-                            {couponDiscount ?
+                                {discountPercentage ?
+                                    <div className="flex flex-row justify-between">
+                                        <p className="text-base font-normal" style={{color: "#606571"}}>Service Discount</p>
+                                        <p className="text-base font-semibold">{`₹${Math.floor(((selectedVariation ? selectedVariation.price : prodData?.product_price) * discountPercentage) / 100)} (${discountPercentage}%)`}</p>
+                                    </div>
+                                    : null
+                                }
                                 <div className="flex flex-row justify-between">
-                                    <p className="text-base font-normal" style={{color: "#606571"}}>Coupon Discount</p>
-                                    <p className="text-base font-semibold">₹{couponDiscount}</p>
+                                    <p className="text-base font-normal" style={{color: "#606571"}}>Discounted Price</p>
+                                    <p className="text-base font-semibold">₹{totalAmount}</p>
                                 </div>
-                                : null
-                            }
-                            <div className="flex flex-row justify-between">
-                                <p className="text-base font-normal" style={{color: "#606571"}}>Tax & Fees</p>
-                                <p className="text-base font-semibold">₹{taxAmount}</p>
-                            </div>
-                            <div className="border-t-2 border-dotted border-black" style={{ opacity: 0.22 }}></div>
-                            <div className="flex flex-row justify-between">
-                                <p className="text-base font-normal text-xl font-semibold">Total Amount</p>
-                                <div className="text-right">
-                                    <p className="text-base font-semibold">₹{(totalAmount + taxAmount - couponDiscount).toFixed(2)}</p>
+                                {couponDiscount ?
+                                    <div className="flex flex-row justify-between">
+                                        <p className="text-base font-normal" style={{color: "#606571"}}>Coupon Discount</p>
+                                        <p className="text-base font-semibold">₹{couponDiscount}</p>
+                                    </div>
+                                    : null
+                                }
+                                <div className="flex flex-row justify-between">
+                                    <p className="text-base font-normal" style={{color: "#606571"}}>Tax & Fees</p>
+                                    <p className="text-base font-semibold">₹{taxAmount}</p>
                                 </div>
+                                <div className="border-t-2 border-dotted border-black" style={{ opacity: 0.22 }}></div>
+                                <div className="flex flex-row justify-between">
+                                    <p className="text-base font-normal text-xl font-semibold">Total Amount</p>
+                                    <div className="text-right">
+                                        <p className="text-base font-semibold">₹{(totalAmount + taxAmount - couponDiscount).toFixed(2)}</p>
+                                    </div>
+                                </div>
+                                <button 
+                                    className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold" 
+                                    style={{backgroundColor: "#249370"}}
+                                    onClick={handleProceed}
+                                    id="proceed-btn"
+                                >
+                                    PROCEED TO CHECKOUT
+                                </button>
                             </div>
-                            <button 
-                                className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold" 
-                                style={{backgroundColor: "#249370"}}
-                                onClick={handleProceed}
-                                id="proceed-btn"
-                            >
-                                PROCEED TO CHECKOUT
-                            </button>
                         </div>
-                    </div>
-
                     }
 
                     {prodData?.is_form === 1 &&
-
-                    <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
-                        <h3 className="text-xl font-semibold">Book an Inspection</h3>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                                <input type="text" id="address" name="address" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
-                            </div>
-                            <div>
-                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
-                                <input type="text" id="fullName" name="fullName" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
-                            </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                                <input type="email" id="email" name="email" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
-                            </div>
-                            <div>
-                                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile</label>
-                                <input type="tel" id="mobile" name="mobile" className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm" />
-                            </div>
-                            <button 
-                                type="submit"
-                                className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
-                            >
-                                Call Back
-                            </button>
-                        </form>
-                    </div>
-
+                        <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                            <h3 className="text-xl font-semibold">Book an Inspection</h3>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div>
+                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                                    <input
+                                        type="text"
+                                        id="address"
+                                        name="address"
+                                        value={formData.address}
+                                        onChange={handleFormChange}
+                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                        required
+                                    />
+                                </div>
+                                    
+                                <div>
+                                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
+                                    <input
+                                        type="text"
+                                        id="fullName"
+                                        name="fullName"
+                                        value={formData.fullName}
+                                        onChange={handleFormChange}
+                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                        required
+                                    />
+                                </div>
+                                    
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleFormChange}
+                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                        required
+                                    />
+                                </div>
+                                    
+                                <div>
+                                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile</label>
+                                    <input
+                                        type="tel"
+                                        id="mobile"
+                                        name="mobile"
+                                        value={formData.mobile}
+                                        onChange={handleFormChange}
+                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                        required
+                                        minLength={10}
+                                        maxLength={10}
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    <div>
+                                        <label htmlFor="width" className="block text-sm font-medium text-gray-700">Width (mm)</label>
+                                        <select
+                                            id="width"
+                                            name="width"
+                                            value={formData.width}
+                                            onChange={handleFormChange}
+                                            className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                            required
+                                        >
+                                            <option value="" hidden>Select Width</option>
+                                            {[...Array((3000 - 400) / 50 + 1)]?.map((_, index) => {
+                                                const value = 400 + index * 50;
+                                                return (
+                                                    <option key={value} value={value}>
+                                                        {value} mm
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="lengthMm" className="block text-sm font-medium text-gray-700">Length (mm)</label>
+                                        <input
+                                            type="number"
+                                            id="length"
+                                            name="length"
+                                            value={formData.length}
+                                            onChange={handleFormChange}
+                                            min="1"
+                                            // max="3000"
+                                            className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                            required
+                                        />
+                                    </div>
+                                    
+                                    <div>
+                                        <label htmlFor="sqft" className="block text-sm font-medium text-gray-700">Sqft</label>
+                                        <input
+                                            type="text"
+                                            id="sqft"
+                                            value={formData.sqft ? `${formData.sqft} sqft` : ''}
+                                            className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                            readOnly
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Total Amount:</label>
+                                    <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">₹{formData.total_amount}</span>
+                                </div>
+                                <button 
+                                    type="submit"
+                                    className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
+                                >
+                                    Call Back
+                                </button>
+                            </form>
+                        </div>
                     }
-
-                    {/* <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4">
-                        <img src="https://hommlie.com/images/certificates/iso.png" alt="" />
-                    </div> */}
                 </div>
 
             </div>

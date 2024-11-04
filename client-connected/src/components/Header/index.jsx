@@ -103,29 +103,80 @@ export default function Header({ logo, logoAlt }) {
     }
   }, [searchPlaceholderData, currentPlaceholderIndex, currentPlaceholder, isTyping]);
 
+  // const getCurrentLocation = () => {
+  //   if (navigator.geolocation && window.isSecureContext) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       async position => {
+  //         const { latitude, longitude } = position.coords;
+  //         try {
+  //           const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+  //           const data = await response.json();
+  //           setCurrentLocation(data);
+  //         } catch (error) {
+  //           console.error("Error fetching location name:", error);
+  //           setCurrentLocation("Location not found");
+  //         }
+  //       },
+  //       error => {
+  //         console.error("Error getting location:", error);
+  //         setCurrentLocation("Bannerghatta, Bangalore");
+  //       }
+  //     );
+  //   } else {
+  //     console.error("Geolocation is not supported or not in a secure context.");
+  //     setCurrentLocation("Location services unavailable");
+  //   }
+  // };
+
   const getCurrentLocation = () => {
-    if (navigator.geolocation && window.isSecureContext) {
-      navigator.geolocation.getCurrentPosition(
-        async position => {
+
+    if (!navigator.geolocation) {
+      setCurrentLocation("Bannerghatta, Bangalore");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
           const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-            const data = await response.json();
-            setCurrentLocation(data);
-          } catch (error) {
-            console.error("Error fetching location name:", error);
-            setCurrentLocation("Location not found");
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
+          );
+          const data = await response.json();          
+          
+          if (data.results && data.results[0]) {
+            // handleLocationSelect({
+            //   name: data.results[0].formatted_address,
+            //   address: data.results[0].formatted_address,
+            //   location: {
+            //     lat: latitude,
+            //     lng: longitude
+            //   }
+            // });
+            const locationStings = data.results[0]?.formatted_address.split(',');
+            if (locationStings.length > 4) {
+              setCurrentLocation(locationStings?.slice(0, 5)?.join(','));
+            } else {
+              setCurrentLocation(data.results[0]?.formatted_address);
+            }
+          } else {
+            setCurrentLocation('Location could not be fetched');
           }
-        },
-        error => {
-          console.error("Error getting location:", error);
+        } catch (error) {
+          console.error('Error fetching location details:', error);
           setCurrentLocation("Bannerghatta, Bangalore");
         }
-      );
-    } else {
-      console.error("Geolocation is not supported or not in a secure context.");
-      setCurrentLocation("Location services unavailable");
-    }
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        setCurrentLocation("Bannerghatta, Bangalore");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    );
   };
 
   const openWhatsApp = () => {
@@ -265,7 +316,7 @@ export default function Header({ logo, logoAlt }) {
                   </div>
                 </button>
 
-                {isLocationModalOpen && <LocationModal onClose={closePage} />}
+                {isLocationModalOpen && <LocationModal onClose={closePage} setCurrentLocation={setCurrentLocation} />}
               </div>
             </div>
 

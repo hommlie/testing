@@ -1,49 +1,134 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
+import config from '../../config/config';
 
 const LocationModal = ({ onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [locationError, setLocationError] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const inputRef = useRef(null);
-  const autocompleteRef = useRef(null);
+  const placesServiceRef = useRef(null);
 
   useEffect(() => {
-    if (window.google && inputRef.current) {
-      initAutocomplete();
+    if (window.google?.maps?.places) {
+      setIsScriptLoaded(true);
+      return;
     }
+
+    const loadGoogleMapsScript = () => {
+      const existingScript = document.getElementById('google-maps-script');
+      if (existingScript) {
+        existingScript.remove();
+      }
+
+      const script = document.createElement('script');
+      script.id = 'google-maps-script';
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GMAP_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => {
+        setIsScriptLoaded(true);
+      };
+
+      script.onerror = () => {
+        setLocationError('Failed to load Google Maps');
+      };
+
+      document.head.appendChild(script);
+    };
+
+    loadGoogleMapsScript();
   }, []);
 
-  const initAutocomplete = () => {
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-      types: ['geocode', 'establishment'],
-      componentRestrictions: { country: 'in' }
-    });
+  useEffect(() => {
+    if (isScriptLoaded && !placesServiceRef.current) {
+      const dummyElement = document.createElement('div');
+      placesServiceRef.current = new window.google.maps.places.PlacesService(dummyElement);
+    }
+  }, [isScriptLoaded]);
 
-    autocompleteRef.current.addListener('place_changed', () => {
-      const place = autocompleteRef.current.getPlace();
-      if (!place.geometry) {
-        setLocationError('Location could not be fetched');
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchQuery && isScriptLoaded && placesServiceRef.current) {
+        performSearch();
+      } else if (!searchQuery) {
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  const performSearch = () => {
+    const request = {
+      input: searchQuery,
+      componentRestrictions: { country: 'in' },
+      types: ['geocode', 'establishment']
+    };
+
+    const displaySuggestions = (predictions, status) => {
+      if (status !== window.google.maps.places.PlacesServiceStatus.OK || !predictions) {
+        console.error('Place Autocomplete failed:', status);
+        setSearchResults([]);
         return;
       }
-      
-      handleLocationSelect({
-        name: place.name,
-        address: place.formatted_address,
-        location: {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        }
-      });
-    });
+
+      const formattedResults = predictions.map(prediction => ({
+        placeId: prediction.place_id,
+        name: prediction.structured_formatting.main_text,
+        address: prediction.structured_formatting.secondary_text,
+        fullText: prediction.description
+      }));
+
+      setSearchResults(formattedResults);
+    };
+
+    const autocompleteService = new window.google.maps.places.AutocompleteService();
+    autocompleteService.getPlacePredictions(request, displaySuggestions);
   };
 
-  const handleLocationSelect = (location) => {
-    // Handle the selected location
-    console.log('Selected location:', location);
-    // You can call a parent callback here
-    // onLocationSelect(location);
+  const handleLocationSelect = async (result) => {
+    setIsLoading(true);
+
+    try {
+      placesServiceRef.current.getDetails(
+        {
+          placeId: result.placeId,
+          fields: ['geometry', 'formatted_address', 'name']
+        },
+        (place, status) => {
+          setIsLoading(false);
+
+          if (status === window.google.maps.places.PlacesServiceStatus.OK && place) {
+            const locationData = {
+              name: place.name || result.name,
+              address: place.formatted_address || result.address,
+              location: {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng()
+              }
+            };
+
+            // Handle the selected location
+            console.log('Selected location:', locationData);
+            // You can call a parent callback here
+            // onLocationSelect(locationData);
+
+            setSearchQuery(result.fullText);
+            setSearchResults([]);
+          } else {
+            setLocationError('Failed to get location details');
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Error getting place details:', error);
+      setLocationError('Failed to get location details');
+      setIsLoading(false);
+    }
   };
 
   const getCurrentLocation = () => {
@@ -61,29 +146,39 @@ const LocationModal = ({ onClose }) => {
         try {
           const { latitude, longitude } = position.coords;
           const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_GOOGLE_API_KEY`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
           );
           const data = await response.json();
-          
+
           if (data.results && data.results[0]) {
-            handleLocationSelect({
+            const locationData = {
               name: data.results[0].formatted_address,
               address: data.results[0].formatted_address,
               location: {
                 lat: latitude,
                 lng: longitude
               }
-            });
+            };
+
+            // Handle the selected location
+            console.log('Selected location:', locationData);
+            // You can call a parent callback here
+            // onLocationSelect(locationData);
+
+            setSearchQuery(data.results[0].formatted_address);
+            setSearchResults([]);
           } else {
             setLocationError('Location could not be fetched');
           }
         } catch (error) {
+          console.error('Error fetching location details:', error);
           setLocationError('Failed to fetch location details');
         } finally {
           setIsLoading(false);
         }
       },
       (error) => {
+        console.error('Geolocation error:', error);
         setLocationError(
           error.code === 1
             ? 'Location access denied. Please enable location services.'
@@ -101,9 +196,9 @@ const LocationModal = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-20 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-md">
-        <div className="flex justify-between items-center p-4 border-b">
-          <div className="flex-1" />
+      <div className="bg-white w-full max-w-md rounded-lg overflow-hidden">
+        <div className="bg-white flex justify-between items-center p-4 border-b">
+          <h2 className="text-lg font-semibold">Select Location</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full"
@@ -131,7 +226,10 @@ const LocationModal = ({ onClose }) => {
             />
             {searchQuery && (
               <button
-                onClick={() => setSearchQuery('')}
+                onClick={() => {
+                  setSearchQuery('');
+                  setSearchResults([]);
+                }}
                 className="absolute inset-y-0 right-3 flex items-center"
               >
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,22 +242,15 @@ const LocationModal = ({ onClose }) => {
 
         <button
           onClick={getCurrentLocation}
-          className="flex items-center px-4 py-3 text-blue-600 hover:bg-gray-50 w-full"
+          className="flex items-center px-4 py-3 text-blue-600 hover:bg-gray-50 w-full border-t border-b"
         >
           <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
           Use current location
+          {isLoading && <Loader2 className="w-5 h-5 ml-2 animate-spin" />}
         </button>
-
-        {/* Loading state */}
-        {isLoading && (
-          <div className="flex flex-col items-center justify-center p-8">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-            <p className="mt-2 text-gray-600">Fetching location...</p>
-          </div>
-        )}
 
         {locationError && (
           <div className="p-4 flex flex-col items-center">
@@ -169,19 +260,19 @@ const LocationModal = ({ onClose }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Location could not be fetched</h3>
-            <p className="mt-1 text-gray-500">Please try searching again</p>
+            <h3 className="text-lg font-semibold text-gray-900">Location Error</h3>
+            <p className="mt-1 text-gray-500">{locationError}</p>
           </div>
         )}
 
         <div className="max-h-64 overflow-y-auto">
-          {searchResults.map((result, index) => (
+          {searchResults.map((result) => (
             <button
-              key={index}
+              key={result.placeId}
               onClick={() => handleLocationSelect(result)}
               className="w-full px-4 py-3 flex items-start hover:bg-gray-50 border-t first:border-t-0"
             >
-              <svg className="w-5 h-5 mr-3 mt-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-3 mt-1 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               </svg>
               <div className="text-left">
