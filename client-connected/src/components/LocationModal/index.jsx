@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import config from '../../config/config';
 
-const LocationModal = ({ onClose }) => {
+const LocationModal = ({ onClose, setCurrentLocation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [locationError, setLocationError] = useState(null);
@@ -114,6 +114,13 @@ const LocationModal = ({ onClose }) => {
 
             // Handle the selected location
             console.log('Selected location:', locationData);
+            const locationStings = locationData?.address?.split(',');
+            if (locationStings.length > 4) {
+              setCurrentLocation(locationStings?.slice(0, 5)?.join(','));
+            } else {
+              setCurrentLocation(locationData?.address);
+            }
+            onClose();
             // You can call a parent callback here
             // onLocationSelect(locationData);
 
@@ -162,6 +169,13 @@ const LocationModal = ({ onClose }) => {
 
             // Handle the selected location
             console.log('Selected location:', locationData);
+            const locationStings = locationData?.address?.split(',');
+            if (locationStings.length > 4) {
+              setCurrentLocation(locationStings?.slice(0, 5)?.join(','));
+            } else {
+              setCurrentLocation(locationData?.address);
+            }
+            onClose();
             // You can call a parent callback here
             // onLocationSelect(locationData);
 
