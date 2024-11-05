@@ -9,7 +9,7 @@ export default function Footer({ logo, logoAlt, copyright, facebook, instagram, 
       <div className="container-sm pt-5 lg:pt-24 pb-5 space-y-8">
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">
-            <img src={logo} alt={logoAlt} className="h-10 lg:h-14 w-max" />
+            <img src={logo} alt={logoAlt} className="h-10 lg:h-14 w-fit" />
             <p className="text-sm text-gray-500 max-w-[300px]">
               One click to transform your home into a sparkling haven with our professional cleaning services. From deep cleans.
             </p>
