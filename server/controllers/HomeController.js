@@ -333,7 +333,7 @@ exports.homeFeeds = async (req, res) => {
                 testimonials: testimonials,
                 // vendors: vendors,
                 // brands: brands,
-                notifications: notifications
+                // notifications: notifications
             });
         } else {
             res.status(200).json({
