@@ -283,16 +283,16 @@ const HomePageFirstSection = () => {
           HELLO {user?.name ? user.name : null} <span className="waving-hand">👋</span>
         </h1>        
         <h1 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">What you are looking for today</h1>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-8">
           {categoryData?.data?.map((ct, index) => {
               if(index === 6) {
                 return null
               } else {
                 return (
                   <div key={index} onClick={() => openCatModal([ct?.id, ct?.category_name])} className="p-2 cursor-pointer">
-                    <div className="mx-auto w-32 h-32 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
+                    <div className="mx-auto  w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
                         <NavLink className="flex justify-end items-end h-full">
-                          <img className="w-max h-full object-cover" src={ct?.image_url} alt={ct?.category_name} />
+                          <img className="w-full h-full object-cover" src={ct?.image_url} alt={ct?.category_name} />
                         </NavLink>
                     </div>
                   </div>
