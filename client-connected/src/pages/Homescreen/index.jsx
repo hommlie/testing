@@ -207,7 +207,7 @@ const HomePageFirstSection = () => {
   }
 
   return (
-    <main className="content w-full bg-[#f5f5f5] scroll-smooth space-y-3 lg:space-y-8">
+    <main className="content w-full bg-[#f5f5f5] scroll-smooth space-y-2 lg:space-y-3">
 
       <Helmet>
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16578324784"></script>
@@ -239,7 +239,7 @@ const HomePageFirstSection = () => {
       <ReferAndEarn isOpen={isReferModalOpen} onClose={() => setIsReferModalOpen(false)} />
 
       <section className="w-full relative group py-0">
-        <div className="w-full h-40 lg:h-[500px] rounded-xl overflow-hidden">
+        <div className="w-full h-24 lg:h-[500px] rounded-xl overflow-hidden">
           {bannerData?.sliders?.map((slide, index) => (
             <div
               key={index}
@@ -250,7 +250,7 @@ const HomePageFirstSection = () => {
               <a href={slide?.link}>
                 <img
                   src={slide.image_url}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   alt={`Slide ${index + 1}`}
                 />
               </a>
@@ -278,7 +278,7 @@ const HomePageFirstSection = () => {
         </div>
       </section>
       
-      <section className="w-full mx-auto section px-8">
+      <section className="w-full mx-auto section md:px-8 py-5 md:py-10">
         <h1 className="px-2 md:px-0 text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
           HELLO {user?.name ? user.name : null} <span className="waving-hand">👋</span>
         </h1>        
@@ -404,11 +404,11 @@ const HomePageFirstSection = () => {
         /> : null
       }
 
-      <div id="offer-scroller" className="w-full overflow-hidden py-4 px-8" style={{ backgroundColor: 'white' }}>
+      <div id="offer-scroller" className="w-full overflow-hidden py-4 md:px-8" style={{ backgroundColor: 'white' }}>
         <div className="flex animate-scroll whitespace-nowrap">
           {[...Array(20)].map((_, index) => (
             <span key={index} className="relative inline-flex items-center mx-4">
-              <span className="text-xl font-semibold" style={{ color: '#035240' }}>
+              <span className="text-base md:text-xl font-semibold" style={{ color: '#035240' }}>
                 lowest price ever
               </span>
               <span className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#f5f5f5] rounded-full"></span>
@@ -418,7 +418,7 @@ const HomePageFirstSection = () => {
         </div>
       </div>
 
-      <section className="px-8">
+      <section className="md:px-8 py-5 md:py-10">
       {homeFeedData?.most_booked_services?.length ?
         <ProdSection
           openExploreModal = {openExploreModal}
@@ -428,8 +428,8 @@ const HomePageFirstSection = () => {
       }
       </section>
 
-      <section className="mt-12 px-8">
-        <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Discover</h2>
+      <section className="mt-12 md:px-8 py-5 md:py-10">
+        <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold md:mb-8 text-[#10847E]">Discover</h2>
         <div className="grid grid-cols-2 md:grid-cols-4">
           <NavLink to={`${config.VITE_BASE_URL}/my-bookings`} className="flex flex-col gap-2 items-center group">
             <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
@@ -465,8 +465,8 @@ const HomePageFirstSection = () => {
       </section>
 
       {homeFeedData?.videos?.length ?
-        <section className="mt-12 px-8">
-          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">Thoughtful Curations</h2>
+        <section className="mt-12 md:px-8 py-5 md:py-10">
+          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold md:mb-8 text-[#10847E]">Thoughtful Curations</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {homeFeedData?.videos?.map((item, index) => (
               <div key={index} className="relative rounded-lg overflow-hidden">
@@ -505,10 +505,10 @@ const HomePageFirstSection = () => {
         : null
       }
 
-      <section className="w-full mx-auto section px-4 py-8 px-8">
+      <section className="w-full mx-auto section px-2 md:px-8 py-5 md:py-10">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6 text-[#10847E]">Why Hommlie</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {whyChoose.map((item, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
+          {whyChoose?.map((item, index) => (
             <div key={index} className="flex flex-row items-center p-4 rounded-lg gap-4">
               <img src={item.icon} className="w-10 h-10" alt="" />
               <p className="font-semibold" style={{color: "#035240"}}>{item.title}</p>
@@ -524,7 +524,7 @@ const HomePageFirstSection = () => {
             setIsReferModalOpen(true) 
           }
         }}
-        className="w-full mx-auto section px-4 py-8 rounded-lg mt-8 px-8" 
+        className="w-full mx-auto section px-4 py-5 md:py-10 rounded-lg mt-8 md:px-8" 
         style={{backgroundColor: "#D9EFDE"}}
       >
         <div className="flex flex-col sm:flex-row items-center">

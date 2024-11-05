@@ -103,31 +103,6 @@ export default function Header({ logo, logoAlt }) {
     }
   }, [searchPlaceholderData, currentPlaceholderIndex, currentPlaceholder, isTyping]);
 
-  // const getCurrentLocation = () => {
-  //   if (navigator.geolocation && window.isSecureContext) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       async position => {
-  //         const { latitude, longitude } = position.coords;
-  //         try {
-  //           const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-  //           const data = await response.json();
-  //           setCurrentLocation(data);
-  //         } catch (error) {
-  //           console.error("Error fetching location name:", error);
-  //           setCurrentLocation("Location not found");
-  //         }
-  //       },
-  //       error => {
-  //         console.error("Error getting location:", error);
-  //         setCurrentLocation("Bannerghatta, Bangalore");
-  //       }
-  //     );
-  //   } else {
-  //     console.error("Geolocation is not supported or not in a secure context.");
-  //     setCurrentLocation("Location services unavailable");
-  //   }
-  // };
-
   const getCurrentLocation = () => {
 
     if (!navigator.geolocation) {
@@ -154,8 +129,8 @@ export default function Header({ logo, logoAlt }) {
             //   }
             // });
             const locationStings = data.results[0]?.formatted_address.split(',');
-            if (locationStings.length > 4) {
-              setCurrentLocation(locationStings?.slice(0, 5)?.join(','));
+            if (locationStings.length > 3) {
+              setCurrentLocation(locationStings?.slice(0, 4)?.join(','));
             } else {
               setCurrentLocation(data.results[0]?.formatted_address);
             }
@@ -450,7 +425,7 @@ export default function Header({ logo, logoAlt }) {
             </button>
           </div>
 
-          <div className="flex items-center justify-between py-2">
+          <div className="flex items-center justify-between py-4">
             <div className="relative flex-grow mr-4">
               <BiSearchAlt className="absolute text-xs lg:text-xl left-1 lg:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input

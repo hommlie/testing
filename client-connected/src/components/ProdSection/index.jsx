@@ -116,10 +116,10 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                                             </span>
                                         )}
                                     </div>
-                                    <h5 className="text-[12px] h-12 line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
+                                    <h5 className="text-[10px] md:text-sm h-8 md:h-12 line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
                                         {item.product_name}
                                     </h5>
-                                    <p className="text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2">
+                                    <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2">
                                         <span>₹{item.discounted_price}</span>
                                         <span className="line-through font-normal" style={{color: "#ADB6BB"}}>₹{item.product_price}</span>
                                     </p>

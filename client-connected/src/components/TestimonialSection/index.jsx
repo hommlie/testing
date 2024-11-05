@@ -33,9 +33,9 @@ const TestimonialSection = ({ testimonials }) => {
   }
 
   return (
-    <section className="w-full mx-auto py-12" style={{ backgroundColor: '#F8F9FF' }}>
+    <section className="w-full mx-auto py-4 md:py-12" style={{ backgroundColor: '#F8F9FF' }}>
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#10847E] mb-8">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#10847E] md:mb-8">
           What people say
         </h2>
         <div className="relative">

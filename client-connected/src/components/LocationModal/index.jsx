@@ -170,8 +170,8 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
             // Handle the selected location
             console.log('Selected location:', locationData);
             const locationStings = locationData?.address?.split(',');
-            if (locationStings.length > 4) {
-              setCurrentLocation(locationStings?.slice(0, 5)?.join(','));
+            if (locationStings.length > 3) {
+              setCurrentLocation(locationStings?.slice(0, 4)?.join(','));
             } else {
               setCurrentLocation(locationData?.address);
             }
