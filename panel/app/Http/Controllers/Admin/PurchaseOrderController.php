@@ -213,14 +213,31 @@ class PurchaseOrderController extends Controller
             return response()->json(['success' => true]);
         }
 
-    public function deactive(Request $request)
+        // public function deactive(Request $request)
+        // {
+        //     $id = $request->id;
+        //     $timeslot = PurchaseOrder::findOrFail($id);
+        //     $timeslot->status = 1;
+        //     $timeslot->save();
+
+        //     return response()->json(['success' => true]);
+        // }
+
+        public function changeStatus(Request $request)
         {
             $id = $request->id;
-            $timeslot = PurchaseOrder::findOrFail($id);
-            $timeslot->status = 1;
-            $timeslot->save();
+            $status = $request->status;
 
-            return response()->json(['success' => true]);
+            $purchaseOrder = PO_vendors::find($id); 
+
+            if ($purchaseOrder !== null) {
+                $purchaseOrder->status = $status; 
+                $purchaseOrder->save();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Purchase order not found'.$id]);
+            }
+
         }
     
 

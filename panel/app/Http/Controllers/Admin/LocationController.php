@@ -157,15 +157,33 @@ class LocationController extends Controller
             return response()->json(['success' => true]);
         }
 
-    public function deactive(Request $request)
-        {
-            $id = $request->id;
-            $timeslot = Location::findOrFail($id);
-            $timeslot->status = 1;
-            $timeslot->save();
 
-            return response()->json(['success' => true]);
-        }
+    public function changeStatus(Request $request)
+    {
+            $id = $request->id;
+            $status = $request->status;
+
+            $locationStmt = Location::find($id); 
+
+            if ($locationStmt !== null) {
+                $locationStmt->status = $status; 
+                $locationStmt->save();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Purchase order not found']);
+            }
+
+    }
+
+    // public function deactive(Request $request)
+    //     {
+    //         $id = $request->id;
+    //         $timeslot = Location::findOrFail($id);
+    //         $timeslot->status = 1;
+    //         $timeslot->save();
+
+    //         return response()->json(['success' => true]);
+    //     }
     
 
 }

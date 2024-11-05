@@ -5,7 +5,7 @@ import config from "../../config/config";
 
 export default function Footer({ logo, logoAlt, copyright, facebook, instagram, linkedin, twitter, youtube }) {
   return (
-    <footer className="footer rounded-lg mt-[40px] z-10">
+    <footer className="footer mt-[40px] z-10">
       <div className="container-sm pt-5 lg:pt-24 pb-5 space-y-8">
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">

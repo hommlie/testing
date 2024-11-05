@@ -226,7 +226,7 @@
     }
 
     function do_delete(id, page_name, name, titles) {
-    console.log("Delete function called with params - ID:", id, "Page:", page_name, "Name:", name, "Titles:", titles); // Log the initial parameters
+            console.log("Delete function called with params - ID:", id, "Page:", page_name, "Name:", name, "Titles:", titles); // Log the initial parameters
     
     Swal.fire({
         title: '{{ trans('labels.are_you_sure') }}',

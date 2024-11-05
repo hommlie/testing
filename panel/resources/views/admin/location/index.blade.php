@@ -265,43 +265,43 @@
     });
 
 
-    $('.deactive-btn').on('click', function(e) {
+    $('.changeStatus').on('click', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
+        var status = $(this).data('status');
         
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
+            text: 'You wantt update this!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Active it!',
-            cancelButtonText: 'Cancel', // Set custom text for the cancel button
-            showCloseButton: true, // Show close button
-          
+            confirmButtonText: 'Yes, Sure',
+            cancelButtonText: 'Cancel',
+            showCloseButton: true,         
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ route("admin.location.deactive") }}',
+                    url: '{{ route("admin.location.changeStatus") }}',
                     type: 'POST',
                     data: {
                         id: id,
+                        status: status,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
                         if(response.success) {
                             Swal.fire(
-                                'Activated!',
-                                'Your record has been Activated.',
+                                'Updated Successfully!',
+                                'Your record has been updated successfully',
                                 'success'
                             );
-                            // Update the view or perform any necessary actions
-                            location.reload(); // For example, reload the page
+                            location.reload(); 
                         } else {
                             Swal.fire(
                                 'Error!',
-                                'Failed to Activate record.',
+                                'Failed to Update record.',
                                 'error'
                             );
                         }
@@ -309,7 +309,7 @@
                     error: function(xhr, status, error) {
                         Swal.fire(
                             'Error!',
-                            'Failed to Activate record.',
+                            'Failed to Update record.',
                             'error'
                         );
                     }

@@ -217,14 +217,14 @@ class OrderController extends Controller
     public function getServiceVariationType($serviceId)
     {
         $services = Variation::where('product_id', $serviceId)
-                                ->where('attribute_id', 2)
+                                //->where('attribute_id', 2)
                                 ->get();
         return response()->json($services);
     }
     public function getServiceVariationArea($serviceId)
     {
         $services = Variation::where('product_id', $serviceId)
-                                ->where('attribute_id', 5)
+                               // ->where('attribute_id', 5)
                                 ->get();
         return response()->json($services);
     }
@@ -232,7 +232,7 @@ class OrderController extends Controller
     public function getServiceDetails($id)
     {
         $service = DB::table('products')
-                     ->join('product_images', 'products.id', '=', 'product_images.product_id')
+                     ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
                      ->where('products.id', $id)
                      ->select(
                          'products.discounted_price',
@@ -254,11 +254,11 @@ class OrderController extends Controller
                         ->get();
     
         return response()->json([
-            'discounted_price' => $service->discounted_price,
-            'tax' => $service->tax,
-            'tax_type' => $service->tax_type,
-            'product_name' => $service->product_name,
-            'image' => $service->image,
+            'discounted_price' => optional($service)->discounted_price,
+            'tax' => optional($service)->tax,
+            'tax_type' => optional($service)->tax_type,
+            'product_name' => optional($service)->product_name,
+            'image' => optional($service)->image,
             'variations' => $variations
         ]);
     }

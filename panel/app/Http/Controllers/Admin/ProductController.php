@@ -160,7 +160,7 @@ class ProductController extends Controller
         // $tags = "na";
 
         $dataval=array(
-            'vendor_id'=>'7',
+            'vendor_id'=>Auth::user()->id,
             'cat_id'=>$request->cat_id,
             'subcat_id'=>$request->subcat_id,
             // 'innersubcat_id'=>$request->innersubcat_id,
@@ -454,7 +454,7 @@ class ProductController extends Controller
         $tags = $request->tags;
         
         $data = [
-            'vendor_id' => '6',
+            'vendor_id' => Auth::user()->id,
             'cat_id' => $request->cat_id,
             'subcat_id' => $request->subcat_id,
             'innersubcat_id' => $request->innersubcat_id,

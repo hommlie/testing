@@ -64,27 +64,28 @@
 @section('scripttop')
 @endsection
 @section('scripts')
-<script src="{{asset('storage/app/public/Adminassets/js/dataTables.js')}}"></script>
+<!-- <script src="{{asset('storage/app/public/Adminassets/js/dataTables.js')}}"></script>
 <script src="{{asset('storage/app/public/Adminassets/js/dataTables.bootstrap4.js')}}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
 <script type="text/javascript">
     // Data Table Script
-    new DataTable('#data_table_bootstrap');
+   // new DataTable('#data_table_bootstrap');
     // Ends
 
 
     $(document).ready(function() {
 
-        $('.active-btn').on('click', function(e) {
+        $('.changestatus').on('click', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
+        var status = $(this).data('status');
         
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
+            text: 'Want to continue .',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -96,17 +97,18 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ route("admin.quotation.delete") }}',
+                    url: '{{ route("admin.purchaseorder.changeStatus") }}',
                     type: 'POST',
                     data: {
-                        id: id,
+                         id: id,
+                         status: status,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
                         if(response.success) {
                             Swal.fire(
-                                'Deactivated!',
-                                'Your record has been Deactivated.',
+                                'Updated Successfully!',
+                                'Your record has been Updated.',
                                 'success'
                             );
                             // Update the view or perform any necessary actions
@@ -114,7 +116,7 @@
                         } else {
                             Swal.fire(
                                 'Error!',
-                                'Failed to Deactive record.',
+                                'Failed to Update record.',
                                 'error'
                             );
                         }
@@ -122,7 +124,7 @@
                     error: function(xhr, status, error) {
                         Swal.fire(
                             'Error!',
-                            'Failed to Deactivate record.',
+                            'Failed to Update record.',
                             'error'
                         );
                     }
@@ -137,65 +139,6 @@
         });
     });
 
-
-    $('.deactive-btn').on('click', function(e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Active it!',
-            cancelButtonText: 'Cancel', // Set custom text for the cancel button
-            showCloseButton: true, // Show close button
-          
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '{{ route("admin.quotation.deactive") }}',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if(response.success) {
-                            Swal.fire(
-                                'Activated!',
-                                'Your record has been Activated.',
-                                'success'
-                            );
-                            // Update the view or perform any necessary actions
-                            location.reload(); // For example, reload the page
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                'Failed to Activate record.',
-                                'error'
-                            );
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire(
-                            'Error!',
-                            'Failed to Activate record.',
-                            'error'
-                        );
-                    }
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                    'Cancelled',
-                    'Your action has been cancelled.',
-                    'error'
-                );
-            }
-        });
-    });
 
 });
 

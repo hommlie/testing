@@ -354,6 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('order_service').addEventListener('change', function () {
         const serviceId = this.value;
+        console.log("serviceId -- " + serviceId);
         if (serviceId) {
             fetchServiceDetails(serviceId);
             fetchServiceType(serviceId);
@@ -425,6 +426,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`get-service-variation-type/${serviceId}`)
             .then(response => response.json())
             .then(data => {
+                console.log("Response From "+data);
+                console.log(data);
                 const serviceTypeSelect = document.getElementById('order_service_type');
                 serviceTypeSelect.innerHTML = '<option value="">-select Service-</option>';
                 data.forEach(service => {

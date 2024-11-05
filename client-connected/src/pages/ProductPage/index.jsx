@@ -1043,7 +1043,7 @@ export default function ProductPage() {
 
             </div>
 
-            <div className="w-full lg:w-2/3 mt-4">
+            <div className="w-full mt-4">
 
                 <section className="container mx-auto section">
                     <ProdSection

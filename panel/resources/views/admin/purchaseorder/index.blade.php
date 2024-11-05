@@ -211,6 +211,8 @@
     $(document).ready(function() {
 
         $('.active-btn').on('click', function(e) {
+
+            alert();
         e.preventDefault();
         var id = $(this).data('id');
         

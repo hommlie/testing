@@ -35,7 +35,7 @@
             <td>
                 @if($row['status']==1)
                 <button class="active-btn edit btn btn-sm btn-outline-success" data-id="{{ $row->id }}" title="{{ trans('active') }}" >
-                    Active
+                    Active 
                 </button>
                 @else
                 <button class="deactive-btn edit btn btn-sm btn-outline-danger" data-id="{{ $row->id }}" title="{{ trans('Inactive') }}" >

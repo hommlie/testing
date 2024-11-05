@@ -18,7 +18,7 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $data=Banner::with('product')->with('category')->where('positions','top')->get();
+        $data=Banner::with('product')->with('category')->where('positions','banner')->get();
         return view('admin.banner.index',compact('data'));
     }
 

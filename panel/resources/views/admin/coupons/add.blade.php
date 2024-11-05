@@ -41,6 +41,13 @@
                                             @endif
                                         </div>
 
+                                        <!-- ============================================ -->
+                                         
+
+
+
+                                        <!-- ============================================ -->
+
                                         <div class="form-group">
                                             <label for="type">{{ trans('labels.type') }}</label>
                                             <select name="type" id="type" class="form-control" onchange="showType(this)">

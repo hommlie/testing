@@ -504,7 +504,12 @@
 
                                     <label for="discounted_percentage" class="col-sm-2 col-form-label">Discount (%)</label>
                                     <div class="col-sm-4">
+                                        <?php if($data->product_price > 0){ ?>
                                         <input type="text" class="form-control" id="discounted_percentage" name="discounted_percentage" placeholder="{{ trans('Enter Discount %') }}" value="{{ (($data->product_price - $data->discounted_price)*100)/$data->product_price }}">
+                                        <?php }else{ ?>
+                                          <input type="text" class="form-control" id="discounted_percentage" name="discounted_percentage" placeholder="{{ trans('Enter Discount %') }}" value="0">
+                                        <?php } ?>  
+
                                         @if ($errors->has('discounted_percentage'))
                                             <span class="text-danger">{{ $errors->first('discounted_percentage') }}</span>
                                         @endif

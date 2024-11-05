@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupons;
@@ -24,6 +24,7 @@ class CouponsController extends Controller
 
     public function add()
     {
+        $data = Category::select('id', 'category_name')->get();
         return view('admin.coupons.add');
     }
 

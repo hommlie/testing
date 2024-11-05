@@ -13,7 +13,10 @@
     </thead>
     <tbody> 
         @php $n=0 @endphp
-        @forelse($data as $row)      
+        @if(!empty($data) && $data->count() > 0)
+
+        @foreach($data as $row)      
+        
         <tr id="del-{{$row->id}}">
             <td>{{++$n}}</td>
              <td><img src='{!! asset("storage/app/public/images/subcategory/".$row->icon) !!}' class='media-object round-media height-50' style="height:50px"></td>
@@ -22,18 +25,25 @@
             <td>{{$row->subcategory_name}}</td>
             <td>
                 <strong>Onsite:</strong>
-                @forelse($row->onsiteQuestions as $question)
-                    <p>{{ $question->label }} ({{ $question->type }})</p>
-                @empty
-                    <p>No questions assigned.</p>
-                @endforelse
+               
+                
+                @if(!empty($row->onsiteQuestions) && $row->onsiteQuestions->count() > 0)
+                    @foreach($row->onsiteQuestions as $question)
+                        <p>{{ $question->label }} ({{ $question->type }})</p>
+                    @endforeach
+                @else
+                    <p>No questions available.</p>
+                @endif
+
 
                 <strong>OnCompleted:</strong>
-                @forelse($row->completedQuestions as $question)
+                @if(!empty($row->completedQuestions) && $row->completedQuestions->count() > 0)
+                    @forelse($row->completedQuestions as $question)
                     <p>{{ $question->label }} ({{ $question->type }})</p>
-                @empty
+                    @endforeach
+                @else
                     <p>No questions assigned.</p>
-                @endforelse
+                @endif
             </td>
             <td id="tdstatus{{$row->id}}"> 
                 @if($row->status=='1') 
@@ -57,9 +67,10 @@
                 <button value="{{ $row->id }}"  data-toggle="modal" class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 assignbtn">Assign</button>
             </td>
         </tr>
-        @empty
 
-        @endforelse
+        @endforeach
+       
+        @endif
   </tbody>
 </table>
 <nav aria-label="Page navigation example">

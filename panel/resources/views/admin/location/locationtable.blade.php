@@ -19,11 +19,11 @@
             <td>{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
             <td>
                 @if($row['status']=='Active')
-                <button class="active-btn edit btn btn-sm btn-outline-success" data-id="{{ $row->id }}" title="{{ trans('active') }}" >
+                <button class="changeStatus edit btn btn-sm btn-outline-success" data-id="{{ $row->id }}" data-status="0" title="{{ trans('active') }}" >
                     Active
                 </button>
                 @else
-                <button class="deactive-btn edit btn btn-sm btn-outline-danger" data-id="{{ $row->id }}" title="{{ trans('Inactive') }}" >
+                <button class="changeStatus edit btn btn-sm btn-outline-danger" data-id="{{ $row->id }}" data-status="1" title="{{ trans('Inactive') }}" >
                     Deactive
                 </button>
                 @endif

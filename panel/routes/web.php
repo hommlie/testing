@@ -98,6 +98,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchaseorder/vendor', 'PurchaseOrderController@vendor')->name('purchaseorder.vendor'); 
     Route::get('purchaseorder/addvendor', 'PurchaseOrderController@addvendor')->name('purchaseorder.addvendor'); 
     Route::post('purchaseorder/storevendor', 'PurchaseOrderController@storevendor')->name('purchaseorder.storevendor'); 
+    Route::post('purchaseorder/changeStatus', 'PurchaseOrderController@changeStatus')->name('purchaseorder.changeStatus'); 
 
 
 
@@ -109,7 +110,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/location/view/{id}', 'LocationController@view')->name('location.view');
     Route::put('/location/update/{id}', 'LocationController@update')->name('location.update');
     Route::post('/admin/location/delete', 'LocationController@delete')->name('location.delete');
-    Route::post('/admin/location/deactive', 'LocationController@deactive')->name('location.deactive');
+    Route::post('/admin/location/changeStatus', 'LocationController@changeStatus')->name('location.changeStatus');
 
 
 
