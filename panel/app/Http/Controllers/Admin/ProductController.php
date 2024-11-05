@@ -351,19 +351,21 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         if ($request->is_variation == "on") {
+
             $this->validate($request, [
-                'cat_id' => 'required|integer',
-                'available_stock' => 'required',
-                'sku' => 'required',
+                'cat_id' => 'required',
+                'available_stock' => 'nullable',
+                'sku' => 'nullable',
                 'subcat_id' => 'required',
                 'product_name' => 'required',
-                'variation.*' => 'required',
-                'price.*' => 'required',
-                'discounted_variation_price.*' => 'required',
-                'qty.*' => 'required',
+                'variation.*' => 'nullable',
+                'price.*' => 'nullable',
+                'discounted_variation_price.*' => 'nullable',
+                'qty.*' => 'nullable',
             ]);
 
-          
+         
+
     
             $is_variation = 1;
             $product_price = $request->product_price;
@@ -408,7 +410,7 @@ class ProductController extends Controller
             $this->validate($request, [
                 'cat_id' => 'required',
                 'available_stock' => 'required',
-                'sku' => 'required',
+                'sku' => 'nullable',
                 'subcat_id' => 'required',
                 'innersubcat_id' => 'required',
                 'product_name' => 'required',
