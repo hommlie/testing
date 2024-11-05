@@ -52,37 +52,37 @@ exports.homeFeeds = async (req, res) => {
             }
         ];
 
-        const featured_products = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                is_featured: 1,
-                status: 1
-            },
-            order: sequelize.random(),
-            limit: 10,
-        });
+        // const featured_products = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         is_featured: 1,
+        //         status: 1
+        //     },
+        //     order: sequelize.random(),
+        //     limit: 10,
+        // });
 
-        const hot_products = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                is_hot: 1,
-                status: 1
-            },
-            order: sequelize.random(),
-            limit: 10,
-        });
+        // const hot_products = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         is_hot: 1,
+        //         status: 1
+        //     },
+        //     order: sequelize.random(),
+        //     limit: 10,
+        // });
 
-        const new_products = await Product.findAll({
-            attributes: commonProductAttributes,
-            include: commonIncludes,
-            where: {
-                status: 1
-            },
-            order: [['id', 'DESC']],
-            limit: 10,
-        });
+        // const new_products = await Product.findAll({
+        //     attributes: commonProductAttributes,
+        //     include: commonIncludes,
+        //     where: {
+        //         status: 1
+        //     },
+        //     order: [['id', 'DESC']],
+        //     limit: 10,
+        // });
 
         const most_booked_services = await Product.findAll({
             attributes: [
@@ -256,54 +256,55 @@ exports.homeFeeds = async (req, res) => {
         //     limit: 10
         // });
 
-        const brands = await Brand.findAll({
-            attributes: [
-                'id',
-                'brand_name',
-                [literal(`CONCAT('${process.env.BASE_URL}/storage/app/public/images/brand/', icon)`), 'image_url']
-            ],
-            where: {
-                status: 1
-            },
-            order: [
-                [Sequelize.fn('RAND')]
-            ],
-            limit: 10
-        });
+        // const brands = await Brand.findAll({
+        //     attributes: [
+        //         'id',
+        //         'brand_name',
+        //         [literal(`CONCAT('${process.env.BASE_URL}/storage/app/public/images/brand/', icon)`), 'image_url']
+        //     ],
+        //     where: {
+        //         status: 1
+        //     },
+        //     order: [
+        //         [Sequelize.fn('RAND')]
+        //     ],
+        //     limit: 10
+        // });
 
-        featured_products.forEach(product => {
-            // Convert numeric values to strings as per your expected response
-            product.product_price = product.product_price.toString();
-            product.discounted_price = product.discounted_price.toString();
-            product.is_variation = product.is_variation ? "1" : "0"; 
-        });
+        // featured_products.forEach(product => {
+        //     // Convert numeric values to strings as per your expected response
+        //     product.product_price = product.product_price.toString();
+        //     product.discounted_price = product.discounted_price.toString();
+        //     product.is_variation = product.is_variation ? "1" : "0"; 
+        // });
         
-        hot_products.forEach(product => {
-            product.product_price = product.product_price.toString();
-            product.discounted_price = product.discounted_price.toString();
-            product.is_variation = product.is_variation ? "1" : "0";
-        });
+        // hot_products.forEach(product => {
+        //     product.product_price = product.product_price.toString();
+        //     product.discounted_price = product.discounted_price.toString();
+        //     product.is_variation = product.is_variation ? "1" : "0";
+        // });
         
-        new_products.forEach(product => {
-            product.product_price = product.product_price.toString();
-            product.discounted_price = product.discounted_price.toString();
-            product.is_variation = product.is_variation ? "1" : "0";
-        });        
+        // new_products.forEach(product => {
+        //     product.product_price = product.product_price.toString();
+        //     product.discounted_price = product.discounted_price.toString();
+        //     product.is_variation = product.is_variation ? "1" : "0";
+        // });        
 
-        const notifications = await Notification.count({
-            where: {
-                is_read: 1,
-                user_id: user_id
-            }
-        });
+        // const notifications = await Notification.count({
+        //     where: {
+        //         is_read: 1,
+        //         user_id: user_id
+        //     }
+        // });
 
         const data = await Settings.findOne();
 
         if (
-            featured_products.length > 0 && 
-            hot_products.length > 0 && 
-            new_products.length > 0 &&
-            most_booked_services.length > 0 &&
+            // featured_products.length > 0 && 
+            // hot_products.length > 0 && 
+            // new_products.length > 0 &&
+            most_booked_services.length > 0 
+            // &&
             // cleaning_services.length > 0 &&
             // pest_control.length > 0 &&
             // safety_pro_netting.length > 0 &&
@@ -312,16 +313,16 @@ exports.homeFeeds = async (req, res) => {
             // videos.length > 0 &&
             // testimonials.length > 0 &&
             // vendors.length > 0 &&
-            brands.length > 0
+            // brands.length > 0
         ) {
             res.status(200).json({
                 status: 1,
                 message: 'Success',
                 currency: data.currency,
                 currency_position: data.currency_position,
-                featured_products: featured_products,
-                hot_products: hot_products,
-                new_products: new_products,
+                // featured_products: featured_products,
+                // hot_products: hot_products,
+                // new_products: new_products,
                 most_booked_services: most_booked_services,
                 cleaning_services: cleaning_services,
                 pest_control: pest_control,
@@ -331,7 +332,7 @@ exports.homeFeeds = async (req, res) => {
                 videos: [],
                 testimonials: testimonials,
                 // vendors: vendors,
-                brands: brands,
+                // brands: brands,
                 notifications: notifications
             });
         } else {
