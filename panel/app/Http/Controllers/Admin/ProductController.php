@@ -352,16 +352,18 @@ class ProductController extends Controller
     {
         if ($request->is_variation == "on") {
             $this->validate($request, [
-                'cat_id' => 'nullable',
-                'available_stock' => 'nullable',
-                'sku' => 'nullable',
-                'subcat_id' => 'nullable',
-                'product_name' => 'nullable',
-                'variation.*' => 'nullable',
-                'price.*' => 'nullable',
-                'discounted_variation_price.*' => 'nullable',
-                'qty.*' => 'nullable',
+                'cat_id' => 'required|integer',
+                'available_stock' => 'required',
+                'sku' => 'required',
+                'subcat_id' => 'required',
+                'product_name' => 'required',
+                'variation.*' => 'required',
+                'price.*' => 'required',
+                'discounted_variation_price.*' => 'required',
+                'qty.*' => 'required',
             ]);
+
+          
     
             $is_variation = 1;
             $product_price = $request->product_price;
@@ -404,15 +406,15 @@ class ProductController extends Controller
     
         } else {
             $this->validate($request, [
-                'cat_id' => 'nullable',
-                'available_stock' => 'nullable',
-                'sku' => 'nullable',
-                'subcat_id' => 'nullable',
-                'innersubcat_id' => 'nullable',
-                'product_name' => 'nullable',
-                'product_price' => 'nullable',
-                'product_qty' => 'nullable',
-                'discounted_price' => 'nullable',
+                'cat_id' => 'required',
+                'available_stock' => 'required',
+                'sku' => 'required',
+                'subcat_id' => 'required',
+                'innersubcat_id' => 'required',
+                'product_name' => 'required',
+                'product_price' => 'required',
+                'product_qty' => 'required',
+                'discounted_price' => 'required',
             ]);
     
             $is_variation = 0;
