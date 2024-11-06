@@ -6,6 +6,7 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import axios from 'axios';
 import config from '../../config/config';
 import couponSucess from '../Lotties/couponSuccess.json';
+import NoResultFoundImg from '../../assets/images/noresultfound.svg'
 
 const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
     const { selectedCoupon, setSelectedCoupon } = useCont();
@@ -16,6 +17,9 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
     const [appliedCoupon, setAppliedCoupon] = useState(null);
 
     async function getCoupons() {
+        console.log(cat_id);
+        setCoupons([]);
+        
         await axios.post(`${config.API_URL}/api/coupons`,
             {
                 cat_id,
@@ -39,7 +43,7 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
         } else {
             setFilteredCoupons([]);
         }
-    }, []);
+    }, [isOpen]);
 
     useEffect(() => {
         handleSearch(searchTerm);
@@ -120,6 +124,12 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
                 </div>
                 <div className='flex flex-col gap-4 justify-center w-full px-4 my-2'>
                     <h3 className='font-bold'>Available Coupons</h3>
+                    {
+                        filteredCoupons?.length === 0 &&
+                        <div className='p-4'>
+                            <img src={NoResultFoundImg} alt="" />
+                        </div>
+                    }
                     {filteredCoupons?.map((cp, index) => (
                         <div key={index} className='relative bg-white rounded-md shadow-md p-2 px-8 space-y-3'>
                             <div className='flex flex-row justify-between'>

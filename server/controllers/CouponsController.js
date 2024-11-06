@@ -6,10 +6,10 @@ const apiUrl = process.env.apiUrl;
 
 exports.coupons = async (req, res) => {
 
-    const cat_id = req.body.cat_id;
+    const { cat_id } = req.body;
 
     const now = new Date().toISOString().split('T')[0];
-
+    
     try {
 
         if (cat_id) {
@@ -32,7 +32,7 @@ exports.coupons = async (req, res) => {
                 },
                 order: [['id', 'DESC']],
                 limit: 10
-            });
+            });            
 
             if (coupons.length > 0) {
                 return res.status(200).json({ status: 1, message: 'Success', data: coupons });
