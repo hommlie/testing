@@ -350,7 +350,7 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
-        if ($request->is_variation == "on") {
+        if ($request->is_variation != null AND $request->is_variation == "on") {
 
             $this->validate($request, [
                 'cat_id' => 'required',
@@ -407,27 +407,32 @@ class ProductController extends Controller
             }
     
         } else {
+
+
+          
             $this->validate($request, [
                 'cat_id' => 'required',
-                'available_stock' => 'required',
+                'available_stock' => 'nullable',
                 'sku' => 'nullable',
                 'subcat_id' => 'required',
-                'innersubcat_id' => 'required',
-                'product_name' => 'required',
+                'innersubcat_id' => 'nullable',
+                'product_name' => 'nullable',
                 'product_price' => 'required',
                 'product_qty' => 'required',
                 'discounted_price' => 'required',
             ]);
     
+           
             $is_variation = 0;
             $product_price = $request->product_price;
             $product_qty = $request->product_qty;
             $discounted_price = $request->discounted_price;
     
+           
             // Delete existing variations as product is now non-variant
             Variation::where('product_id', $request->product_id)->delete();
         }
-
+     
         if (!empty($request->video)) {
             // Check if video_id is provided in the request for update
             if (!empty($request->video_id)) {
@@ -447,6 +452,7 @@ class ProductController extends Controller
         }
         
     
+      
         $free_shipping = $request->free_shipping == "on" ? 1 : 2;
         $is_hot = $request->is_hot == "on" ? 1 : 2;
         $flat_rate = $request->flat_rate == "on" ? 1 : 2;
