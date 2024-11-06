@@ -327,6 +327,9 @@
                             }else{
                                 $('#tdstatus'+id).html('<span class="btn btn-raised btn-outline-danger round btn-min-width mr-1 mb-1 changeStatus" data-status="1"  data-id="'+id+'">{{ trans('labels.deactive') }}</span>');
                             }
+
+                            location.reload();
+                            
                         }
                         else
                         {

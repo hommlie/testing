@@ -381,8 +381,28 @@ class ProductController extends Controller
             $discounted_variation_price = $request->discounted_variation_price;
             $qty = $request->qty;
     
+            print_r($variation);
+
+            echo "<br>";
+            print_r($attribute_id);
+
+            echo "<br>";
+            print_r($variation_interval);
+
+            echo "<br>";
+            print_r($price);
+
+            echo "<br>";
+            print_r($discounted_variation_price);
+
+            echo "<br>";
+            print_r($discounted_variation_price);
+
+            dd();
+          
             if (is_array($variation) || is_object($variation)) {
                 foreach ($variation as $i => $no) {
+
                     if ($no != "") {
                         $input = [
                             'attribute_id' => $attribute_id[$i],
@@ -422,7 +442,6 @@ class ProductController extends Controller
                 'discounted_price' => 'required',
             ]);
     
-           
             $is_variation = 0;
             $product_price = $request->product_price;
             $product_qty = $request->product_qty;

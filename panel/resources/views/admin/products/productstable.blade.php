@@ -32,7 +32,7 @@
             <td>{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
             <td id="tdstatus{{$row->id}}"> 
                 @if($row->status=='1') 
-                    <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus" data-status="2" data-id="{{$row->id}}">
+                    <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus" data-status="0" data-id="{{$row->id}}">
                       <span class="green-text">{{ trans('labels.active') }}</span>
                     </span>
                 @else 
