@@ -74,7 +74,7 @@ exports.getSubcategory = async (req, res) => {
           subcat_id: sub.id,
           status: 1,
         },
-        order: [['id', 'DESC']],
+        // order: [['id', 'DESC']],
       });
 
       return {
@@ -93,7 +93,7 @@ exports.getSubcategory = async (req, res) => {
     if (subcategory.length > 0) {
       return res.status(200).json({ status: 1, message: 'Success', data: { subcategory } });
     } else {
-      return res.status(200).json({ status: 0, message: 'No data found' });
+      return res.status(200).json({ status: 0, message: 'No subscategory data found' });
     }
   } catch (error) {
     return res.status(500).json({ status: 0, message: 'Error occurred', error: error.message });
