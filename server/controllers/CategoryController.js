@@ -72,7 +72,7 @@ exports.getSubcategory = async (req, res) => {
         ],
         where: {
           subcat_id: sub.id,
-          // status: 1,
+          status: 1,
         },
         order: [['id', 'DESC']],
       });
