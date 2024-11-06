@@ -52,7 +52,7 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
         try {
             const response = await axios.post(`${config.API_URL}/api/products`, { subcategory_id: subCatId });
             setSubCategoryData(response.data.data);
-            console.log("Sub categories:", response.data.data);
+            console.log("Sub categories:", response);
         } catch (error) {
             console.log("error: " + error);
         } finally {

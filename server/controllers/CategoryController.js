@@ -20,10 +20,12 @@ exports.getCategory = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ status: 0, message: 'Error occurred', error: error });
   }
+  
 };
 
 exports.getSubcategory = async (req, res) => {
   try {
+    
     const { cat_id } = req.body;
     const user_id = 1;
 
@@ -83,7 +85,7 @@ exports.getSubcategory = async (req, res) => {
         //   id: inner.id,
         //   innersubcategory_name: inner.innersubcategory_name
         // })),
-        productsData: productsData
+        // productsData: productsData
       };
 
     }));

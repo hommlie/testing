@@ -29,10 +29,10 @@ export default function Footer({ logo, logoAlt, copyright, facebook, instagram, 
               title="Our Brands"
               links={[
                 { title: "Hommlie", link: "https://www.hommlie.com/" },
-                { title: "Hompure", link: "https://www.hompure.in/" },
-                { title: "Hoy Smart", link: "https://www.hompure.in/" },
-                { title: "RoachX", link: "https://www.hompure.in/" },
-                { title: "Pink Store", link: "https://www.hompure.in/" }
+                { title: "Hompure", link: "https://hompure.in/" },
+                { title: "Hoy Smart", link: "https://hoysmart.in/" },
+                { title: "RoachX", link: "https://roachx.in/" },
+                { title: "Pink Store", link: "https://pinkstore.co.in/" }
               ]}
             />
 
