@@ -429,7 +429,7 @@ export default function ProductPage() {
     const renderMedia = (item) => {
         return (
             <img
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 src={item?.image_url}
                 alt="Product"
                 onLoad={() => {console.log("loaded")}}
@@ -555,7 +555,7 @@ export default function ProductPage() {
                     <section className="bg-white rounded-lg md:p-4 mb-6 glow-border mt-5 md:mt-10">
                         <div className="relative">
                             {imageItems.length > 0 && (
-                                <div className="w-full h-[250px] lg:h-[450px]">
+                                <div className="w-full lg:w-[1050px] h-[250px] lg:h-[450px] border">
                                     {renderMedia(imageItems[currentMediaIndex])}
                                 </div>
                             )}

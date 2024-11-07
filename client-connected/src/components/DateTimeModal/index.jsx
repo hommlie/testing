@@ -186,9 +186,9 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
     }
 
     return (
-        <div className="fixed inset-0 z-20 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="fixed inset-0 opacity-60" style={{ backgroundColor: "black" }} onClick={onClose}></div>
-            <div className="relative bg-white w-[80%] md:w-full max-w-[24rem] max-h-[35rem] overflow-y-scroll p-4 md:p-8 md:px-12 rounded-2xl shadow-lg overflow-hidden z-30 space-y-4 scrollbar-hide">
+            <div className="relative bg-white w-[80%] md:w-full max-w-[24rem] max-h-[40rem] overflow-y-scroll p-4 md:p-8 md:px-12 rounded-2xl shadow-lg overflow-hidden z-30 space-y-4 scrollbar-hide">
                 <h2 className='text-lg font-bold'>Select Date & Time for the appointment</h2>
                 <div className='flex flex-col gap-3'>
                     <h3 className='font-bold'>When would you like your service?</h3>

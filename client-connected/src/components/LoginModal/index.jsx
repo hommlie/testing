@@ -184,7 +184,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
                         <p className="text-sm text-gray-600 mb-6">
                             Please enter the 4 digit code sent to <span className="font-medium text-[#035240]">+91 {phone}</span>
                         </p>
-                        <div className="flex space-x-4 mb-6" onPaste={handlePaste}>
+                        <div className="w-full flex justify-between mb-6" onPaste={handlePaste}>
                             {otp.map((digit, index) => (
                                 <input
                                     key={index}

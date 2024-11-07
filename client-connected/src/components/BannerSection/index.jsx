@@ -28,7 +28,7 @@ const bannerDatalider = ({ bannerData }) => {
   return (
     <div className="relative bg-white w-full h-[150px] md:h-[300px] lg:h-[500px] overflow-hidden md:px-8 py-5 md:py-10">
       <div
-        className="flex w-[100vw] h-full overflow-x-auto scroll-smooth gap-3 md:gap-5 md:gap-10 scrollbar-hide"
+        className="flex w-[100vw] h-full overflow-x-auto scroll-smooth gap-5 md:gap-10 md:gap-10 scrollbar-hide"
         ref={sliderRef}
       >
         {bannerData?.map((banner, index) => (
