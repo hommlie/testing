@@ -27,6 +27,9 @@ Banner.init({
     positions: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    link: {
+        type: DataTypes.STRING
     }
 }, {
     sequelize,
