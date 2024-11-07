@@ -434,8 +434,10 @@ exports.orderdetails = async (req, res) => {
           orderItem.attribute = attributeDetails?.attribute || '';
       }
 
-      // Format specific fields
-      response.order_info.desired_time = moment(response.order_info.desired_time, 'HH:mm').format('hh:mm A');
+      // Convert desired_time to 12-hour format
+      const desiredTime24 = response.order_info.desired_time;
+      const desiredTime12 = moment(desiredTime24, 'HH:mm').format('hh:mm A');
+      response.order_info.desired_time = desiredTime12;
 
       return res.status(200).json(response);
   } catch (error) {
