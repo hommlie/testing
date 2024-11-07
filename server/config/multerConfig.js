@@ -3,7 +3,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    let uploadPath = '/panel/public/storage/app/public/';
+    let uploadPath = 'https://www.hommlie.com/panel/public/storage/app/public/';
     
     if (file.mimetype.startsWith('image/')) {
       uploadPath += 'images/profile/';
