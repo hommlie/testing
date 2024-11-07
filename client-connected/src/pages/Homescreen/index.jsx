@@ -477,7 +477,7 @@ const HomePageFirstSection = () => {
                 <img
                   src={item.thumbnail || DefaultThumbnail}
                   alt="Video thumbnail"
-                  className="w-full h-48 object-cover"
+                  className="w-full h-[250px] object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <button
