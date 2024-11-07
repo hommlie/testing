@@ -32,22 +32,20 @@ class ThoughtfulCurationController extends Controller
        
 
         $validator = Validator::make($request->all(), [
-            // 'video_file' => 'required|file|mimes:mp4|max:10240',
-            'video_file' => 'required',
+            'video_file' => 'required|file|mimes:mp4|max:10240',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg|max:10240',
         ]);
 
-        $videoPath = $request->video_file;
+        $videoPath = null;
         $thumbnailPath = null;
 
-
        
-        // if ($request->hasFile('video_file')) {
-        //     $video = $request->file('video_file');
-        //     $videoFileName = 'video_' . time() . '.' . $video->extension();
-        //     $video->move(public_path('/storage/app/public/thoughtfull-videos/'), $videoFileName);
-        //     $videoPath =$videoFileName; 
-        // }
+        if ($request->hasFile('video_file')) {
+            $video = $request->file('video_file');
+            $videoFileName = 'video_' . time() . '.' . $video->extension();
+            $video->move(public_path('/storage/app/public/thoughtfull-videos/'), $videoFileName);
+            $videoPath =$videoFileName; 
+        }
 
      
         if ($request->hasFile('thumbnail')) {
@@ -78,7 +76,7 @@ class ThoughtfulCurationController extends Controller
     {
        
         $request->validate([
-            'video_file' => 'nullable',
+            'video_file' => 'nullable|file|mimes:mp4',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg',
         ]);
 
@@ -86,22 +84,22 @@ class ThoughtfulCurationController extends Controller
         $curation = ThoughtfulCuration::findOrFail($id);
 
        
-        $videoPath = $request->video_file; 
+        $videoPath = $curation->video; 
         $thumbnailPath = $curation->thumbnail; 
 
        
-        // if ($request->hasFile('video_file')) {
+        if ($request->hasFile('video_file')) {
          
-        //     if ($curation->video && Storage::disk('public')->exists($curation->video)) {
-        //         Storage::disk('public')->delete($curation->video);
-        //     }
+            if ($curation->video && Storage::disk('public')->exists($curation->video)) {
+                Storage::disk('public')->delete($curation->video);
+            }
 
      
-        //     $video = $request->file('video_file');
-        //     $videoFileName = 'video_' . time() . '.' . $video->extension();
-        //     $video->move(public_path('/storage/app/public/thoughtfull-videos/'), $videoFileName);
-        //     $videoPath =  $videoFileName;
-        // }
+            $video = $request->file('video_file');
+            $videoFileName = 'video_' . time() . '.' . $video->extension();
+            $video->move(public_path('/storage/app/public/thoughtfull-videos/'), $videoFileName);
+            $videoPath =  $videoFileName;
+        }
 
       
         if ($request->hasFile('thumbnail')) {

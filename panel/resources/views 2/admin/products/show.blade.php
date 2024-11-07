@@ -177,7 +177,8 @@
                                       
                                         <label for="est_shipping_days">In mins</label>
                                         
-                                          <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days" placeholder="{{ trans('placeholder.est_shipping_days') }}" value="{{$data->est_shipping_days}}">
+                                         
+                                          <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days" placeholder="{{ trans('placeholder.est_shipping_days') }}"   value="{{ $data->est_shipping_days }}">
                                           @if ($errors->has('est_shipping_days'))
                                               <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
                                           @endif

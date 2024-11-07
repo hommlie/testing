@@ -44,7 +44,18 @@
                                         <!-- ============================================ -->
                                          
 
-
+                                        <div class="form-group">
+                                        <label for="Categories">Select Categories</label>
+                                        <select class="form-control" name="cat_id" id="cat_id" required>
+                                            <option value="null">Common</option>
+                                                @foreach ($data as $category)
+                                                    <option value="{{ $category->id }}" {{ old('cat_id') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('cat_id'))
+                                                <span class="text-danger">{{ $errors->first('cat_id') }}</span>
+                                            @endif
+                                        </div>
 
                                         <!-- ============================================ -->
 

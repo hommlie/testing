@@ -35,8 +35,8 @@
             @csrf
             
             <div class="form-group">
-            <label for="video_file" style="font-size: 0.9em;">Video URL</span></label>
-                <input type="url" class="form-control"  name="video_file" placeholder="Enter Video youtube URL" required>
+            <label for="video_file" style="font-size: 0.9em;">Upload Video File <span class="text-success">(Only mp4 formats are allowed)</span></label>
+                <input type="file" class="form-control" id="video_file" name="video_file" required>
                 <span id="videoFileError" class="text-danger"></span> <!-- Error message span -->
             </div>
 

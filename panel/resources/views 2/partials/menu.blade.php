@@ -806,7 +806,7 @@
 
                    <!-- ===================================== thoughtful-Curations==================================== -->
 
-                   <!-- @can('banner_management_access')
+                @can('banner_management_access')
                     <li class="nav-item has-treeview {{ request()->is('admin/thoughtful-curations*') ? 'menu-open' : '' }} {{ request()->is('admin/thoughtful-curations/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-video mr-2">
@@ -845,7 +845,7 @@
                             @endcan
                         </ul>
                     </li>
-                @endcan -->
+                @endcan 
                 <!-- ========================================================================= -->
 
                 @can('cms_main_menu_access')

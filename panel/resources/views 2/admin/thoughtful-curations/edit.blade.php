@@ -29,27 +29,33 @@
     <h3 class="mt-4">Edit Thoughtful Curation</h3>
     <hr>
 
-   
+    <!-- Form for editing the thoughtful curation -->
     <form id="mediaForm" action="{{ route('admin.thoughtful-curations.update', $curation->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        <div class="form-group ml-5 col-md-6">
-            <label for="video">Video URL</label>
-            <input type="url" class="form-control"  name="video_file" value="{{$curation->video}}">
+        <div class="form-group">
+            <label for="video">Video<label for="video_file" style="font-size: 0.9em;">Upload Video File <span class="text-success">(Only mp4 formats are allowed)</span></label></label>
+            <input type="file" class="form-control" id="video" name="video_file">
             <span id="videoFileError" class="text-danger"></span> <!-- Error message span -->
         </div>
 
-        <div class="form-group ml-5 col-md-6">
-            <label for="thumbnail">Thumbnail <span class="text-success">(Only jpeg,png,jpg formats are allowed)</span></label>
+        <div class="form-group">
+            <label for="thumbnail">Thumbnail<label for="thumbnail">Thumbnail <span class="text-success">(Only jpeg,png,jpg formats are allowed)</span></label></label>
             <input type="file" class="form-control" id="thumbnail" name="thumbnail">
             <span id="thumbnailError" class="text-danger"></span> <!-- Error message span -->
         </div>
 
-      
+        <div class="form-group ml-5">
+            <label>Current Video</label><br>
+            <video width="320" height="240" controls>
+                <source src="{{ asset('/storage/app/public/thoughtfull-videos/' . $curation->video) }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
 
         <div class="form-group ml-5 mt-5">
             <label>Current Thumbnail</label><br>
-            <img src="{{ asset('/storage/app/public/thoughtfull-thumbnails/' . $curation->thumbnail) }}" alt="Current Thumbnail" style="width:400px; height:250px;">
+            <img src="{{ asset('/storage/app/public/thoughtfull-thumbnails/' . $curation->thumbnail) }}" alt="Current Thumbnail" style="width: 100px; height: auto;">
         </div>
 
         <button type="submit" class="btn btn-primary mt-5 ml-5">Update</button>

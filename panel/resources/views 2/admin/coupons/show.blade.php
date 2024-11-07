@@ -41,6 +41,22 @@
                                             @endif
                                         </div>
 
+
+                                        <div class="form-group">
+                                            <label for="Categories">Select Categories</label>
+                                            <select class="form-control" name="cat_id" id="cat_id">
+                                                <option value="">{{ trans('placeholder.select_category') }}</option>
+                                                <option value="null" {{ $data->cat_id == null ? 'selected' : '' }}>Common
+                                                </option> 
+                                                @foreach ($category as $category)
+                                                    <option value="{{ $category->id }}" {{ $data->cat_id == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('cat_id'))
+                                                <span class="text-danger">{{ $errors->first('cat_id') }}</span>
+                                            @endif
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="type">{{ trans('labels.type') }}</label>
                                             <select name="type" id="type" class="form-control" onchange="showType(this)">
