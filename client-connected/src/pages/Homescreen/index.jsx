@@ -78,10 +78,16 @@ const HomePageFirstSection = () => {
     },
   ];
   
+  // const facts = [
+  //   { label: "App Users", value: "2 Millions+" },
+  //   { label: "Completed Jobs", value: "150 Thousands+" },
+  //   { label: "Monthly Job Request", value: "15 Thousands+" }
+  // ];
+
   const facts = [
-    { label: "App Users", value: "2 Millions+" },
-    { label: "Completed Jobs", value: "150 Thousands+" },
-    { label: "Monthly Job Request", value: "15 Thousands+" }
+    { label: "Completed Jobs", value: "5,000+" },
+    { label: "Monthly Job Opportunities (Oct 2024)", value: "1,000+" },
+    { label: "Google Service Rating", value: "4.95" }
   ];
 
   const { user, getHomeFeeds, getCategoryData, getBannerData, fetchAllData, homeFeedData, categoryData, bannerData } = useCont();
@@ -617,9 +623,9 @@ const HomePageFirstSection = () => {
       )}
 
       <section className="w-full mx-auto py-10">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="flex flex-col items-center gap-4 mx-auto px-4">
           <motion.h2 
-            className="text-2xl font-semibold text-center mb-8"
+            className="text-2xl font-semibold text-center"
             style={{ color: '#035240' }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -627,8 +633,8 @@ const HomePageFirstSection = () => {
           >
             Some interesting facts about Hommlie Services
           </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {facts.map((fact, index) => (
+          <div className="max-w-5xl grid grid-cols-3 gap-6">
+            {facts?.map((fact, index) => (
               <motion.div 
                 key={index} 
                 className="text-center"
@@ -637,7 +643,7 @@ const HomePageFirstSection = () => {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 <motion.p 
-                  className="text-3xl font-bold mb-1" 
+                  className="text-xl md:text-3xl font-bold mb-1" 
                   style={{ color: "#035240" }}
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
@@ -645,9 +651,17 @@ const HomePageFirstSection = () => {
                 >
                   {fact.value}
                 </motion.p>
-                <p className="text-gray-600 text-sm">{fact.label}</p>
+                <p className="text-gray-600 text-xs md:text-sm">{fact.label}</p>
               </motion.div>
             ))}
+          </div>
+          <div className="text-center text-sm md:text-base text-[#035240]">
+            <p>
+            Thank you for being a valued part of the Hommlie community! Your support has been essential to our growth, and we’re thrilled to enhance your experience with the launch of our new app.
+            </p>
+            <p>
+            Stay tuned for more updates—we can’t wait to share what’s coming next!
+            </p>
           </div>
         </div>
       </section>
