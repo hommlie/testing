@@ -548,14 +548,14 @@ export default function ProductPage() {
 
             <div className="flex flex-col lg:flex-row lg:space-x-4 scroll-smooth">
 
-                <div className="flex-1 space-y-6">
+                <div className="flex-1 space-y-6 lg:w-2/3">
                     
                     <LoginSignup isOpen={isModalOpen} onClose={closeModal} checkoutPd={checkoutPd} />
 
                     <section className="bg-white rounded-lg md:p-4 mb-6 glow-border mt-5 md:mt-10">
-                        <div className="relative">
+                        <div className="relative max-h-[250px] lg:max-h-[450px]">
                             {imageItems.length > 0 && (
-                                <div className="w-full lg:w-[1050px] h-[250px] lg:h-[450px] border">
+                                <div className="w-full h-full border">
                                     {renderMedia(imageItems[currentMediaIndex])}
                                 </div>
                             )}

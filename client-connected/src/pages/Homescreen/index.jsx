@@ -467,17 +467,17 @@ const HomePageFirstSection = () => {
       </section>
 
       {homeFeedData?.videos?.length ?
-        <section className="mt-12 md:px-8 py-5 md:py-10">
-          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold md:mb-8 text-[#10847E]">
+        <section className="mt-12 px-2 md:px-8 py-5 md:py-10">
+          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-5 md:mb-8 text-[#10847E]">
             Thoughtful Curations
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 md:gap-10">
             {homeFeedData?.videos?.map((item, index) => (
               <div key={index} className="relative rounded-lg overflow-hidden">
                 <img
                   src={item.thumbnail || DefaultThumbnail}
                   alt="Video thumbnail"
-                  className="w-full h-[250px] object-cover"
+                  className="w-full h-20 lg:h-[250px] object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <button
