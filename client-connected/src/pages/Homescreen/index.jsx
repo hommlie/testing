@@ -114,7 +114,6 @@ const HomePageFirstSection = () => {
     }, 1400);
 
     return () => clearTimeout(timer);
-    console.log(homeFeedData);
     
   }, []);
 
