@@ -86,7 +86,7 @@ exports.order = async (req, res) => {
     grand_total,
     discount_amount, 
     coupon_name, 
-    // order_notes, 
+    order_notes, 
     full_name, 
     email, 
     mobile, 
@@ -163,7 +163,7 @@ exports.order = async (req, res) => {
             coupon_name,
             shipping_cost: shipping_cost,
             order_total: grand_total,
-            // order_notes,
+            order_notes,
             payment_type,
             full_name,
             email,
@@ -199,7 +199,7 @@ exports.order = async (req, res) => {
           coupon_name,
           shipping_cost,
           order_total: grand_total,
-          // order_notes,
+          order_notes,
           payment_type,
           full_name,
           email,
@@ -352,7 +352,7 @@ exports.orderdetails = async (req, res) => {
       const order_info = await Order.findOne({
           attributes: [
               'order_number',
-              // 'order_notes',
+              'order_notes',
               'payment_type',
               'full_name',
               'email',
@@ -372,7 +372,7 @@ exports.orderdetails = async (req, res) => {
               "desired_date",
           ],
           where: { order_number },
-          group: ['order_number']
+          // group: ['order_number']
       });
 
       const order_data = await Order.findAll({
@@ -464,7 +464,7 @@ exports.trackOrder = async (req, res) => {
         'email',
         'mobile',
         'payment_type',
-        // 'order_notes',
+        'order_notes',
         'order_status',
         'landmark',
         'street_address',
@@ -679,7 +679,7 @@ exports.vendororderdetails = async (req, res) => {
       const order_info = await Order.findOne({
         attributes: [
           'order_number',
-          // 'order_notes',
+          'order_notes',
           'payment_type',
           'full_name',
           'email',
