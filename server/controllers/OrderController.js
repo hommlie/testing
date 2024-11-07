@@ -349,6 +349,7 @@ exports.orderdetails = async (req, res) => {
   }
 
   try {
+      // Fetch basic order information
       const order_info = await Order.findOne({
           attributes: [
               'order_number',
@@ -361,37 +362,11 @@ exports.orderdetails = async (req, res) => {
               'street_address',
               'pincode',
               'coupon_name',
-              [sequelize.fn('COALESCE', sequelize.fn('SUM', sequelize.col('discount_amount')), 0), 'discount_amount'],
+              'discount_amount',
               'status',
               [sequelize.fn('DATE_FORMAT', sequelize.col('created_at'), '%d-%m-%Y'), 'date'],
-              [sequelize.literal('SUM(price * qty)'), 'subtotal'],
-              [sequelize.literal('SUM(tax)'), 'tax'],
-              [sequelize.literal('SUM(shipping_cost)'), 'shipping_cost'],
-              [sequelize.literal('SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - COALESCE(SUM(discount_amount), 0)'), 'grand_total'],
-              "desired_time",
-              "desired_date",
-          ],
-          where: { order_number },
-          // group: ['order_number']
-      });
-
-      const order_data = await Order.findAll({
-          attributes: [
-              'id',
-              'product_id',
-              'product_name',
-              'qty',
-              'price',
-              'status',
-              'attribute',
-              'variation',
-              'tax',
-              'shipping_cost',
-              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/products/', image)`), 'image_url'],
-              'discount_amount',
-              [sequelize.literal('0'), 'return_days'],
-              "desired_time",
-              "desired_date",
+              'desired_time',
+              'desired_date',
           ],
           where: { order_number }
       });
@@ -400,38 +375,67 @@ exports.orderdetails = async (req, res) => {
           return res.status(404).json({ status: 0, message: "Order not found" });
       }
 
+      // Fetch all items related to the order
+      const order_data = await Order.findAll({
+          attributes: [
+              'id',
+              'product_id',
+              'product_name',
+              'qty',
+              'price',
+              'tax',
+              'shipping_cost',
+              'discount_amount',
+              'status',
+              'attribute',
+              'variation',
+              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/products/', image)`), 'image_url']
+          ],
+          where: { order_number }
+      });
+
+      // Initialize totals
+      let subtotal = 0;
+      let taxTotal = 0;
+      let shippingTotal = 0;
+      let discountTotal = 0;
+
+      // Calculate totals
+      for (const item of order_data) {
+          const itemSubtotal = item.price * item.qty;
+          subtotal += itemSubtotal;
+          taxTotal += parseFloat(item.tax);
+          shippingTotal += parseFloat(item.shipping_cost);
+          discountTotal += parseFloat(item.discount_amount);
+      }
+
+      // Calculate grand total
+      const grand_total = subtotal + taxTotal + shippingTotal - discountTotal;
+
       const response = {
           status: 1,
           message: "Order history list Successful",
-          order_info: order_info.toJSON(),
+          order_info: {
+              ...order_info.toJSON(),
+              subtotal: subtotal.toFixed(2),
+              tax: taxTotal.toFixed(2),
+              shipping_cost: shippingTotal.toFixed(2),
+              discount_amount: discountTotal.toFixed(2),
+              grand_total: grand_total.toFixed(2),
+          },
           order_data: order_data.map(item => item.toJSON())
       };
 
+      // Additional data processing
       for (const orderItem of response.order_data) {
-        const variationDetails = await Variation.findByPk(orderItem.variation);
-        const attributeDetails = await Attribute.findByPk(orderItem.attribute);
-  
-        orderItem.variation = variationDetails?.variation || '';
-        orderItem.attribute = attributeDetails?.attribute || '';
+          const variationDetails = await Variation.findByPk(orderItem.variation);
+          const attributeDetails = await Attribute.findByPk(orderItem.attribute);
+          orderItem.variation = variationDetails?.variation || '';
+          orderItem.attribute = attributeDetails?.attribute || '';
       }
 
       // Format specific fields
-      response.order_info.discount_amount = parseFloat(response.order_info.discount_amount).toFixed(2);
-      response.order_info.subtotal = parseFloat(response.order_info.subtotal).toFixed(2);
-      response.order_info.tax = parseFloat(response.order_info.tax).toFixed(2);
-      response.order_info.shipping_cost = parseFloat(response.order_info.shipping_cost).toFixed(2);
-      response.order_info.grand_total = parseFloat(response.order_info.grand_total).toFixed(2);
-
-      // Convert desired_time to 12-hour format
-      const desiredTime24 = response.order_info.desired_time;
-      const desiredTime12 = moment(desiredTime24, 'HH:mm').format('hh:mm A');
-      response.order_info.desired_time = desiredTime12;
-
-      response.order_data.forEach(item => {
-          item.tax = parseFloat(item.tax).toFixed(2);
-          item.shipping_cost = parseFloat(item.shipping_cost).toFixed(2);
-          item.discount_amount = parseFloat(item.discount_amount).toFixed(2);
-      });
+      response.order_info.desired_time = moment(response.order_info.desired_time, 'HH:mm').format('hh:mm A');
 
       return res.status(200).json(response);
   } catch (error) {
