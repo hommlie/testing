@@ -11,6 +11,7 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
     const [selectedTime, setSelectedTime] = useState(null);
     const [dates, setDates] = useState([]);
     const [times, setTimes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { setSelectedDayTime, setRescheduleDayTime } = useCont();
 
     const notify = useToast();
@@ -138,6 +139,7 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
     if (!isOpen) return null;
 
     const handleProceed = async() => {
+        setIsLoading(true);
         const dayTime = {
             date: selectedDate,
             time: selectedTime,
@@ -148,9 +150,11 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
             setSelectedDayTime(dayTime);
             onClose();
         }
+        setIsLoading(false);
     };
 
     async function rescheduleOrder() {
+        setIsLoading(true);
         const dayTime = {
             date: selectedDate,
             time: selectedTime,
@@ -183,6 +187,7 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
         } else {
             console.log("User hasn't logged in");
         }
+        setIsLoading(false);
     }
 
     return (
@@ -228,10 +233,18 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
                 <div className='flex justify-center'>
                     <button 
                         style={{ backgroundColor: "#249370" }} 
-                        className="block mt-4 px-8 py-2 text-xs text-center text-white tracking-widest"
+                        className={`block mt-4 px-8 py-2 text-xs text-center text-white tracking-widest disabled:opacity-60 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                         onClick={handleProceed}
+                        disabled={isLoading}
                     >
-                        PROCEED
+                        {isLoading ? (
+                            <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                                <span className="ml-2">Loading...</span>
+                            </div>
+                        ) : (
+                            'PROCEED'
+                        )}
                     </button>
                 </div>
             </div>

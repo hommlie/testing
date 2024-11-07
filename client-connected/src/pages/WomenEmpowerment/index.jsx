@@ -47,7 +47,7 @@ export default function WomenEmpowerment() {
             );
 
             if (response.status === 200) {
-                successNotify('Form submitted successfully!');
+                successNotify('Thank you! Our team will contact you soon!');
                 setFormData({ name: '', mobile: '', message: '' });
                 setIsModalOpen(false);
             } else {
@@ -207,6 +207,8 @@ export default function WomenEmpowerment() {
                                 <input
                                     type="tel"
                                     id="mobile"
+                                    minLength={10}
+                                    maxLength={10}
                                     value={formData.mobile}
                                     onChange={handleChange}
                                     className="p-2 mt-1 block w-full rounded-md border border-gray-300 focus:border-green-500 focus:ring-green-500"

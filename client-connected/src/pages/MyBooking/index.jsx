@@ -126,16 +126,16 @@ export default function MyBookings() {
     }
 
     return (
-        <main className="flex justify-center bg-gray-100 min-h-screen py-8">
-            <section className="w-[90%] md:w-[70%] space-y-6">
+        <main className="flex justify-center min-h-screen py-8">
+            <section className="w-[90%] md:w-[50%] space-y-6">
                 <h3 className="text-center text-3xl font-bold text-gray-800">My Bookings</h3>
                 {groupedBookings.length === 0 &&
-                    <div className="w-full bg-white rounded-lg shadow-md overflow-hidden flex justify-center">
+                    <div className="w-full rounded-lg shadow-md overflow-hidden flex justify-center">
                         <img src={emptyBooking} alt="" className="w-96" />
                     </div>
                 }
                 {Object.entries(groupedBookings).map(([orderNumber, orders]) => (
-                    <div key={orderNumber} className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div key={orderNumber} className="bg-white rounded-lg shadow-md glow-border overflow-hidden">
                         <div 
                             className="flex justify-between items-center p-4 cursor-pointer"
                             onClick={() => toggleDetails(orderNumber)}

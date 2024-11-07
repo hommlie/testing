@@ -213,7 +213,7 @@ export default function BookingSuccess() {
                             </div>
                         </div>
 
-                        <div className="bg-white p-4 flex flex-col justify-between gap-4 pb-8 shadow">
+                        <div className="bg-white p-4 flex flex-col justify-between gap-4 pb-8 glow-border shadow">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-col gap-2 w-3/4">
                                     <span className="text-xl font-bold">Order Number: <span style={{color: "#249370"}}>{orderInfo?.order_number}</span></span>
@@ -236,10 +236,10 @@ export default function BookingSuccess() {
                                             <span className="">Price: ₹{parseFloat(item.price).toFixed(2)}</span>
                                         </p>
                                         <p className="font-semibold">Total: ₹{(parseFloat(item.price) * parseInt(item.qty)).toFixed(2)}</p>
-                                        <div className="flex flex-row items-center gap-2">
+                                        {/* <div className="flex flex-row items-center gap-2">
                                             <p>Schedule Date and Time:</p>
                                             <p style={{color: "rgba(0, 0, 0, 0.4)"}}>{item?.desired_date} @ {item?.desired_time}</p>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="">
                                         <span className="w-[80px] h-[21px] px-3 py-1 rounded font-medium text-xs" style={getStatusStyles(parseInt(item.status))}>{OrderStatuses[parseInt(item.status)]}</span>
@@ -256,12 +256,12 @@ export default function BookingSuccess() {
                             <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
                             <div className="w-full flex flex-col gap-4">
                                 <div className="flex flex-row justify-between items-center">
-                                    <p>Order Date: </p>
-                                    <p style={{color: "rgba(0, 0, 0, 0.4)"}}>{orderInfo?.date}</p>
+                                            <p>Schedule Date and Time:</p>
+                                            <p style={{color: "rgba(0, 0, 0, 0.4)"}}>{orderInfo?.desired_date} @ {orderInfo?.desired_time}</p>
                                 </div>
                                 {orderInfo?.coupon_name ?
                                     <div className="flex flex-row justify-between text-md">
-                                        <p>Coupon:</p>
+                                        <p>Applied Coupon:</p>
                                         <p>{orderInfo?.coupon_name}</p>
                                     </div>
                                     : null
@@ -284,19 +284,6 @@ export default function BookingSuccess() {
                                     <p>Total cost:</p>
                                     <p>₹{orderInfo?.grand_total}</p>
                                 </div>
-                                {/* <div className="flex flex-row justify-between items-center">
-                                    <p>Schedule Date and Time </p>
-                                    <p style={{color: "rgba(0, 0, 0, 0.4)"}}>{orderInfo?.desired_date} @ {orderInfo?.desired_time}</p>
-                                </div> */}
-                                <div className="flex flex-col gap-2">
-                                    <p>Address</p>
-                                    <p className="flex flex-col" style={{color: "rgba(0, 0, 0, 0.4)"}}>
-                                        <span>{orderInfo?.full_name}</span>
-                                        <span>{orderInfo?.street_address}</span>
-                                        <span>{orderInfo?.landmark} - {orderInfo?.pincode} </span>
-                                        <span>{orderInfo?.mobile} </span>
-                                    </p>
-                                </div>
                                 {/* <div className="flex flex-row justify-center items-center gap-10">
                                     <button
                                         onClick={handleDownloadInvoice}
@@ -313,6 +300,16 @@ export default function BookingSuccess() {
                                         <FaFilePdf className="mr-2" /> Download Report
                                     </button>
                                 </div> */}
+                            </div>
+                            <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
+                            <div className="flex flex-col gap-2">
+                                <p>Delivery Address:</p>
+                                <p className="flex flex-col" style={{color: "rgba(0, 0, 0, 0.4)"}}>
+                                    <span>{orderInfo?.full_name}</span>
+                                    <span>{orderInfo?.street_address}</span>
+                                    <span>{orderInfo?.landmark} - {orderInfo?.pincode} </span>
+                                    <span>{orderInfo?.mobile} </span>
+                                </p>
                             </div>
                         </div>
 

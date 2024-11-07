@@ -18,10 +18,37 @@ export default function CareerPage() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: files ? files[0] : value
-    }));
+
+    if (files) {
+        const file = files[0];
+        
+        // Check if the file is a PDF
+        if (file.type !== "application/pdf") {
+            alert("Please upload a PDF file.");
+            e.target.value = ""; // Clear the input
+            return;
+        }
+
+        // Check file size (1 MB = 1,048,576 bytes)
+        const maxSize = 1 * 1024 * 1024; // 1 MB in bytes
+        if (file.size > maxSize) {
+            alert("File size should not exceed 1 MB.");
+            e.target.value = ""; // Clear the input
+            return;
+        }
+
+        // File is valid; proceed with updating form data
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: file
+        }));
+    } else {
+        // For non-file inputs, just update the form data
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -101,7 +128,7 @@ export default function CareerPage() {
           Get the fastest application so that your name is above other applications
         </div>
         
-        <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
+        <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-lg rounded-lg glow-border p-8">
           <div className="mb-6">
             <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
             <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
@@ -116,7 +143,7 @@ export default function CareerPage() {
           </div>
           <div className="mb-6">
             <label htmlFor="resume" className="block text-gray-700 text-sm font-bold mb-2">CV/Resume</label>
-            <input type="file" id="resume" name="resume" onChange={handleChange} className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+            <input type="file"  id="resume" name="resume" accept="application/pdf" onChange={handleChange} className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
           </div>
           <div className="mb-6">
             <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">Message</label>

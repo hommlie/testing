@@ -40,7 +40,7 @@ const PartnerWithUs = () => {
             );
 
             if (response.status === 200) {
-                successNotify('Form submitted successfully!');
+                successNotify('Thank you! Our team will contact you soon!');
                 setFormData({ name: '', mobile: '', message: '' });
             } else {
                 errorNotify('Failed to submit form. Please try again.');
@@ -93,8 +93,8 @@ const PartnerWithUs = () => {
                 { title: "Female beauticians", description: "Facials, waxing, haircuts, massage for women" },
                 { title: "Male stylists & barbers", description: "Facials, haircuts, massage for men, beard trimming" },
                 ].map((category, index) => (
-                <div key={index} className="bg-white px-4 py-8 rounded shadow hover:shadow-xl transition-shadow duration-300">
-                    <h3 className="text-2xl font-semibold mb-4 text-purple-600">{category.title}</h3>
+                <div key={index} className="bg-white px-4 py-8 rounded shadow hover:shadow-xl transition-shadow duration-300 glow-border">
+                    <h3 className="text-2xl font-semibold mb-4 text-green-700">{category.title}</h3>
                     <p className="text-gray-600 mb-6">{category.description}</p>
                     <button onClick={scrollToForm} className="flex flex-row items-center gap-2 font-semibold hover:text-purple-700 transition-colors duration-300" style={{color: "#249370"}}>
                     Apply Now <FaArrowRight size={14} />
@@ -112,8 +112,8 @@ const PartnerWithUs = () => {
                 { title: "Delight your customers", description: "Work your magic in a 1:1 setting with your clients" },
                 { title: "Get paid weekly", description: "We ensure your peace of mind with automated weekly payouts" },
                 ].map((step, index) => (
-                <div key={index} className="text-center bg-white p-8 rounded shadow hover:shadow-xl transition-shadow duration-300">
-                    <h3 className="text-2xl font-semibold mb-4 text-purple-600">{step.title}</h3>
+                <div key={index} className="text-center bg-white p-8 rounded shadow hover:shadow-xl transition-shadow duration-300 glow-border">
+                    <h3 className="text-2xl font-semibold mb-4 text-green-700">{step.title}</h3>
                     <p className="text-gray-600">{step.description}</p>
                 </div>
                 ))}
@@ -146,15 +146,13 @@ const PartnerWithUs = () => {
                     }
                     ].map((step, index) => (
                     <div key={index} className="flex flex-col items-center text-center">
-                        <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4 ${
-                        step.icon ? 'bg-[#249370] text-white' : 'bg-[#249370] text-white '
-                        }`}>
+                        <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4 bg-[#249370] text-white`}>
                         {step.icon ? '✓' : step.number}
                         </div>
                         <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                         <p className="text-gray-600">{step.description}</p>
                         {index < 3 && (
-                        <div className="hidden md:block w-full h-0.5 bg-gray-300 mt-8"></div>
+                        <div className="hidden md:block w-full h-0.5 bg-green-400 mt-8"></div>
                         )}
                     </div>
                     ))}
@@ -169,7 +167,7 @@ const PartnerWithUs = () => {
                 Join 50,000+ other partners
                 </div>
                 
-                <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
+                <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 glow-border">
                     <div className="mb-6">
                         <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
                         <input 
@@ -186,6 +184,8 @@ const PartnerWithUs = () => {
                         <input 
                             type="tel" 
                             id="mobile" 
+                            minLength={10}
+                            maxLength={10}
                             value={formData.mobile}
                             onChange={handleChange}
                             className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
@@ -215,11 +215,11 @@ const PartnerWithUs = () => {
                 </form>
             </section>
 
-            <section className="text-center text-white py-16 shadow-2xl" style={{backgroundColor: "#249370"}}>
-            <h2 className="text-4xl font-bold mb-8">Ready to transform your career?</h2>
-            <button onClick={scrollToForm} style={{color: "#249370"}} className="bg-white px-10 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-xl transform hover:scale-105">
-                Join 50,000+ other partners
-            </button>
+            <section className="text-center text-white py-16 shadow-2xl mt-4" style={{backgroundColor: "#249370"}}>
+                <h2 className="text-4xl font-bold mb-8">Ready to transform your career?</h2>
+                <button onClick={scrollToForm} style={{color: "#249370"}} className="bg-white px-10 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-xl transform hover:scale-105">
+                    Join 50,000+ other partners
+                </button>
             </section>
         </main>
         </div>

@@ -458,6 +458,8 @@ const AddressModal = ({ isOpen, onClose }) => {
                     type="text"
                     id="mobile"
                     name="mobile"
+                    minLength={10}
+                    maxLength={10}
                     value={formData.mobile}
                     onChange={handleChange}
                     className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.mobile ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}

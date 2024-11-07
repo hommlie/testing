@@ -73,6 +73,7 @@ export default function TrackOrder() {
     }
 
     const handleCancel = async () => {
+        setIsLoading(true);
         const jwtToken = Cookies.get("HommlieUserjwtToken");
         if (jwtToken) {
             try {
@@ -97,6 +98,7 @@ export default function TrackOrder() {
             console.log("User hasn't logged in");
             errorNotify("Please log in to cancel your order");
         }
+        setIsLoading(false);
         closeCancelModal();
     }
 
@@ -145,7 +147,7 @@ export default function TrackOrder() {
                         </div>
                     )}
 
-                    <div className="bg-white rounded-lg shadow-md p-6">
+                    <div className="bg-white rounded-lg shadow p-6 glow-border">
                         <h1 className="text-2xl font-bold mb-4">Order Tracking</h1>
                         <div className="flex justify-between items-center mb-6">
                             <div>
@@ -153,7 +155,7 @@ export default function TrackOrder() {
                                 <p className="text-sm text-gray-600">Order Date: {trackingDetails?.date}</p>
                             </div>
                             <div className="text-right">
-                                <p className="text-lg font-semibold">Status: <span className="text-blue-600">{topTracker[statusIndex]}</span></p>
+                                <p className="text-lg font-semibold">Status: <span className="text-[#249370]">{topTracker[statusIndex]}</span></p>
                             </div>
                         </div>
 
@@ -181,7 +183,7 @@ export default function TrackOrder() {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6">
+                    <div className="bg-white rounded-lg shadow glow-border p-6">
                         <h2 className="text-xl font-semibold mb-4">Order Details</h2>
                         <div className="flex items-start space-x-4 mb-4 h-40">
                             <img src={trackingDetails?.image} alt="" className="w-20 lg:w-32 h-20 lg:h-32 object-cover rounded-md" />
@@ -216,7 +218,8 @@ export default function TrackOrder() {
                         <div className="flex justify-center space-x-4">
                             <button 
                                 onClick={openCancelModal} 
-                                className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
+                                className={`px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                disabled={isLoading}
                             >
                                 Cancel Order
                             </button>
