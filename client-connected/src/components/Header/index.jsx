@@ -284,10 +284,10 @@ export default function Header({ logo, logoAlt }) {
                 >
                   <MdLocationOn className="text-sm md:text-xl" color="#32A071" />
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] md:text-sm font-medium">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
-                    <span className="text-[10px] md:text-xs lg:text-sm max-w-[150px] md:max-w-[200px] lg:max-w-[300px] truncate">
+                    <span className="font-medium text-[10px] md:text-xs lg:text-sm max-w-[150px] md:max-w-[200px] lg:max-w-[350px] truncate">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
+                    {/* <span className="text-[10px] md:text-xs lg:text-sm max-w-[150px] md:max-w-[200px] lg:max-w-[300px] truncate">
                       {currentLocation?.address?.state_district} {currentLocation?.address?.state}
-                    </span>
+                    </span> */}
                   </div>
                 </button>
 
