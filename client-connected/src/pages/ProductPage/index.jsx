@@ -429,7 +429,7 @@ export default function ProductPage() {
     const renderMedia = (item) => {
         return (
             <img
-                className="w-full h-full object-contain rounded-lg"
+                className="w-full h-full object-cover"
                 src={item?.image_url}
                 alt="Product"
                 onLoad={() => {console.log("loaded")}}
@@ -454,8 +454,8 @@ export default function ProductPage() {
         return (
             <iframe
                 width="100%"
-                height="315"
-                src={`https://www.youtube.com/embed/${videoId}`}
+                height="100%"
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -555,7 +555,7 @@ export default function ProductPage() {
                     <section className="bg-white rounded-lg md:p-4 mb-6 glow-border mt-5 md:mt-10">
                         <div className="relative">
                             {imageItems.length > 0 && (
-                                <div className="w-full h-[250px] lg:h-[450px] rounded-lg">
+                                <div className="w-full h-[250px] lg:h-[450px]">
                                     {renderMedia(imageItems[currentMediaIndex])}
                                 </div>
                             )}
@@ -570,7 +570,7 @@ export default function ProductPage() {
                             </>
                             )}
                         </div>
-                        <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between pb-4 mb-4 mt-10" style={{borderBottom: "1px solid #E3E3E3"}}>
+                        <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between mt-10">
                             <div className="space-y-1 sm:space-y-3 lg:space-y-4">
                                 <p className="text-2xl sm:text-5xl font-bold mb-2">{prodData?.product_name}</p>
                                 <div className="flex items-center mb-2">
@@ -598,6 +598,7 @@ export default function ProductPage() {
                             </div> */}
                         </div>
                     </section>
+
                     <section className="bg-white rounded-lg p-4 glow-border">
                         <ul className="flex mb-3" style={{borderBottom: "1px solid rgba(0, 0, 0, 0.1)"}}>
                             <li className={`mr-1 ${activeTab === 1 ? 'border-[#035240]' : ''}`}>
@@ -711,11 +712,11 @@ export default function ProductPage() {
                     </section>
 
                     {videoItems?.length > 0 && (
-                        <section className="bg-white rounded-lg p-4 mt-6 glow-border">
-                            <h2 className="text-2xl font-semibold mb-4">Product Videos</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <section className="bg-white rounded-lg mt-6">
+                            {/* <h2 className="text-2xl font-semibold mb-4">Product Video</h2> */}
+                            <div className="">
                                 {videoItems?.map((video, index) => (
-                                    <div key={index} className="video-container">
+                                    <div key={index} className="video-container h-[500px]">
                                         {renderYouTubeVideo(video.image_url)}
                                     </div>
                                 ))}
@@ -725,7 +726,7 @@ export default function ProductPage() {
             
                 </div>
 
-                <div className="lg:w-1/3 space-y-4 mt-[40px]">
+                <div className="sticky top-40 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
                     <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                         <div className="flex justify-between items-center">
                             <div className="flex flex-row items-center">
@@ -1043,9 +1044,9 @@ export default function ProductPage() {
 
             </div>
 
-            <div className="w-full mt-4">
+            <div className="flex flex-col gap-4 mt-4">
 
-                <section className="container mx-auto section">
+                <section className="bg-white rounded-lg w-full p-4 glow-border">
                     <ProdSection
                         title = "Similar Services"
                         items = {visibleItems ? visibleItems : []}
@@ -1053,7 +1054,7 @@ export default function ProductPage() {
                     />
                 </section>
 
-                <section className="bg-white rounded-lg p-4 space-y-4">
+                <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
                     <div 
                         className="flex justify-between items-center cursor-pointer"
                         onClick={toggleExpansion}

@@ -99,11 +99,11 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                     {items?.map((item, index) => {
                         const discountPercentage = calculateDiscountPercentage(item.product_price, item.discounted_price);
                         return (
-                            <div key={index} className="p-2 lg:px-4 w-28 md:w-40 lg:w-60 flex-shrink-0 scroll-snap-align-start">
+                            <div key={index} className="p-2 lg:px-4 w-28 md:w-40 lg:w-72 flex-shrink-0 scroll-snap-align-start">
                                 <div onClick={() => handleProductClick(item)} className="block cursor-pointer">
                                     <div className="relative">
                                         <img
-                                            className="pd-imgs w-60 h-[100px] md:h-40 lg:h-56 object-cover rounded-lg"
+                                            className="pd-imgs w-72 h-[100px] md:h-40 lg:h-56 object-cover rounded-lg"
                                             src={item.productimage?.image_url}
                                             alt={item.product_name}
                                         />
@@ -116,10 +116,10 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                                             </span>
                                         )}
                                     </div>
-                                    <h5 className="text-[10px] md:text-sm h-8 md:h-12 line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
+                                    <h5 className="text-[10px] md:text-sm line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
                                         {item.product_name}
                                     </h5>
-                                    <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2">
+                                    <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2 mt-1">
                                         <span>₹{item.discounted_price}</span>
                                         <span className="line-through font-normal" style={{color: "#ADB6BB"}}>₹{item.product_price}</span>
                                     </p>
