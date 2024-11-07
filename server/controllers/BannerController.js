@@ -47,7 +47,7 @@ exports.getBanner = async (req, res) => {
       };
 
       switch (value.positions) {
-        case 'top':
+        case 'banner':
           topbanner.push(bannerItem);
           break;
         case 'large':
