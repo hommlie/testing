@@ -28,7 +28,7 @@ const bannerDatalider = ({ bannerData }) => {
   return (
     <div className="relative bg-white w-full overflow-hidden md:px-8 py-5 md:py-10">
       <div
-        className="flex w-[100vw] h-full overflow-x-auto scroll-smooth gap-5 md:gap-10 md:gap-9 scrollbar-hide"
+        className="flex w-[100vw] h-full overflow-x-auto scroll-smooth gap-5 md:gap-10 md:gap-11 scrollbar-hide"
         ref={sliderRef}
       >
         {bannerData?.map((banner, index) => (
@@ -40,7 +40,7 @@ const bannerDatalider = ({ bannerData }) => {
               <img
                 src={banner.image_url}
                 alt={`Banner ${index}`}
-                className="w-full h-32 lg:h-[290px] object-cover rounded-lg border"
+                className="w-[510px] h-32 lg:h-[290px] object-contain rounded-lg border"
               />
             </a>
           </div>
