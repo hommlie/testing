@@ -80,7 +80,7 @@ const HomePageFirstSection = () => {
   
   const facts = [
     { label: "App Users", value: "2 Millions+" },
-    { label: "Completed Jobs", value: "15 Thousands+" },
+    { label: "Completed Jobs", value: "150 Thousands+" },
     { label: "Monthly Job Request", value: "15 Thousands+" }
   ];
 
@@ -173,6 +173,33 @@ const HomePageFirstSection = () => {
   const goToSlideBottomSlider = (slideIndex) => {
     setCurrentIndexBottomSlider(slideIndex);
   }
+
+  const extractYouTubeVideoId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const renderYouTubeVideo = (url) => {
+    const videoId = extractYouTubeVideoId(url);
+    
+    if (!videoId) {
+        console.error('Invalid YouTube URL:', url);
+        return <p>Invalid YouTube URL</p>;
+    }
+
+    return (
+        <iframe
+            width="100%"
+            height="100%"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="Product Video"
+        ></iframe>
+    );
+  };
 
   useEffect(() => {
     const topInterval = setInterval(() => {
@@ -512,7 +539,7 @@ const HomePageFirstSection = () => {
     
           {playingVideo !== null && (
             <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-              <div className="relative bg-white rounded-lg overflow-hidden max-w-3xl w-full">
+              <div className="relative bg-transparent rounded-lg overflow-hidden h-full w-full p-8">
                 <button
                   className="absolute top-3 right-3 z-20 text-white bg-black bg-opacity-75 rounded-full p-1"
                   onClick={() => setPlayingVideo(null)}
@@ -532,13 +559,9 @@ const HomePageFirstSection = () => {
                     />
                   </svg>
                 </button>
-                <video
-                  src={homeFeedData.videos[playingVideo].video}
-                  className="w-full h-auto max-h-screen m-2"
-                  controls
-                  autoPlay
-                  onEnded={() => setPlayingVideo(null)}
-                />
+                <div className="w-full h-full">
+                  {renderYouTubeVideo(homeFeedData.videos[playingVideo].video)}
+                </div>
               </div>
             </div>
           )}
