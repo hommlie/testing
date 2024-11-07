@@ -36,11 +36,13 @@ const bannerDatalider = ({ bannerData }) => {
             key={index}
             className="shrink-0 h-full flex-col justify-center items-center"
           >
-            <img
-              src={banner.image_url}
-              alt={`Banner ${index}`}
-              className="w-full h-full object-cover"
-            />
+            <a href={banner.link}>
+              <img
+                src={banner.image_url}
+                alt={`Banner ${index}`}
+                className="w-full h-full object-cover"
+              />
+            </a>
           </div>
         ))}
       </div>
