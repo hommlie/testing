@@ -172,7 +172,7 @@ exports.getProfile = async(req, res) => {
     const user = await User.findOne({
       where: { id: user_id },
       attributes: ['id', 'name', 'email', 'mobile', 'facebook', 'instagram', 'google', 'youtube', 'twitter',
-        [sequelize.fn('CONCAT', sequelize.literal(`'${profileApiUrl}/storage/app/public/images/profile/'`), sequelize.col('profile_pic')), 'profile_pic']
+        [sequelize.fn('CONCAT', sequelize.literal(`'${profileApiUrl}/images/profile/'`), sequelize.col('profile_pic')), 'profile_pic']
       ]
     });
 
@@ -209,7 +209,7 @@ exports.editProfile = async(req, res) => {
     const user = await User.findOne({ 
       where: { id: user_id },
       attributes: ['id', 'name', 'email', 'mobile', 'facebook', 'instagram', 'google', 'youtube', 'twitter',
-        [sequelize.fn('CONCAT', sequelize.literal(`'${profileApiUrl}/storage/app/public/images/profile/'`), sequelize.col('profile_pic')), 'profile_pic']
+        [sequelize.fn('CONCAT', sequelize.literal(`'${profileApiUrl}/images/profile/'`), sequelize.col('profile_pic')), 'profile_pic']
       ]
     });
     const userJson = user.toJSON();
@@ -248,7 +248,7 @@ exports.vendors = async(req, res) => {
         type: 3,
         is_available: 1,
       },
-      attributes: ['id', 'name', [sequelize.literal(`CONCAT('${url}/storage/app/public/images/profile/', profile_pic)`), 'image_url']],
+      attributes: ['id', 'name', [sequelize.literal(`CONCAT('${url}/images/profile/', profile_pic)`), 'image_url']],
       include: ['rattings'],
       order: [['id', 'DESC']],
       limit: 10,
