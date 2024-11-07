@@ -224,7 +224,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: [
                   'id',
                   [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-thumbnails/'`), sequelize.col('thumbnail')), 'thumbnail'],
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-videos/'`), sequelize.col('video')), 'video']
+                //   [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-videos/'`), sequelize.col('video')), 'video']
+                'video'
             ],
             limit: 4
         });

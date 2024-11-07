@@ -108,6 +108,8 @@ const HomePageFirstSection = () => {
     }, 1400);
 
     return () => clearTimeout(timer);
+    console.log(homeFeedData);
+    
   }, []);
 
   const openCatModal = (category, items) => {    
@@ -466,41 +468,80 @@ const HomePageFirstSection = () => {
 
       {homeFeedData?.videos?.length ?
         <section className="mt-12 md:px-8 py-5 md:py-10">
-          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold md:mb-8 text-[#10847E]">Thoughtful Curations</h2>
+          <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold md:mb-8 text-[#10847E]">
+            Thoughtful Curations
+          </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {homeFeedData?.videos?.map((item, index) => (
               <div key={index} className="relative rounded-lg overflow-hidden">
-                {playingVideo === index ? (
-                  <video 
-                    src={item.video_url} 
-                    className="w-full h-48 object-cover" 
-                    autoPlay 
-                    controls
-                    onEnded={() => setPlayingVideo(null)}
-                  />
-                ) : (
-                  <>
-                    <img 
-                      src={item.thumbnail || DefaultThumbnail} 
-                      alt="Video thumbnail" 
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <button 
-                        onClick={() => setPlayingVideo(index)}
-                        className="w-12 h-12 bg-white bg-opacity-75 rounded-full flex items-center justify-center hover:bg-opacity-100 transition-colors"
-                      >
-                        <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </>
-                )}
+                <img
+                  src={item.thumbnail || DefaultThumbnail}
+                  alt="Video thumbnail"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <button
+                    onClick={() => setPlayingVideo(index)}
+                    className="w-12 h-12 bg-white bg-opacity-75 rounded-full flex items-center justify-center hover:bg-opacity-100 transition-colors"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-800"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             ))}
           </div>
+    
+          {playingVideo !== null && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+              <div className="relative bg-white rounded-lg overflow-hidden max-w-3xl w-full">
+                <button
+                  className="absolute top-3 right-3 z-20 text-white bg-black bg-opacity-75 rounded-full p-1"
+                  onClick={() => setPlayingVideo(null)}
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+                <video
+                  src={homeFeedData.videos[playingVideo].video}
+                  className="w-full h-auto max-h-screen m-2"
+                  controls
+                  autoPlay
+                  onEnded={() => setPlayingVideo(null)}
+                />
+              </div>
+            </div>
+          )}
         </section> 
         : null
       }
