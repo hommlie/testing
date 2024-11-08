@@ -264,6 +264,7 @@ export default function ProductPage() {
       
             if (response.data.status === 1) {
               successNotify('Inspection request submitted successfully!');
+              window.location.reload();
             } else {
               errorNotify('Failed to submit inspection request. Please try again.');
             }
@@ -553,9 +554,9 @@ export default function ProductPage() {
                     <LoginSignup isOpen={isModalOpen} onClose={closeModal} checkoutPd={checkoutPd} />
 
                     <section className="bg-white rounded-lg md:p-4 mb-6 glow-border mt-5 md:mt-10">
-                        <div className="relative max-h-[250px] lg:max-h-[450px]">
+                        <div className="relative h-[250px] lg:h-[450px]">
                             {imageItems.length > 0 && (
-                                <div className="w-full h-full border">
+                                <div className="w-full h-full">
                                     {renderMedia(imageItems[currentMediaIndex])}
                                 </div>
                             )}
