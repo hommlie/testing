@@ -113,7 +113,7 @@ export function ContProvider({ children }) {
         const response = await axios.get(`${config.API_URL}/api/banner`);
         if (response.data.status === 1) {          
           setBannerData(response.data);
-          console.log(response.data);
+          // console.log(response.data);
           
           localStorage.setItem("HommliebannerData", JSON.stringify(response.data));
         }
@@ -160,9 +160,7 @@ export function ContProvider({ children }) {
       setCart([]);
       const jwtToken = Cookies.get(`HommlieUserjwtToken`);
       if (jwtToken) {
-        const id = jwtDecode(jwtToken);
-        console.log(id.id);
-        
+        const id = jwtDecode(jwtToken);        
         try {
           const response = await axios.post(`${config.API_URL}/api/getcart`, {
             user_id: id.id,

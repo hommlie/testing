@@ -84,6 +84,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
             const response = await axios.post(`${config.API_URL}/api/register`, { 
                 mobile: `+91${phone}`
             });
+            
             if (response.data.status === 1) {                
                 if (response.data?.user_name) {
                     setName(response.data?.user_name);

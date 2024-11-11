@@ -59,7 +59,7 @@ export default function Header({ logo, logoAlt }) {
   };
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
 
     const handleClickOutside = event => {
       if (loginDropdownRef.current && !loginDropdownRef.current.contains(event.target)) {
