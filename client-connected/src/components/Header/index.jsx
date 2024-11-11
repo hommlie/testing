@@ -369,7 +369,7 @@ export default function Header({ logo, logoAlt }) {
                         {cart.map((item, index) => (
                           <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 transition-colors border-b last:border-b-0">
                             <div className="flex items-center space-x-3">
-                              <img src={item.image_url} alt={item.product_name} className="w-16 h-16 object-cover rounded-md" />
+                              {/* <img src={item.image_url} alt={item.product_name} className="w-16 h-16 object-cover rounded-md" /> */}
                               <div>
                                 <p className="text-sm font-medium text-gray-800">{item.product_name}</p>
                                 <p className="text-xs text-gray-500">{item.attribute_name}</p>
