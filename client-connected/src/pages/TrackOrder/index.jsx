@@ -186,7 +186,7 @@ export default function TrackOrder() {
                     <div className="bg-white rounded-lg shadow glow-border p-6">
                         <h2 className="text-xl font-semibold mb-4">Order Details</h2>
                         <div className="flex items-start space-x-4 mb-4 h-40">
-                            <img src={trackingDetails?.image} alt="" className="w-20 lg:w-32 h-20 lg:h-32 object-cover rounded-md" />
+                            {/* <img src={trackingDetails?.image} alt="" className="w-20 lg:w-32 h-20 lg:h-32 object-cover rounded-md" /> */}
                             <div className="flex-1 space-y-1">
                                 <h3 className="text-sm lg:text-lg font-semibold">{trackingDetails?.product_name}</h3>
                                 <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.attribute}</p>
