@@ -6,7 +6,7 @@ import axios from 'axios';
 import config from '../../config/config';
 import { useToast } from '../../context/ToastProvider';
 
-const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, order_id, order_type }) => {
+const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, order_id, order_type, slotFull }) => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [dates, setDates] = useState([]);
@@ -139,6 +139,11 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
     if (!isOpen) return null;
 
     const handleProceed = async() => {
+        if (slotFull) {
+            alert("All slots are full for the next few days, we will be adding more slots soon! Please check back in few days");
+            onClose();
+            return null;
+        }
         setIsLoading(true);
         const dayTime = {
             date: selectedDate,

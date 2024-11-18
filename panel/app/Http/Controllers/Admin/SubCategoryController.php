@@ -171,7 +171,7 @@ class SubCategoryController extends Controller
         $this->validate($request, [
             'subcategory_name' => 'required',
             'cat_id' => 'required',
-            'icon' => 'mimes:jpeg,png,jpg',
+            'icon' => 'required|mimes:png,jpg,jpeg',
         ]);
     
         $icon = $request->old_img; 

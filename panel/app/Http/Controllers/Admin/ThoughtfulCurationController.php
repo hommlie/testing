@@ -13,13 +13,12 @@ class ThoughtfulCurationController extends Controller
 {
     public function index()
     {
-       
-        $thoughtfulCurations = ThoughtfulCuration::all();
-
-      //  dd($thoughtfulCurations);
-
+        // Assuming you want to order by 'created_at' field in descending order
+        $thoughtfulCurations = ThoughtfulCuration::orderBy('created_at', 'desc')->get();
+    
         return view('admin.thoughtful-curations.index', compact('thoughtfulCurations'));
     }
+    
     public function create()
     {
         return view('admin.thoughtful-curations.add'); 
