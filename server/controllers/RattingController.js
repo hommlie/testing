@@ -2,6 +2,26 @@ const { Op } = require('sequelize');
 const sequelize = require('../config/connection');
 const { Ratting, User, Product, Order, Employee } = require('../models'); 
 const apiUrl = process.env.apiUrl;
+const GOOGLE_API_KEY = process.env.GMAP_KEY;
+const PLACE_ID = process.env.PLACE_ID;
+
+exports.getGoogleReviews = async(req, res) => {
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/place/details/json`,
+      {
+        params: {
+          place_id: PLACE_ID,
+          fields: 'reviews',
+          key: GOOGLE_API_KEY,
+        },
+      }
+    );
+    return res.status(200).json({ status: 1, message: 'Success', data: response.data.reviews });
+  } catch (error) {
+    return res.status(500).json({ status: 0, message: 'Something went wrong', error });
+  }
+}
 
 exports.addRatting = async(req, res) => {
     const { product_id, order_id, user_id, ratting, comment } = req.body;

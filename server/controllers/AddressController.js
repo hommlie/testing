@@ -3,7 +3,6 @@ const apiUrl = process.env.apiUrl;
 
 exports.saveAddress = async(req, res) => {
     const { user_id, name, address, landmark, pincode, mobile, email, latitude, longitude } = req.body;
-    console.log(req.body);
 
     try {
       if (!user_id) {
