@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const axios = require('axios');
 const sequelize = require('../config/connection');
 const { Ratting, User, Product, Order, Employee } = require('../models'); 
 const apiUrl = process.env.apiUrl;

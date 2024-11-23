@@ -98,6 +98,8 @@ export function ContProvider({ children }) {
       // incrementApiCall();
       try {
         const response = await axios.get(`${config.API_URL}/api/google-reviews`);
+        console.log(response);
+        
         // setCategoryData(response.data);
         // localStorage.setItem("HommlieGoogleReviews", JSON.stringify(response.data));
       } catch (err) {
