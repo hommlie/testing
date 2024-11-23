@@ -8,16 +8,7 @@ const PLACE_ID = process.env.PLACE_ID;
 
 exports.getGoogleReviews = async(req, res) => {
   try {
-    const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/place/details/json`,
-      {
-        params: {
-          place_id: PLACE_ID,
-          fields: 'reviews',
-          key: GOOGLE_API_KEY,
-        },
-      }
-    );
+    const response = await axios.get("https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJgxuWZf0_rjsRbJaur3y9Lxo&fields=reviews&key=AIzaSyBmaR3DSseRPUCCvGT0Ru8aK-Jrm39NlTE");
     return res.status(200).json({ status: 1, message: 'Success', data: response.data.reviews });
   } catch (error) {
     return res.status(500).json({ status: 0, message: 'Something went wrong', error });
