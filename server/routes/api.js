@@ -62,7 +62,7 @@ app.post('/getwishlist', WishlistController.getWishlist);
 //Rattings
 app.post('/addratting', RattingController.addRatting);
 app.post('/productreview', RattingController.productReview);
-app.post('/google-reviews', RattingController.getGoogleReviews);
+app.get('/google-reviews', RattingController.getGoogleReviews);
 
 //Categorymanagement
 app.get("/category", CategoryController.getCategory);

@@ -90,7 +90,7 @@ const HomePageFirstSection = () => {
     { label: "Google Service Rating", value: "4.95" }
   ];
 
-  const { user, getHomeFeeds, getCategoryData, getBannerData, fetchAllData, homeFeedData, categoryData, bannerData } = useCont();
+  const { user, getHomeFeeds, getCategoryData, getBannerData, fetchAllData, homeFeedData, categoryData, bannerData, getGoogleReviews } = useCont();
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
   const [isExploreModalOpen, setIsExploreModalOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState();
@@ -108,6 +108,7 @@ const HomePageFirstSection = () => {
     window.scrollTo(0, 0);
     AOS.init({ duration: 1000 });
     fetchAllData();
+    getGoogleReviews();
 
     const timer = setTimeout(() => {
       setIsLoading(false);
