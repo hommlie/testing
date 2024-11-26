@@ -263,7 +263,12 @@ export default function AddtoCart() {
     return (
         <main className="flex justify-center bg-gray-100">
             <div className="relative w-full max-w-5xl my-6 md:my-16 space-y-6 px-4">
-                <DateTimeModal isOpen={isDateTimeModalOpen} onClose={closeDateTimeModal} order_type="AMC" slotFull />
+                <DateTimeModal 
+                    isOpen={isDateTimeModalOpen} 
+                    onClose={closeDateTimeModal} 
+                    order_type="AMC" 
+                    // slotFull 
+                />
                 <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} />
                 <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalItemPrice + tax} />
                 <PaymentModal isOpen={isPaymentOpen} onClose={closePaymentModal} />

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaQuoteLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaQuoteLeft, FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa';
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
 
 const TestimonialSection = ({ testimonials }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -39,7 +41,7 @@ const TestimonialSection = ({ testimonials }) => {
           What people say
         </h2>
         <div className="relative">
-          {/* <button
+          <button
             onClick={prevTestimonial}
             className="absolute top-1/2 -left-7 -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10 hover:bg-gray-100 transition-colors"
           >
@@ -50,7 +52,7 @@ const TestimonialSection = ({ testimonials }) => {
             className="absolute top-1/2 -right-7 -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10 hover:bg-gray-100 transition-colors"
           >
             <FaChevronRight className="h-5 w-5 text-[#035240]" />
-          </button> */}
+          </button>
           <div className="overflow-hidden py-2">
             <AnimatePresence initial={false} mode="wait">
               <motion.div
@@ -65,17 +67,29 @@ const TestimonialSection = ({ testimonials }) => {
                   const testimonial = testimonials[(activeIndex + offset) % testimonials.length];
                   return (
                     <div key={testimonial.id} className="w-full lg:w-1/2 flex-shrink-0">
-                      <div className="bg-white p-8 rounded-lg shadow-md h-full flex flex-col justify-between">
-                        <div>
-                          <FaQuoteLeft className="text-4xl mb-4 text-[#035240]" />
-                          <p className="text-gray-600 mb-6">{testimonial.feedback}</p>
-                        </div>
+                      <div className="bg-white p-8 rounded-lg shadow-md h-full flex flex-col justify-between gap-4">
                         <div className="flex items-center">
-                          <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4 object-cover" />
+                          <div className="relative">
+                            <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4 object-cover" />
+                            <FcGoogle className="absolute bottom-1 right-3 text-xl bg-white rounded-full"/>
+                          </div>
                           <div>
-                            <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                            <div className="flex gap-2 items-center">
+                              <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                              <RiVerifiedBadgeFill className="text-blue-500" />
+                            </div>
                             <p className="text-gray-500">{testimonial.location}</p>
                           </div>
+                        </div>
+                        <div className="flex gap-2 text-yellow-500">
+                          <FaStar />
+                          <FaStar />
+                          <FaStar />
+                          <FaStar />
+                          <FaStar />
+                        </div>
+                        <div>
+                          <p className="text-gray-600 mb-6">{testimonial.feedback}</p>
                         </div>
                       </div>
                     </div>
