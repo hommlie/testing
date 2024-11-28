@@ -182,7 +182,7 @@ exports.homeFeeds = async (req, res) => {
               'subcategory_name',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
-            where: { cat_id: 29, status: 1 }
+            where: { cat_id: 47, status: 1 }
         });
 
         const shop_now = await Product.findAll({
