@@ -4,6 +4,26 @@ import { FaQuoteLeft, FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 
+const ReadMoreText = ({ text, maxLength = 90 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  if (text.length <= maxLength) {
+    return <p className="text-gray-600">{text}</p>;
+  }
+
+  return (
+    <p className="text-gray-600">
+      {isExpanded ? text : `${text.slice(0, maxLength)}...`}
+      <span 
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="text-[#10847E] cursor-pointer font-semibold ml-2 hover:underline"
+      >
+        {isExpanded ? 'Read Less' : 'Read More'}
+      </span>
+    </p>
+  );
+};
+
 const TestimonialSection = ({ testimonials }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -89,7 +109,7 @@ const TestimonialSection = ({ testimonials }) => {
                           <FaStar />
                         </div>
                         <div>
-                          <p className="text-gray-600 mb-6">{testimonial.feedback}</p>
+                          <ReadMoreText text={testimonial.feedback} />
                         </div>
                       </div>
                     </div>
