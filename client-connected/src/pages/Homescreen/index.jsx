@@ -145,7 +145,7 @@ const HomePageFirstSection = () => {
   }
 
   const openWhatsApp = () => {
-    window.open(`https://wa.link/8whe95`, '_blank');
+    window.open(`https://api.whatsapp.com/send?phone=919844090440`, "_blank");
   };
 
   const prevSlideTopSlider = () => {
