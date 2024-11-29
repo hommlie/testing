@@ -155,7 +155,7 @@ export default function Header({ logo, logoAlt }) {
   };
 
   const openWhatsApp = () => {
-    window.open(`https://api.whatsapp.com/send?phone=919739739394`, "_blank");
+    window.open(`https://api.whatsapp.com/send?phone=919844090440`, "_blank");
   };
 
   const callNumber = () => {
