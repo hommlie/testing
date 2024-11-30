@@ -14,3 +14,4 @@ class ThoughtfulCuration extends Model
        
     ];
 }
+?>

@@ -10,6 +10,8 @@
             <th>#</th>
             <th>{{ trans('labels.image') }}</th>
             <th>{{ trans('labels.link') }}</th>
+            <th>ALT tag</th>
+            <th>Image title</th>
             <th>{{ trans('labels.status') }}</th>
             <th>{{ trans('labels.action') }}</th>
         </tr>
@@ -21,6 +23,8 @@
             <td>{{++$n}}</td>
             <td><img src='{!! asset("storage/app/public/images/slider/".$row->image) !!}' class='media-object round-media height-150' style="width:150px"></td>
             <td><a href="{{$row->link}}" target="_blank">{{ trans('labels.link') }}</a></td>
+            <td>{{$row->alt_tag}}</td>
+            <td>{{$row->image_title}}</td>
             <td id="tdstatus{{$row->id}}"> 
                 @if($row->status=='1') 
                     <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus" data-status="2" data-id="{{$row->id}}">

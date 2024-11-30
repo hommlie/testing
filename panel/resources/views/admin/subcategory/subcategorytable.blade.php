@@ -6,6 +6,8 @@
             <th>{{ trans('labels.category') }}</th>
             
             <th>{{ trans('labels.subcategory') }}</th>
+            <th>ALT tag</th>
+            <th>Image title</th>
             <th>{{ trans('Assigned Questions') }}</th>
             <th>{{ trans('labels.status') }}</th>
             <th>{{ trans('labels.action') }}</th>
@@ -23,6 +25,8 @@
             <td>{{$row['category']->category_name}}</td>
               
             <td>{{$row->subcategory_name}}</td>
+            <td>{{$row->alt_tag}}</td>
+            <td>{{$row->image_title}}</td>
             <td>
                 <strong>Onsite:</strong>
                

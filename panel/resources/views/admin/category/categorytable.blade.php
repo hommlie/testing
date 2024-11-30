@@ -4,6 +4,8 @@
             <th>#</th>
             <th>{{ trans('Image') }}</th>
             <th>{{ trans('Category Name') }}</th>
+            <th>ALT tag</th>
+            <th>Image title</th>
             <th>{{ trans('Status') }}</th>
             <th>{{ trans('Action') }}</th>
         </tr>
@@ -15,6 +17,8 @@
             <td>{{++$n}}</td>
             <td><img src='{!! asset("storage/app/public/images/category/".$row->icon) !!}' class='media-object round-media height-50' style="height:100px"></td>
             <td>{{$row->category_name}}</td>
+            <td>{{$row->alt_tag}}</td>
+            <td>{{$row->image_title}}</td>
             <td id="tdstatus{{$row->id}}"> 
                 @if($row->status=='1') 
                     <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus" data-status="2" data-id="{{$row->id}}">

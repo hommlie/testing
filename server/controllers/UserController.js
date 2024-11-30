@@ -39,10 +39,6 @@ exports.registerOrLogin = async (req, res) => {
       
       axios.request(options).then(function (response) {
         if (response.data.type === 'success') {
-          sendWhatsAppNotification(
-            mobile, 
-            `Hi ${user.name}, you have successfully logged in to Hommlie.`
-          );
           const newresponse = {
             status: 1,
             message: response.data,
@@ -113,8 +109,11 @@ exports.verifyOtp = async (req, res) => {
     };
 
     axios.request(options).then(function (response) {
-      console.log(response.data);
       if (response.data.type === 'success') {
+        sendWhatsAppNotification(
+          user.mobile, 
+          `Hi ${user.name}, you have successfully logged in to Hommlie.`
+        );
         const token = jwt.sign({ id: user.id, mobile: user.mobile, referred_id: user.referred_id, referral_code: user.referral_code }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30d' });
         return res.status(200).json({ status: 1, message: response.data.message, token, user_id: user.id });
       } else {

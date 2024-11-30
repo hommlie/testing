@@ -4,10 +4,12 @@
             <th>#</th>
             <th>{{ trans('labels.image') }}</th>
             <th>{{ trans('labels.link') }}</th>
+            <th>ALT tag</th>
+            <th>Image title</th>
             <th>{{ trans('labels.type') }}</th>
             <th>{{ trans('labels.category') }}</th>
             <th>{{ trans('labels.product') }}</th>
-            <th>{{ trans('labels.action') }}</th>
+            <th>{{ trans('labels.action') }}</th>   
         </tr>
     </thead>
     <tbody> 
@@ -17,6 +19,8 @@
             <td>{{++$n}}</td>
             <td><img src='{!! asset("storage/app/public/images/banner/".$row->image) !!}' class='media-object round-media height-50' style="height:70px"></td>
             <td>{{$row->link}}</td>
+            <td>{{$row->alt_tag}}</td>
+            <td>{{$row->image_title}}</td>
             <td>{{$row->type}}</td>
             <td>
                 @if ($row->type == "category")

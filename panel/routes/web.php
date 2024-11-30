@@ -180,6 +180,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'OrderController@index')->name('orders');
         Route::get('addorder', 'OrderController@addorder')->name('orders.add');
+        // ADD RESIDENTIAL ORDERS
+        Route::get('add-residential',function(){ return view('admin.orders.add-residential'); })->name('orders.add-residential');
         Route::get('/get-subcategories/{categoryId}', 'OrderController@getSubcategories')->name('orders.getSubcategories');
         Route::get('/get-services/{subcategoryId}', 'OrderController@getServices')->name('orders.getServices');
 
@@ -439,6 +441,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
         
         
+    });
+
+    
+    // COMPALINT MANAGEMENT (Help's) 
+    Route::group(['prefix'=> 'complaint'], function () {
+        Route::get('/', 'ComplaintController@index')->name('complaint');
+       
+        
+        
+    });
+
+
+    // INSPECTIONS MANAGEMENT  
+    Route::group(['prefix'=> 'inspections'], function () {
+        Route::get('/', 'InspectionsController@index')->name('inspections');
+    });
+
+    // MANAGE APP HEADER 
+    Route::group(['prefix'=> 'appheader'], function () {
+        Route::get('/', 'AppHeaderController@index')->name('appheader');
+        Route::post('/update/{id}', 'AppHeaderController@update')->name('appheader.update');
     });
 
 

@@ -2,16 +2,17 @@
     <!-- Brand Logo -->
     <a href="#" class="brand-link bg-light">
         <!-- <span class="brand-text font-weight-light">HOMMLIE</span> -->
-         <!-- <img src="{{ asset('storage/app/public/assets/hommlie-logo-dark.png') }}" alt=""> -->
-         <img src="{{ asset('storage/app/public/Adminassets/img/sidebar-bg/hommlie-logo.png') }}" style="width: 90%;" alt="">
+        <!-- <img src="{{ asset('storage/app/public/assets/hommlie-logo-dark.png') }}" alt=""> -->
+        <img src="{{ asset('storage/app/public/Adminassets/img/sidebar-bg/hommlie-logo.png') }}" style="width: 90%;"
+            alt="">
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar bg-success" style="height:100vh;overflow-y:scroll" >
+    <div class="sidebar bg-success" style="height:100vh;overflow-y:scroll">
         <!-- Sidebar user (optional) -->
 
         <!-- Sidebar Menu -->
-        <nav class="mt-2" >
+        <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="{{ route("admin.home") }}" class="nav-link">
@@ -23,10 +24,11 @@
 
                 </li>
 
-                
+
                 @can('gantt_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.gantt") }}" class="nav-link {{ request()->is('admin/gantt') ? 'active' : '' }}">
+                        <a href="{{ route("admin.gantt") }}"
+                            class="nav-link {{ request()->is('admin/gantt') ? 'active' : '' }}">
                             <i class="fas fa-chart-bar mr-2">
                             </i>
                             <p>
@@ -35,10 +37,11 @@
                         </a>
                     </li>
                 @endcan
-                
+
                 @can('manualorderassign_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.manualorderassign") }}" class="nav-link {{ request()->is('admin/manualorderassign') ? 'active' : '' }}">
+                        <a href="{{ route("admin.manualorderassign") }}"
+                            class="nav-link {{ request()->is('admin/manualorderassign') ? 'active' : '' }}">
                             <i class="fas fa-plus mr-2">
                             </i>
                             <p>
@@ -48,11 +51,12 @@
                     </li>
                 @endcan
 
-                
-                
+
+
                 @can('help_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.help") }}" class="nav-link {{ request()->is('admin/help') ? 'active' : '' }}">
+                        <a href="{{ route("admin.help") }}"
+                            class="nav-link {{ request()->is('admin/help') ? 'active' : '' }}">
                             <i class="fas fa-question-circle mr-2">
                             </i>
                             <p>
@@ -63,7 +67,8 @@
                 @endcan
 
                 @can('order_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/orders*') ? 'menu-open' : '' }} {{ request()->is('admin/orders/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/orders*') ? 'menu-open' : '' }} {{ request()->is('admin/orders/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-shopping-cart mr-2">
 
@@ -74,9 +79,11 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-4">
+                            {{-- VIEW ORDERS --}}
                             @can('order_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.orders") }}" class="nav-link {{ request()->is('admin/orders')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.orders") }}"
+                                        class="nav-link {{ request()->is('admin/orders') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -86,9 +93,11 @@
                                     </a>
                                 </li>
                             @endcan
+                            {{-- ADD ORDERS --}}
                             @can('order_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.orders.add") }}" class="nav-link {{ request()->is('admin/orders/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.orders.add") }}"
+                                        class="nav-link {{ request()->is('admin/orders/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -98,12 +107,41 @@
                                     </a>
                                 </li>
                             @endcan
+                            {{-- VIEW RESIDENTIAL ORDERS --}}
+                            <!-- @can('order_access')
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link   ? 'active' : '' }}">
+                                            <i class="fa fa-check-circle mr-2">
+
+                                            </i>
+                                            <p>
+                                                <span>View Residential Orders</span>
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endcan -->
+
+                            {{-- ADD RESIDENTIAL ORDERS --}}
+                            @can('order_add_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.orders.add-residential") }}"
+                                        class="nav-link {{ request()->is('admin/orders/add-residential') ? 'active' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>Add Residential Orders</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan
 
                 @can('attendance_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/empattendance*') ? 'menu-open' : '' }}  {{ request()->is('admin/verifiedAttendence*') ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/empattendance*') ? 'menu-open' : '' }}  {{ request()->is('admin/verifiedAttendence*') ? 'menu-open' : '' }}">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-book mr-2">
 
@@ -116,7 +154,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('attendance_login_history_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.empattendance") }}" class="nav-link {{ request()->is('admin/empattendance')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.empattendance") }}"
+                                        class="nav-link {{ request()->is('admin/empattendance') ? 'active' : '' }}">
                                         <i class="fas fa-unlock-alt">
 
                                         </i>
@@ -128,7 +167,8 @@
                             @endcan
                             @can('verified_attendance_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.empattendance.verifiedAttendence") }}" class="nav-link {{ request()->is('admin/verifiedAttendence')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.empattendance.verifiedAttendence") }}"
+                                        class="nav-link {{ request()->is('admin/verifiedAttendence') ? 'active' : '' }}">
                                         <i class="fas fa-briefcase">
 
                                         </i>
@@ -144,9 +184,10 @@
                 @endcan
 
 
-                
+
                 @can('customer_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/customers*') ? 'menu-open' : '' }} {{ request()->is('admin/customers/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/customers*') ? 'menu-open' : '' }} {{ request()->is('admin/customers/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-users mr-2">
 
@@ -159,7 +200,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('customer_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.customers") }}" class="nav-link {{ request()->is('admin/customers')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.customers") }}"
+                                        class="nav-link {{ request()->is('admin/customers') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -171,7 +213,8 @@
                             @endcan
                             @can('customer_bulk_upload_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.bulkupload") }}" class="nav-link {{ request()->is('admin/customers/bulkupload')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.bulkupload") }}"
+                                        class="nav-link {{ request()->is('admin/customers/bulkupload') ? 'active' : '' }}">
                                         <i class="fa fa-upload mr-2">
 
                                         </i>
@@ -187,10 +230,11 @@
 
 
 
-                
+
 
                 @can('product_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/product*') ? 'menu-open' : '' }} {{ request()->is('admin/product/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/product*') ? 'menu-open' : '' }} {{ request()->is('admin/product/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-cogs mr-2">
 
@@ -203,7 +247,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('product_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.product") }}" class="nav-link {{ request()->is('admin/product')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.product") }}"
+                                        class="nav-link {{ request()->is('admin/product') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -215,7 +260,8 @@
                             @endcan
                             @can('product_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.products.add") }}" class="nav-link {{ request()->is('admin/product/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.products.add") }}"
+                                        class="nav-link {{ request()->is('admin/product/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -229,10 +275,11 @@
                     </li>
                 @endcan
 
-             
+
 
                 @can('employee_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/employees*') ? 'menu-open' : '' }} {{ request()->is('admin/employees/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/employees*') ? 'menu-open' : '' }} {{ request()->is('admin/employees/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-address-book mr-2">
 
@@ -245,7 +292,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('employee_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.employees.index") }}" class="nav-link {{ request()->is('admin/employees')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.employees.index") }}"
+                                        class="nav-link {{ request()->is('admin/employees') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -257,7 +305,8 @@
                             @endcan
                             @can('employee_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.employees.add") }}" class="nav-link {{ request()->is('admin/employees/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.employees.add") }}"
+                                        class="nav-link {{ request()->is('admin/employees/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -272,7 +321,8 @@
                 @endcan
 
                 @can('timeslot_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/timeslot*') ? 'menu-open' : '' }} {{ request()->is('admin/timeslot/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/timeslot*') ? 'menu-open' : '' }} {{ request()->is('admin/timeslot/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-clock mr-2">
 
@@ -285,7 +335,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('timeslot_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.timeslot") }}" class="nav-link {{ request()->is('admin/timeslot')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.timeslot") }}"
+                                        class="nav-link {{ request()->is('admin/timeslot') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -297,7 +348,8 @@
                             @endcan
                             @can('timeslot_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.timeslot.add") }}" class="nav-link {{ request()->is('admin/timeslot/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.timeslot.add") }}"
+                                        class="nav-link {{ request()->is('admin/timeslot/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -312,7 +364,8 @@
                 @endcan
 
                 @can('inventory_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/inventory*') ? 'menu-open' : '' }} {{ request()->is('admin/inventory_history*') ? 'menu-open' : '' }} {{ request()->is('admin/assigned_inventory_history*') ? 'menu-open' : '' }} {{ request()->is('admin/inventory/add*') ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/inventory*') ? 'menu-open' : '' }} {{ request()->is('admin/inventory_history*') ? 'menu-open' : '' }} {{ request()->is('admin/assigned_inventory_history*') ? 'menu-open' : '' }} {{ request()->is('admin/inventory/add*') ? 'menu-open' : '' }}">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-coins mr-2">
 
@@ -325,7 +378,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('view_inventory_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.inventory") }}" class="nav-link {{ request()->is('admin/inventory')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.inventory") }}"
+                                        class="nav-link {{ request()->is('admin/inventory') ? 'active' : '' }}">
                                         <i class="fas fa-unlock-alt">
 
                                         </i>
@@ -337,7 +391,8 @@
                             @endcan
                             @can('inventory_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.inventory.add") }}" class="nav-link {{ request()->is('admin/inventory/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.inventory.add") }}"
+                                        class="nav-link {{ request()->is('admin/inventory/add') ? 'active' : '' }}">
                                         <i class="fas fa-unlock-alt">
 
                                         </i>
@@ -349,7 +404,8 @@
                             @endcan
                             @can('assigned_inventory_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.inventory.assigned_inventory_history") }}" class="nav-link {{ request()->is('admin/assigned_inventory_history')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.inventory.assigned_inventory_history") }}"
+                                        class="nav-link {{ request()->is('admin/assigned_inventory_history') ? 'active' : '' }}">
                                         <i class="fas fa-briefcase">
 
                                         </i>
@@ -361,7 +417,8 @@
                             @endcan
                             @can('all_history_inventory_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.inventory.inventory_history") }}" class="nav-link {{ request()->is('admin/inventory_history')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.inventory.inventory_history") }}"
+                                        class="nav-link {{ request()->is('admin/inventory_history') ? 'active' : '' }}">
                                         <i class="fas fa-user">
 
                                         </i>
@@ -377,7 +434,8 @@
 
 
                 @can('testimonial_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/testimonials*') ? 'menu-open' : '' }} {{ request()->is('admin/testimonials/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/testimonials*') ? 'menu-open' : '' }} {{ request()->is('admin/testimonials/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-quote-left mr-2">
 
@@ -390,7 +448,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('testimonial_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.testimonials") }}" class="nav-link {{ request()->is('admin/testimonials')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.testimonials") }}"
+                                        class="nav-link {{ request()->is('admin/testimonials') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -402,7 +461,8 @@
                             @endcan
                             @can('testimonial_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.testimonials.add") }}" class="nav-link {{ request()->is('admin/testimonials/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.testimonials.add") }}"
+                                        class="nav-link {{ request()->is('admin/testimonials/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -417,7 +477,8 @@
                 @endcan
 
                 @can('location_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/location*') ? 'menu-open' : '' }} {{ request()->is('admin/location/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/location*') ? 'menu-open' : '' }} {{ request()->is('admin/location/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-map-marker-alt mr-2">
 
@@ -430,7 +491,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('location_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.location") }}" class="nav-link {{ request()->is('admin/location')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.location") }}"
+                                        class="nav-link {{ request()->is('admin/location') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -442,7 +504,8 @@
                             @endcan
                             @can('location_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.location.add") }}" class="nav-link {{ request()->is('admin/location/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.location.add") }}"
+                                        class="nav-link {{ request()->is('admin/location/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -458,10 +521,11 @@
 
 
 
-                
+
 
                 @can('quotation_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/quotation*') ? 'menu-open' : '' }} {{ request()->is('admin/quotation/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/quotation*') ? 'menu-open' : '' }} {{ request()->is('admin/quotation/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-file-pdf mr-2">
 
@@ -474,7 +538,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('quotation_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.quotation") }}" class="nav-link {{ request()->is('admin/quotation')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.quotation") }}"
+                                        class="nav-link {{ request()->is('admin/quotation') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -486,7 +551,8 @@
                             @endcan
                             @can('quotation_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.quotation.add") }}" class="nav-link {{ request()->is('admin/quotation/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.quotation.add") }}"
+                                        class="nav-link {{ request()->is('admin/quotation/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -501,7 +567,8 @@
                 @endcan
 
                 @can('purchaseorder_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/purchaseorder*') ? 'menu-open' : '' }} {{ request()->is('admin/purchaseorder/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/purchaseorder*') ? 'menu-open' : '' }} {{ request()->is('admin/purchaseorder/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-file-pdf mr-2">
 
@@ -514,7 +581,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('purchaseorder_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.purchaseorder") }}" class="nav-link {{ request()->is('admin/purchaseorder')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.purchaseorder") }}"
+                                        class="nav-link {{ request()->is('admin/purchaseorder') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -526,7 +594,8 @@
                             @endcan
                             @can('purchaseorder_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.purchaseorder.add") }}" class="nav-link {{ request()->is('admin/purchaseorder/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.purchaseorder.add") }}"
+                                        class="nav-link {{ request()->is('admin/purchaseorder/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -542,15 +611,16 @@
 
 
 
-               
 
 
 
 
-                
-             
+
+
+
                 @can('category_main_menu_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/category*') ? 'menu-open' : '' }}   {{ request()->is('admin/subcategory*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/category*') ? 'menu-open' : '' }}   {{ request()->is('admin/subcategory*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-list-alt">
 
@@ -563,7 +633,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('category_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.category") }}" class="nav-link {{ request()->is('admin/category')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.category") }}"
+                                        class="nav-link {{ request()->is('admin/category') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle">
 
                                         </i>
@@ -575,7 +646,8 @@
                             @endcan
                             @can('category_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.category.add") }}" class="nav-link {{ request()->is('admin/category/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.category.add") }}"
+                                        class="nav-link {{ request()->is('admin/category/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle">
 
                                         </i>
@@ -587,7 +659,8 @@
                             @endcan
                             @can('subcategory_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.subcategory") }}" class="nav-link {{ request()->is('admin/subcategory')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.subcategory") }}"
+                                        class="nav-link {{ request()->is('admin/subcategory') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle">
 
                                         </i>
@@ -599,7 +672,8 @@
                             @endcan
                             @can('subcategory_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.subcategory.add") }}" class="nav-link {{ request()->is('admin/subcategory/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.subcategory.add") }}"
+                                        class="nav-link {{ request()->is('admin/subcategory/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle">
 
                                         </i>
@@ -611,37 +685,38 @@
                             @endcan
 
                             <!-- @can('innersubcategory_access')
-                                <li class="nav-item">
-                                    <a href="{{ route("admin.innersubcategory") }}" class="nav-link {{ request()->is('admin/innersubcategory')  ? 'active' : '' }}">
-                                        <i class="fa fa-check-circle">
+                                    <li class="nav-item">
+                                        <a href="{{ route("admin.innersubcategory") }}" class="nav-link {{ request()->is('admin/innersubcategory')  ? 'active' : '' }}">
+                                            <i class="fa fa-check-circle">
 
-                                        </i>
-                                        <p>
-                                            <span>{{ trans('View Inner Subcategory') }}</span>
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
+                                            </i>
+                                            <p>
+                                                <span>{{ trans('View Inner Subcategory') }}</span>
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endcan
 
-                            @can('innersubcategory_add_access')
-                                <li class="nav-item">
-                                    <a href="{{ route("admin.innersubcategory.add") }}" class="nav-link {{ request()->is('admin/innersubcategory/add')  ? 'active' : '' }}">
-                                        <i class="fa fa-plus-circle">
+                                @can('innersubcategory_add_access')
+                                    <li class="nav-item">
+                                        <a href="{{ route("admin.innersubcategory.add") }}" class="nav-link {{ request()->is('admin/innersubcategory/add')  ? 'active' : '' }}">
+                                            <i class="fa fa-plus-circle">
 
-                                        </i>
-                                        <p>
-                                            <span>{{ trans('Add Inner Sub Category') }}</span>
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan -->
+                                            </i>
+                                            <p>
+                                                <span>{{ trans('Add Inner Sub Category') }}</span>
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endcan -->
 
                         </ul>
                     </li>
                 @endcan
 
                 @can('slider_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/slider*') ? 'menu-open' : '' }} {{ request()->is('admin/slider/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/slider*') ? 'menu-open' : '' }} {{ request()->is('admin/slider/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-sliders-h mr-2">
 
@@ -654,7 +729,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('slider_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.slider") }}" class="nav-link {{ request()->is('admin/slider')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.slider") }}"
+                                        class="nav-link {{ request()->is('admin/slider') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -666,7 +742,8 @@
                             @endcan
                             @can('slider_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.slider.add") }}" class="nav-link {{ request()->is('admin/slider/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.slider.add") }}"
+                                        class="nav-link {{ request()->is('admin/slider/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -679,9 +756,45 @@
                         </ul>
                     </li>
                 @endcan
+                <!-- MANAGE APP HEADER  -->
+
+                @can('slider_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/appheader*') ? 'menu-open' : '' }} {{ request()->is('admin/appheader/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-mobile-alt mr-2">
+
+                            </i>
+                            <p>
+                                <span>Manage App Header</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('slider_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.appheader") }}"
+                                        class="nav-link {{ request()->is('admin/appheader') ? 'active' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>View App Header</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+
+
+
+
 
                 @can('banner_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/banner*') ? 'menu-open' : '' }} {{ request()->is('admin/banner/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/banner*') ? 'menu-open' : '' }} {{ request()->is('admin/banner/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-image mr-2">
 
@@ -694,7 +807,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('banner_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.banner") }}" class="nav-link {{ request()->is('admin/banner')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.banner") }}"
+                                        class="nav-link {{ request()->is('admin/banner') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -706,7 +820,8 @@
                             @endcan
                             @can('banner_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.banner.add") }}" class="nav-link {{ request()->is('admin/banner/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.banner.add") }}"
+                                        class="nav-link {{ request()->is('admin/banner/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -721,7 +836,8 @@
                 @endcan
 
                 @can('attribute_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/attribute*') ? 'menu-open' : '' }} {{ request()->is('admin/attribute/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/attribute*') ? 'menu-open' : '' }} {{ request()->is('admin/attribute/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-braille mr-2">
 
@@ -734,7 +850,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('attribute_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.attribute") }}" class="nav-link {{ request()->is('admin/attribute')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.attribute") }}"
+                                        class="nav-link {{ request()->is('admin/attribute') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -746,7 +863,8 @@
                             @endcan
                             @can('attribute_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.attribute.add") }}" class="nav-link {{ request()->is('admin/attribute/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.attribute.add") }}"
+                                        class="nav-link {{ request()->is('admin/attribute/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -760,11 +878,12 @@
                     </li>
                 @endcan
 
-               
 
-                
+
+
                 @can('coupon_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/coupons*') ? 'menu-open' : '' }} {{ request()->is('admin/coupons/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/coupons*') ? 'menu-open' : '' }} {{ request()->is('admin/coupons/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-gift mr-2">
 
@@ -777,7 +896,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('coupon_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.coupons") }}" class="nav-link {{ request()->is('admin/coupons')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.coupons") }}"
+                                        class="nav-link {{ request()->is('admin/coupons') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -789,7 +909,8 @@
                             @endcan
                             @can('coupon_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.coupons.add") }}" class="nav-link {{ request()->is('admin/coupons/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.coupons.add") }}"
+                                        class="nav-link {{ request()->is('admin/coupons/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -804,10 +925,11 @@
                 @endcan
 
 
-                   <!-- ===================================== thoughtful-Curations==================================== -->
+                <!-- ===================================== thoughtful-Curations==================================== -->
 
                 @can('banner_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/thoughtful-curations*') ? 'menu-open' : '' }} {{ request()->is('admin/thoughtful-curations/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/thoughtful-curations*') ? 'menu-open' : '' }} {{ request()->is('admin/thoughtful-curations/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-video mr-2">
 
@@ -821,7 +943,7 @@
                             @can('banner_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.thoughtful-curations") }}" class="nav-link {{ request()->is('admin/
-                                    thoughtful-curations')  ? 'active' : '' }}">
+                                            thoughtful-curations') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -833,7 +955,8 @@
                             @endcan
                             @can('banner_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.thoughtful-curations.add") }}" class="nav-link {{ request()->is('admin/thoughtful-curations/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.thoughtful-curations.add") }}"
+                                        class="nav-link {{ request()->is('admin/thoughtful-curations/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -845,11 +968,12 @@
                             @endcan
                         </ul>
                     </li>
-                @endcan 
+                @endcan
                 <!-- ========================================================================= -->
 
                 @can('cms_main_menu_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/about*') ? 'menu-open' : '' }}   {{ request()->is('admin/privacy-policy*') ? 'menu-open' : '' }} {{ request()->is('admin/terms-conditions*') ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/about*') ? 'menu-open' : '' }}   {{ request()->is('admin/privacy-policy*') ? 'menu-open' : '' }} {{ request()->is('admin/terms-conditions*') ? 'menu-open' : '' }}">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-tasks mr-2">
 
@@ -862,7 +986,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('about_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.about") }}" class="nav-link {{ request()->is('admin/about')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.about") }}"
+                                        class="nav-link {{ request()->is('admin/about') ? 'active' : '' }}">
                                         <i class="fas fa-unlock-alt">
 
                                         </i>
@@ -874,7 +999,8 @@
                             @endcan
                             @can('privacypolicy_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.privacy-policy") }}" class="nav-link {{ request()->is('admin/privacy-policy')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.privacy-policy") }}"
+                                        class="nav-link {{ request()->is('admin/privacy-policy') ? 'active' : '' }}">
                                         <i class="fas fa-briefcase">
 
                                         </i>
@@ -887,7 +1013,8 @@
 
                             @can('termsconditions_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.terms-conditions") }}" class="nav-link {{ request()->is('admin/terms-conditions')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.terms-conditions") }}"
+                                        class="nav-link {{ request()->is('admin/terms-conditions') ? 'active' : '' }}">
                                         <i class="fas fa-briefcase">
 
                                         </i>
@@ -903,7 +1030,8 @@
                 @endcan
 
                 @can('question_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/question*') ? 'menu-open' : '' }} {{ request()->is('admin/question/add*') ? 'menu-open' : '' }} ">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/question*') ? 'menu-open' : '' }} {{ request()->is('admin/question/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-question-circle mr-2">
 
@@ -916,7 +1044,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('question_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.question") }}" class="nav-link {{ request()->is('admin/question')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.question") }}"
+                                        class="nav-link {{ request()->is('admin/question') ? 'active' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
 
                                         </i>
@@ -928,7 +1057,8 @@
                             @endcan
                             @can('question_add_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.question.add") }}" class="nav-link {{ request()->is('admin/question/add')  ? 'active' : '' }}">
+                                    <a href="{{ route("admin.question.add") }}"
+                                        class="nav-link {{ request()->is('admin/question/add') ? 'active' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
 
                                         </i>
@@ -942,8 +1072,76 @@
                     </li>
                 @endcan
 
+
+                <!-- COMPALINT MANAGEMENT (Help's) -->
+                @can('question_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/complaint*') ? 'menu-open' : '' }} {{ request()->is('admin/complaint/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fa fa-comments"></i>
+                            </i>
+                            <p>
+                                <span>Manage Complaint</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('question_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.complaint") }}"
+                                        class="nav-link {{ request()->is('admin/complaint') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>View Complaint</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcan
+
+                <!-- INSPECTIONS MANAGEMENT  -->
+                @can('question_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/inspections*') ? 'menu-open' : '' }} {{ request()->is('admin/inspections/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fa fa-clipboard-check"></i>
+                            </i>
+                            <p>
+                                <span>Manage Inspections</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('question_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.inspections") }}"
+                                        class="nav-link {{ request()->is('admin/inspections') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>View Inspections</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcan
+
+
+
+
+
                 @can('user_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fas fa-users mr-2">
 
@@ -956,7 +1154,8 @@
                         <ul class="nav nav-treeview ml-4">
                             @can('permission_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                    <a href="{{ route("admin.permissions.index") }}"
+                                        class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                                         <i class="fas fa-unlock-alt mr-2">
 
                                         </i>
@@ -968,7 +1167,8 @@
                             @endcan
                             @can('role_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
+                                    <a href="{{ route("admin.roles.index") }}"
+                                        class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
                                         <i class="fas fa-briefcase mr-2">
 
                                         </i>
@@ -980,7 +1180,8 @@
                             @endcan
                             @can('user_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+                                    <a href="{{ route("admin.users.index") }}"
+                                        class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                                         <i class="fas fa-user mr-2">
 
                                         </i>
@@ -998,7 +1199,8 @@
 
                 @can('payment_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.payments") }}" class="nav-link {{ request()->is('admin/payments') ? 'active' : '' }}">
+                        <a href="{{ route("admin.payments") }}"
+                            class="nav-link {{ request()->is('admin/payments') ? 'active' : '' }}">
                             <i class="fas fa-dollar-sign mr-2">
                             </i>
                             <p>
@@ -1008,10 +1210,11 @@
                     </li>
                 @endcan
 
-                
+
                 @can('settings_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.settings") }}" class="nav-link {{ request()->is('admin/settings') ? 'active' : '' }}">
+                        <a href="{{ route("admin.settings") }}"
+                            class="nav-link {{ request()->is('admin/settings') ? 'active' : '' }}">
                             <i class="fas fa-cogs mr-2">
                             </i>
                             <p>
@@ -1023,12 +1226,13 @@
 
 
 
-                
 
-                   
-                
+
+
+
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                    <a href="#" class="nav-link"
+                        onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                         <p>
                             <i class="fas fa-sign-out-alt mr-2">
 
@@ -1038,14 +1242,14 @@
                     </a>
                 </li>
                 <li class="" style="height:150px">
-                    <a class="" >
+                    <a class="">
                         <p>
-                            
+
                             <span></span>
                         </p>
                     </a>
                 </li>
-                
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -1056,7 +1260,8 @@
 
 
 
-<div class="modal fade text-left" id="EmployeeAssignModal"  role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+<div class="modal fade text-left" id="EmployeeAssignModal" role="dialog" aria-labelledby="myModalLabel33"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1100,7 +1305,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <input type="reset" class="btn btn-raised btn-warning" data-dismiss="modal" value="{{ trans('labels.close') }}">
+                    <input type="reset" class="btn btn-raised btn-warning" data-dismiss="modal"
+                        value="{{ trans('labels.close') }}">
                     <button type="submit" class="btn btn-raised btn-primary submit">{{ trans('Update') }}</button>
                 </div>
             </form>
@@ -1109,11 +1315,13 @@
 </div>
 
 <!--Inventory Assign to  Employee  Modal -->
-<div class="modal fade text-left" id="InventoryAssignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+<div class="modal fade text-left" id="InventoryAssignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <label class="modal-title text-text-bold-600" id="myModalLabel33">{{ trans('Assign Inventory') }}</label>
+                <label class="modal-title text-text-bold-600"
+                    id="myModalLabel33">{{ trans('Assign Inventory') }}</label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1127,13 +1335,13 @@
                 <input type="hidden" name="type" id="type">
                 <input type="hidden" name="price" id="price">
                 <input type="hidden" name="status" id="inventory_status">
-                <input type="hidden" name="employee_id" id="employee_id"> 
+                <input type="hidden" name="employee_id" id="employee_id">
                 <input type="hidden" name="employee_name" id="employee_name">
                 <div class="modal-body">
                     <label class="">{{ trans('Select Employee') }}: </label>
                     <div class="form-group ">
                         <select name="emp" id="emp" class="form-control">
-                            <option value="" >-Employee-</option>
+                            <option value="">-Employee-</option>
                         </select>
                         <span class="error" id="role-error"></span>
                     </div>
@@ -1146,8 +1354,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <input type="reset" class="btn btn-raised btn-warning" data-dismiss="modal" value="{{ trans('labels.close') }}">
-                    <button type="submit" class="btn btn-raised btn-primary submit" >{{ trans('Assign') }}</button>
+                    <input type="reset" class="btn btn-raised btn-warning" data-dismiss="modal"
+                        value="{{ trans('labels.close') }}">
+                    <button type="submit" class="btn btn-raised btn-primary submit">{{ trans('Assign') }}</button>
                 </div>
             </form>
         </div>
@@ -1158,51 +1367,56 @@
 
 
 <!-- Questions Assign to Sub Categories model -->
-<div class="modal fade text-left" id="QuestionAssignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <label class="modal-title text-text-bold-600" id="myModalLabel33">{{ trans('Assign Questions') }}</label>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="{{ route('admin.employees.getassignemployee', 2) }}" id="QuestionAssignForm">
-        @csrf
-        <input type="hidden" name="subcat_id" id="subcat_id_emp">
-        <div class="modal-body">
-          <label>{{ trans('Select Questions for On-Site Stage') }}: </label>
-          <div class="form-group">
-            <select name="onsite" id="onsite" class="form-control" multiple>
-            </select>
-            <span class="error" id="onsite-error"></span>
-          </div>
+<div class="modal fade text-left" id="QuestionAssignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="modal-title text-text-bold-600"
+                    id="myModalLabel33">{{ trans('Assign Questions') }}</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('admin.employees.getassignemployee', 2) }}" id="QuestionAssignForm">
+                @csrf
+                <input type="hidden" name="subcat_id" id="subcat_id_emp">
+                <div class="modal-body">
+                    <label>{{ trans('Select Questions for On-Site Stage') }}: </label>
+                    <div class="form-group">
+                        <select name="onsite" id="onsite" class="form-control" multiple>
+                        </select>
+                        <span class="error" id="onsite-error"></span>
+                    </div>
 
-          <label>{{ trans('Select Questions for Completed Stage') }}: </label>
-          <div class="form-group">
-            <select name="completed" id="completed" class="form-control" multiple>
-            </select>
-          </div>
+                    <label>{{ trans('Select Questions for Completed Stage') }}: </label>
+                    <div class="form-group">
+                        <select name="completed" id="completed" class="form-control" multiple>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="reset" class="btn btn-raised btn-warning" data-dismiss="modal"
+                        value="{{ trans('labels.close') }}">
+                    <button type="submit" class="btn btn-raised btn-primary submit">{{ trans('Update') }}</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-          <input type="reset" class="btn btn-raised btn-warning" data-dismiss="modal" value="{{ trans('labels.close') }}">
-          <button type="submit" class="btn btn-raised btn-primary submit">{{ trans('Update') }}</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
 
 
 <!-- Edit Images -->
-<div class="modal fade" id="EditImages" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabeledit" aria-hidden="true">
+<div class="modal fade" id="EditImages" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabeledit"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" name="editimg" class="editimg" id="editimg" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabeledit">{{ trans('labels.images') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <span id="emsg"></span>
@@ -1211,13 +1425,25 @@
                         <label>{{ trans('labels.images') }}</label>
                         <input type="hidden" id="idd" name="id">
                         <input type="hidden" class="form-control" id="old_img" name="old_img">
-                        <input type="file" class="form-control" name="image" id="image" accept="image/*">
+                        <input type="file" class="form-control" name="image" id="image" accept="image/*"><br />
+                        <label>ALT Tag</label>
+                        <input type="text" name="alt_tag" id="alt_tag" class="form-control" placeholder="ALT tag" required>
+                        @error('alt_tag')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <label>Image Title</label>
+                        <input type="text" name="image_title" id="image_title" class="form-control"
+                            placeholder="Image Title" required>
+                            @error('image_title')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
                         <input type="hidden" name="removeimg" id="removeimg">
                     </div>
                     <div class="galleryim"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btna-secondary" data-dismiss="modal">{{ trans('labels.close') }}</button>
+                    <button type="button" class="btn btna-secondary"
+                        data-dismiss="modal">{{ trans('labels.close') }}</button>
                     <button type="submit" class="btn btn-primary">{{ trans('labels.update') }}</button>
                 </div>
             </div>

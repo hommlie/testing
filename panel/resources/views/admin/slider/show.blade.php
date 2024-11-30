@@ -55,6 +55,26 @@
                                                 @endif
                                             </fieldset>
                                         </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="all_tag" class="col-form-label">ALT tag:</label>
+                                            <input type="text" class="form-control" name="alt_tag"
+                                                placeholder="Enter tag" required value="{{$data->alt_tag}}">
+                                            @if ($errors->has('alt_tag'))
+                                                <span class="text-danger">{{ $errors->first('alt_tag') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="Image title" class="col-form-label">Image title:</label>
+                                            <input type="text" class="form-control" name="image_title"
+                                                placeholder="Enter Image title" required value="{{$data->image_title}}">
+                                            @if ($errors->has('image_title'))
+                                                <span class="text-danger">{{ $errors->first('image_title') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                       </div>
                                     </div>
 
