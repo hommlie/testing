@@ -11,6 +11,7 @@ const apiUrl = process.env.apiUrl;
 const profileApiUrl = process.env.profileApiUrl;
 const MSG91_TEMPLATEID = process.env.MSG91_TEMPLATEID;
 const MSG91_AUTH_KEY = process.env.MSG91_AUTH_KEY;
+const { sendWhatsAppNotification } = require('../utils/sendWhatsAppNotification');
 
 exports.registerOrLogin = async (req, res) => {
   const { mobile } = req.body;
@@ -38,6 +39,10 @@ exports.registerOrLogin = async (req, res) => {
       
       axios.request(options).then(function (response) {
         if (response.data.type === 'success') {
+          sendWhatsAppNotification(
+            mobile, 
+            `Hi ${user.name}, you have successfully logged in to Hommlie.`
+          );
           const newresponse = {
             status: 1,
             message: response.data,
