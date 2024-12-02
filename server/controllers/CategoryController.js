@@ -7,7 +7,17 @@ exports.getCategory = async (req, res) => {
 
   try {
     const categoryData = await Category.findAll({
-      attributes: ['id', 'category_name', [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url']],
+      attributes: [
+        'id', 
+        'category_name', 
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+        'video',
+        'thumbnail',
+        'is_form',
+        'slug',
+        'alt_tag',
+        'image_title' 
+      ],
       where: { status: 1 },
       limit: 6
     });
@@ -33,7 +43,12 @@ exports.getSubcategory = async (req, res) => {
       attributes: [
         'id',
         'subcategory_name',
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url'],
+        'video',
+        'thumbnail',
+        'slug',
+        'alt_tag',
+        'image_title' 
       ],
       where: { cat_id, status: 1 }
     });
@@ -52,12 +67,12 @@ exports.getSubcategory = async (req, res) => {
           'product_price',
           'discounted_price',
           'is_variation',
-          'sku'
+          'sku',
         ],
         include: [
           {
             model: ProductImage,
-            attributes: ['id', 'product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']],
+            attributes: ['id', 'product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url'], 'alt_tag', 'image_title' ],
             where: { media: 'Image' },
             as: 'productimage'
           },

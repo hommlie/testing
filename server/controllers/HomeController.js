@@ -22,7 +22,9 @@ exports.homeFeeds = async (req, res) => {
                 model: ProductImage,
                 attributes: [
                     'id',
-                    'product_id', 
+                    'product_id',
+                    'alt_tag',
+                    'image_title',  
                     [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
                 ],
                 where: {
@@ -153,6 +155,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: [
               'id',
               'subcategory_name',
+              'alt_tag',
+              'image_title' ,
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
             where: { cat_id: 19, status: 1 }
@@ -162,6 +166,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: [
               'id',
               'subcategory_name',
+              'alt_tag',
+              'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
             where: { cat_id: 18, status: 1 }
@@ -171,6 +177,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: [
               'id',
               'subcategory_name',
+              'alt_tag',
+              'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
             where: { cat_id: 28, status: 1 }
@@ -180,6 +188,8 @@ exports.homeFeeds = async (req, res) => {
             attributes: [
               'id',
               'subcategory_name',
+              'alt_tag',
+              'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
             where: { cat_id: 47, status: 1 }
@@ -192,7 +202,9 @@ exports.homeFeeds = async (req, res) => {
                     model: ProductImage,
                     attributes: [
                         'id',
-                        'product_id', 
+                        'product_id',
+                        'alt_tag',
+                        'image_title', 
                         [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
                     ],
                     where: {
