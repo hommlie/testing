@@ -2,18 +2,18 @@ const { Sequelize } = require('sequelize');
 const config = require('./config.json');
 
 const sequelize = new Sequelize(
-  config.test.database,
-  config.test.username,
-  config.test.password,
+  config.development.database,
+  config.development.username,
+  config.development.password,
   {
-    host: config.test.host,
-    dialect: config.test.dialect,
-    logging: false, // Disable logging SQL queries in test
+    host: config.development.host,
+    dialect: config.development.dialect,
+    logging: false, // Disable logging SQL queries in development
     dialectOptions: {
-      // ssl: {
-      //   rejectUnauthorized: false
-      // }
-      ssl: false // No SSL connection since XAMPP doesn't support it
+      ssl: {
+        rejectUnauthorized: false
+      }
+      // ssl: false // No SSL connection since XAMPP doesn't support it
     }
   }
 );
