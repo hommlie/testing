@@ -15,6 +15,8 @@ exports.getBanner = async (req, res) => {
         'product_id',
         'positions',
         'link',
+        'alt_tag',
+        'image_title' 
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/banner/', image)`), 'image'],
       ],
       include: {
@@ -27,6 +29,8 @@ exports.getBanner = async (req, res) => {
     const sliders = await Slider.findAll({
       attributes: [
         'link',
+        'alt_tag',
+        'image_title' 
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/slider/', image)`), 'image_url'],
       ],
       where: { status: 1 },
