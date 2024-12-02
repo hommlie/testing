@@ -122,7 +122,7 @@
                                 @endcan -->
 
                             {{-- ADD RESIDENTIAL ORDERS --}}
-                            @can('order_add_access')
+                            <!-- @can('order_add_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.orders.add-residential") }}"
                                         class="nav-link {{ request()->is('admin/orders/add-residential') ? 'active' : '' }}">
@@ -134,7 +134,7 @@
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
+                            @endcan -->
                         </ul>
                     </li>
                 @endcan

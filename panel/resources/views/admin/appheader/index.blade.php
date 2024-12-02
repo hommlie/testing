@@ -95,19 +95,19 @@
                                         @csrf
                                         @method('POST')
                                         <div class="modal-body">
-                                            <div class="form-group">
+                                            <div class="form-group ">
                                                 <label for="bg_color">Background Color</label>
-                                                <input type="text" name="bg_color" class="form-control"
+                                                <input type="color" name="bg_color" class="form-control col-md-2 form-control-color"
                                                     value="{{ $header->bg_color }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="text_color">Text Color</label>
-                                                <input type="text" name="text_color" class="form-control"
+                                                <input type="color" name="text_color" class="form-control col-md-2 form-control-color"
                                                     value="{{ $header->text_color }}" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="text_color">Text Color</label>
-                                                <input type="text" name="sub_text_color" class="form-control"
+                                                <label for="text_color">Text Sub Color</label>
+                                                <input type="color" name="sub_text_color" class="form-control col-md-2 form-control-color"
                                                     value="{{ $header->sub_text_color }}" required>
                                             </div>
                                            
