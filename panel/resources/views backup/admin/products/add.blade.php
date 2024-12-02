@@ -1119,31 +1119,21 @@
   // });
 
   const productRatingInput = document.getElementById('productRating');
-const ratingError = document.getElementById('ratingError');
+  const ratingError = document.getElementById('ratingError');
 
-productRatingInput.addEventListener('input', function () {
-  // Convert the value to an integer to prevent decimal points
-  let value = parseInt(this.value);
-
-  // If value is greater than 5, set it to 5
-  if (value > 5) {
-    this.value = 5;
-    ratingError.textContent = 'Rating cannot be greater than 5.';
-    ratingError.classList.remove('d-none');
-  }
-  // If value is less than 0, set it to 0
-  else if (value < 0) {
-    this.value = 0;
-    ratingError.textContent = 'Rating cannot be less than 0.';
-    ratingError.classList.remove('d-none');
-  }
-  // If value is between 0 and 5, hide the error message
-  else {
-    this.value = value;  // Ensure valid value is reflected
-    ratingError.classList.add('d-none');
-  }
-});
-
+  productRatingInput.addEventListener('input', function () {
+    if (this.value > 5) {
+      this.value = 5;
+      ratingError.classList.remove('d-none');
+      ratingError.textContent = 'Rating cannot exceed 5.';
+    } else if (this.value < 0) {
+      this.value = 0;
+      ratingError.classList.remove('d-none');
+      ratingError.textContent = 'Rating cannot be less than 1.';
+    } else {
+      ratingError.classList.add('d-none');
+    }
+  });
 
 
   var images = [];
