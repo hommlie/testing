@@ -298,7 +298,6 @@ export default function ProductPage() {
                 console.log(response.data);
                 
                 setProdData(response.data.data);
-
                 setProdVendors(response.data.vendors);
                 setProdRelatedProds(response.data.related_products);
                 setProdReturnPolicy(response.data.returnpolicy);
