@@ -11,7 +11,15 @@ ProductImage.init({
     image: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+    alt_tag: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
+    image_title: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
 }, {
     sequelize,
     modelName: 'ProductImage',

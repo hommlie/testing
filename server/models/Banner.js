@@ -30,7 +30,15 @@ Banner.init({
     },
     link: {
         type: DataTypes.STRING
-    }
+    },
+    alt_tag: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
+    image_title: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
 }, {
     sequelize,
     modelName: 'Banner',

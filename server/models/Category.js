@@ -21,7 +21,15 @@ Category.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1 
-    }
+    },
+    alt_tag: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
+    image_title: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
 }, {
     sequelize,
     modelName: 'Category',
