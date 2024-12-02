@@ -78,12 +78,13 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
                                 <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-lg overflow-hidden">
                                     <img
                                         className="w-full h-full object-cover"
-                                        src={category.image_url}
-                                        alt={category.subcategory_name}
+                                        src={category?.image_url}
+                                        title={category?.image_title}
+                                        alt={category?.alt_tag}
                                     />
                                 </div>
                                 <h5 className="text-[10px] md:text-sm md:h-12 line-clamp-2 lg:text-base font-medium text-gray-700 text-center mt-2">
-                                    {category.subcategory_name}
+                                    {category?.subcategory_name}
                                 </h5>
                             </div>
                         </div>

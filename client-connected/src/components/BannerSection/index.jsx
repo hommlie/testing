@@ -39,7 +39,8 @@ const bannerDatalider = ({ bannerData }) => {
             <a href={banner.link}>
               <img
                 src={banner.image_url}
-                alt={`Banner ${index}`}
+                title={banner.image_title}
+                alt={banner.alt_tag}
                 className="w-full h-32 lg:h-[290px] object-contain rounded-lg border"
               />
             </a>

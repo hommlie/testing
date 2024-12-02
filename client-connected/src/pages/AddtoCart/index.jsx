@@ -300,7 +300,7 @@ export default function AddtoCart() {
                     </div>
                 ) : cart.length === 0 ? (
                     <div className="bg-white rounded-lg shadow p-4 md:p-6 flex flex-col items-center justify-center">
-                        <img src={emptyCart} className="w-64" alt="" />
+                        <img src={emptyCart} className="w-64" alt="Hommlie Cart" />
                         <button 
                             onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
                             className="px-6 py-1 bg-[#249370] text-white font-semibold hover:bg-green-700 transition duration-300"
@@ -314,7 +314,12 @@ export default function AddtoCart() {
                         <div key={index} className="bg-white rounded-lg shadow p-4 md:p-6 flex items-center">
                                 {/* {pd.image_url &&
                                     <div onClick={() => handleProductClick(pd)}>
-                                        <img src={pd.image_url} alt="" className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg mr-4" />
+                                        <img 
+                                            src={pd.image_url}
+                                            title={pd?.image_title}
+                                            alt={pd?.alt_tag}
+                                            className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg mr-4" 
+                                        />
                                     </div>
                                 } */}
                                 <div className="flex-grow">
@@ -564,7 +569,7 @@ export default function AddtoCart() {
                 </section>
 
                 <div className="flex flex-col items-center gap-4 mt-8">
-                    <img src={secureIcon} alt="Secure payment" className="w-12 h-12" />
+                    <img src={secureIcon} alt="Hommlie Secure payment" className="w-12 h-12" />
                     <p className="text-sm text-center text-gray-500">
                         Safe and Secure Payments. Easy Returns.<br />100% Authentic Products.
                     </p>

@@ -432,7 +432,8 @@ export default function ProductPage() {
             <img
                 className="w-full h-full object-contain"
                 src={item?.image_url}
-                alt="Product"
+                title={item?.image_title}
+                alt={item?.alt_tag}
                 onLoad={() => {console.log("loaded")}}
             />
         );
@@ -733,7 +734,7 @@ export default function ProductPage() {
                             <div className="flex flex-row items-center">
                                 <img 
                                     src={cartBag} 
-                                    alt="" 
+                                    alt="Hommlie Cart" 
                                     className="w-[34px] h-[34px] p-[7px] rounded-full" 
                                     style={{backgroundColor: "#EEF4FF"}} 
                                 />

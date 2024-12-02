@@ -105,7 +105,8 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                                         <img
                                             className="pd-imgs w-72 h-[100px] md:h-40 lg:h-56 object-cover rounded-lg"
                                             src={item.productimage?.image_url}
-                                            alt={item.product_name}
+                                            title={item.productimage?.image_title}
+                                            alt={item.productimage?.alt_tag}
                                         />
                                         {discountPercentage > 0 && (
                                             <span 

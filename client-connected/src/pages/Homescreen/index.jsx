@@ -285,8 +285,9 @@ const HomePageFirstSection = () => {
               <a href={slide?.link}>
                 <img
                   src={slide.image_url}
+                  title={slide.image_title}
+                  alt={slide.alt_tag}
                   className="w-full h-full object-contain"
-                  alt={`Slide ${index + 1}`}
                 />
               </a>
             </div>
@@ -327,7 +328,12 @@ const HomePageFirstSection = () => {
                   <div key={index} onClick={() => openCatModal([ct?.id, ct?.category_name])} className="p-2 cursor-pointer">
                     <div className="mx-auto  w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
                         <NavLink className="flex justify-end items-end h-full">
-                          <img className="w-full h-full object-cover" src={ct?.image_url} alt={ct?.category_name} />
+                          <img 
+                            className="w-full h-full object-cover" 
+                            src={ct?.image_url} 
+                            title={ct?.image_title}
+                            alt={ct?.alt_tag} 
+                          />
                         </NavLink>
                     </div>
                   </div>
@@ -468,7 +474,7 @@ const HomePageFirstSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-4">
           <NavLink to={`${config.VITE_BASE_URL}/my-bookings`} className="flex flex-col gap-2 items-center group">
             <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
-              <img src={discoverImg1} className="h-full w-full" alt="" />
+              <img src={discoverImg1} className="h-full w-full" alt="Discover our services" />
             </div>
             <span className="text-sm text-center text-[#035240] font-semibold transition-colors">My Orders</span>
           </NavLink>
@@ -480,19 +486,19 @@ const HomePageFirstSection = () => {
           </NavLink> */}
           <NavLink to={`${config.VITE_BASE_URL}/contact-us`} className="flex flex-col gap-2 items-center group">
             <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
-              <img src={discoverImg3} className="h-full w-full" alt="" />
+              <img src={discoverImg3} className="h-full w-full" alt="Discover" />
             </div>
             <span className="text-sm text-center text-[#035240] font-semibold transition-colors">Complaints</span>
           </NavLink>
           <button onClick={() => setIsInspectionModalOpen(true)} className="flex flex-col it gap-2 items-center group">
             <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
-              <img src={discoverImg4} className="h-full w-full" alt="" />
+              <img src={discoverImg4} className="h-full w-full" alt="Discover" />
             </div>
             <span className="text-sm text-center text-[#035240] font-semibold transition-colors">Book an Inspection</span>
           </button>
           <button onClick={() => openWhatsApp()} className="flex flex-col gap-2 items-center group">
             <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
-              <img src={discoverImg5} className="h-full w-full" alt="" />
+              <img src={discoverImg5} className="h-full w-full" alt="Discover" />
             </div>
             <span className="text-sm text-center text-[#035240] font-semibold transition-colors">Book on Whatsapp</span>
           </button>
@@ -509,7 +515,7 @@ const HomePageFirstSection = () => {
               <div key={index} className="relative rounded-lg overflow-hidden">
                 <img
                   src={item.thumbnail || DefaultThumbnail}
-                  alt="Video thumbnail"
+                  alt="Hommlie videos"
                   className="w-full h-20 lg:h-[250px] object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -580,7 +586,7 @@ const HomePageFirstSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
           {whyChoose?.map((item, index) => (
             <div key={index} className="flex flex-row items-center p-4 rounded-lg gap-4">
-              <img src={item.icon} className="w-10 h-10" alt="" />
+              <img src={item.icon} className="w-10 h-10" alt="Why choose hommlie?" />
               <p className="font-semibold" style={{color: "#035240"}}>{item.title}</p>
             </div>
           ))}
@@ -670,7 +676,7 @@ const HomePageFirstSection = () => {
         <div className="w-full h-full">
           <img 
             src={downloadApp} 
-            alt="Background" 
+            alt="Download hommlie app" 
             className="w-full h-auto object-cover"
           />
         </div>
@@ -710,7 +716,7 @@ const HomePageFirstSection = () => {
         <div className="w-full h-full mt-8 flex justify-center">
           <img 
             src={downloadAppMobile} 
-            alt="Background" 
+            alt="download hommlie app" 
             className="w-1/2 h-auto object-cover"
           />
         </div>
