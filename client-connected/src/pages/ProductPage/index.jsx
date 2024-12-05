@@ -652,9 +652,10 @@ export default function ProductPage() {
                                 />
                             )}
                             {activeTab === 2 && (
-                                <div className="p-4">
-                                    
-                                </div>
+                                <div 
+                                    className="space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
+                                    dangerouslySetInnerHTML={{ __html: prodData?.faqs }} 
+                                />
                             )}
                             {activeTab === 3 && (
                                 <div className="p-4 space-y-6">
@@ -927,18 +928,6 @@ export default function ProductPage() {
                         <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
                             <h3 className="text-xl font-semibold">Book an Inspection</h3>
                             <form onSubmit={handleSubmit} className="space-y-4">
-                                <div>
-                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                                    <input
-                                        type="text"
-                                        id="address"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleFormChange}
-                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                                        required
-                                    />
-                                </div>
                                     
                                 <div>
                                     <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
@@ -952,14 +941,14 @@ export default function ProductPage() {
                                         required
                                     />
                                 </div>
-                                    
+
                                 <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
                                     <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        value={formData.email}
+                                        type="text"
+                                        id="address"
+                                        name="address"
+                                        value={formData.address}
                                         onChange={handleFormChange}
                                         className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
                                         required
@@ -980,30 +969,50 @@ export default function ProductPage() {
                                         maxLength={10}
                                     />
                                 </div>
+
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleFormChange}
+                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                                        required
+                                    />
+                                </div>
+
+                                <button 
+                                    type="submit"
+                                    className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
+                                >
+                                    Schedule for Inspection
+                                </button>
                                 <div className="flex gap-2">
                                     <div>
-                                        <label htmlFor="width" className="block text-sm font-medium text-gray-700">Width (mm)</label>
+                                        <label htmlFor="width" className="block text-sm font-medium text-gray-700">Width (ft)</label>
                                         <select
                                             id="width"
                                             name="width"
                                             value={formData.width}
                                             onChange={handleFormChange}
                                             className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
-                                            required
+                                            // required
                                         >
                                             <option value="" hidden>Select Width</option>
-                                            {[...Array((3000 - 400) / 50 + 1)]?.map((_, index) => {
-                                                const value = 400 + index * 50;
+                                            {[...Array((120 - 1))]?.map((_, index) => {
+                                                const value = 1 + index;
                                                 return (
                                                     <option key={value} value={value}>
-                                                        {value} mm
+                                                        {value} sqft
                                                     </option>
                                                 );
                                             })}
                                         </select>
                                     </div>
                                     <div>
-                                        <label htmlFor="lengthMm" className="block text-sm font-medium text-gray-700">Length (mm)</label>
+                                        <label htmlFor="lengthMm" className="block text-sm font-medium text-gray-700">Length (ft)</label>
                                         <input
                                             type="number"
                                             id="length"
@@ -1013,7 +1022,7 @@ export default function ProductPage() {
                                             min="1"
                                             // max="3000"
                                             className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                                            required
+                                            // required
                                         />
                                     </div>
                                     
@@ -1024,20 +1033,14 @@ export default function ProductPage() {
                                             id="sqft"
                                             value={formData.sqft ? `${formData.sqft} sqft` : ''}
                                             className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                                            readOnly
+                                            // readOnly
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Total Amount:</label>
+                                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Approx. Amount:</label>
                                     <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">₹{formData.total_amount}</span>
                                 </div>
-                                <button 
-                                    type="submit"
-                                    className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
-                                >
-                                    Call Back
-                                </button>
                             </form>
                         </div>
                     }
