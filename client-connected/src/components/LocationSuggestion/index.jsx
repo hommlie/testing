@@ -8,8 +8,11 @@ const LocationSuggestion = ({ value, onChange }) => {
   const [locationError, setLocationError] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  
   const inputRef = useRef(null);
   const placesServiceRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   // Load Google Maps script
   useEffect(() => {
@@ -54,11 +57,32 @@ const LocationSuggestion = ({ value, onChange }) => {
         performSearch();
       } else if (!searchQuery) {
         setSearchResults([]);
+        setIsDropdownVisible(false);
       }
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
+
+  // Handle clicks outside the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        inputRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setIsDropdownVisible(false);
+      }
+    };
+
+    // Add click event listener to document
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Perform Google Places search
   const performSearch = () => {
@@ -72,6 +96,7 @@ const LocationSuggestion = ({ value, onChange }) => {
     autocompleteService.getPlacePredictions(request, (predictions, status) => {
       if (status !== window.google.maps.places.PlacesServiceStatus.OK || !predictions) {
         setSearchResults([]);
+        setIsDropdownVisible(false);
         return;
       }
 
@@ -83,6 +108,7 @@ const LocationSuggestion = ({ value, onChange }) => {
       }));
 
       setSearchResults(formattedResults);
+      setIsDropdownVisible(true);
     });
   };
 
@@ -91,6 +117,14 @@ const LocationSuggestion = ({ value, onChange }) => {
     setSearchQuery(result.fullText);
     onChange(result.fullText);
     setSearchResults([]);
+    setIsDropdownVisible(false);
+  };
+
+  // Handle input focus
+  const handleFocus = () => {
+    if (searchResults.length > 0) {
+      setIsDropdownVisible(true);
+    }
   };
 
   return (
@@ -103,11 +137,15 @@ const LocationSuggestion = ({ value, onChange }) => {
           setSearchQuery(e.target.value);
           onChange(e.target.value);
         }}
+        onFocus={handleFocus}
         className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
         placeholder="Search for your location"
       />
-      {searchQuery && (
-        <div className="absolute w-full bg-white shadow-lg rounded-md z-10 max-h-64 overflow-y-auto">
+      {isDropdownVisible && searchQuery && (
+        <div 
+          ref={dropdownRef}
+          className="absolute w-full bg-white shadow-lg rounded-md z-10 max-h-64 overflow-y-auto"
+        >
           {searchResults.length > 0 ? (
             searchResults.map((result) => (
               <button
