@@ -183,7 +183,11 @@ const InspectionModal = ({ isOpen, onClose }) => {
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                   Address
                 </label>
-                <LocationSuggestion value={formData.address} onChange={(value) => handleFormChange("address", value)} />
+                <LocationSuggestion 
+                  value={formData.address} 
+                  onChange={handleInputChange} 
+                  name="address" 
+                />
               </div>
               <div>
                 <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">

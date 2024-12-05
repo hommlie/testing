@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
 import config from "../../config/config";
 
-const LocationSuggestion = ({ value, onChange }) => {
+const LocationSuggestion = ({ 
+  value, 
+  onChange, 
+  name = "address"
+}) => {
   const [searchQuery, setSearchQuery] = useState(value || "");
   const [isLoading, setIsLoading] = useState(false);
   const [locationError, setLocationError] = useState(null);
@@ -114,10 +118,33 @@ const LocationSuggestion = ({ value, onChange }) => {
 
   // Handle location selection
   const handleLocationSelect = (result) => {
+    const selectEvent = {
+      target: {
+        name: name,
+        value: result.fullText
+      }
+    };
+
     setSearchQuery(result.fullText);
-    onChange(result.fullText);
+    onChange(selectEvent);  // Pass synthetic event to match handleFormChange
     setSearchResults([]);
     setIsDropdownVisible(false);
+  };
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    
+    // Create a synthetic event to match handleFormChange
+    const syntheticEvent = {
+      target: {
+        name: name,
+        value: inputValue
+      }
+    };
+
+    setSearchQuery(inputValue);
+    onChange(syntheticEvent);
   };
 
   // Handle input focus
@@ -132,11 +159,9 @@ const LocationSuggestion = ({ value, onChange }) => {
       <input
         ref={inputRef}
         type="text"
+        name={name}
         value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-          onChange(e.target.value);
-        }}
+        onChange={handleInputChange}
         onFocus={handleFocus}
         className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
         placeholder="Search for your location"

@@ -12,6 +12,8 @@ import { useCont } from "../../context/MyContext";
 import axios from "axios";
 import Cookies from "js-cookie";
 import config from "../../config/config";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { jwtDecode } from "jwt-decode";
 import { useToast } from "../../context/ToastProvider";
 import Loading from "../../components/Loading";
@@ -80,11 +82,15 @@ export default function ProductPage() {
         fullName: '',
         email: '',
         mobile: '',
+        date: new Date(),
+        time: "",
         width: null,
         length: null,
         sqft: null,
         total_amount: 0
     });
+
+    const timeSlots = ["9 to 11 AM", "11 to 1 PM", "1 to 3 PM", "3 to 5 PM", "5 to 7 PM"];
     
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
@@ -242,10 +248,17 @@ export default function ProductPage() {
     }, [formData.width, formData.length, totalAmount]);
 
     const handleFormChange = (e) => {        
-        const { name, value } = e.target;
+        const { name, value } = e.target;        
         setState(prev => ({
           ...prev,
           [name]: value
+        }));
+    };
+
+    const handleDateChange = (date) => {
+        setState((prevData) => ({
+          ...prevData,
+          date: date,
         }));
     };
 
@@ -945,7 +958,11 @@ export default function ProductPage() {
 
                                 <div>
                                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                                    <LocationSuggestion value={formData.address} onChange={(value) => handleFormChange("address", value)} />
+                                        <LocationSuggestion 
+                                            value={formData.address} 
+                                            onChange={handleFormChange} 
+                                            name="address" 
+                                        />                                
                                 </div>
                                     
                                 <div>
@@ -974,6 +991,40 @@ export default function ProductPage() {
                                         className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
                                         required
                                     />
+                                </div>
+
+                                <div className="flex space-x-4">
+                                    <div className="w-1/2">
+                                    <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                                        Date
+                                    </label>
+                                    <DatePicker
+                                        selected={formData.date}
+                                        onChange={handleDateChange}
+                                        className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        required
+                                    />
+                                    </div>
+                                    <div className="w-1/2">
+                                    <label htmlFor="time" className="block text-sm font-medium text-gray-700">
+                                        Time
+                                    </label>
+                                    <select
+                                        id="time"
+                                        name="time"
+                                        value={formData.time}
+                                        onChange={handleFormChange}
+                                        className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        required
+                                    >
+                                        <option value="">Select a time slot</option>
+                                        {timeSlots.map((slot, index) => (
+                                        <option key={index} value={slot}>
+                                            {slot}
+                                        </option>
+                                        ))}
+                                    </select>
+                                    </div>
                                 </div>
 
                                 <button 
