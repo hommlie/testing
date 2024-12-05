@@ -18,6 +18,7 @@ import Loading from "../../components/Loading";
 import ProdSection from "../../components/ProdSection";
 import CouponModal from "../../components/CouponModal";
 import InspectionModal from "../../components/InspectionModal";
+import LocationSuggestion from "../../components/LocationSuggestion";
 import { BiSolidOffer } from "react-icons/bi";
 
 export default function ProductPage() {
@@ -944,15 +945,7 @@ export default function ProductPage() {
 
                                 <div>
                                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                                    <input
-                                        type="text"
-                                        id="address"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleFormChange}
-                                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                                        required
-                                    />
+                                    <LocationSuggestion value={formData.address} onChange={(value) => handleFormChange("address", value)} />
                                 </div>
                                     
                                 <div>
