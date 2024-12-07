@@ -73,11 +73,6 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
 
     if (!isOpen) return null;
 
-    const handleProductClick = (item) => {
-        const slug = item.product_name.toLowerCase().replace(/ /g, '-');
-        navigate(`${config.VITE_BASE_URL}/product/${item.id}/${slug}`);
-    };
-
     return (
         <>
         {isLoading ? (
@@ -140,7 +135,7 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
                                             />
 
                                             <button
-                                                onClick={() => handleProductClick(item)}
+                                                onClick={() => navigate(`${config.VITE_BASE_URL}/product/${item.id}/${item.slug}`)}
                                                 className="w-full py-2 text-center text-white bg-[#10847E] hover:shadow-lg rounded-md transition-colors"
                                             >
                                                 View Details

@@ -43,6 +43,7 @@ exports.brandsProducts = async(req, res) => {
           'discounted_price',
           'is_variation',
           'sku',
+          'slug',
         //   [sequelize.literal('(CASE WHEN wishlists.product_id IS NULL THEN 0 ELSE 1 END)'), 'is_wishlist']
         ],
         include: [

@@ -15,6 +15,7 @@ exports.homeFeeds = async (req, res) => {
             'discounted_price',
             'is_variation',
             'sku',
+            'slug',
         ];
 
         const commonIncludes = [

@@ -68,6 +68,8 @@ exports.getSubcategory = async (req, res) => {
           'discounted_price',
           'is_variation',
           'sku',
+          'slug',
+          'slug',
         ],
         include: [
           {

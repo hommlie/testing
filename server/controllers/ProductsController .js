@@ -16,6 +16,7 @@ exports.viewAllListing = async(req, res) => {
           'discounted_price',
           'is_variation',
           'sku',
+          'slug',
       ];
 
       const commonIncludes = [
@@ -276,7 +277,7 @@ exports.productDetails = async (req, res) => {
       where: { id: product_id, status: 1 },
       attributes: [
         'id', 'product_name', 'product_price', 'cat_id', 'discounted_price', 'description', 'tags', 'product_qty', 'is_variation', 'vendor_id', 'sku',
-        'free_shipping', 'shipping_cost', 'tax_type', 'tax', 'est_shipping_days', 'is_return', 'return_days', 'faqs'
+        'free_shipping', 'shipping_cost', 'tax_type', 'tax', 'est_shipping_days', 'is_return', 'return_days', 'faqs', 'slug',
       ],
       include: [
         {
@@ -524,7 +525,8 @@ exports.products = async (req, res) => {
               'product_price',
               'discounted_price',
               'is_variation',
-              'sku'
+              'sku',
+              'slug',
           ],
           include: [
               {
@@ -600,7 +602,8 @@ exports.searchProducts = async(req, res) => {
           'product_price',
           'discounted_price',
           'is_variation',
-          'sku'
+          'sku',
+          'slug',
         ],
         include: [
           {
