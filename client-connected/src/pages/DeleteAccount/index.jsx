@@ -20,12 +20,7 @@ const DeleteAccountPage = () => {
           </div>
 
           <div>
-            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 3 - Goto settings</h2>
-            <p className="text-gray-600">Navigate to the settings section.</p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 4 - Click on Delete account</h2>
+            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 3 - Click on Delete account</h2>
             <p className="text-gray-600">Click on the "Delete account" option.</p>
           </div>
         </div>
