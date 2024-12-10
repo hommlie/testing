@@ -10,12 +10,12 @@ const DeleteAccountPage = () => {
 
         <div className="space-y-4">
           <div>
-            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 1 - Open Rider or Driver App</h2>
-            <p className="text-gray-600">Open the Rider or Driver app.</p>
+            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 1 - Open User app or Technician App</h2>
+            <p className="text-gray-600">Open User app or Technician App.</p>
           </div>
 
           <div>
-            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 2 - Goto home page click on top left menu</h2>
+            <h2 className="text-xl font-medium text-gray-900 mb-2">Step 2 - Goto home page and click on menu</h2>
             <p className="text-gray-600">Go to the home page and click on the top left menu.</p>
           </div>
 
