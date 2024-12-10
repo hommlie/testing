@@ -19,6 +19,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import CareerPage from './pages/Career';
 import PartnerWithUs from "./pages/PartnerUs";
+import DeleteAccountPage from "./pages/DeleteAccount";
 import { useToast } from "./context/ToastProvider";
 
 const ProjectRoutes = () => {
@@ -88,6 +89,7 @@ const ProjectRoutes = () => {
     { path: `${config.VITE_BASE_URL}/careers`, element: <CareerPage /> },
     { path: `${config.VITE_BASE_URL}/partner-us`, element: <PartnerWithUs /> },
     { path: `${config.VITE_BASE_URL}/terms-conditions`, element: <TermsConditions /> },
+    { path: `${config.VITE_BASE_URL}/delete-account`, element: <DeleteAccountPage /> },
   ]);
 
   return element;
