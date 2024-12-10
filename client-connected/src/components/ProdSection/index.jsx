@@ -53,11 +53,6 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
         return Math.round(percentage);
     };
 
-    const handleProductClick = (item) => {
-        const slug = item.product_name.toLowerCase().replace(/ /g, '-');
-        navigate(`${config.VITE_BASE_URL}/product/${item.id}/${slug}`);
-    };
-
     const startDragging = (e) => {
         setIsDragging(true);
         setStartX(e.pageX - sliderRef.current.offsetLeft);
@@ -100,7 +95,7 @@ export default function ProdSection({ openExploreModal, title, items, btnHidden,
                         const discountPercentage = calculateDiscountPercentage(item.product_price, item.discounted_price);
                         return (
                             <div key={index} className="p-2 lg:px-4 w-28 md:w-40 lg:w-72 flex-shrink-0 scroll-snap-align-start">
-                                <div onClick={() => handleProductClick(item)} className="block cursor-pointer">
+                                <div onClick={() => navigate(`${config.VITE_BASE_URL}/product/${item.id}/${item.slug}`)} className="block cursor-pointer">
                                     <div className="relative">
                                         <img
                                             className="pd-imgs w-72 h-[100px] md:h-40 lg:h-56 object-cover rounded-lg"

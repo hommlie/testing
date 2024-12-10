@@ -251,12 +251,6 @@ export default function Header({ logo, logoAlt }) {
 
   const location = useLocation();
 
-  const handleProductClick = (item) => {            
-    const slug = item?.product_name?.toLowerCase()?.replace(/ /g, '-');
-    navigate(`${config.VITE_BASE_URL}/product/${item.id}/${slug}`);
-    setIsSearchOpen(false);
-  };
-
   return (
     <GoogleMapLoader>
       <header ref={headerRef} className="sticky bg-[#c5dbca] top-0 z-20 shadow-md">
@@ -445,7 +439,7 @@ export default function Header({ logo, logoAlt }) {
               {isSearchOpen && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg z-20 max-h-96 overflow-y-auto lg:grid lg:grid-cols-4 py-4">
                   {searchResults.map(product => (
-                    <button key={product.id} onClick={() => handleProductClick(product)} className="block px-4 py-2 hover:bg-gray-100">
+                    <button key={product.id} onClick={() => navigate(`${config.VITE_BASE_URL}/product/${product.id}/${product.slug}`)} className="block px-4 py-2 hover:bg-gray-100">
                       <div className="flex items-center space-x-2">
                         <img src={product.productimage.image_url} alt={product.product_name} className="w-24 h-24 object-cover rounded" />
                         <div className="space-y-2">

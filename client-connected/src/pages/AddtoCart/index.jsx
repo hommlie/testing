@@ -313,7 +313,7 @@ export default function AddtoCart() {
                     cart?.map((pd, index) => (
                         <div key={index} className="bg-white rounded-lg shadow p-4 md:p-6 flex items-center">
                                 {/* {pd.image_url &&
-                                    <div onClick={() => handleProductClick(pd)}>
+                                    <div onClick={() => navigate(`${config.VITE_BASE_URL}/product/${pd.id}/${pd.slug}`)}>
                                         <img 
                                             src={pd.image_url}
                                             title={pd?.image_title}

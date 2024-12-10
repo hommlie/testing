@@ -12,11 +12,6 @@ const ExploreModal = ({ isOpen, onClose, items, title }) => {
 
     if (!isOpen) return null;
 
-    const handleProductClick = (item) => {
-        const slug = item.product_name.toLowerCase().replace(/ /g, '-');
-        navigate(`${config.VITE_BASE_URL}/product/${item.id}/${slug}`);
-    };
-
     return (
         <div className="fixed inset-0 z-20 flex items-center justify-center">
             <div className="fixed inset-0 opacity-60" style={{ backgroundColor: "black" }} onClick={() => {onClose();}}></div>
@@ -34,7 +29,7 @@ const ExploreModal = ({ isOpen, onClose, items, title }) => {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     {items?.map((item, index) => (
-                        <div onClick={() => handleProductClick(item)} key={index} className="max-w-xs h-full mx-auto flex flex-col gap-2 p-4 justify-between hover:shadow-xl rounded-lg">
+                        <div onClick={() => navigate(`${config.VITE_BASE_URL}/product/${item.id}/${item.slug}`)} key={index} className="max-w-xs h-full mx-auto flex flex-col gap-2 p-4 justify-between hover:shadow-xl rounded-lg">
                             <div className="">
                                 <img className="w-60 h-[100px] sm:h-56 object-cover" src={item?.productimage?.image_url} alt="product" />
                             </div>
