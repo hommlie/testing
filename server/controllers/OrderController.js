@@ -35,8 +35,11 @@ exports.initiatePayment = async (req, res) => {
         amount -= discountAmount;
       }
     }
+    console.log(amount);
+    
+    amount = Math.round(amount * 100);
 
-    // amount = Math.round(amount * 100);
+    console.log(amount);
 
     const options = {
       amount: amount,
