@@ -4,6 +4,7 @@ const Razorpay = require("razorpay");
 const { Order, Cart, Ratting, Payment, User, Notification, Transaction, Settings, Variation, Coupons, Attribute } = require('../models'); 
 // const stripe = require('stripe')('your_stripe_secret_key');
 const moment = require('moment');
+const crypto = require("crypto");
 const apiUrl = process.env.apiUrl;
 const { sendEmail } = require('../middleware/mailMiddleware');
 
@@ -62,12 +63,10 @@ exports.verifyPayment = async (req, res) => {
       const sign = razorpay_order_id + "|" + razorpay_payment_id;
       const expectedSign = crypto
           .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-          .update(sign.toString())
+          .update(sign)
           .digest("hex");
 
       if (razorpay_signature === expectedSign) {
-          // Payment is successful
-          // Update database to mark the order as paid
           return res.status(200).json({ status: 1, message: "Payment verified successfully" });
       } else {
           return res.status(400).json({ status: 0, message: "Invalid signature sent!" });

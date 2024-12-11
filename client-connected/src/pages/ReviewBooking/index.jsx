@@ -94,12 +94,13 @@ export default function ReviewBooking() {
         const jwtToken = Cookies.get("HommlieUserjwtToken");
         if (jwtToken) {
             const user = jwtDecode(jwtToken);
-            const payment_id = Math.random().toString(36).substring(10);
+            const payment_id = Math.random().toString(36).substring(2, 12);
 
             if (paymentType?.payment_name === "Online") {
                 try {
                     const orderResponse = await axios.post(`${config.API_URL}/api/initiatePayment`, {
-                        amount: totalAmount,
+                        // amount: totalAmount,
+                        amount: 5,
                         currency: "INR",
                         user_id: user.id,
                         coupon_id: selectedCoupon ? selectedCoupon.id : null,
@@ -107,7 +108,7 @@ export default function ReviewBooking() {
                         headers: {
                             Authorization: `Bearer ${jwtToken}`,
                         },
-                    });
+                    });                    
 
                     const options = {
                         key: config.RAZORPAY_KEY_ID,
@@ -117,6 +118,7 @@ export default function ReviewBooking() {
                         description: "Order Payment",
                         order_id: orderResponse.data.data.id,
                         handler: async function (response) {
+                            console.log("Payment Response:", response);
                             try {
                                 const verifyResponse = await axios.post(`${config.API_URL}/api/verifyPayment`, {
                                     razorpay_order_id: response.razorpay_order_id,
@@ -185,7 +187,6 @@ export default function ReviewBooking() {
                 desired_time: selectedDayTime?.time,
             });
             
-            
             const response = await axios.post(`${config.API_URL}/api/order`, 
                 {
                     user_id: user.id, 
@@ -212,6 +213,8 @@ export default function ReviewBooking() {
                     },
                 }
             );
+            console.log(response);
+            
 
             if (response.data.status === 1) {
                 console.log(response.data.message);

@@ -5,6 +5,8 @@ const config = {
     PLACE_ID: "ChIJgxuWZf0_rjsRbJaur3y9Lxo",
     VITE_BASE_URL: "",
     RAZORPAY_KEY_ID: "rzp_live_ziQnMov0ucEqGL",
+    RAZORPAY_TEST_KEY_ID: 'rzp_test_0vcGsGh8Ebtgd4',
+    RAZORPAY_TEST_KEY_SECRET: 'aXnetTExGvqoFQaQTn6hVugq',
     RAZORPAY_KEY_SECRET: "CAqffXj972VdF1bpVVLi577z"
 };
 
