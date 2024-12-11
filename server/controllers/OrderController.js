@@ -31,8 +31,6 @@ exports.initiatePayment = async (req, res) => {
 
         // Ensure discount doesn't exceed the total amount
         discountAmount = Math.min(discountAmount, amount);
-        console.log("discountAmount", discountAmount);
-        console.log("amount", amount);
 
         amount -= discountAmount;
       }
