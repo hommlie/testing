@@ -228,7 +228,7 @@ export default function AddtoCart() {
 
     const calculateCouponDiscount = () => {
         if (selectedCoupon) {
-            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const subtotal = cart.reduce((acc, item) => acc + (Number(item.price) + Number(item.tax) * item.qty), 0);
             if (selectedCoupon.amount) {
                 setCouponDiscount(Number(selectedCoupon.amount));
             } else if (selectedCoupon.percentage) {
