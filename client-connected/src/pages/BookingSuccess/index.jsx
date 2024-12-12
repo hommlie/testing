@@ -224,7 +224,7 @@ export default function BookingSuccess() {
                             <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
                             {orderData.map((item, index) => (
                                 <div key={index} className="flex justify-center flex-col md:flex-row gap-10 my-2">
-                                    <div className="flex items-center" onClick={() => navigate(`${config.VITE_BASE_URL}/product/${item.id}/${item.slug}`)}>
+                                    <div className="flex items-center" onClick={() => handleProductClick(item)}>
                                         <img src={item.image_url} alt="" className="w-40 h-40 object-cover" />
                                     </div>
                                     <div className="w-3/5 space-y-4" style={{color: "#605A65"}}>
