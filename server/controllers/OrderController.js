@@ -138,7 +138,8 @@ exports.order = async (req, res) => {
         where: { id: attribute }
       });
 
-      if (variationDetails && attributeDetails.attribute.includes('AMC')) {          
+      // if (variationDetails && attributeDetails.attribute.includes('AMC')) {          
+      if (variationDetails && variationDetails.variation_times && variationDetails.variation_times > 1) {          
         
         const { variation_interval, variation_times } = variationDetails;
         const pricePerOrder = price / variation_times;
