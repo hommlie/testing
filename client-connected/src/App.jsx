@@ -8,6 +8,7 @@ import fetchSettings from "./config/settings";
 import { ContProvider, useCont } from "./context/MyContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastProvider";
+import 'tailwindcss/tailwind.css';
 import "./App.css";
 
 function App() {

@@ -197,6 +197,7 @@ exports.order = async (req, res) => {
           variation,
           tax: tax * qty,
           coupon_name,
+          coupon_id,
           shipping_cost,
           order_total: grand_total,
           order_notes,
@@ -217,7 +218,6 @@ exports.order = async (req, res) => {
 
         orders.push(order);
       }
-    
     }
 
     const order_id = orders[0].id;
@@ -280,6 +280,7 @@ exports.orderhistory = async (req, res) => {
         'shipping_cost',
         'order_total',
         'coupon_name',
+        'coupon_id',
         'full_name',
         'email',
         'mobile',

@@ -21,6 +21,7 @@ import CareerPage from './pages/Career';
 import PartnerWithUs from "./pages/PartnerUs";
 import DeleteAccountPage from "./pages/DeleteAccount";
 import { useToast } from "./context/ToastProvider";
+import InnerSubCategoryPage from "./pages/InnerSubCategoryPage";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -57,6 +58,8 @@ const ProjectRoutes = () => {
     // { path: `${config.VITE_BASE_URL}/product/:id`, element: <ProductPage /> },
     { path: `${config.VITE_BASE_URL}/product/:id/:slug`, element: <ProductPage /> },
     { path: `${config.VITE_BASE_URL}/product/:id/:slug/tag/:tag`, element: <ProductPage /> },
+
+    { path: `${config.VITE_BASE_URL}/innersubcategory/:id`, element: <InnerSubCategoryPage /> },
 
     { 
       path: `${config.VITE_BASE_URL}/add-to-cart`, 

@@ -8,6 +8,7 @@ const UserController = require('../controllers/UserController');
 const ProductsController = require('../controllers/ProductsController ');
 const HomeController = require('../controllers/HomeController');
 const CategoryController = require('../controllers/CategoryController');
+const InnerSubCategoryController = require('../controllers/InnerSubCategoryController');
 const BannerController = require('../controllers/BannerController');
 const WishlistController = require('../controllers/WishlistController');
 const RattingController = require('../controllers/RattingController');
@@ -67,6 +68,9 @@ app.get('/google-reviews', RattingController.getGoogleReviews);
 //Categorymanagement
 app.get("/category", CategoryController.getCategory);
 app.post("/subcategory", CategoryController.getSubcategory);
+
+//innersubcategory
+app.post("/innersubcategory", InnerSubCategoryController.getInnerSubcategory);
 
 //Bannermanagement
 app.get("/banner", BannerController.getBanner);

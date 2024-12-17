@@ -923,7 +923,7 @@ export default function ProductPage() {
                                 <div className="flex flex-row justify-between">
                                     <p className="text-base font-normal text-xl font-semibold">Total Amount</p>
                                     <div className="text-right">
-                                        <p className="text-base font-semibold">₹{(totalAmount + taxAmount - couponDiscount).toFixed(2)}</p>
+                                        <p className="text-base font-semibold">₹{(totalAmount + taxAmount - couponDiscount)?.toFixed(2)}</p>
                                     </div>
                                 </div>
                                 <button 

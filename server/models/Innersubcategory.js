@@ -21,6 +21,10 @@ Innersubcategory.init({
         allowNull: false,
         defaultValue: 1
     },
+    banner: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     slug: {
         type: DataTypes.STRING,
         allowNull: false

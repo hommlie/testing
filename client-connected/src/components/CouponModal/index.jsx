@@ -38,7 +38,7 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
 
     useEffect(() => {
         getCoupons();
-        if (coupons?.length) {
+        if (coupons?.length) {            
             setFilteredCoupons(coupons);
         } else {
             setFilteredCoupons([]);
