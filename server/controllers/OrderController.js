@@ -173,7 +173,7 @@ exports.order = async (req, res) => {
             pincode,
             latitude,
             longitude,
-            discount_amount: discountAmount,
+            discount_amount: discountAmount / variation_times,
             order_status: 1,
             desired_time: formattedTime,
             desired_date: orderDate,

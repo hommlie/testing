@@ -166,50 +166,72 @@ export default function ReviewBooking() {
     const placeOrder = async (user, payment_id, razorpay_payment_id = null) => {
         try {
             
-            const response = await axios.post(`${config.API_URL}/api/order`, 
-                {
-                    user_id: user.id, 
-                    payment_type: paymentType?.id, 
-                    payment_id: razorpay_payment_id || payment_id, 
-                    grand_total: totalAmount - couponDiscount,
-                    discount_amount: couponDiscount,
-                    coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
-                    coupon_id: selectedCoupon ? selectedCoupon.id : null, 
-                    order_notes: null, 
-                    full_name: selectedAddrs?.name, 
-                    email: selectedAddrs?.email, 
-                    mobile: selectedAddrs?.mobile, 
-                    landmark: selectedAddrs?.landmark, 
-                    street_address: selectedAddrs?.address, 
-                    pincode: selectedAddrs.pincode,
-                    latitude: selectedAddrs.latitude,
-                    longitude: selectedAddrs.longitude,
-                    desired_date: selectedDayTime?.date?.formattedDate,
-                    desired_time: selectedDayTime?.time,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}`,
-                    },
-                }
-            );            
+            console.log({
+                user_id: user.id, 
+                payment_type: paymentType?.id, 
+                payment_id: razorpay_payment_id || payment_id, 
+                grand_total: totalAmount - couponDiscount,
+                discount_amount: couponDiscount,
+                coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
+                coupon_id: selectedCoupon ? selectedCoupon.id : null, 
+                order_notes: null, 
+                full_name: selectedAddrs?.name, 
+                email: selectedAddrs?.email, 
+                mobile: selectedAddrs?.mobile, 
+                landmark: selectedAddrs?.landmark, 
+                street_address: selectedAddrs?.address, 
+                pincode: selectedAddrs.pincode,
+                latitude: selectedAddrs.latitude,
+                longitude: selectedAddrs.longitude,
+                desired_date: selectedDayTime?.date?.formattedDate,
+                desired_time: selectedDayTime?.time,
+            });
+            
 
-            if (response.data.status === 1) {
-                console.log(response.data.message);
-                successNotify("Successfully placed your order");
-                localStorage.removeItem("cart");
-                setCart([]);
-                localStorage.removeItem("HommlieselectedAddrs");
-                localStorage.removeItem("HommlieselectedDayTime");
-                localStorage.removeItem("HommlieselectedCoupon");
-                localStorage.removeItem("HommliepaymentType");
-                getBookings();
-                getCart();
-                navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
-            } else {
-                errorNotify(response.data.message);
-                console.log("error placing order:",response.data);
-            }
+            // const response = await axios.post(`${config.API_URL}/api/order`, 
+            //     {
+            //         user_id: user.id, 
+            //         payment_type: paymentType?.id, 
+            //         payment_id: razorpay_payment_id || payment_id, 
+            //         grand_total: totalAmount - couponDiscount,
+            //         discount_amount: couponDiscount,
+            //         coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
+            //         coupon_id: selectedCoupon ? selectedCoupon.id : null, 
+            //         order_notes: null, 
+            //         full_name: selectedAddrs?.name, 
+            //         email: selectedAddrs?.email, 
+            //         mobile: selectedAddrs?.mobile, 
+            //         landmark: selectedAddrs?.landmark, 
+            //         street_address: selectedAddrs?.address, 
+            //         pincode: selectedAddrs.pincode,
+            //         latitude: selectedAddrs.latitude,
+            //         longitude: selectedAddrs.longitude,
+            //         desired_date: selectedDayTime?.date?.formattedDate,
+            //         desired_time: selectedDayTime?.time,
+            //     },
+            //     {
+            //         headers: {
+            //             Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}`,
+            //         },
+            //     }
+            // );            
+
+            // if (response.data.status === 1) {
+            //     console.log(response.data.message);
+            //     successNotify("Successfully placed your order");
+            //     localStorage.removeItem("cart");
+            //     setCart([]);
+            //     localStorage.removeItem("HommlieselectedAddrs");
+            //     localStorage.removeItem("HommlieselectedDayTime");
+            //     localStorage.removeItem("HommlieselectedCoupon");
+            //     localStorage.removeItem("HommliepaymentType");
+            //     getBookings();
+            //     getCart();
+            //     navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
+            // } else {
+            //     errorNotify(response.data.message);
+            //     console.log("error placing order:",response.data);
+            // }
         } catch (error) {
             console.log("error placing order:", error);
             errorNotify(error.response?.data?.message || "Error placing order. Please try again.");
@@ -341,7 +363,7 @@ export default function ReviewBooking() {
                     <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
                     <div className="text-xl flex flex-row justify-between mt-2" style={{color: "#606571"}}>
                         <p>Total</p>
-                        <p>₹<span>{totalAmount - couponDiscount}</span></p>
+                        <p>₹<span>{(totalAmount - couponDiscount)?.toFixed(2)}</span></p>
                     </div>
                 </div>
 
