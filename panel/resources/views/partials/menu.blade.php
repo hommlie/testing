@@ -107,34 +107,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            {{-- VIEW RESIDENTIAL ORDERS --}}
-                            <!-- @can('order_access')
-                                    <li class="nav-item">
-                                        <a href="" class="nav-link   ? 'active' : '' }}">
-                                            <i class="fa fa-check-circle mr-2">
-
-                                            </i>
-                                            <p>
-                                                <span>View Residential Orders</span>
-                                            </p>
-                                        </a>
-                                    </li>
-                                @endcan -->
-
-                            {{-- ADD RESIDENTIAL ORDERS --}}
-                            <!-- @can('order_add_access')
-                                <li class="nav-item">
-                                    <a href="{{ route("admin.orders.add-residential") }}"
-                                        class="nav-link {{ request()->is('admin/orders/add-residential') ? 'active' : '' }}">
-                                        <i class="fa fa-plus-circle mr-2">
-
-                                        </i>
-                                        <p>
-                                            <span>Add Residential Orders</span>
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan -->
+                            
                         </ul>
                     </li>
                 @endcan
@@ -1099,6 +1072,19 @@
                                     </a>
                                 </li>
                             @endcan
+                            @can('question_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.complaint.add") }}"
+                                        class="nav-link {{ request()->is('admin/complaint/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>Add Complaint</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
 
                         </ul>
                     </li>
@@ -1121,11 +1107,24 @@
                                 <li class="nav-item">
                                     <a href="{{ route("admin.inspections") }}"
                                         class="nav-link {{ request()->is('admin/inspections') ? '' : '' }}">
-                                        <i class="fa fa-check-circle mr-2">
+                                        <i class="fa fa-plus-circle mr-2">
 
                                         </i>
                                         <p>
                                             <span>View Inspections</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('question_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.inspections.add") }}"
+                                        class="nav-link {{ request()->is('admin/inspections/add') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>Add Inspections</span>
                                         </p>
                                     </a>
                                 </li>

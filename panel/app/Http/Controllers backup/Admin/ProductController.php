@@ -26,22 +26,22 @@ class ProductController extends Controller
     {
         abort_unless(\Gate::allows('product_access'), 403);
 
-        $data=Products::with(['category','variation'])->with('subcategory')->orderBy('id', 'DESC')->get();
-        return view('admin.products.index',compact('data'));
+        $data = Products::with(['category', 'variation'])->with('subcategory')->orderBy('id', 'DESC')->get();
+        return view('admin.products.index', compact('data'));
     }
 
     public function add()
     {
-    	$data=Category::select('id','category_name')->where('status','1')->get();
-        $attribute=Attribute::select('id','attribute')->where('status','1')->get();
-        $brands=Brand::select('id','brand_name')->where('status','1')->get();
-        return view('admin.products.add',compact('data','attribute','brands'));
+        $data = Category::select('id', 'category_name')->where('status', '1')->get();
+        $attribute = Attribute::select('id', 'attribute')->where('status', '1')->get();
+        $brands = Brand::select('id', 'brand_name')->where('status', '1')->get();
+        return view('admin.products.add', compact('data', 'attribute', 'brands'));
     }
 
     public function list()
     {
-        $data = Products::with('category')->with('subcategory')->with('innersubcategory')->where('vendor_id',Auth::user()->id)->get();
-        return view('admin.products.productstable',compact('data'));
+        $data = Products::with('category')->with('subcategory')->with('innersubcategory')->where('vendor_id', Auth::user()->id)->get();
+        return view('admin.products.productstable', compact('data'));
     }
 
     /**
@@ -51,8 +51,8 @@ class ProductController extends Controller
      */
     public function search(Request $request)
     {
-        $data=Products::where('product_name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'DESC')->paginate(10);
-        return view('admin.products.index',compact('data'));
+        $data = Products::where('product_name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.products.index', compact('data'));
 
     }
 
@@ -66,7 +66,7 @@ class ProductController extends Controller
     {
         // dd($request);
         if ($request->is_variation == "on") {
-            $this->validate($request,[
+            $this->validate($request, [
                 'available_stock' => 'nullable',
                 'sku' => 'nullable',
                 'product_name' => 'nullable',
@@ -83,7 +83,7 @@ class ProductController extends Controller
             $discounted_price = $request->discounted_variation_price[0];
 
         } else {
-            $this->validate($request,[
+            $this->validate($request, [
                 'available_stock' => 'nullable',
                 'sku' => 'nullable',
                 'cat_id' => 'nullable',
@@ -99,7 +99,7 @@ class ProductController extends Controller
 
             $product_price = $request->product_price;
             $discounted_price = $request->discounted_price;
-            
+
         }
 
         if ($request->free_shipping == "on") {
@@ -115,7 +115,7 @@ class ProductController extends Controller
         }
 
         if ($request->flat_rate == "on") {
-            $this->validate($request,[
+            $this->validate($request, [
                 'shipping_cost' => 'nullable'
             ]);
             $shipping_cost = $request->shipping_cost;
@@ -126,7 +126,7 @@ class ProductController extends Controller
         }
 
         if ($request->is_return == "on") {
-            $this->validate($request,[
+            $this->validate($request, [
                 'return_days' => 'nullable'
             ]);
             $return_days = $request->return_days;
@@ -155,39 +155,41 @@ class ProductController extends Controller
         // }
 
 
-        
+
 
         // $tags = "na";
 
-        $dataval=array(
-            'vendor_id'=>Auth::user()->id,
-            'cat_id'=>$request->cat_id,
-            'subcat_id'=>$request->subcat_id,
+        $dataval = array(
+            'vendor_id' => Auth::user()->id,
+            'cat_id' => $request->cat_id,
+            'subcat_id' => $request->subcat_id,
             // 'innersubcat_id'=>$request->innersubcat_id,
-            'product_name'=>$request->product_name,
-            'brand'=>$request->brand,
-            'description'=>$request->description,
-            'product_price'=>$product_price,
-            'discounted_price'=>$discounted_price,            
+            'product_name' => $request->product_name,
+            'brand' => $request->brand,
+            'description' => $request->description,
+            'product_price' => $product_price,
+            'discounted_price' => $discounted_price,
             'slug' => \Str::slug($request->product_name),
-            'is_variation'=>$is_variation,
+            'is_variation' => $is_variation,
             // 'attribute'=>$request->attribute,
-            'product_qty'=>$product_qty,
-            'is_hot'=>$is_hot,
-            'free_shipping'=>$free_shipping,
-            'flat_rate'=>$flat_rate,
-            'shipping_cost'=>$shipping_cost,
-            'is_return'=>$is_return,
-            'return_days'=>$return_days,
-            'is_featured'=>$is_featured,
-            'available_stock'=>$request->available_stock,
-            'sku'=>$request->sku,
-            'est_shipping_days'=>$request->est_shipping_days,
-            'tax'=>$request->tax,
-            'tax_type'=>$request->tax_type,
-            'tags'=>$request->tags,
-            'video'=>'NA',
-            'video_thumbnail'=>'NA',
+            'product_qty' => $product_qty,
+            'is_hot' => $is_hot,
+            'free_shipping' => $free_shipping,
+            'flat_rate' => $flat_rate,
+            'shipping_cost' => $shipping_cost,
+            'is_return' => $is_return,
+            'return_days' => $return_days,
+            'is_featured' => $is_featured,
+            'available_stock' => $request->available_stock,
+            'sku' => $request->sku,
+            'est_shipping_days' => $request->est_shipping_days,
+            'tax' => $request->tax,
+            'tax_type' => $request->tax_type,
+            'tags' => $request->tags,
+            'faqs' => $request->faqs,
+            'rating' => $request->productRating,
+            'video' => 'NA',
+            'video_thumbnail' => 'NA',
         );
 
         // $dataval=array(
@@ -218,30 +220,36 @@ class ProductController extends Controller
         //     'tax_type'=>'$request->tax_type',
         //     'tags'=>'$tags',
         // );
-        $data=Products::create($dataval);
+        $data = Products::create($dataval);
 
         if ($request->hasFile('image')) {
             $files = $request->file('image');
-
-            foreach($files as $file){
+            $altTags = $request->input('alt_tag');
+            $imageTitles = $request->input('image_title');
+           
+          
+            foreach ($files as $index=> $file) {
                 $productimage = new ProductImages;
                 $image = 'product-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
                 $file->move('storage/app/public/images/products', $image);
 
-                $productimage->product_id =$data->id;
-                $productimage->image =$image;
-                $productimage->media ='Image';
+                $productimage->product_id = $data->id;
+                $productimage->image = $image;
+                $productimage->media = 'Image';
+                $productimage->alt_tag = $altTags[$index];  
+                $productimage->image_title = $imageTitles[$index]; 
+                // dd($productimage,$productimage);
                 $productimage->save();
             }
         }
 
-        
+
         // if ($request->hasFile('video') && $request->hasFile('video_thumbnail')) {
         //     $video = $request->file('video');
         //     $videoName = 'video-' . uniqid() . '.' . $video->getClientOriginalExtension();
 
-            
+
         //     $video->move('storage/app/public/images/products', $videoName);
 
         //     $video_thumbnail = $request->file('video_thumbnail');
@@ -259,7 +267,7 @@ class ProductController extends Controller
 
         // Store Youtue URL
         if (!empty($request->video)) {
-            
+
 
             $productimage = new ProductImages;
             $productimage->product_id = $data->id;
@@ -269,7 +277,7 @@ class ProductController extends Controller
         }
 
 
-       
+
 
         if ($is_variation == 1) {
             $variation = $request->variation;
@@ -278,11 +286,10 @@ class ProductController extends Controller
             $attribute_id = $request->attribute;
             $price = $request->price;
             $discounted_variation_price = $request->discounted_variation_price;
-            $qty= $request->qty;
+            $qty = $request->qty;
 
-            foreach($price as $i => $no)
-            {
-                $input['product_id'] =$data->id;
+            foreach ($price as $i => $no) {
+                $input['product_id'] = $data->id;
                 $input['price'] = $price[$i];
                 $input['discounted_variation_price'] = $discounted_variation_price[$i];
                 $input['attribute_id'] = $attribute_id[$i];
@@ -294,9 +301,9 @@ class ProductController extends Controller
                 Variation::create($input);
             }
         }
-        
+
         if ($data) {
-             return redirect('admin/product')->with('success', trans('messages.success'));
+            return redirect('admin/product')->with('success', trans('messages.success'));
         } else {
             return redirect('admin/product')->with('danger', trans('messages.fail'));
         }
@@ -310,12 +317,12 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $data=Products::where('id',$id)->find($id);
-        $category=Category::select('id','category_name')->where('status','1')->get();
-        $subcategory=Subcategory::select('id','subcategory_name')->where('status','1')->get();
-        $innersubcategory=Innersubcategory::select('id','innersubcategory_name')->where('status','1')->get();
-        $attribute=Attribute::select('id','attribute')->where('status','1')->get();
-        $images = ProductImages::select('id', 'product_id', \DB::raw("CONCAT('".url('/storage/app/public/images/products/')."/', image) AS image_url"))
+        $data = Products::where('id', $id)->find($id);
+        $category = Category::select('id', 'category_name')->where('status', '1')->get();
+        $subcategory = Subcategory::select('id', 'subcategory_name')->where('status', '1')->get();
+        $innersubcategory = Innersubcategory::select('id', 'innersubcategory_name')->where('status', '1')->get();
+        $attribute = Attribute::select('id', 'attribute')->where('status', '1')->get();
+        $images = ProductImages::select('id', 'product_id','alt_tag','image_title', \DB::raw("CONCAT('" . url('/storage/app/public/images/products/') . "/', image) AS image_url"))
             ->where('product_id', $id)
             ->where('media', 'image') // Filter only images
             ->get();
@@ -326,17 +333,17 @@ class ProductController extends Controller
 
 
 
-        $brands=Brand::select('id','brand_name')->where('status','1')->get();
-        $variations=Variation::where('product_id',$id)->get();
-        
-        return view('admin.products.show',compact('data','category','subcategory','innersubcategory','attribute','images','brands','variations','video'));
+        $brands = Brand::select('id', 'brand_name')->where('status', '1')->get();
+        $variations = Variation::where('product_id', $id)->get();
+
+        return view('admin.products.show', compact('data', 'category', 'subcategory', 'innersubcategory', 'attribute', 'images', 'brands', 'variations', 'video'));
     }
 
     public function showimage(Request $request)
     {
-        $getitem = ProductImages::where('id',$request->id)->first();
-        if($getitem->image){
-            $getitem->img=url('storage/app/public/images/products/'.$getitem->image);
+        $getitem = ProductImages::where('id', $request->id)->first();
+        if ($getitem->image) {
+            $getitem->img = url('storage/app/public/images/products/' . $getitem->image);
         }
         return response()->json(['ResponseCode' => 1, 'ResponseData' => $getitem], 200);
     }
@@ -350,7 +357,7 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
-        if ($request->is_variation != null AND $request->is_variation == "on") {
+        if ($request->is_variation != null and $request->is_variation == "on") {
 
             $this->validate($request, [
                 'cat_id' => 'required',
@@ -364,15 +371,15 @@ class ProductController extends Controller
                 'qty.*' => 'nullable',
             ]);
 
-         
 
-    
+
+
             $is_variation = 1;
             $product_price = $request->product_price;
             $product_qty = $request->product_qty;
             $discounted_price = $request->discounted_price;
 
-    
+
             $variation = $request->variation;
             $attribute_id = $request->attribute;
             $variation_interval = $request->variation_interval;
@@ -380,9 +387,9 @@ class ProductController extends Controller
             $price = $request->price;
             $discounted_variation_price = $request->discounted_variation_price;
             $qty = $request->qty;
-    
-    
-          
+
+
+
             if (is_array($variation) || is_object($variation)) {
                 foreach ($variation as $i => $no) {
 
@@ -397,7 +404,7 @@ class ProductController extends Controller
                             'qty' => $qty[$i],
                             'product_id' => $request->product_id,
                         ];
-    
+
                         if (isset($request->variation_id[$i])) {
                             // Update existing variation
                             Variation::where('id', $request->variation_id[$i])->update($input);
@@ -408,13 +415,15 @@ class ProductController extends Controller
                     }
                 }
             }
-    
+
         } else {
 
 
-          
+
             $this->validate($request, [
                 'cat_id' => 'required',
+                'faqs' => 'required',
+                'productRating' => 'required',
                 'available_stock' => 'nullable',
                 'sku' => 'nullable',
                 'subcat_id' => 'required',
@@ -424,17 +433,17 @@ class ProductController extends Controller
                 'product_qty' => 'required',
                 'discounted_price' => 'required',
             ]);
-    
+
             $is_variation = 0;
             $product_price = $request->product_price;
             $product_qty = $request->product_qty;
             $discounted_price = $request->discounted_price;
-    
-           
+
+
             // Delete existing variations as product is now non-variant
             Variation::where('product_id', $request->product_id)->delete();
         }
-     
+
         if (!empty($request->video)) {
             // Check if video_id is provided in the request for update
             if (!empty($request->video_id)) {
@@ -444,7 +453,7 @@ class ProductController extends Controller
                     $productimage->image = $request->video; // Update the video file name or path
                     $productimage->save(); // Save changes
                 }
-            }else{
+            } else {
                 $productimage = new ProductImages;
                 $productimage->product_id = $request->product_id;
                 $productimage->image = $request->video;
@@ -452,9 +461,9 @@ class ProductController extends Controller
                 $productimage->save();
             }
         }
-        
-    
-      
+
+
+
         $free_shipping = $request->free_shipping == "on" ? 1 : 2;
         $is_hot = $request->is_hot == "on" ? 1 : 2;
         $flat_rate = $request->flat_rate == "on" ? 1 : 2;
@@ -464,7 +473,7 @@ class ProductController extends Controller
         $is_featured = $request->is_featured == "on" ? 1 : 2;
         // $tags = $request->tags ? implode(', ', $request->tags) : '';
         $tags = $request->tags;
-        
+
         $data = [
             'vendor_id' => Auth::user()->id,
             'cat_id' => $request->cat_id,
@@ -490,41 +499,49 @@ class ProductController extends Controller
             'sku' => $request->sku,
             'est_shipping_days' => $request->est_shipping_days,
             'tax' => $request->tax,
+            'faqs' => $request->faqs,
+            'rating' => $request->productRating,
+        //  dd($request->productRating),
             'tax_type' => $request->tax_type,
             'tags' => $tags,
         ];
-    
+
         $product = Products::find($request->product_id)->update($data);
-    
+
         if ($product) {
             return redirect('admin/product')->with('success', trans('messages.update'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
     }
-    
-    
-    
+
+
+
 
     public function updateimage(Request $request)
     {
-        $this->validate($request,[
-            'image' => 'image|mimes:jpeg,png,jpg'
+        $this->validate($request, [
+            'image' => 'image|mimes:jpeg,png,jpg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
         ]);
 
 
         $itemimage = new ProductImages;
         $itemimage->exists = true;
         $itemimage->id = $request->id;
+        
 
-        if(isset($request->image)){
-            if($request->hasFile('image')){
+        if (isset($request->image)) {
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $image = 'product-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
                 $request->image->move('storage/app/public/images/products', $image);
-                $itemimage->image=$image;
-            }           
+                $itemimage->image = $image;
+            }
         }
+        $itemimage->alt_tag = $request->alt_tag;
+        $itemimage->image_title = $request->image_title;
         $itemimage->save();
 
         if ($itemimage) {
@@ -538,15 +555,19 @@ class ProductController extends Controller
     {
         if ($request->hasFile('file')) {
             $files = $request->file('file');
-            foreach($files as $file){
+            $altTags = $request->input('alt_tag');
+            $imageTitles = $request->input('image_title');
+            foreach ($files as $index=> $file) {
 
                 $productimage = new ProductImages;
                 $image = 'item-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
                 $file->move('storage/app/public/images/products', $image);
 
-                $productimage->product_id =$request->pro_id;
-                $productimage->image =$image;
+                $productimage->product_id = $request->pro_id;
+                $productimage->image = $image;
+                $productimage->alt_tag = $altTags[$index];  
+                $productimage->image_title = $imageTitles[$index]; 
                 $productimage->save();
             }
         }
@@ -562,11 +583,11 @@ class ProductController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'id' => 'required',
         ]);
-        $data=Products::where('id',$request->id)->where('vendor_id',Auth::user()->id)->delete();
-        if($data) {
+        $data = Products::where('id', $request->id)->where('vendor_id', Auth::user()->id)->delete();
+        if ($data) {
             return 1000;
         } else {
             return 2000;
@@ -576,44 +597,44 @@ class ProductController extends Controller
     public function destroyimage(Request $request)
     {
         $getitemimages = ProductImages::where('product_id', $request->product_id)->count();
-        
+
         if ($getitemimages > 1) {
-           $itemimage=ProductImages::where('id', $request->id)->delete();
-           if ($itemimage) {
-               return 1;
-           } else {
-               return 0;
-           }
+            $itemimage = ProductImages::where('id', $request->id)->delete();
+            if ($itemimage) {
+                return 1;
+            } else {
+                return 0;
+            }
         } else {
             return 2;
         }
     }
-    
+
     public function changeStatus(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'id' => 'required',
             'status' => 'required',
         ]);
 
-        $data['status']=$request->status;
-        Products::where('id',$request->id)->where('vendor_id',Auth::user()->id)->update($data);
+        $data['status'] = $request->status;
+        Products::where('id', $request->id)->where('vendor_id', Auth::user()->id)->update($data);
         if ($data) {
             return 1000;
         } else {
             return 2000;
-        }      
+        }
     }
 
     public function subcat(Request $request)
     {
-        $data=Subcategory::select('id','subcategory_name')->where('cat_id',$request->cat_id)->get();
-        return json_encode($data);  
+        $data = Subcategory::select('id', 'subcategory_name')->where('cat_id', $request->cat_id)->get();
+        return json_encode($data);
     }
 
     public function innersubcat(Request $request)
     {
-        $data=Innersubcategory::select('id','innersubcategory_name')->where('subcat_id',$request->subcat_id)->get();
-        return json_encode($data);  
+        $data = Innersubcategory::select('id', 'innersubcategory_name')->where('subcat_id', $request->subcat_id)->get();
+        return json_encode($data);
     }
 }

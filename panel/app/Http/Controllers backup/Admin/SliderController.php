@@ -54,11 +54,13 @@ class SliderController extends Controller
         $this->validate($request,[
             'link' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
         ]);
         $image = 'slider-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
         $request->image->move('storage/app/public/images/slider', $image);
 
-        $dataval=array('link'=>$request->link,'image'=>$image);
+        $dataval=array('link'=>$request->link,'image'=>$image,'alt_tag' => $request->alt_tag,'image_title' => $request->image_title);
         $data=Slider::create($dataval);
         if ($data) {
              return redirect('admin/slider')->with('success', trans('messages.success'));
@@ -91,6 +93,8 @@ class SliderController extends Controller
         $this->validate($request,[
             'link' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
         ]);
 
         if(isset($request->image)){
@@ -102,11 +106,11 @@ class SliderController extends Controller
                 $image = 'slider-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
                 $request->image->move('storage/app/public/images/slider', $image);
 
-                $data=array('link'=>$request->link,'image'=>$image);
+                $data=array('link'=>$request->link,'image'=>$image,'alt_tag' => $request->alt_tag,'image_title' => $request->image_title);
                 $slider=Slider::find($request->slider_id)->update($data);
             }
         } else {
-            $data=array('link'=>$request->link);
+            $data=array('link'=>$request->link,'alt_tag' => $request->alt_tag,'image_title' => $request->image_title);
             $slider=Slider::find($request->slider_id)->update($data);
         }
         

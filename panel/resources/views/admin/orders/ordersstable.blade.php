@@ -23,7 +23,7 @@
             <td class="text-center">{{$row->no_products}}</td>
             <td class="text-center">{{$row->full_name}}</td>
             <td class="text-center">{{$row->mobile}}</td>
-            <td class="text-center">{{$row->grand_total}}</td>
+            <td class="text-center">{{ number_format($row->grand_total, 2) }}</td>
             <td class="text-center">{{$row->date}}</td>
             <td class="text-center">{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
             <td class="text-center d-flex">

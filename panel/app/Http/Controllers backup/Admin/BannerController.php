@@ -61,7 +61,7 @@ class BannerController extends Controller
         $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
         $request->image->move('storage/app/public/images/banner', $image);
 
-        $dataval=array('image'=>$image,'link'=>$request->link,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type,'positions'=>"banner");
+        $dataval=array('image'=>$image,'link'=>$request->link,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type,'positions'=>"banner");
         $data=Banner::create($dataval);
         if ($data) {
              return redirect('admin/banner')->with('success', trans('messages.success'));
@@ -99,7 +99,8 @@ class BannerController extends Controller
         $this->validate($request,[
             'image' => 'mimes:jpeg,png,jpg',
         ]);
-        
+        // dd($request->alt_tag);
+
 
         if(isset($request->image)){
 
@@ -110,11 +111,11 @@ class BannerController extends Controller
                 $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
                 $request->image->move('storage/app/public/images/banner', $image);
 
-                $data=array('image'=>$image,'link'=>$request->link,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
+                $data=array('image'=>$image,'link'=>$request->link,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
                 $brand=Banner::find($request->brand_id)->update($data);
             }
         } else {
-            $data=array('link'=>$request->link,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
+            $data=array('link'=>$request->link,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
             $brand=Banner::find($request->brand_id)->update($data);
         }
         

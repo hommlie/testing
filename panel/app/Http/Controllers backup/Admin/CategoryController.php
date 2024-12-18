@@ -62,6 +62,8 @@ class CategoryController extends Controller
             'category_name' => 'required',
             'icon' => 'required|mimes:png,jpg,jpeg',
             'webicon' => 'required|mimes:png,jpg,jpeg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
             'video' => 'required|mimes:mp4,avi,mov|max:102400'
         ]);
     
@@ -82,13 +84,16 @@ class CategoryController extends Controller
             } else {
                 return redirect()->back()->with('danger', 'No video file was uploaded.');
             }
-    
+            $isFormChecked = $request->has('is_form') ? 1 : 0;
             // Save category data
             $dataval = [
                 'category_name' => $request->category_name,
                 'icon' => $icon,
                 'web_icon' => $webicon,
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
                 'video' => $videoName,
+                'is_form' => $isFormChecked,
                 'slug' => Str::slug($request->category_name)
             ];
     
@@ -112,6 +117,8 @@ class CategoryController extends Controller
             'category_name' => 'required',
             'icon' => 'required|mimes:png,jpg,jpeg',
             'webicon' => 'required|mimes:png,jpg,jpeg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
             'video' => 'nullable',
             'thumbnail' => 'nullable'
         ]);
@@ -150,8 +157,9 @@ class CategoryController extends Controller
     
         // Check if a subcategory with the same slug already exists
         $checkslug = Category::where('slug', \Str::slug($request->category_name))->first();
-    
+        $isFormChecked = $request->has('is_form') ? 1 : 0;
         if (@$checkslug->slug) {
+            
             // If slug exists, create a new slug combining category slug and subcategory name
             $dataval = [
                 'icon' => $icon, // Ensure icon is included here
@@ -159,6 +167,9 @@ class CategoryController extends Controller
                 'thumbnail' => $thumbnail, // Ensure icon is included here
                 'video' => $video, // Ensure icon is included here
                 'category_name' => $request->category_name,
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
+                'is_form' => $isFormChecked,
                 'slug' => \Str::slug(uniqid(). '-' . $request->category_name),
             ];
         } else {
@@ -166,9 +177,12 @@ class CategoryController extends Controller
             $dataval = [
                 'category_name' => $request->category_name,
                 'web_icon' => $webicon, // Ensure icon is included here
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
                 'video' => $video, // Ensure icon is included here
                 'thumbnail' => $thumbnail, // Ensure icon is included here
                 'slug' => \Str::slug($request->category_name),
+                'is_form' => $isFormChecked,
                 'icon' => $icon, // Ensure icon is included here as well
             ];
         }
@@ -212,6 +226,8 @@ class CategoryController extends Controller
             'category_name' => 'required',
             'icon' => 'mimes:jpeg,png,jpg',
             'webicon' => 'mimes:jpeg,png,jpg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
         ]);
 
         if(isset($request->icon)){
@@ -223,11 +239,11 @@ class CategoryController extends Controller
                 $icon = 'category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
                 $request->icon->move('storage/app/public/images/category', $icon);
 
-                $data=array('category_name'=>$request->category_name,'icon'=>$icon,'slug'=>\Str::slug($request->category_name));
+                $data=array('category_name'=>$request->category_name,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'is_form' => $request->has('is_form') ? 1 : 0,'icon'=>$icon,'slug'=>\Str::slug($request->category_name));
                 $category=Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data=array('category_name'=>$request->category_name,'slug'=>\Str::slug($request->category_name));
+            $data=array('category_name'=>$request->category_name,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'is_form' => $request->has('is_form') ? 1 : 0,'slug'=>\Str::slug($request->category_name));
             $category=Category::find($request->cat_id)->update($data);
         }
 
@@ -240,11 +256,11 @@ class CategoryController extends Controller
                 $webicon = 'webcategory-' . uniqid() . '.' . $request->webicon->getClientOriginalExtension();
                 $request->webicon->move('storage/app/public/images/category', $webicon);
 
-                $data=array('category_name'=>$request->category_name,'web_icon'=>$webicon,'slug'=>\Str::slug($request->category_name));
+                $data=array('category_name'=>$request->category_name,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'web_icon'=>$webicon,'slug'=>\Str::slug($request->category_name));
                 $category=Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data=array('category_name'=>$request->category_name,'slug'=>\Str::slug($request->category_name));
+            $data=array('category_name'=>$request->category_name,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'slug'=>\Str::slug($request->category_name));
             $category=Category::find($request->cat_id)->update($data);
         }
 

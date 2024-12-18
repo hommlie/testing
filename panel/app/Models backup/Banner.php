@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Banner extends Model
 {
     protected $fillable = [
-        'image','link', 'type', 'cat_id', 'product_id','vendor_id','positions'
+        'image','link','alt_tag','image_title', 'type', 'cat_id', 'product_id','vendor_id','positions'
     ];
 
     public function category(){

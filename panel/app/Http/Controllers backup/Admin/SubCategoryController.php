@@ -23,43 +23,43 @@ class SubCategoryController extends Controller
         abort_unless(\Gate::allows('subcategory_access'), 403);
 
         $data = Subcategory::with('category')->orderBy('id', 'DESC')->paginate(10);
-    
+
         // Decode questions and fetch question details
         foreach ($data as $subcategory) {
             $questions = json_decode($subcategory->question, true);
             $subcategory->onsiteQuestions = $this->getQuestionDetails($questions, 'Onsite');
             $subcategory->completedQuestions = $this->getQuestionDetails($questions, 'OnCompleted');
         }
-    
+
         return view('admin.subcategory.index', compact('data'));
     }
-    
+
     private function getQuestionDetails($questions, $title)
     {
         if (!is_array($questions)) {
             return [];
         }
-    
+
         foreach ($questions as $questionSet) {
             if ($questionSet['title'] == $title) {
                 $questionIds = explode(',', $questionSet['question']);
                 return Question::whereIn('id', $questionIds)->get();
             }
         }
-    
+
         return [];
     }
-    
+
     public function add()
     {
-    	$data=Category::select('id','category_name')->get();
-        return view('admin.subcategory.add',compact('data'));
+        $data = Category::select('id', 'category_name')->get();
+        return view('admin.subcategory.add', compact('data'));
     }
 
     public function list()
     {
         $data = Subcategory::all();
-        return view('admin.subcategory.subcategorytable',compact('data'));
+        return view('admin.subcategory.subcategorytable', compact('data'));
     }
 
     /**
@@ -69,8 +69,8 @@ class SubCategoryController extends Controller
      */
     public function search(Request $request)
     {
-        $data=Subcategory::where('subcategory_name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'DESC')->paginate(10);
-        return view('admin.subcategory.index',compact('data'));
+        $data = Subcategory::where('subcategory_name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.subcategory.index', compact('data'));
 
     }
 
@@ -86,39 +86,43 @@ class SubCategoryController extends Controller
             'subcategory_name' => 'required',
             'cat_id' => 'required',
             'icon' => 'required|mimes:png,jpg,jpeg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
             'thumbnail' => 'nullable',
             'video' => 'nullable',
         ]);
-    
+
         // Generate unique file name and move the file
         $icon = 'sub_category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
         $request->icon->move('storage/app/public/images/subcategory', $icon);
-    
+
         // Generate unique file name and move the file
-        if($request->hasFile('thumbnail')){
+        if ($request->hasFile('thumbnail')) {
             $thumbnail = 'sub_category-' . uniqid() . '.' . $request->thumbnail->getClientOriginalExtension();
             $request->thumbnail->move('storage/app/public/images/subcategory', $thumbnail);
-        }else{
+        } else {
             $thumbnail = "NA";
         }
-    
+
         // Generate unique file name and move the file
-        if($request->hasFile('video')){
+        if ($request->hasFile('video')) {
             $video = 'sub_category-' . uniqid() . '.' . $request->video->getClientOriginalExtension();
             $request->video->move('storage/app/public/images/subcategory', $video);
-        }else{
-            $video ="NA";
+        } else {
+            $video = "NA";
         }
-    
+
         // Check if a subcategory with the same slug already exists
         $checkslug = Subcategory::where('slug', \Str::slug($request->subcategory_name))->first();
-    
+
         if (@$checkslug->slug) {
             // If slug exists, create a new slug combining category slug and subcategory name
             $cat_slug = Category::select('slug')->where('id', $request->cat_id)->first();
             $dataval = [
                 'cat_id' => $request->cat_id,
                 'icon' => $icon, // Ensure icon is included here
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
                 'thumbnail' => $thumbnail, // Ensure icon is included here
                 'video' => $video, // Ensure icon is included here
                 'subcategory_name' => $request->subcategory_name,
@@ -131,11 +135,13 @@ class SubCategoryController extends Controller
                 'subcategory_name' => $request->subcategory_name,
                 'slug' => \Str::slug($request->subcategory_name),
                 'icon' => $icon, // Ensure icon is included here as well
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
                 'thumbnail' => $thumbnail, // Ensure icon is included here as well
                 'video' => $video, // Ensure icon is included here as well
             ];
         }
-    
+
         // Create the new subcategory record
         $data = Subcategory::create($dataval);
         if ($data) {
@@ -144,7 +150,7 @@ class SubCategoryController extends Controller
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -154,9 +160,9 @@ class SubCategoryController extends Controller
      */
     public function show($id)
     {
-        $data=Subcategory::find($id);
-        $category = Category::select('id','category_name')->get();
-        return view('admin.subcategory.show',compact('data','category'));
+        $data = Subcategory::find($id);
+        $category = Category::select('id', 'category_name')->get();
+        return view('admin.subcategory.show', compact('data', 'category'));
     }
 
     /**
@@ -172,27 +178,31 @@ class SubCategoryController extends Controller
             'subcategory_name' => 'required',
             'cat_id' => 'required',
             'icon' => 'required|mimes:png,jpg,jpeg',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
         ]);
-    
-        $icon = $request->old_img; 
-    
+
+        $icon = $request->old_img;
+
         if (isset($request->icon)) {
             File::delete('storage/app/public/images/subcategory/' . $request->old_img);
-    
+
             if ($request->hasFile('icon')) {
                 $iconFile = $request->file('icon');
                 $icon = 'subcategory-' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
                 $iconFile->move('storage/app/public/images/subcategory', $icon);
             }
         }
-    
+
         $checkslug = Subcategory::where('slug', \Str::slug($request->subcategory_name))->first();
-    
+
         if (@$checkslug->slug) {
             $cat_slug = Category::select('slug')->where('id', $request->cat_id)->first();
             $data = [
                 'cat_id' => $request->cat_id,
                 'icon' => $icon,
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
                 'subcategory_name' => $request->subcategory_name,
                 'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
             ];
@@ -201,19 +211,21 @@ class SubCategoryController extends Controller
                 'cat_id' => $request->cat_id,
                 'subcategory_name' => $request->subcategory_name,
                 'slug' => \Str::slug($request->subcategory_name),
-                'icon' => $icon, 
+                'icon' => $icon,
+                'alt_tag' => $request->alt_tag,
+                'image_title' => $request->image_title,
             ];
         }
-    
+
         $subcategory = Subcategory::find($request->subcat_id)->update($data);
-    
+
         if ($subcategory) {
             return redirect('admin/subcategory')->with('success', trans('messages.update'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -223,74 +235,75 @@ class SubCategoryController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'id' => 'required',
         ]);
-        $data=Subcategory::where('id',$request->id)->delete();
-        Products::where('subcat_id',$request->id)->delete();
-        Innersubcategory::where('subcat_id',$request->id)->delete();
-        if($data) {
+        $data = Subcategory::where('id', $request->id)->delete();
+        Products::where('subcat_id', $request->id)->delete();
+        Innersubcategory::where('subcat_id', $request->id)->delete();
+        if ($data) {
             return 1000;
         } else {
             return 2000;
         }
     }
-    
+
     public function changeStatus(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'id' => 'required',
             'status' => 'required',
         ]);
 
-        $data['status']=$request->status;
-        Subcategory::where('id',$request->id)->update($data);
+        $data['status'] = $request->status;
+        Subcategory::where('id', $request->id)->update($data);
         if ($data) {
             return 1000;
         } else {
             return 2000;
-        }      
+        }
     }
 
     // Get Questions 
 
-    public function getQuestions() {
+    public function getQuestions()
+    {
 
-        $questions = Question::orderBy('id','desc')->get();
-    
+        $questions = Question::orderBy('id', 'desc')->get();
+
         return response()->json([
             'status' => 200,
             'questions' => $questions,
         ]);
-    
+
     }
 
 
     public function submitQuestions(Request $request, $id)
-{
-    $this->validate($request, [
-        'question' => 'required',
-    ]);
+    {
+        $this->validate($request, [
+            'question' => 'required',
+        ]);
 
-    $record = Subcategory::find($id);
+        $record = Subcategory::find($id);
 
 
-    if (!$record) {
+        if (!$record) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Record not found',
+            ], 404);
+        }
+
+        $record->question = $request->input('question');
+        $record->save();
+
+        // Return a success response
         return response()->json([
-            'status' => 404,
-            'message' => 'Record not found',
-        ], 404);
-    }
-
-    $record->question = $request->input('question');
-    $record->save();
-
-    // Return a success response
-    return response()->json([
-        'status' => 200,
-        'message' => 'Question updated successfully',
-        'question' => $record,
-    ]);
+            'status' => 200,
+            'message' => 'Question updated successfully',
+            'question' => $record,
+        ]);
     }
 
 }
