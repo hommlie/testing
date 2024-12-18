@@ -385,7 +385,7 @@ export default function AddtoCart() {
                     <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
                     <div className="flex justify-between text-xl font-semibold">
                         <span>Total</span>
-                        <span>₹{totalAmount}</span>
+                        <span>₹{totalAmount?.toFixed(2)}</span>
                     </div>
                 </div>
 
