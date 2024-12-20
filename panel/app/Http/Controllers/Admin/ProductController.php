@@ -187,6 +187,8 @@ class ProductController extends Controller
             'tax_type' => $request->tax_type,
             'tags' => $request->tags,
             'faqs' => $request->faqs,
+            'meta_title' => $request->meta_title,
+            'meta_description' => $request->meta_description,
             'rating' => $request->productRating,
             'video' => 'NA',
             'video_thumbnail' => 'NA',
@@ -226,9 +228,9 @@ class ProductController extends Controller
             $files = $request->file('image');
             $altTags = $request->input('alt_tag');
             $imageTitles = $request->input('image_title');
-           
-          
-            foreach ($files as $index=> $file) {
+
+
+            foreach ($files as $index => $file) {
                 $productimage = new ProductImages;
                 $image = 'product-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
@@ -237,8 +239,8 @@ class ProductController extends Controller
                 $productimage->product_id = $data->id;
                 $productimage->image = $image;
                 $productimage->media = 'Image';
-                $productimage->alt_tag = $altTags[$index];  
-                $productimage->image_title = $imageTitles[$index]; 
+                $productimage->alt_tag = $altTags[$index];
+                $productimage->image_title = $imageTitles[$index];
                 // dd($productimage,$productimage);
                 $productimage->save();
             }
@@ -322,7 +324,7 @@ class ProductController extends Controller
         $subcategory = Subcategory::select('id', 'subcategory_name')->where('status', '1')->get();
         $innersubcategory = Innersubcategory::select('id', 'innersubcategory_name')->where('status', '1')->get();
         $attribute = Attribute::select('id', 'attribute')->where('status', '1')->get();
-        $images = ProductImages::select('id', 'product_id','alt_tag','image_title', \DB::raw("CONCAT('" . url('/storage/app/public/images/products/') . "/', image) AS image_url"))
+        $images = ProductImages::select('id', 'product_id', 'alt_tag', 'image_title', \DB::raw("CONCAT('" . url('/storage/app/public/images/products/') . "/', image) AS image_url"))
             ->where('product_id', $id)
             ->where('media', 'image') // Filter only images
             ->get();
@@ -500,8 +502,10 @@ class ProductController extends Controller
             'est_shipping_days' => $request->est_shipping_days,
             'tax' => $request->tax,
             'faqs' => $request->faqs,
+            'meta_title' => $request->meta_title,
+            'meta_description' => $request->meta_description,
             'rating' => $request->productRating,
-        //  dd($request->productRating),
+            //  dd($request->productRating),
             'tax_type' => $request->tax_type,
             'tags' => $tags,
         ];
@@ -530,7 +534,7 @@ class ProductController extends Controller
         $itemimage = new ProductImages;
         $itemimage->exists = true;
         $itemimage->id = $request->id;
-        
+
 
         if (isset($request->image)) {
             if ($request->hasFile('image')) {
@@ -557,7 +561,7 @@ class ProductController extends Controller
             $files = $request->file('file');
             $altTags = $request->input('alt_tag');
             $imageTitles = $request->input('image_title');
-            foreach ($files as $index=> $file) {
+            foreach ($files as $index => $file) {
 
                 $productimage = new ProductImages;
                 $image = 'item-' . uniqid() . '.' . $file->getClientOriginalExtension();
@@ -566,8 +570,8 @@ class ProductController extends Controller
 
                 $productimage->product_id = $request->pro_id;
                 $productimage->image = $image;
-                $productimage->alt_tag = $altTags[$index];  
-                $productimage->image_title = $imageTitles[$index]; 
+                $productimage->alt_tag = $altTags[$index];
+                $productimage->image_title = $imageTitles[$index];
                 $productimage->save();
             }
         }

@@ -20,7 +20,7 @@ class AppHeaderController extends   Controller{
             'bg_color' => 'required|string|max:255',
             'text_color' => 'required|string|max:255',
             'sub_text_color' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
         ]);
     
         if ($request->hasFile('image')) {

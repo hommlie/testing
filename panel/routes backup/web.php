@@ -3,7 +3,7 @@ use App\Http\Controllers\Admin\QuestionsController;
 
 
 Route::redirect('/', 'public/login');
-
+    
 Route::redirect('/home', 'admin');
 
 Auth::routes(['register' => false]);
@@ -180,13 +180,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'OrderController@index')->name('orders');
         Route::get('addorder', 'OrderController@addorder')->name('orders.add');
+
+
+        // SERVICES CENTER/ BUSINESS STORE / GET BRANCH CODE / GET CERVICES CENTER BASED ON REGION ID / ADDRESS DETAILS 
+        Route::post('serviceStore', 'OrderController@serviceStore')->name('orders.serviceStore');
+        Route::post('businessStore', 'OrderController@businessStore')->name('orders.businessStore');
+      
+        Route::get('get-branch-code', 'OrderController@getbranchcode')->name('orders.getbranchcode');
+        Route::get('get_services_center/{regionId}', 'OrderController@getServiceCenter')->name('orders.getServiceCenter');
+        Route::get('get-customer-data/{cusID}', 'OrderController@getCustomerData')->name('orders.getCustomerData');
+
+
         // ADD RESIDENTIAL ORDERS
-        Route::get('add-residential',function(){ return view('admin.orders.add-residential'); })->name('orders.add-residential');
         Route::get('/get-subcategories/{categoryId}', 'OrderController@getSubcategories')->name('orders.getSubcategories');
         Route::get('/get-services/{subcategoryId}', 'OrderController@getServices')->name('orders.getServices');
-
+        Route::get('/get-coupons/{categoryId}', 'OrderController@getCoupons')->name('orders.getCoupons');
         Route::get('/get-service-variation-type/{serviceId}', 'OrderController@getServiceVariationType')->name('orders.getServiceVariationType');
-        Route::get('/get-service-variation-area/{serviceId}', 'OrderController@getServiceVariationArea')->name('orders.getServiceVariationArea');
+        Route::get('/get-service-variation-area/{serviceId}/{productId}', 'OrderController@getServiceVariationArea')->name('orders.getServiceVariationArea');
+
 
         Route::get('/get-service-details/{id}', 'OrderController@getServiceDetails')->name('orders.getServiceDetails');
 
@@ -202,6 +213,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/delete', 'OrderController@delete')->name('orders.delete');
         Route::get('/search', 'OrderController@search')->name('orders.search');
         Route::post('/change/status', 'OrderController@changeStatus')->name('orders.changeStatus');
+       
     });
 
     // Return Orders
@@ -447,6 +459,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // COMPALINT MANAGEMENT (Help's) 
     Route::group(['prefix'=> 'complaint'], function () {
         Route::get('/', 'ComplaintController@index')->name('complaint');
+        Route::get('/add', 'ComplaintController@create')->name('complaint.add');
+        Route::post('/store', 'ComplaintController@store')->name('complaint.store');
+
        
         
         
@@ -456,13 +471,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // INSPECTIONS MANAGEMENT  
     Route::group(['prefix'=> 'inspections'], function () {
         Route::get('/', 'InspectionsController@index')->name('inspections');
+        Route::get('/add', 'InspectionsController@create')->name('inspections.add');
+        Route::post('/store', 'InspectionsController@store')->name('inspections.store');
     });
 
     // MANAGE APP HEADER 
     Route::group(['prefix'=> 'appheader'], function () {
         Route::get('/', 'AppHeaderController@index')->name('appheader');
+
         Route::post('/update/{id}', 'AppHeaderController@update')->name('appheader.update');
     });
+    // SEARCH STATE
+    Route::get('/get-states', function (\Illuminate\Http\Request $request) {
+        $zone = $request->query('zone');
+        $states = \App\Models\Business_region::where('zone', 'LIKE', "%$zone%")->pluck('state');
+        return response()->json($states);
+    });
+
+    
 
 
 });

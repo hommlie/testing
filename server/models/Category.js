@@ -8,6 +8,10 @@ Category.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    sub_title: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     icon: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -4,6 +4,16 @@
 @endsection
 
 <style>
+    .text-green {
+        color: rgba(17, 174, 59, 0.88);
+    }
+
+    .text-gap {
+        line-height: 0.4;
+        font-size: 14px;
+    }
+
+
     @media print {
 
         /* Hide everything except the print area */
@@ -63,53 +73,83 @@
     </div>
     <section class="invoice-template ">
         <div class="card print-area">
-            <div class="card-body p-3">
+            <div class="card-body">
                 <div id="invoice-template" class="card-block">
                     <!-- Invoice Company Details -->
                     <div id="invoice-company-details" class="row">
-                        <div class="col-6 text-left">
+                        {{-- NEW INVOICE DESIGN --}}
+                        <div class="border border-dark">
+                            <div class="mt-3 ml-2 mr-3">
+                                {{-- HOMMLIE INFORAMTION --}}
+                                <div class="header-section  d-flex align-items-center">
+                                    <div class="col-md-6 mt-2">
+                                        <h4 class="text-success"><b>ADML TECHNOSERVICES PVT. LTD.</b></h4>
+                                        <p>
+                                            <b>Registered Office:</b> 57 2nd floor, Place building, 6th Main Rd,
+                                            Nagendra Block, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka
+                                            560050.
+                                            <br>
+                                            
+                                                
+                                            <b>Website:</b> <i><u class="text-primary">www.hommlie.com</u></i>
+                                            <b>Customer Care:</b> +91 6363865658 
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <img src="{{ asset('storage/app/public/Adminassets/img/sidebar-bg/hommlie-logo.png') }}"
+                                            alt="company logo" class="mb-2" width="170">
+                                    </div>
+                                </div>
+                                <hr>
+                                {{-- CUSTOMER INFORAMTION --}}
+                                <div class="">
+                                    <div class="col-md-6">
+                                        <h4 class="text-success">SERVICE CONTRACT FORM</h4>
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="col-md-8 ml-3">
+                                        <ul class="list-unstyled">
+                                            <li><b>PAN :</b> AAZCA4409K  <b class="ml-5">GSTIN :</b> 29AAZCA4409K1ZZ <b class="ml-5">CIN :</b> U96908KA2023PTC179034</li>
+                                        <br>
+                                            <li> <b> Order No :</b> # {{$order_info->order_number}}</li>
+                                            <li><b>Order Date: </b> {{$order_info->date}}</li>
+                                            <li> <b> Customer Name: </b> 
+                                            @php
+                                            if($order_info->bill_to_Name == ""){
+                                                echo  $order_info->full_name;
+                                                }else{
+                                                    echo  $order_info->bill_to_Name;
+                                                }
 
-                            <img src="{{ asset('storage/app/public/Adminassets/img/sidebar-bg/hommlie-logo.png') }}"
-                                alt="company logo" class="mb-2" width="70">
-                            <ul class="px-0 list-unstyled">
-                                <li>{{$order_info->store_address}}</li>
-                            </ul>
-                        </div>
-                        <div class="col-6 text-right">
-                            <h2>INVOICE</h2>
-                            <p class="pb-3"># {{$order_info->order_number}}</p>
-                        </div>
-                    </div>
-                    <!--/ Invoice Company Details -->
-                    <!-- Invoice Customer Details -->
-                    <div id="invoice-customer-details" class="row pt-2">
-                        <div class="col-sm-12 text-left">
-                            <p class="text-muted">Bill To:</p>
-                        </div>
-                        <div class="col-6 text-left">
-                            <ul class="px-0 list-unstyled">
-                                <li class="text-bold-800">{{$order_info->full_name}}</li>
-                                <li class="text-bold-800">{{$order_info->email}}</li>
-                                <li class="text-bold-800">{{$order_info->mobile}}</li>
-                                <li>{{$order_info->street_address}},</li>
-                                <li>{{$order_info->landmark}},</li>
-                                <li>{{$order_info->pincode}}.</li>
-                            </ul>
-                        </div>
-                        <div class="col-6 text-right">
-                            <p><span class="text-muted">Invoice Date :</span> {{$order_info->date}}</p>
-                        </div>
-                    </div>
-                    <!--/ Invoice Customer Details -->
-                    <!-- Invoice Items Details -->
-                    <div id="invoice-items-details" class="pt-2">
-                        <div class="row">
-                            <div class="table-responsive col-sm-12">
-                                <table class="table">
-                                    <thetad>
+                                            @endphp
+                                            
+                                        </li>
+                                            <li> <b> Service Address :</b>
+                                                {{$order_info->street_address}},{{$order_info->landmark}},{{$order_info->pincode}}.
+                                            </li>
+                                            <li> <b> House Number: </b>
+                                                @php
+                                                    if ($order_info->house_number) {
+                                                        echo $order_info->house_number;
+                                                    } else {
+                                                        echo "";
+                                                    }
+                                                @endphp </li>
+                                            <li> <b> Email Id : </b>{{$order_info->email}}</li>
+                                            <li> <b> Mobile Number : </b>{{$order_info->mobile}}</li>
+
+                                        </ul>
+                                    </div>
+
+                                </div><br />
+                                <hr>
+
+                                <table class="table table-bordered">
+                                    <thead>
                                         <tr>
                                             <th>SR-ID</th>
-                                            <th>{{ trans('labels.image') }}</th>
+                                            {{-- <th>{{ trans('labels.image') }}</th> --}}
                                             <th>{{ trans('labels.name') }}</th>
                                             <th>{{ trans('labels.price') }}</th>
                                             <th>{{ trans('labels.qty') }}</th>
@@ -118,8 +158,7 @@
                                             <th>{{ trans('labels.status') }}</th>
                                             <th>{{ trans('labels.order_total') }}</th>
                                         </tr>
-
-                                    </thetad>
+                                    </thead>
                                     <tbody>
                                         @foreach($order_data as $row)
 
@@ -130,9 +169,9 @@
                                             @endif
                                             <tr>
                                                 <td>SR-{{$row->id}}</td>
-                                                <td><img class="media-object round-media height-50"
+                                              {{--   <td><img class="media-object round-media height-50"
                                                         src="{{$row->image_url}}" alt="Generic placeholder image"
-                                                        style="width: 70px;" /></td>
+                                                        style="width: 70px;" /></td>--}}
                                                 <td>{{$row->product_name}} @if($row->variation != "")({{$row->variation}})
                                                 @endif</td>
                                                 <td>₹{{ number_format($row->price, 2) }}</td>
@@ -260,115 +299,185 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12 text-left">
-                                <p class="lead">Payment Methods:</p>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <table class="table table-borderless table-sm">
-                                            <tbody>
-                                                <!-- payment_type = COD : 1, Wallet : 2, RazorPay : 3, Stripe : 4, Flutterwave : 5 , Paystack : 6-->
-                                                <td>
-                                                    @if($order_info->payment_type == 1)
-                                                        COD
-                                                    @endif
+                                <hr>
+                                <div class="">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="">
+                                                <div class="card-body">
+                                                    <h6><b>Payment Type</b></h6>
+                                                    <div class="form-check form-check-inline mt-2">
+                                                        @if($order_info->payment_type == 1)
+                                                            <input type="radio" name="payment_type" value="1" checked
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">COD</label>
+                                                        @else
+                                                            <input type="radio" name="payment_type" value="1"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">COD</label>
+                                                        @endif
+                                                    </div>
 
-                                                    @if($order_info->payment_type == 2)
-                                                        Wallet
-                                                    @endif
+                                                    <div class="form-check form-check-inline">
+                                                        @if($order_info->payment_type == 2)
+                                                            <input type="radio" name="payment_type" value="2" checked
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Wallet</label>
+                                                        @else
+                                                            <input type="radio" name="payment_type" value="2"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Wallet</label>
+                                                        @endif
+                                                    </div>
 
-                                                    @if($order_info->payment_type == 3)
-                                                        RazorPay
-                                                    @endif
+                                                    <div class="form-check form-check-inline">
+                                                        @if($order_info->payment_type == 3)
+                                                            <input type="radio" name="payment_type" value="3" checked
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">RazorPay</label>
+                                                        @else
+                                                            <input type="radio" name="payment_type" value="3"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">RazorPay</label>
+                                                        @endif
+                                                    </div>
 
-                                                    @if($order_info->payment_type == 4)
-                                                        Stripe
-                                                    @endif
+                                                    <div class="form-check form-check-inline">
+                                                        @if($order_info->payment_type == 4)
+                                                            <input type="radio" name="payment_type" value="4" checked
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Stripe</label>
+                                                        @else
+                                                            <input type="radio" name="payment_type" value="4"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Stripe</label>
+                                                        @endif
+                                                    </div>
 
-                                                    @if($order_info->payment_type == 5)
-                                                        Flutterwave
-                                                    @endif
+                                                    <div class="form-check form-check-inline">
+                                                        @if($order_info->payment_type == 5)
+                                                            <input type="radio" name="payment_type" value="5" checked
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Flutterwave</label>
+                                                        @else
+                                                            <input type="radio" name="payment_type" value="5"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Flutterwave</label>
+                                                        @endif
+                                                    </div>
 
-                                                    @if($order_info->payment_type == 6)
-                                                        Paystack
-                                                    @endif
-                                                </td>
-                                                <td class="text-right">{{$order_info->payment_id}}</td>
-                                            </tbody>
-                                        </table>
+                                                    <div class="form-check form-check-inline ">
+                                                        @if($order_info->payment_type == 6)
+                                                            <input type="radio" name="payment_type" value="6" checked
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Paystack</label>
+                                                        @else
+                                                            <input type="radio" name="payment_type" value="6"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label">Paystack</label>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                    <hr>
+                                    <div>
+                                        <div class="col-12">
+                                            <div class="">
+                                                <div class="">
+                                                    <table class="table table-bordered">
+                                                        <tr>
+                                                            <td class="text-left">Subtotal</td>
+                                                            <td class="text-right">
+                                                                ₹{{ number_format($order_info->subtotal, 2) }}</td>
+                                                        </tr>
 
-                            <div class="col-md-6 col-sm-12">
-                                <p class="lead">Total due</p>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <tbody>
-                                            <!-- Subtotal -->
-                                            <tr>
-                                                <td>Sub Total</td>
-                                                <td class="text-right">₹{{ number_format($order_info->subtotal, 2) }}
-                                                </td>
-                                            </tr>
+                                                        @if (!empty($order_info->discount_amount) && $order_info->discount_amount > 0)
+                                                            <tr>
+                                                                <td class="text-left">Discount</td>
+                                                                <td class="text-right">-
+                                                                    ₹{{ number_format($order_info->discount_amount, 2) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endif
 
-                                            <!-- Discount (only show if discount_amount is not empty) -->
-                                            @if (!empty($order_info->discount_amount) && $order_info->discount_amount > 0)
-                                                <tr>
-                                                    <td>Discount</td>
-                                                    <td class="text-right">-
-                                                        ₹{{ number_format($order_info->discount_amount, 2) }}</td>
-                                                </tr>
-                                            @endif
+                                                        <tr>
+                                                            <td class="text-left">TAX</td>
+                                                            <td class="text-right">+
+                                                                ₹{{ number_format($order_info->tax, 2) }}</td>
+                                                        </tr>
 
-                                            <!-- Tax -->
-                                            <tr>
-                                                <td>TAX</td>
-                                                <td class="text-right">+ ₹{{ number_format($order_info->tax, 2) }}</td>
-                                            </tr>
+                                                        @php
+                                                            if (!empty($order_info->discount_amount) && $order_info->discount_amount > 0) {
+                                                                $total = $order_info->subtotal + $order_info->tax - $order_info->discount_amount;
+                                                            } else {
+                                                                $total = $order_info->subtotal + $order_info->tax;
+                                                            }
+                                                        @endphp
 
-                                            @php
-                                                // Calculate total based on discount presence
-                                                if (!empty($order_info->discount_amount) && $order_info->discount_amount > 0) {
-                                                    $total = $order_info->subtotal + $order_info->tax - $order_info->discount_amount;
-                                                } else {
-                                                    $total = $order_info->subtotal + $order_info->tax;
-                                                }
-                                            @endphp
+                                                        <tr>
+                                                            <td class="text-left font-weight-bold">Total</td>
+                                                            <td class="text-right font-weight-bold">
+                                                                ₹{{ number_format($total, 2) }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                    <div class="col-md-12 text-gap mt-lg-5 d-flex">
+                                        <div class="col-md-6 text-left">
+                                            <p><b>CUSTOMER ACCEPTANCE </b></p>
+                                            <p> I/We agree that the service contract is based on the information
+                                                provided
+                                                above.</p>
+                                            <p> Name of Customer :
+                                                ..................................................................................................
+                                            </p>
+                                            <p>Preserve this contract form and payment receipt.</p>
+                                        </div>
+                                        <div class="col-md-6 text-right mt-4">
+                                            <p>
+                                                .....................................
+                                            </p>
+                                            <p>Signature of Customer</p>
+                                        </div>
 
-                                            <!-- Total -->
-                                            <tr>
-                                                <td class="text-bold-800 font-weight-bold">Total</td>
-                                                <td class="text-bold-800 text-right font-weight-bold">
-                                                    ₹{{ number_format($total, 2) }}</td>
-                                            </tr>
-                                        </tbody>
+                                    </div>
+                                </div><br>
+                                <hr><br><br>
+                                <div class="col-md-12">
+                                    <h4><b>About us</b></h4><br>
+                                    {!! $aboutData->about_content !!}
+                                </div><br>
+                                <hr>
+                                <div class="col-md-12">
+                                    <h4><b>Privacy policy</b></h4> <br>
+                                    {!! $policyData->privacypolicy_content !!}
+                                </div><br>
+                                <hr>
+                                <div class="col-md-12">
+                                    <h4><b>Terms Conditions</b></h4><br>
+                                    {!! $conditionsData->terms_conditions !!}
 
-                                    </table>
-
-                                </div>
-                                <button onclick="window.print()" class="btn btn-primary">Print Invoice</button>
+                                </div><br>
                             </div>
                         </div>
                     </div>
-                    <!-- Invoice Footer -->
-                    <!-- <div id="invoice-footer mt-3">
-                            <div class="row">
-                                <div class="col-md-9 col-sm-12">
-                                    <h6>Terms &amp; Condition</h6>
-                                    <p>You know, being a test pilot isn't always the healthiest business in the world. We predict too
-                                        much for the next year and yet far too little for the next 10.</p>
-                                </div>
-                            </div>
-                        </div> -->
-                    <!--/ Invoice Footer -->
                 </div>
             </div>
         </div>
-    </section>
 </div>
+<div class="mt-5 text-right">
+    <button onclick="window.print()" class="btn btn-success rounded-0">Print Invoice</button>
+</div>
+
+</section>
+
+</div>
+
+
 
 
 @endsection
@@ -376,11 +485,11 @@
 @endsection
 @section('scripts')
 <script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    // $.ajaxSetup({
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     }
+    // });
 
     //Change Status
     $('body').on('click', '.changeStatus', function () {

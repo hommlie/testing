@@ -180,11 +180,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'OrderController@index')->name('orders');
         Route::get('addorder', 'OrderController@addorder')->name('orders.add');
+       
+
+        
 
 
         // SERVICES CENTER/ BUSINESS STORE / GET BRANCH CODE / GET CERVICES CENTER BASED ON REGION ID / ADDRESS DETAILS 
         Route::post('serviceStore', 'OrderController@serviceStore')->name('orders.serviceStore');
         Route::post('businessStore', 'OrderController@businessStore')->name('orders.businessStore');
+        // Route::put('businessUpdate', 'OrderController@UpdateBusinessRegion')->name('orders.businessUpdate');
+        Route::get('region', 'OrderController@viewBusinessRegion')->name('orders.region');
+        Route::get('services-center', 'OrderController@viewServicesCenter')->name('orders.services-center');
       
         Route::get('get-branch-code', 'OrderController@getbranchcode')->name('orders.getbranchcode');
         Route::get('get_services_center/{regionId}', 'OrderController@getServiceCenter')->name('orders.getServiceCenter');

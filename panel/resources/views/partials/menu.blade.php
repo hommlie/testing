@@ -106,6 +106,34 @@
                                         </p>
                                     </a>
                                 </li>
+                            @endcan 
+                               {{-- VIEW SERVICE CENTER --}}
+                              @can('order_access')
+                            <li class="nav-item">
+                                <a href="{{ route("admin.orders.region") }}"
+                                    class="nav-link {{ request()->is('admin/orders/region') ? 'active' : '' }}">
+                                    <i class="fa fa-check-circle mr-2">
+
+                                    </i>
+                                    <p>
+                                        <span>View Business Region</span>
+                                    </p>
+                                </a>
+                            </li>
+                            @endcan
+                               {{-- VIEW SERVICE CENTER --}}
+                                @can('order_access')
+                            <li class="nav-item">
+                                <a href="{{ route("admin.orders.services-center") }}"
+                                    class="nav-link {{ request()->is('admin/orders/services-center') ? 'active' : '' }}">
+                                    <i class="fa fa-check-circle mr-2">
+
+                                    </i>
+                                    <p>
+                                        <span>View Services Center</span>
+                                    </p>
+                                </a>
+                            </li>
                             @endcan
                             
                         </ul>

@@ -85,6 +85,22 @@
                                         @endif
                                         </div>
                                     </div>
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="Image title" class="col-form-label">Meta title:</label>
+                                            <input type="text" class="form-control" name="meta_title"
+                                                placeholder="Enter Image title">
+
+                                        </div>
+                                    </div>
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="meta_description" class="col-form-label">Meta
+                                                Description:</label>
+                                            <textarea class="form-control" name="meta_description"
+                                                placeholder="Enter Image title"></textarea>
+                                        </div>
+                                    </div>
 <!-- 
                                         <div class="form-group">
                                             <label for="icon">{{ trans('Video') }}</label>

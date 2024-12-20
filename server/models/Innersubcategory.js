@@ -16,6 +16,10 @@ Innersubcategory.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    sub_title: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     status: {
         type: DataTypes.INTEGER,
         allowNull: false,

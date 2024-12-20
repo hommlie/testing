@@ -11,11 +11,14 @@ use App\Models\Products;
 use App\Models\Employees;
 use App\Models\Variation;
 use App\Models\Attribute;
+use App\Models\PrivacyPolicy;
+use App\Models\TermsConditions;
 use App\Models\Subcategory;
 use App\Models\Coupons;
 use App\Models\Transaction;
 use App\Models\ServicesCenter;
 use App\Models\Business_region;
+use App\Models\About;
 use App\Models\Address;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -60,9 +63,6 @@ class OrderController extends Controller
             ->groupBy('order_number')
             ->orderBy('id', 'DESC')
             ->paginate(10000000000000);
-
-
-
 
         return view('admin.orders.index', compact('data'));
 
@@ -368,7 +368,7 @@ class OrderController extends Controller
         }
         if (!$request->technicianAssign == '') {
             $ORST = '2'; // ORDER STATUS STORE 2 IN DATABASE 
-        }else{
+        } else {
             $ORST = '1';
         }
 
@@ -402,7 +402,7 @@ class OrderController extends Controller
                     'branch_code' => $request->branchcode,
                     'customer_type' => $request->customerType,
                     'business_lead' => $request->businessLead,
-                    'bill_to_Name' => $request -> billToAccountName,
+                    'bill_to_Name' => $request->billToAccountName,
                     'image' => $request->hidden_image,
                     'qty' => $request->hidden_quantity,
                     'price' => $splitPrice,
@@ -492,40 +492,40 @@ class OrderController extends Controller
         // dd($request->all());
         // Validate the request data
         // try {
-            $this->validate($request, [
-                'hidden_quantity' => 'required|integer',
-                'hidden_tax' => 'required|numeric',
-                'hidden_image' => 'required',
-                'hidden_product_name' => 'required',
-                'serviceCenterType' => 'required',
-                'employeeName' => 'required',
-                'billing' => 'required',
-                'accountType' => 'required',
-                'accountSubType' => 'required',
-                'businessRegion' => 'required',
-                'businessSubRegion' => 'required',
-                'branchcode' => 'required',
-                'customerType' => 'required',
-                'category' => 'required|integer',
-                'subcategory' => 'required|integer',
-                'service' => 'required|integer',
-                'price' => 'required',
-                'desired_date' => 'required|date',
-                'desired_time' => 'required|date_format:H:i',
-                'fullname' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'mobile' => 'required|digits:10',
-                'landmark' => 'nullable|string|max:255',
-                'address' => 'required|string|max:500',
-                'houseNo' => 'required|string|max:255',
-                'pincode' => 'required|digits:6',
-                'srTime' => 'required',
-                'srInterval' => 'required',
-                'clatlon' => 'required',
-                'attribute' => 'required',
-                'variationsID' => 'required',
-            ]);
-        
+        $this->validate($request, [
+            'hidden_quantity' => 'required|integer',
+            'hidden_tax' => 'required|numeric',
+            'hidden_image' => 'required',
+            'hidden_product_name' => 'required',
+            'serviceCenterType' => 'required',
+            'employeeName' => 'required',
+            'billing' => 'required',
+            'accountType' => 'required',
+            'accountSubType' => 'required',
+            'businessRegion' => 'required',
+            'businessSubRegion' => 'required',
+            'branchcode' => 'required',
+            'customerType' => 'required',
+            'category' => 'required|integer',
+            'subcategory' => 'required|integer',
+            'service' => 'required|integer',
+            'price' => 'required',
+            'desired_date' => 'required|date',
+            'desired_time' => 'required|date_format:H:i',
+            'fullname' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'mobile' => 'required|digits:10',
+            'landmark' => 'nullable|string|max:255',
+            'address' => 'required|string|max:500',
+            'houseNo' => 'required|string|max:255',
+            'pincode' => 'required|digits:6',
+            'srTime' => 'required',
+            'srInterval' => 'required',
+            'clatlon' => 'required',
+            'attribute' => 'required',
+            'variationsID' => 'required',
+        ]);
+
         // } catch (\Illuminate\Validation\ValidationException $e) {
         //     return response()->json([
         //         'error' => 'Validation failed',
@@ -537,7 +537,7 @@ class OrderController extends Controller
             $clatlon = $request->input('clatlon');
             list($latitude, $longitude) = explode(',', $clatlon);
         }
-        
+
 
         $order = Order::find($id);
 
@@ -555,7 +555,7 @@ class OrderController extends Controller
             'branch_code' => $request->branchcode,
             'customer_type' => $request->customerType,
             'full_name' => $request->fullname,
-            'bill_to_Name' => $request -> billToAccountName,
+            'bill_to_Name' => $request->billToAccountName,
             'email' => $request->email,
             'mobile' => $request->mobile,
             'landmark' => $request->landmark,
@@ -605,6 +605,7 @@ class OrderController extends Controller
             'payment_type',
             'payment_id',
             'full_name',
+            'bill_to_Name',
             'email',
             'mobile',
             'landmark',
@@ -617,7 +618,7 @@ class OrderController extends Controller
             'is_otp_verified',
             'order_total',
             'discount_amount',
-            'order_total',
+            'house_number',
             \DB::raw('DATE_FORMAT(created_at, "%d-%m-%Y") as date')
         )
             ->where('order_number', $id)
@@ -625,7 +626,7 @@ class OrderController extends Controller
 
         // Fetch aggregated order data separately
         $aggregated_order_info = Order::select(
-            \DB::raw('SUM(price * qty) AS subtotal'),
+            \DB::raw('SUM(price) AS subtotal'),
             \DB::raw('SUM(tax) AS tax'),
             \DB::raw('SUM(shipping_cost) AS shipping_cost'),
             \DB::raw('SUM(order_total) AS grand_total')
@@ -640,6 +641,11 @@ class OrderController extends Controller
             $order_info->shipping_cost = $aggregated_order_info->shipping_cost;
             $order_info->grand_total = $aggregated_order_info->grand_total;
         }
+
+        $aboutData = About::first();
+        $policyData = PrivacyPolicy::first();
+        $conditionsData = TermsConditions::first();
+
 
         // Fetch detailed order items
         $order_data = Order::select(
@@ -664,7 +670,7 @@ class OrderController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        return view('admin.orders.order-details', compact('order_info', 'order_data'));
+        return view('admin.orders.order-details', compact('order_info', 'order_data', 'aboutData', 'policyData', 'conditionsData'));
     }
 
     // public function delete()
@@ -812,39 +818,92 @@ class OrderController extends Controller
             'regionName' => 'required|string|max:255',
             'stateName' => 'required|string|max:255',
         ]);
-    
+
         $regionName = strtolower($validated['regionName']);
         $stateName = strtolower($validated['stateName']);
-    
+
         $existingRegion = Business_region::whereRaw('LOWER(zone) = ?', [$regionName])
-                                          ->whereRaw('LOWER(state) = ?', [$stateName])
-                                          ->exists();
-    
+            ->whereRaw('LOWER(state) = ?', [$stateName])
+            ->exists();
+
         if ($existingRegion) {
-            return redirect()->back()->with('danger','This region and state combination already exists.');
+            return redirect()->back()->with('danger', 'This region and state combination already exists.');
         }
-    
+
         $existingRegionName = Business_region::whereRaw('LOWER(zone) = ?', [$regionName])->exists();
         $existingStateName = Business_region::whereRaw('LOWER(state) = ?', [$stateName])->exists();
-    
+
         if ($existingRegionName) {
             return redirect()->back()->with('danger', 'This region already exists.');
         }
-    
+
         if ($existingStateName) {
             return redirect()->back()->with('danger', 'This state already exists.');
         }
-    
+
         $businessRegion = new Business_region();
         $businessRegion->zone = $validated['regionName'];
         $businessRegion->state = $validated['stateName'];
         $businessRegion->status = 1;
         $businessRegion->save();
-    
+
         return redirect()->back()->with('success', 'Region saved successfully!');
     }
-    
-    
+
+    public function viewBusinessRegion()
+    {
+        $businessregion = Business_region::orderBy('id', 'asc')->get();
+        return view('admin.orders.region', compact('businessregion'));
+
+
+    }
+
+    public function UpdateBusinessRegion(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'regionName' => 'required|string|max:255',
+            'stateName' => 'required|string|max:255',
+        ]);
+
+        $regionName = strtolower($validated['regionName']);
+        $stateName = strtolower($validated['stateName']);
+
+        $existingRegion = Business_region::whereRaw('LOWER(zone) = ?', [$regionName])
+            ->whereRaw('LOWER(state) = ?', [$stateName])
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($existingRegion) {
+            return redirect()->back()->with('danger', 'This region and state combination already exists.');
+        }
+
+        $existingRegionName = Business_region::whereRaw('LOWER(zone) = ?', [$regionName])
+            ->where('id', '!=', $id)
+            ->exists();
+
+        $existingStateName = Business_region::whereRaw('LOWER(state) = ?', [$stateName])
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($existingRegionName) {
+            return redirect()->back()->with('danger', 'This region already exists.');
+        }
+
+        if ($existingStateName) {
+            return redirect()->back()->with('danger', 'This state already exists.');
+        }
+
+        Business_region::where('id', $id)->update([
+            'zone' => $validated['regionName'],
+            'state' => $validated['stateName'],
+            'status' => 1, // Status remains active
+        ]);
+
+        return redirect()->back()->with('success', 'Region updated successfully!');
+    }
+
+
+
 
     // GENTARE BRANCH CODE AUTOMATIC 
     public function getbranchcode()
@@ -896,6 +955,12 @@ class OrderController extends Controller
         $serviceCenter->save();
 
         return redirect()->back()->with('success', 'Service center added successfully!');
+    }
+
+    public function viewServicesCenter()
+    {
+        $serviceCenter = ServicesCenter::orderBy('id', 'asc')->get();
+        return view('admin.orders.services-center', compact('serviceCenter'));
     }
 
     // GET EXISTING CUSTOMER DETAILS (Name, Pincode, Mobile number, Pincode)

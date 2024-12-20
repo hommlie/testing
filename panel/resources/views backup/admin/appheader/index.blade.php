@@ -112,7 +112,7 @@
                                             </div>
                                            
                                             <div class="form-group">
-                                            <label for="image">Image <span class="text-success" style="font-size:12px;">(Accepted formats: jpeg, png, jpg, gif | Max size: 5MB)</span></label>
+                                            <label for="image">Image <span class="text-success" style="font-size:12px;">(Accepted formats: jpeg, png, jpg, gif | Max size: 1MB)</span></label>
                                                 <input type="file" name="image" class="form-control">
                                                 @if ($header->image)
                                                     <img src="{{ asset('/storage/app/public/appHeaderImgae/' . $header->image) }}"
