@@ -16,7 +16,7 @@ exports.initiatePayment = async (req, res) => {
     });
 
     let amount = req.body.amount;
-        
+
     amount = Math.round(amount * 100);
 
     const options = {
@@ -65,6 +65,7 @@ exports.order = async (req, res) => {
     grand_total,
     discount_amount, 
     coupon_name, 
+    coupon_id,
     order_notes, 
     full_name, 
     email, 
@@ -141,6 +142,7 @@ exports.order = async (req, res) => {
             variation,
             tax: (tax * qty) / variation_times,
             coupon_name,
+            coupon_id,
             shipping_cost: shipping_cost,
             order_total: grand_total,
             order_notes,

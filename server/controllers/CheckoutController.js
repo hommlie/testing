@@ -4,7 +4,10 @@ const { Sequelize } = require('sequelize');
 const apiUrl = process.env.apiUrl;
 
 exports.checkout = async(req, res) => {
-    const { user_id, coupon_name } = req.body;
+    const { 
+      user_id, 
+      // coupon_name 
+    } = req.body;
 
     try {
       if (!user_id) {
@@ -13,17 +16,20 @@ exports.checkout = async(req, res) => {
 
       // Check if there are existing orders with the coupon for the user
       const orderCount = await Order.count({
-        where: { user_id, coupon_name }
+        where: { 
+          user_id, 
+          // coupon_name 
+        }
       });
 
       // Fetch coupon details
-      const coupon = await Coupons.findOne({
-        attributes: ['quantity', 'times', 'end_date', 'coupon_name', 'type', 'percentage', 'amount'],
-        where: {
-          status: 1,
-          coupon_name
-        }
-      });
+      // const coupon = await Coupons.findOne({
+      //   attributes: ['quantity', 'times', 'end_date', 'coupon_name', 'type', 'percentage', 'amount'],
+      //   where: {
+      //     status: 1,
+      //     coupon_name
+      //   }
+      // });
 
       // Fetch cart items for the user
       const cartItems = await Cart.findAll({
@@ -48,47 +54,47 @@ exports.checkout = async(req, res) => {
       let discount_amount = 0;
 
       for (const value of cartItems) {
-        if (coupon_name) {
-          const now = new Date().toISOString().slice(0, 10);
+        // if (coupon_name) {
+        //   const now = new Date().toISOString().slice(0, 10);
 
-          if (coupon.end_date >= now) {
-            if (coupon.quantity === 1) {
-              if (orderCount > coupon.times) {
-                return res.status(200).json({ status: 0, message: 'Coupon Usage Limit Has Been Reached' });
-              } else {
-                if (coupon.type === '1') {
-                  if (value.price * value.qty > coupon.amount) {
-                    discount_amount = value.price * value.qty - coupon.amount;
-                  } else {
-                    return res
-                      .status(200)
-                      .json({ status: 0, message: `Each item amount should be more than ${Helper.CurrencyFormatter(coupon.amount)}` });
-                  }
-                }
+        //   if (coupon.end_date >= now) {
+        //     if (coupon.quantity === 1) {
+        //       if (orderCount > coupon.times) {
+        //         return res.status(200).json({ status: 0, message: 'Coupon Usage Limit Has Been Reached' });
+        //       } else {
+        //         if (coupon.type === '1') {
+        //           if (value.price * value.qty > coupon.amount) {
+        //             discount_amount = value.price * value.qty - coupon.amount;
+        //           } else {
+        //             return res
+        //               .status(200)
+        //               .json({ status: 0, message: `Each item amount should be more than ${Helper.CurrencyFormatter(coupon.amount)}` });
+        //           }
+        //         }
 
-                if (coupon.type === '0') {
-                  discount_amount = (value.price * value.qty * coupon.percentage) / 100;
-                }
-              }
-            } else {
-              if (coupon.type === '1') {
-                if (value.price * value.qty > coupon.amount) {
-                  discount_amount = value.price * value.qty - coupon.amount;
-                } else {
-                  return res
-                    .status(200)
-                    .json({ status: 0, message: `Amount should be more than ${Helper.CurrencyFormatter(coupon.amount)}` });
-                }
-              }
+        //         if (coupon.type === '0') {
+        //           discount_amount = (value.price * value.qty * coupon.percentage) / 100;
+        //         }
+        //       }
+        //     } else {
+        //       if (coupon.type === '1') {
+        //         if (value.price * value.qty > coupon.amount) {
+        //           discount_amount = value.price * value.qty - coupon.amount;
+        //         } else {
+        //           return res
+        //             .status(200)
+        //             .json({ status: 0, message: `Amount should be more than ${Helper.CurrencyFormatter(coupon.amount)}` });
+        //         }
+        //       }
 
-              if (coupon.type === '0') {
-                discount_amount = (value.price * value.qty * coupon.percentage) / 100;
-              }
-            }
-          } else {
-            return res.status(200).json({ status: 0, message: 'This coupon code is invalid or has expired.' });
-          }
-        }
+        //       if (coupon.type === '0') {
+        //         discount_amount = (value.price * value.qty * coupon.percentage) / 100;
+        //       }
+        //     }
+        //   } else {
+        //     return res.status(200).json({ status: 0, message: 'This coupon code is invalid or has expired.' });
+        //   }
+        // }
 
         cdata.push({
           id: value.id,
@@ -119,13 +125,15 @@ exports.checkout = async(req, res) => {
       });
 
       if (cartSummary) {
+
         return res.status(200).json({
           status: 1,
           message: 'Success',
           data: cartSummary,
           cartdata: cdata,
-          coupon_name: coupon ? coupon.coupon_name : ''
+          // coupon_name: coupon ? coupon.coupon_name : ''
         });
+
       } else {
         return res.status(200).json({ status: 0, message: 'Something went wrong' });
       }
