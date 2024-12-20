@@ -72,7 +72,7 @@ export default function ReviewBooking() {
 
     const calculateCouponDiscount = () => {
         if (selectedCoupon) {
-            const subtotal = cart.reduce((acc, item) => acc + (Number(item.price) + Number(item.tax) * item.qty), 0);
+            const subtotal = cart.reduce((acc, item) => acc + (Number(item.price) * item.qty), 0);
             if (selectedCoupon.amount) {
                 setCouponDiscount(Number(selectedCoupon.amount));
             } else if (selectedCoupon.percentage) {
@@ -102,7 +102,6 @@ export default function ReviewBooking() {
                         amount: totalAmount,
                         currency: "INR",
                         user_id: user.id,
-                        coupon_id: selectedCoupon ? selectedCoupon.id : null,
                     }, {
                         headers: {
                             Authorization: `Bearer ${jwtToken}`,
@@ -165,28 +164,6 @@ export default function ReviewBooking() {
 
     const placeOrder = async (user, payment_id, razorpay_payment_id = null) => {
         try {
-            
-            console.log({
-                user_id: user.id, 
-                payment_type: paymentType?.id, 
-                payment_id: razorpay_payment_id || payment_id, 
-                grand_total: totalAmount - couponDiscount,
-                discount_amount: couponDiscount,
-                coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
-                coupon_id: selectedCoupon ? selectedCoupon.id : null, 
-                order_notes: null, 
-                full_name: selectedAddrs?.name, 
-                email: selectedAddrs?.email, 
-                mobile: selectedAddrs?.mobile, 
-                landmark: selectedAddrs?.landmark, 
-                street_address: selectedAddrs?.address, 
-                pincode: selectedAddrs.pincode,
-                latitude: selectedAddrs.latitude,
-                longitude: selectedAddrs.longitude,
-                desired_date: selectedDayTime?.date?.formattedDate,
-                desired_time: selectedDayTime?.time,
-            });
-            
 
             const response = await axios.post(`${config.API_URL}/api/order`, 
                 {

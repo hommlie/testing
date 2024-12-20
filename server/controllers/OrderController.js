@@ -16,27 +16,7 @@ exports.initiatePayment = async (req, res) => {
     });
 
     let amount = req.body.amount;
-
-    if (req.body.coupon_id) {
-      const coupon = await Coupons.findOne({
-        where: { id: req.body.coupon_id }
-      });
-
-      if (coupon) {
-        let discountAmount = 0;
-        if (coupon.percentage) {
-          discountAmount = (amount * coupon.percentage) / 100;
-        } else if (coupon.amount) {
-          discountAmount = coupon.amount;
-        }
-
-        // Ensure discount doesn't exceed the total amount
-        discountAmount = Math.min(discountAmount, amount);
-
-        amount -= discountAmount;
-      }
-    }
-    
+        
     amount = Math.round(amount * 100);
 
     const options = {
