@@ -382,6 +382,7 @@ class OrderController extends Controller
         if ($request->srTime > 1) {
             $splitPrice = $request->price / $request->srTime;
             $splitTax = $request->hidden_tax / $request->srTime;
+            $splitcouponsprice = $request->couponsprice / $request->srTime;
             $initialDate = Carbon::parse($request->desired_date);
 
             for ($i = 0; $i < $request->srTime; $i++) {
@@ -407,7 +408,7 @@ class OrderController extends Controller
                     'qty' => $request->hidden_quantity,
                     'price' => $splitPrice,
                     'coupon_id' => $request->coupons,
-                    'discount_amount' => $request->couponsprice,
+                    'discount_amount' => $splitcouponsprice,
                     'attribute' => $attribute,
                     'variation' => $request->variationsID,
                     'tax' => $splitTax,
@@ -629,7 +630,8 @@ class OrderController extends Controller
             \DB::raw('SUM(price) AS subtotal'),
             \DB::raw('SUM(tax) AS tax'),
             \DB::raw('SUM(shipping_cost) AS shipping_cost'),
-            \DB::raw('SUM(order_total) AS grand_total')
+            \DB::raw('SUM(order_total) AS grand_total'),
+            \DB::raw('SUM(discount_amount) AS grand_discount_amount')
         )
             ->where('order_number', $id)
             ->first();
@@ -640,6 +642,7 @@ class OrderController extends Controller
             $order_info->tax = $aggregated_order_info->tax;
             $order_info->shipping_cost = $aggregated_order_info->shipping_cost;
             $order_info->grand_total = $aggregated_order_info->grand_total;
+            $order_info->grand_discount_amount = $aggregated_order_info->grand_discount_amount;
         }
 
         $aboutData = About::first();
@@ -811,6 +814,20 @@ class OrderController extends Controller
 
 
     //============================================================================================
+
+    // SERACH ORDER DATA USING ORDER-ID 
+    public function getOrderData($orderID)
+    {
+        $orderData = Order::where('order_number', 'LIKE', "%$orderID%")
+                          ->orWhere('id', 'LIKE', "%$orderID%")
+                          ->get();
+    
+        return response()->json($orderData);
+    }
+    
+
+
+
     // ADD BUSINESS REGION
     public function businessStore(Request $request)
     {
