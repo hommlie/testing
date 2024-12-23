@@ -47,7 +47,7 @@ exports.checkout = async(req, res) => {
           [Sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/products/', image)`), 'image_url']
         ],
         where: { user_id },
-        // order: [['id', 'DESC']]
+        order: [['id', 'DESC']]
       });
 
       let cdata = [];
@@ -115,11 +115,9 @@ exports.checkout = async(req, res) => {
       // Calculate totals from cart data
       const cartSummary = await Cart.findOne({
         attributes: [
-          'id',
           [Sequelize.literal('SUM(price*qty)'), 'subtotal'],
           [Sequelize.literal('SUM(tax*qty)'), 'tax'],
           [Sequelize.literal('SUM(shipping_cost)'), 'shipping_cost'],
-          'vendor_id'
         ],
         where: { user_id }
       });
