@@ -6,6 +6,10 @@ use App\Models\Business_region;
 
 class RegionController extends Controller
 {
+    public function index(){
+        return ("admin.orders.region");
+
+    }
     public function getStates(Request $request)
     {
         dd($request->query('zone'));

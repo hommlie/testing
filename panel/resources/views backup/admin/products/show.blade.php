@@ -87,6 +87,25 @@
           @endif
                   </div>
                 </div>
+                {{-- PRODUCT META TITLE --}}
+                <div class="form-group row">
+                  <label for="Image title" class="col-sm-2 col-form-label">Meta title:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="meta_title" placeholder="Enter Meta title"
+                      value="{{$data->meta_title}}">
+                  </div>
+                </div>
+
+                {{-- PRODUCT META DESCRIPTION --}}
+                <div class="form-group row">
+                  <label for="meta_description" class="col-sm-2 col-form-label">Meta
+                    Description:</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name="meta_description"
+                      placeholder="Enter Meta Description">{{ $data->meta_description }}</textarea>
+                  </div>
+                </div>
+
 
                 <!-- <div class="form-group row">
                                       <label for="brand" class="col-sm-2 col-form-label">{{ trans('labels.brand') }}</label>
@@ -494,7 +513,7 @@
                     <span id="ratingError" class="text-danger d-none">Rating must be between 0 and 5.</span>
                     @if ($errors->has('productRating'))
             <span class="text-danger">{{ $errors->first('productRating') }}</span>
-            @endif
+          @endif
                   </div>
                 </div>
               </div>
@@ -596,78 +615,78 @@
                 <div class="panel-body variation" @if ($data->is_variation != '1') style="display: none;" @endif>
 
                   @foreach ($variations as $ky => $variation)
-              <div class="row" id="del-{{$variation->id}}">
-              <input type="hidden" name="variation_id[]" value="{{$variation->id}}">
+                <div class="row" id="del-{{$variation->id}}">
+                <input type="hidden" name="variation_id[]" value="{{$variation->id}}">
 
-              <div class="col-sm-2 nopadding">
-                <div class="form-group">
-                <label for="attribute" class="col-sm-12 col-form-label">{{ trans('labels.attribute') }}</label>
-                <div class="col-sm-112">
-                  <select class="form-control" name="attribute[{{$ky}}]" id="attribute">
-                  <option value="">{{ trans('placeholder.select_attribute') }}</option>
-                  @foreach ($attribute as $attributes)
+                <div class="col-sm-2 nopadding">
+                  <div class="form-group">
+                  <label for="attribute" class="col-sm-12 col-form-label">{{ trans('labels.attribute') }}</label>
+                  <div class="col-sm-112">
+                    <select class="form-control" name="attribute[{{$ky}}]" id="attribute">
+                    <option value="">{{ trans('placeholder.select_attribute') }}</option>
+                    @foreach ($attribute as $attributes)
             <option value="{{$attributes->id}}" {{ $variation->attribute_id == $attributes->id ? 'selected' : '' }}>{{$attributes->attribute}}</option>
           @endforeach
-                  </select>
+                    </select>
+                  </div>
+                  </div>
                 </div>
+
+                <div class="col-sm-1 nopadding">
+                  <div class="form-group">
+                  <label for="variation" class="col-form-label">Variation</label>
+                  <input type="text" class="form-control" name="variation[{{$ky}}]" id="variation"
+                    value="{{$variation->variation}}" placeholder="Variation">
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-sm-1 nopadding">
-                <div class="form-group">
-                <label for="variation" class="col-form-label">Variation</label>
-                <input type="text" class="form-control" name="variation[{{$ky}}]" id="variation"
-                  value="{{$variation->variation}}" placeholder="Variation">
+                <div class="col-sm-2 nopadding">
+                  <div class="form-group">
+                  <label for="variation_interval" class="col-form-label">Interval(AMC)</label>
+                  <input type="number" class="form-control discount-percentage" id="variation_interval"
+                    name="variation_interval[{{$ky}}]" value="{{$variation->variation_interval}}"
+                    placeholder="In days">
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-sm-2 nopadding">
-                <div class="form-group">
-                <label for="variation_interval" class="col-form-label">Interval(AMC)</label>
-                <input type="number" class="form-control discount-percentage" id="variation_interval"
-                  name="variation_interval[{{$ky}}]" value="{{$variation->variation_interval}}"
-                  placeholder="In days">
+
+                <div class="col-sm-1 nopadding">
+                  <div class="form-group">
+                  <label for="variation_times" class="col-form-label">Times(AMC)</label>
+                  <input type="text" class="form-control discount-percentage" id="variation_times"
+                    name="variation_times[{{$ky}}]" pattern="[0-9]+" value="{{$variation->variation_times}}"
+                    placeholder="e.g., 5">
+                  </div>
                 </div>
-              </div>
 
-
-              <div class="col-sm-1 nopadding">
-                <div class="form-group">
-                <label for="variation_times" class="col-form-label">Times(AMC)</label>
-                <input type="text" class="form-control discount-percentage" id="variation_times"
-                  name="variation_times[{{$ky}}]" pattern="[0-9]+" value="{{$variation->variation_times}}"
-                  placeholder="e.g., 5">
+                <div class="col-sm-1 nopadding">
+                  <div class="form-group">
+                  <label for="price" class="col-form-label">Price</label>
+                  <input type="text" class="form-control" id="var_price" name="price[{{$ky}}]" pattern="[0-9]+"
+                    value="{{$variation->price}}" placeholder="Price">
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-sm-1 nopadding">
-                <div class="form-group">
-                <label for="price" class="col-form-label">Price</label>
-                <input type="text" class="form-control" id="var_price" name="price[{{$ky}}]" pattern="[0-9]+"
-                  value="{{$variation->price}}" placeholder="Price">
+                <div class="col-sm-2 nopadding">
+                  <div class="form-group">
+                  <label for="discounted_variation_price" class="col-form-label">Discounted Price</label>
+                  <input type="text" class="form-control discounted-pric" id="discounted_variation_price"
+                    name="discounted_variation_price[{{$ky}}]"
+                    value="{{ $variation->discounted_variation_price }}" pattern="[0-9]+"
+                    placeholder="{{ trans('placeholder.discounted_price') }}">
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-sm-2 nopadding">
-                <div class="form-group">
-                <label for="discounted_variation_price" class="col-form-label">Discounted Price</label>
-                <input type="text" class="form-control discounted-pric" id="discounted_variation_price"
-                  name="discounted_variation_price[{{$ky}}]"
-                  value="{{ $variation->discounted_variation_price }}" pattern="[0-9]+"
-                  placeholder="{{ trans('placeholder.discounted_price') }}">
+                <div class="col-sm-1 nopadding">
+                  <div class="form-group">
+                  <label for="qty" class="col-form-label">{{ trans('Qty') }}</label>
+                  <input type="text" class="form-control" name="qty[{{$ky}}]" pattern="[0-9]+"
+                    value="{{ $variation->qty }}" id="qty" placeholder="QTY">
+                  </div>
                 </div>
-              </div>
-
-              <div class="col-sm-1 nopadding">
-                <div class="form-group">
-                <label for="qty" class="col-form-label">{{ trans('Qty') }}</label>
-                <input type="text" class="form-control" name="qty[{{$ky}}]" pattern="[0-9]+"
-                  value="{{ $variation->qty }}" id="qty" placeholder="QTY">
-                </div>
-              </div>
 
 
-              <!-- <div class="col-sm-2 nopadding">
+                <!-- <div class="col-sm-2 nopadding">
             <div class="form-group">
             <label for="variation" class="col-form-label">Variation</label>
             <input type="text" class="form-control" name="variation[{{$ky}}]" id="variation" placeholder="Variation" value="{{$variation->variation}}">
@@ -695,20 +714,20 @@
             </div>
             </div> -->
 
-              <div class="col-sm-1 nopadding">
-                <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-btn">
-                  <a href="javascript:void(0);" class="danger p-0"
-                    data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.delete') }}"
-                    onclick="do_delete('{{$variation->id}}','{{route('admin.variation.delete')}}','You want to Delete variation','{{ trans('labels.delete') }}')">
-                    <i class="ft-trash font-medium-3"></i>
-                  </a>
+                <div class="col-sm-1 nopadding">
+                  <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-btn">
+                    <a href="javascript:void(0);" class="danger p-0"
+                      data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.delete') }}"
+                      onclick="do_delete('{{$variation->id}}','{{route('admin.variation.delete')}}','You want to Delete variation','{{ trans('labels.delete') }}')">
+                      <i class="ft-trash font-medium-3"></i>
+                    </a>
+                    </div>
+                  </div>
                   </div>
                 </div>
                 </div>
-              </div>
-              </div>
           @endforeach
 
                   <!-- -------------------------------------- -->
@@ -813,16 +832,16 @@
                       placeholder="{{ trans('placeholder.description') }}">{!! $data->description !!}</textarea>
                     <div id="editor">{!! $data->description !!}</div>
                     @if ($errors->has('description'))
-              <span class="text-danger">{{ $errors->first('description') }}</span>
-              @endif
+            <span class="text-danger">{{ $errors->first('description') }}</span>
+          @endif
                   </div>
                 </div>
               </div>
             </div>
           </div>
-         
-           <!-- PRODUCT FAQs  -->
-           <div class="card">
+
+          <!-- PRODUCT FAQs  -->
+          <div class="card">
             <div class="card-header">
               <h6 class="card-title mb-0">Product FAQS</h6>
             </div>
@@ -831,12 +850,12 @@
                 <div class="form-group row">
                   <label for="description" class="col-sm-2 col-form-label">FAQs</label>
                   <div class="col-sm-10">
-                    <textarea class="form-control d-none" required id="faqs" name="faqs" rows="8"
-                      placeholder="" required >{!! $data->faqs !!}</textarea>
+                    <textarea class="form-control d-none" required id="faqs" name="faqs" rows="8" placeholder=""
+                      required>{!! $data->faqs !!}</textarea>
                     <div id="faqeditor"></div>
                     @if ($errors->has('faqs'))
-              <span class="text-danger">{{ $errors->first('faqs') }}</span>
-              @endif
+            <span class="text-danger">{{ $errors->first('faqs') }}</span>
+          @endif
                   </div>
                 </div>
               </div>
@@ -1366,33 +1385,33 @@
       });
   });
   document.addEventListener("DOMContentLoaded", function () {
-  console.log('Document is ready.');
-  const editorElement = document.querySelector('#faqeditor');
-  const textareaElement = document.querySelector('#faqs');
+    console.log('Document is ready.');
+    const editorElement = document.querySelector('#faqeditor');
+    const textareaElement = document.querySelector('#faqs');
 
-  if (!editorElement || !textareaElement) {
-    console.error('Editor or textarea element is missing!');
-  } else {
-    console.log('Elements found.');
-  }
+    if (!editorElement || !textareaElement) {
+      console.error('Editor or textarea element is missing!');
+    } else {
+      console.log('Elements found.');
+    }
 
-  ClassicEditor
-    .create(editorElement)
-    .then(editor => {
-      console.log('Editor initialized successfully.');
+    ClassicEditor
+      .create(editorElement)
+      .then(editor => {
+        console.log('Editor initialized successfully.');
 
-      // Load initial data into the editor
-      editor.setData(textareaElement.value);
+        // Load initial data into the editor
+        editor.setData(textareaElement.value);
 
-      // Sync editor content to the textarea
-      editor.model.document.on('change:data', () => {
-        textareaElement.value = editor.getData();
+        // Sync editor content to the textarea
+        editor.model.document.on('change:data', () => {
+          textareaElement.value = editor.getData();
+        });
+      })
+      .catch(error => {
+        console.error('Error initializing editor:', error);
       });
-    })
-    .catch(error => {
-      console.error('Error initializing editor:', error);
-    });
-});
+  });
 
 </script>
 

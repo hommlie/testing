@@ -181,21 +181,22 @@ class VendorController extends Controller
 
     // Process each order
     $orderData = $orders->map(function($order) use ($request) {
-        // Decode the question JSON from the subcategories table
-        $questions = json_decode($order->questions, true);
 
-        // Initialize flags for OnSite and OnCompleted questions
+        $questions = json_decode($order->questions, true);
         $onSiteExists = 0;
         $onCompletedExists = 0;
 
-        // Check if OnSite or OnCompleted questions exist in the JSON data
-        foreach ($questions as $questionSet) {
-            if ($questionSet['title'] == 'Onsite') {
-                $onSiteExists = 1;
+        if ($questions !== null && is_array($questions)){
+            foreach ($questions as $questionSet) {
+                if ($questionSet['title'] == 'Onsite') {
+                    $onSiteExists = 1;
+                }
+                if ($questionSet['title'] == 'OnCompleted') {
+                    $onCompletedExists = 1;
+                }
             }
-            if ($questionSet['title'] == 'OnCompleted') {
-                $onCompletedExists = 1;
-            }
+        }else {
+            echo "Data is empty or invalid JSON";
         }
 
         // Check if the combination of order status and order id exists in the QuestionAnswers table

@@ -118,7 +118,7 @@
                                         {{-- SERVICE CENTER TYPE --}}
                                         <label for="serviceCenterType">Service Center Type</label>
                                         <select name="serviceCenterType" id="serviceCenterType" name="serviceCenterType"
-                                            class="form-control">
+                                            class="form-control" required>
                                             <option value="" disabled selected>- Service Center Type -</option>
                                             <option value="hommlie">Hommlie</option>
                                             <option value="vendor">Vendor</option>
@@ -374,21 +374,21 @@
                                     </div>
                                     <br>
                                     {{--NEW SECTION FOR DATE --}}
-                                    <div class="row">
+                                  {{--   <div class="row">
                                         <div class="col-md-6">
-                                            {{-- CONTRACT START DATE --}}
+                                            {{-- CONTRACT START DATE 
                                             <label for="contractStartDate">Contract Start Date</label>
                                             <input type="text" name="contractStartDate" id="contractStartDate"
                                                 class="form-control" placeholder="Contract Start Date" readonly><br />
                                         </div>
                                         <div class="col-md-6">
-                                            {{-- CONTRACT END DATE --}}
+                                            {{-- CONTRACT END DATE 
                                             <label for="contractEndDate">Contract End Date</label>
                                             <input type="text" name="contractEndDate" id="contractEndDate"
                                                 class="form-control" placeholder="Contract End Date" readonly><br />
                                         </div>
 
-                                    </div>
+                                    </div> --}}
                                     <label for="price">Price (Without GST)</label>
                                     <input type="text" name="price" placeholder="Price" id="order_price" readonly
                                         class="form-control" />
@@ -401,7 +401,7 @@
 
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <label for="desired_date">Desired date</label>
+                                            <label for="desired_date">Contract Start Date</label>
                                             <input type="date" name="desired_date" placeholder="desired_date"
                                                 id="desired_date" class="form-control" />
                                             @if ($errors->has('desired_date'))
@@ -409,7 +409,7 @@
                                             @endif
                                         </div>
                                         <div class="col-lg-6">
-                                            <label for="desired_time">Desired Time</label>
+                                            <label for="desired_time"> Time</label>
                                             <input type="time" name="desired_time" placeholder="desired_time"
                                                 id="desired_time" class="form-control" />
                                             @if ($errors->has('desired_time'))
@@ -515,8 +515,9 @@
                                     </div>
                                     {{-- NEW SECTION --}}   
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-4">
                                             {{-- TECHNICIAN ASSIGN --}}
+                                            
                                             <label for="technicianAssign">Technician Assign</label>
                                             <select name="technicianAssign" id="technicianAssign" class="form-control">
                                                 <option value="" disabled selected>- Technician Assign -</option>
@@ -1334,9 +1335,9 @@
                                     document.getElementById('couponsprice').value = copAmount;
 
                                 } else {
-                                    const finaltot = (subtotal + taxAmount).toFixed(2);
+                                    const finaltot = (subtotal).toFixed(2);
                                     const copPer = (selectedCoupon.percentage / 100) * finaltot;
-                                    const totalAfterDiscount = (finaltot - copPer).toFixed(2);
+                                    const totalAfterDiscount = (finaltot - copPer + taxAmount).toFixed(2);
                                     totalPriceDisplay.innerHTML = `${subtotal.toFixed(2)} + ${taxAmount.toFixed(2)} - ${copPer.toFixed(2)} = ${totalAfterDiscount} /-`;
                                     // Update hidden inputs
                                     hiddenTotalPriceInput.value = totalAfterDiscount;

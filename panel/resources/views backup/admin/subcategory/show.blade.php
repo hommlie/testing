@@ -87,6 +87,24 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="Image title" class="col-form-label">Meta title:</label>
+                                            <input type="text" class="form-control" name="meta_title"
+                                                placeholder="Enter Meta title" value="{{$data->meta_title}}">
+
+                                        </div>
+                                    </div>
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="meta_description" class="col-form-label">Meta
+                                                Description:</label>
+                                            <textarea class="form-control" name="meta_description"
+                                                placeholder="Enter Meta Description">{{ $data->meta_description }}</textarea>
+                                        </div>
+                                    </div>
+                                   
                                     </div>
 
                                     <div class="form-actions center">

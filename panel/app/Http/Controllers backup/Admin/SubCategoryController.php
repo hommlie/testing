@@ -123,6 +123,8 @@ class SubCategoryController extends Controller
                 'icon' => $icon, // Ensure icon is included here
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
+                'meta_title' => $request->meta_title,
+                'meta_description' => $request->meta_description,
                 'thumbnail' => $thumbnail, // Ensure icon is included here
                 'video' => $video, // Ensure icon is included here
                 'subcategory_name' => $request->subcategory_name,
@@ -137,6 +139,8 @@ class SubCategoryController extends Controller
                 'icon' => $icon, // Ensure icon is included here as well
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
+                'meta_title' => $request->meta_title,
+                'meta_description' => $request->meta_description,
                 'thumbnail' => $thumbnail, // Ensure icon is included here as well
                 'video' => $video, // Ensure icon is included here as well
             ];
@@ -203,6 +207,8 @@ class SubCategoryController extends Controller
                 'icon' => $icon,
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
+                'meta_title' => $request->meta_title,
+                'meta_description' => $request->meta_description,
                 'subcategory_name' => $request->subcategory_name,
                 'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
             ];
@@ -214,6 +220,8 @@ class SubCategoryController extends Controller
                 'icon' => $icon,
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
+                'meta_title' => $request->meta_title,
+                'meta_description' => $request->meta_description,
             ];
         }
 

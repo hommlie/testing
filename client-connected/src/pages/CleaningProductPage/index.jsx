@@ -8,7 +8,7 @@ import Banner from '../../assets/images/innersubcat-banner.webp';
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 
-const InnerSubCategoryPage = () => {
+const CleaningProductPage = () => {
     const location = useLocation();
     const { id, tag } = useParams();
     const navigate = useNavigate();
@@ -27,10 +27,10 @@ const InnerSubCategoryPage = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         setIsLoading(true);
-        fetchInnerSubCategoryData();
+        fetchSubCategoryData();
     }, [id]);
 
-    const fetchInnerSubCategoryData = async () => {
+    const fetchSubCategoryData = async () => {
         try {
         // const response = await axios.post(`${config.API_URL}/api/innersubcategory`, { inner_subcat_id: id });
         const statData = {
@@ -469,4 +469,4 @@ const InnerSubCategoryPage = () => {
   );
 };
 
-export default InnerSubCategoryPage;
+export default CleaningProductPage;

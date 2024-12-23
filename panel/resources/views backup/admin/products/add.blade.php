@@ -20,7 +20,7 @@
         {{ Session::get('danger') }}
         @php
         Session::forget('danger');
-    @endphp
+      @endphp
       </div>
   @endif
     <form class="form" method="post" action="{{ route('admin.products.store') }}" enctype="multipart/form-data">
@@ -78,7 +78,7 @@
                       placeholder="{{ trans('Enter Service Name') }}" value="{{old('product_name')}}">
                     @if ($errors->has('product_name'))
             <span class="text-danger">{{ $errors->first('product_name') }}</span>
-          @endif
+            @endif
                   </div>
                 </div>
 
@@ -123,6 +123,24 @@
                     <input type="file" required class="form-control" id="prod_image" name="image[]" multiple
                       accept="image/*">
                     <div class="gallery row mt-3"></div> <!-- Container for image previews -->
+                  </div>
+                </div>
+                {{-- PRODUCT META TITLE --}}
+                <div class="form-group row">
+                  <label for="Image title" class="col-sm-2 col-form-label">Meta title:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="meta_title" placeholder="Enter Meta title"
+                    >
+                  </div>
+                </div>
+
+                {{-- PRODUCT META DESCRIPTION --}}
+                <div class="form-group row">
+                  <label for="meta_description" class="col-sm-2 col-form-label">Meta
+                    Description:</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name="meta_description"
+                      placeholder="Enter Meta Description"></textarea>
                   </div>
                 </div>
 
@@ -476,7 +494,7 @@
                     <span id="ratingError" class="text-danger d-none">Rating must be between 1 and 5.</span>
                     @if ($errors->has('productRating'))
             <span class="text-danger">{{ $errors->first('productRating') }}</span>
-            @endif
+          @endif
                   </div>
                 </div>
               </div>
@@ -670,88 +688,88 @@
 
 
 
-            <div class="col-sm-2 nopadding">
-            <div class="form-group">
-              <label for="attribute" class="col-sm-12 col-form-label">{{ trans('labels.attribute') }}</label>
-              <div class="col-sm-112">
-              <select class="form-control" name="attribute[]" id="attribute">
-                <option value="">{{ trans('placeholder.select_attribute') }}</option>
-                @foreach ($attribute as $attributes)
-          <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
-        @endforeach
-              </select>
-              </div>
-            </div>
-            </div>
-
-            <div class="col-sm-1 nopadding">
-            <div class="form-group">
-              <label for="variation" class="col-form-label">Variation</label>
-              <input type="text" class="form-control" name="variation[]" id="variation"
-              value="{{old('variation')}}" placeholder="Variation">
-            </div>
-            </div>
-
-
-
-            <!-- <div class="col-sm-2 nopadding">
-      <div class="form-group">
-      <label for="variation_discount_percentage" class="col-form-label">Discount (%)</label>
-      <input type="text" class="form-control discount-percentage" id="variation_discount_percentage" name="variation_discount_percentage[]" pattern="[0-9]+" value="{{old('variation_discount_percentage')}}" placeholder="e.g., 5">
-      </div>
-      </div> -->
-
-            <div class="col-sm-2 nopadding">
-            <div class="form-group">
-              <label for="variation_interval" class="col-form-label">Interval(AMC)</label>
-              <input type="number" class="form-control discount-percentage" id="variation_interval"
-              name="variation_interval[]" value="{{old('variation_interval')}}" placeholder="In days">
-            </div>
-            </div>
-
-
-            <div class="col-sm-1 nopadding">
-            <div class="form-group">
-              <label for="variation_times" class="col-form-label">Times(AMC)</label>
-              <input type="text" class="form-control discount-percentage" id="variation_times"
-              name="variation_times[]" pattern="[0-9]+" value="{{old('variation_times')}}"
-              placeholder="e.g., 5">
-            </div>
-            </div>
-
-            <div class="col-sm-1 nopadding">
-            <div class="form-group">
-              <label for="price" class="col-form-label">Price</label>
-              <input type="text" class="form-control" id="var_price" name="price[]" pattern="[0-9]+"
-              value="{{old('price')}}" placeholder="Price">
-            </div>
-            </div>
-
-            <div class="col-sm-2 nopadding">
-            <div class="form-group">
-              <label for="discounted_variation_price" class="col-form-label">Discounted Price</label>
-              <input type="text" class="form-control discounted-price" id="discounted_variation_price"
-              name="discounted_variation_price[]" pattern="[0-9]+"
-              placeholder="{{ trans('placeholder.discounted_price') }}">
-            </div>
-            </div>
-
-            <div class="col-sm-1 nopadding">
-            <div class="form-group">
-              <label for="qty" class="col-form-label">{{ trans('Qty') }}</label>
-              <input type="text" class="form-control" name="qty[]" pattern="[0-9]+" id="qty" placeholder="QTY">
-            </div>
-            </div>
-
-            <div class="col-sm-1 nopadding">
-            <div class="form-group">
-              <div class="input-group">
-              <div class="input-group-btn">
-                <button class="btn btn-success" type="button" onclick="variation_fields();"> + </button>
+              <div class="col-sm-2 nopadding">
+              <div class="form-group">
+                <label for="attribute" class="col-sm-12 col-form-label">{{ trans('labels.attribute') }}</label>
+                <div class="col-sm-112">
+                <select class="form-control" name="attribute[]" id="attribute">
+                  <option value="">{{ trans('placeholder.select_attribute') }}</option>
+                  @foreach ($attribute as $attributes)
+            <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
+          @endforeach
+                </select>
+                </div>
               </div>
               </div>
-            </div>
-            </div>
+
+              <div class="col-sm-1 nopadding">
+              <div class="form-group">
+                <label for="variation" class="col-form-label">Variation</label>
+                <input type="text" class="form-control" name="variation[]" id="variation"
+                value="{{old('variation')}}" placeholder="Variation">
+              </div>
+              </div>
+
+
+
+              <!-- <div class="col-sm-2 nopadding">
+        <div class="form-group">
+        <label for="variation_discount_percentage" class="col-form-label">Discount (%)</label>
+        <input type="text" class="form-control discount-percentage" id="variation_discount_percentage" name="variation_discount_percentage[]" pattern="[0-9]+" value="{{old('variation_discount_percentage')}}" placeholder="e.g., 5">
+        </div>
+        </div> -->
+
+              <div class="col-sm-2 nopadding">
+              <div class="form-group">
+                <label for="variation_interval" class="col-form-label">Interval(AMC)</label>
+                <input type="number" class="form-control discount-percentage" id="variation_interval"
+                name="variation_interval[]" value="{{old('variation_interval')}}" placeholder="In days">
+              </div>
+              </div>
+
+
+              <div class="col-sm-1 nopadding">
+              <div class="form-group">
+                <label for="variation_times" class="col-form-label">Times(AMC)</label>
+                <input type="text" class="form-control discount-percentage" id="variation_times"
+                name="variation_times[]" pattern="[0-9]+" value="{{old('variation_times')}}"
+                placeholder="e.g., 5">
+              </div>
+              </div>
+
+              <div class="col-sm-1 nopadding">
+              <div class="form-group">
+                <label for="price" class="col-form-label">Price</label>
+                <input type="text" class="form-control" id="var_price" name="price[]" pattern="[0-9]+"
+                value="{{old('price')}}" placeholder="Price">
+              </div>
+              </div>
+
+              <div class="col-sm-2 nopadding">
+              <div class="form-group">
+                <label for="discounted_variation_price" class="col-form-label">Discounted Price</label>
+                <input type="text" class="form-control discounted-price" id="discounted_variation_price"
+                name="discounted_variation_price[]" pattern="[0-9]+"
+                placeholder="{{ trans('placeholder.discounted_price') }}">
+              </div>
+              </div>
+
+              <div class="col-sm-1 nopadding">
+              <div class="form-group">
+                <label for="qty" class="col-form-label">{{ trans('Qty') }}</label>
+                <input type="text" class="form-control" name="qty[]" pattern="[0-9]+" id="qty" placeholder="QTY">
+              </div>
+              </div>
+
+              <div class="col-sm-1 nopadding">
+              <div class="form-group">
+                <div class="input-group">
+                <div class="input-group-btn">
+                  <button class="btn btn-success" type="button" onclick="variation_fields();"> + </button>
+                </div>
+                </div>
+              </div>
+              </div>
       @endif
 
                   <div class="clear"></div>
@@ -798,8 +816,8 @@
                       placeholder=""></textarea>
                     <div id="faqeditor"></div>
                     @if ($errors->has('faqs'))
-              <span class="text-danger">{{ $errors->first('faqs') }}</span>
-              @endif
+            <span class="text-danger">{{ $errors->first('faqs') }}</span>
+          @endif
                   </div>
                 </div>
               </div>
@@ -842,7 +860,7 @@
                     <select class="form-control" name="attribute[]">
                         <option value="">{{ trans('placeholder.select_attribute') }}</option>
                         @foreach ($attribute as $attributes)
-              <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
+                <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
             @endforeach
                     </select>
                 </div>
@@ -1119,30 +1137,30 @@
   // });
 
   const productRatingInput = document.getElementById('productRating');
-const ratingError = document.getElementById('ratingError');
+  const ratingError = document.getElementById('ratingError');
 
-productRatingInput.addEventListener('input', function () {
-  // Convert the value to an integer to prevent decimal points
-  let value = parseInt(this.value);
+  productRatingInput.addEventListener('input', function () {
+    // Convert the value to an integer to prevent decimal points
+    let value = parseInt(this.value);
 
-  // If value is greater than 5, set it to 5
-  if (value > 5) {
-    this.value = 5;
-    ratingError.textContent = 'Rating cannot be greater than 5.';
-    ratingError.classList.remove('d-none');
-  }
-  // If value is less than 0, set it to 0
-  else if (value < 0) {
-    this.value = 0;
-    ratingError.textContent = 'Rating cannot be less than 0.';
-    ratingError.classList.remove('d-none');
-  }
-  // If value is between 0 and 5, hide the error message
-  else {
-    this.value = value;  // Ensure valid value is reflected
-    ratingError.classList.add('d-none');
-  }
-});
+    // If value is greater than 5, set it to 5
+    if (value > 5) {
+      this.value = 5;
+      ratingError.textContent = 'Rating cannot be greater than 5.';
+      ratingError.classList.remove('d-none');
+    }
+    // If value is less than 0, set it to 0
+    else if (value < 0) {
+      this.value = 0;
+      ratingError.textContent = 'Rating cannot be less than 0.';
+      ratingError.classList.remove('d-none');
+    }
+    // If value is between 0 and 5, hide the error message
+    else {
+      this.value = value;  // Ensure valid value is reflected
+      ratingError.classList.add('d-none');
+    }
+  });
 
 
 
