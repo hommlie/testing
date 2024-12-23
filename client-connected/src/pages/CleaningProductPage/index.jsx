@@ -25,19 +25,22 @@ const CleaningProductPage = () => {
     const productRefs = useRef([]);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
+    },[]);
+
+    useEffect(() => {
         setIsLoading(true);
         fetchSubCategoryData();
     }, [id]);
 
     const fetchSubCategoryData = async () => {
         try {
-        // const response = await axios.post(`${config.API_URL}/api/innersubcategory`, { inner_subcat_id: id });
+        // const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
         const statData = {
-            "innersubcat_id": 71,
-            "innersubcategory_name": "Sofa Cleaning",
+            "subcat_id": 71,
+            "subcategory_name": "Sofa Cleaning",
             "slug": "sofa-cleaning-sofa-cleaning",
-            "banner": "https://www.hommlie.com/panel/public/storage/app/public/images/banner/img1.png",
+            "subcategory_banner": "https://www.hommlie.com/panel/public/storage/app/public/images/banner/img1.png",
             "products": [
                 {
                     "id": 830,

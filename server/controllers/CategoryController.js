@@ -117,3 +117,182 @@ exports.getSubcategory = async (req, res) => {
   }
 };
 
+exports.getCleaningSubcategory = async (req, res) => {
+  try {
+    const { subcat_id } = req.body;
+
+    if (!subcat_id) {
+      return res.status(400).json({
+        status: 0,
+        message: 'subcat_id is required',
+      });
+    }
+
+    // Fetch subcategory data
+    const subcategoryData = await Subcategory.findOne({
+      attributes: [
+        'id',
+        'subcategory_name',
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url'],
+        'video',
+        'thumbnail',
+        'slug',
+        'alt_tag',
+        'image_title'
+      ],
+      where: { 
+        id: subcat_id, 
+        status: 1 
+      }
+    });
+
+    if (!subcategoryData) {
+      return res.status(404).json({
+        status: 0,
+        message: 'Subcategory not found or inactive',
+      });
+    }
+
+    // Fetch products for the specific subcategory with detailed information
+    const products = await Product.findAll({
+      where: { 
+        subcat_id: subcat_id, 
+        status: 1 
+      },
+      attributes: [
+        'id', 
+        'product_name', 
+        'product_price', 
+        'cat_id',
+        'discounted_price', 
+        'description',
+        'tags',
+        'product_qty',
+        'is_variation',
+        'vendor_id',
+        'sku',
+        'free_shipping',
+        'shipping_cost',
+        'tax_type',
+        'tax',
+        'est_shipping_days',
+        'is_return',
+        'return_days',
+        'faqs',
+        'slug'
+      ],
+      include: [
+        {
+          model: ProductImage,
+          attributes: [
+            'id',
+            'product_id',
+            'media',
+            'thumbnail',
+            'alt_tag',
+            'image_title',
+            [
+              sequelize.literal(`
+                CASE 
+                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', image)
+                  WHEN media = 'Video' THEN image
+                  ELSE NULL
+                END
+              `),
+              'image_url'
+            ]
+          ],
+          as: 'productimages'
+        },
+        {
+          model: Variation,
+          attributes: [
+            'id',
+            'product_id',
+            'attribute_id',
+            'price',
+            'description',
+            'discounted_variation_price',
+            'variation',
+            'variation_interval',
+            'variation_times',
+            'qty'
+          ],
+          include: [
+            {
+              model: Attribute,
+              attributes: ['id', 'attribute'],
+              where: { status: 1 },
+              as: 'attribute',
+            },
+          ],
+          as: 'variations',
+          required: false
+        },
+        {
+          model: Ratting,
+          as: 'rattings',
+          required: false
+        },
+        { model: Category, attributes: ['category_name', 'is_form'], as: 'category' },
+        { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' }
+      ],
+      order: [['id', 'DESC']]
+    });
+
+    // Transform the products data
+    const transformedProducts = await Promise.all(products.map(async (product) => {
+      const plainProduct = product.get({ plain: true });
+
+      // Restructure variations
+      const restructuredVariations = plainProduct.variations.map(variation => {
+        const { attribute, ...variationData } = variation;
+        return {
+          attribute_name: attribute.attribute,
+          data: variationData
+        };
+      });
+
+      // Get return policy
+      const returnPolicy = await User.findOne({
+        where: { id: product.vendor_id },
+        attributes: ['return_policies']
+      });
+
+      return {
+        ...plainProduct,
+        variations: restructuredVariations,
+        return_policy: returnPolicy?.return_policies,
+        is_form: plainProduct.category.is_form
+      };
+    }));
+
+    // Structure the response
+    const response = {
+      subcategory_id: subcategoryData.id,
+      subcategory_name: subcategoryData.subcategory_name,
+      subcategory_banner: subcategoryData.get('image_url'),
+      video: subcategoryData.video,
+      thumbnail: subcategoryData.thumbnail,
+      slug: subcategoryData.slug,
+      alt_tag: subcategoryData.alt_tag,
+      image_title: subcategoryData.image_title,
+      products: transformedProducts
+    };
+
+    return res.status(200).json({
+      status: 1,
+      message: 'Success',
+      data: response
+    });
+
+  } catch (error) {
+    console.error("Error fetching subcategory data:", error);
+    return res.status(500).json({
+      status: 0,
+      message: 'Error occurred',
+      error: error.message
+    });
+  }
+};
+

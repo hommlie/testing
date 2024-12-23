@@ -68,9 +68,7 @@ app.get('/google-reviews', RattingController.getGoogleReviews);
 //Categorymanagement
 app.get("/category", CategoryController.getCategory);
 app.post("/subcategory", CategoryController.getSubcategory);
-
-//innersubcategory
-app.post("/innersubcategory", InnerSubCategoryController.getInnerSubcategory);
+app.post("/cleaningsubcategory", CategoryController.getCleaningSubcategory);
 
 //Bannermanagement
 app.get("/banner", BannerController.getBanner);
