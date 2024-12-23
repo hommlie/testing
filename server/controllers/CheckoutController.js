@@ -47,7 +47,7 @@ exports.checkout = async(req, res) => {
           [Sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/products/', image)`), 'image_url']
         ],
         where: { user_id },
-        order: [['DESC']]
+        // order: [['id', 'DESC']]
       });
 
       let cdata = [];
