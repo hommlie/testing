@@ -36,111 +36,6 @@ const CleaningProductPage = () => {
     const fetchSubCategoryData = async () => {
         try {
         const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
-        const statData = {
-            "subcat_id": 71,
-            "subcategory_name": "Sofa Cleaning",
-            "slug": "sofa-cleaning-sofa-cleaning",
-            "subcategory_banner": "https://www.hommlie.com/panel/public/storage/app/public/images/banner/img1.png",
-            "products": [
-                {
-                    "id": 830,
-                    "product_name": "Basic Sofa Cleaning",
-                    "product_price": 349,
-                    "discounted_price": "249",
-                    "is_variation": 1,
-                    "sku": "NA",
-                    "slug": "basic-sofa-cleaning",
-                    "product_image": 'https://www.hommlie.com/panel/public/storage/app/public/images/products/product-672cfbf1bd8f5.png',
-                    "variations": [
-                        {
-                            "id": 3584,
-                            "product_id": 830,
-                            "attribute_id": 28,
-                            "attribute_name": "2 Seater Sofa",
-                            "price": "349",
-                            "discounted_variation_price": "249",
-                            "variation": "1 BHK",
-                            "variation_interval": "1",
-                            "variation_times": 1,
-                            "description": 'Hand Scrubbing of floor & tiles and cleaning hard to reach areas',
-                            "qty": "100",
-                            "created_at": "2024-11-07T13:57:59.000Z",
-                            "updated_at": "2024-11-07T13:57:59.000Z"
-                        },
-                        {
-                            "id": 3585,
-                            "product_id": 830,
-                            "attribute_id": 28,
-                            "price": "349",
-                            "discounted_variation_price": "249",
-                            "variation": "3 Seater Sofa",
-                            "variation_interval": "1",
-                            "variation_times": 1,
-                            "description": 'Drying up the bathroom with multi-fiber cloth & spraying scented freshner',
-                            "qty": "100",
-                            "created_at": "2024-11-07T13:57:59.000Z",
-                            "updated_at": "2024-11-07T13:57:59.000Z"
-                        }
-                    ],
-                    "ratings": []
-                },
-                {
-                    "id": 828,
-                    "product_name": "Leather Sofa Cleaning",
-                    "product_price": 1999,
-                    "discounted_price": "1499.00",
-                    "is_variation": 0,
-                    "sku": null,
-                    "slug": "leather-sofa-cleaning",
-                    "product_image": 'https://www.hommlie.com/panel/public/storage/app/public/images/products/product-67482cc361242.png',
-                    "variations": [
-                        {
-                            "id": 3586,
-                            "product_id": 830,
-                            "attribute_id": 28,
-                            "price": "349",
-                            "discounted_variation_price": "249",
-                            "variation": "1 Seater",
-                            "variation_interval": "1",
-                            "variation_times": 1,
-                            "description": 'Object removal. Removing bathroom toiletries and objects before cleaning, then replacing them afterwards',
-                            "qty": "100",
-                            "created_at": "2024-11-07T13:57:59.000Z",
-                            "updated_at": "2024-11-07T13:57:59.000Z"
-                        },
-                        {
-                            "id": 3587,
-                            "product_id": 830,
-                            "attribute_id": 28,
-                            "price": "349",
-                            "discounted_variation_price": "249",
-                            "variation": "2 Seater",
-                            "variation_interval": "1",
-                            "variation_times": 1,
-                            "description": 'Removal of dirt, black and yellow brown spots from all corners & fittings',
-                            "qty": "100",
-                            "created_at": "2024-11-07T13:57:59.000Z",
-                            "updated_at": "2024-11-07T13:57:59.000Z"
-                        },
-                        {
-                            "id": 3588,
-                            "product_id": 830,
-                            "attribute_id": 28,
-                            "price": "349",
-                            "discounted_variation_price": "249",
-                            "variation": "3 Seater",
-                            "variation_interval": "1",
-                            "variation_times": 1,
-                            "description": null,
-                            "qty": "100",
-                            "created_at": "2024-11-07T13:57:59.000Z",
-                            "updated_at": "2024-11-07T13:57:59.000Z"
-                        }
-                    ],
-                    "ratings": []
-                }
-            ]
-        };
         console.log(response.data.data);
         if (response.data.status === 1) {
           setInnerSubCategoryData(response.data.data);
@@ -374,7 +269,7 @@ const CleaningProductPage = () => {
                       >
                         <div className="">
                           <h3 className="text-base font-medium">
-                            {variation.variation}
+                            {variation.attribute_name}
                           </h3>
                           <p className="text-gray-500 text-sm">
                             {variation.discounted_variation_price ? (

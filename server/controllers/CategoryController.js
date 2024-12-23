@@ -246,13 +246,12 @@ exports.getCleaningSubcategory = async (req, res) => {
     const transformedProducts = await Promise.all(products.map(async (product) => {
       const plainProduct = product.get({ plain: true });
 
-      // Restructure variations with the new format
-      const restructuredVariations = plainProduct.variations.map(variation => {
-        return {
+      // Group variations by attribute_id
+      const groupedVariations = plainProduct.variations.reduce((acc, variation) => {
+        // Create variation object without attribute info
+        const variationData = {
           id: variation.id,
           product_id: variation.product_id,
-          attribute_id: variation.attribute_id,
-          attribute_name: variation.attribute.attribute,
           price: variation.price,
           discounted_variation_price: variation.discounted_variation_price,
           variation: variation.variation,
@@ -263,7 +262,24 @@ exports.getCleaningSubcategory = async (req, res) => {
           created_at: variation.created_at,
           updated_at: variation.updated_at
         };
-      });
+
+        // Check if attribute group exists
+        const existingGroup = acc.find(group => group.attribute_id === variation.attribute_id);
+
+        if (existingGroup) {
+          // Add variation to existing group
+          existingGroup.variations.push(variationData);
+        } else {
+          // Create new attribute group
+          acc.push({
+            attribute_id: variation.attribute_id,
+            attribute_name: variation.attribute.attribute,
+            variations: [variationData]
+          });
+        }
+
+        return acc;
+      }, []);
 
       // Get return policy
       const returnPolicy = await User.findOne({
@@ -271,9 +287,12 @@ exports.getCleaningSubcategory = async (req, res) => {
         attributes: ['return_policies']
       });
 
+      // Remove the original variations array
+      delete plainProduct.variations;
+
       return {
         ...plainProduct,
-        variations: restructuredVariations,
+        attributes: groupedVariations,
         return_policy: returnPolicy?.return_policies,
         is_form: plainProduct.category.is_form
       };
