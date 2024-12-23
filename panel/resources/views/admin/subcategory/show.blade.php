@@ -64,6 +64,31 @@
                                                 <span class="text-danger">{{ $errors->first('subcategory_name') }}</span>
                                             @endif
                                         </div>
+
+                                        <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="Image title" class="col-form-label">Subcategory title:</label>
+                                            <input type="text" class="form-control" name="subcategory_title"
+                                                placeholder="Enter Subcategory Title" required value="{{$data->subcategory_title}}" >
+                                            @if ($errors->has('subcategory_title'))
+                                                <span class="text-danger">{{ $errors->first('subcategory_title') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="subcategory sub title" class="col-form-label">Subcategory Sub title :</label>
+                                            <input type="text" class="form-control" name="subcategory_sub_title"
+                                                placeholder="Enter Subcategory Sub Title" value="{{$data->subcategory_sub_title}}" required>
+
+                                        </div>
+                                    </div>
+
+
+
+
+
                                         <div class="product gravity">
                                         <div class="form-group">
                                             <label for="all_tag" class="col-form-label">ALT tag:</label>

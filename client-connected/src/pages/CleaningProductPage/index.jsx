@@ -35,7 +35,7 @@ const CleaningProductPage = () => {
 
     const fetchSubCategoryData = async () => {
         try {
-        // const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
+        const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
         const statData = {
             "subcat_id": 71,
             "subcategory_name": "Sofa Cleaning",
@@ -140,9 +140,11 @@ const CleaningProductPage = () => {
                 }
             ]
         };
-        // setInnerSubCategoryData(response.data.data);
-        setInnerSubCategoryData(statData);
-        setIsLoading(false);
+        console.log(response.data.data);
+        if (response.data.status === 1) {
+          setInnerSubCategoryData(response.data.data);
+          setIsLoading(false);
+        }
         } catch (error) {
         console.error("Error fetching inner sub-category data:", error);
         setIsLoading(false);
@@ -345,7 +347,7 @@ const CleaningProductPage = () => {
         <div className="lg:w-3/4 overflow-y-auto h-screen custom-scrollbar scrollbar-hide">
           <section className="bg-white rounded-lg p-4 space-y-4">
             <img
-              src={Banner}
+              src={innerSubCategoryData?.subcategory_banner}
               alt={innerSubCategoryData.innersubcategory_name}
               className="w-full h-[500px] object-cover rounded-md"
             />

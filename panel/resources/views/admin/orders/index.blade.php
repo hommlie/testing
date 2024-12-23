@@ -55,7 +55,7 @@
                            {{--  <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
                                 data-bs-toggle="modal" data-bs-target="#SR_ID">
                                 SR-ID Close
-                            </a>--}}
+                            </a> --}}
                             <a href="{{ route('admin.orders.add') }}"
                                 class="btn btn-raised btn-primary text-light btn-min-width mb-0 me-2 "
                                 style="margin-left:5%;">
@@ -71,7 +71,7 @@
                         <div class="modal-dialog modal-xl" role="document" style="max-width: 90%;">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Customer Data</h5>
+                                    <h5 class="modal-title">Order Data</h5>
                                     <div class="col-md-4 d-flex">
                                         <input type="text" class="form-control" id="orderID"
                                             placeholder="Enter ORDER-ID / SR-ID">

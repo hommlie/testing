@@ -28,6 +28,10 @@
         font-size: 8px !important;
         z-index: 9999 !important;
     }
+
+    .pac-container {
+        z-index: 1051;
+    }
 </style>
 @section('title')
 @endsection
@@ -73,7 +77,7 @@
                             <select id="addResidentialOrder" class="form-select col-md-3 mb-0 border-0 mr-3"
                                 aria-label="Select Order">
                                 <option value="" disabled selected>- Select an Order -</option>
-                               
+
                             </select>
                         </div>
 
@@ -133,7 +137,7 @@
 
                                         <label for="accountType">Account Type</label>
                                         <select name="accountType" id="accountType" name="accountType"
-                                            class="form-control">
+                                            class="form-control" required>
                                             <option value="" disabled selected>- Account Type -</option>
                                             <option value="individual">Individual</option>
                                             <option value="bulkBooking">Bulk Booking</option>
@@ -144,7 +148,7 @@
                                         <br />
                                         {{-- BUSINESS SUB REGION --}}
                                         <label for="businessSubRegion">Business Sub Region</label>
-                                        <select name="businessSubRegion" id="businessSubRegion" class="form-control">
+                                        <select name="businessSubRegion" id="businessSubRegion" class="form-control" required>
                                             <option value="" disabled selected>- Select Branch -</option>
 
                                         </select>
@@ -158,7 +162,7 @@
                                         {{-- EMPLOYEE NAME --}}
                                         <label for="employeeName">Employee Name</label>
                                         <input type="text" name="employeeName" id="employeeName" class="form-control"
-                                            value="{{ $userdata->first()->name ?? '' }}" readonly>
+                                            value="{{ $userdata->first()->name ?? '' }}" readonly required> 
                                         @error('employeeName')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -167,7 +171,7 @@
                                         {{-- ACCOUNT SUB TYPE --}}
                                         <label for="accountSubType">Account Sub Type</label>
                                         <select name="accountSubType" id="accountSubType" name="accountSubType"
-                                            class="form-control">
+                                            class="form-control" required>
                                             <option value="" disabled selected>- Account Sub Type -</option>
 
                                         </select>
@@ -180,7 +184,7 @@
 
                                         <label for="branchCode" class="form-label">Branch Code</label>
                                         <input type="text" class="form-control" id="branchcode" name="branchcode"
-                                            value="{{ old('branch_code') }}" readonly placeholder="">
+                                            value="{{ old('branch_code') }}" readonly placeholder="" required>
                                         @error('branchcode')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -191,7 +195,7 @@
                                     <div class="col-lg-4">
                                         {{-- BILLING --}}
                                         <label for="billing">Billing</label>
-                                        <select name="billing" id="billing" name="billing" class="form-control">
+                                        <select name="billing" id="billing" name="billing" class="form-control" required>
                                             <option value="" disabled selected>- Billing -</option>
                                             <option value="headOffice">Head Office</option>
                                             <option value="regionalOffice">Regional Office</option>
@@ -205,10 +209,10 @@
 
                                         {{-- BUSINESS REGION --}}
                                         <label for="businessRegion">Business Region</label>
-                                        <select name="businessRegion" id="businessRegion" class="form-control">
+                                        <select name="businessRegion" id="businessRegion" class="form-control" required>
                                             <option value="" disabled selected>- Business Region -</option>
                                             @foreach($businessregion as $region)
-                                                <option value="{{ $region->id }}" >{{ $region->state }}
+                                                <option value="{{ $region->id }}">{{ $region->state }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -231,7 +235,7 @@
                                 <div class="col-md-6">
                                     {{-- CUSTOMER TYPE --}}
                                     <label for="customerType">Customer Type</label>
-                                    <select name="customerType" id="customerType" class="form-control">
+                                    <select name="customerType" id="customerType" class="form-control" required>
                                         <option value="" disabled selected>- Customer Type -</option>
                                         <option value="newCustomer">New Customer</option>
                                         <option value="existingCustomer">Existing Customer</option>
@@ -245,7 +249,7 @@
                                     {{-- BUSINESS LEAD --}}
                                     <div id="businessLead">
                                         <label for="businessLead">Business Lead</label>
-                                        <select name="businessLead" id="businessLeadDropdown" class="form-control">
+                                        <select name="businessLead" id="businessLeadDropdown" class="form-control" required>  
                                             <option value="" disabled selected>- Business Lead -</option>
                                         </select>
                                         @error('businessLead')
@@ -257,7 +261,7 @@
                                             <div class="d-flex">
                                                 <!-- <label for="customerInput">Customer ID</label> -->
                                                 <input type="text" id="customerID" class="form-control"
-                                                    placeholder="Customer Mobile Number">
+                                                    placeholder="Customer Mobile Number" >
                                                 <span id="costomerData"
                                                     class="btn btn-outline-secondary ms-2">Search</span>
                                             </div>
@@ -275,7 +279,7 @@
                             <div class="row ">
                                 <div class="col-lg-6">
                                     <label for="category">Category</label>
-                                    <select name="category" id="order_category" class="form-control">
+                                    <select name="category" id="order_category" class="form-control" required>
                                         <option value="">-Select Category-</option>
                                         @foreach ($category as $cat)
                                             <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
@@ -287,7 +291,7 @@
                                     <br>
 
                                     <label for="subcategory">Sub-Category</label>
-                                    <select name="subcategory" id="order_subcategory" class="form-control">
+                                    <select name="subcategory" id="order_subcategory" class="form-control" required>
                                         <option value="">-Select Sub-Category-</option>
                                     </select>
                                     @if ($errors->has('subcategory'))
@@ -296,7 +300,7 @@
                                     <br>
 
                                     <label for="service">Service</label>
-                                    <select name="service" id="order_service" class="form-control">
+                                    <select name="service" id="order_service" class="form-control" required>
                                         <option value="">-Select Service-</option>
                                     </select>
                                     @if ($errors->has('service'))
@@ -307,7 +311,7 @@
                                     <label for="variation">Variation</label>
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <select name="attribute" id="attribute" class="form-control">
+                                            <select name="attribute" id="attribute" class="form-control" required>
                                                 <option value="">-Select Type-</option>
                                             </select>
                                             @if ($errors->has('attribute'))
@@ -316,7 +320,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <select name="order_service_area" id="order_service_area"
-                                                class="form-control">
+                                                class="form-control" required>
                                                 <option value="">-Select Area-</option>
                                             </select>
                                             @if ($errors->has('variationsID'))
@@ -332,7 +336,7 @@
                                         <div class="col-md-6">
                                             <label for="">No. of Services </label>
                                             <input type="text" name="srTime" placeholder="SR-No. of Services"
-                                                id="srTime" readonly class="form-control" readonly="" />
+                                                id="srTime" readonly class="form-control" readonly="" required />
                                             @if ($errors->has('srTime'))
                                                 <span class="text-danger">The No. of Services field is required.</span>
                                             @endif
@@ -341,7 +345,7 @@
                                         <div class="col-md-6">
                                             <label for="">Scheduled every </label>
                                             <input type="text" name="srInterval" placeholder="SR-Scheduled every"
-                                                id="srInterval" readonly class="form-control" readonly="" />
+                                                id="srInterval" readonly class="form-control" readonly=""  required/>
                                             @if ($errors->has('srInterval'))
                                                 <span class="text-danger">The Scheduled every field is required.</span>
                                             @endif
@@ -374,15 +378,15 @@
                                     </div>
                                     <br>
                                     {{--NEW SECTION FOR DATE --}}
-                                  {{--   <div class="row">
+                                    {{-- <div class="row">
                                         <div class="col-md-6">
-                                            {{-- CONTRACT START DATE 
+                                            {{-- CONTRACT START DATE
                                             <label for="contractStartDate">Contract Start Date</label>
                                             <input type="text" name="contractStartDate" id="contractStartDate"
                                                 class="form-control" placeholder="Contract Start Date" readonly><br />
                                         </div>
                                         <div class="col-md-6">
-                                            {{-- CONTRACT END DATE 
+                                            {{-- CONTRACT END DATE
                                             <label for="contractEndDate">Contract End Date</label>
                                             <input type="text" name="contractEndDate" id="contractEndDate"
                                                 class="form-control" placeholder="Contract End Date" readonly><br />
@@ -391,7 +395,7 @@
                                     </div> --}}
                                     <label for="price">Price (Without GST)</label>
                                     <input type="text" name="price" placeholder="Price" id="order_price" readonly
-                                        class="form-control" />
+                                        class="form-control" required />
                                     @if ($errors->has('price'))
                                         <span class="text-danger">{{ $errors->first('price') }}</span>
                                     @endif
@@ -403,7 +407,7 @@
                                         <div class="col-lg-6">
                                             <label for="desired_date">Contract Start Date</label>
                                             <input type="date" name="desired_date" placeholder="desired_date"
-                                                id="desired_date" class="form-control" />
+                                                id="desired_date" class="form-control" required />
                                             @if ($errors->has('desired_date'))
                                                 <span class="text-danger">{{ $errors->first('desired_date') }}</span>
                                             @endif
@@ -411,7 +415,7 @@
                                         <div class="col-lg-6">
                                             <label for="desired_time"> Time</label>
                                             <input type="time" name="desired_time" placeholder="desired_time"
-                                                id="desired_time" class="form-control" />
+                                                id="desired_time" class="form-control" required />
                                             @if ($errors->has('desired_time'))
                                                 <span class="text-danger">{{ $errors->first('desired_time') }}</span>
                                             @endif
@@ -422,42 +426,42 @@
                                 <div class="col-lg-6">
                                     <label for="fullname">Customer Name</label>
                                     <input type="text" name="fullname" placeholder="Enter Customer name" id="fullname"
-                                        class="form-control" />
+                                        class="form-control"  required />
                                     @if ($errors->has('fullname'))
                                         <span class="text-danger">{{ $errors->first('fullname') }}</span>
                                     @endif
                                     <br>
                                     <label for="email">Email</label>
                                     <input type="email" name="email" placeholder="Enter Customer email" id="email"
-                                        class="form-control" />
+                                        class="form-control" required  />
                                     @if ($errors->has('email'))
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif
                                     <br>
                                     <label for="mobile">Mobile Number</label>
                                     <input type="text" name="mobile" placeholder="Enter Customer mobile Number"
-                                        id="mobile" class="form-control" />
+                                        id="mobile" class="form-control" required />
                                     @if ($errors->has('mobile'))
                                         <span class="text-danger">{{ $errors->first('mobile') }}</span>
                                     @endif
                                     <br>
                                     <label for="landmark">Landmark</label>
                                     <input type="text" name="landmark" placeholder="Enter Customer landmark"
-                                        id="landmark" class="form-control" />
+                                        id="landmark" class="form-control" required  />
                                     @if ($errors->has('landmark'))
                                         <span class="text-danger">{{ $errors->first('landmark') }}</span>
                                     @endif
                                     <br>
                                     <label for="address">Address</label>
                                     <input type="text" name="address" placeholder="Enter Customer address" id="address"
-                                        class="form-control" />
+                                        class="form-control"  required />
                                     @if ($errors->has('address'))
                                         <span class="text-danger">{{ $errors->first('address') }}</span>
                                     @endif
                                     <br>
                                     <label for="pincode">Pincode</label>
                                     <input type="number" name="pincode" placeholder="Enter Customer pincode"
-                                        id="pincode" class="form-control" />
+                                        id="pincode" class="form-control" required />
                                     @if ($errors->has('pincode'))
                                         <span class="text-danger">{{ $errors->first('pincode') }}</span>
                                     @endif
@@ -469,41 +473,49 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="mapModalLabel">Select Location</h5>
+                                                    <h4>Search Location</h4>
+
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
-
                                                 </div>
                                                 <div class="modal-body">
-                                                    <input id="searchBox" class="form-control mb-3" type="text"
-                                                        placeholder="Search a location">
-                                                    <div id="map"></div>
+                                                    <input id="pac-input" class="controls form-control rounded-0"
+                                                        type="text" placeholder="Search Box">
+                                                    <div class="col-lg-12">
+
+                                                        <div id="map-canvas" style="height: 500px; width:100%;"></div>
+                                                        <div id="info"></div>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
+
                                                     <div id="latlong" class="mr-auto"></div>
 
-                                                    <button type="button" class="btn btn-primary"
+                                                    <button type="button" class="btn btn-primary rounded-0"
                                                         id="save-location">Save</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
+
                                     {{--NEW SECTION --}}
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="">House / Flat Number</label>
                                             <input type="text" name="houseNo" id="houseNo" class="form-control"
-                                                placeholder="Customer House / Flat Number">
+                                                placeholder="Customer House / Flat Number" required>
+                                            
                                             @if ($errors->has('houseNo'))
                                                 <span class="text-danger">{{ $errors->first('houseNo') }}</span>
                                             @endif
+                                            
                                         </div>
                                         <div class="col-md-6">
                                             <label for="latlong">Latlong</label>
                                             <div class="d-flex">
-                                                <input type="text" id="clatlon" name="clatlon" class="form-control"
-                                                    readonly><br />
+                                                <input required type="text" id="clatlon" name="clatlon" class="form-control"
+                                                    readonly ><br />
                                                 <span id="latlong" class="btn btn-outline-secondary ms-2"
                                                     data-bs-toggle="modal" data-bs-target="#mapModal">Latlong</span>
                                             </div>
@@ -513,11 +525,11 @@
                                         </div>
 
                                     </div>
-                                    {{-- NEW SECTION --}}   
+                                    {{-- NEW SECTION --}}
                                     <div class="row">
                                         <div class="col-md-12 mt-4">
                                             {{-- TECHNICIAN ASSIGN --}}
-                                            
+
                                             <label for="technicianAssign">Technician Assign</label>
                                             <select name="technicianAssign" id="technicianAssign" class="form-control">
                                                 <option value="" disabled selected>- Technician Assign -</option>
@@ -786,9 +798,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqf4NpjMnz8J-LuEwgJAdVrn_1_5Zt6g&libraries=places"></script>
-
-<script src="https://www.google.com/recaptcha/api.js"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqf4NpjMnz8J-LuEwgJAdVrn_1_5Zt6g&libraries=drawing,places"></script>
 @section('scripts')
 
 <script>
@@ -823,8 +833,6 @@
         var branchCode = selectedOption.getAttribute('data-branch-code');
         document.getElementById('branchcode').value = branchCode;
     });
-
-    // GENRATE BRANCH CODE AUTOMATIC
     document.addEventListener("DOMContentLoaded", function () {
         fetch('{{ route('admin.orders.getbranchcode') }}')
             .then(response => response.json())
@@ -835,84 +843,102 @@
                 console.error('Error fetching branch code:', error);
             });
     });
-    // MAP 
-    var map, searchBox, markers = [];
-    function initMap() {
-        var location = { lat: -34.397, lng: 150.644 };
-        map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 8,
-            center: location
-        });
-        var marker = new google.maps.Marker({
-            position: location,
-            map: map
-        });
 
-        var input = document.getElementById('searchBox');
-        searchBox = new google.maps.places.SearchBox(input);
-        map.addListener('bounds_changed', function () {
-            searchBox.setBounds(map.getBounds());
-        });
-        searchBox.addListener('places_changed', function () {
-            var places = searchBox.getPlaces();
-            if (places.length == 0) {
-                console.log("No places found");
-                return;
+    // MAP AND SEARCH BOX IN MODEL
+    var map, marker, searchBox;
+
+    function InitMap() {
+
+        var location;
+        var latLon = document.getElementById('clatlon').value;
+        if (latLon) {
+            var latLng = latLon.split(',');
+            var lat = parseFloat(latLng[0]);
+            var lng = parseFloat(latLng[1]);
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+
+                location = new google.maps.LatLng(lat, lng);
+            } else {
+
+                location = new google.maps.LatLng(12.9715987, 77.5945627);
             }
+        } else {
 
-            markers.forEach(function (marker) {
-                marker.setMap(null);
-            });
-            markers = [];
+            location = new google.maps.LatLng(12.9715987, 77.5945627);
+        }
+        var mapOptions = {
+            zoom: 12,
+            center: location,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        marker = new google.maps.Marker({
+            map: map,
+            position: location,
+            draggable: true
+        });
+
+        searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('pac-input'));
+
+        google.maps.event.addListener(searchBox, 'places_changed', function () {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) return;
 
             var bounds = new google.maps.LatLngBounds();
+
             places.forEach(function (place) {
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var marker = new google.maps.Marker({
-                    map: map,
-                    title: place.name,
-                    position: place.geometry.location
-                });
-                markers.push(marker);
+                if (!place.geometry || !place.geometry.location) return;
 
-                if (place.geometry.viewport) {
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
+                marker.setPosition(place.geometry.location);
+                bounds.extend(place.geometry.location);
             });
+
             map.fitBounds(bounds);
+            map.setZoom(Math.min(map.getZoom(), 12));
         });
-
-        // Geolocation to center map
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                map.setCenter(userLocation);
-                new google.maps.Marker({
-                    position: userLocation,
-                    map: map,
-                    title: "You are here!"
-                });
-            });
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
     }
 
-    window.onload = initMap;
     document.getElementById('save-location').addEventListener('click', function () {
-        var latLng = map.getCenter();
-        console.log("Latitude: " + latLng.lat() + ", Longitude: " + latLng.lng());
-        document.getElementById('clatlon').value = latLng.lat() + "," + latLng.lng()
+        var position = marker.getPosition();
+        console.log("Latitude: " + position.lat() + ", Longtude: " + position.lng());
+        document.getElementById('clatlon').value = position.lat() + "," + position.lng();
         $('#mapModal').modal('hide');
     });
+
+    $('#mapModal').on('shown.bs.modal', function () {
+    if (!map) {
+        InitMap();
+    }
+    const input = document.getElementById('pac-input');
+    if (input) {
+        const autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.setFields(['place_id', 'geometry', 'name']);  
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                map.setCenter(place.geometry.location);
+                map.setZoom(13); 
+                marker.setPosition(place.geometry.location);
+                document.getElementById('coordinates').value = `${lat}, ${lng}`;
+                document.getElementById('info').innerHTML = `Selected: ${place.name}`;
+            }
+        });
+    }
+});
+
+
+
+
+
+
+
+
 
 
 
@@ -929,27 +955,27 @@
         }
     });
 
-    // ACCOUNT TYPE 
+    // ACCOUNT TYPE
     const accountTypeDropdown = document.getElementById('accountType');
     const accountSubTypeDropdown = document.getElementById('accountSubType');
     accountTypeDropdown.addEventListener('change', function () {
         if (this.value === 'bulkBooking') {
             accountSubTypeDropdown.innerHTML = `
-                <option value="" disabled selected>- Account Sub Type -</option>
-                <option value="Education & Institute">Education & Institute</option>
-                <option value="Flat / Housing Society">Flat / Housing Society</option>
-                <option value="Government">Government</option>
-                <option value="Housing Society">Housing Society</option>
-                <option value="Builder">Others</option>
-                <option value="VIP">VIP</option>
-            `;
+        <option value="" disabled selected>- Account Sub Type -</option>
+        <option value="Education & Institute">Education & Institute</option>
+        <option value="Flat / Housing Society">Flat / Housing Society</option>
+        <option value="Government">Government</option>
+        <option value="Housing Society">Housing Society</option>
+        <option value="Builder">Others</option>
+        <option value="VIP">VIP</option>
+        `;
         } else if (this.value === 'individual') {
             accountSubTypeDropdown.innerHTML = `
-                <option value="Residential Order" selected>Residential Order</option>
+            <option value="Residential Order" selected>Residential Order</option>
             `;
         } else {
             accountSubTypeDropdown.innerHTML = `
-                <option value="" disabled selected>- Account Sub Type -</option>
+            <option value="" disabled selected>- Account Sub Type -</option>
             `;
         }
     });
@@ -960,20 +986,20 @@
 
 
     const newCustomerOptions = `
-    <option value="" disabled selected>- Business Lead -</option>
-    <option value="exhibition">Exhibition</option>
-    <option value="webLead">Web Lead</option>
-    <option value="serviceLead">Service Lead</option>
-    <option value="customerReferral">Customer Referral</option>
-    <option value="coldCall">Cold Call</option>
-    <option value="socialMedia">Social Media</option>
-    <option value="whatsappChatBot">What's App Chat Bot</option>
-    <option value="vendors">Vendors</option>
-    <option value="others">Others</option>
+<option value="" disabled selected>- Business Lead -</option>
+<option value="exhibition">Exhibition</option>
+<option value="webLead">Web Lead</option>
+<option value="serviceLead">Service Lead</option>
+<option value="customerReferral">Customer Referral</option>
+<option value="coldCall">Cold Call</option>
+<option value="socialMedia">Social Media</option>
+<option value="whatsappChatBot">What's App Chat Bot</option>
+<option value="vendors">Vendors</option>
+<option value="others">Others</option>
 `;
 
     const existingCustomerOption = `
-    <option value="na" selected>N/A</option>
+<option value="na" selected>N/A</option>
 `;
 
     customerTypeDropdown.addEventListener('change', function () {
@@ -1026,15 +1052,15 @@
                     data.forEach(customer => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
-                        <td>${customer.name}</td>
-                        <td>${customer.address}</td>
-                        <td>${customer.landmark}</td>
-                        <td>${customer.pincode}</td>
-                        <td>${customer.mobile}</td>
-                        <td>${customer.email}</td> 
-                        <td>${customer.latitude && customer.longitude ? `${customer.latitude},${customer.longitude}` : 'N/A'}</td>
-                        <td><span class="btn btn-primary btn-sm address-btn">Add</span></td>
-                    `;
+                            <td>${customer.name}</td>
+                            <td>${customer.address}</td>
+                            <td>${customer.landmark}</td>
+                            <td>${customer.pincode}</td>
+                            <td>${customer.mobile}</td>
+                            <td>${customer.email}</td>
+                            <td>${customer.latitude && customer.longitude ? `${customer.latitude},${customer.longitude}` : 'N/A'}</td>
+                            <td><span class="btn btn-primary btn-sm address-btn">Add</span></td>
+                            `;
                         tableBody.appendChild(row);
 
                         // Add event listener to the "Add" button
@@ -1068,7 +1094,7 @@
 
 
 
-    // GST 
+    // GST
     function toggleImageUpload() {
         const gstStatus = document.getElementById('gstNumber').value;
         const agriStatus = document.getElementById('agriLicence').value;
@@ -1094,39 +1120,39 @@
     }
 
     // document.addEventListener('DOMContentLoaded', function () {
-    //     const quantityValueSpan = document.querySelector('.quantity-value');
-    //     const incrementBtn = document.querySelector('.increment');
-    //     const decrementBtn = document.querySelector('.decrement');
-    //     const priceInput = document.getElementById('price');
-    //     const totalInput = document.getElementById('total');
+    // const quantityValueSpan = document.querySelector('.quantity-value');
+    // const incrementBtn = document.querySelector('.increment');
+    // const decrementBtn = document.querySelector('.decrement');
+    // const priceInput = document.getElementById('price');
+    // const totalInput = document.getElementById('total');
 
-    //     function calculateTotal() {
-    //         const quantity = parseFloat(quantityValueSpan.textContent) || 0;
-    //         const price = parseFloat(priceInput.value) || 0;
-    //         totalInput.value = (quantity * price).toFixed(2);
-    //     }
+    // function calculateTotal() {
+    // const quantity = parseFloat(quantityValueSpan.textContent) || 0;
+    // const price = parseFloat(priceInput.value) || 0;
+    // totalInput.value = (quantity * price).toFixed(2);
+    // }
 
-    //     incrementBtn.addEventListener('click', function () {
-    //         let currentValue = parseInt(quantityValueSpan.textContent);
-    //         currentValue++;
-    //         quantityValueSpan.textContent = currentValue-1;
-    //         calculateTotal();
-    //     });
-
-    //     decrementBtn.addEventListener('click', function () {
-    //         let currentValue = parseInt(quantityValueSpan.textContent);
-    //         if (currentValue > 1) {
-    //             currentValue--;
-    //             quantityValueSpan.textContent = currentValue+1;
-    //             calculateTotal();
-    //         }
-    //     });
-
-    //     priceInput.addEventListener('input', calculateTotal);
+    // incrementBtn.addEventListener('click', function () {
+    // let currentValue = parseInt(quantityValueSpan.textContent);
+    // currentValue++;
+    // quantityValueSpan.textContent = currentValue-1;
+    // calculateTotal();
     // });
 
-    // Independent Dropdown selection 
-    // Independent Dropdown selection 
+    // decrementBtn.addEventListener('click', function () {
+    // let currentValue = parseInt(quantityValueSpan.textContent);
+    // if (currentValue > 1) {
+    // currentValue--;
+    // quantityValueSpan.textContent = currentValue+1;
+    // calculateTotal();
+    // }
+    // });
+
+    // priceInput.addEventListener('input', calculateTotal);
+    // });
+
+    // Independent Dropdown selection
+    // Independent Dropdown selection
 
     document.addEventListener('DOMContentLoaded', function () {
         const quantityValueSpan = document.querySelector('.quantity-value');
@@ -1148,7 +1174,7 @@
         let serviceTypePrice = 0;
         let serviceAreaPrice = 0;
         let taxAmount = 0;
-        let taxType = ''; // 'percent' or 'amount' 
+        let taxType = ''; // 'percent' or 'amount'
         let taxRate = 0; // Holds the tax rate value if it's percentage
         let subtotal = 0;
 
@@ -1257,23 +1283,23 @@
             }
         });
 
-        //      document.getElementById('order_service_type').addEventListener('change', function () {
-        //        serviceTypePrice = parseFloat(this.value) || 0;
-        //    const selectedOption = this.options[this.selectedIndex];
+        // document.getElementById('order_service_type').addEventListener('change', function () {
+        // serviceTypePrice = parseFloat(this.value) || 0;
+        // const selectedOption = this.options[this.selectedIndex];
 
-        //          // Retrieve the value and textContent of the selected option
-        //     const optionValue = selectedOption.value;
-        //         const optionText = selectedOption.textContent;
-        //         console.log(optionValue)
-        //         console.log(optionText)
+        // // Retrieve the value and textContent of the selected option
+        // const optionValue = selectedOption.value;
+        // const optionText = selectedOption.textContent;
+        // console.log(optionValue)
+        // console.log(optionText)
 
-        //         document.getElementById('serviceTypePriceValue').value = optionText;
+        // document.getElementById('serviceTypePriceValue').value = optionText;
 
-        //          console.log('Selected Value SSSS:', optionValue);
-        //         console.log('Selected Text:', optionText);
+        // console.log('Selected Value SSSS:', optionValue);
+        // console.log('Selected Text:', optionText);
 
-        //         calculateTotal();fsrTime
-        //      });
+        // calculateTotal();fsrTime
+        // });
 
 
         document.getElementById('order_service_area').addEventListener('change', function () {
@@ -1308,7 +1334,7 @@
                     const couponsData = {};
                     const couponsSelect = document.getElementById('coupons');
 
-                    couponsSelect.innerHTML = '<option value="" >- Coupons -</option>';
+                    couponsSelect.innerHTML = '<option value="">- Coupons -</option>';
                     data.forEach(coupon => {
                         couponsData[coupon.id] = {
                             amount: coupon.amount,
@@ -1316,7 +1342,7 @@
                             couponName: coupon.coupon_name
                         };
 
-                        couponsSelect.innerHTML += `<option  value="${coupon.id}">${coupon.coupon_name}</option>`;
+                        couponsSelect.innerHTML += `<option value="${coupon.id}">${coupon.coupon_name}</option>`;
                     });
                     // console.log('Coupons Data:', couponsData);
                     couponsSelect.addEventListener('change', () => {
@@ -1328,7 +1354,8 @@
                                 if (selectedCoupon.amount !== '' && selectedCoupon.amount != null) {
                                     copAmount = parseInt(selectedCoupon.amount);
                                     const finaltot = (subtotal + taxAmount - copAmount).toFixed(2);
-                                    totalPriceDisplay.innerHTML = `${subtotal.toFixed(2)} + ${taxAmount.toFixed(2)} - ${copAmount.toFixed(2)} = ${finaltot} /-`;
+                                    totalPriceDisplay.innerHTML = `${subtotal.toFixed(2)} + ${taxAmount.toFixed(2)} - ${copAmount.toFixed(2)} = ${finaltot}
+                                        /-`;
 
                                     // Update hidden inputs
                                     hiddenTotalPriceInput.value = finaltot;
@@ -1338,7 +1365,8 @@
                                     const finaltot = (subtotal).toFixed(2);
                                     const copPer = (selectedCoupon.percentage / 100) * finaltot;
                                     const totalAfterDiscount = (finaltot - copPer + taxAmount).toFixed(2);
-                                    totalPriceDisplay.innerHTML = `${subtotal.toFixed(2)} + ${taxAmount.toFixed(2)} - ${copPer.toFixed(2)} = ${totalAfterDiscount} /-`;
+                                    totalPriceDisplay.innerHTML = `${subtotal.toFixed(2)} + ${taxAmount.toFixed(2)} - ${copPer.toFixed(2)} =
+                                        ${totalAfterDiscount} /-`;
                                     // Update hidden inputs
                                     hiddenTotalPriceInput.value = totalAfterDiscount;
                                     document.getElementById('couponsprice').value = copPer;
@@ -1370,41 +1398,41 @@
         }
 
         // function fetchServiceType(serviceId) {
-        //     console.log(serviceId);
-        //     fetch(`get-service-variation-type/${serviceId}`)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log("Response From " + data);
-        //             console.log(data);
-        //             const serviceTypeSelect = document.getElementById('order_service_type');
-        //             serviceTypeSelect.innerHTML = '<option value="">-select Service-</option>';
-        //             data.services.forEach(service => {
-        //                 serviceTypeSelect.innerHTML += `<option value="${service.id}|${data.product_id}">${service.attribute}</option>`;
-        //             });
-        //         });
-        //            serviceTypeSelect.addEventListener('change', function () {
-        //         const selectedValue = serviceTypeSelect.value;
-        //         if (selectedValue) {
-        //             const [serviceId, productId] = selectedValue.split('|');
-        //             console.log('Selected Service ID:', serviceId);
-        //             console.log('Product ID:', productId);
-        //         } else {
-        //             console.log('No service selected.');
-        //         }
-        //     });
+        // console.log(serviceId);
+        // fetch(`get-service-variation-type/${serviceId}`)
+        // .then(response => response.json())
+        // .then(data => {
+        // console.log("Response From " + data);
+        // console.log(data);
+        // const serviceTypeSelect = document.getElementById('order_service_type');
+        // serviceTypeSelect.innerHTML = '<option value="">-select Service-</option>';
+        // data.services.forEach(service => {
+        // serviceTypeSelect.innerHTML += `<option value="${service.id}|${data.product_id}">${service.attribute}</option>`;
+        // });
+        // });
+        // serviceTypeSelect.addEventListener('change', function () {
+        // const selectedValue = serviceTypeSelect.value;
+        // if (selectedValue) {
+        // const [serviceId, productId] = selectedValue.split('|');
+        // console.log('Selected Service ID:', serviceId);
+        // console.log('Product ID:', productId);
+        // } else {
+        // console.log('No service selected.');
+        // }
+        // });
         // }
 
 
         // function fetchServiceArea(serviceId) {
-        //     fetch(`get-service-variation-area/${serviceId}`)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             const serviceAreaSelect = document.getElementById('order_service_area');
-        //             serviceAreaSelect.innerHTML = '<option value="">-select Service-</option>';
-        //             data.forEach(service => {
-        //                 serviceAreaSelect.innerHTML += `<option value="${service.discounted_variation_price}">${service.variation}</option>`;
-        //             });
-        //         });
+        // fetch(`get-service-variation-area/${serviceId}`)
+        // .then(response => response.json())
+        // .then(data => {
+        // const serviceAreaSelect = document.getElementById('order_service_area');
+        // serviceAreaSelect.innerHTML = '<option value="">-select Service-</option>';
+        // data.forEach(service => {
+        // serviceAreaSelect.innerHTML += `<option value="${service.discounted_variation_price}">${service.variation}</option>`;
+        // });
+        // });
         // }
 
         function fetchServiceType(serviceId) {
@@ -1458,11 +1486,11 @@
 
                         // Add the option with both values
                         serviceAreaSelect.innerHTML += `
-                    <option id="${combinedValue}" value="${service.discounted_variation_price}" 
-                        data-variation-times="${variationTimes}" data-variatio-id="${variationID}" data-variation-interval="${variationInterval}">
-                        ${service.variation}
-                    </option>
-                `;
+                        <option id="${combinedValue}" value="${service.discounted_variation_price}" data-variation-times="${variationTimes}"
+                            data-variatio-id="${variationID}" data-variation-interval="${variationInterval}">
+                            ${service.variation}
+                        </option>
+                        `;
                     });
 
                     serviceAreaSelect.addEventListener('change', (event) => {

@@ -119,6 +119,7 @@ class CategoryController extends Controller
             'category_name' => 'required',
             'icon' => 'required|mimes:png,jpg,jpeg',
             'webicon' => 'required|mimes:png,jpg,jpeg',
+            'motion_graphics' => 'required|mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
             'video' => 'nullable',
@@ -141,6 +142,8 @@ class CategoryController extends Controller
             $webicon = "NA";
         }
 
+
+
         // Generate unique file name and move the file
         if ($request->hasFile('thumbnail')) {
             $thumbnail = 'thumbnail-' . uniqid() . '.' . $request->thumbnail->getClientOriginalExtension();
@@ -157,6 +160,13 @@ class CategoryController extends Controller
             $video = "NA";
         }
 
+        if ($request->hasFile('motion_graphics')) {
+            $motion_graphics = 'motion_graphics-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
+            $request->motion_graphics->move('storage/app/public/images/category', $motion_graphics);
+        } else {
+            $motion_graphics = "NA";
+        }
+
         // Check if a subcategory with the same slug already exists
         $checkslug = Category::where('slug', \Str::slug($request->category_name))->first();
         $isFormChecked = $request->has('is_form') ? 1 : 0;
@@ -168,6 +178,7 @@ class CategoryController extends Controller
                 'web_icon' => $webicon, // Ensure icon is included here
                 'thumbnail' => $thumbnail, // Ensure icon is included here
                 'video' => $video, // Ensure icon is included here
+                'motion_graphics' => $motion_graphics, 
                 'category_name' => $request->category_name,
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
@@ -181,6 +192,7 @@ class CategoryController extends Controller
             $dataval = [
                 'category_name' => $request->category_name,
                 'web_icon' => $webicon, // Ensure icon is included here
+                'motion_graphics' => $motion_graphics, 
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
                 'meta_title' => $request->meta_title,
@@ -232,6 +244,7 @@ class CategoryController extends Controller
             'category_name' => 'required',
             'icon' => 'mimes:jpeg,png,jpg',
             'webicon' => 'mimes:jpeg,png,jpg',
+           'motion_graphics' => 'required|mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
         ]);
@@ -263,7 +276,25 @@ class CategoryController extends Controller
                 $webicon = 'webcategory-' . uniqid() . '.' . $request->webicon->getClientOriginalExtension();
                 $request->webicon->move('storage/app/public/images/category', $webicon);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'web_icon' => $webicon, 'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'web_icon' => $webicon,  'slug' => \Str::slug($request->category_name));
+                $category = Category::find($request->cat_id)->update($data);
+            }
+        } else {
+            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
+            $category = Category::find($request->cat_id)->update($data);
+        }
+
+
+        if (isset($request->motion_graphics)) {
+
+            File::delete('storage/app/public/images/category/' . $request->motion_graphics);
+
+            if ($request->hasFile('motion_graphics')) {
+                $motion_graphics = $request->file('motion_graphics');
+                $motion_graphics = 'motion_graphics-' . uniqid() . '.' . $request->motion_graphics->getClientOriginalExtension();
+                $request->motion_graphics->move('storage/app/public/images/category', $motion_graphics);
+
+                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,     'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {

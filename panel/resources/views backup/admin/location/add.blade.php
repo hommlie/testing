@@ -123,10 +123,6 @@ function InitMap() {
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-
-
-
-
     drawingManager = new google.maps.drawing.DrawingManager({
         drawingMode: google.maps.drawing.OverlayType.POLYGON,
         drawingControl: true,
@@ -194,16 +190,7 @@ function InitMap() {
    });
 }
 
-// function updateCoordinates(shape) {
-//     coordinates = [];
-//     shape.getPath().forEach(function(latlng) {
-//         coordinates.push({
-//             lat: latlng.lat(),
-//             lng: latlng.lng()
-//         });
-//     });
-//     document.getElementById('coordinates').value = JSON.stringify(coordinates);
-// }
+
 
 function updateCoordinates(shape) {
     coordinates = [];

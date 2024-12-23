@@ -142,18 +142,19 @@
                                         </ul>
                                     </div>
 
-                                </div><br />
+                                </div>
                                 <hr>
-
+                                <h4  class="text-success"><b>Order Details</b></h4>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>SR-ID</th>
                                             {{-- <th>{{ trans('labels.image') }}</th> --}}
                                             <th>{{ trans('labels.name') }}</th>
-                                            <th>{{ trans('labels.price') }}</th>
                                             <th>{{ trans('labels.qty') }}</th>
-                                            <th>{{ trans('labels.tax') }}</th>
+                                            <th>{{ trans('labels.price') }}</th>
+                                            <th>{{trans('Discount ')}}</th>                                         
+                                            <th>{{ trans('labels.tax') }}</th>                                         
                                             <th>{{ trans('Desired Date&Time') }}</th>
                                             <th>{{ trans('labels.status') }}</th>
                                             <th>{{ trans('labels.order_total') }}</th>
@@ -174,8 +175,9 @@
                                                         style="width: 70px;" /></td>--}}
                                                 <td>{{$row->product_name}} @if($row->variation != "")({{$row->variation}})
                                                 @endif</td>
-                                                <td>₹{{ number_format($row->price, 2) }}</td>
                                                 <td>{{$row->qty}}</td>
+                                                <td>₹{{ number_format($row->price, 2) }}</td>
+                                                <td>₹{{ number_format($row->discount_amount, 2) }}</td>
                                                 <td>₹{{ number_format($row->tax, 2) }}</td>
                                                 <td>{{($row->desired_date . ' ' . $row->desired_time)}}</td>
 
@@ -294,7 +296,7 @@
                                                         </div>
                                                     </td>
                                                 @endif
-                                                <td {{ $row->order_status == 4 ? 'style="text-decoration: line-through;"' : '' }}>₹{{ number_format($row->price + $row->tax, 2) }}</td>
+                                                <td {{ $row->order_status == 4 ? 'style="text-decoration: line-through;"' : '' }}>₹{{ number_format($row->price - $row->discount_amount + $row->tax , 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -393,11 +395,11 @@
                                                                 ₹{{ number_format($order_info->subtotal, 2) }}</td>
                                                         </tr>
 
-                                                        @if (!empty($order_info->discount_amount) && $order_info->discount_amount > 0)
+                                                        @if (!empty($order_info->grand_discount_amount) && $order_info->grand_discount_amount > 0)
                                                             <tr>
                                                                 <td class="text-left">Discount</td>
                                                                 <td class="text-right">-
-                                                                    ₹{{ number_format($order_info->discount_amount, 2) }}
+                                                                    ₹{{ number_format($order_info->grand_discount_amount, 2) }}
                                                                 </td>
                                                             </tr>
                                                         @endif
@@ -409,8 +411,8 @@
                                                         </tr>
 
                                                         @php
-                                                            if (!empty($order_info->discount_amount) && $order_info->discount_amount > 0) {
-                                                                $total = $order_info->subtotal + $order_info->tax - $order_info->discount_amount;
+                                                            if (!empty($order_info->grand_discount_amount) && $order_info->grand_discount_amount > 0) {
+                                                                $total = $order_info->subtotal + $order_info->tax - $order_info->grand_discount_amount;
                                                             } else {
                                                                 $total = $order_info->subtotal + $order_info->tax;
                                                             }
@@ -425,7 +427,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><br>
+                                    </div><br><br><br><br>
                                     <div class="col-md-12 text-gap mt-lg-5 d-flex">
                                         <div class="col-md-6 text-left">
                                             <p><b>CUSTOMER ACCEPTANCE </b></p>
@@ -445,7 +447,7 @@
                                         </div>
 
                                     </div>
-                                </div><br>
+                                </div><br><br><br><br><br>
                                 <hr><br><br>
                                 <div class="col-md-12">
                                     <h4><b>About us</b></h4><br>
