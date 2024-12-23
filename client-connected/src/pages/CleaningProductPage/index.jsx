@@ -56,9 +56,10 @@ const CleaningProductPage = () => {
                             "id": 3584,
                             "product_id": 830,
                             "attribute_id": 28,
+                            "attribute_name": "2 Seater Sofa",
                             "price": "349",
                             "discounted_variation_price": "249",
-                            "variation": "2 Seater Sofa",
+                            "variation": "1 BHK",
                             "variation_interval": "1",
                             "variation_times": 1,
                             "description": 'Hand Scrubbing of floor & tiles and cleaning hard to reach areas',
@@ -362,9 +363,9 @@ const CleaningProductPage = () => {
                     <h3 className="text-base lg:text-2xl font-semibold">
                       {product.product_name}
                     </h3>
-                    {product?.variations?.map((variation) => (
+                    {product?.variations?.map((variation, index) => (
                       <div
-                        key={variation.id}
+                        key={index}
                         className={`flex justify-between p-4 rounded-md cursor-pointer ${
                           variation.id === currentVariationIndex
                             ? "bg-blue-100"

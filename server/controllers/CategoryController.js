@@ -216,7 +216,9 @@ exports.getCleaningSubcategory = async (req, res) => {
             'variation',
             'variation_interval',
             'variation_times',
-            'qty'
+            'qty',
+            'created_at',
+            'updated_at'
           ],
           include: [
             {
@@ -244,12 +246,22 @@ exports.getCleaningSubcategory = async (req, res) => {
     const transformedProducts = await Promise.all(products.map(async (product) => {
       const plainProduct = product.get({ plain: true });
 
-      // Restructure variations
+      // Restructure variations with the new format
       const restructuredVariations = plainProduct.variations.map(variation => {
-        const { attribute, ...variationData } = variation;
         return {
-          attribute_name: attribute.attribute,
-          data: variationData
+          id: variation.id,
+          product_id: variation.product_id,
+          attribute_id: variation.attribute_id,
+          attribute_name: variation.attribute.attribute,
+          price: variation.price,
+          discounted_variation_price: variation.discounted_variation_price,
+          variation: variation.variation,
+          variation_interval: variation.variation_interval,
+          variation_times: variation.variation_times,
+          description: variation.description,
+          qty: variation.qty,
+          created_at: variation.created_at,
+          updated_at: variation.updated_at
         };
       });
 

@@ -6,7 +6,7 @@ const apiUrl = process.env.apiUrl;
 exports.checkout = async(req, res) => {
     const { 
       user_id, 
-      // coupon_name 
+      // coupon_id
     } = req.body;
 
     try {
@@ -27,7 +27,7 @@ exports.checkout = async(req, res) => {
       //   attributes: ['quantity', 'times', 'end_date', 'coupon_name', 'type', 'percentage', 'amount'],
       //   where: {
       //     status: 1,
-      //     coupon_name
+      //     id: coupon_id
       //   }
       // });
 
