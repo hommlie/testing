@@ -7,132 +7,256 @@ import Loading from "../../components/Loading";
 import Banner from '../../assets/images/innersubcat-banner.webp';
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
+import ProductDetailModal from "../../components/ProductDetailsModal";
+
+const CartSection = ({ cart }) => {
+  const calculateCartTotal = () => {
+    return cart.reduce((sum, item) => sum + (Number(item.price) * item.qty), 0);
+  };
+
+  const calculateTaxTotal = () => {
+    return cart.reduce((sum, item) => sum + (Number(item.tax) * item.qty), 0);
+  };
+
+  const calculateSavings = () => {
+    // Assuming original price is stored or calculate savings based on your logic
+    return cart.reduce((sum, item) => sum + 78, 0); // Replace with actual savings calculation
+  };
+
+  return (
+    <div className="sticky top-4 space-y-4">
+      <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+        <h2 className="text-xl font-semibold">Cart Summary</h2>
+        <div className="space-y-3">
+          {cart.map((item) => (
+            <div key={item.id} className="flex items-center justify-between py-2 border-b">
+              <div className="flex flex-col">
+                <span className="font-medium">{item.product_name}</span>
+                <span className="text-sm text-gray-500">{item.variation_name}</span>
+              </div>
+              <div className="text-right">
+                <span className="font-medium">₹{item.price}</span>
+                <span className="text-sm text-gray-500 block">Qty: {item.qty}</span>
+              </div>
+            </div>
+          ))}
+          
+          <div className="pt-2 space-y-2">
+            <div className="flex justify-between text-gray-600">
+              <span>Subtotal</span>
+              <span>₹{calculateCartTotal()}</span>
+            </div>
+            <div className="flex justify-between text-gray-600">
+              <span>Tax</span>
+              <span>₹{calculateTaxTotal()}</span>
+            </div>
+            <div className="flex justify-between font-medium pt-2 border-t">
+              <span>Total</span>
+              <span>₹{calculateCartTotal() + calculateTaxTotal()}</span>
+            </div>
+          </div>
+
+          {calculateSavings() > 0 && (
+            <div className="flex items-center justify-between text-green-600 pt-2">
+              <span>Congratulations!</span>
+              <span>₹{calculateSavings()} saved</span>
+            </div>
+          )}
+
+          <button 
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+            onClick={() => window.location.href = '/cart'}
+          >
+            View Cart
+          </button>
+        </div>
+      </section>
+
+      <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+        <h2 className="text-xl font-semibold">Hommlie Features</h2>
+        <ul className="space-y-2 text-gray-600">
+          <li>✓ Verified Professionals</li>
+          <li>✓ Safe Chemicals</li>
+          <li>✓ Service in 4hr</li>
+          <li>✓ Superior Stain Removal</li>
+        </ul>
+      </section>
+    </div>
+  );
+};
 
 const CleaningProductPage = () => {
-    const location = useLocation();
-    const { id, tag } = useParams();
-    const navigate = useNavigate();
-    const { cart, user, checkoutPd } = useCont();
+  const location = useLocation();
+  const { id, tag } = useParams();
+  const navigate = useNavigate();
+  const { cart, user, checkoutPd } = useCont();
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [innerSubCategoryData, setInnerSubCategoryData] = useState(null);
-    const [currentProductIndex, setCurrentProductIndex] = useState(0);
-    const [currentVariationIndex, setCurrentVariationIndex] = useState(0);
-    const [showVariationDetails, setShowVariationDetails] = useState(false);
-    const [isAddingToCart, setIsAddingToCart] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [innerSubCategoryData, setInnerSubCategoryData] = useState(null);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
+  const [currentVariationIndex, setCurrentVariationIndex] = useState(0);
+  const [showVariationDetails, setShowVariationDetails] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const productRefs = useRef([]);
+  const productRefs = useRef([]);
 
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    },[]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  },[]);
 
-    useEffect(() => {
-        setIsLoading(true);
-        fetchSubCategoryData();
-    }, [id]);
+  useEffect(() => {
+      setIsLoading(true);
+      fetchSubCategoryData();
+  }, [id]);
 
-    const fetchSubCategoryData = async () => {
-        try {
-        const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
-        console.log(response.data.data);
-        if (response.data.status === 1) {
-          setInnerSubCategoryData(response.data.data);
-          setIsLoading(false);
-        }
-        } catch (error) {
-        console.error("Error fetching inner sub-category data:", error);
+  const fetchSubCategoryData = async () => {
+      try {
+      const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
+      console.log(response.data.data);
+      if (response.data.status === 1) {
+        setInnerSubCategoryData(response.data.data);
         setIsLoading(false);
-        }
-    };
+      }
+      } catch (error) {
+      console.error("Error fetching inner sub-category data:", error);
+      setIsLoading(false);
+      }
+  };
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => {
-        setIsModalOpen(false);
-        const proceedBtn = document.getElementById('proceed-btn')?.onClick;
-        if (typeof(proceedBtn) == undefined) {
-            navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-        }
-    };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+      setIsModalOpen(false);
+      const proceedBtn = document.getElementById('proceed-btn')?.onClick;
+      if (typeof(proceedBtn) == undefined) {
+          navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+      }
+  };
 
-    const handleProductClick = (index) => {
-        setCurrentProductIndex(index);
-        productRefs.current[index].scrollIntoView({ behavior: "smooth" });
-      };
+  const handleProductClick = (index) => {
+    setCurrentProductIndex(index);
+    productRefs.current[index].scrollIntoView({ behavior: "smooth" });
+  };
 
-    const handleProductNavigate = (product) => {
-        const slug = product.product_name.toLowerCase().replace(/ /g, "-");
-        navigate(`${config.VITE_BASE_URL}/product/${product.id}/${slug}/tag/${tag}`);
-    };
+  const handleProductNavigate = (product) => {
+      const slug = product.product_name.toLowerCase().replace(/ /g, "-");
+      navigate(`${config.VITE_BASE_URL}/product/${product.id}/${slug}/tag/${tag}`);
+  };
 
-    const handlePrevProduct = () => {
-        setCurrentProductIndex((prevIndex) =>
-          prevIndex === 0 ? innerSubCategoryData.products.length - 1 : prevIndex - 1
-        );
-        productRefs.current[
-          prevIndex === 0
-            ? innerSubCategoryData.products.length - 1
-            : prevIndex - 1
-        ].scrollIntoView({ behavior: "smooth" });
-      };
+  const handlePrevProduct = () => {
+    setCurrentProductIndex((prevIndex) =>
+      prevIndex === 0 ? innerSubCategoryData.products.length - 1 : prevIndex - 1
+    );
+    productRefs.current[
+      prevIndex === 0
+        ? innerSubCategoryData.products.length - 1
+        : prevIndex - 1
+    ].scrollIntoView({ behavior: "smooth" });
+  };
+  
+  const handleNextProduct = () => {
+    setCurrentProductIndex((prevIndex) =>
+      prevIndex === innerSubCategoryData.products.length - 1 ? 0 : prevIndex + 1
+    );
+    productRefs.current[
+      prevIndex === innerSubCategoryData.products.length - 1 ? 0 : prevIndex + 1
+    ].scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleAddToCart = async () => {
+      if(user.length === 0) {
+          openModal();
+      } else {
+          setIsAddingToCart(true);
+          const product = {
+              user_id: user.id,
+              product_id: prod_id,
+              vendor_id: prodData.vendor_id,
+              product_name: prodData.product_name,
+              image: prodData?.productimages[0]?.image_url,
+              qty: 1,
+              price: totalAmount,
+              attribute: selectedVariation && selectedVariation.attribute_id,
+              variation: selectedVariation && selectedVariation.id,
+              tax: taxAmount,
+              shipping_cost: prodData.shipping_cost
+          };            
+
+          try {
+              const response = await axios.post(`${config.API_URL}/api/addtocart`, product);
+              if(response.data.status === 1) {
+                  console.log(response.data);
+                  successNotify("Successfully added to Cart");
+                  getCart();
+              }
+          } catch (error) {
+              errorNotify(error);
+              console.log("error adding to cart:", error);
+          } finally {
+              setIsAddingToCart(false);
+          }
+          setCart(product);
+          const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+          existingCart.push(product);
+          localStorage.setItem('cart', JSON.stringify(existingCart));
+          getCart();
+      }
+  };
+
+  const handleQtyUpdate = async (id, qty) => {
+    setIsAddingToCart(true);
     
-      const handleNextProduct = () => {
-        setCurrentProductIndex((prevIndex) =>
-          prevIndex === innerSubCategoryData.products.length - 1 ? 0 : prevIndex + 1
-        );
-        productRefs.current[
-          prevIndex === innerSubCategoryData.products.length - 1 ? 0 : prevIndex + 1
-        ].scrollIntoView({ behavior: "smooth" });
-      };
-
-    const handleVariationClick = (variation) => {
-        setShowVariationDetails(true);
-        setCurrentVariationIndex(variation.id);
-    };
-
-    const handleAddToCart = async () => {
-        if(user.length === 0) {
-            openModal();
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (jwtToken) {
+        if (qty === 0) {                
+            handleRemoveFromCart(id);
         } else {
-            setIsAddingToCart(true);
-            const product = {
-                user_id: user.id,
-                product_id: prod_id,
-                vendor_id: prodData.vendor_id,
-                product_name: prodData.product_name,
-                image: prodData?.productimages[0]?.image_url,
-                qty: 1,
-                price: totalAmount,
-                attribute: selectedVariation && selectedVariation.attribute_id,
-                variation: selectedVariation && selectedVariation.id,
-                tax: taxAmount,
-                shipping_cost: prodData.shipping_cost
-            };            
-
             try {
-                const response = await axios.post(`${config.API_URL}/api/addtocart`, product);
+                const response = await axios.post(`${config.API_URL}/api/qtyUpdate`,
+                    { qty, cart_id: id },
+                    { headers: { Authorization: `Bearer ${jwtToken}` } }
+                );
                 if(response.data.status === 1) {
-                    console.log(response.data);
-                    successNotify("Successfully added to Cart");
+                    console.log(response.data.message);
                     getCart();
                 }
             } catch (error) {
-                errorNotify(error);
-                console.log("error adding to cart:", error);
+                console.log("error updating cart:", error);
             } finally {
                 setIsAddingToCart(false);
             }
-            setCart(product);
-            const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-            existingCart.push(product);
-            localStorage.setItem('cart', JSON.stringify(existingCart));
-            getCart();
         }
-    };
+    }
+  };
 
-  const handleViewDetails = () => {
-    // Implement view details functionality
+  const handleRemoveFromCart = async(id) => {
+    setIsAddingToCart(true);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (jwtToken) {
+        
+        const user_id = jwtDecode(jwtToken).id;
+        try {
+            const response = await axios.post(`${config.API_URL}/api/deleteProduct`, 
+                { user_id, cart_id: id },
+                { headers: { Authorization: `Bearer ${jwtToken}` } }
+            );
+            if(response.data.status === 1) {
+                console.log(response.data.message);
+                getCart();
+            }
+        } catch (error) {
+            console.log("error removing from cart:", error);
+        } finally {
+            setIsAddingToCart(false);
+        }
+    }
+  };
+
+  const handleViewDetails = (product) => {
+    setSelectedProduct(product);
+    setIsDetailModalOpen(true);
   };
 
   if (!innerSubCategoryData) {
@@ -143,48 +267,19 @@ const CleaningProductPage = () => {
     );
   }
 
-  const AddButton = () => {
-      const totalCart = cart.filter(ct => ct.product_id === prodData.id);                
-      const specificCart = totalCart?.filter(ct => ct?.variation == selectedVariation?.id);
-      
-      if (isAddingToCart) {
-          return (
-              <div className="w-[109px] h-[35px] flex items-center justify-center rounded-lg" style={{border: "1px solid #249370"}}>
-                  <span className="loader"></span>
-              </div>
-          );
-      }
-      
-      if (specificCart.length !== 0) {
-          return (
-              <div className="w-[109px] h-[35px] flex flex-row justify-around items-center text-2xl font-semibold rounded-lg" style={{border: "1px solid #249370"}}>
-                  <button onClick={() => handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty - 1)} style={{color: "#249370"}}>-</button>
-                  <span style={{color: "#249370"}}>{specificCart[0]?.qty}</span>
-                  <button onClick={() => handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty + 1)} style={{color: "#249370"}}>+</button>
-              </div>
-          );
-      } else if(totalCart.length !== 0) {
-          return (
-              <div className="w-[109px] h-[35px] flex flex-row justify-around items-center text-2xl font-semibold rounded-lg" style={{border: "1px solid #249370"}}>
-                  <button onClick={() => handleQtyUpdate(totalCart[0]?.id, totalCart[0]?.qty - 1)} style={{color: "#249370"}}>-</button>
-                  <span style={{color: "#249370"}}>{totalCart[0]?.qty}</span>
-                  <button onClick={() => handleQtyUpdate(totalCart[0]?.id, totalCart[0]?.qty + 1)} style={{color: "#249370"}}>+</button>
-              </div>
-          );
-      } else {
-          return (
-              <button
-                  className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border" 
-                  onClick={handleAddToCart}
-              >
-                  Add
-              </button>
-          );
-      }
+  const AddButton = ({ product }) => {
+    return (
+      <button
+        className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"
+        onClick={() => handleViewDetails(product)}
+      >
+        Add
+      </button>
+    );
   };
 
   return (
-    <main className="main-div flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white mx-20">
+    <main className="main-div flex flex-col md:p-4 mb-2 scroll-smooth bg-white mx-2 lg:mx-20">
       <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">
         <a href="/" className="text-blue-500">
           Home
@@ -204,34 +299,35 @@ const CleaningProductPage = () => {
         )}
       </nav>
 
-      <div className="flex flex-col-reverse lg:flex-row gap-4 mt-4 h-screen overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-4 mt-4 overflow-hidden">
+        
         {/* Left Sidebar - Sticky */}
-        <div className="lg:w-1/4 lg:sticky lg:top-0 lg:self-start lg:max-h-screen z-10">
+        <div className="lg:w-1/4 lg:sticky lg:top-0 lg:self-start z-10">
           <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
             <h2 className="text-base lg:text-2xl font-semibold">
               {innerSubCategoryData?.innersubcategory_name}
             </h2>
             <p className="text-sm">Select a service</p>
             <div className="grid grid-cols-3 gap-4">
-              {innerSubCategoryData.products.map((product, index) => (
+              {innerSubCategoryData?.products?.map((product, index) => (
                 <div
                   key={product.id}
                   className={`flex flex-col items-center p-2 rounded-md cursor-pointer ${
-                    index === currentProductIndex ? "glow-border" : "hover:bg-gray-100 border-gray-100"
+                    index === currentProductIndex ? "glow-border px-0" : "hover:bg-gray-100 border-gray-100"
                   }`}
                   onClick={() => handleProductClick(index)}
                 >
-                  {product.product_image ? (
+                  {product.productimages && product.productimages?.length > 0 ? (
                     <img
-                      src={product.product_image}
+                      src={product.productimages[0]?.image_url}
                       alt={product.product_name}
-                      className="w-20 h-20 object-cover rounded-md"
+                      className="w-20 h-20 rounded-md"
                     />
                   ) : (
                     <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
                   )}
                   <div>
-                    <h3 className="text-sm text-center font-medium">{product.product_name}</h3>
+                    <h3 className="text-sm line-clamp-2 text-center font-medium">{product.product_name}</h3>
                   </div>
                 </div>
               ))}
@@ -240,15 +336,15 @@ const CleaningProductPage = () => {
         </div>
 
         {/* Center Section - Scrollable */}
-        <div className="lg:w-3/4 overflow-y-auto h-screen custom-scrollbar scrollbar-hide">
-          <section className="bg-white rounded-lg p-4 space-y-4">
+        <div className="lg:w-3/4">
+          <section className="bg-white rounded-lg py-0 px-4 space-y-4">
             <img
               src={innerSubCategoryData?.subcategory_banner}
-              alt={innerSubCategoryData.innersubcategory_name}
-              className="w-full h-[500px] object-cover rounded-md"
+              alt={innerSubCategoryData?.innersubcategory_name}
+              className="w-full h-[200px] md:h-[500px] rounded-md"
             />
-            <div className="flex gap-4">
-              <div className="flex flex-col gap-4">
+            <div className="flex flex-col md:flex-row gap-4 w-full">
+              <div className="md:overflow-y-auto custom-scrollbar scrollbar-hide w-full md:w-2/3 flex flex-col gap-4">
                 {innerSubCategoryData?.products.map((product, index) => (
                   <section
                     key={product.id}
@@ -258,42 +354,42 @@ const CleaningProductPage = () => {
                     <h3 className="text-base lg:text-2xl font-semibold">
                       {product.product_name}
                     </h3>
-                    {product?.variations?.map((variation, index) => (
+                    {product?.attributes?.map((attribute, index) => (
                       <div
                         key={index}
                         className={`flex justify-between p-4 rounded-md cursor-pointer ${
-                          variation.id === currentVariationIndex
+                          attribute.id === currentVariationIndex
                             ? "bg-blue-100"
                             : "hover:bg-gray-100"
                         }`}
                       >
                         <div className="">
                           <h3 className="text-base font-medium">
-                            {variation.attribute_name}
+                            {attribute.attribute_name}
                           </h3>
                           <p className="text-gray-500 text-sm">
-                            {variation.discounted_variation_price ? (
+                            {attribute.variations?.length > 0 && attribute.variations[0]?.discounted_variation_price ? (
                               <>
-                                <span className="font-medium text-blue-500">
-                                  ₹{variation.discounted_variation_price}
-                                </span>
-                                <span className="line-through text-gray-400 ml-2">
-                                  ₹{variation.price}
+                                <span className="flex gap-2 font-medium">
+                                  Starts from 
+                                  <span className="text-blue-500">
+                                    ₹{attribute.variations[0]?.discounted_variation_price}
+                                  </span>
                                 </span>
                               </>
                             ) : (
                               <span className="font-medium text-blue-500">
-                                ₹{variation.price}
+                                ₹{attribute.variations[0]?.discounted_variation_price}
                               </span>
                             )}
                           </p>
                           <div className="space-y-4">
                             <p className="text-gray-500">
-                              {variation.description}
+                              {attribute.description}
                             </p>
                             <button
                               className="underline text-blue-500 hover:underline"
-                              onClick={handleViewDetails}
+                              onClick={() => handleViewDetails(product)}
                             >
                               View Details
                             </button>
@@ -301,7 +397,7 @@ const CleaningProductPage = () => {
                         </div>
                         <div className="relative flex justify-center items-center">
                           <img 
-                            src={product?.product_image} 
+                            src={product?.productimages && product?.productimages[0]?.image_url} 
                             alt="" 
                             className="w-32 h-32 rounded-lg"
                           />
@@ -316,31 +412,8 @@ const CleaningProductPage = () => {
                   </section>
                 ))}
               </div>
-              <div className="lg:w-1/4 lg:sticky lg:top-0 lg:self-start lg:max-h-screen lg:overflow-y-auto z-10">
-                <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-                  <h2 className="text-base lg:text-2xl font-semibold">Cart</h2>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Intense cleaning</span>
-                      <span className="font-medium text-blue-500">₹960</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Congratulations! ₹78 saved so far!</span>
-                      <button className="bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600">
-                        View Cart
-                      </button>
-                    </div>
-                  </div>
-                </section>
-                <section className="bg-white rounded-lg p-4 space-y-4 glow-border mt-4">
-                  <h2 className="text-base lg:text-2xl font-semibold">Hommlie Features</h2>
-                  <ul className="space-y-2">
-                    <li>Verified Professionals</li>
-                    <li>Safe Chemicals</li>
-                    <li>Service in 4hr</li>
-                    <li>Superior Stain Removal</li>
-                  </ul>
-                </section>
+              <div className="sticky w-full md:w-1/3 z-10">
+                <CartSection cart={cart} />
               </div>
             </div>
           </section>
@@ -364,7 +437,20 @@ const CleaningProductPage = () => {
         `}</style>
       </div>
 
-      <LoginSignup isOpen={isModalOpen} onClose={closeModal} checkoutPd={checkoutPd} />
+      <LoginSignup 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        checkoutPd={checkoutPd} 
+      />
+
+      <ProductDetailModal 
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        product={selectedProduct}
+        handleAddToCart={handleAddToCart}
+        handleQtyUpdate={handleQtyUpdate}
+        isAddingToCart={isAddingToCart}
+      />
 
     </main>
   );
