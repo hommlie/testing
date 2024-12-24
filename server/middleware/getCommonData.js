@@ -6,6 +6,10 @@ const profileApiUrl = process.env.profileApiUrl;
 
 async function fetchProductReviews(product_id, reviewDataIncluded) {
     try {
+
+        console.log(product_id);
+        console.log(reviewDataIncluded);
+        
       // Fetch reviews for the product with associated images
       const reviews = await Ratting.findAll({
         where: { product_id },
