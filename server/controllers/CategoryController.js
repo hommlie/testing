@@ -171,7 +171,7 @@ exports.getCleaningSubcategory = async (req, res) => {
       attributes: [
         'id',
         'subcategory_name',
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url'],
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url'],
         'video',
         'thumbnail',
         'slug',
