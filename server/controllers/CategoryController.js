@@ -181,6 +181,7 @@ exports.getCleaningSubcategory = async (req, res) => {
       include: [
         {
           model: Category,
+          as: 'category'
         }
       ],
       where: { 
