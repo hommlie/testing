@@ -27,7 +27,19 @@ Subcategory.init({
     icon: {
         type: DataTypes.STRING,
         allowNull: false 
-    }
+    },
+    meta_title: {
+        type: DataTypes.STRING,
+    },
+    meta_description: {
+        type: DataTypes.STRING,
+    },
+    subcategory_title: {
+        type: DataTypes.STRING,
+    },
+    subcategory_sub_title: {
+        type: DataTypes.STRING,
+    },
 }, {
     sequelize,
     modelName: 'Subcategory',

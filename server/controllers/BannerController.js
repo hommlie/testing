@@ -1,7 +1,5 @@
-const Banner = require('../models/Banner');
-const Slider = require('../models/Slider');
-const Category = require('../models/Category');
 const sequelize = require('../config/connection');
+const { Category, Slider, Banner } = require('../models');
 const apiUrl = process.env.apiUrl;
 
 exports.getBanner = async (req, res) => {

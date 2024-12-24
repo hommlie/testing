@@ -34,6 +34,15 @@ Category.init({
         type: DataTypes.STRING,
         allowNull: true 
     },
+    meta_title: {
+        type: DataTypes.STRING,
+    },
+    meta_description: {
+        type: DataTypes.STRING,
+    },
+    motion_graphics: {
+        type: DataTypes.STRING,
+    },
 }, {
     sequelize,
     modelName: 'Category',

@@ -64,10 +64,10 @@ const CartSection = ({ cart }) => {
           )}
 
           <button 
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-md transition"
             onClick={() => window.location.href = '/cart'}
           >
-            View Cart
+            Checkout Now
           </button>
         </div>
       </section>
@@ -285,18 +285,9 @@ const CleaningProductPage = () => {
           Home
         </a>
         <span>/</span>
-        <span>Product</span>
-        {tag ? (
-          <>
-            <span>/</span>
-            <span>{tag}</span>
-          </>
-        ) : (
-          <>
-            <span>/</span>
-            <span>{innerSubCategoryData.innersubcategory_name}</span>
-          </>
-        )}
+        <span>Sub Category</span>
+        <span>/</span>
+        <span>{innerSubCategoryData.subcategory_name}</span>
       </nav>
 
       <div className="flex flex-col lg:flex-row gap-4 mt-4 overflow-hidden">

@@ -1,5 +1,5 @@
 const sequelize = require('../config/connection');
-const { Product, User, Banner, Brand, Category, Subcategory, Innersubcategory, Attribute, ProductImage, Variation, Ratting, Wishlist } = require('../models');
+const { AppHeader, Product, User, Banner, Brand, Category, Subcategory, Innersubcategory, Attribute, ProductImage, Variation, Ratting, Wishlist } = require('../models');
 
 const apiUrl = process.env.apiUrl;
 
@@ -16,14 +16,35 @@ exports.getCategory = async (req, res) => {
         'is_form',
         'slug',
         'alt_tag',
-        'image_title' 
+        'image_title',
+        'meta_description',
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
       ],
       where: { status: 1 },
       limit: 6
     });
+    
+    // Fetch app header data
+    const appHeaders = await AppHeader.findAll();
 
-    if (categoryData.length > 0) {
-      return res.status(200).json({ status: 1, message: 'Success', data: categoryData });
+    // Process app header data into desired format
+    const appData = {};
+    appHeaders.forEach(header => {
+      if (header.id === 1) {
+        appData['app_header'] = header;
+      } else if (header.id === 2) {
+        appData['shop_header'] = header;
+      }
+    });
+
+    // // Construct response
+    // const responseData = {
+    //   data: categoryData,
+    //   app_headers: appData
+    // };
+
+    if (categoryData.length > 0 || Object.keys(appData).length > 0) {
+      return res.status(200).json({ status: 1, message: 'Success', data: categoryData, app_headers: appData });
     } else {
       return res.status(200).json({ status: 0, message: 'No data found' });
     }
@@ -48,7 +69,11 @@ exports.getSubcategory = async (req, res) => {
         'thumbnail',
         'slug',
         'alt_tag',
-        'image_title' 
+        'image_title',
+        'meta_title', 
+        'meta_description', 
+        'subcategory_title', 
+        'subcategory_sub_title', 
       ],
       where: { cat_id, status: 1 }
     });
@@ -139,6 +164,11 @@ exports.getCleaningSubcategory = async (req, res) => {
         'slug',
         'alt_tag',
         'image_title'
+      ],
+      include: [
+        {
+          model: Category,
+        }
       ],
       where: { 
         id: subcat_id, 
