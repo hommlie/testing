@@ -613,7 +613,7 @@ exports.searchProducts = async(req, res) => {
               'product_id', 
               'alt_tag',
               'image_title',
-              [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('productimages.image')), 'image_url']
+              [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('productimage.image')), 'image_url']
             ],
             where: {media: 'Image'},
             as: 'productimage'
