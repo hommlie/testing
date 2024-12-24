@@ -181,7 +181,21 @@ exports.getCleaningSubcategory = async (req, res) => {
       include: [
         {
           model: Category,
-          as: 'category'
+          as: 'category',
+          attributes: [
+            'id', 
+            'category_name', 
+            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+            'video',
+            'thumbnail',
+            'is_form',
+            'slug',
+            'alt_tag',
+            'image_title',
+            'meta_title',
+            'meta_description',
+            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+          ],
         }
       ],
       where: { 
