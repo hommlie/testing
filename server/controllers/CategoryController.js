@@ -38,11 +38,13 @@ exports.getCategory = async (req, res) => {
 
     // Process app header data into desired format
     const appData = {};
+    let app_header = {};
+    let shop_header = {};
     appHeaders.forEach(header => {
       if (header.id === 1) {
-        appData['app_header'] = header;
+        app_header = header;
       } else if (header.id === 2) {
-        appData['shop_header'] = header;
+        shop_header = header;
       }
     });
 
@@ -53,7 +55,7 @@ exports.getCategory = async (req, res) => {
     // };
 
     if (categoryData.length > 0 || Object.keys(appData).length > 0) {
-      return res.status(200).json({ status: 1, message: 'Success', data: categoryData, app_headers: appData });
+      return res.status(200).json({ status: 1, message: 'Success', data: categoryData, app_header, shop_header });
     } else {
       return res.status(200).json({ status: 0, message: 'No data found' });
     }
