@@ -60,7 +60,7 @@ app.post('/removefromwishlist', WishlistController.removeFromWishlist);
 app.post('/getwishlist', WishlistController.getWishlist);
 
 //Rattings
-app.post('/addratting', RattingController.addRatting);
+app.post('/addratting', upload.array('reviewImages', 5), RattingController.addRatting);
 app.post('/productreview', RattingController.productReview);
 app.get('/google-reviews', RattingController.getGoogleReviews);
 

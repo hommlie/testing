@@ -6,7 +6,11 @@ const storage = multer.diskStorage({
     let uploadPath = 'storage/app/public/';
     
     if (file.mimetype.startsWith('image/')) {
-      uploadPath += 'images/profile/';
+      if (file.fieldname === 'reviewImages') {
+        uploadPath += 'images/reviews/';
+      } else {
+        uploadPath += 'images/profile/';
+      }
     } else if (file.mimetype === 'application/pdf') {
       uploadPath += 'pdfs/resume/';
     }

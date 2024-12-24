@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
 const axios = require('axios');
 const sequelize = require('../config/connection');
-const { Ratting, User, Product, Order, Employee } = require('../models'); 
+const { Ratting, User, Product, Order, Employee, ReviewImage } = require('../models'); 
 const apiUrl = process.env.apiUrl;
 const GOOGLE_API_KEY = process.env.GMAP_KEY;
 const PLACE_ID = process.env.PLACE_ID;
@@ -81,8 +81,18 @@ exports.addRatting = async(req, res) => {
       });
 
       if (checkRatting.length > 0) {
+
         return res.status(200).json({ status: 0, message: 'You have already written the review.' });
+      
       } else {
+
+        if (req.files.length > 0) {
+          const reviewImages = req.files.map(file => ({
+            review_id: newReview.id,
+            image: file.filename,
+          }));
+          await ReviewImage.bulkCreate(reviewImages);
+        }
 
         const data = await Ratting.create({
           vendor_id,
@@ -129,7 +139,14 @@ exports.productReview = async(req, res)=> {
             model: User,
             attributes: ['id', 'name'],
             as: "users"
-          }
+          },
+          {
+            model: ReviewImage,
+            attributes: [
+              'id', 
+              [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/reviews/', image)`), 'image_url'],
+            ],
+          },
         ],
         attributes: [
           'user_id',
@@ -157,3 +174,5 @@ exports.productReview = async(req, res)=> {
       return res.status(500).json({ status: 0, message: 'Something went wrong', error });
     }
 }
+
+

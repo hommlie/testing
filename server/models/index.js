@@ -7,6 +7,7 @@ const Cart = require('./Cart');
 const Coupons = require('./Coupons');
 const User = require('./User');
 const Ratting = require('./Ratting');
+const ReviewImage = require('./ReviewImage');
 const Product = require('./Products');
 const Category = require('./Category');
 const Subcategory = require('./Subcategory');
@@ -152,6 +153,9 @@ Ratting.belongsTo(User, {
       // [sequelize.literal(`CONCAT('${url}/storage/app/public/images/profile/', profile_pic)`), 'image_url']
   ]
 });
+Ratting.hasMany(ReviewImage, { foreignKey: 'review_id' });
+
+ReviewImage.belongsTo(Ratting, { foreignKey: 'review_id' });
 
 // Wishlist.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
 Wishlist.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
@@ -168,6 +172,7 @@ module.exports = {
   Slider,
   User,
   Ratting,
+  ReviewImage,
   Product,
   Category,
   Subcategory,
