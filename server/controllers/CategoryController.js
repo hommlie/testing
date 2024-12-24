@@ -248,8 +248,8 @@ exports.getCleaningSubcategory = async (req, res) => {
             [
               sequelize.literal(`
                 CASE 
-                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', image)
-                  WHEN media = 'Video' THEN image
+                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', ProductImage.image)
+                  WHEN media = 'Video' THEN ProductImage.image
                   ELSE NULL
                 END
               `),

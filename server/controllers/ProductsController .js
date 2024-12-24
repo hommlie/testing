@@ -27,7 +27,7 @@ exports.viewAllListing = async(req, res) => {
                   'product_id', 
                   'alt_tag',
                   'image_title',
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('ProductImage.image')), 'image_url']
               ],
               where: {
                   media: 'Image'
@@ -293,8 +293,8 @@ exports.productDetails = async (req, res) => {
             [
               sequelize.literal(`
                 CASE 
-                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', image)
-                  WHEN media = 'Video' THEN image
+                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', ProductImage.image)
+                  WHEN media = 'Video' THEN ProductImage.image
                   ELSE NULL
                 END
               `),
@@ -402,7 +402,7 @@ exports.productDetails = async (req, res) => {
           attributes: [
             'id', 
             'product_id', 
-            [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url'],
+            [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('ProductImage.image')), 'image_url'],
             'alt_tag',
             'image_title',
           ],
@@ -536,7 +536,7 @@ exports.products = async (req, res) => {
                     'product_id', 
                     'alt_tag',
                     'image_title',
-                    [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+                    [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('ProductImage.image')), 'image_url']
                   ],
                   where: {media: 'Image'},
                   as: 'productimage'
@@ -613,7 +613,7 @@ exports.searchProducts = async(req, res) => {
               'product_id', 
               'alt_tag',
               'image_title',
-              [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+              [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('ProductImage.image')), 'image_url']
             ],
             where: {media: 'Image'},
             as: 'productimage'
@@ -661,7 +661,7 @@ exports.filter = async(req, res) => {
                   'product_id', 
                   'alt_tag',
                   'image_title',
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('ProductImage.image')), 'image_url']
                 ],
                 where: {media: 'Image'},
                 as: 'productimage'
@@ -701,7 +701,7 @@ exports.filter = async(req, res) => {
                   'product_id', 
                   'alt_tag',
                   'image_title',
-                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+                  [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('ProductImage.image')), 'image_url']
                 ],
                 where: {media: 'Image'},
                 as: 'productimage'
