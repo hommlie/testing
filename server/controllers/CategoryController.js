@@ -1,5 +1,6 @@
 const sequelize = require('../config/connection');
 const { AppHeader, Product, User, Banner, Brand, Category, Subcategory, Innersubcategory, Attribute, ProductImage, Variation, Ratting, Wishlist } = require('../models');
+const { fetchProductReviews } = require('../middleware/getCommonData');
 
 const apiUrl = process.env.apiUrl;
 
@@ -63,7 +64,6 @@ exports.getSubcategory = async (req, res) => {
   try {
     
     const { cat_id } = req.body;
-    const user_id = 1;
 
     const subcategoryData = await Subcategory.findAll({
       attributes: [
@@ -295,10 +295,11 @@ exports.getCleaningSubcategory = async (req, res) => {
       ],
       order: [['id', 'DESC']]
     });
-
     // Transform the products data
     const transformedProducts = await Promise.all(products.map(async (product) => {
       const plainProduct = product.get({ plain: true });
+
+      const reviewsData = fetchProductReviews(product.id);
 
       // Group variations by attribute_id
       const groupedVariations = plainProduct.variations.reduce((acc, variation) => {
@@ -328,7 +329,8 @@ exports.getCleaningSubcategory = async (req, res) => {
           acc.push({
             attribute_id: variation.attribute_id,
             attribute_name: variation.attribute.attribute,
-            variations: [variationData]
+            variations: [variationData],
+            reviewsData
           });
         }
 
