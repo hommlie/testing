@@ -17,6 +17,7 @@ exports.getCategory = async (req, res) => {
         'slug',
         'alt_tag',
         'image_title',
+        'meta_title',
         'meta_description',
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
       ],

@@ -277,7 +277,7 @@ exports.productDetails = async (req, res) => {
       where: { id: product_id, status: 1 },
       attributes: [
         'id', 'product_name', 'product_price', 'cat_id', 'discounted_price', 'description', 'tags', 'product_qty', 'is_variation', 'vendor_id', 'sku',
-        'free_shipping', 'shipping_cost', 'tax_type', 'tax', 'est_shipping_days', 'is_return', 'return_days', 'faqs', 'slug',
+        'free_shipping', 'shipping_cost', 'tax_type', 'tax', 'est_shipping_days', 'is_return', 'return_days', 'faqs', 'slug', 'meta_title', 'meta_description',
       ],
       include: [
         {

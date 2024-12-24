@@ -114,7 +114,13 @@ Product.init({
     product_qty: {
         type: DataTypes.INTEGER,
         allowNull: false
-    }
+    },
+    meta_title: {
+        type: DataTypes.STRING,
+    },
+    meta_description: {
+        type: DataTypes.STRING,
+    },
 }, {
     sequelize,
     modelName: 'Product',
