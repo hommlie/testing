@@ -299,7 +299,7 @@ exports.getCleaningSubcategory = async (req, res) => {
     const transformedProducts = await Promise.all(products.map(async (product) => {
       const plainProduct = product.get({ plain: true });
 
-      const reviewsData = fetchProductReviews(product.id);
+      const reviewsData = fetchProductReviews(plainProduct.id);
 
       // Group variations by attribute_id
       const groupedVariations = plainProduct.variations.reduce((acc, variation) => {
