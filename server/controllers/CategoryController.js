@@ -361,6 +361,7 @@ exports.getCleaningSubcategory = async (req, res) => {
       subcategory_id: subcategoryData.id,
       subcategory_name: subcategoryData.subcategory_name,
       subcategory_banner: subcategoryData.get('image_url'),
+      category: subcategoryData.category,
       video: subcategoryData.video,
       thumbnail: subcategoryData.thumbnail,
       slug: subcategoryData.slug,

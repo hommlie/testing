@@ -285,9 +285,9 @@ const CleaningProductPage = () => {
           Home
         </a>
         <span>/</span>
-        <span>Sub Category</span>
+        <span>{innerSubCategoryData?.category?.category_name}</span>
         <span>/</span>
-        <span>{innerSubCategoryData.subcategory_name}</span>
+        <span>{innerSubCategoryData?.subcategory_name}</span>
       </nav>
 
       <div className="flex flex-col lg:flex-row gap-4 mt-4 overflow-hidden">
