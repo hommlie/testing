@@ -25,7 +25,15 @@ exports.getCategory = async (req, res) => {
     });
     
     // Fetch app header data
-    const appHeaders = await AppHeader.findAll();
+    const appHeaders = await AppHeader.findAll({
+      attributes: [
+        'id', 
+        'bg_color', 
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/appHeaderImgae/', image)`), 'image'],
+        'text_color',
+        'sub_text_color',
+      ],
+    });
 
     // Process app header data into desired format
     const appData = {};
@@ -123,6 +131,10 @@ exports.getSubcategory = async (req, res) => {
         subcat_id: sub.id,
         subcategory_name: sub.subcategory_name,
         subcategory_icon: sub.getDataValue('image_url'),
+        meta_title: sub.meta_title, 
+        meta_description: sub.meta_description, 
+        subcategory_title: sub.subcategory_title, 
+        subcategory_sub_title: sub.subcategory_sub_title,
         // innersubcategory: innersubcategoryData.map(inner => ({
         //   id: inner.id,
         //   innersubcategory_name: inner.innersubcategory_name
