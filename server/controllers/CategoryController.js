@@ -84,7 +84,16 @@ exports.getSubcategory = async (req, res) => {
       include: [
         {
           model: Category,
-          // attributes: ['id', 'product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('productimage.image')), 'image_url'], 'alt_tag', 'image_title' ],
+          attributes: [
+            'id', 
+            'category_name', 
+            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+            'video',
+            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', thumbnail)`), 'thumbnail'],
+            'is_form',
+            'is_page',
+            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+          ],
           as: 'category'
         },
       ],
