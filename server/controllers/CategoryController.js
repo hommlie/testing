@@ -256,6 +256,7 @@ exports.getCleaningSubcategory = async (req, res) => {
               'image_url'
             ]
           ],
+          where: { media: 'Image' },
           as: 'productimages'
         },
         {
