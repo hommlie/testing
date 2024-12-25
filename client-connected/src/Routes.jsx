@@ -59,7 +59,7 @@ const ProjectRoutes = () => {
     { path: `${config.VITE_BASE_URL}/product/:id/:slug`, element: <ProductPage /> },
     { path: `${config.VITE_BASE_URL}/product/:id/:slug/tag/:tag`, element: <ProductPage /> },
 
-    { path: `${config.VITE_BASE_URL}/innersubcategory/:id`, element: <CleaningProductPage /> },
+    { path: `${config.VITE_BASE_URL}/subcategory/:slug/:id`, element: <CleaningProductPage /> },
 
     { 
       path: `${config.VITE_BASE_URL}/add-to-cart`, 

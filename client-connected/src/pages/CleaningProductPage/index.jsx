@@ -383,7 +383,7 @@ const CleaningProductPage = () => {
                             className="w-32 h-32 rounded-lg"
                           />
                           <div
-                            className="absolute inset-x-0 -bottom-3 flex justify-center items-center"
+                            className="absolute inse  t-x-0 -bottom-3 flex justify-center items-center"
                           >
                             <button
                               className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"

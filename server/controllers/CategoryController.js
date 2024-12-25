@@ -148,7 +148,8 @@ exports.getSubcategory = async (req, res) => {
         meta_description: sub.meta_description, 
         subcategory_title: sub.subcategory_title, 
         subcategory_sub_title: sub.subcategory_sub_title,
-        is_page_category: sub.category.is_page,
+        slug: sub.slug,
+        // is_page_category: sub.category.is_page,
         category: sub.category,
         // innersubcategory: innersubcategoryData.map(inner => ({
         //   id: inner.id,

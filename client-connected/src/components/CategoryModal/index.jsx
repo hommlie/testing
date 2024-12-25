@@ -62,9 +62,13 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
     }
 
     const handleCategoryClick = (cat) => {
-        setSubCatId(cat.subcat_id);
-        setSubCatTitle(cat.subcategory_name);
-        getSubCategoryItems(cat.subcat_id);
+        if (cat.category.is_page === 1) {
+            navigate(`${config.VITE_BASE_URL}/subcategory/${cat.slug}/${cat.subcat_id}`)
+        } else {
+            setSubCatId(cat.subcat_id);
+            setSubCatTitle(cat.subcategory_name);
+            getSubCategoryItems(cat.subcat_id);
+        }
     };
 
     const handleBackClick = () => {
