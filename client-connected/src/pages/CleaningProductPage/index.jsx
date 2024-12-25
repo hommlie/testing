@@ -268,17 +268,6 @@ const CleaningProductPage = () => {
     );
   }
 
-  const AddButton = ({ product }) => {
-    return (
-      <button
-        className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"
-        onClick={() => handleViewDetails(product)}
-      >
-        Add
-      </button>
-    );
-  };
-
   return (
     <main className="main-div flex flex-col md:p-4 mb-2 scroll-smooth bg-white mx-2 lg:mx-20">
       <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">
@@ -396,7 +385,12 @@ const CleaningProductPage = () => {
                           <div
                             className="absolute inset-x-0 -bottom-3 flex justify-center items-center"
                           >
-                            <AddButton />
+                            <button
+                              className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"
+                              onClick={() => handleViewDetails(product)}
+                            >
+                              Add
+                            </button>
                           </div>
                         </div>
                       </div>

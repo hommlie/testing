@@ -15,6 +15,7 @@ exports.getCategory = async (req, res) => {
         'video',
         'thumbnail',
         'is_form',
+        'is_page',
         'slug',
         'alt_tag',
         'image_title',
@@ -80,6 +81,13 @@ exports.getSubcategory = async (req, res) => {
         'subcategory_title', 
         'subcategory_sub_title', 
       ],
+      include: [
+        {
+          model: Category,
+          // attributes: ['id', 'product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('productimage.image')), 'image_url'], 'alt_tag', 'image_title' ],
+          as: 'category'
+        },
+      ],
       where: { cat_id, status: 1 }
     });
 
@@ -132,6 +140,7 @@ exports.getSubcategory = async (req, res) => {
         meta_description: sub.meta_description, 
         subcategory_title: sub.subcategory_title, 
         subcategory_sub_title: sub.subcategory_sub_title,
+        category: sub.category,
         // innersubcategory: innersubcategoryData.map(inner => ({
         //   id: inner.id,
         //   innersubcategory_name: inner.innersubcategory_name
@@ -185,6 +194,7 @@ exports.getCleaningSubcategory = async (req, res) => {
             'video',
             'thumbnail',
             'is_form',
+            'is_page',
             'slug',
             'alt_tag',
             'image_title',
@@ -291,7 +301,7 @@ exports.getCleaningSubcategory = async (req, res) => {
           as: 'rattings',
           required: false
         },
-        { model: Category, attributes: ['category_name', 'is_form'], as: 'category' },
+        { model: Category, attributes: ['category_name', 'is_form', 'is_page',], as: 'category' },
         { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' }
       ],
       order: [['id', 'DESC']]
@@ -351,7 +361,8 @@ exports.getCleaningSubcategory = async (req, res) => {
         ...plainProduct,
         attributes: groupedVariations,
         return_policy: returnPolicy?.return_policies,
-        is_form: plainProduct.category.is_form
+        is_form: plainProduct.category.is_form,
+        is_page: plainProduct.category.is_page
       };
     }));
 
