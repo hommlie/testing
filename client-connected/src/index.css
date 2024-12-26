@@ -7,4 +7,22 @@
     transition: border-color 0.3s, box-shadow 0.3s;
     border-color: rgba(23, 203, 89, 0.5);
     /* box-shadow: 0 0 10px rgba(66, 225, 137, 0.2); */
+}
+
+/* header height variables */
+:root {
+  --header-height: 160px; 
+}
+
+/* Mobile header height adjustment */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 200px;
   }
+}
+
+/* utility classes for sticky positioning */
+.sticky-header-offset {
+  top: var(--header-height);
+  position: sticky;
+}

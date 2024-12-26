@@ -10,7 +10,6 @@ import secureIcon from '../../assets/images/secure-icon.png';
 import AddressModal from "../../components/AddressModal";
 import DateTimeModal from "../../components/DateTimeModal";
 import CouponModal from "../../components/CouponModal";
-import PaymentModal from "../../components/PaymentModal";
 import { useToast } from "../../context/ToastProvider";
 import emptyCart from '../../assets/images/illustrator/empty_cart.png';
 import axios from "axios";
@@ -23,7 +22,6 @@ export default function AddtoCart() {
     const navigate = useNavigate();
     const notify = useToast();
     const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
-    const [isPaymentOpen, setIsPaymentOpen] = useState(false);
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
     const [prodRelatedProds, setProdRelatedProds] = useState([]);
@@ -65,8 +63,6 @@ export default function AddtoCart() {
     const closeAddressModal = () => setIsAddressModalOpen(false);
     const openDateTimeModal = () => setIsDateTimeModalOpen(true);
     const closeDateTimeModal = () => setIsDateTimeModalOpen(false);
-    const openPaymentModal = () => setIsPaymentOpen(true);
-    const closePaymentModal = () => setIsPaymentOpen(false);
     const openCouponModal = () => setIsCouponModalOpen(true);
     const closeCouponModal = () => {        
         setIsCouponModalOpen(false);
@@ -259,26 +255,17 @@ export default function AddtoCart() {
     const topTracker = ["Add To Cart", "Review Booking", "Booking Confirmed"];
 
     return (
-        <main className="flex justify-center bg-gray-100">
-            <div className="relative w-full max-w-5xl my-6 md:my-16 space-y-6 px-4">
-                <DateTimeModal 
-                    isOpen={isDateTimeModalOpen} 
-                    onClose={closeDateTimeModal} 
-                    order_type="AMC" 
-                    // slotFull 
-                />
-                <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} />
-                <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalItemPrice + tax} />
-                <PaymentModal isOpen={isPaymentOpen} onClose={closePaymentModal} />
-                
-                <div className="flex flex-col justify-center items-center">
-                    <div className="w-full p-4 relative">
+        <main className="min-h-screen bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+                {/* Progress Tracker */}
+                <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow-sm mb-4">
+                    <div className="w-full lg:w-[80%] p-4 relative">
                         <div className="flex flex-row justify-between my-8">
                             {
-                                topTracker?.map((tracker, index) => {
+                                topTracker.map((tracker, index) => {
                                     return (
                                         <div key={index} className="w-full flex flex-col justify-center items-center gap-4" style={{color: `${tracker === "Booking Confirmed" ? "#E5E7EB" : ""}`}}>
-                                            <span className="text-xs md:text-base font-semibold">{tracker}</span>
+                                            <span className={`text-[9px] md:text-xs md:text-base font-semibold`}>{tracker}</span>
                                             <div className={`${tracker === "Booking Confirmed" ? "border-[#E5E7EB]" : "border-[#249370]"} w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}></div>
                                         </div>
                                     )
@@ -292,310 +279,323 @@ export default function AddtoCart() {
                     </div>
                 </div>
 
-                {isLoading && cart.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow p-4 md:p-6 flex flex-col items-center justify-center">
-                        <p className="text-lg text-gray-600 mb-4">Loading...</p>
-                    </div>
-                ) : cart.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow p-4 md:p-6 flex flex-col items-center justify-center">
-                        <img src={emptyCart} className="w-64" alt="Hommlie Cart" />
-                        <button 
-                            onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
-                            className="px-6 py-1 bg-[#249370] text-white font-semibold hover:bg-green-700 transition duration-300"
-                            style={{backgroundColor: "#035240"}}
-                        >
-                            Add Item
-                        </button>
-                    </div>
-                ) : ( 
-                    cart?.map((pd, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow p-4 md:p-6 flex items-center">
-                                {/* {pd.image_url &&
-                                    <div onClick={() => navigate(`${config.VITE_BASE_URL}/product/${pd.id}/${pd.slug}`)}>
-                                        <img 
-                                            src={pd.image_url}
-                                            title={pd?.image_title}
-                                            alt={pd?.alt_tag}
-                                            className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg mr-4" 
-                                        />
-                                    </div>
-                                } */}
-                                <div className="flex-grow">
-                                    <h3 className="font-bold text-lg md:text-xl mb-2">{pd.product_name}</h3>
-                                    <p className="text-gray-600 mb-2">{pd?.attribute_name}</p>
-                                    <p className="text-gray-600 mb-2">{pd?.variation_name}</p>
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-bold text-lg">₹{pd.price * pd.qty}</span>
-                                    </div>
-                                </div>                            <div className="h-32 flex flex-col justify-between items-end">
-                                <div className="flex items-center rounded-xl" style={{border: "1px solid #249370", color: "#249370"}}>
-                                    <button 
-                                        onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)} 
-                                        className="w-8 h-8 rounded-l-lg"
-                                        disabled={isLoading && loadingItemId === pd?.id}
-                                    >
-                                        {isLoading && loadingItemId === pd?.id ? (
-                                            <span className="loader"></span>
-                                        ) : (
-                                            "-"
-                                        )}
-                                    </button>
-                                    <span className="text-center w-8 h-8 leading-8">{pd?.qty}</span>
-                                    <button 
-                                        onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)} 
-                                        className="w-8 h-8 rounded-r-lg"
-                                        disabled={isLoading && loadingItemId === pd?.id}
-                                    >
-                                        {isLoading && loadingItemId === pd?.id ? (
-                                            <span className="loader"></span>
-                                        ) : (
-                                            "+"
-                                        )}
-                                    </button>
-                                </div>
-                                <button onClick={() => handleRemoveFromCart(pd?.id)} className="ml-4 flex">
-                                    <RiDeleteBin5Line size={20} color="#374151"  />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Main Cart Content */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Cart Items */}
+                        {isLoading && cart.length === 0 ? (
+                            <div className="bg-white rounded-xl shadow-sm p-6 flex justify-center items-center min-h-[200px]">
+                                <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#249370] border-t-transparent"></div>
+                            </div>
+                        ) : cart.length === 0 ? (
+                            <div className="bg-white rounded-xl shadow-sm p-8 flex flex-col items-center">
+                                <img src={emptyCart} alt="Empty Cart" className="w-64 mb-6" />
+                                <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
+                                <p className="text-gray-600 mb-6">Add items to start a purchase</p>
+                                <button 
+                                    onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
+                                    className="px-8 py-3 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition duration-300"
+                                >
+                                    Browse Products
                                 </button>
                             </div>
-                        </div>
-                    ))      
-                )}
-
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h2 className="text-lg font-semibold mb-4">Price Details ({itemCount} items)</h2>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div className="space-y-2 mb-4" style={{color: "rgba(0,0,0,0.4)"}}>
-                        <div className="flex justify-between text-gray-600">
-                            <span>Price ({itemCount} items)</span>
-                            <span>₹{totalItemPrice}</span>
-                        </div>
-                        <div className="flex justify-between text-gray-600">
-                            <span>Tax & Fees</span>
-                            <span>₹{tax}</span>
-                        </div>
-                        {couponDiscount > 0 && (
-                            <div className="flex justify-between text-green-600">
-                                <span>Coupon Discount</span>
-                                <span>-₹{couponDiscount.toFixed(2)}</span>
-                            </div>
-                        )}
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div className="flex justify-between text-xl font-semibold">
-                        <span>Total</span>
-                        <span>₹{totalAmount?.toFixed(2)}</span>
-                    </div>
-                </div>
-
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-lg font-semibold">Account</h2>
-                        <NavLink to={`${config.VITE_BASE_URL}/edit-profile`} style={{border: "1px solid #249370", color: "#249370"}} className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">Edit</NavLink>
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div style={{color: "rgba(0,0,0,0.4)"}}>
-                        <p>{user?.name}</p>
-                        <p>Mob: {user?.mobile}</p>
-                        <p>Email: {user?.email}</p>
-                    </div>
-                </div>
-                
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center">
-                            <HiOutlineLocationMarker className="text-2xl text-[#249370] mr-2" />
-                            <h2 className="text-lg font-semibold">Address</h2>
-                        </div>
-                        <button onClick={openAddressModal} style={{border: "1px solid #249370", color: "#249370"}} className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
-                            {selectedAddrs ? "Change Address" : "Choose Address"}
-                        </button>
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div style={{color: "rgba(0,0,0,0.4)"}}>
-                        {selectedAddrs ? (
-                            <div>
-                                <p className="font-semibold">{selectedAddrs.name}</p>
-                                <p>{selectedAddrs.address}</p>
-                                <p>{selectedAddrs.landmark}</p>
-                                <p>{selectedAddrs.pincode}</p>
-                                <p>{selectedAddrs.mobile}</p>
-                            </div>
                         ) : (
-                            "Choose your delivery address"
-                        )}
-                    </div>
-                </div>
+                            cart?.map((pd, index) => (
+                                <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 transform transition duration-300 hover:shadow-md">
+                                    <div className="flex gap-3 md:gap-6">
+                                        <div>
+                                        <img 
+                                            src={pd.image_url}
+                                            alt={pd?.alt_tag}
+                                            className="w-20 h-20 xs:w-24 xs:h-24 md:w-32 md:h-32 object-cover rounded-lg" 
+                                        />
+                                        </div>
+                                        
+                                        <div className="flex-1 min-w-0"> {/* min-w-0 prevents flex child from overflowing */}
+                                        <div className="flex justify-between">
+                                            {/* Product Details */}
+                                            <div className="min-w-0 pr-2"> {/* pr-2 prevents text from touching price */}
+                                            <h3 className="text-base xs:text-lg md:text-xl font-semibold mb-0.5 md:mb-2 line-clamp-2">
+                                                {pd.product_name}
+                                            </h3>
+                                            {pd?.attribute_name && (
+                                                <p className="text-xs xs:text-sm md:text-base text-gray-600 mb-0.5 md:mb-1">
+                                                {pd?.attribute_name}
+                                                </p>
+                                            )}
+                                            {pd?.variation_name && (
+                                                <p className="text-xs xs:text-sm md:text-base text-gray-600 mb-1 md:mb-2">
+                                                {pd?.variation_name}
+                                                </p>
+                                            )}
+                                            </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-lg font-semibold">Select Day & Time Slot</h2>
-                        <button onClick={openDateTimeModal} style={{border: "1px solid #249370", color: "#249370"}} className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
-                            {selectedDayTime ? "Edit" : "Choose"}
-                        </button>
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div style={{color: "rgba(0,0,0,0.4)"}}>
-                        {selectedDayTime ? (
-                            <p>{selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}</p>
-                        ) : (
-                            "Choose your delivery Date & Time"
-                        )}
-                    </div>
-                </div>
+                                            {/* Price and Controls */}
+                                            <div className="flex flex-col items-end">
+                                                <span className="text-lg xs:text-xl md:text-2xl font-bold text-[#249370] whitespace-nowrap">
+                                                    ₹{pd.price * pd.qty}
+                                                </span>
+                                                
+                                                <div className="mt-4"> {/* pushes controls to bottom */}
+                                                    <div className="flex items-center gap-2 md:gap-4">
+                                                    {/* Quantity Controls */}
+                                                    <div className="flex items-center border-2 border-[#249370] rounded-lg">
+                                                        <button 
+                                                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
+                                                            className="w-6 h-6 xs:w-7 xs:h-7 md:w-8 md:h-8 flex items-center justify-center text-[#249370] hover:bg-[#249370] hover:text-white transition-colors"
+                                                            disabled={isLoading && loadingItemId === pd?.id}
+                                                        >
+                                                        -
+                                                        </button>
+                                                        <span className="w-6 xs:w-8 md:w-10 text-center text-xs xs:text-sm md:text-base font-medium">
+                                                            {pd?.qty}
+                                                        </span>
+                                                        <button 
+                                                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
+                                                            className="w-6 h-6 xs:w-7 xs:h-7 md:w-8 md:h-8 flex items-center justify-center text-[#249370] hover:bg-[#249370] hover:text-white transition-colors"
+                                                            disabled={isLoading && loadingItemId === pd?.id}
+                                                        >
+                                                        +
+                                                        </button>
+                                                    </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-lg font-semibold mb-4">Payment options</h2>
-                        {/* <button onClick={openPaymentModal} style={{border: "1px solid #249370", color: "#249370"}} className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
-                            {selectedDayTime ? "Edit" : "Choose"}
-                        </button> */}
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div className="space-y-4" style={{color: "rgba(0,0,0,0.4)"}}>
-                        {paymentList?.map((payment) => (
-                            <div key={payment.id} className="flex items-center">
-                                <input
-                                    type="radio"
-                                    id={`payment-${payment.id}`}
-                                    name="paymentMethod"
-                                    value={payment.id}
-                                    checked={paymentType?.id === payment.id}
-                                    onChange={handlePaymentChange}
-                                    className="mr-2"
-                                />
-                                <label htmlFor={`payment-${payment.id}`}>{payment.payment_name}</label>
-                            </div>
-                        ))}
-                    </div>
-                    {paymentType?.payment_name === 'Card' && (
-                        <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-                            <h3 className="text-lg font-semibold mb-4">Enter your Card details</h3>
-                            <form className="space-y-4">
-                                <div>
-                                    <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700">Card Number</label>
-                                    <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter Your Card Number" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" />
-                                </div>
-                                <div>
-                                    <label htmlFor="cardName" className="block text-sm font-medium text-gray-700">Name on the card</label>
-                                    <input type="text" id="cardName" name="cardName" placeholder="Name on the card" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" />
-                                </div>
-                                <div className="flex space-x-4">
-                                    <div className="w-1/2">
-                                        <label htmlFor="expiry" className="block text-sm font-medium text-gray-700">Expiry</label>
-                                        <div className="flex space-x-2">
-                                            <input type="text" id="expiryMonth" name="expiryMonth" placeholder="MM" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" />
-                                            <input type="text" id="expiryYear" name="expiryYear" placeholder="YY" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" />
+                                                    {/* Delete Button */}
+                                                    <button 
+                                                        onClick={() => handleRemoveFromCart(pd?.id)}
+                                                        className="text-gray-400 hover:text-red-500 transition-colors"
+                                                        aria-label="Remove item"
+                                                    >
+                                                        <RiDeleteBin5Line className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6" />
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         </div>
                                     </div>
-                                    <div className="w-1/2">
-                                        <label htmlFor="cvv" className="block text-sm font-medium text-gray-700">CVV</label>
-                                        <input type="text" id="cvv" name="cvv" placeholder="CVV" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" />
-                                    </div>
                                 </div>
-                                <div className="flex items-center">
-                                    <input type="checkbox" id="saveCard" name="saveCard" className="h-4 w-4 text-[#249370] focus:ring-green-500 border-gray-300 rounded" />
-                                    <label htmlFor="saveCard" className="ml-2 block text-sm text-gray-700">
-                                        Save this card information to my account and make faster payments.
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
-                    )}
-                </div>
-
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center">
-                            <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
-                            <h2 className="text-lg font-semibold">Coupons</h2>
-                        </div>
-                        <button onClick={openCouponModal} style={{border: "1px solid #249370", color: "#249370"}} className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
-                            Explore Now
-                        </button>
-                    </div>
-                    <div className="mb-2" style={{border: "1px dotted #E5E7EB"}}></div>
-                    <div style={{color: "rgba(0,0,0,0.4)"}}>
-                        {selectedCoupon ? (
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center">
-                                    <IoCheckmarkCircle className="text-[#249370] mr-2" />
-                                    <span className="font-semibold">{selectedCoupon?.coupon_name}</span>
-                                </div>
-                                <button onClick={handleRemoveCoupon} className="text-red-500">Remove</button>
-                            </div>
-                        ) : (
-                            coupons?.length ? (
-                                <p className="font-semibold">You have unlocked <span className="text-[#249370]">{coupons?.length} new coupons</span></p>
-                            ) : null
+                            ))
                         )}
-                    </div>
-                </div>
 
-                <section className="container mx-auto section p-4">
-                    <ProdSection
-                        title = "Similar Services"
-                        items = {visibleItems ? visibleItems : []}
-                        btnHidden
-                    />
-                </section>
+                        {/* Account Section */}
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold">Account Details</h2>
+                                <NavLink 
+                                    to={`${config.VITE_BASE_URL}/edit-profile`}
+                                    className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                                >
+                                    Edit
+                                </NavLink>
+                            </div>
+                            <div className="border-t border-gray-100 pt-4">
+                                <div className="space-y-2 text-gray-600">
+                                    <p className="font-medium text-black">{user?.name}</p>
+                                    <p>Mobile: {user?.mobile}</p>
+                                    <p>Email: {user?.email}</p>
+                                </div>
+                            </div>
+                        </div>
 
-                <section className="bg-white rounded-lg shadow p-6">
-                    <div className="flex flex-col md:flex-row items-center justify-between">
-                        <div className="mb-4 md:mb-0 md:mr-4">
-                            <h2 className="text-2xl font-semibold mb-2">Need help finding the right plan?</h2>
-                            <p className="text-gray-600">Our team will get in touch to answer your questions and help you get started</p>
-                            <button className="text-[#249370] text-semibold" onClick={() => navigate(`${config.VITE_BASE_URL}/contact-us`)}>
-                                Contact us now
-                            </button>
+                        {/* Address Section */}
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center gap-3">
+                                    <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
+                                    <h2 className="text-xl font-semibold">Delivery Address</h2>
+                                </div>
+                                <button 
+                                    onClick={openAddressModal}
+                                    className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                                >
+                                    {selectedAddrs ? "Change" : "Add Address"}
+                                </button>
+                            </div>
+                            <div className="border-t border-gray-100 pt-4">
+                                {selectedAddrs ? (
+                                    <div className="space-y-2 text-gray-600">
+                                        <p className="font-medium text-black">{selectedAddrs.name}</p>
+                                        <p>{selectedAddrs.address}</p>
+                                        <p>{selectedAddrs.landmark}</p>
+                                        <p>{selectedAddrs.pincode}</p>
+                                        <p>Mobile: {selectedAddrs.mobile}</p>
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500">Please select a delivery address</p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Delivery Time Section */}
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center gap-3">
+                                    <RiTimerLine className="text-2xl text-[#249370]" />
+                                    <h2 className="text-xl font-semibold">Delivery Time</h2>
+                                </div>
+                                <button 
+                                    onClick={openDateTimeModal}
+                                    className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                                >
+                                    {selectedDayTime ? "Change" : "Select Time"}
+                                </button>
+                            </div>
+                            <div className="border-t border-gray-100 pt-4">
+                                {selectedDayTime ? (
+                                    <p className="text-gray-600">
+                                        {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
+                                    </p>
+                                ) : (
+                                    <p className="text-gray-500">Please select delivery date and time</p>
+                                )}
+                            </div>
                         </div>
                     </div>
-                    {/* <div className="mt-4 flex flex-col sm:flex-row">
-                        <input
-                            type="tel"
-                            placeholder="Enter your Mobile No"
-                            className="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                            value={callbackMobileNumber}
-                            onChange={(e) => setCallbackMobileNumber(e.target.value)}
-                        />
-                        <button
-                            onClick={handleCallbackRequest}
-                            className="mt-2 sm:mt-0 px-6 py-2 bg-[#249370] text-white font-semibold rounded-r-lg transition duration-300"
+
+                    {/* Order Summary */}
+                    <div className="lg:col-span-1 space-y-6">
+                        <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
+                            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                            <div className="space-y-4">
+                                <div className="flex justify-between text-gray-600">
+                                    <span>Items ({itemCount})</span>
+                                    <span>₹{totalItemPrice}</span>
+                                </div>
+                                <div className="flex justify-between text-gray-600">
+                                    <span>Tax & Fees</span>
+                                    <span>₹{tax}</span>
+                                </div>
+                                {couponDiscount > 0 && (
+                                    <div className="flex justify-between text-green-600">
+                                    <span>Coupon Discount</span>
+                                    <span>-₹{couponDiscount.toFixed(2)}</span>
+                                </div>
+                            )}
+                            <div className="border-t border-gray-200 pt-4">
+                                <div className="flex justify-between text-lg font-semibold">
+                                    <span>Total Amount</span>
+                                    <span className="text-[#249370]">₹{totalAmount?.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Coupon Section */}
+                        <div className="mt-6 pt-6 border-t border-gray-200">
+                            <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center gap-2">
+                                    <BiSolidOffer className="text-xl text-[#249370]" />
+                                    <span className="font-medium">Apply Coupon</span>
+                                </div>
+                                <button 
+                                    onClick={openCouponModal}
+                                    className="text-[#249370] hover:underline"
+                                >
+                                    View Coupons
+                                </button>
+                            </div>
+                            {selectedCoupon && (
+                                <div className="flex justify-between items-center bg-green-50 p-3 rounded-lg">
+                                    <div className="flex items-center gap-2">
+                                        <IoCheckmarkCircle className="text-[#249370]" />
+                                        <span className="font-medium">{selectedCoupon?.coupon_name}</span>
+                                    </div>
+                                    <button 
+                                        onClick={handleRemoveCoupon}
+                                        className="text-red-500 text-sm hover:underline"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Payment Options */}
+                        <div className="mt-6 pt-6 border-t border-gray-200">
+                            <h3 className="font-semibold mb-4">Payment Method</h3>
+                            <div className="space-y-3">
+                                {paymentList?.map((payment) => (
+                                    <label 
+                                        key={payment.id} 
+                                        className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${
+                                            paymentType?.id === payment.id 
+                                                ? 'border-[#249370] bg-green-50' 
+                                                : 'border-gray-200 hover:border-[#249370]'
+                                        }`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="paymentMethod"
+                                            value={payment.id}
+                                            checked={paymentType?.id === payment.id}
+                                            onChange={handlePaymentChange}
+                                            className="mr-3 text-[#249370] focus:ring-[#249370]"
+                                        />
+                                        <span className="font-medium">{payment.payment_name}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Proceed Button */}
+                        <button 
+                            onClick={cart.length === 0 ? handleEmptyCartClick : handleProceed}
+                            className={`w-full py-4 rounded-lg font-medium mt-6 transition-colors ${
+                                cart.length === 0 
+                                    ? 'bg-gray-300 cursor-not-allowed' 
+                                    : 'bg-[#035240] text-white hover:bg-[#024535]'
+                            }`}
                         >
-                            CALLBACK
+                            {cart.length === 0 ? 'Cart is Empty' : 'Proceed to Payment'}
                         </button>
-                    </div> */}
+
+                        {/* Security Badge */}
+                        <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
+                            <img src={secureIcon} alt="Secure Payment" className="w-8 h-8" />
+                            <p className="text-sm text-gray-500">
+                                Safe and Secure Payments
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                {/* Similar Products Section */}
+                {prodRelatedProds?.length > 0 && (
+                    <section className="mt-12">
+                        <h2 className="text-2xl font-semibold mb-6">Similar Services</h2>
+                        <ProdSection
+                            title="Similar Services"
+                            items={visibleItems || []}
+                            btnHidden
+                        />
+                    </section>
+                )}
+
+                {/* Need Help Section */}
+                <section className="mt-12 bg-white rounded-xl shadow-sm p-8">
+                    <div className="max-w-3xl mx-auto text-center">
+                        <h2 className="text-2xl font-semibold mb-4">Need help finding the right plan?</h2>
+                        <p className="text-gray-600 mb-6">
+                            Our team will get in touch to answer your questions and help you get started
+                        </p>
+                        <button 
+                            onClick={() => navigate(`${config.VITE_BASE_URL}/contact-us`)}
+                            className="inline-block px-8 py-3 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                        >
+                            Contact Us Now
+                        </button>
+                    </div>
                 </section>
-
-                <div className="flex flex-col items-center gap-4 mt-8">
-                    <img src={secureIcon} alt="Hommlie Secure payment" className="w-12 h-12" />
-                    <p className="text-sm text-center text-gray-500">
-                        Safe and Secure Payments. Easy Returns.<br />100% Authentic Products.
-                    </p>
-                    {/* <button 
-                        onClick={cart.length === 0 ? handleEmptyCartClick : handleProceed} 
-                        className={`w-full max-w-md py-3 text-white font-semibold transition duration-300 ${
-                            cart.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#249370] hover:bg-green-700'
-                        }`}
-                        style={{backgroundColor: cart.length === 0 ? "#cccccc" : "#035240"}}
-                        // disabled={cart.length === 0}
-                    >
-                        PROCEED TO PAYMENT
-                    </button> */}
-                </div>
-
-                <div className="sticky bottom-2 z-20 transition-transform duration-300 flex justify-center">
-                    <button 
-                        onClick={cart.length === 0 ? handleEmptyCartClick : handleProceed} 
-                        className={`w-full max-w-md py-3 text-white font-semibold transition duration-300 ${
-                            cart.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#249370] hover:bg-green-700'
-                        }`}
-                        style={{backgroundColor: cart.length === 0 ? "#cccccc" : "#035240"}}
-                        // disabled={cart.length === 0}
-                    >
-                        PROCEED TO PAYMENT
-                    </button>
-                </div>
             </div>
+
+            {/* Modals */}
+            <DateTimeModal 
+                isOpen={isDateTimeModalOpen} 
+                onClose={closeDateTimeModal} 
+                order_type="AMC" 
+            />
+            <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} />
+            <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalItemPrice + tax} />
         </main>
     );
 }

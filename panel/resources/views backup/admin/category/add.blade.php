@@ -58,6 +58,15 @@
                                             <span class="text-danger">{{ $errors->first('icon') }}</span>
                                         @endif
                                     </div>
+
+                                    <div class="form-group"><br/>
+                                        <label for="icon">{{ trans('Motion Graphics') }}</label>
+                                        <input type="file" id="motion_graphics" class="form-control" name="motion_graphics">
+                                        @if ($errors->has('motion_graphics'))
+                                            <span class="text-danger">{{ $errors->first('motion_graphics') }}</span>
+                                        @endif
+                                    </div>
+                                    
                                     <div class="product gravity">
                                         <div class="form-group">
                                             <label for="all_tag" class="col-form-label">ALT tag:</label>

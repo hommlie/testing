@@ -65,7 +65,7 @@ const CartSection = ({ cart }) => {
 
           <button 
             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-md transition"
-            onClick={() => window.location.href = '/cart'}
+            onClick={() => window.location.href = '/add-to-cart'}
           >
             Checkout Now
           </button>

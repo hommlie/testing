@@ -818,10 +818,10 @@ class OrderController extends Controller
     // SERACH ORDER DATA USING ORDER-ID 
     public function getOrderData($orderID)
     {
+      
         $orderData = Order::where('order_number', 'LIKE', "%$orderID%")
                           ->orWhere('id', 'LIKE', "%$orderID%")
                           ->get();
-    
         return response()->json($orderData);
     }
     

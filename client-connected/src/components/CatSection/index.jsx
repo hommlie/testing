@@ -9,6 +9,8 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
     const sliderRef = useRef(null);
 
     useEffect(() => {        
+        console.log(categories);
+        
         const updateVisibleItemsCount = () => {
             if (window.innerWidth >= 1024) {
                 setVisibleItemsCount(6);

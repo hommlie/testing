@@ -67,6 +67,18 @@
                                     </div>
                                     <img src='{!! asset("storage/app/public/images/category/" . $data->web_icon) !!}'
                                         class='media-object round-media height-50' height="180px">
+
+                                    {{-- MOTION GRAPHICS IMAGES --}}
+                                    
+                                    <div class="form-group"><br/>
+                                        <label for="icon">{{ trans('Motion Graphics') }}</label>
+                                        <input type="file" id="motion_graphics" class="form-control" name="motion_graphics">
+                                        @if ($errors->has('motion_graphics'))
+                                            <span class="text-danger">{{ $errors->first('motion_graphics') }}</span>
+                                        @endif
+                                    </div>
+                                    <img src='{!! asset("storage/app/public/images/category/" . $data->motion_graphics) !!}'
+                                        class='media-object round-media height-50' height="180px">
                                     <br>
                                     <div class="product gravity">
                                         <div class="form-group">

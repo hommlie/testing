@@ -1,6 +1,6 @@
 const sequelize = require('../config/connection');
 const { Sequelize, Op, fn, col, literal, where } = require('sequelize');
-const { User, Product, ProductImage, Order, Variation, Ratting, Wishlist, Brand, Notification, Settings, Testimonials, Subcategory, ThoughtfulCurations } = require('../models');
+const { User, Product, ProductImage, Order, Variation, Ratting, Wishlist, Brand, Notification, Settings, Testimonials, Subcategory, ThoughtfulCurations, Category } = require('../models');
 const apiUrl = process.env.apiUrl;
 
 exports.homeFeeds = async (req, res) => {
@@ -160,6 +160,22 @@ exports.homeFeeds = async (req, res) => {
               'image_title' ,
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
+            include: [
+                {
+                  model: Category,
+                  attributes: [
+                    'id', 
+                    'category_name', 
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+                    // 'video',
+                    // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
+                    'is_form',
+                    'is_page',
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+                  ],
+                  as: 'category'
+                },
+            ],
             where: { cat_id: 19, status: 1 }
         });
 
@@ -170,6 +186,22 @@ exports.homeFeeds = async (req, res) => {
               'alt_tag',
               'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+            ],
+            include: [
+                {
+                  model: Category,
+                  attributes: [
+                    'id', 
+                    'category_name', 
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+                    // 'video',
+                    // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
+                    'is_form',
+                    'is_page',
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+                  ],
+                  as: 'category'
+                },
             ],
             where: { cat_id: 18, status: 1 }
         });
@@ -182,6 +214,22 @@ exports.homeFeeds = async (req, res) => {
               'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
             ],
+            include: [
+                {
+                  model: Category,
+                  attributes: [
+                    'id', 
+                    'category_name', 
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+                    // 'video',
+                    // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
+                    'is_form',
+                    'is_page',
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+                  ],
+                  as: 'category'
+                },
+            ],
             where: { cat_id: 28, status: 1 }
         });
 
@@ -192,6 +240,22 @@ exports.homeFeeds = async (req, res) => {
               'alt_tag',
               'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`), 'image_url']
+            ],
+            include: [
+                {
+                  model: Category,
+                  attributes: [
+                    'id', 
+                    'category_name', 
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+                    // 'video',
+                    // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
+                    'is_form',
+                    'is_page',
+                    [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+                  ],
+                  as: 'category'
+                },
             ],
             where: { cat_id: 47, status: 1 }
         });

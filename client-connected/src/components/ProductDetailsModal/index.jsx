@@ -13,7 +13,7 @@ const ProductDetailModal = ({
   product,
 }) => {
     const { cart, getCart } = useCont();
-    const [selectedTab, setSelectedTab] = useState('variations');
+    const [selectedTab, setSelectedTab] = useState('details');
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [cartTotal, setCartTotal] = useState(0);
 
@@ -176,9 +176,9 @@ const ProductDetailModal = ({
   if (!isOpen) return null;
 
   const tabs = [
-    { id: 'variations', label: 'Variations' },
+    // { id: 'variations', label: 'Variations' },
     { id: 'details', label: 'Details' },
-    { id: 'gallery', label: 'Gallery' },
+    // { id: 'gallery', label: 'Gallery' },
     { id: 'reviews', label: 'Reviews' }
   ];
 
@@ -192,11 +192,11 @@ const ProductDetailModal = ({
               <X className="h-6 w-6" />
             </button>
           </div>
-          <div className="flex space-x-4 mt-4">
+          <div className="w-full flex space-x-4 mt-4">
             {tabs.map(tab => (
               <button
                 key={tab.id}
-                className={`px-4 py-2 font-medium ${
+                className={`w-full px-4 py-2 font-medium ${
                   selectedTab === tab.id
                     ? 'text-emerald-600 border-b-2 border-emerald-600'
                     : 'text-gray-500 hover:text-gray-700'
@@ -210,7 +210,8 @@ const ProductDetailModal = ({
         </div>
 
         <div className="p-6">
-          {selectedTab === 'variations' && (
+          
+          {/* {selectedTab === 'variations' && (
             <div className="space-y-4">
               {product?.attributes?.map(attribute => (
                 <div key={attribute.attribute_id} className="space-y-4">
@@ -239,16 +240,60 @@ const ProductDetailModal = ({
                 </div>
               ))}
             </div>
-          )}
+          )} */}
 
           {selectedTab === 'details' && (
-            <div 
-              className="prose max-w-none"
-              dangerouslySetInnerHTML={{ __html: product?.description }}
-            />
+            <section className='space-y-5 my-0'>
+              
+              <div className="space-y-4">
+                {product?.attributes?.map(attribute => (
+                  <div key={attribute.attribute_id} className="space-y-4">
+                    <h3 className="text-lg font-semibold">{attribute.attribute_name}</h3>
+                    {attribute.variations?.map(variation => (
+                      <div
+                        key={variation.id}
+                        className="flex justify-between items-center p-4 border rounded-lg"
+                      >
+                        <div>
+                          <h4 className="font-medium">{variation.variation}</h4>
+                          <div className="mt-1 space-x-2">
+                            <span className="text-emerald-600 font-medium">
+                              ₹{variation.discounted_variation_price}
+                            </span>
+                            {variation.price !== variation.discounted_variation_price && (
+                              <span className="text-gray-500 line-through">
+                                ₹{variation.price}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <AddButton variation={variation} />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+
+              <div 
+                className="prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: product?.description }}
+              />
+
+              <div className="space-y-4">
+                {product?.productimages?.map(image => (
+                  <img
+                    key={image.id}
+                    src={image.image_url}
+                    alt={product.product_name}
+                    className="w-full h-64"
+                  />
+                ))}
+              </div>
+
+            </section>
           )}
 
-          {selectedTab === 'gallery' && (
+          {/* {selectedTab === 'gallery' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {product?.productimages?.map(image => (
                 <img
@@ -259,7 +304,7 @@ const ProductDetailModal = ({
                 />
               ))}
             </div>
-          )}
+          )} */}
 
           {selectedTab === 'reviews' && (
             <div className="space-y-4">
@@ -304,7 +349,7 @@ const ProductDetailModal = ({
                 <p className="text-emerald-600">₹{cartTotal.toFixed(2)}</p>
               </div>
               <button
-                onClick={() => navigate('/cart')}
+                onClick={() => navigate(`${config.VITE_BASE_URL}add-to-cart`)}
                 className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700"
               >
                 Checkout Now

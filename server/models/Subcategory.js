@@ -28,6 +28,7 @@ Subcategory.init({
         type: DataTypes.STRING,
         allowNull: false 
     },
+    //create banner
     meta_title: {
         type: DataTypes.STRING,
     },

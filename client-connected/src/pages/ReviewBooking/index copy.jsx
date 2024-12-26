@@ -220,18 +220,22 @@ export default function ReviewBooking() {
     const topTracker = ["Add To Cart", "Review Booking", "Booking Confirmed"];
 
     return (
-        <main className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-                {/* Progress Tracker - Keep existing tracker code */}
-                <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow-sm mb-8">
+        <main className="flex justify-center">
+            <div className="w-[90%] md:w-[75%] my-6 md:my-16 space-y-4">
+                
+                <div className="flex flex-col justify-center items-center">
                     <div className="w-full lg:w-[80%] p-4 relative">
                         <div className="flex flex-row justify-between my-8">
-                            {topTracker.map((tracker, index) => (
-                                <div key={index} className="w-full flex flex-col justify-center items-center gap-4" style={{color: `${tracker === "Booking Confirmed" ? "#E5E7EB" : ""}`}}>
-                                    <span className={`text-xs md:text-base font-semibold`}>{tracker}</span>
-                                    <div className={`${tracker === "Booking Confirmed" ? "border-[#E5E7EB]" : "border-[#249370]"} w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}></div>
-                                </div>
-                            ))}
+                            {
+                                topTracker.map((tracker, index) => {
+                                    return (
+                                        <div key={index} className="w-full flex flex-col justify-center items-center gap-4" style={{color: `${tracker === "Booking Confirmed" ? "#E5E7EB" : ""}`}}>
+                                            <span className={`text-xs md:text-base font-semibold`}>{tracker}</span>
+                                            <div className={`${tracker === "Booking Confirmed" ? "border-[#E5E7EB]" : "border-[#249370]"} w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}></div>
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                         <div className="flex absolute inset-0 top-[35px] md:top-[40px] justify-center items-center px-24 md:px-32 lg:px-32 gap-9">
                             <div className="w-[255px]" style={{border: "1px solid #249370"}}></div>
@@ -240,147 +244,146 @@ export default function ReviewBooking() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Main Content Section */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Address Section */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                                <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
-                                <h2 className="text-xl font-semibold">Delivery Address</h2>
-                            </div>
-                            <div className="border-t border-gray-100 pt-4">
-                                {dataLoaded && Object.keys(selectedAddrs || {}).length > 0 ? (
-                                    <div className="space-y-2 text-gray-600">
-                                        <p className="font-medium text-black">{selectedAddrs.name}</p>
-                                        <p>{selectedAddrs.address}</p>
-                                        <p>{selectedAddrs.landmark}</p>
-                                        <p>{selectedAddrs.pincode}</p>
-                                        <p>Mobile: {selectedAddrs.mobile}</p>
-                                    </div>
-                                ) : (
-                                    <p className="text-gray-500">No address selected</p>
-                                )}
-                            </div>
+                <div className="bg-white p-4 flex flex-col justify-between gap-4 pb-8 shadow">
+                    <div className="flex flex-row justify-between">
+                        <div className="flex flex-row gap-2 items-center">
+                            <HiOutlineLocationMarker />
+                            <span className="text-lg">Your Address</span>
                         </div>
+                    </div>
+                    <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div style={{color: "rgba(0,0,0,0.4)"}} className="">
+                        <div className="flex flex-col">
+                        {
+                            dataLoaded && Object.keys(selectedAddrs || {}).length > 0 
+                            ? <div className="flex flex-col">
+                                <span className="font-bold flex flex-row items-center gap-2">{selectedAddrs.name}</span>
+                                <span className="">{selectedAddrs.address}</span>
+                                <span className="">{selectedAddrs.landmark}</span>
+                                <span className="">{selectedAddrs.pincode}</span>
+                                <span className="flex flex-row items-center gap-2">
+                                    {selectedAddrs.mobile}
+                                </span>
+                                </div>
+                            : <span>No address selected</span>
+                        }
+                        </div>
+                    </div>
+                </div>
 
-                        {/* Day & Time Slot Section */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-xl font-semibold mb-4">Day & Time Slot</h2>
-                            <div className="border-t border-gray-100 pt-4">
-                                {selectedDayTime?.length !== 0 ? (
-                                    <p className="text-gray-600">
+                <div className="bg-white p-4 flex flex-col justify-between gap-4 pb-8 shadow">
+                    <div className="flex flex-row justify-between">
+                        <p className="text-lg">Day & Time Slot</p>
+                    </div>
+                    <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div>
+                        <div style={{color: "rgba(0,0,0,0.4)"}}>
+                            {
+                                selectedDayTime?.length != 0 
+                                ? <div className="flex flex-col mt-2">
                                         {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
-                                    </p>
-                                ) : (
-                                    <p className="text-gray-500">No time slot selected</p>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Coupon Section */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                                <BiSolidOffer className="text-xl text-[#249370]" />
-                                <h2 className="text-xl font-semibold">Applied Coupon</h2>
-                            </div>
-                            <div className="border-t border-gray-100 pt-4">
-                                {selectedCoupon?.coupon_name ? (
-                                    <div className="bg-green-50 p-3 rounded-lg">
-                                        <p className="font-medium">Coupon Code Applied: "{selectedCoupon?.coupon_name}"</p>
-                                    </div>
-                                ) : (
-                                    <p className="text-gray-500">No coupons added</p>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Payment Method Section */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                                <CiCreditCard1 className="text-2xl text-[#249370]" />
-                                <h2 className="text-xl font-semibold">Payment Method</h2>
-                            </div>
-                            <div className="border-t border-gray-100 pt-4">
-                                <p className="text-gray-600">{paymentType?.payment_name}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Order Summary Section */}
-                    <div className="lg:col-span-1">
-                        <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
-                            <h2 className="text-xl font-semibold mb-4">Price Details ({itemCount} items)</h2>
-                            <div className="space-y-4">
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Price ({itemCount} items)</span>
-                                    <span>₹{totalItemPrice}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Tax & Fees</span>
-                                    <span>₹{tax}</span>
-                                </div>
-                                {couponDiscount > 0 && (
-                                    <div className="flex justify-between text-green-600">
-                                        <span>Coupon Discount</span>
-                                        <span>-₹{couponDiscount.toFixed(2)}</span>
-                                    </div>
-                                )}
-                                <div className="border-t border-gray-200 pt-4">
-                                    <div className="flex justify-between text-lg font-semibold">
-                                        <span>Total Amount</span>
-                                        <span className="text-[#249370]">₹{(totalAmount - couponDiscount)?.toFixed(2)}</span>
-                                    </div>
-                                </div>
-
-                                <button 
-                                    onClick={handleProceed}
-                                    className="w-full py-4 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition-colors mt-6"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? (
-                                        <div className="flex items-center justify-center gap-2">
-                                            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            <span>PLACING ORDER...</span>
-                                        </div>
-                                    ) : (
-                                        'PLACE ORDER'
-                                    )}
-                                </button>
-
-                                <button 
-                                    onClick={() => navigate(-1)}
-                                    className="w-full py-4 text-[#249370] font-medium hover:underline transition-colors"
-                                >
-                                    Go Back
-                                </button>
-                            </div>
+                                : ""
+                            }
                         </div>
                     </div>
                 </div>
 
-                {/* Additional Info Section */}
-                <div className="mt-12 grid md:grid-cols-2 gap-8">
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <CiDeliveryTruck className="text-2xl text-[#249370]" />
-                            <h3 className="font-semibold">Return Policy</h3>
+                <div className="bg-white p-4 flex flex-col justify-between gap-4 pb-8 shadow">
+                    <div className="flex flex-row justify-between">
+                        <div className="flex flex-row gap-2 items-center">
+                            <BiSolidOffer color="#4ECB71" className="w-[25px] h-[25px]" />
+                            <span className="text-lg">Extra Discount</span>
                         </div>
-                        <a href={`${config.VITE_BASE_URL}/privacy-policy`} className="text-gray-600 hover:underline">
-                            Learn More
-                        </a>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-                        <img src={secureIcon} alt="Secure Payment" className="w-9 h-9 mx-auto mb-3" />
-                        <p className="text-gray-500 text-sm">
-                            Safe and Secure Payments.<br />100% Authentic Products.
-                        </p>
+                        {
+                            selectedCoupon?.coupon_name
+                            ?<div className="flex flex-row items-center gap-2">
+                                <span className="font-bold" style={{color: "#249370"}}>COUPON CODE APPLIED "{selectedCoupon?.coupon_name}"</span>
+                            </div>
+                            :<span className="font-bold">No coupons added</span>
+                        }
                     </div>
                 </div>
+
+                <div className="bg-white p-4 flex flex-col justify-between gap-4 pb-8 shadow">
+                    <div className="flex flex-row justify-between">
+                        <div className="flex flex-row gap-2 items-center">
+                            <CiCreditCard1 />
+                            <span className="text-lg">Payment</span>
+                        </div>
+                    </div>
+                    <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div className="w-1/2 flex flex-row items-center gap-3">
+                        <p>{paymentType?.payment_name}</p>
+                    </div>
+                </div>
+
+                <div className="bg-white p-4 space-y-4 shadow">
+                    <p className="text-lg">Price Details (<span>{itemCount}</span> items)</p>
+                    <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div className="space-y-2">
+                        <div className="text-sm flex flex-row justify-between" style={{color: "#606571"}}>
+                            <p>Price (<span>{itemCount}</span> items)</p>
+                            <p>₹<span>{totalItemPrice}</span></p>
+                        </div>
+                        <div className="text-sm flex flex-row justify-between" style={{color: "#606571"}}>
+                            <p>Tax & Fees</p>
+                            <p>₹<span>{tax}</span></p>
+                        </div>
+                        {couponDiscount > 0 && (
+                            <div className="text-sm flex justify-between text-green-600">
+                                <span>Coupon Discount</span>
+                                <span>-₹{couponDiscount.toFixed(2)}</span>
+                            </div>
+                        )}
+                    </div>
+                    <div className="" style={{border: "1px dotted #E5E7EB"}}></div>
+                    <div className="text-xl flex flex-row justify-between mt-2" style={{color: "#606571"}}>
+                        <p>Total</p>
+                        <p>₹<span>{(totalAmount - couponDiscount)?.toFixed(2)}</span></p>
+                    </div>
+                </div>
+
+                <div className="w-full flex flex-col justify-center items-center gap-4 pt-8">
+                    <div className="flex flex-col md:flex-row justify-between w-full">
+                        <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-3">
+                            {/* <div className="flex flex-row gap-2">
+                                <CiDeliveryTruck className="w-[24px] h-[24px]" color="#249370" />
+                                <div>
+                                    <p className="font-medium">Free Shipping</p>
+                                    <p style={{color: "#6B7280"}}>Free standard shipping on orders over Rs 300</p>
+                                    <p style={{color: "#6B7280"}}>Estimated to be delivered on <span>28/02/2022</span> - <span>03/03/2022</span></p>
+                                </div>
+                            </div> */}
+                            <div className="flex flex-row items-center gap-2">
+                                <CiDeliveryTruck className="w-[24px] h-[24px]" color="#249370" />
+                                <div>
+                                    <p className="font-medium">Return Policy</p>
+                                    <a href={`${config.VITE_BASE_URL}/privacy-policy`} className="underline" style={{color: "#6B7280"}}>Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-3">
+                            <img src={secureIcon} className="w-[36px] h-[36px]" alt="" />
+                            <p className="text-xs text-center" style={{color: "#B2B2B2"}}>Safe and Secure Payments Easy Returns.<br />100% Authentic Products.</p>
+                        </div>
+                    </div>
+                    <button 
+                        onClick={handleProceed} 
+                        className="w-[354px] h-[48px] flex text-white items-center justify-center" 
+                        style={{backgroundColor: "#249370"}}
+                    >
+                        {isLoading ? (
+                            <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        ) : null}
+                        {isLoading ? 'PLACING ORDER...' : 'PLACE ORDER'}
+                    </button>
+                    <button onClick={() => navigate(-1)} className="w-[354px] h-[48px] underline">Go Back</button>
+                </div>
+
             </div>
         </main>
     );

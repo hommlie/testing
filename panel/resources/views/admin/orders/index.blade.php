@@ -52,10 +52,10 @@
 
 
                         <div class="d-flex " style="margin-left:70%;">
-                           {{--  <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
+                           {{-- <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
                                 data-bs-toggle="modal" data-bs-target="#SR_ID">
                                 SR-ID Close
-                            </a> --}}
+                            </a>--}}
                             <a href="{{ route('admin.orders.add') }}"
                                 class="btn btn-raised btn-primary text-light btn-min-width mb-0 me-2 "
                                 style="margin-left:5%;">

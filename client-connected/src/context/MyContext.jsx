@@ -94,21 +94,6 @@ export function ContProvider({ children }) {
       }
     }, []);
 
-    const getGoogleReviews = useCallback(async () => {
-      // incrementApiCall();
-      try {
-        const response = await axios.get(`${config.API_URL}/api/google-reviews`);
-        console.log(response);
-        
-        // setCategoryData(response.data);
-        // localStorage.setItem("HommlieGoogleReviews", JSON.stringify(response.data));
-      } catch (err) {
-        console.log("error: " + err);
-      } finally {
-        // decrementApiCall();
-      }
-    }, []);
-
     const getCategoryData = useCallback(async () => {
       // incrementApiCall();
       try {
@@ -346,7 +331,6 @@ export function ContProvider({ children }) {
       bookings, setBookings, selectedCoupon, setSelectedCoupon, 
       // coupons, setCoupons, getCoupons,
       prodData, setData, getSearchProdData, getHomeFeeds, getCategoryData, getBannerData, getCart, getBookings, fetchAllData,
-      getGoogleReviews,
       startLoading: () => setIsLoading(true),
       stopLoading: () => setIsLoading(false),
     };
