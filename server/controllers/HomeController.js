@@ -157,6 +157,7 @@ exports.homeFeeds = async (req, res) => {
               'id',
               'subcategory_name',
               'alt_tag',
+              'slug',
               'image_title' ,
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url']
             ],
@@ -184,6 +185,7 @@ exports.homeFeeds = async (req, res) => {
               'id',
               'subcategory_name',
               'alt_tag',
+              'slug',
               'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url']
             ],
@@ -211,6 +213,7 @@ exports.homeFeeds = async (req, res) => {
               'id',
               'subcategory_name',
               'alt_tag',
+              'slug',
               'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url']
             ],
@@ -238,6 +241,7 @@ exports.homeFeeds = async (req, res) => {
               'id',
               'subcategory_name',
               'alt_tag',
+              'slug',
               'image_title',
               [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url']
             ],

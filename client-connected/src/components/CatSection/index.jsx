@@ -8,9 +8,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
     const [scrollLeft, setScrollLeft] = useState(0);
     const sliderRef = useRef(null);
 
-    useEffect(() => {        
-        console.log(categories);
-        
+    useEffect(() => {                
         const updateVisibleItemsCount = () => {
             if (window.innerWidth >= 1024) {
                 setVisibleItemsCount(6);
@@ -35,6 +33,14 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
 
     const handleNextClick = () => {
         sliderRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    };
+
+    const handleSubCategoryClick = (category) => {
+        if (category?.category?.is_page === 1) {
+            navigate(`${config.VITE_BASE_URL}/subcategory/${category.slug}/${category.id}`);
+        } else {
+            openSubCatModal([category.id, category.subcategory_name]);
+        }
     };
 
     const startDragging = (e) => {
@@ -74,7 +80,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
                         <div 
                             key={index} 
                             className="p-2 w-28 md:w-40 lg:w-52 flex-shrink-0 scroll-snap-align-start cursor-pointer"
-                            onClick={() => openSubCatModal([category.id, category.subcategory_name])}
+                            onClick={() => handleSubCategoryClick(category)}
                         >
                             <div className="flex flex-col items-center">
                                 <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-lg overflow-hidden">
