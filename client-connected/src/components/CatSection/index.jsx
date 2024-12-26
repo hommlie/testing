@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import config from "../../config/config";
 
 export default function CategorySlider({ title, categories, openSubCatModal }) {
     const [visibleItemsCount, setVisibleItemsCount] = useState(5);
@@ -7,6 +9,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const sliderRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {                
         const updateVisibleItemsCount = () => {

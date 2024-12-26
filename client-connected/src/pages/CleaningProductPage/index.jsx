@@ -326,7 +326,7 @@ const CleaningProductPage = () => {
             />
             <div className="flex flex-col md:flex-row gap-4 w-full">
               <div className="md:overflow-y-auto custom-scrollbar scrollbar-hide w-full md:w-2/3 flex flex-col gap-4">
-                {innerSubCategoryData?.products.map((product, index) => (
+                {innerSubCategoryData?.products?.map((product, index) => (
                   <section
                     key={product.id}
                     className="bg-white rounded-lg p-4 space-y-4 glow-border"

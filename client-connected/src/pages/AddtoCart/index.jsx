@@ -561,8 +561,7 @@ export default function AddtoCart() {
 
                 {/* Similar Products Section */}
                 {prodRelatedProds?.length > 0 && (
-                    <section className="mt-12">
-                        <h2 className="text-2xl font-semibold mb-6">Similar Services</h2>
+                    <section className="mt-12 p-4">
                         <ProdSection
                             title="Similar Services"
                             items={visibleItems || []}
