@@ -18,21 +18,22 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $data=Banner::with('product')->with('category')->where('positions','banner')->get();
-        return view('admin.banner.index',compact('data'));
+        $data = Banner::with('product')->with('category')->whereIn('positions', ['banner','bannerPest', 'bannerBird','bannerMosqito','bannerQuickService','bannerReferEarn'])->get();
+        return view('admin.banner.index', compact('data'));
     }
 
     public function add()
     {
-    	$data=Category::select('id','category_name')->get();
-    	$products=Products::select('id','product_name')->get();
-        return view('admin.banner.add',compact('data','products'));
+        $data = Category::select('id', 'category_name')->get();
+        $products = Products::select('id', 'product_name')->get();
+        $banner = Banner::select('id', 'positions')->get();
+        return view('admin.banner.add', compact('data', 'products', 'banner'));
     }
 
     public function list()
     {
-    	$data = Banner::with('product')->with('category')->where('positions','top')->get();
-        return view('admin.banner.bannertable',compact('data'));
+        $data = Banner::with('product')->with('category')->where('positions', 'top')->get();
+        return view('admin.banner.bannertable', compact('data'));
     }
 
     /**
@@ -53,18 +54,19 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
 
-        $this->validate($request,[
+        $this->validate($request, [
             'image' => 'required|mimes:jpeg,png,jpg',
         ]);
-        
+
         $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
         $request->image->move('storage/app/public/images/banner', $image);
 
-        $dataval=array('image'=>$image,'link'=>$request->link,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type,'positions'=>"banner");
-        $data=Banner::create($dataval);
+        $dataval = array('image' => $image, 'link' => $request->link, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'product_id' => $request->product_id, 'cat_id' => $request->cat_id, 'type' => $request->type, 'positions' => $request->positions);
+        $data = Banner::create($dataval);
         if ($data) {
-             return redirect('admin/banner')->with('success', trans('messages.success'));
+            return redirect('admin/banner')->with('success', trans('messages.success'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
@@ -78,13 +80,13 @@ class BannerController extends Controller
      */
     public function show($id)
     {
-        $data=Banner::find($id);
-        $category=Category::select('id','category_name')->get();
-        $products=Products::select('id','product_name')->get();
-        if($data->image){
-            $data->img=url('storage/app/public/images/banner/'.$data->image);
+        $data = Banner::find($id);
+        $category = Category::select('id', 'category_name')->get();
+        $products = Products::select('id', 'product_name')->get();
+        if ($data->image) {
+            $data->img = url('storage/app/public/images/banner/' . $data->image);
         }
-        return view('admin.banner.show',compact('data','category','products'));
+        return view('admin.banner.show', compact('data', 'category', 'products'));
     }
 
     /**
@@ -96,31 +98,31 @@ class BannerController extends Controller
      */
     public function update(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'image' => 'mimes:jpeg,png,jpg',
         ]);
         // dd($request->alt_tag);
 
 
-        if(isset($request->image)){
+        if (isset($request->image)) {
 
-        	File::delete('storage/app/public/images/banner/' . $request->old_img);
+            File::delete('storage/app/public/images/banner/' . $request->old_img);
 
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
                 $request->image->move('storage/app/public/images/banner', $image);
 
-                $data=array('image'=>$image,'link'=>$request->link,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
-                $brand=Banner::find($request->brand_id)->update($data);
+                $data = array('image' => $image, 'link' => $request->link, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'product_id' => $request->product_id, 'cat_id' => $request->cat_id, 'type' => $request->type);
+                $brand = Banner::find($request->brand_id)->update($data);
             }
         } else {
-            $data=array('link'=>$request->link,'alt_tag'=>$request->alt_tag,'image_title'=>$request->image_title,'product_id'=>$request->product_id,'cat_id'=>$request->cat_id,'type'=>$request->type);
-            $brand=Banner::find($request->brand_id)->update($data);
+            $data = array('link' => $request->link, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'product_id' => $request->product_id, 'cat_id' => $request->cat_id, 'type' => $request->type);
+            $brand = Banner::find($request->brand_id)->update($data);
         }
-        
+
         if ($brand) {
-             return redirect('admin/banner')->with('success', trans('messages.update'));
+            return redirect('admin/banner')->with('success', trans('messages.update'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
@@ -134,11 +136,11 @@ class BannerController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'id' => 'required',
         ]);
-        $data=Banner::where('id',$request->id)->delete();
-        if($data) {
+        $data = Banner::where('id', $request->id)->delete();
+        if ($data) {
             return 1000;
         } else {
             return 2000;

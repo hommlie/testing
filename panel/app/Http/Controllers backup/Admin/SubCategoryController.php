@@ -189,7 +189,7 @@ class SubCategoryController extends Controller
             'cat_id' => 'required',
             'subcategory_sub_title' => 'required',
             'subcategory_title' => 'required',
-            'icon' => 'required|mimes:png,jpg,jpeg',
+            'icon' =>  'mimes:png,jpg,jpeg',
             'alt_tag' => 'required',
             'image_title' => 'required',
         ]);

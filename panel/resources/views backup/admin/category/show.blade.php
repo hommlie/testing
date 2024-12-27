@@ -35,7 +35,9 @@
                                 <div class="form-body">
                                     <input type="hidden" name="cat_id" id="cat_id" value="{{$data->id}}"
                                         class="form-control">
-                                    <input type="hidden" name="old_img" id="old_img" value="{{$data->icon}}"
+                                    <input type="hidden" name="old_img" id="old_img" value="{{$data->icon}}">
+                                    <input type="hidden" name="old_motion" id="old_motion" value="{{$data->motion_graphics}}"
+
                                         class="form-control">
                                     <div class="form-group">
                                         <label for="category_name">{{ trans('category_name') }}</label>

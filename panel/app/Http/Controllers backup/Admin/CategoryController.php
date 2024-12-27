@@ -244,11 +244,11 @@ class CategoryController extends Controller
             'category_name' => 'required',
             'icon' => 'mimes:jpeg,png,jpg',
             'webicon' => 'mimes:jpeg,png,jpg',
-           'motion_graphics' => 'required|mimes:png,jpg,jpeg,gif',
+            'motion_graphics' => 'mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
         ]);
-        
+         
 
         if (isset($request->icon)) {
 
@@ -282,19 +282,15 @@ class CategoryController extends Controller
         } else {
             $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
-        }
-
-
+        }       
         if (isset($request->motion_graphics)) {
-
             File::delete('storage/app/public/images/category/' . $request->motion_graphics);
-
             if ($request->hasFile('motion_graphics')) {
                 $motion_graphics = $request->file('motion_graphics');
                 $motion_graphics = 'motion_graphics-' . uniqid() . '.' . $request->motion_graphics->getClientOriginalExtension();
                 $request->motion_graphics->move('storage/app/public/images/category', $motion_graphics);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,     'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,  'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {

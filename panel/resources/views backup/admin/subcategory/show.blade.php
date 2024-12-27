@@ -33,6 +33,7 @@
                                 @csrf
                                     <div class="form-body">
                                         <input type="hidden" name="subcat_id" id="subcat_id" value="{{$data->id}}" class="form-control">
+                                         <input type="hidden" name="old_img" id="old_img" value="{{$data->icon}}">
 
                                         <div class="form-group">
                                             <label for="cat_id">{{ trans('labels.category') }}</label>
@@ -50,7 +51,7 @@
                                         </div>
                                            <div class="form-group">
                                             <label for="icon">{{ trans('labels.image') }}</label>
-                                            <input type="file" id="icon" class="form-control" name="icon" >
+                                            <input type="file" id="icon" class="form-control" name="icon" value="{{$data->icon}}">
                                             @if ($errors->has('icon'))
                                                 <span class="text-danger">{{ $errors->first('icon') }}</span>
                                             @endif
