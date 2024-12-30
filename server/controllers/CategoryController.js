@@ -11,6 +11,7 @@ exports.getCategory = async (req, res) => {
       attributes: [
         'id', 
         'category_name', 
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', icon)`), 'app_icon'],
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
         'video',
         'thumbnail',

@@ -8,6 +8,7 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import LoginSignup from "../../components/LoginModal";
 import cartBag from '../../assets/images/cart-bag.png';
 import "./index.css";
+import { Helmet } from "react-helmet-async";
 import { useCont } from "../../context/MyContext";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -543,6 +544,15 @@ export default function ProductPage() {
                 </div>
             ) : (
             <>
+
+            {/* Dynamic Meta Tags */}
+            <Helmet>
+                <title>{prodData.meta_title || "Hommlie services"}</title>
+                <meta
+                    name="description"
+                    content={prodData.meta_description || "Hommlie services"}
+                />
+            </Helmet>
 
             <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">
                 <NavLink to="/" className="text-blue-500">Home</NavLink>

@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import fetchSettings from "./config/settings";
+import { HelmetProvider } from "react-helmet-async";
 import { ContProvider, useCont } from "./context/MyContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastProvider";
@@ -72,26 +73,28 @@ function App() {
   }, [settings]);
 
   return (
-    <ContProvider>
-      <AuthProvider>
-        <ToastProvider>
-          <Router>
-            <Header logo={settings?.logo} logoAlt={settings?.site_title} />
-            <Routes />
-            <Footer 
-              logo={settings?.logo} 
-              logoAlt={settings?.site_title} 
-              copyright={settings?.copyright} 
-              facebook={settings?.facebook} 
-              instagram={settings?.instagram}
-              linkedin={settings?.linkedin}
-              twitter={settings?.twitter}
-              youtube={settings?.youtube}
-            />
-          </Router>
-        </ToastProvider>
-      </AuthProvider>
-    </ContProvider>
+    <HelmetProvider>
+      <ContProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <Router>
+              <Header logo={settings?.logo} logoAlt={settings?.site_title} />
+              <Routes />
+              <Footer 
+                logo={settings?.logo} 
+                logoAlt={settings?.site_title} 
+                copyright={settings?.copyright} 
+                facebook={settings?.facebook} 
+                instagram={settings?.instagram}
+                linkedin={settings?.linkedin}
+                twitter={settings?.twitter}
+                youtube={settings?.youtube}
+              />
+            </Router>
+          </ToastProvider>
+        </AuthProvider>
+      </ContProvider>
+    </HelmetProvider>
   );
 }
 
