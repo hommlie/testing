@@ -101,6 +101,11 @@ exports.getBanner = async (req, res) => {
       leftbanner,
       bottombanner,
       popupbanner,
+      bannerReferEarn,
+      bannerQuickService,
+      bannerPest,
+      bannerMosqito,
+      bannerBird,
       sliders,
     });
   } catch (error) {
