@@ -101,6 +101,7 @@ const CleaningProductPage = () => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeImage, setActiveImage] = useState();
+  const [selectedAttributeId, setSelectedAttributeId] = useState();
 
   const productRefs = useRef([]);
 
@@ -255,8 +256,11 @@ const CleaningProductPage = () => {
     }
   };
 
-  const handleViewDetails = (product) => {
+  const handleViewDetails = (product, attributeId = null) => {
     setSelectedProduct(product);
+    console.log(attributeId);
+    
+    setSelectedAttributeId(attributeId);
     setIsDetailModalOpen(true);
   };
 
@@ -370,7 +374,7 @@ const CleaningProductPage = () => {
                             </p>
                             <button
                               className="underline text-blue-500 hover:underline"
-                              onClick={() => handleViewDetails(product)}
+                              onClick={() => handleViewDetails(product, attribute.id)}
                             >
                               View Details
                             </button>
@@ -387,7 +391,7 @@ const CleaningProductPage = () => {
                           >
                             <button
                               className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"
-                              onClick={() => handleViewDetails(product)}
+                              onClick={() => handleViewDetails(product, attribute.id)}
                             >
                               Add
                             </button>
@@ -436,6 +440,7 @@ const CleaningProductPage = () => {
         handleAddToCart={handleAddToCart}
         handleQtyUpdate={handleQtyUpdate}
         isAddingToCart={isAddingToCart}
+        selectedAttributeId={selectedAttributeId}
       />
 
     </main>

@@ -39,6 +39,11 @@ exports.getBanner = async (req, res) => {
     const leftbanner = [];
     const bottombanner = [];
     const popupbanner = [];
+    const bannerReferEarn = [];
+    const bannerQuickService = [];
+    const bannerPest = [];
+    const bannerMosqito = [];
+    const bannerBird = [];
 
     banners.forEach(value => {
       const bannerItem = {
@@ -67,6 +72,21 @@ exports.getBanner = async (req, res) => {
           break;
         case 'popup':
           popupbanner.push(bannerItem);
+          break;
+        case 'bannerReferEarn':
+          bannerReferEarn.push(bannerItem);
+          break;
+        case 'bannerQuickService':
+          bannerQuickService.push(bannerItem);
+            break;
+        case 'bannerPest':
+          bannerPest.push(bannerItem);
+            break;
+        case 'bannerMosqito':
+          bannerMosqito.push(bannerItem);
+          break;
+        case 'bannerBird':
+          bannerBird.push(bannerItem);
           break;
         default:
           break;

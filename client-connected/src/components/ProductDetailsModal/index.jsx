@@ -11,11 +11,13 @@ const ProductDetailModal = ({
   isOpen, 
   onClose, 
   product,
+  selectedAttributeId = null 
 }) => {
     const { cart, getCart } = useCont();
     const [selectedTab, setSelectedTab] = useState('details');
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [cartTotal, setCartTotal] = useState(0);
+    const [displayedAttributes, setDisplayedAttributes] = useState([]);
 
     const notify = useToast();
     const successNotify = (success) => notify(success, 'success');
@@ -24,14 +26,24 @@ const ProductDetailModal = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      calculateCartTotal();
+      calculateCartTotal();      
+
+      // Set displayed attributes based on selection
+      if (selectedAttributeId && product?.attributes) {
+          const selectedAttribute = product.attributes.find(
+              attr => attr.attribute_id === selectedAttributeId
+          );
+          setDisplayedAttributes(selectedAttribute ? [selectedAttribute] : product.attributes);
+      } else {
+          setDisplayedAttributes(product?.attributes || []);
+      }
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, cart]);
+  }, [isOpen, cart, selectedAttributeId, product]);
 
   const calculateCartTotal = () => {
     const total = cart
@@ -246,7 +258,7 @@ const ProductDetailModal = ({
             <section className='space-y-5 my-0'>
               
               <div className="space-y-4">
-                {product?.attributes?.map(attribute => (
+                {displayedAttributes?.map(attribute => (
                   <div key={attribute.attribute_id} className="space-y-4">
                     <h3 className="text-lg font-semibold">{attribute.attribute_name}</h3>
                     {attribute.variations?.map(variation => (
