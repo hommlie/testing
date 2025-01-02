@@ -65,12 +65,17 @@ const ProductDetailModal = ({
     }
 
     const user = jwtDecode(jwtToken);
+
+    const productImagesArray = mediaItems.filter(item => {
+      item.media === "Image"
+    });
+
     const cartItem = {
       user_id: user.id,
       product_id: product.id,
       vendor_id: product.vendor_id,
       product_name: product.product_name,
-      image: product?.productimages[0]?.image_url,
+      image: productImagesArray[0]?.image_url,
       qty: 1,
       price: variation.discounted_variation_price,
       attribute: variation.attribute_id,

@@ -138,13 +138,14 @@ export default function ProductPage() {
         if(user.length === 0) {
             openModal();
         } else {
+
             setIsAddingToCart(true);
             const product = {
                 user_id: user.id,
                 product_id: prod_id,
                 vendor_id: prodData.vendor_id,
                 product_name: prodData.product_name,
-                image: prodData?.productimages[0]?.image_url,
+                image: imageItems[0]?.image_url,
                 qty: 1,
                 price: totalAmount,
                 attribute: selectedVariation && selectedVariation.attribute_id,
