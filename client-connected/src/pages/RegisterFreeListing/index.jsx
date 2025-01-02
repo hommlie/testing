@@ -7,6 +7,10 @@ import CountdownTimer from '../../components/CountDownTimer';
 import { FaTelegramPlane } from "react-icons/fa";
 import { GiCheckMark } from "react-icons/gi";
 import BusinessRegistrationForm from '../../components/FreeListingForm';
+import { useToast } from '../../context/ToastProvider';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import config from '../../config/config';
 
 export default function ServiceProviderRegistration() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -20,6 +24,11 @@ export default function ServiceProviderRegistration() {
     services: '',
     experience: ''
   });
+
+    const navigate =  useNavigate();
+    const notify = useToast();
+    const successNotify = (success) => notify(success, "success");
+    const errorNotify = (error) => notify(error, "error");
 
   const handlePhoneChange = (e) => {
     const value = e.target.value.replace(/\D/g, '');
@@ -39,10 +48,29 @@ export default function ServiceProviderRegistration() {
     setShowRegistrationForm(true);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log({ ...formData, phoneNumber });
+
+    try {
+        const response = await axios.post(`${config.API_URL}/api/freelisting/create`, 
+            { ...formData, phoneNumber }, 
+            {
+                headers: {
+                "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (response.data.status === 1) {
+            successNotify("Inspection request submitted successfully!");
+            navigate(`${config.VITE_BASE_URL}/`);
+        } else {
+            errorNotify("Failed to submit inspection request. Please try again.");
+        }
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      errorNotify("An error occurred. Please check the console for details.");
+    }
   };
 
   return (

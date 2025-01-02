@@ -33,6 +33,7 @@ const Testimonials = require('./Testimonials');
 const Employee = require('./Employee');
 const ThoughtfulCurations = require('./ThoughtfulCuration');
 const AppHeader = require('./AppHeader');
+const ListingForm = require('./ListingForm');
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -195,5 +196,6 @@ module.exports = {
   Testimonials,
   Employee,
   ThoughtfulCurations,
-  AppHeader
+  AppHeader,
+  ListingForm
 };

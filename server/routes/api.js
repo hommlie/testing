@@ -26,6 +26,7 @@ const MessageController = require('../controllers/MessageController');
 const CareerContoller = require('../controllers/CareerController');
 const PartnerContoller = require('../controllers/PartnerController');
 const InspectionController = require('../controllers/InspectionController');
+const ListingFormController = require('../controllers/ListingFormController');
 
 const app = express();
 
@@ -142,6 +143,10 @@ app.post("/createpartnerform", PartnerContoller.createPartnerForm);
 
 //Inspection
 app.post("/createInspection", InspectionController.createInspection);
+
+//free listing form
+app.post("/freelisting/create", ListingFormController.create);
+
 
 module.exports = app;
 
