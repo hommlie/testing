@@ -22,6 +22,7 @@ import PartnerWithUs from "./pages/PartnerUs";
 import DeleteAccountPage from "./pages/DeleteAccount";
 import { useToast } from "./context/ToastProvider";
 import CleaningProductPage from "./pages/CleaningProductPage";
+import ServiceProviderRegistration from "./pages/RegisterFreeListing";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -93,6 +94,9 @@ const ProjectRoutes = () => {
     { path: `${config.VITE_BASE_URL}/partner-us`, element: <PartnerWithUs /> },
     { path: `${config.VITE_BASE_URL}/terms-conditions`, element: <TermsConditions /> },
     { path: `${config.VITE_BASE_URL}/delete-account`, element: <DeleteAccountPage /> },
+
+
+    { path: `${config.VITE_BASE_URL}/register-free-listing`, element: <ServiceProviderRegistration /> },
   ]);
 
   return element;

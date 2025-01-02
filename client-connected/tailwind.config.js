@@ -5,6 +5,9 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      Orbitron: ['Orbitron', 'serif'],
+    },
     extend: {
       colors: {
         'gr-1-t': '#31CFA4',

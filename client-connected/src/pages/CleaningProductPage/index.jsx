@@ -24,63 +24,65 @@ const CartSection = ({ cart }) => {
   };
 
   return (
-    <div className="sticky top-4 space-y-4">
-      <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-        <h2 className="text-xl font-semibold">Cart Summary</h2>
-        <div className="space-y-3">
-          {cart.map((item) => (
-            <div key={item.id} className="flex items-center justify-between py-2 border-b">
-              <div className="flex flex-col">
-                <span className="font-medium">{item.product_name}</span>
-                <span className="text-sm text-gray-500">{item.variation_name}</span>
+    <div className="h-[calc(100vh-2rem)] overflow-y-auto">
+      <div className="space-y-4">
+        <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+          <h2 className="text-xl font-semibold">Cart Summary</h2>
+          <div className="space-y-3">
+            {cart.map((item) => (
+              <div key={item.id} className="flex items-center justify-between py-2 border-b">
+                <div className="flex flex-col">
+                  <span className="font-medium">{item.product_name}</span>
+                  <span className="text-sm text-gray-500">{item.variation_name}</span>
+                </div>
+                <div className="text-right">
+                  <span className="font-medium">₹{item.price}</span>
+                  <span className="text-sm text-gray-500 block">Qty: {item.qty}</span>
+                </div>
               </div>
-              <div className="text-right">
-                <span className="font-medium">₹{item.price}</span>
-                <span className="text-sm text-gray-500 block">Qty: {item.qty}</span>
+            ))}
+            
+            <div className="pt-2 space-y-2">
+              <div className="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span>₹{calculateCartTotal()}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Tax</span>
+                <span>₹{calculateTaxTotal()}</span>
+              </div>
+              <div className="flex justify-between font-medium pt-2 border-t">
+                <span>Total</span>
+                <span>₹{calculateCartTotal() + calculateTaxTotal()}</span>
               </div>
             </div>
-          ))}
-          
-          <div className="pt-2 space-y-2">
-            <div className="flex justify-between text-gray-600">
-              <span>Subtotal</span>
-              <span>₹{calculateCartTotal()}</span>
-            </div>
-            <div className="flex justify-between text-gray-600">
-              <span>Tax</span>
-              <span>₹{calculateTaxTotal()}</span>
-            </div>
-            <div className="flex justify-between font-medium pt-2 border-t">
-              <span>Total</span>
-              <span>₹{calculateCartTotal() + calculateTaxTotal()}</span>
-            </div>
+
+            {calculateSavings() > 0 && (
+              <div className="flex items-center justify-between text-green-600 pt-2">
+                <span>Congratulations!</span>
+                <span>₹{calculateSavings()} saved</span>
+              </div>
+            )}
+
+            <button 
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-md transition"
+              onClick={() => window.location.href = '/add-to-cart'}
+            >
+              Checkout Now
+            </button>
           </div>
+        </section>
 
-          {calculateSavings() > 0 && (
-            <div className="flex items-center justify-between text-green-600 pt-2">
-              <span>Congratulations!</span>
-              <span>₹{calculateSavings()} saved</span>
-            </div>
-          )}
-
-          <button 
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-md transition"
-            onClick={() => window.location.href = '/add-to-cart'}
-          >
-            Checkout Now
-          </button>
-        </div>
-      </section>
-
-      <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-        <h2 className="text-xl font-semibold">Hommlie Features</h2>
-        <ul className="space-y-2 text-gray-600">
-          <li>✓ Verified Professionals</li>
-          <li>✓ Safe Chemicals</li>
-          <li>✓ Service in 4hr</li>
-          <li>✓ Superior Stain Removal</li>
-        </ul>
-      </section>
+        <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+          <h2 className="text-xl font-semibold">Hommlie Features</h2>
+          <ul className="space-y-2 text-gray-600">
+            <li>✓ Verified Professionals</li>
+            <li>✓ Safe Chemicals</li>
+            <li>✓ Service in 4hr</li>
+            <li>✓ Superior Stain Removal</li>
+          </ul>
+        </section>
+      </div>
     </div>
   );
 };
@@ -271,164 +273,135 @@ const CleaningProductPage = () => {
   }
 
   return (
-    <main className="main-div flex flex-col md:p-4 mb-2 scroll-smooth bg-white mx-2 lg:mx-20">
-      <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">
-        <a href="/" className="text-blue-500">
-          Home
-        </a>
-        <span>/</span>
-        <span>{innerSubCategoryData?.category?.category_name}</span>
-        <span>/</span>
-        <span>{innerSubCategoryData?.subcategory_name}</span>
-      </nav>
+    <main className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
+          <a href="/" className="text-blue-500">Home</a>
+          <span>/</span>
+          <span>{innerSubCategoryData?.category?.category_name}</span>
+          <span>/</span>
+          <span>{innerSubCategoryData?.subcategory_name}</span>
+        </nav>
 
-      <div className="flex flex-col lg:flex-row gap-4 mt-4 overflow-hidden">
-        
-        {/* Left Sidebar - Sticky */}
-        <div className="lg:w-1/4 lg:sticky lg:sticky-header-offset transition-all lg:top-0 lg:self-start z-10">
-          <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-            <h2 className="text-base lg:text-lg font-semibold">
-              {innerSubCategoryData?.subcategory_name}
-            </h2>
-            <div className="text-sm flex items-center">
-              <span className="w-1/3 text-gray-500">Select a service</span>
-              <div className="bg-gray-300 h-0.5 w-2/3"></div>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {innerSubCategoryData?.products?.map((product, index) => (
-                <div
-                  key={product.id}
-                  className={`flex flex-col items-center p-2 rounded-md cursor-pointer ${
-                    index === currentProductIndex ? "glow-border" : "hover:bg-gray-100 border-gray-100"
-                  }`}
-                  onClick={() => handleProductClick(index)}
-                >
-                  {product.productimages && product.productimages?.length > 0 ? (
-                    <img
-                      src={product.productimages[0]?.image_url}
-                      alt={product.product_name}
-                      className="w-20 h-20 rounded-md object-cover"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
-                  )}
-                  <p
-                    className="text-xs text-center font-medium mt-2 truncate"
-                    style={{ maxWidth: "100%" }}
-                  >
-                    {product.product_name}
-                  </p>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left Sidebar */}
+          <div className="lg:w-1/4">
+            <div className="sticky sticky-header-offset top-4 transition-all duration-300 ease-in-out">
+              <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+                <h2 className="text-lg font-semibold">
+                  {innerSubCategoryData?.subcategory_name}
+                </h2>
+                <div className="text-sm flex items-center">
+                  <span className="w-1/3 text-gray-500">Select a service</span>
+                  <div className="bg-gray-300 h-0.5 w-2/3"></div>
                 </div>
-              ))}
+                <div className="grid grid-cols-3 gap-4 max-h-[calc(100vh-16rem)] overflow-y-auto">
+                  {innerSubCategoryData?.products?.map((product, index) => (
+                    <div
+                      key={product.id}
+                      className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
+                        index === currentProductIndex 
+                          ? "glow-border bg-blue-50" 
+                          : "hover:bg-gray-50"
+                      }`}
+                      onClick={() => handleProductClick(index)}
+                    >
+                      {product.productimages && product.productimages?.length > 0 ? (
+                        <img
+                          src={product.productimages[0]?.image_url}
+                          alt={product.product_name}
+                          className="w-20 h-20 rounded-md object-cover"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
+                      )}
+                      <p className="text-xs text-center font-medium mt-2 truncate w-full">
+                        {product.product_name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
             </div>
-          </section>
-        </div>
+          </div>
 
-        {/* Center Section - Scrollable */}
-        <div className="lg:w-3/4">
-          <section className="bg-white rounded-lg py-0 px-4 space-y-4">
-            <img
-              src={innerSubCategoryData?.subcategory_banner}
-              alt={innerSubCategoryData?.innersubcategory_name}
-              className="w-full h-[200px] md:h-[500px] rounded-md"
-            />
-            <div className="flex flex-col md:flex-row gap-4 w-full">
-              <div className="md:overflow-y-auto custom-scrollbar scrollbar-hide w-full md:w-2/3 flex flex-col gap-4">
-                {innerSubCategoryData?.products?.map((product, index) => (
-                  <section
-                    key={product.id}
-                    className="bg-white rounded-lg p-4 space-y-4 glow-border"
-                    ref={(el) => (productRefs.current[index] = el)}
-                  >
-                    <h3 className="text-base lg:text-2xl font-semibold">
-                      {product.product_name}
-                    </h3>
-                    {product?.attributes?.map((attribute, index) => (
-                      <div
-                        key={index}
-                        className={`flex justify-between p-4 rounded-md cursor-pointer ${
-                          attribute.id === currentVariationIndex
-                            ? "bg-blue-100"
-                            : "hover:bg-gray-100"
-                        }`}
-                      >
-                        <div className="">
-                          <h3 className="text-base font-medium">
-                            {attribute.attribute_name}
-                          </h3>
-                          <p className="text-gray-500 text-sm">
-                            {attribute.variations?.length > 0 && attribute.variations[0]?.discounted_variation_price ? (
-                              <>
-                                <span className="flex gap-2 font-medium">
-                                  Starts from 
-                                  <span className="text-blue-500">
-                                    ₹{attribute.variations[0]?.discounted_variation_price}
-                                  </span>
-                                </span>
-                              </>
-                            ) : (
-                              <span className="font-medium text-blue-500">
+          {/* Main Content */}
+          <div className="lg:w-1/2">
+            <div className="space-y-6">
+              <img
+                src={innerSubCategoryData?.subcategory_banner}
+                alt={innerSubCategoryData?.innersubcategory_name}
+                className="w-full h-[300px] object-cover rounded-lg"
+              />
+              
+              {innerSubCategoryData?.products?.map((product, index) => (
+                <section
+                  key={product.id}
+                  ref={(el) => (productRefs.current[index] = el)}
+                  className="bg-white rounded-lg p-6 space-y-6 glow-border scroll-mt-4"
+                >
+                  <h3 className="text-2xl font-semibold">{product.product_name}</h3>
+                  {product?.attributes?.map((attribute, attrIndex) => (
+                    <div
+                      key={attrIndex}
+                      className={`flex justify-between p-4 rounded-lg transition-all duration-200 ${
+                        attribute.id === currentVariationIndex
+                          ? "bg-blue-50"
+                          : "hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-medium">
+                          {attribute.attribute_name}
+                        </h3>
+                        <p className="text-gray-500">
+                          {attribute.variations?.length > 0 && (
+                            <span className="flex gap-2 items-center">
+                              Starts from
+                              <span className="text-blue-500 font-medium">
                                 ₹{attribute.variations[0]?.discounted_variation_price}
                               </span>
-                            )}
-                          </p>
-                          <div className="space-y-4">
-                            <p className="text-gray-500">
-                              {attribute.description}
-                            </p>
-                            <button
-                              className="underline text-blue-500 hover:underline"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                            >
-                              View Details
-                            </button>
-                          </div>
-                        </div>
-                        <div className="relative flex justify-center items-center">
-                          <img 
-                            src={product?.productimages && product?.productimages[0]?.image_url} 
-                            alt="" 
-                            className="w-32 h-32 rounded-lg"
-                          />
-                          <div
-                            className="absolute inse  t-x-0 -bottom-3 flex justify-center items-center"
-                          >
-                            <button
-                              className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                            >
-                              Add
-                            </button>
-                          </div>
-                        </div>
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-gray-600">{attribute.description}</p>
+                        <button
+                          className="text-blue-500 hover:text-blue-600 underline"
+                          onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                        >
+                          View Details
+                        </button>
                       </div>
-                    ))}
-                  </section>
-                ))}
-              </div>
-              <div className="sticky w-full md:w-1/3 z-10">
-                <CartSection cart={cart} />
-              </div>
+                      
+                      <div className="relative">
+                        <img 
+                          src={product?.productimages?.[0]?.image_url} 
+                          alt="" 
+                          className="w-32 h-32 rounded-lg object-cover"
+                        />
+                        <button
+                          className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
+                                   bg-white text-emerald-600 px-6 py-2 rounded-lg glow-border 
+                                   hover:bg-emerald-50 transition-all duration-200"
+                          onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              ))}
             </div>
-          </section>
-        </div>  
+          </div>
 
-        {/* Optional: Custom Scrollbar CSS */}
-        <style jsx global>{`
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-          }
-        `}</style>
+          {/* Right Cart Section */}
+          <div className="lg:w-1/4">
+            <div className="sticky sticky-header-offset transition-all duration-300 ease-in-out">
+              <CartSection cart={cart} />
+            </div>
+          </div>
+        </div>
       </div>
 
       <LoginSignup 
@@ -446,7 +419,6 @@ const CleaningProductPage = () => {
         isAddingToCart={isAddingToCart}
         selectedAttributeId={selectedAttributeId}
       />
-
     </main>
   );
 };
