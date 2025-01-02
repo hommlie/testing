@@ -57,7 +57,7 @@ class BannerController extends Controller
         // dd($request->all());
 
         $this->validate($request, [
-            'image' => 'required|mimes:jpeg,png,jpg',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
         ]);
 
         $image = 'topbanner-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
@@ -99,7 +99,7 @@ class BannerController extends Controller
     public function update(Request $request)
     {
         $this->validate($request, [
-            'image' => 'mimes:jpeg,png,jpg',
+            'image' => 'mimes:jpeg,png,jpg,gif',
         ]);
         // dd($request->alt_tag);
 

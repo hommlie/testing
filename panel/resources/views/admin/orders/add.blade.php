@@ -935,15 +935,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     // ADD RESIDENTIAL ORDER
     document.getElementById('addResidentialOrder').addEventListener('change', function () {
         var addresorderSection = document.getElementById('addresorder');
@@ -1119,40 +1110,7 @@
         }
     }
 
-    // document.addEventListener('DOMContentLoaded', function () {
-    // const quantityValueSpan = document.querySelector('.quantity-value');
-    // const incrementBtn = document.querySelector('.increment');
-    // const decrementBtn = document.querySelector('.decrement');
-    // const priceInput = document.getElementById('price');
-    // const totalInput = document.getElementById('total');
 
-    // function calculateTotal() {
-    // const quantity = parseFloat(quantityValueSpan.textContent) || 0;
-    // const price = parseFloat(priceInput.value) || 0;
-    // totalInput.value = (quantity * price).toFixed(2);
-    // }
-
-    // incrementBtn.addEventListener('click', function () {
-    // let currentValue = parseInt(quantityValueSpan.textContent);
-    // currentValue++;
-    // quantityValueSpan.textContent = currentValue-1;
-    // calculateTotal();
-    // });
-
-    // decrementBtn.addEventListener('click', function () {
-    // let currentValue = parseInt(quantityValueSpan.textContent);
-    // if (currentValue > 1) {
-    // currentValue--;
-    // quantityValueSpan.textContent = currentValue+1;
-    // calculateTotal();
-    // }
-    // });
-
-    // priceInput.addEventListener('input', calculateTotal);
-    // });
-
-    // Independent Dropdown selection
-    // Independent Dropdown selection
 
     document.addEventListener('DOMContentLoaded', function () {
         const quantityValueSpan = document.querySelector('.quantity-value');
@@ -1283,23 +1241,7 @@
             }
         });
 
-        // document.getElementById('order_service_type').addEventListener('change', function () {
-        // serviceTypePrice = parseFloat(this.value) || 0;
-        // const selectedOption = this.options[this.selectedIndex];
 
-        // // Retrieve the value and textContent of the selected option
-        // const optionValue = selectedOption.value;
-        // const optionText = selectedOption.textContent;
-        // console.log(optionValue)
-        // console.log(optionText)
-
-        // document.getElementById('serviceTypePriceValue').value = optionText;
-
-        // console.log('Selected Value SSSS:', optionValue);
-        // console.log('Selected Text:', optionText);
-
-        // calculateTotal();fsrTime
-        // });
 
 
         document.getElementById('order_service_area').addEventListener('change', function () {
@@ -1397,43 +1339,7 @@
                 });
         }
 
-        // function fetchServiceType(serviceId) {
-        // console.log(serviceId);
-        // fetch(`get-service-variation-type/${serviceId}`)
-        // .then(response => response.json())
-        // .then(data => {
-        // console.log("Response From " + data);
-        // console.log(data);
-        // const serviceTypeSelect = document.getElementById('order_service_type');
-        // serviceTypeSelect.innerHTML = '<option value="">-select Service-</option>';
-        // data.services.forEach(service => {
-        // serviceTypeSelect.innerHTML += `<option value="${service.id}|${data.product_id}">${service.attribute}</option>`;
-        // });
-        // });
-        // serviceTypeSelect.addEventListener('change', function () {
-        // const selectedValue = serviceTypeSelect.value;
-        // if (selectedValue) {
-        // const [serviceId, productId] = selectedValue.split('|');
-        // console.log('Selected Service ID:', serviceId);
-        // console.log('Product ID:', productId);
-        // } else {
-        // console.log('No service selected.');
-        // }
-        // });
-        // }
-
-
-        // function fetchServiceArea(serviceId) {
-        // fetch(`get-service-variation-area/${serviceId}`)
-        // .then(response => response.json())
-        // .then(data => {
-        // const serviceAreaSelect = document.getElementById('order_service_area');
-        // serviceAreaSelect.innerHTML = '<option value="">-select Service-</option>';
-        // data.forEach(service => {
-        // serviceAreaSelect.innerHTML += `<option value="${service.discounted_variation_price}">${service.variation}</option>`;
-        // });
-        // });
-        // }
+    
 
         function fetchServiceType(serviceId) {
             console.log(serviceId);

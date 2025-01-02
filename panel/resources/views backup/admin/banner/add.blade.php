@@ -32,7 +32,28 @@
                             <form class="form" method="post" action="{{ route('admin.banner.store') }}"
                                 enctype="multipart/form-data">
                                 @csrf
+
                                 <div class="form-body">
+                                @php
+                                    $allBanners = [
+                                        'bannerPest' => 'Banner Under Pest','bannerBird' => 'Banner under Bird','bannerMosqito' => 'Banner under Mosqito','bannerQuickService' => 'Banner under Quick Service','bannerReferEarn' => 'Banner Refer & Earn'
+                                    ];
+                                    $storedBanners = $banner->pluck('positions')->toArray();
+                                    @endphp
+                                
+                                    <div class="form-group">
+                                        <label for="type" class="col-form-label">Banner Positions:</label>
+                                        <select name="positions" class="form-control" id="positions">
+                                            <option value="banner">Top Banner</option>
+                                            @foreach ($allBanners as $key => $label)
+                                            @if (!in_array($key, $storedBanners))
+                                                <option value="{{ $key }}">{{ $label }}</option>
+                                            @endif
+                                        @endforeach
+                                        </select>
+                                    </div>
+
+
                                     <div class="form-group">
                                         <label for="type" class="col-form-label">{{ trans('labels.type') }}:</label>
                                         <select name="type" class="form-control" id="type">
@@ -42,11 +63,13 @@
                                         </select>
                                     </div>
 
+
                                     <div class="category gravity">
                                         <div class="form-group">
                                             <label for="cat_id"
                                                 class="col-form-label">{{ trans('labels.category') }}:</label>
-                                            <select name="cat_id" class="form-control selectpicker" id="cat_id" required>
+                                            <select name="cat_id" class="form-control selectpicker" id="cat_id"
+                                                required>
                                                 <option value="">{{ trans('placeholder.select_category') }}</option>
                                                 @foreach ($data as $category)
                                                     <option value="{{$category->id}}">{{$category->category_name}}</option>
@@ -60,7 +83,8 @@
                                         <div class="form-group">
                                             <label for="product_id"
                                                 class="col-form-label">{{ trans('labels.product') }}:</label>
-                                            <select name="product_id" class="form-control selectpicker" id="product_id" required>
+                                            <select name="product_id" class="form-control selectpicker" id="product_id"
+                                                required>
                                                 <option value="">{{ trans('placeholder.select_product') }}</option>
                                                 @foreach ($products as $product)
                                                     <option value="{{$product->id}}">{{$product->product_name}}</option>
@@ -80,7 +104,7 @@
                                         <div class="form-group">
                                             <label for="all_tag" class="col-form-label">ALT tag:</label>
                                             <input type="text" class="form-control" name="alt_tag"
-                                                placeholder="Enter tag" required >
+                                                placeholder="Enter tag" required>
                                         </div>
                                     </div>
 
@@ -88,7 +112,7 @@
                                         <div class="form-group">
                                             <label for="Image title" class="col-form-label">Image title:</label>
                                             <input type="text" class="form-control" name="image_title"
-                                                placeholder="Enter Image title" required >
+                                                placeholder="Enter Image title" required>
                                         </div>
                                     </div>
 

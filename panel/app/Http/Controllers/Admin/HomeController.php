@@ -43,7 +43,7 @@ class HomeController
             \DB::raw('MAX(order_status) as order_status'),
             \DB::raw('MAX(desired_time) as desired_time'),
             \DB::raw('MAX(desired_date) as desired_date'),
-            \DB::raw('SUM(order_total) AS grand_total'),
+            \DB::raw('MAX(order_total) AS grand_total'),
             \DB::raw('DATE_FORMAT(MAX(created_at), "%d %M %Y") as date'),
             \DB::raw('COUNT(order_number) AS no_products'),
             \DB::raw('GROUP_CONCAT(id) as order_ids')

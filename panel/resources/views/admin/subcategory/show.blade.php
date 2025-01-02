@@ -34,6 +34,7 @@
                                     <div class="form-body">
                                         <input type="hidden" name="subcat_id" id="subcat_id" value="{{$data->id}}" class="form-control">
                                          <input type="hidden" name="old_img" id="old_img" value="{{$data->icon}}">
+                                         <input type="hidden" name="old_banner" id="old_banner" value="{{$data->sub_cat_banner}}">
 
                                         <div class="form-group">
                                             <label for="cat_id">{{ trans('labels.category') }}</label>
@@ -56,7 +57,19 @@
                                                 <span class="text-danger">{{ $errors->first('icon') }}</span>
                                             @endif
                                         </div>
+                                        
                                         <img src='{!! asset("storage/app/public/images/subcategory/".$data->icon) !!}' class='media-object round-media height-50'>
+                                        <br/>
+                                        <div class="form-group">
+                                            <br/>
+                                            <label for="sub_cat_banner">Sub Category Banner</label>
+                                            <input type="file" id="sub_cat_banner" class="form-control" name="sub_cat_banner">
+                                            @if ($errors->has('sub_cat_banner'))
+                                                <span class="text-danger">{{ $errors->first('sub_cat_banner') }}</span>
+                                            @endif
+                                        </div>
+                                       
+                                        <img src='{!! asset("storage/app/public/images/subcategory/".$data->sub_cat_banner) !!}' class='media-object round-media height-50'>
                                     
                                         <div class="form-group">
                                             <label for="subcategory_name">{{ trans('labels.subcategory_name') }}</label>
