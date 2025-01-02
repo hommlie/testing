@@ -188,6 +188,7 @@ exports.getCleaningSubcategory = async (req, res) => {
         'id',
         'subcategory_name',
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url'],
+        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`), 'banner'],
         'video',
         'thumbnail',
         'slug',

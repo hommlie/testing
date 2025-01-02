@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { useCont } from '../../context/MyContext';
 import { useToast } from '../../context/ToastProvider';
+import LoginSignup from '../LoginModal';
 
 const ProductDetailModal = ({ 
   isOpen, 
@@ -18,6 +19,7 @@ const ProductDetailModal = ({
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [cartTotal, setCartTotal] = useState(0);
     const [displayedAttributes, setDisplayedAttributes] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const notify = useToast();
     const successNotify = (success) => notify(success, 'success');
@@ -57,7 +59,7 @@ const ProductDetailModal = ({
     const jwtToken = Cookies.get("HommlieUserjwtToken");
     
     if (!jwtToken) {
-      errorNotify("Please login to continue");
+      setIsModalOpen(true);
       setIsAddingToCart(false);
       return;
     }
@@ -371,6 +373,12 @@ const ProductDetailModal = ({
         )}
 
       </div>
+
+      <LoginSignup 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />   
+
     </div>
   );
 };

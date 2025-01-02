@@ -257,9 +257,7 @@ const CleaningProductPage = () => {
   };
 
   const handleViewDetails = (product, attributeId = null) => {
-    setSelectedProduct(product);
-    console.log(attributeId);
-    
+    setSelectedProduct(product);    
     setSelectedAttributeId(attributeId);
     setIsDetailModalOpen(true);
   };
@@ -287,18 +285,21 @@ const CleaningProductPage = () => {
       <div className="flex flex-col lg:flex-row gap-4 mt-4 overflow-hidden">
         
         {/* Left Sidebar - Sticky */}
-        <div className="lg:w-1/4 lg:sticky lg:top-0 lg:self-start z-10">
+        <div className="lg:w-1/4 lg:sticky lg:sticky-header-offset transition-all lg:top-0 lg:self-start z-10">
           <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-            <h2 className="text-base lg:text-2xl font-semibold">
-              {innerSubCategoryData?.innersubcategory_name}
+            <h2 className="text-base lg:text-lg font-semibold">
+              {innerSubCategoryData?.subcategory_name}
             </h2>
-            <p className="text-sm">Select a service</p>
+            <div className="text-sm flex items-center">
+              <span className="w-1/3 text-gray-500">Select a service</span>
+              <div className="bg-gray-300 h-0.5 w-2/3"></div>
+            </div>
             <div className="grid grid-cols-3 gap-4">
               {innerSubCategoryData?.products?.map((product, index) => (
                 <div
                   key={product.id}
                   className={`flex flex-col items-center p-2 rounded-md cursor-pointer ${
-                    index === currentProductIndex ? "glow-border px-0" : "hover:bg-gray-100 border-gray-100"
+                    index === currentProductIndex ? "glow-border" : "hover:bg-gray-100 border-gray-100"
                   }`}
                   onClick={() => handleProductClick(index)}
                 >
@@ -306,14 +307,17 @@ const CleaningProductPage = () => {
                     <img
                       src={product.productimages[0]?.image_url}
                       alt={product.product_name}
-                      className="w-20 h-20 rounded-md"
+                      className="w-20 h-20 rounded-md object-cover"
                     />
                   ) : (
                     <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
                   )}
-                  <div>
-                    <h3 className="text-sm line-clamp-2 text-center font-medium">{product.product_name}</h3>
-                  </div>
+                  <p
+                    className="text-xs text-center font-medium mt-2 truncate"
+                    style={{ maxWidth: "100%" }}
+                  >
+                    {product.product_name}
+                  </p>
                 </div>
               ))}
             </div>
@@ -374,7 +378,7 @@ const CleaningProductPage = () => {
                             </p>
                             <button
                               className="underline text-blue-500 hover:underline"
-                              onClick={() => handleViewDetails(product, attribute.id)}
+                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
                             >
                               View Details
                             </button>
@@ -391,7 +395,7 @@ const CleaningProductPage = () => {
                           >
                             <button
                               className="text-[#249370] rounded-lg px-4 py-1 bg-white glow-border"
-                              onClick={() => handleViewDetails(product, attribute.id)}
+                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
                             >
                               Add
                             </button>

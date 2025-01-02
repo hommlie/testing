@@ -16,7 +16,7 @@ const sendWhatsAppNotification = async (phoneNumber, message) => {
           recipient_type: 'individual',
           text: {body: message}
         }
-    };    
+    };  
     
     const { data } = await axios.request(options);
     console.log(data);
