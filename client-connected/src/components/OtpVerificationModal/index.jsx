@@ -60,6 +60,7 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
                 alert(response.data.message);
             }
         } catch (error) {
+            console.log(error);
             alert(error.response?.data?.message || "Failed to send OTP");
         }
     };

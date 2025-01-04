@@ -42,6 +42,7 @@ const loadGoogleMapsApi = (() => {
 
 const BusinessRegistrationForm = () => {
   const [formData, setFormData] = useState({
+    userName: '',
     businessName: '',
     pincode: '',
     address: '',
@@ -149,6 +150,9 @@ const BusinessRegistrationForm = () => {
     if (!formData.businessName.trim()) {
       newErrors.businessName = 'Business name is required';
     }
+    if (!formData.userName.trim()) {
+        newErrors.userName = 'Business name is required';
+      }
     if (!formData.pincode.trim()) {
       newErrors.pincode = 'Pin code is required';
     } else if (!/^\d{6}$/.test(formData.pincode)) {
@@ -187,10 +191,11 @@ const BusinessRegistrationForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${config.API_URL}/api/register-business`, formData);
+      const response = await axios.post(`${config.API_URL}/api/freelisting/create`, formData);
       if (response.data.status === 1) {
         setShowSuccess(true);
         setFormData({
+          userName: '',
           businessName: '',
           pincode: '',
           address: '',
@@ -219,6 +224,25 @@ const BusinessRegistrationForm = () => {
     <div className="">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg glow-border p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="text-gray-700 text-sm font-medium block mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="userName"
+              value={formData.userName}
+              onChange={handleChange}
+              placeholder="Enter Your Full Name"
+              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
+                errors.userName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
+              }`}
+            />
+            {errors.userName && (
+              <p className="mt-1 text-sm text-red-500">{errors.userName}</p>
+            )}
+          </div>
+          
           <div>
             <label className="text-gray-700 text-sm font-medium block mb-2">
               Business Name

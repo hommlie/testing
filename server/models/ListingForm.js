@@ -4,6 +4,10 @@ const sequelize = require('../config/connection');
 class ListingForm extends Model {}
 
 ListingForm.init({
+    userName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     businessName: {
         type: DataTypes.STRING,
         allowNull: false,

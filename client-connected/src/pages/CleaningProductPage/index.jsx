@@ -274,7 +274,7 @@ const CleaningProductPage = () => {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className=" mx-auto px-4 py-8">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">Home</a>
           <span>/</span>
@@ -286,7 +286,7 @@ const CleaningProductPage = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar */}
           <div className="lg:w-1/4">
-            <div className="sticky sticky-header-offset top-4 transition-all duration-300 ease-in-out">
+            <div className="sticky  top-44 transition-all duration-300 ease-in-out">
               <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
                 <h2 className="text-lg font-semibold">
                   {innerSubCategoryData?.subcategory_name}

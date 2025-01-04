@@ -5,6 +5,7 @@ class ListingFormController {
     async create(req, res) {
         try {
             const {
+                userName,
                 businessName,
                 phoneNumber,
                 email,
@@ -16,14 +17,15 @@ class ListingFormController {
 
             // Basic validation
             if (!businessName || !phoneNumber || !address || !city || !services) {
-                return res.status(400).json({
-                    success: false,
+                return res.status(200).json({
+                    success: 0,
                     message: 'Please provide all required fields'
                 });
             }
 
             // Create listing
             const listing = await FreeListing.create({
+                userName,
                 businessName,
                 phoneNumber,
                 email,
@@ -33,14 +35,15 @@ class ListingFormController {
                 experience
             });
 
-            return res.status(201).json({
-                success: true,
+            return res.status(200).json({
+                success: 1,
+                message: 'Registered successfully',
                 data: listing
             });
         } catch (error) {
             console.error('Error creating listing:', error);
             return res.status(500).json({
-                success: false,
+                success: 0,
                 message: 'Internal server error'
             });
         }
