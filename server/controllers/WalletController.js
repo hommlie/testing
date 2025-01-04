@@ -4,7 +4,7 @@ const { Wallet, WalletTransaction } = require('../models');
 // Get Wallet Balance
 exports.getWalletBalance = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.body;
 
     const wallet = await Wallet.findOne({ where: { user_id: userId } });
     if (!wallet) {
@@ -20,8 +20,7 @@ exports.getWalletBalance = async (req, res) => {
 // Add Money to Wallet
 exports.addMoneyToWallet = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const { amount, description } = req.body;
+    const { userId, amount, description } = req.body;
 
     if (amount <= 0) {
       return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
@@ -51,8 +50,7 @@ exports.addMoneyToWallet = async (req, res) => {
 // Deduct Money from Wallet
 exports.deductMoneyFromWallet = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const { amount, description } = req.body;
+    const { userId, amount, description } = req.body;
 
     if (amount <= 0) {
       return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
@@ -86,7 +84,7 @@ exports.deductMoneyFromWallet = async (req, res) => {
 // Get Wallet Transactions
 exports.getWalletTransactions = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.body;
 
     const wallet = await Wallet.findOne({ where: { user_id: userId } });
     if (!wallet) {
