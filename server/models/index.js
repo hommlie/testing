@@ -34,6 +34,8 @@ const Employee = require('./Employee');
 const ThoughtfulCurations = require('./ThoughtfulCuration');
 const AppHeader = require('./AppHeader');
 const ListingForm = require('./ListingForm');
+const Wallet = require('./Wallet');
+const WalletTransaction = require('./WalletTransaction');
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -161,6 +163,9 @@ ReviewImage.belongsTo(Ratting, { foreignKey: 'review_id' });
 // Wishlist.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
 Wishlist.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
+Wallet.hasMany(WalletTransaction, { foreignKey: 'wallet_id' });
+WalletTransaction.belongsTo(Wallet, { foreignKey: 'wallet_id' });
+
 module.exports = {
   sequelize,
   About,
@@ -197,5 +202,7 @@ module.exports = {
   Employee,
   ThoughtfulCurations,
   AppHeader,
-  ListingForm
+  ListingForm,
+  Wallet,
+  WalletTransaction
 };

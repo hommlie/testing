@@ -24,7 +24,7 @@ const CartSection = ({ cart }) => {
   };
 
   return (
-    <div className="h-[calc(100vh-2rem)] overflow-y-auto">
+    <div className=" overflow-y-auto">
       <div className="space-y-4">
         <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
           <h2 className="text-xl font-semibold">Cart Summary</h2>
@@ -286,7 +286,7 @@ const CleaningProductPage = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar */}
           <div className="lg:w-1/4">
-            <div className="sticky  top-44 transition-all duration-300 ease-in-out">
+            <div className="sticky top-44 transition-all duration-300 ease-in-out">
               <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
                 <h2 className="text-lg font-semibold">
                   {innerSubCategoryData?.subcategory_name}
@@ -397,7 +397,7 @@ const CleaningProductPage = () => {
 
           {/* Right Cart Section */}
           <div className="lg:w-1/4">
-            <div className="sticky sticky-header-offset transition-all duration-300 ease-in-out">
+            <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
               <CartSection cart={cart} />
             </div>
           </div>
@@ -419,6 +419,7 @@ const CleaningProductPage = () => {
         isAddingToCart={isAddingToCart}
         selectedAttributeId={selectedAttributeId}
       />
+      
     </main>
   );
 };
