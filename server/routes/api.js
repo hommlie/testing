@@ -149,10 +149,10 @@ app.post("/createInspection", InspectionController.createInspection);
 app.post("/freelisting/create", ListingFormController.create);
 
 //wallet
-router.get("/wallet/:userId/balance", WalletController.getWalletBalance);
-router.post("/wallet/:userId/add-money", WalletController.addMoneyToWallet);
-router.post("/wallet/:userId/deduct-money", WalletController.deductMoneyFromWallet);
-router.get("/wallet/:userId/transactions", WalletController.getWalletTransactions);
+app.get("/wallet/:userId/balance", WalletController.getWalletBalance);
+app.post("/wallet/:userId/add-money", WalletController.addMoneyToWallet);
+app.post("/wallet/:userId/deduct-money", WalletController.deductMoneyFromWallet);
+app.get("/wallet/:userId/transactions", WalletController.getWalletTransactions);
 
 
 module.exports = app;
