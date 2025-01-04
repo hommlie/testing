@@ -21,7 +21,7 @@ class ListingFormController {
             // Basic validation for required fields
             if (!userName || !businessName || !phoneNumber || !address || !city || !pincode) {
                 return res.status(400).json({
-                    success: 0,
+                    status: 0,
                     message: 'Please provide all required fields'
                 });
             }
@@ -29,7 +29,7 @@ class ListingFormController {
             // Validate phone number length
             if (phoneNumber.length !== 10) {
                 return res.status(400).json({
-                    success: 0,
+                    status: 0,
                     message: 'Phone number must be exactly 10 digits'
                 });
             }
@@ -51,7 +51,7 @@ class ListingFormController {
             });
 
             return res.status(201).json({
-                success: 1,
+                status: 1,
                 message: 'Listing created successfully',
                 data: listing
             });
@@ -61,13 +61,13 @@ class ListingFormController {
             // Handle Sequelize validation errors
             if (error.name === 'SequelizeValidationError') {
                 return res.status(400).json({
-                    success: 0,
+                    status: 0,
                     message: error.errors.map(e => e.message).join(', ')
                 });
             }
 
             return res.status(500).json({
-                success: 0,
+                status: 0,
                 message: 'Internal server error'
             });
         }
@@ -90,13 +90,13 @@ class ListingFormController {
             });
 
             return res.status(200).json({
-                success: true,
+                status: 1,
                 data: listings
             });
         } catch (error) {
             console.error('Error fetching listings:', error);
             return res.status(500).json({
-                success: false,
+                status: 0,
                 message: 'Internal server error'
             });
         }
@@ -110,19 +110,19 @@ class ListingFormController {
 
             if (!listing) {
                 return res.status(404).json({
-                    success: false,
+                    status: 0,
                     message: 'Listing not found'
                 });
             }
 
             return res.status(200).json({
-                success: true,
+                status: 1,
                 data: listing
             });
         } catch (error) {
             console.error('Error fetching listing:', error);
             return res.status(500).json({
-                success: false,
+                status: 0,
                 message: 'Internal server error'
             });
         }
@@ -136,7 +136,7 @@ class ListingFormController {
 
             if (!listing) {
                 return res.status(404).json({
-                    success: false,
+                    status: 0,
                     message: 'Listing not found'
                 });
             }
@@ -144,7 +144,7 @@ class ListingFormController {
             // Validate phone number if it's being updated
             if (req.body.phoneNumber && req.body.phoneNumber.length !== 10) {
                 return res.status(400).json({
-                    success: false,
+                    status: 0,
                     message: 'Phone number must be exactly 10 digits'
                 });
             }
@@ -152,7 +152,7 @@ class ListingFormController {
             await listing.update(req.body);
 
             return res.status(200).json({
-                success: true,
+                status: 1,
                 message: 'Listing updated successfully',
                 data: listing
             });
@@ -162,13 +162,13 @@ class ListingFormController {
             // Handle Sequelize validation errors
             if (error.name === 'SequelizeValidationError') {
                 return res.status(400).json({
-                    success: false,
+                    status: 0,
                     message: error.errors.map(e => e.message).join(', ')
                 });
             }
 
             return res.status(500).json({
-                success: false,
+                status: false,
                 message: 'Internal server error'
             });
         }
@@ -182,7 +182,7 @@ class ListingFormController {
 
             if (!listing) {
                 return res.status(404).json({
-                    success: false,
+                    status: false,
                     message: 'Listing not found'
                 });
             }
@@ -190,13 +190,13 @@ class ListingFormController {
             await listing.destroy();
 
             return res.status(200).json({
-                success: true,
-                message: 'Listing deleted successfully'
+                status: true,
+                message: 'Listing deleted statusfully'
             });
         } catch (error) {
             console.error('Error deleting listing:', error);
             return res.status(500).json({
-                success: false,
+                status: false,
                 message: 'Internal server error'
             });
         }
@@ -211,7 +211,7 @@ class ListingFormController {
 
             if (!listing) {
                 return res.status(404).json({
-                    success: false,
+                    status: false,
                     message: 'Listing not found'
                 });
             }
@@ -219,7 +219,7 @@ class ListingFormController {
             // Validate status
             if (!['active', 'pending', 'rejected'].includes(status)) {
                 return res.status(400).json({
-                    success: false,
+                    status: false,
                     message: 'Invalid status value'
                 });
             }
@@ -227,14 +227,14 @@ class ListingFormController {
             await listing.update({ status });
 
             return res.status(200).json({
-                success: true,
+                status: true,
                 message: 'Listing status updated successfully',
                 data: listing
             });
         } catch (error) {
             console.error('Error updating listing status:', error);
             return res.status(500).json({
-                success: false,
+                status: false,
                 message: 'Internal server error'
             });
         }

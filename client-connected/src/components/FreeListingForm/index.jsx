@@ -245,7 +245,9 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${config.API_URL}/api/freelisting/create`, formData);      
+      const response = await axios.post(`${config.API_URL}/api/freelisting/create`, formData);
+      console.log(response.data);
+      
       if (response.data.status === 1) {        
         setShowSuccess(true);
         setFormData({
