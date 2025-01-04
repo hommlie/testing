@@ -30,18 +30,22 @@ export default function Wallet() {
       const jwtToken = Cookies.get("HommlieUserjwtToken");
       const user = jwtDecode(jwtToken);
 
-      const response = await axios.get(`${config.API_URL}/api/wallet/transactions`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
+      const response = await axios.post(`${config.API_URL}/api/wallet/transactions`, 
+        {
+            userId: user.id
         },
-        data: {
-          userId: user.id
+        {
+            headers: {
+            Authorization: `Bearer ${jwtToken}`,
+            },
         }
-      });
+        );
 
       if (response.data.status === 1) {
         setTransactions(response.data.transactions);
         setWallet(response.data.wallet);
+      } else {
+        errorNotify(response.data.message);
       }
     } catch (error) {
       console.error('Error fetching wallet data:', error);

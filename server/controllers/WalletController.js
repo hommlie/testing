@@ -89,7 +89,7 @@ exports.getWalletTransactions = async (req, res) => {
 
     const wallet = await Wallet.findOne({ where: { user_id: userId } });
     if (!wallet) {
-      return res.status(404).json({ status: 0, message: 'Wallet not found' });
+      return res.status(200).json({ status: 0, message: 'Wallet not found' });
     }
 
     const transactions = await WalletTransaction.findAll({ where: { wallet_id: wallet.id } });
