@@ -137,7 +137,7 @@ export default function ServiceProviderRegistration() {
                 <div className="lg:w-1/2 bg-white p-8">
                     <h2 className="text-2xl font-semibold mb-6">Enter your business Details</h2>
                 
-                    <BusinessRegistrationForm />
+                    <BusinessRegistrationForm phoneNumber={phoneNumber} />
                 </div>
             </motion.div>
             )}

@@ -19,13 +19,6 @@ ListingForm.init({
             len: [10, 10], 
         }
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        validate: {
-            isEmail: true
-        }
-    },
     address: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -34,17 +27,21 @@ ListingForm.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    services: {
-        type: DataTypes.TEXT,
+    pincode: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
-    experience: {
-        type: DataTypes.INTEGER,
+    area: {
+        type: DataTypes.STRING,
         allowNull: true,
     },
-    isVerified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
+    landmark: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    state: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     status: {
         type: DataTypes.ENUM('active', 'pending', 'rejected'),

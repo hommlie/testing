@@ -40,8 +40,9 @@ const loadGoogleMapsApi = (() => {
   };
 })();
 
-const BusinessRegistrationForm = () => {
+const BusinessRegistrationForm = ({ phoneNumber }) => {
   const [formData, setFormData] = useState({
+    phoneNumber,
     userName: '',
     businessName: '',
     pincode: '',
@@ -224,6 +225,20 @@ const BusinessRegistrationForm = () => {
     <div className="">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg glow-border p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="text-gray-700 text-sm font-medium block mb-2">
+              Mobile
+              <span className='text-xs'>(verified)</span>
+            </label>
+            <input
+              type="text"
+              name="userName"
+              value={formData.phoneNumber}
+              readOnly
+              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 border-gray-300 focus:ring-green-500`}
+            />
+          </div>
+
           <div>
             <label className="text-gray-700 text-sm font-medium block mb-2">
               Full Name
