@@ -94,7 +94,7 @@ exports.getWalletTransactions = async (req, res) => {
 
     const transactions = await WalletTransaction.findAll({ where: { wallet_id: wallet.id } });
 
-    return res.status(200).json({ status: 1, transactions });
+    return res.status(200).json({ status: 1, transactions, wallet });
   } catch (error) {
     return res.status(500).json({ status: 0, message: error.message });
   }
