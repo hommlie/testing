@@ -39,9 +39,9 @@ export default function Wallet() {
             Authorization: `Bearer ${jwtToken}`,
             },
         }
-        );
+      );
 
-      if (response.data.status === 1) {
+      if (response.data.status === 1) {        
         setTransactions(response.data.transactions);
         setWallet(response.data.wallet);
       } else {
@@ -212,7 +212,7 @@ export default function Wallet() {
                         {transaction.description}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {format(new Date(transaction.createdAt), 'MMM dd, yyyy HH:mm')}
+                        {format(new Date(transaction.created_at), 'MMM dd, yyyy HH:mm')}
                       </p>
                     </div>
                   </div>
