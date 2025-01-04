@@ -20,7 +20,7 @@ exports.getWalletBalance = async (req, res) => {
 // Add Money to Wallet
 exports.addMoneyToWallet = async (req, res) => {
   try {
-    const { userId, amount, description } = req.body;
+    const { userId, amount, description, payment_id } = req.body;
 
     if (amount <= 0) {
       return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
@@ -38,6 +38,7 @@ exports.addMoneyToWallet = async (req, res) => {
       wallet_id: wallet.id,
       transaction_type: 'credit',
       amount,
+      payment_id,
       description: description || 'Money added to wallet',
     });
 

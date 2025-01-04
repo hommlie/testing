@@ -26,6 +26,10 @@ WalletTransaction.init({
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
+    payment_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     description: {
         type: DataTypes.STRING,
         allowNull: true,
