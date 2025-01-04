@@ -21,7 +21,7 @@ class ListingFormController {
             // Basic validation for required fields
             if (!userName || !businessName || !phoneNumber || !address || !city || !pincode) {
                 return res.status(400).json({
-                    success: false,
+                    success: 0,
                     message: 'Please provide all required fields'
                 });
             }
@@ -29,7 +29,7 @@ class ListingFormController {
             // Validate phone number length
             if (phoneNumber.length !== 10) {
                 return res.status(400).json({
-                    success: false,
+                    success: 0,
                     message: 'Phone number must be exactly 10 digits'
                 });
             }
@@ -51,7 +51,7 @@ class ListingFormController {
             });
 
             return res.status(201).json({
-                success: true,
+                success: 1,
                 message: 'Listing created successfully',
                 data: listing
             });
@@ -61,13 +61,13 @@ class ListingFormController {
             // Handle Sequelize validation errors
             if (error.name === 'SequelizeValidationError') {
                 return res.status(400).json({
-                    success: false,
+                    success: 0,
                     message: error.errors.map(e => e.message).join(', ')
                 });
             }
 
             return res.status(500).json({
-                success: false,
+                success: 0,
                 message: 'Internal server error'
             });
         }

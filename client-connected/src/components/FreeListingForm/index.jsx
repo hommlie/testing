@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import config from '../../config/config';
+import { Check, PartyPopper } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const loadGoogleMapsApi = (() => {
   let promise = null;
@@ -39,6 +41,57 @@ const loadGoogleMapsApi = (() => {
     return promise;
   };
 })();
+
+const SuccessModal = ({ isOpen }) => {
+    const navigate = useNavigate();
+    console.log(isOpen);
+    
+
+    if (!isOpen) return null;
+    
+    return (
+      <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300`}>
+        <div className={`bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
+          <div className="text-center">
+            {/* Success Icon with Animation */}
+            <div className="relative mx-auto">
+              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-2 mx-auto animate-bounce">
+                <PartyPopper className="h-8 w-8 text-green-600" />
+              </div>
+              <div className="absolute -top-1 -right-1">
+                <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                  <Check className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </div>
+  
+            {/* Success Message */}
+            <h3 className="mt-4 text-2xl font-bold text-gray-900 mb-2">
+              Thank you for registration!
+            </h3>
+            <div className="mt-3">
+              <p className="text-gray-600">
+                Our team will contact you soon.
+              </p>
+            </div>
+  
+            {/* Action Button */}
+            <div className="mt-8">
+              <button
+                onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
+                className="w-full bg-green-600 text-white py-3 px-6 rounded-xl font-semibold
+                         hover:bg-green-700 transform transition-all duration-200
+                         hover:shadow-lg hover:-translate-y-0.5
+                         focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              >
+                Explore Our Services
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+};
 
 const BusinessRegistrationForm = ({ phoneNumber }) => {
   const [formData, setFormData] = useState({
@@ -192,8 +245,8 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${config.API_URL}/api/freelisting/create`, formData);
-      if (response.data.status === 1) {
+      const response = await axios.post(`${config.API_URL}/api/freelisting/create`, formData);      
+      if (response.data.status === 1) {        
         setShowSuccess(true);
         setFormData({
           userName: '',
@@ -401,44 +454,8 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
         </form>
       </div>
 
-      {/* Success Modal */}
-      {showSuccess && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                <svg
-                  className="h-6 w-6 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">
-                Registration Successful!
-              </h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Your business has been successfully registered.
-              </p>
-              <div className="mt-6">
-                <button
-                  onClick={() => setShowSuccess(false)}
-                  className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <SuccessModal isOpen={showSuccess} />
+
     </div>
   );
 };
