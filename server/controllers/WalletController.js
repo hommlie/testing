@@ -8,12 +8,12 @@ exports.getWalletBalance = async (req, res) => {
 
     const wallet = await Wallet.findOne({ where: { user_id: userId } });
     if (!wallet) {
-      return res.status(404).json({ success: false, message: 'Wallet not found' });
+      return res.status(404).json({ status: 0, message: 'Wallet not found' });
     }
 
-    return res.status(200).json({ success: true, balance: wallet.balance });
+    return res.status(200).json({ status: 0, balance: wallet.balance });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ status: 0, message: error.message });
   }
 };
 
@@ -23,7 +23,7 @@ exports.addMoneyToWallet = async (req, res) => {
     const { userId, amount, description, payment_id } = req.body;
 
     if (amount <= 0) {
-      return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
+      return res.status(400).json({ status: 0, message: 'Amount must be greater than 0' });
     }
 
     let wallet = await Wallet.findOne({ where: { user_id: userId } });
@@ -42,9 +42,9 @@ exports.addMoneyToWallet = async (req, res) => {
       description: description || 'Money added to wallet',
     });
 
-    return res.status(200).json({ success: true, message: 'Money added successfully', balance: wallet.balance });
+    return res.status(200).json({ status: 1, message: 'Money added successfully', balance: wallet.balance });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ status: 0, message: error.message });
   }
 };
 
@@ -54,16 +54,16 @@ exports.deductMoneyFromWallet = async (req, res) => {
     const { userId, amount, description } = req.body;
 
     if (amount <= 0) {
-      return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
+      return res.status(400).json({ status: 0, message: 'Amount must be greater than 0' });
     }
 
     const wallet = await Wallet.findOne({ where: { user_id: userId } });
     if (!wallet) {
-      return res.status(404).json({ success: false, message: 'Wallet not found' });
+      return res.status(404).json({ status: 0, message: 'Wallet not found' });
     }
 
     if (wallet.balance < amount) {
-      return res.status(400).json({ success: false, message: 'Insufficient balance' });
+      return res.status(400).json({ status: 0, message: 'Insufficient balance' });
     }
 
     wallet.balance -= parseFloat(amount);
@@ -76,9 +76,9 @@ exports.deductMoneyFromWallet = async (req, res) => {
       description: description || 'Money deducted from wallet',
     });
 
-    return res.status(200).json({ success: true, message: 'Money deducted successfully', balance: wallet.balance });
+    return res.status(200).json({ status: 1, message: 'Money deducted successfully', balance: wallet.balance });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ status: 0, message: error.message });
   }
 };
 
@@ -89,13 +89,13 @@ exports.getWalletTransactions = async (req, res) => {
 
     const wallet = await Wallet.findOne({ where: { user_id: userId } });
     if (!wallet) {
-      return res.status(404).json({ success: false, message: 'Wallet not found' });
+      return res.status(404).json({ status: 0, message: 'Wallet not found' });
     }
 
     const transactions = await WalletTransaction.findAll({ where: { wallet_id: wallet.id } });
 
-    return res.status(200).json({ success: true, transactions });
+    return res.status(200).json({ status: 1, transactions });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ status: 0, message: error.message });
   }
 };
