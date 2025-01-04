@@ -4,6 +4,11 @@ const sequelize = require('../config/connection');
 class ListingForm extends Model {}
 
 ListingForm.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     userName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -25,7 +30,7 @@ ListingForm.init({
     },
     city: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     pincode: {
         type: DataTypes.STRING,
