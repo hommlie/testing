@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useToast } from "../../context/ToastProvider";
 import config from "../../config/config";
-import { FaWallet } from "react-icons/fa";
+import { FaWallet, FaChevronRight } from "react-icons/fa";
 import { BsArrowUpCircleFill, BsArrowDownCircleFill } from "react-icons/bs";
 import { format } from 'date-fns';
 
@@ -24,24 +24,20 @@ export default function Wallet() {
     fetchWalletData();
   }, []);
 
+  // Keeping all the existing functionality methods unchanged
   const fetchWalletData = async () => {
     setIsLoading(true);
     try {
       const jwtToken = Cookies.get("HommlieUserjwtToken");
       const user = jwtDecode(jwtToken);
 
-      const response = await axios.post(`${config.API_URL}/api/wallet/transactions`, 
-        {
-            userId: user.id
-        },
-        {
-            headers: {
-            Authorization: `Bearer ${jwtToken}`,
-            },
-        }
+      const response = await axios.post(
+        `${config.API_URL}/api/wallet/transactions`,
+        { userId: user.id },
+        { headers: { Authorization: `Bearer ${jwtToken}` } }
       );
 
-      if (response.data.status === 1) {        
+      if (response.data.status === 1) {
         setTransactions(response.data.transactions);
         setWallet(response.data.wallet);
       } else {
@@ -74,9 +70,7 @@ export default function Wallet() {
           user_id: user.id,
         },
         {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
+          headers: { Authorization: `Bearer ${jwtToken}` },
         }
       );
 
@@ -97,9 +91,7 @@ export default function Wallet() {
                 razorpay_signature: response.razorpay_signature,
               },
               {
-                headers: {
-                  Authorization: `Bearer ${jwtToken}`,
-                },
+                headers: { Authorization: `Bearer ${jwtToken}` },
               }
             );
 
@@ -164,88 +156,113 @@ export default function Wallet() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-        {/* Wallet Balance Card */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <FaWallet className="text-3xl text-[#249370]" />
-              <div>
-                <h2 className="text-2xl font-semibold">Wallet Balance</h2>
-                <p className="text-4xl font-bold text-[#249370] mt-2">
-                  ₹{wallet?.balance || 0}
-                </p>
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Modern Card Design */}
+        <div className="relative mb-12 transition-all duration-300 hover:transform hover:scale-105">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-3xl transform rotate-1 opacity-20"></div>
+          <div className="relative bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl p-8 shadow-xl">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                  <FaWallet className="text-2xl text-white" />
+                </div>
+                <h2 className="text-xl text-white font-medium">Digital Wallet</h2>
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-6 py-3 bg-white text-emerald-600 font-medium rounded-xl hover:bg-emerald-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  Add Money
+                </button>
               </div>
             </div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-6 py-3 bg-[#249370] text-white font-medium rounded-lg hover:bg-[#1a745a] transition-colors"
-            >
-              Add Money
-            </button>
+            <div className="text-white">
+              <p className="text-lg opacity-80">Available Balance</p>
+              <p className="text-5xl font-bold mt-2">₹{wallet?.balance || 0}</p>
+            </div>
+            <div className="absolute bottom-8 right-8 opacity-10">
+              <div className="w-16 h-16 border-2 border-white rounded-full"></div>
+              <div className="w-16 h-16 border-2 border-white rounded-full -mt-8 ml-8"></div>
+            </div>
           </div>
         </div>
 
-        {/* Transactions List */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-xl font-semibold mb-6">Transaction History</h3>
+        {/* Transactions List with Animation */}
+        <div className="bg-white rounded-3xl shadow-lg p-8">
+          <h3 className="text-2xl font-semibold mb-8 text-gray-800">Transaction History</h3>
           {isLoading ? (
-            <div className="flex justify-center items-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#249370]"></div>
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
             </div>
           ) : transactions.length > 0 ? (
             <div className="space-y-4">
-              {transactions.map((transaction) => (
+              {transactions.map((transaction, index) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="transform transition-all duration-300 hover:scale-102 hover:bg-gray-50"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex items-center gap-4">
-                    {transaction.transaction_type === 'credit' ? (
-                      <BsArrowUpCircleFill className="text-2xl text-green-500" />
-                    ) : (
-                      <BsArrowDownCircleFill className="text-2xl text-red-500" />
-                    )}
-                    <div>
-                      <p className="font-medium">
-                        {transaction.description}
+                  <div className="flex items-center justify-between p-6 rounded-2xl border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center gap-6">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        transaction.transaction_type === 'credit' ? 'bg-emerald-100' : 'bg-red-100'
+                      }`}>
+                        {transaction.transaction_type === 'credit' ? (
+                          <BsArrowUpCircleFill className="text-2xl text-emerald-500" />
+                        ) : (
+                          <BsArrowDownCircleFill className="text-2xl text-red-500" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {transaction.description}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {format(new Date(transaction.created_at), 'MMM dd, yyyy HH:mm')}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <p className={`text-lg font-semibold ${
+                        transaction.transaction_type === 'credit'
+                          ? 'text-emerald-500'
+                          : 'text-red-500'
+                      }`}>
+                        {transaction.transaction_type === 'credit' ? '+' : '-'}₹{transaction.amount}
                       </p>
-                      <p className="text-sm text-gray-500">
-                        {format(new Date(transaction.created_at), 'MMM dd, yyyy HH:mm')}
-                      </p>
+                      <FaChevronRight className="text-gray-400" />
                     </div>
                   </div>
-                  <p className={`font-semibold ${
-                    transaction.transaction_type === 'credit'
-                      ? 'text-green-500'
-                      : 'text-red-500'
-                  }`}>
-                    {transaction.transaction_type === 'credit' ? '+' : '-'}₹{transaction.amount}
-                  </p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-500 py-8">No transactions found</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaWallet className="text-2xl text-gray-400" />
+              </div>
+              <p className="text-gray-500">No transactions found</p>
+            </div>
           )}
         </div>
 
-        {/* Add Money Modal */}
+        {/* Enhanced Modal Design */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
-              <h3 className="text-xl font-semibold mb-4">Add Money to Wallet</h3>
-              <div className="space-y-4">
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 animate-fadeIn">
+            <div className="bg-white rounded-3xl p-8 w-full max-w-md mx-4 transform transition-all duration-300 scale-100 animate-slideUp">
+              <h3 className="text-2xl font-semibold mb-6 text-gray-800">Add Money to Wallet</h3>
+              <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2 text-gray-700">
                     Enter Amount (₹)
                   </label>
                   <input
                     type="number"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#249370]"
+                    className="w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
                     placeholder="Enter amount"
                     min="1"
                   />
@@ -253,18 +270,18 @@ export default function Wallet() {
                 <div className="flex gap-4">
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 py-3 text-gray-600 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+                    className="flex-1 py-4 text-gray-600 font-medium rounded-xl border border-gray-200 hover:bg-gray-50 transition-all duration-300"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleRecharge}
                     disabled={isProcessing}
-                    className="flex-1 py-3 bg-[#249370] text-white font-medium rounded-lg hover:bg-[#1a745a] transition-colors disabled:opacity-50"
+                    className="flex-1 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 disabled:opacity-50"
                   >
                     {isProcessing ? (
                       <div className="flex items-center justify-center gap-2">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                         <span>Processing...</span>
                       </div>
                     ) : (

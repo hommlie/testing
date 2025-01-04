@@ -19,7 +19,7 @@ Wallet.init({
         },
     },
     balance: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.FLOAT,
         defaultValue: 0.00,
         allowNull: false,
     },
