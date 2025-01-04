@@ -27,6 +27,7 @@ const CareerContoller = require('../controllers/CareerController');
 const PartnerContoller = require('../controllers/PartnerController');
 const InspectionController = require('../controllers/InspectionController');
 const ListingFormController = require('../controllers/ListingFormController');
+const WalletController = require("../controllers/WalletController");
 
 const app = express();
 
@@ -146,6 +147,12 @@ app.post("/createInspection", InspectionController.createInspection);
 
 //free listing form
 app.post("/freelisting/create", ListingFormController.create);
+
+//wallet
+router.get("/wallet/:userId/balance", WalletController.getWalletBalance);
+router.post("/wallet/:userId/add-money", WalletController.addMoneyToWallet);
+router.post("/wallet/:userId/deduct-money", WalletController.deductMoneyFromWallet);
+router.get("/wallet/:userId/transactions", WalletController.getWalletTransactions);
 
 
 module.exports = app;

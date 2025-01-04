@@ -1,21 +1,21 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/connection');
-const User = require('./User');
+const User = require('./User'); 
 
 class Wallet extends Model {}
 
 Wallet.init({
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
     },
     user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT.UNSIGNED, 
         allowNull: false,
         references: {
-          model: User,
-          key: 'id',
+            model: User,
+            key: 'id',
         },
     },
     balance: {
@@ -32,4 +32,4 @@ Wallet.init({
     updatedAt: 'updated_at'
 });
 
-module.exports = Wallet;  
+module.exports = Wallet;

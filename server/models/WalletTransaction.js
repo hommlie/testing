@@ -6,12 +6,12 @@ class WalletTransaction extends Model {}
 
 WalletTransaction.init({
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT.UNSIGNED, 
         primaryKey: true,
         autoIncrement: true,
     },
     wallet_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT.UNSIGNED,
         allowNull: false,
         references: {
             model: Wallet,
@@ -39,4 +39,4 @@ WalletTransaction.init({
     updatedAt: 'updated_at'
 });
 
-module.exports = WalletTransaction;  
+module.exports = WalletTransaction;
