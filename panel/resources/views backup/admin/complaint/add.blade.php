@@ -40,36 +40,36 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <label for="name" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="name" name="first_name" value="{{ old('name') }}"  >
+            <input type="text" placeholder="Enter Frist Name  " class="form-control" id="name" name="first_name" value="{{ old('name') }}"  >
             @error('first_name') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
         <div class="col-md-4">
             <label for="name" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="name" name="last_name" value="{{ old('name') }}"  >
+            <input type="text" placeholder="Enter last Name  " class="form-control" id="name" name="last_name" value="{{ old('name') }}"  >
             @error('last_name') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
         <div class="col-md-4">
             <label for="mobile" class="form-label">Mobile</label>
-            <input type="text" class="form-control" id="mobile" name="mobile" value="{{ old('mobile') }}" >
+            <input type="text" placeholder="Enter Mobile Number" class="form-control" id="mobile" name="mobile" value="{{ old('mobile') }}" >
             @error('mobile') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-6">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" >
+            <input type="email" placeholder="Enter Email" class="form-control" id="email" name="email" value="{{ old('email') }}" >
             @error('email') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
         <div class="col-md-6">
             <label for="subject" class="form-label">Subject</label>
-            <input type="text" class="form-control" id="subject" name="subject" value="{{ old('subject') }}" >
+            <input type="text" placeholder="Enter Subject" class="form-control" id="subject" name="subject" value="{{ old('subject') }}" >
             @error('subject') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-12">
-            <label for="message" class="form-label">Message</label>
-            <textarea class="form-control" id="message" name="message" rows="4" >{{ old('message') }}</textarea>
+            <label for="message"  class="form-label">Message</label>
+            <textarea class="form-control" placeholder="Enter Message" id="message" name="message" rows="4" >{{ old('message') }}</textarea>
             @error('message') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
     </div>

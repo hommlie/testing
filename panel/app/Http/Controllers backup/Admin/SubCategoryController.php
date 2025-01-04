@@ -86,6 +86,7 @@ class SubCategoryController extends Controller
             'subcategory_name' => 'required',
             'cat_id' => 'required',
             'icon' => 'required|mimes:png,jpg,jpeg',
+            'sub_cat_banner' => 'required|mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
             'subcategory_sub_title' => 'required',
@@ -97,6 +98,9 @@ class SubCategoryController extends Controller
         // Generate unique file name and move the file
         $icon = 'sub_category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
         $request->icon->move('storage/app/public/images/subcategory', $icon);
+
+        $subCatBanner = 'sub_cat_banner-' . uniqid() . '.' . $request->sub_cat_banner->getClientOriginalExtension();
+        $request->sub_cat_banner->move('storage/app/public/images/subcategory', $subCatBanner);
 
         // Generate unique file name and move the file
         if ($request->hasFile('thumbnail')) {
@@ -123,6 +127,7 @@ class SubCategoryController extends Controller
             $dataval = [
                 'cat_id' => $request->cat_id,
                 'icon' => $icon, // Ensure icon is included here
+                'sub_cat_banner' => $subCatBanner, 
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
                 'meta_title' => $request->meta_title,
@@ -141,6 +146,7 @@ class SubCategoryController extends Controller
                 'subcategory_name' => $request->subcategory_name,
                 'slug' => \Str::slug($request->subcategory_name),
                 'icon' => $icon, // Ensure icon is included here as well
+                'sub_cat_banner' => $subCatBanner, 
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
                 'meta_title' => $request->meta_title,
@@ -184,17 +190,21 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request)
     {
+        // dd($request->all());
         $this->validate($request, [
             'subcategory_name' => 'required',
             'cat_id' => 'required',
             'subcategory_sub_title' => 'required',
             'subcategory_title' => 'required',
             'icon' =>  'mimes:png,jpg,jpeg',
+            'sub_cat_banner' => 'mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
         ]);
 
         $icon = $request->old_img;
+        $sub_cat_banner = $request->old_banner;
+
 
         if (isset($request->icon)) {
             File::delete('storage/app/public/images/subcategory/' . $request->old_img);
@@ -206,6 +216,16 @@ class SubCategoryController extends Controller
             }
         }
 
+        if (isset($request->sub_cat_banner)) {
+            File::delete('storage/app/public/images/subcategory/' . $request->old_banner);
+
+            if ($request->hasFile('sub_cat_banner')) {
+                $Filetbanner = $request->file('sub_cat_banner');
+                $sub_cat_banner = 'subcategoryBanner-' . uniqid() . '.' . $Filetbanner->getClientOriginalExtension();
+                $Filetbanner->move('storage/app/public/images/subcategory', $sub_cat_banner);
+            }
+        }
+
         $checkslug = Subcategory::where('slug', \Str::slug($request->subcategory_name))->first();
 
         if (@$checkslug->slug) {
@@ -213,6 +233,7 @@ class SubCategoryController extends Controller
             $data = [
                 'cat_id' => $request->cat_id,
                 'icon' => $icon,
+                'sub_cat_banner'  => $sub_cat_banner,
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
                 'meta_title' => $request->meta_title,
@@ -228,6 +249,7 @@ class SubCategoryController extends Controller
                 'subcategory_name' => $request->subcategory_name,
                 'slug' => \Str::slug($request->subcategory_name),
                 'icon' => $icon,
+                'sub_cat_banner'  => $sub_cat_banner,
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
                 'meta_title' => $request->meta_title,

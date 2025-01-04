@@ -610,6 +610,7 @@ class OrderController extends Controller
             'email',
             'mobile',
             'landmark',
+            'attribute',
             'street_address',
             'pincode',
             'status',
@@ -648,6 +649,9 @@ class OrderController extends Controller
         $aboutData = About::first();
         $policyData = PrivacyPolicy::first();
         $conditionsData = TermsConditions::first();
+        $variData = Variation::orderBy('id', 'asc')->get();
+        $attrData = Attribute::orderBy('id', 'asc')->get();
+
 
 
         // Fetch detailed order items
@@ -661,6 +665,7 @@ class OrderController extends Controller
             'status',
             'discount_amount',
             'order_status',
+            'attribute',
             'desired_time',
             'desired_date',
             'is_otp_verified',
@@ -673,7 +678,7 @@ class OrderController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        return view('admin.orders.order-details', compact('order_info', 'order_data', 'aboutData', 'policyData', 'conditionsData'));
+        return view('admin.orders.order-details', compact('order_info', 'order_data', 'aboutData', 'policyData', 'conditionsData', 'variData', 'attrData'));
     }
 
     // public function delete()

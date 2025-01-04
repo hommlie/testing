@@ -44,6 +44,7 @@
                         </div>
                         
                         <div class="card-body collapse show">
+                            <h2></h2>
                             <div class="card-block card-dashboard" id="table-display">
                                     @include('Admin.testimonials.testimonialstable')
                             </div>

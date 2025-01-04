@@ -71,7 +71,7 @@
 
         </div>
     </div>
-    <section class="invoice-template ">
+    <section class="invoice-template" id="inTemDownload">
         <div class="card print-area">
             <div class="card-body">
                 <div id="invoice-template" class="card-block">
@@ -89,10 +89,10 @@
                                             Nagendra Block, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka
                                             560050.
                                             <br>
-                                            
-                                                
+
+
                                             <b>Website:</b> <i><u class="text-primary">www.hommlie.com</u></i>
-                                            <b>Customer Care:</b> +91 6363865658 
+                                            <b>Customer Care:</b> +91 6363865658
                                         </p>
                                     </div>
                                     <div class="col-md-6 text-right">
@@ -110,21 +110,22 @@
                                 <div class="row d-flex">
                                     <div class="col-md-8 ml-3">
                                         <ul class="list-unstyled">
-                                            <li><b>PAN :</b> AAZCA4409K  <b class="ml-5">GSTIN :</b> 29AAZCA4409K1ZZ <b class="ml-5">CIN :</b> U96908KA2023PTC179034</li>
-                                        <br>
+                                            <li><b>PAN :</b> AAZCA4409K <b class="ml-5">GSTIN :</b> 29AAZCA4409K1ZZ <b
+                                                    class="ml-5">CIN :</b> U96908KA2023PTC179034</li>
+                                            <br>
                                             <li> <b> Order No :</b> # {{$order_info->order_number}}</li>
                                             <li><b>Order Date: </b> {{$order_info->date}}</li>
-                                            <li> <b> Customer Name: </b> 
-                                            @php
-                                            if($order_info->bill_to_Name == ""){
-                                                echo  $order_info->full_name;
-                                                }else{
-                                                    echo  $order_info->bill_to_Name;
-                                                }
+                                            <li> <b> Customer Name: </b>
+                                                @php
+                                                    if ($order_info->bill_to_Name == "") {
+                                                        echo $order_info->full_name;
+                                                    } else {
+                                                        echo $order_info->bill_to_Name;
+                                                    }
 
-                                            @endphp
-                                            
-                                        </li>
+                                                @endphp
+
+                                            </li>
                                             <li> <b> Service Address :</b>
                                                 {{$order_info->street_address}},{{$order_info->landmark}},{{$order_info->pincode}}.
                                             </li>
@@ -144,7 +145,7 @@
 
                                 </div>
                                 <hr>
-                                <h4  class="text-success"><b>Order Details</b></h4>
+                                <h4 class="text-success"><b>Order Details</b></h4>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -153,8 +154,8 @@
                                             <th>{{ trans('labels.name') }}</th>
                                             <th>{{ trans('labels.qty') }}</th>
                                             <th>{{ trans('labels.price') }}</th>
-                                            <th>{{trans('Discount ')}}</th>                                         
-                                            <th>{{ trans('labels.tax') }}</th>                                         
+                                            <th>{{trans('Discount ')}}</th>
+                                            <th>{{ trans('labels.tax') }}</th>
                                             <th>{{ trans('Desired Date&Time') }}</th>
                                             <th>{{ trans('labels.status') }}</th>
                                             <th>{{ trans('labels.order_total') }}</th>
@@ -169,12 +170,20 @@
                                                 @php        $grand_total = $row->subtotal + $row->tax + $row->shipping_cost - $row->discount_amount; @endphp
                                             @endif
                                             <tr>
+
                                                 <td>SR-{{$row->id}}</td>
-                                              {{--   <td><img class="media-object round-media height-50"
+                                                {{-- <td><img class="media-object round-media height-50"
                                                         src="{{$row->image_url}}" alt="Generic placeholder image"
                                                         style="width: 70px;" /></td>--}}
-                                                <td>{{$row->product_name}} @if($row->variation != "")({{$row->variation}})
-                                                @endif</td>
+                                                <td>{{$row->product_name}}
+                                                    @if($row->attribute != "")
+                                                        @foreach($attrData as $attri)
+                                                            @if($row->attribute == $attri->id)
+                                                                ({{$attri->attribute}})
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </td>
                                                 <td>{{$row->qty}}</td>
                                                 <td>₹{{ number_format($row->price, 2) }}</td>
                                                 <td>₹{{ number_format($row->discount_amount, 2) }}</td>
@@ -296,7 +305,9 @@
                                                         </div>
                                                     </td>
                                                 @endif
-                                                <td {{ $row->order_status == 4 ? 'style="text-decoration: line-through;"' : '' }}>₹{{ number_format($row->price - $row->discount_amount + $row->tax , 2) }}</td>
+                                                <td {{ $row->order_status == 4 ? 'style="text-decoration: line-through;"' : '' }}>
+                                                    ₹{{ number_format($row->price - $row->discount_amount + $row->tax, 2) }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -427,27 +438,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><br><br><br><br>
-                                    <div class="col-md-12 text-gap mt-lg-5 d-flex">
+                                    </div>
+                                    <div class="col-md-12  text-gap mt-lg-5">
                                         <div class="col-md-6 text-left">
                                             <p><b>CUSTOMER ACCEPTANCE </b></p>
                                             <p> I/We agree that the service contract is based on the information
                                                 provided
                                                 above.</p>
-                                            <p> Name of Customer :
-                                                ..................................................................................................
+                                            <p> Name of Customer :..................................................................................................
                                             </p>
                                             <p>Preserve this contract form and payment receipt.</p>
+                                        </div><br><br><br>
+                                        <div class="col-md-6 mt-lg-5">
+                                        <p>Signature of Customer</p>
+                                            <p>.....................................</p><br/>
                                         </div>
-                                        <div class="col-md-6 text-right mt-4">
-                                            <p>
-                                                .....................................
-                                            </p>
-                                            <p>Signature of Customer</p>
-                                        </div>
-
                                     </div>
-                                </div><br><br><br><br><br>
+                                </div><br><br>
                                 <hr><br><br>
                                 <div class="col-md-12">
                                     <h4><b>About us</b></h4><br>
@@ -473,7 +480,9 @@
 </div>
 <div class="mt-5 text-right">
     <button onclick="window.print()" class="btn btn-success rounded-0">Print Invoice</button>
+    <button id="downloadInvoice" class="btn btn-primary rounded-0">Download Invoice</button>
 </div>
+
 
 </section>
 
@@ -486,12 +495,26 @@
 @section('scripttop')
 @endsection
 @section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 <script type="text/javascript">
     // $.ajaxSetup({
     //     headers: {
     //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     //     }
     // });
+
+    document.getElementById('downloadInvoice').addEventListener('click', () => {
+        const element = document.getElementById('inTemDownload');
+        const opt = {
+            margin: 0,
+            filename: 'invoice.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'pt', format: 'a3', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    });
+
 
     //Change Status
     $('body').on('click', '.changeStatus', function () {

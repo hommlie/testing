@@ -53,6 +53,15 @@
                                             @endif
                                         </div>
                                         <div class="gallery"></div>
+
+                                        <div class="form-group">
+                                            
+                                            <label for="sub_cat_banner">Sub Category Banner</label>
+                                            <input type="file" id="sub_cat_banner" class="form-control" name="sub_cat_banner">
+                                            @if ($errors->has('sub_cat_banner'))
+                                                <span class="text-danger">{{ $errors->first('sub_cat_banner') }}</span>
+                                            @endif
+                                        </div>
                                     
 
                                         <div class="form-group">
