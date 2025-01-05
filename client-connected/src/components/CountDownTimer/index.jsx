@@ -42,7 +42,7 @@ const CountdownTimer = () => {
 
   // Digit display component
   const DigitDisplay = ({ value }) => (
-    <div className="flex gap-2">
+    <div className="flex gap-1 md:gap-2">
       {formatNumber(value).map((digit, index) => (
         <div
           key={index}
@@ -56,7 +56,7 @@ const CountdownTimer = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="flex items-center justify-around p-6 bg-white border rounded-lg shadow-sm">
+      <div className="flex items-center justify-around gap-4 p-6 md:px-10 bg-white border rounded-lg shadow-sm">
         <div className="text-center">
           <DigitDisplay value={timeLeft.days} />
           <p className="mt-2 text-sm text-gray-600">Days</p>
