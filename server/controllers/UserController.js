@@ -203,7 +203,8 @@ exports.getProfile = async(req, res) => {
       message: 'Profile data', 
       data: userJson, contactInfo, 
       cartLength: cartItems ? cartItems.length : 0,
-      walletBalance: wallet ? wallet.balance : 0.0
+      walletBalance: wallet ? wallet.balance : 0.0,
+      wallet: wallet ? wallet : null
     });
 }
 
