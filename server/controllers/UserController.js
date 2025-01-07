@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const sequelize = require('../config/connection');
 const { Op } = require('sequelize');
 const axios = require('axios');
-const { Settings, User } = require('../models');
+const { Settings, User, Wallet } = require('../models');
 const Help = require('../models/Help');
 // const { sendEmail } = require('../utils/email');
 const apiUrl = process.env.apiUrl;
@@ -184,6 +184,13 @@ exports.getProfile = async(req, res) => {
       return res.status(400).json({ status: 0, message: 'User not found' });
     }
 
+    const cartItems = await Cart.findAll({
+      attributes: ['product_id'],
+      where: { user_id },
+    });
+
+    const wallet = await Wallet.findOne({ where: { user_id } });
+
     const userJson = user.toJSON();
     delete userJson.password;
 
@@ -191,7 +198,13 @@ exports.getProfile = async(req, res) => {
       attributes: ['address', 'contact', 'email', 'facebook', 'twitter', 'instagram', 'linkedin']
     });
 
-    return res.status(200).json({ status: 1, message: 'Profile data', data: userJson, contactInfo });
+    return res.status(200).json({ 
+      status: 1, 
+      message: 'Profile data', 
+      data: userJson, contactInfo, 
+      cartLength: cartItems ? cartItems.length : 0,
+      walletBalance: wallet ? wallet.balance : 0.0
+    });
 }
 
 exports.editProfile = async(req, res) => {
