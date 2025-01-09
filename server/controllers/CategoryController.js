@@ -328,6 +328,8 @@ exports.getCleaningSubcategory = async (req, res) => {
       ],
       order: [['id', 'DESC']]
     });
+    console.log(products);
+    
     // Transform the products data
     const transformedProducts = await Promise.all(products.map(async (product) => {
       const plainProduct = product.get({ plain: true });
