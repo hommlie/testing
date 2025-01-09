@@ -307,7 +307,6 @@ exports.getCleaningSubcategory = async (req, res) => {
                 'id', 
                 'attribute',
                 'specifications',
-                // [sequelize.fn('CONCAT', storagebaseUrl, '/images/', sequelize.col('SubCategories.image')), 'image']
                 [sequelize.fn('CONCAT', `${apiUrl}/storage/app/public/images/variation/`, sequelize.col('variations->attribute.image')), 'image'],
                 'total_reviews',
                 'avg_rating',
@@ -347,6 +346,9 @@ exports.getCleaningSubcategory = async (req, res) => {
           variation_interval: variation.variation_interval,
           variation_times: variation.variation_times,
           description: variation.description,
+          image: variation.image,
+          total_reviews: variation.total_reviews,
+          avg_rating: variation.avg_rating,
           qty: variation.qty,
           created_at: variation.created_at,
           updated_at: variation.updated_at
@@ -363,6 +365,10 @@ exports.getCleaningSubcategory = async (req, res) => {
           acc.push({
             attribute_id: variation.attribute_id,
             attribute_name: variation.attribute.attribute,
+            specifications: variation.attribute.specifications,
+            image: variation.attribute.image,
+            total_reviews: variation.attribute.total_reviews,
+            avg_rating: variation.attribute.avg_rating,
             variations: [variationData],
             reviewsData
           });
