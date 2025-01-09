@@ -326,7 +326,8 @@ exports.getCleaningSubcategory = async (req, res) => {
         { model: Category, attributes: ['category_name', 'is_form', 'is_page',], as: 'category' },
         { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' }
       ],
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']],
+      logging: console.log,
     });
     // Transform the products data
     const transformedProducts = await Promise.all(products.map(async (product) => {
