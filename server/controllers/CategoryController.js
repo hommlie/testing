@@ -307,7 +307,7 @@ exports.getCleaningSubcategory = async (req, res) => {
                 'id', 
                 'attribute',
                 'specifications',
-                [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/variation/', Attribute.image)`), 'image'],
+                [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/variation/', attributes.image)`), 'image'],
                 'total_reviews',
                 'avg_rating',
               ],
