@@ -307,7 +307,8 @@ exports.getCleaningSubcategory = async (req, res) => {
                 'id', 
                 'attribute',
                 'specifications',
-                [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/variation/', variations->attribute.image)`), 'image'],
+                // [sequelize.fn('CONCAT', storagebaseUrl, '/images/', sequelize.col('SubCategories.image')), 'image']
+                [sequelize.fn('CONCAT', `${apiUrl}/storage/app/public/images/variation/`, sequelize.col('variations->attribute.image')), 'image'],
                 'total_reviews',
                 'avg_rating',
               ],
@@ -327,7 +328,6 @@ exports.getCleaningSubcategory = async (req, res) => {
         { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' }
       ],
       order: [['id', 'DESC']],
-      logging: console.log,
     });
     // Transform the products data
     const transformedProducts = await Promise.all(products.map(async (product) => {
