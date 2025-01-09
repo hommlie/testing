@@ -8,10 +8,6 @@ Attribute.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    attribute: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     specifications: {
         type: DataTypes.TEXT,
         allowNull: true,
