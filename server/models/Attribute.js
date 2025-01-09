@@ -8,6 +8,26 @@ Attribute.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    attribute: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    specifications: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    total_reviews: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    avg_rating: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
     status: {
         type: DataTypes.STRING,
         allowNull: false

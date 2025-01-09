@@ -293,6 +293,9 @@ exports.getCleaningSubcategory = async (req, res) => {
             'variation',
             'variation_interval',
             'variation_times',
+            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/attribute/', Variation.image)`), 'image'],
+            'total_reviews',
+            'avg_rating',
             'qty',
             'created_at',
             'updated_at'
@@ -300,7 +303,14 @@ exports.getCleaningSubcategory = async (req, res) => {
           include: [
             {
               model: Attribute,
-              attributes: ['id', 'attribute'],
+              attributes: [
+                'id', 
+                'attribute',
+                'specifications',
+                [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/variation/', Attribute.image)`), 'image'],
+                'total_reviews',
+                'avg_rating',
+              ],
               where: { status: 1 },
               as: 'attribute',
             },

@@ -40,6 +40,18 @@ Variation.init({
         type: DataTypes.TEXT,
         allowNull: false
     },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    total_reviews: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    avg_rating: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
     qty: {
         type: DataTypes.INTEGER,
         allowNull: false

@@ -28,49 +28,71 @@ const CartSection = ({ cart }) => {
       <div className="space-y-4">
         <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
           <h2 className="text-xl font-semibold">Cart Summary</h2>
-          <div className="space-y-3">
-            {cart.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2 border-b">
-                <div className="flex flex-col">
-                  <span className="font-medium">{item.product_name}</span>
-                  <span className="text-sm text-gray-500">{item.variation_name}</span>
+          
+          {cart?.length > 0 ? (
+            <div className="space-y-3">
+              {cart.map((item) => (
+                <div key={item.id} className="flex items-center justify-between py-2 border-b">
+                  <div className="flex flex-col">
+                    <span className="font-medium">{item.product_name}</span>
+                    <span className="text-sm text-gray-500">{item.variation_name}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-medium">₹{item.price}</span>
+                    <span className="text-sm text-gray-500 block">Qty: {item.qty}</span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="font-medium">₹{item.price}</span>
-                  <span className="text-sm text-gray-500 block">Qty: {item.qty}</span>
+              ))}
+
+              <div className="pt-2 space-y-2">
+                <div className="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span>₹{calculateCartTotal()}</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>Tax</span>
+                  <span>₹{calculateTaxTotal()}</span>
+                </div>
+                <div className="flex justify-between font-medium pt-2 border-t">
+                  <span>Total</span>
+                  <span>₹{calculateCartTotal() + calculateTaxTotal()}</span>
                 </div>
               </div>
-            ))}
-            
-            <div className="pt-2 space-y-2">
-              <div className="flex justify-between text-gray-600">
-                <span>Subtotal</span>
-                <span>₹{calculateCartTotal()}</span>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Tax</span>
-                <span>₹{calculateTaxTotal()}</span>
-              </div>
-              <div className="flex justify-between font-medium pt-2 border-t">
-                <span>Total</span>
-                <span>₹{calculateCartTotal() + calculateTaxTotal()}</span>
-              </div>
+
+              {calculateSavings() > 0 && (
+                <div className="flex items-center justify-between text-green-600 pt-2">
+                  <span>Congratulations!</span>
+                  <span>₹{calculateSavings()} saved</span>
+                </div>
+              )}
+
+              <button 
+                className="bg-emerald-600 hover:bg-emerald-700 w-full text-white py-2 rounded-md transition"
+                onClick={() => window.location.href = '/add-to-cart'}
+              >
+                Checkout Now
+              </button>
             </div>
-
-            {calculateSavings() > 0 && (
-              <div className="flex items-center justify-between text-green-600 pt-2">
-                <span>Congratulations!</span>
-                <span>₹{calculateSavings()} saved</span>
-              </div>
-            )}
-
-            <button 
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-md transition"
-              onClick={() => window.location.href = '/add-to-cart'}
-            >
-              Checkout Now
-            </button>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center text-center text-gray-600 py-10">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth="1.5" 
+                stroke="currentColor" 
+                className="w-16 h-16 mb-4 text-gray-400"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M3 3h18M3 7h18M3 7v14h18V7M8 11v6m4-6v6m4-6v6" 
+                />
+              </svg>
+              <p className="text-lg font-semibold">Your cart is empty</p>
+              <p className="text-sm text-gray-500">Looks like you haven’t added anything to your cart yet.</p>
+            </div>
+          )}
         </section>
 
         <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
@@ -273,7 +295,7 @@ const CleaningProductPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen">
       <div className=" mx-auto px-4 py-8">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">Home</a>
