@@ -118,16 +118,9 @@ class ComplaintController extends Controller
         $complaint->subject = $validated['subject'];
         $complaint->message = $validated['message'];
 
-        $message = "Hello {$complaint->first_name}, your complaint '{$complaint->subject}' has been registered successfully. We will get back to you soon.";
 
-        $smsStatus = $this->sendSMS($complaint->mobile, $message);
-
-        if ($smsStatus) {
             $complaint->save();
-            return redirect()->back()->with('success', 'Complaint submitted and SMS sent successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Complaint submitted but SMS failed.');
-        }
+            return redirect()->back()->with('success', 'Complaint submitted successfully.');
     }
 }
 

@@ -49,6 +49,9 @@
                         <span>Banner Under Quick Service</span>
                     @elseif ($row->positions == 'bannerReferEarn')
                         <span>Banner Refer & Earn</span>
+                    @elseif ($row->positions == 'bannerCategory')
+                        <span>Banner Under Category</span>
+
                     @else
                         <span>Banner</span>
                     @endif
@@ -62,7 +65,15 @@
                     <a href="javascript:void(0);" class="danger p-0" data-original-title="{{ trans('labels.delete') }}"
                         title="{{ trans('labels.delete') }}"
                         onclick="do_delete('{{$row->id}}','{{route('admin.banner.delete')}}','{{ trans('labels.delete_banner') }}','{{ trans('labels.delete') }}')">
-                        <i class="ft-trash font-medium-3"></i>
+                        @if (in_array($row->positions, ['bannerPest', 'bannerBird', 'bannerMosqito', 'bannerQuickService', 'bannerReferEarn', 'bannerCategory']))
+                            @if ($row->status == 1)
+                                <p class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 ">Active</p>
+                            @else
+                                <p class="btn btn-raised btn-outline-danger round btn-min-width mr-1 mb-1 ">Deactive</p>
+                            @endif
+                        @else
+                            <i class="ft-trash font-medium-3"></i>
+                        @endif
                     </a>
                 </td>
             </tr>

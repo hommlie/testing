@@ -195,6 +195,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::get('get-branch-code', 'OrderController@getbranchcode')->name('orders.getbranchcode');
         Route::get('get_services_center/{regionId}', 'OrderController@getServiceCenter')->name('orders.getServiceCenter');
         Route::get('get-customer-data/{cusID}', 'OrderController@getCustomerData')->name('orders.getCustomerData');
+        // GET ORDER DATA USING ORDER ID 
+        Route::get('get-Order-data/{orderID}', 'OrderController@getOrderData')->name('orders.getOrderData');
 
 
         // ADD RESIDENTIAL ORDERS

@@ -759,7 +759,7 @@
                 @endcan
                 <!-- MANAGE APP HEADER  -->
 
-                @can('slider_management_access')
+                @can('appheader_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/appheader*') ? 'menu-open' : '' }} {{ request()->is('admin/appheader/index*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
@@ -772,7 +772,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-4">
-                            @can('slider_access')
+                            @can('appheader_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.appheader") }}"
                                         class="nav-link {{ request()->is('admin/appheader') ? 'active' : '' }}">
@@ -928,7 +928,7 @@
 
                 <!-- ===================================== thoughtful-Curations==================================== -->
 
-                @can('banner_management_access')
+                @can('thoughtful_curations_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/thoughtful-curations*') ? 'menu-open' : '' }} {{ request()->is('admin/thoughtful-curations/add*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
@@ -941,7 +941,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-4">
-                            @can('banner_access')
+                            @can('thoughtful_curations_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.thoughtful-curations") }}" class="nav-link {{ request()->is('admin/
                                             thoughtful-curations') ? 'active' : '' }}">
@@ -954,7 +954,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @can('banner_add_access')
+                            @can('thoughtful_curations_add_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.thoughtful-curations.add") }}"
                                         class="nav-link {{ request()->is('admin/thoughtful-curations/add') ? 'active' : '' }}">
@@ -1075,11 +1075,11 @@
 
 
                 <!-- COMPALINT MANAGEMENT (Help's) -->
-                @can('question_management_access')
+                @can('complaint_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/complaint*') ? 'menu-open' : '' }} {{ request()->is('admin/complaint/index*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
-                            <i class="fa fa-comments"></i>
+                            <i class="fa fa-comments mr-2"></i>
                             </i>
                             <p>
                                 <span>Manage Complaint</span>
@@ -1087,7 +1087,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-4">
-                            @can('question_access')
+                            @can('complaint_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.complaint") }}"
                                         class="nav-link {{ request()->is('admin/complaint') ? '' : '' }}">
@@ -1100,7 +1100,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @can('question_access')
+                            @can('complaint_add_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.complaint.add") }}"
                                         class="nav-link {{ request()->is('admin/complaint/add') ? '' : '' }}">
@@ -1119,11 +1119,11 @@
                 @endcan
 
                 <!-- INSPECTIONS MANAGEMENT  -->
-                @can('question_management_access')
+                @can('inspections_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/inspections*') ? 'menu-open' : '' }} {{ request()->is('admin/inspections/index*') ? 'menu-open' : '' }} ">
                         <a class="nav-link nav-dropdown-toggle">
-                            <i class="fa fa-clipboard-check"></i>
+                            <i class="fa fa-clipboard-check mr-2"></i>
                             </i>
                             <p>
                                 <span>Manage Inspections</span>
@@ -1131,7 +1131,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-4">
-                            @can('question_access')
+                            @can('inspections_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.inspections") }}"
                                         class="nav-link {{ request()->is('admin/inspections') ? '' : '' }}">
@@ -1144,7 +1144,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @can('question_access')
+                            @can('inspections_add_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.inspections.add") }}"
                                         class="nav-link {{ request()->is('admin/inspections/add') ? '' : '' }}">
@@ -1157,6 +1157,51 @@
                                     </a>
                                 </li>
                             @endcan
+
+                        </ul>
+                    </li>
+                @endcan
+
+                <!-- MANAGE Business DETAILS   -->
+                
+                @can('businessregistration_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/businessregistration*') ? 'menu-open' : '' }} {{ request()->is('admin/businessregistration/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="far fa-address-card mr-2"></i>
+                            </i>
+                            <p>
+                                <span> Business Registration</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('businessregistration_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.businessregistration") }}"
+                                        class="nav-link {{ request()->is('admin/businessregistration') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>View Registration</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                           {{--  @can('businessregistration_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.businessregistration.add") }}"
+                                        class="nav-link {{ request()->is('admin/businessregistration/add') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>Add Registration</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan --}}
 
                         </ul>
                     </li>
