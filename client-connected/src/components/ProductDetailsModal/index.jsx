@@ -169,46 +169,45 @@ const ProductDetailModal = ({
   };
 
   const AddButton = ({ variation }) => {    
-    
-    const totalCart = cart.filter(ct => ct.product_id === product.id);
-    const specificCart = totalCart?.filter(ct => ct?.variation == variation.id);
-        
-    if (isAddingToCart) {
+      const totalCart = cart.filter(ct => ct.product_id === product.id);
+      const specificCart = totalCart?.filter(ct => ct?.variation == variation.id);
+          
+      if (isAddingToCart) {
+          return (
+              <div className="absolute bottom-4 right-4 w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
+                  <span className="loader"></span>
+              </div>
+          );
+      }
+      
+      if (specificCart.length !== 0) {
+          return (
+              <div className="absolute bottom-4 right-4 w-28 h-9 flex justify-around items-center text-2xl font-semibold rounded-lg bg-white shadow-lg">
+                  <button 
+                      onClick={() => handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty - 1)}
+                      className="text-emerald-600"
+                  >
+                      -
+                  </button>
+                  <span className="text-emerald-600">{specificCart[0]?.qty}</span>
+                  <button 
+                      onClick={() => handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty + 1)}
+                      className="text-emerald-600"
+                  >
+                      +
+                  </button>
+              </div>
+          );
+      }
+      
       return (
-        <div className="w-28 h-9 flex items-center justify-center rounded-lg border border-emerald-600">
-          <span className="loader"></span>
-        </div>
-      );
-    }
-    
-    if (specificCart.length !== 0) {
-      return (
-        <div className="w-28 h-9 flex justify-around items-center text-2xl font-semibold rounded-lg border border-emerald-600">
-          <button 
-            onClick={() => handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty - 1)}
-            className="text-emerald-600"
+          <button
+              className="absolute bottom-4 right-4 text-emerald-600 rounded-lg px-4 py-2 bg-white shadow-lg hover:bg-emerald-50"
+              onClick={() => handleAddToCart(variation)}
           >
-            -
+              Add
           </button>
-          <span className="text-emerald-600">{specificCart[0]?.qty}</span>
-          <button 
-            onClick={() => handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty + 1)}
-            className="text-emerald-600"
-          >
-            +
-          </button>
-        </div>
       );
-    }
-    
-    return (
-      <button
-        className="text-emerald-600 rounded-lg px-4 py-2 border border-emerald-600 hover:bg-emerald-50"
-        onClick={() => handleAddToCart(variation)}
-      >
-        Add
-      </button>
-    );
   };
 
   if (!isOpen) return null;
@@ -266,52 +265,93 @@ const ProductDetailModal = ({
                                 <h3 className="text-lg font-semibold">
                                     {attribute.attribute_name}
                                 </h3>
-                                <div className="relative">
-                                    <button 
-                                        onClick={() => scroll(attribute.attribute_id, 'left')}
-                                        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-lg p-2 hover:bg-gray-50"
-                                        aria-label="Scroll left"
-                                    >
-                                        <ChevronLeft className="w-6 h-6" />
-                                    </button>
-                                    <button 
-                                        onClick={() => scroll(attribute.attribute_id, 'right')}
-                                        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-lg p-2 hover:bg-gray-50"
-                                        aria-label="Scroll right"
-                                    >
-                                        <ChevronRight className="w-6 h-6" />
-                                    </button>
-                                    <div 
-                                        ref={el => variationRefs.current[attribute.attribute_id] = el}
-                                        className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide snap-x"
-                                        style={{ scrollBehavior: 'smooth' }}
-                                    >
-                                        {attribute?.variations?.map(variation => (
-                                            <div 
-                                                key={variation.id}
-                                                className="flex-none w-72 snap-start"
-                                            >
-                                                <div className="border rounded-lg p-4 space-y-4 bg-white shadow-sm">
-                                                    <div>
-                                                        <h4 className="font-medium">
-                                                            {variation.variation}
-                                                        </h4>
-                                                        <div className="mt-1 space-x-2">
-                                                            <span className="text-emerald-600 font-medium">
-                                                                ₹{variation.discounted_variation_price}
-                                                            </span>
-                                                            {variation.price !== variation.discounted_variation_price && (
-                                                                <span className="text-gray-500 line-through">
-                                                                    ₹{variation.price}
+                                <div className="space-y-4">
+                                    {attribute?.variations?.map(variation => (
+                                        <div 
+                                            key={variation.id}
+                                            className="flex flex-col md:flex-row border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
+                                        >
+                                            {/* Content Section */}
+                                            <div className="flex-1 p-4">
+                                                <div className="space-y-3">
+                                                    <h4 className="font-medium">
+                                                        {variation.variation}
+                                                    </h4>
+
+                                                    {/* Rating and Reviews */}
+                                                    {(variation.avg_rating || variation.total_reviews) && (
+                                                        <div className="flex items-center space-x-2">
+                                                            {variation.avg_rating && (
+                                                                <div className="flex items-center">
+                                                                    {[...Array(5)].map((_, index) => (
+                                                                        <Star
+                                                                            key={index}
+                                                                            className={`w-4 h-4 ${
+                                                                                index < Math.floor(variation.avg_rating)
+                                                                                    ? "text-yellow-400 fill-current"
+                                                                                    : "text-gray-300"
+                                                                            }`}
+                                                                        />
+                                                                    ))}
+                                                                    <span className="ml-1 text-sm font-medium">
+                                                                        {variation.avg_rating.toFixed(1)}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+                                                            {variation.total_reviews && (
+                                                                <span className="text-sm text-gray-500">
+                                                                    ({variation.total_reviews >= 1000 
+                                                                        ? `${(variation.total_reviews / 1000).toFixed(1)}K` 
+                                                                        : variation.total_reviews} reviews)
                                                                 </span>
                                                             )}
                                                         </div>
+                                                    )}
+
+                                                    {/* Price */}
+                                                    <div className="space-x-2">
+                                                        <span className="text-emerald-600 font-medium">
+                                                            ₹{variation.discounted_variation_price}
+                                                        </span>
+                                                        {variation.price !== variation.discounted_variation_price && (
+                                                            <span className="text-gray-500 line-through">
+                                                                ₹{variation.price}
+                                                            </span>
+                                                        )}
                                                     </div>
-                                                    <AddButton variation={variation} />
+
+                                                    {/* Description */}
+                                                    {variation.description && (
+                                                        <div className="space-y-2">
+                                                            <ul className="space-y-1">
+                                                                {variation.description.split('|')
+                                                                    .map(desc => desc.trim())
+                                                                    .filter(desc => desc)
+                                                                    .map((desc, index) => (
+                                                                        <li key={index} className="flex items-start space-x-2">
+                                                                            <span className="text-emerald-500 mt-1">•</span>
+                                                                            <span className="text-gray-600 text-sm">{desc}</span>
+                                                                        </li>
+                                                                    ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
+
+                                            {/* Image Section with Overlapped Add Button */}
+                                            <div className="relative w-full md:w-64 h-48">
+                                                {variation.image && (
+                                                    <img
+                                                        src={variation.image}
+                                                        alt={variation.variation}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                )}
+                                                <AddButton variation={variation} />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ))}

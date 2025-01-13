@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { Star } from "lucide-react";
 import axios from "axios";
 import config from "../../config/config";
 import Loading from "../../components/Loading";
-import Banner from '../../assets/images/innersubcat-banner.webp';
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import ProductDetailModal from "../../components/ProductDetailsModal";
+import NoImage from '../../assets/bg/no-image.svg';
 
 const CartSection = ({ cart }) => {
   const calculateCartTotal = () => {
@@ -335,7 +336,11 @@ const CleaningProductPage = () => {
                           className="w-20 h-20 rounded-md object-cover"
                         />
                       ) : (
-                        <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
+                        <img
+                          src={NoImage}
+                          alt=""
+                          className="w-20 h-20 rounded-md object-cover opacity-40"
+                        />
                       )}
                       <p className="text-xs text-center font-medium mt-2 truncate w-full">
                         {product.product_name}
@@ -350,11 +355,20 @@ const CleaningProductPage = () => {
           {/* Main Content */}
           <div className="lg:w-1/2">
             <div className="space-y-6">
-              <img
-                src={innerSubCategoryData?.subcategory_banner}
-                alt={innerSubCategoryData?.innersubcategory_name}
-                className="w-full h-[300px] object-cover rounded-lg"
-              />
+              {
+                innerSubCategoryData?.subcategory_banner ?
+                <img
+                  src={innerSubCategoryData?.subcategory_banner}
+                  alt={innerSubCategoryData?.innersubcategory_name}
+                  className="w-full h-[300px] object-cover rounded-lg"
+                />
+                :
+                <img
+                  src={NoImage}
+                  alt=""
+                  className="w-full h-[300px] object-cover rounded-lg opacity-40"
+                />
+              }
               
               {innerSubCategoryData?.products?.map((product, index) => (
                 <section
@@ -363,57 +377,115 @@ const CleaningProductPage = () => {
                   className="bg-white rounded-lg p-6 space-y-6 glow-border scroll-mt-4"
                 >
                   <h3 className="text-2xl font-semibold">{product.product_name}</h3>
-                  {product?.attributes?.map((attribute, attrIndex) => (
-                    <div
-                      key={attrIndex}
-                      className={`flex justify-between p-4 rounded-lg transition-all duration-200 ${
-                        attribute.id === currentVariationIndex
-                          ? "bg-blue-50"
-                          : "hover:bg-gray-50"
-                      }`}
-                    >
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium">
-                          {attribute.attribute_name}
-                        </h3>
-                        <p className="text-gray-500">
-                          {attribute.variations?.length > 0 && (
-                            <span className="flex gap-2 items-center">
-                              Starts from
-                              <span className="text-blue-500 font-medium">
-                                ₹{attribute.variations[0]?.discounted_variation_price}
-                              </span>
-                            </span>
-                          )}
-                        </p>
-                        <p className="text-gray-600">{attribute.description}</p>
-                        <button
-                          className="text-blue-500 hover:text-blue-600 underline"
-                          onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                        >
-                          View Details
-                        </button>
+                  <div className="divide-y">
+                    {product?.attributes?.map((attribute, attrIndex) => (
+                      <div
+                        key={attrIndex}
+                        className={`py-6 ${
+                          attrIndex === product.attributes.length - 1 ? '' : 'border-gray-200'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center gap-6">
+                          <div className="space-y-4 flex-1">
+                            <div className="space-y-2">
+                              <h3 className="text-lg font-medium">
+                                {attribute.attribute_name}
+                              </h3>
+                              
+                              {/* Rating and Reviews */}
+                              {(attribute.avg_rating || attribute.total_reviews) && (
+                                <div className="flex items-center space-x-2">
+                                  {attribute.avg_rating && (
+                                    <div className="flex items-center">
+                                      {[...Array(5)].map((_, index) => (
+                                        <Star
+                                          key={index}
+                                          className={`w-4 h-4 ${
+                                            index < Math.floor(attribute.avg_rating)
+                                              ? "text-yellow-400 fill-current"
+                                              : "text-gray-300"
+                                          }`}
+                                        />
+                                      ))}
+                                      <span className="ml-1 text-sm font-medium">
+                                        {attribute.avg_rating.toFixed(1)}
+                                      </span>
+                                    </div>
+                                  )}
+                                  {attribute.total_reviews && (
+                                    <span className="text-sm text-gray-500">
+                                      ({attribute.total_reviews >= 1000 
+                                        ? `${(attribute.total_reviews / 1000).toFixed(1)}K` 
+                                        : attribute.total_reviews} reviews)
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Price */}
+                              <p className="text-gray-500">
+                                {attribute.variations?.length > 0 && (
+                                  <span className="flex gap-2 items-center">
+                                    Starts from
+                                    <span className="text-emerald-600 font-medium">
+                                      ₹{attribute.variations[0]?.discounted_variation_price}
+                                    </span>
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+
+                            {/* Specifications */}
+                            {attribute.specifications && (
+                              <div className="space-y-2">
+                                <h4 className="font-medium text-gray-700">Specifications:</h4>
+                                <ul className="space-y-1">
+                                  {attribute.specifications.split('|')
+                                    .map((spec, index) => spec.trim())
+                                    .filter(spec => spec)
+                                    .map((spec, index) => (
+                                      <li key={index} className="flex items-start space-x-2">
+                                        <span className="text-emerald-500 mt-1">•</span>
+                                        <span className="text-gray-600">{spec.replace(/^"|"$/g, '')}</span>
+                                      </li>
+                                    ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            <button
+                              className="text-blue-500 hover:text-blue-600 font-semibold"
+                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                            >
+                              View Details
+                            </button>
+                          </div>
+                          
+                          {/* Image with overlapped Add button */}
+                          <div className="relative w-32 flex-shrink-0">
+                            <div className="relative w-32 h-32">
+                              <img 
+                                src={attribute.image || product?.productimages?.[0]?.image_url || NoImage} 
+                                alt="" 
+                                className="w-full h-full rounded-lg object-cover"
+                              />
+                              <button
+                                className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
+                                        bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
+                                        hover:bg-emerald-50 transition-colors"
+                                onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                              >
+                                Add
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      
-                      <div className="relative">
-                        <img 
-                          src={product?.productimages?.[0]?.image_url} 
-                          alt="" 
-                          className="w-32 h-32 rounded-lg object-cover"
-                        />
-                        <button
-                          className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
-                                   bg-white text-emerald-600 px-6 py-2 rounded-lg glow-border 
-                                   hover:bg-emerald-50 transition-all duration-200"
-                          onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                        >
-                          Add
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </section>
               ))}
+
             </div>
           </div>
 

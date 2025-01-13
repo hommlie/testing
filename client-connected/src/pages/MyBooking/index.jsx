@@ -11,6 +11,7 @@ import { useToast } from "../../context/ToastProvider";
 import ReviewModal from "../../components/ReviewModal";
 
 export default function MyBookings() {
+    
     const getStatusStyles = (status) => {
         switch (status) {
             case 1:

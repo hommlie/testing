@@ -14,7 +14,8 @@ exports.getBanner = async (req, res) => {
         'positions',
         'link',
         'alt_tag',
-        'image_title', 
+        'image_title',
+        'status', 
         [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/banner/', image)`), 'image'],
       ],
       include: {
