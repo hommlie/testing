@@ -294,7 +294,7 @@ exports.orderhistory = async (req, res) => {
         'status', 'image'
       ],
       order: [['order_number', 'DESC'], ['id', 'DESC']],
-      limit: 10
+      // limit: 10
     });
 
     const updatedData = await Promise.all(orderData.map(async (order) => {
