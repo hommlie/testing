@@ -55,7 +55,8 @@ exports.getBanner = async (req, res) => {
         cat_id: value.cat_id,
         category_name: value.category ? value.category.category_name : null,
         product_id: value.product_id,
-        link: value.link
+        link: value.link,
+        status: value.status
       };
 
       switch (value.positions) {
