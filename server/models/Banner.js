@@ -39,6 +39,10 @@ Banner.init({
         type: DataTypes.STRING,
         allowNull: true 
     },
+    status: {
+        type: DataTypes.INTEGER,
+        allowNull: true 
+    },
 }, {
     sequelize,
     modelName: 'Banner',
