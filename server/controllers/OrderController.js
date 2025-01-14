@@ -347,6 +347,7 @@ exports.orderdetails = async (req, res) => {
               'coupon_name',
               'discount_amount',
               'status',
+              'order_status',
               [sequelize.fn('DATE_FORMAT', sequelize.col('created_at'), '%d-%m-%Y'), 'date'],
               'desired_time',
               'desired_date',
