@@ -242,7 +242,7 @@ export default function BookingSuccess() {
                                         </div> */}
                                     </div>
                                     <div className="">
-                                        <span className="w-[80px] h-[21px] px-3 py-1 rounded font-medium text-xs" style={getStatusStyles(parseInt(item.status))}>{OrderStatuses[parseInt(item.status)]}</span>
+                                        <span className="w-[80px] h-[21px] px-3 py-1 rounded font-medium text-xs" style={getStatusStyles(parseInt(item.order_status))}>{OrderStatuses[parseInt(item.order_status)]}</span>
                                     </div>
                                     <button 
                                         onClick={() => navigate(`${config.VITE_BASE_URL}/track-order/${item?.id}`)} 
