@@ -110,10 +110,15 @@ exports.verifyOtp = async (req, res) => {
 
     axios.request(options).then(function (response) {
       if (response.data.type === 'success') {
-        sendWhatsAppNotification(
-          user.mobile, 
-          `Hi ${user.name}, you have successfully logged in to Hommlie.`
-        );
+        sendWhatsAppNotification({
+            campaignName: "user welcome message",
+            phoneNumber: user.mobile,
+            userName: name,
+            // mediaUrl,
+            // mediaName,
+            templateParams: [name],
+          
+        });
         const token = jwt.sign({ id: user.id, mobile: user.mobile, referred_id: user.referred_id, referral_code: user.referral_code }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30d' });
         return res.status(200).json({ status: 1, message: response.data.message, token, user_id: user.id });
       } else {

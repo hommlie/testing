@@ -1,22 +1,42 @@
 const axios = require('axios');
 
-const sendWhatsAppNotification = async (phoneNumber, message) => {
+const sendWhatsAppNotification = async ({
+  campaignName,
+  phoneNumber,
+  userName,
+  mediaUrl,
+  mediaName,
+  templateParams,
+
+}) => {
   try {
     const options = {
         method: 'POST',
-        url: 'https://apis.aisensy.com/project-apis/v1/project/{wa.aisensy.com/+919844090440}/messages',
+        url: 'https://backend.aisensy.com/campaign/t1/api/v2',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           'X-AiSensy-Partner-API-Key': '123'
         },
         data: {
-          to: phoneNumber,
-          type: 'text',
-          recipient_type: 'individual',
-          text: {body: message}
+          "apiKey": process.env.AISENSY_API_KEY,
+          "campaignName": campaignName,
+          "destination": phoneNumber,
+          "userName": userName,
+          // "source": string,
+          // "media": {
+          //    "url": mediaUrl,
+          //    "filename": mediaName
+          // },
+          "templateParams": templateParams,
+          // "tags": [
+          //   string
+          // ],
+          // "attributes": {
+          //   "attribute_name": string
+          // }
         }
-    };  
+    }; 
     
     const { data } = await axios.request(options);
     console.log(data);
