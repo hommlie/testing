@@ -19,7 +19,7 @@ const sendWhatsAppNotification = async ({
           'X-AiSensy-Partner-API-Key': '123'
         },
         data: {
-          "apiKey": process.env.AISENSY_API_KEY,
+          "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MzQzZDNjODMwNzNiMGJlZWJkNmIzMyIsIm5hbWUiOiJIb21tbGllIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY3MzQzZDNhODMwNzNiMGJlZWJkNmFlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzMxNDc2Nzk2fQ.vpMUCLf18YJu7biNHkfpKnzBDq73FFqPJPdag4JlcpQ",
           "campaignName": campaignName,
           "destination": phoneNumber,
           "userName": userName,
