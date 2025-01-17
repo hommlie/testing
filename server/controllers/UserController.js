@@ -111,7 +111,7 @@ exports.verifyOtp = async (req, res) => {
     axios.request(options).then(function (response) {
       if (response.data.type === 'success') {
         sendWhatsAppNotification({
-            campaignName: "user welcome message",
+            campaignName: "Welcome Login Message",
             phoneNumber: user.mobile,
             userName: name,
             // mediaUrl,

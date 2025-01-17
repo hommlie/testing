@@ -61,7 +61,7 @@ function App() {
             const newTitle = document.createElement("title");
             newTitle.content = settings?.site_title;
             document.head.appendChild(newTitle);
-        }
+        }        
 
         updateMetaTag("title", settings?.meta_title);
         updateMetaTag("description", settings?.meta_description);

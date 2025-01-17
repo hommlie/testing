@@ -39,7 +39,6 @@ const sendWhatsAppNotification = async ({
     }; 
     
     const { data } = await axios.request(options);
-    console.log(data);
 
     // const response = await axios.post('https://api.aisensy.com/whatsapp/waapi/v1/message', {
     //   apiKey: process.env.AISENSY_API_KEY,

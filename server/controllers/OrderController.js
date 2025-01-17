@@ -162,6 +162,26 @@ exports.order = async (req, res) => {
           });
 
           orders.push(order);
+
+          const currentDate = new Date();
+          const currentTime = currentDate.toLocaleTimeString();
+
+          sendWhatsAppNotification({
+            campaignName: "Booking Service Details",
+            phoneNumber: userData.mobile,
+            userName: userData.name,
+            // mediaUrl,
+            // mediaName,
+            templateParams: [
+              userData.name, 
+              order_number, 
+              currentDate.toLocaleDateString(),
+              currentTime,
+              product_name,
+              order.price
+            ],
+          
+          });
         }
       } else {
           
@@ -199,6 +219,26 @@ exports.order = async (req, res) => {
         });
 
         orders.push(order);
+
+        const currentDate = new Date();
+        const currentTime = currentDate.toLocaleTimeString();
+
+        sendWhatsAppNotification({
+          campaignName: "Booking Service Details",
+          phoneNumber: userData.mobile,
+          userName: userData.name,
+          // mediaUrl,
+          // mediaName,
+          templateParams: [
+            userData.name, 
+            order_number, 
+            currentDate.toLocaleDateString(),
+            currentTime,
+            product_name,
+            order.price
+          ],
+        
+        });
       }
     }
 
@@ -206,17 +246,8 @@ exports.order = async (req, res) => {
 
     await Cart.destroy({ where: { user_id } });
 
-    const notification = await Notification.create({
-      user_id,
-      order_id,
-      order_number,
-      order_status: "1",
-      message: `Order ${order_number} has been placed`,
-      is_read: "1",
-      type: "order",
-    });
-
     const userData = await User.findByPk(user_id);
+
     if (userData?.email) {
       try {
         const subject = `Order Confirmation - Order #${order_number}`;
