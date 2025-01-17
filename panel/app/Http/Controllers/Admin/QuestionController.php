@@ -7,6 +7,7 @@ use Hash;
 use Session;
 use App\Models\User;
 use App\Models\Employees;
+use App\Http\Controllers\StorePermissionRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -16,6 +17,7 @@ use App\Models\Permissions;
 use App\Models\Question;
 use App\Models\Timeslot;
 use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Support\Facades\Redirect;
 
 class QuestionController extends Controller

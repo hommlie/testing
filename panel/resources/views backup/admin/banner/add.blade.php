@@ -37,7 +37,7 @@
                                 @php
                                     $allBanners = [
                                         'bannerPest' => 'Banner Under Pest','bannerBird' => 'Banner under Bird','bannerMosqito' => 'Banner under Mosqito','bannerQuickService' => 'Banner under Quick Service','bannerReferEarn' => 'Banner Refer & Earn'
-                                    ];
+                                    ,'bannerCategory' => 'Banner Under Category'];
                                     $storedBanners = $banner->pluck('positions')->toArray();
                                     @endphp
                                 

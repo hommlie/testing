@@ -200,9 +200,6 @@ class VendorController extends Controller
                 }
 
             }
-        
-        
-          
 
             // Check if the combination of order status and order id exists in the QuestionAnswers table
             $isQuestionsSubmitted = \DB::table('question_answers')
@@ -701,16 +698,5 @@ class VendorController extends Controller
             'total_distance_this_year' => $totalDistanceThisYear,
         ], 200);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }

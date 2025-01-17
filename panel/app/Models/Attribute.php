@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
 	protected $fillable = [
-        'attribute', 'status'
+        'attribute', 'status','specifications','image','total_reviews','avg_rating'
     ];
 }

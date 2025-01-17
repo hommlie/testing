@@ -67,10 +67,10 @@
                     <select class="form-control" name="cat_id" id="cat_id">
                       <option value="">{{ trans('placeholder.select_category') }}</option>
                       @foreach ($category as $category)
-                      <option value="{{$category->id}}" {{ $data->cat_id == $category->id ? 'selected' : ''}}>
-                      {{$category->category_name}}
-                      </option>
-                      @endforeach
+                        <option value="{{$category->id}}" {{ $data->cat_id == $category->id ? 'selected' : ''}}>
+                    {{$category->category_name}}
+                    </option>
+                     @endforeach
                     </select>
                     @if ($errors->has('cat_id'))
                    <span class="text-danger">{{ $errors->first('cat_id') }}</span>
@@ -86,11 +86,11 @@
                       <option value="{{$subcategory->id}}" {{ $data->subcat_id == $subcategory->id ? 'selected' : ''}}>
                       {{$subcategory->subcategory_name}}
                       </option>
-                      @endforeach
+                       @endforeach
                     </select>
                     @if ($errors->has('subcat_id'))
                     <span class="text-danger">{{ $errors->first('subcat_id') }}</span>
-                    @endif
+                  @endif
                   </div>
                 </div>
                 <div class="form-group row">
@@ -99,8 +99,8 @@
                     <input type="text" class="form-control" id="product_name" name="product_name"
                       placeholder="{{ trans('placeholder.product') }}" value="{{$data->product_name}}">
                     @if ($errors->has('product_name'))
-                    <span class="text-danger">{{ $errors->first('product_name') }}</span>
-                    @endif
+                        <span class="text-danger">{{ $errors->first('product_name') }}</span>
+                  @endif
                   </div>
                 </div>
                 {{-- PRODUCT META TITLE --}}
@@ -164,8 +164,8 @@
                     <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days"
                       placeholder="{{ trans('placeholder.est_shipping_days') }}" value="{{ $data->est_shipping_days }}">
                     @if ($errors->has('est_shipping_days'))
-                    <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
-                    @endif
+                  <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
+                  @endif
                   </div>
                 </div>
               </div>
@@ -187,7 +187,7 @@
                     <p class="text-muted">Type a word and press enter to add a tag. Click a tag to remove it.</p>
                     @if ($errors->has('tags'))
                     <span class="text-danger">{{ $errors->first('tags') }}</span>
-                      @endif
+                    @endif
                   </div>
                 </div>
               </div>
@@ -206,7 +206,7 @@
                   <div class="float-right">
                     <label class="switch checkbox-wrapper-25">
                       <input type="checkbox" name="is_featured" id="is_featured" @if ($data->is_featured == '1')
-                        checked="" @endif>
+                      checked="" @endif>
                       <span class="slider"></span>
                     </label>
                   </div>
@@ -244,8 +244,8 @@
                     <input type="text" class="form-control" id="tax" name="tax"
                       placeholder="{{ trans('placeholder.tax') }}" value="{{$data->tax}}">
                     @if ($errors->has('tax'))
-                     <span class="text-danger">{{ $errors->first('tax') }}</span>
-                   @endif
+                  <span class="text-danger">{{ $errors->first('tax') }}</span>
+                  @endif
                   </div>
                   <div class="col-lg-6">
 
@@ -271,7 +271,7 @@
                     <span id="ratingError" class="text-danger d-none">Rating must be between 0 and 5.</span>
                     @if ($errors->has('productRating'))
                     <span class="text-danger">{{ $errors->first('productRating') }}</span>
-                    @endif
+                     @endif
                   </div>
                 </div>
               </div>
@@ -299,8 +299,8 @@
                     <input type="text" class="form-control" id="product_price" name="product_price"
                       placeholder="{{ trans('Enter Actual Price') }}" value="{{$data->product_price}}">
                     @if ($errors->has('product_price'))
-                    <span class="text-danger">{{ $errors->first('product_price') }}</span>
-                    @endif
+                     <span class="text-danger">{{ $errors->first('product_price') }}</span>
+                      @endif
                   </div>
 
                   <label for="discounted_percentage" class="col-sm-2 col-form-label">Discount (%)</label>
@@ -314,8 +314,8 @@
                       placeholder="{{ trans('Enter Discount %') }}" value="0">
                     <?php } ?>
                     @if ($errors->has('discounted_percentage'))
-                    <span class="text-danger">{{ $errors->first('discounted_percentage') }}</span>
-                    @endif
+                  <span class="text-danger">{{ $errors->first('discounted_percentage') }}</span>
+                  @endif
                   </div>
                 </div>
                 <div class="form-group row default_price" @if ($data->is_variation == '1') style="display: none;" @endif>
@@ -326,10 +326,11 @@
                       placeholder="{{ trans('placeholder.discounted_price') }}" value="{{$data->discounted_price}}"
                       readonly>
                     @if ($errors->has('discounted_price'))
-                    <span class="text-danger">{{ $errors->first('discounted_price') }}</span>
-                   @endif
+                    <span span class="text-danger">{{ $errors->first('discounted_price') }}</span>
+                  @endif
                   </div>
                 </div>
+
                 <div class="form-group row default_price" @if ($data->is_variation == '1') style="display: none;" @endif>
                   <label for="product_qty" class="col-sm-2 col-form-label">{{ trans('labels.qty') }}</label>
                   <div class="col-sm-10">
@@ -341,91 +342,154 @@
                   </div>
                 </div>
                 <div class="panel-body variation" @if ($data->is_variation != '1') style="display: none;" @endif>
-
+                <!-- FETCH ALL VARIATIONS DATA -->
                   @foreach ($variations as $ky => $variation)
-                  <div class="row" id="del-{{$variation->id}}">
-                  <input type="hidden" name="variation_id[]" value="{{$variation->id}}">
+                    <div class="row pl-5 pt-3 mt-3" id="del-{{$variation->id}}"
+                    style="border: solid 1px white; box-shadow: 0 4px 8px rgba(178, 236, 178, 0.5); border-radius: 5px;">
+                    <input type="hidden" name="variation_id[]" value="{{$variation->id}}">
 
-            <div class="col-sm-2 nopadding">
-              <div class="form-group">
-              <label for="attribute" class="col-sm-12 col-form-label">{{ trans('labels.attribute') }}</label>
-              <div class="col-sm-112">
-                <select class="form-control" name="attribute[{{$ky}}]" id="attribute">
-                <option value="">{{ trans('placeholder.select_attribute') }}</option>
-                @foreach ($attribute as $attributes)
-          <option value="{{$attributes->id}}" {{ $variation->attribute_id == $attributes->id ? 'selected' : '' }}>{{$attributes->attribute}}</option>
-        @endforeach
-                </select>
-              </div>
-              </div>
-            </div>
+                    <!-- VARIATION ATTRIBUTED  -->
+                    <div class="col-sm-2 nopadding">
+                      <div class="form-group">
+                      <label for="attribute" class="col-sm-12 col-form-label">{{ trans('labels.attribute') }}</label>
+                      <div class="col-sm-112">
+                        <select class="form-control" name="attribute[{{$ky}}]" id="attribute">
+                        <option value="">{{ trans('placeholder.select_attribute') }}</option>
+                        @foreach ($attribute as $attributes)
+                      <option value="{{$attributes->id}}" {{ $variation->attribute_id == $attributes->id ? 'selected' : '' }}>{{$attributes->attribute}}</option>
+                      @endforeach
+                        </select>
+                      </div>
+                      </div>
+                    </div>
 
-            <div class="col-sm-1 nopadding">
-              <div class="form-group">
-              <label for="variation" class="col-form-label">Variation</label>
-              <input type="text" class="form-control" name="variation[{{$ky}}]" id="variation"
-                value="{{$variation->variation}}" placeholder="Variation">
-              </div>
-            </div>
+                    <!-- VARIATION Variation -->
+                    <div class="col-sm-1 nopadding">
+                      <div class="form-group">
+                      <label for="variation" class="col-form-label">Variation</label>
+                      <input type="text" class="form-control" name="variation[{{$ky}}]" id="variation"
+                        value="{{$variation->variation}}" placeholder="Variation">
+                      </div>
+                    </div>
 
-            <div class="col-sm-2 nopadding">
-              <div class="form-group">
-              <label for="variation_interval" class="col-form-label">Interval(AMC)</label>
-              <input type="number" class="form-control discount-percentage" id="variation_interval"
-                name="variation_interval[{{$ky}}]" value="{{$variation->variation_interval}}"
-                placeholder="In days">
-              </div>
-            </div>
+                    <!-- VARIATION Interval (AMC)  -->
+                    <div class="col-sm-2 nopadding">
+                      <div class="form-group">
+                      <label for="variation_interval" class="col-form-label">Interval(AMC)</label>
+                      <input type="number" class="form-control discount-percentage" id="variation_interval"
+                        name="variation_interval[{{$ky}}]" value="{{$variation->variation_interval}}"
+                        placeholder="In days">
+                      </div>
+                    </div>
 
+                    <!-- VARIATION TIMES (AMC)  -->
+                    <div class="col-sm-1 nopadding">
+                      <div class="form-group">
+                      <label for="variation_times" class="col-form-label">Times(AMC)</label>
+                      <input type="text" class="form-control discount-percentage" id="variation_times"
+                        name="variation_times[{{$ky}}]" pattern="[0-9]+" value="{{$variation->variation_times}}"
+                        placeholder="e.g., 5">
+                      </div>
+                    </div>
 
-            <div class="col-sm-1 nopadding">
-              <div class="form-group">
-              <label for="variation_times" class="col-form-label">Times(AMC)</label>
-              <input type="text" class="form-control discount-percentage" id="variation_times"
-                name="variation_times[{{$ky}}]" pattern="[0-9]+" value="{{$variation->variation_times}}"
-                placeholder="e.g., 5">
-              </div>
-            </div>
+                    <!-- VARIATION price  -->
+                    <div class="col-sm-1 nopadding">
+                      <div class="form-group">
+                      <label for="price" class="col-form-label">Price</label>
+                      <input type="text" class="form-control" id="var_price" name="price[{{$ky}}]" pattern="[0-9]+"
+                        value="{{$variation->price}}" placeholder="Price">
+                      </div>
+                    </div>
 
-            <div class="col-sm-1 nopadding">
-              <div class="form-group">
-              <label for="price" class="col-form-label">Price</label>
-              <input type="text" class="form-control" id="var_price" name="price[{{$ky}}]" pattern="[0-9]+"
-                value="{{$variation->price}}" placeholder="Price">
-              </div>
-            </div>
+                    <!-- VARIATION Discounted price  -->
+                    <div class="col-sm-2 nopadding">
+                      <div class="form-group">
+                      <label for="discounted_variation_price" class="col-form-label">Discounted Price</label>
+                      <input type="text" class="form-control discounted-pric" id="discounted_variation_price"
+                        name="discounted_variation_price[{{$ky}}]"
+                        value="{{ $variation->discounted_variation_price }}" pattern="[0-9]+"
+                        placeholder="{{ trans('placeholder.discounted_price') }}">
+                      </div>
+                    </div>
 
-            <div class="col-sm-2 nopadding">
-              <div class="form-group">
-              <label for="discounted_variation_price" class="col-form-label">Discounted Price</label>
-              <input type="text" class="form-control discounted-pric" id="discounted_variation_price"
-                name="discounted_variation_price[{{$ky}}]"
-                value="{{ $variation->discounted_variation_price }}" pattern="[0-9]+"
-                placeholder="{{ trans('placeholder.discounted_price') }}">
-              </div>
-            </div>
+                    <!-- VARIATION QTY  -->
+                    <div class="col-sm-1 nopadding">
+                      <div class="form-group">
+                      <label for="qty" class="col-form-label">{{ trans('Qty') }}</label>
+                      <input type="text" class="form-control" name="qty[{{$ky}}]" pattern="[0-9]+"
+                        value="{{ $variation->qty }}" id="qty" placeholder="QTY">
+                      </div>
+                    </div>
 
-            <div class="col-sm-1 nopadding">
-              <div class="form-group">
-              <label for="qty" class="col-form-label">{{ trans('Qty') }}</label>
-              <input type="text" class="form-control" name="qty[{{$ky}}]" pattern="[0-9]+"
-                value="{{ $variation->qty }}" id="qty" placeholder="QTY">
-              </div>
-            </div>
-            <div class="col-sm-1 nopadding">
-              <div class="form-group">
-              <div class="input-group">
-                <div class="input-group-btn">
-                <a href="javascript:void(0);" class="danger p-0"
-                  data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.delete') }}"
-                  onclick="do_delete('{{$variation->id}}','{{route('admin.variation.delete')}}','You want to Delete variation','{{ trans('labels.delete') }}')">
-                  <i class="ft-trash font-medium-3"></i>
-                </a>
-                </div>
-              </div>
-              </div>
-            </div>
-            </div>
+                    <!-- VARIATION SPECIFICATION -->
+                    <div class="form-group col-md-3">
+                      <label for="Specifications">Specifications</label>
+                      <div id="input-container-{{$ky}}">
+                        @php
+                          $specs = explode('|', $variation->description ?? '');
+                        @endphp
+
+                        @foreach ($specs as $key => $spec)
+                          <div class="d-flex mb-2" data-key="{{$key}}">
+                            <input type="text" class="form-control" name="specifications[{{$ky}}][{{$key}}]" 
+                              value="{{ trim($spec) }}" placeholder="Enter Specifications">
+                            @if ($key === 0)
+                              <span class="btn btn-success ml-3" id="add-button-{{$ky}}">+</span>
+                            @else
+                              <span class="btn btn-danger ml-3 remove-specification">-</span>
+                            @endif
+                          </div>
+                        @endforeach
+                      </div>
+                      <small id="error-message-{{$ky}}" class="text-danger"></small>
+                      @if ($errors->has('specifications'))
+                        <span class="text-danger">{{ $errors->first('specifications') }}</span>
+                      @endif
+                    </div>
+
+                    <!-- VARIATION IMAGES -->
+                      <div class="form-group col-md-3">
+                      <label for="Image">Image</label>
+                      <input type="file" class="form-control" name="attribute_image[]" id="attribute_image">
+                      @if ($errors->has('attribute_image'))
+                      <span class="text-danger">{{ $errors->first('attribute_image') }}</span>
+                      @endif
+                    </div>
+                    <img class="mt-4" src="{{ asset('/storage/app/public/variation/' . $variation->image) }}" alt="" height="50px" width="'50px">
+                    <!-- VARIATION TOTAL REVIEWS -->
+                    <div class="form-group col-md-2">
+                      <label for="Total_reviews">Total reviews</label>
+                      <input type="number" class="form-control" name="total_reviews[]" id="total_reviews"
+                      placeholder="Enter Total reviews " value="{{$variation->total_reviews}}">
+                      @if ($errors->has('total_reviews'))
+                    <span class="text-danger">{{ $errors->first('total_reviews') }}</span>
+                    @endif
+                    </div>
+                    <!-- VARIATION AVG RATING -->
+                    <div class="form-group col-md-2">
+                      <label for="Avg_rating">Avg Rating</label>
+                      <input type="text" class="form-control" name="avg_rating[]" id="avg_rating"
+                      placeholder="Enter Avg Rating" value="{{$variation->avg_rating}}">
+                      <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
+                      rating.</span>
+                      @if ($errors->has('avg_rating'))
+              <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
+            @endif
+                    </div>
+                    <div class="col-sm-1 nopadding">
+                      <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-btn">
+                        <a href="javascript:void(0);" class="danger p-0"
+                          data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.delete') }}"
+                          onclick="do_delete('{{$variation->id}}','{{route('admin.variation.delete')}}','You want to Delete variation','{{ trans('labels.delete') }}')">
+                          <i class="ft-trash font-medium-3"></i>
+                        </a>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                    </div>
           @endforeach
                   <!-- -------------------------------------- -->
                   <div class="col-sm-1 nopadding">
@@ -447,7 +511,6 @@
                   @foreach(old('update') as $quty)
             <input type="hidden" class="form-control" name="update[]" id="update">
             <div class="row removeclass{{$i}}">
-
             <div class="col-sm-3 nopadding">
             <div class="form-group">
               <label for="variation" class="col-form-label">Variation1</label>
@@ -507,7 +570,6 @@
             <?php    $i++; ?>
           @endforeach
         @endif
-
               </div>
             </div>
           </div>
@@ -525,8 +587,8 @@
                       placeholder="{{ trans('placeholder.description') }}">{!! $data->description !!}</textarea>
                     <div id="editor">{!! $data->description !!}</div>
                     @if ($errors->has('description'))
-            <span class="text-danger">{{ $errors->first('description') }}</span>
-          @endif
+                    <span class="text-danger">{{ $errors->first('description') }}</span>
+                   @endif
                   </div>
                 </div>
               </div>
@@ -547,8 +609,8 @@
                       required>{!! $data->faqs !!}</textarea>
                     <div id="faqeditor"></div>
                     @if ($errors->has('faqs'))
-                    <span class="text-danger">{{ $errors->first('faqs') }}</span>
-                    @endif
+                  <span class="text-danger">{{ $errors->first('faqs') }}</span>
+                  @endif
                   </div>
                 </div>
               </div>
@@ -594,7 +656,7 @@
         </div>
       </div>
       </div>
-    @endforeach
+      @endforeach
     </div>
   </section>
 </div>
@@ -636,9 +698,9 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('labels.close') }}</button>
           @if (env('Environment') == 'sendbox')
         <button type="button" class="btn btn-primary" onclick="myFunction()">{{ trans('labels.save') }}</button>
-      @else
-      <button type="submit" name="submit" id="submit" class="btn btn-primary">{{ trans('labels.save') }}</button>
-    @endif
+        @else
+        <button type="submit" name="submit" id="submit" class="btn btn-primary">{{ trans('labels.save') }}</button>
+        @endif
         </div>
       </div>
     </form>
@@ -792,7 +854,8 @@
     variationdata = "{{old('update') ? count(old('update')) + count($variations) : count($variations)}}";
 
     console.log(variationdata);
-  });
+});
+
 
   function variation_fields() {
 
@@ -801,6 +864,7 @@
     divtest.setAttribute("class", "form-group removeclass" + variationdata);
     var rdiv = 'removeclass' + variationdata;
     divtest.innerHTML = `
+    <div  class="pl-5 pt-3" style="solid 1px white; box-shadow: 0 4px 8px rgba(178, 236, 178, 0.5); border-radius: 5px;">
         <input type="hidden" class="form-control" name="update[]" id="update">
         <div class="row panel-body variation">
         <div class="col-sm-2 nopadding">
@@ -859,6 +923,36 @@
                 <input type="text" class="form-control qty-input" name="qty[`+ variationdata + `]" pattern="[0-9]+" placeholder="Qty">
             </div>
         </div>
+        <!-- VARIATION SPECIFICATIONS -->
+        <div class="form-group col-md-3">
+          <label for="Specifications">Specifications</label>
+          <div id="input-container-${variationdata}">
+            <div class="d-flex mb-2">
+              <input type="text" class="form-control" name="specifications[${variationdata}][0]" placeholder="Enter Specification">
+              <span class="btn btn-success ml-3" id="add-button-${variationdata}">+</span>
+            </div>
+          </div>
+          <div id="error-message-${variationdata}" class="text-danger"></div>
+        </div>
+        <!-- VARIATION IMAGES -->
+        <div class="form-group col-md-3">
+          <label for="Image">Image</label>
+          <input type="file" class="form-control" name="attribute_image[]" id="attribute_image">
+        </div>
+        <!-- VARIATION TOTAL REVIEWS -->
+        <div class="form-group col-md-2">
+          <label for="Total_reviews">Total reviews</label>
+          <input type="number" class="form-control" name="total_reviews[]" id="total_reviews"
+          placeholder="Enter Total reviews " >
+        </div>
+        <!-- VARIATION AVG RATING -->
+        <div class="form-group col-md-2">
+          <label for="Avg_rating">Avg Rating</label>
+          <input type="text" class="form-control" name="avg_rating[]" id="avg_rating"
+          placeholder="Enter Avg Rating" ">
+          <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
+          rating.</span>
+        </div>
         <div class="col-sm-1 nopadding">
             <div class="form-group">
                 <div class="input-group">
@@ -870,12 +964,46 @@
         </div>
         <div class="clear">
         
-        </div></div>`;
+        </div></div></div>`;
 
     // divtest.innerHTML = '<input type="hidden" class="form-control" name="update[]" id="update"><div class="row panel-body variation"><div class="col-sm-3 nopadding"> <div class="form-group"> <label for="variation" class="col-form-label">Variation</label> <input type="text" class="form-control" name="variation['+ variationdata +']" id="variation" placeholder="Variation" > </div></div><div class="col-sm-3 nopadding"> <div class="form-group"> <label for="price" class="col-form-label">Price</label> <input type="text" class="form-control" id="price" name="price['+ variationdata +']" pattern="[0-9]+" placeholder="Price" > </div></div><div class="col-sm-3 nopadding"> <div class="form-group"> <label for="discounted_variation_price" class="col-form-label">Discounted Price</label> <input type="text" class="form-control" id="discounted_variation_price" name="discounted_variation_price['+ variationdata +']" pattern="[0-9]+" placeholder="{{ trans('placeholder.discounted_price') }}"> </div></div><div class="col-sm-2 nopadding"> <div class="form-group"> <label for="qty" class="col-form-label">{{trans('labels.qty')}}</label> <input type="text" class="form-control" name="qty['+ variationdata +']" pattern="[0-9]+" id="qty"> </div></div><div class="col-sm-1 nopadding"> <div class="form-group"> <div class="input-group"> <div class="input-group-btn"> <button class="btn btn-danger" type="button" onclick="remove_variation_fields('+ variationdata +');"> - </button> </div></div></div></div><div class="clear"></div></div>';
     // counter.innerHTML = variationdata;
+
+
+
+
     variationdata++;
     objTo.appendChild(divtest)
+    const addButton = divtest.querySelector(`#add-button-${variationdata - 1}`);
+    const specificationContainer = divtest.querySelector(`#input-container-${variationdata - 1}`);
+    const errorMessage = divtest.querySelector(`#error-message-${variationdata - 1}`);
+    let currentIndex = 1;
+
+    addButton.addEventListener('click', function () {
+      const currentInputs = specificationContainer.querySelectorAll(`input[name^="specifications[${variationdata - 1}]"]`);
+      if (currentInputs.length >= 2) {
+        errorMessage.textContent = 'Maximum 2 specifications allowed.';
+        addButton.disabled = true;
+        return;
+      }
+      const newSpecification = document.createElement('div');
+      newSpecification.classList.add('d-flex', 'mb-2');
+      newSpecification.innerHTML = `
+      <input type="text" class="form-control" name="specifications[${variationdata - 1}][${currentIndex}]" placeholder="Enter Specification">
+      <span class="btn btn-danger ml-3 remove-specification">-</span>
+    `;
+      specificationContainer.appendChild(newSpecification);
+
+      // Remove specification functionality
+      newSpecification.querySelector('.remove-specification').addEventListener('click', function () {
+        newSpecification.remove();
+        errorMessage.textContent = '';
+        addButton.disabled = false;
+      });
+
+      currentIndex++;
+    });
+
   }
   function remove_variation_fields(rid) {
     $('.removeclass' + rid).remove();
@@ -1172,17 +1300,14 @@
       document.getElementById('discounted_price').value = '';
     }
   });
-
   // Function to handle discount calculation
   function calculateDiscount(inputElement) {
     const row = inputElement.closest('.row'); // Find the closest row
     const actualPriceElement = row.querySelector('.form-control[id="var_price"]');
     const discountPercentageElement = row.querySelector('.form-control.discount-percentage');
     const discountedPriceElement = row.querySelector('.form-control.discounted-price');
-
     const actualPrice = parseFloat(actualPriceElement.value);
     const discountPercentage = parseFloat(discountPercentageElement.value);
-
     if (!isNaN(actualPrice) && !isNaN(discountPercentage)) {
       const discountedPrice = actualPrice - (actualPrice * discountPercentage / 100);
       discountedPriceElement.value = discountedPrice.toFixed(2);
@@ -1197,6 +1322,63 @@
       calculateDiscount(event.target);
     }
   });
+
+
+  //SPECIFICATION 
+  document.addEventListener('DOMContentLoaded', function () {
+  const variationDataElements = document.querySelectorAll('[id^="input-container-"]');
+
+  variationDataElements.forEach((divtest) => {
+    const ky = divtest.id.split('-')[2]; // Extract the ky value from the id
+    const addButton = document.querySelector(`#add-button-${ky}`);
+    const specificationContainer = divtest;
+    const errorMessage = document.querySelector(`#error-message-${ky}`);
+    let currentIndex = specificationContainer.querySelectorAll(`input[name^="specifications[${ky}]"]`).length;
+
+    if (addButton) {
+      addButton.addEventListener('click', function () {
+        const currentInputs = specificationContainer.querySelectorAll(`input[name^="specifications[${ky}]"]`);
+        if (currentInputs.length >= 2) {
+          errorMessage.textContent = 'Maximum 2 specifications allowed.';
+          addButton.disabled = true;
+          return;
+        }
+
+        const newSpecification = document.createElement('div');
+        newSpecification.classList.add('d-flex', 'mb-2');
+        newSpecification.innerHTML = `
+          <input type="text" class="form-control" name="specifications[${ky}][${currentIndex}]" placeholder="Enter Specification">
+          <span class="btn btn-danger ml-3 remove-specification">-</span>
+        `;
+        specificationContainer.appendChild(newSpecification);
+
+        // Remove specification functionality
+        newSpecification.querySelector('.remove-specification').addEventListener('click', function () {
+          newSpecification.remove();
+          errorMessage.textContent = '';
+          addButton.disabled = false;
+        });
+
+        currentIndex++;
+      });
+    }
+
+    // Remove existing specification functionality
+    const removeButtons = specificationContainer.querySelectorAll('.remove-specification');
+    removeButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        button.parentElement.remove();
+        errorMessage.textContent = '';
+        addButton.disabled = false;
+      });
+    });
+  });
+});
+
+
+
+
+
 
 </script>
 

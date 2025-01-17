@@ -14,6 +14,7 @@
         </tr>
     </thead>
     <tbody>
+
         @php $n=0 @endphp
         @forelse($data as $row)
         <tr id="del-{{$row->id}}">
@@ -60,6 +61,8 @@
         @endforelse
     </tbody>
 </table>
+
+
 
 <script>
     function toggleDropdown(id) {

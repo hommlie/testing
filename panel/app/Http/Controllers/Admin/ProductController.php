@@ -64,7 +64,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         if ($request->is_variation == "on") {
             $this->validate($request, [
                 'available_stock' => 'nullable',
@@ -76,9 +75,12 @@ class ProductController extends Controller
                 'price.*' => 'nullable',
                 'discounted_variation_price.*' => 'nullable',
                 'qty.*' => 'nullable',
+                'specifications.*' => 'nullable',
+                'total_reviews.*' => 'nullable',
+                'avg_rating.*' => 'nullable',
+                'attribute_image.*' => 'nullable',
             ]);
             $is_variation = 1;
-
             $product_price = $request->price[0];
             $discounted_price = $request->discounted_variation_price[0];
 
@@ -96,7 +98,6 @@ class ProductController extends Controller
                 'description' => 'nullable',
             ]);
             $is_variation = 0;
-
             $product_price = $request->product_price;
             $discounted_price = $request->discounted_price;
 
@@ -153,9 +154,6 @@ class ProductController extends Controller
         // } else {
         //     $tags = implode(', ', $request->tags);
         // }
-
-
-
 
         // $tags = "na";
 
@@ -289,7 +287,13 @@ class ProductController extends Controller
             $price = $request->price;
             $discounted_variation_price = $request->discounted_variation_price;
             $qty = $request->qty;
+            $total_reviews = $request->total_reviews;
+            $avg_rating = $request->avg_rating;
 
+            $specification = array_map(function ($innerArray) {
+                return implode('|', $innerArray);
+            }, $request->specifications);
+    
             foreach ($price as $i => $no) {
                 $input['product_id'] = $data->id;
                 $input['price'] = $price[$i];
@@ -299,6 +303,16 @@ class ProductController extends Controller
                 $input['variation_interval'] = $variation_interval[$i];
                 $input['variation_times'] = $variation_times[$i];
                 $input['qty'] = $qty[$i];
+                $input['total_reviews'] = $total_reviews[$i];
+                $input['avg_rating'] = $avg_rating[$i];
+                $input['description'] = $specification[$i+1];
+
+                if ($request->hasFile('attribute_image') && isset($request->attribute_image[$i])) {
+                    $attributeImage = $request->file('attribute_image')[$i];
+                    $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
+                    $attributeImage->move(public_path('/storage/app/public/variation/'), $attributeImageFileName);
+                    $input['image'] = $attributeImageFileName;
+                }
 
                 Variation::create($input);
             }
@@ -326,9 +340,9 @@ class ProductController extends Controller
         $attribute = Attribute::select('id', 'attribute')->where('status', '1')->get();
         $images = ProductImages::select('id', 'product_id', 'alt_tag', 'image_title', \DB::raw("CONCAT('" . url('/storage/app/public/images/products/') . "/', image) AS image_url"))
             ->where('product_id', $id)
-            ->where('media', 'image') // Filter only images
+            ->where('media', 'image') 
             ->get();
-        $video = ProductImages::select('id', 'product_id', 'image') // Select the raw 'image' value
+        $video = ProductImages::select('id', 'product_id', 'image') 
             ->where('product_id', $id)
             ->where('media', 'video') // Filter for videos only
             ->first(); // Retrieve only one record
@@ -359,6 +373,7 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
+        // dd($request->all());
         if ($request->is_variation != null and $request->is_variation == "on") {
 
             $this->validate($request, [
@@ -371,17 +386,16 @@ class ProductController extends Controller
                 'price.*' => 'nullable',
                 'discounted_variation_price.*' => 'nullable',
                 'qty.*' => 'nullable',
+                'specifications.*' => 'nullable',
+                'total_reviews.*' => 'nullable',
+                'avg_rating.*' => 'nullable',
+                'attribute_image.*' => 'nullable',
             ]);
-
-
-
 
             $is_variation = 1;
             $product_price = $request->product_price;
             $product_qty = $request->product_qty;
             $discounted_price = $request->discounted_price;
-
-
             $variation = $request->variation;
             $attribute_id = $request->attribute;
             $variation_interval = $request->variation_interval;
@@ -389,12 +403,15 @@ class ProductController extends Controller
             $price = $request->price;
             $discounted_variation_price = $request->discounted_variation_price;
             $qty = $request->qty;
+            $total_reviews = $request->total_reviews;
+            $avg_rating = $request->avg_rating;
 
-
+            $specification = array_map(function ($innerArray) {
+                return implode('|', $innerArray);
+            }, $request->specifications);
 
             if (is_array($variation) || is_object($variation)) {
                 foreach ($variation as $i => $no) {
-
                     if ($no != "") {
                         $input = [
                             'attribute_id' => $attribute_id[$i],
@@ -405,8 +422,18 @@ class ProductController extends Controller
                             'variation' => $variation[$i],
                             'qty' => $qty[$i],
                             'product_id' => $request->product_id,
+                            'total_reviews' => $total_reviews[$i],
+                           'avg_rating'=> $avg_rating[$i],
+                            'description' => $specification[$i],
                         ];
 
+                        if ($request->hasFile('attribute_image') && isset($request->attribute_image[$i])) {
+                            $attributeImage = $request->file('attribute_image')[$i];
+                            $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
+                            $attributeImage->move(public_path('/storage/app/public/variation/'), $attributeImageFileName);
+                            $input['image'] = $attributeImageFileName;  // Corrected line
+                        }
+                        
                         if (isset($request->variation_id[$i])) {
                             // Update existing variation
                             Variation::where('id', $request->variation_id[$i])->update($input);

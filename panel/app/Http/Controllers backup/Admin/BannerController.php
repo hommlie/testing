@@ -18,7 +18,7 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $data = Banner::with('product')->with('category')->whereIn('positions', ['banner','bannerPest', 'bannerBird','bannerMosqito','bannerQuickService','bannerReferEarn'])->get();
+        $data = Banner::with('product')->with('category')->whereIn('positions', ['banner','bannerPest', 'bannerBird','bannerMosqito','bannerQuickService','bannerReferEarn','bannerCategory'])->get();
         return view('admin.banner.index', compact('data'));
     }
 
@@ -137,13 +137,31 @@ class BannerController extends Controller
     public function destroy(Request $request)
     {
         $this->validate($request, [
-            'id' => 'required',
+            'id' => 'required|integer',
         ]);
-        $data = Banner::where('id', $request->id)->delete();
-        if ($data) {
-            return 1000;
-        } else {
+        $banner = Banner::with('product', 'category')->find($request->id);
+    
+        if (!$banner) {
             return 2000;
         }
+        $restrictedPositions = [
+            'bannerPest',
+            'bannerBird',
+            'bannerMosqito',
+            'bannerQuickService',
+            'bannerReferEarn',
+            'bannerCategory',
+        ];
+    
+        if (in_array($banner->positions, $restrictedPositions)) {
+            $banner->status = $banner->status == 1 ? 0 : 1;
+            
+            $banner->save();
+            return 1000;
+        } else {
+            $banner->delete();
+            return 1000;
+        }
     }
+    
 }

@@ -52,10 +52,10 @@
 
 
                         <div class="d-flex " style="margin-left:70%;">
-                           {{-- <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
+                            <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
                                 data-bs-toggle="modal" data-bs-target="#SR_ID">
-                                SR-ID Close
-                            </a>--}}
+                                GET OTP
+                            </a>
                             <a href="{{ route('admin.orders.add') }}"
                                 class="btn btn-raised btn-primary text-light btn-min-width mb-0 me-2 "
                                 style="margin-left:5%;">
@@ -89,7 +89,8 @@
                                                 <th>Mobile</th>
                                                 <th>Email</th>
                                                 <th>Service Date</th>
-                                                <th>Action</th>
+                                                <th>OTP</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -120,8 +121,13 @@
                                 <button class="btn btn-sm btn-outline-success round-pill mx-2" id="filter_custom">Custom
                                     Date</button>
                                 <a href="orders" class="btn btn-sm btn-outline-success round-pill mx-2"
-                                    id="filter_reset">Reset Filter</a>
-                            </div>
+                                    id="filter_reset"> Reset Filter</a>
+
+                                <a href="orders" class="btn btn-sm btn-outline-success round-pill mx-2" id="dwCsv"><i
+                                        class="fa fa-download"></i>CSV</a>
+                                <a href="orders" class="btn btn-sm btn-outline-success round-pill mx-2" id="dwExcel"><i
+                                        class="fa fa-download"> </i> Excel</a>
+                            </div><br />
 
                             <div id="custom_date_filter" style="display:none;">
                                 <label for="start_date">Start Date:</label>
@@ -133,6 +139,7 @@
                             </div>
                             <br>
 
+
                             @include('admin.orders.ordersstable')
                         </div>
                     </div>
@@ -142,7 +149,7 @@
 
     </section>
 </div>
-
+<
 
 @endsection
 @section('scripttop')
@@ -156,7 +163,7 @@
         var orderID = document.getElementById('orderID').value.trim();
 
         const tableBody = document.getElementById("orderDataTable").getElementsByTagName("tbody")[0];
-        tableBody.innerHTML = ""; // Clear the table body
+        tableBody.innerHTML = ""; 
 
         if (orderID === "") {
             const row = document.createElement("tr");
@@ -165,13 +172,11 @@
         `;
             tableBody.appendChild(row);
 
-            return; // Exit the function if orderID is empty
+            return; 
         }
-
-        // Show loading indicator
         const loadingRow = document.createElement("tr");
         loadingRow.innerHTML = `
-        <td colspan="8" style="text-align: center; font-weight: bold;">Loading...</td>
+        <td colspan="8" style="text-align: center; font-weight: bold;"><i class="fa fa-spinner fa-spin" style="font-size:20px;"></i></td>
     `;
         tableBody.appendChild(loadingRow);
 
@@ -185,7 +190,7 @@
             })
             .then(data => {
                 console.log('Order Data:', data);
-                tableBody.innerHTML = ""; // Clear the table body before adding new rows
+                tableBody.innerHTML = ""; 
 
                 if (data.length === 0) {
                     const row = document.createElement("tr");
@@ -193,32 +198,36 @@
                     <td colspan="8"  style="text-align: center; font-weight: bold;">No data available</td>
                 `;
                     tableBody.appendChild(row);
-                } else {
-                    data.forEach(orderData => {
+                }else {
+                        data.forEach(orderData => {
                         
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                        <td>SR-${orderData.id}</td>
-                        <td>${orderData.order_number}</td>
-                        <td>${orderData.full_name}</td>
-                        <td>${orderData.product_name}</td>
-                        <td>${orderData.mobile}</td>
-                        <td>${orderData.email}</td>
-                        <td>${orderData.desired_date}</td>
-                        <td>
-                        <select class='form-control'>
-                       
-                        <option>Order placed</option>
-                        <option>Confirmed</option>
-                        <option>Order shipped</option>
-                        <option>Delivered</option>
-                        </select>
-                        </td>
-                    `;
-                        tableBody.appendChild(row);
-                    });
-                }
-
+                            const row = document.createElement("tr");
+                            const otpCell = `<i class="fa fa-spinner fa-spin" style="font-size:15px; color:green;"></i>`;
+                            row.innerHTML = `
+                                <td>SR-${orderData.id}</td>
+                                <td>${orderData.order_number}</td>
+                                <td>${orderData.full_name}</td>
+                                <td>${orderData.product_name}</td>
+                                <td>${orderData.mobile}</td>
+                                <td>${orderData.email}</td>
+                                <td>${orderData.desired_date}</td>
+                                <td class="otp-cell">${otpCell}</td>
+                                <td>
+                                <!-- <select class='form-control'>
+                                    <option>Order placed</option>
+                                    <option>Confirmed</option>
+                                    <option>Order shipped</option>
+                                    <option>Delivered</option>
+                                </select> -->
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                            if (orderData.otp) {
+                                const otpElement = row.querySelector(".otp-cell");
+                                otpElement.innerHTML = orderData.otp;
+                            }
+                        });
+                    }
                 $('#SR_ID').modal('show');
             })
             .catch(error => {
@@ -231,7 +240,6 @@
                 tableBody.appendChild(errorRow);
             });
     });
-
 
 
     $(document).ready(function () {
@@ -353,7 +361,33 @@
             table.draw(); // Redraw the table to apply the date filter
         }
     });
+
+    //Download Excel Data 
+    document.getElementById("dwExcel").addEventListener("click", function () {
+        const data2 = @json($data1);
+        const worksheet = XLSX.utils.json_to_sheet(data2);
+        const header = worksheet['!cols'] = worksheet['!cols'] || [];
+        header[0] = { width: 30 };
+        header[1] = { width: 50 };
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+        XLSX.writeFile(workbook, "orders.xlsx");
+    });
+
+    //Download CSV Data
+    document.getElementById("dwCsv").addEventListener("click", function () {
+        const data2 = @json($data1);
+        const worksheet = XLSX.utils.json_to_sheet(data2);
+        const csv = XLSX.utils.sheet_to_csv(worksheet);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "orders.csv";
+        link.click();
+    });
+
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 
 
 @endsection

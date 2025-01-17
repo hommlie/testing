@@ -10,6 +10,7 @@ class AppHeader extends Model
         'text_color',
         'image',
         'sub_text_color',  
+        'status',
     ];
 }
 

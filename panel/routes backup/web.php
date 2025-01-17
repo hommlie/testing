@@ -463,18 +463,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         
     });
 
-    
     // COMPALINT MANAGEMENT (Help's) 
     Route::group(['prefix'=> 'complaint'], function () {
         Route::get('/', 'ComplaintController@index')->name('complaint');
         Route::get('/add', 'ComplaintController@create')->name('complaint.add');
-        Route::post('/store', 'ComplaintController@store')->name('complaint.store');
-
-       
-        
-        
+        Route::post('/store', 'ComplaintController@store')->name('complaint.store'); 
     });
 
+    //MANAGE 
+    Route::group(['prefix'=> 'businessregistration'], function () {
+        Route::get('/', 'BusinessRegistrationController@index')->name('businessregistration');
+        Route::get('/add', 'BusinessRegistrationController@create')->name('businessregistration.add');
+        Route::post('/store', 'BusinessRegistrationController@store')->name('complaint.store'); 
+    });
 
     // INSPECTIONS MANAGEMENT  
     Route::group(['prefix'=> 'inspections'], function () {
@@ -489,6 +490,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
         Route::post('/update/{id}', 'AppHeaderController@update')->name('appheader.update');
     });
+
     // SEARCH STATE
     Route::get('/get-states', function (\Illuminate\Http\Request $request) {
         $zone = $request->query('zone');

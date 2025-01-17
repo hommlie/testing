@@ -41,6 +41,26 @@ class AppHeaderController extends   Controller{
         $appHeader->save();
         return redirect()->route('admin.appheader')->with('success', 'App Header Data updated successfully!');
     }
+
+    public function changeStatus(Request $request)
+
+    {
+        // dd($request->all());
+        $this->validate($request, [
+            'id' => 'required',
+        ]);
+
+        $currentStatus = AppHeader::where('id', $request->id)->value('status');
+        $newStatus = ($currentStatus == 1) ? 0 : 1;
+    
+        $data['status'] = $newStatus;
+        $updateStatus = AppHeader::where('id', $request->id)->update($data);
+        if ($updateStatus) {
+            return 1000; 
+        } else {
+            return 2000;
+        }
+    }
     
     
 }
