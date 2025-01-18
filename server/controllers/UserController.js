@@ -69,7 +69,7 @@ function generateReferralCode() {
 }
 
 exports.verifyOtp = async (req, res) => {
-  const { mobile, otp, referral_code, name } = req.body;
+  const { mobile, otp, referral_code, name, app_token } = req.body;
 
   if (!mobile || !otp) {
     return res.status(200).json({ status: 0, message: 'Mobile and OTP are required' });
@@ -98,8 +98,11 @@ exports.verifyOtp = async (req, res) => {
         referred_id: referringUser ? referringUser.id : null,
         referral_code: newReferralCode,
         is_verified: 1,
+        token: app_token
       });
     }
+
+    await User.update({ token: app_token }, { where: { id: user.id } });
 
     var options = {
       method: 'GET',
