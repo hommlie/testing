@@ -1,41 +1,75 @@
-const sequelize = require('../config/connection');
-const { AppHeader, Product, User, Banner, Brand, Category, Subcategory, Innersubcategory, Attribute, ProductImage, Variation, Ratting, Wishlist } = require('../models');
-const { fetchProductReviews } = require('../middleware/getCommonData');
+const sequelize = require("../config/connection");
+const {
+  AppHeader,
+  Product,
+  User,
+  Banner,
+  Brand,
+  Category,
+  Subcategory,
+  Innersubcategory,
+  Attribute,
+  ProductImage,
+  Variation,
+  Ratting,
+  Wishlist,
+} = require("../models");
+const { fetchProductReviews } = require("../middleware/getCommonData");
 
 const apiUrl = process.env.apiUrl;
 
 exports.getCategory = async (req, res) => {
-
   try {
     const categoryData = await Category.findAll({
       attributes: [
-        'id', 
-        'category_name', 
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', icon)`), 'app_icon'],
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
-        'video',
-        'thumbnail',
-        'is_form',
-        'is_page',
-        'slug',
-        'alt_tag',
-        'image_title',
-        'meta_title',
-        'meta_description',
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+        "id",
+        "category_name",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', icon)`
+          ),
+          "app_icon",
+        ],
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+          ),
+          "image_url",
+        ],
+        "video",
+        "thumbnail",
+        "is_form",
+        "is_page",
+        "slug",
+        "alt_tag",
+        "image_title",
+        "meta_title",
+        "meta_description",
+        "location",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`
+          ),
+          "motion_graphics",
+        ],
       ],
       where: { status: 1 },
-      limit: 6
+      limit: 6,
     });
-    
+
     // Fetch app header data
     const appHeaders = await AppHeader.findAll({
       attributes: [
-        'id', 
-        'bg_color', 
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/appHeaderImgae/', image)`), 'image'],
-        'text_color',
-        'sub_text_color',
+        "id",
+        "bg_color",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/appHeaderImgae/', image)`
+          ),
+          "image",
+        ],
+        "text_color",
+        "sub_text_color",
       ],
     });
 
@@ -43,7 +77,7 @@ exports.getCategory = async (req, res) => {
     let app_header = {};
     let shop_header = {};
 
-    appHeaders.forEach(header => {
+    appHeaders.forEach((header) => {
       if (header.id === 1) {
         app_header = header;
       } else if (header.id === 2) {
@@ -52,122 +86,171 @@ exports.getCategory = async (req, res) => {
     });
 
     if (categoryData.length > 0) {
-      return res.status(200).json({ status: 1, message: 'Success', data: categoryData, app_header, shop_header });
+      return res.status(200).json({
+        status: 1,
+        message: "Success",
+        data: categoryData,
+        app_header,
+        shop_header,
+      });
     } else {
-      return res.status(200).json({ status: 0, message: 'No data found' });
+      return res.status(200).json({ status: 0, message: "No data found" });
     }
   } catch (error) {
-    return res.status(500).json({ status: 0, message: 'Error occurred', error: error });
+    return res
+      .status(500)
+      .json({ status: 0, message: "Error occurred", error: error });
   }
-  
 };
 
 exports.getSubcategory = async (req, res) => {
   try {
-    
     const { cat_id } = req.body;
 
     const subcategoryData = await Subcategory.findAll({
       attributes: [
-        'id',
-        'subcategory_name',
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url'],
-        'video',
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.thumbnail)`), 'thumbnail'],
-        'slug',
-        'alt_tag',
-        'image_title',
-        'meta_title', 
-        'meta_description', 
-        'subcategory_title', 
-        'subcategory_sub_title', 
+        "id",
+        "subcategory_name",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+          ),
+          "image_url",
+        ],
+        "video",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.thumbnail)`
+          ),
+          "thumbnail",
+        ],
+        "slug",
+        "alt_tag",
+        "image_title",
+        "meta_title",
+        "meta_description",
+        "subcategory_title",
+        "subcategory_sub_title",
+        "location",
       ],
       include: [
         {
           model: Category,
           attributes: [
-            'id', 
-            'category_name', 
-            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
+            "id",
+            "category_name",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+              ),
+              "image_url",
+            ],
             // 'video',
             // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
-            'is_form',
-            'is_page',
-            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+            "is_form",
+            "is_page",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`
+              ),
+              "motion_graphics",
+            ],
           ],
-          as: 'category'
+          as: "category",
         },
       ],
-      where: { cat_id, status: 1 }
+      where: { cat_id, status: 1 },
     });
 
-    const subcategory = await Promise.all(subcategoryData.map(async (sub) => {
-      
-      // const innersubcategoryData = await Innersubcategory.findAll({
-      //   attributes: ['id', 'innersubcategory_name'],
-      //   where: { subcat_id: sub.id, status: 1 }
-      // });
+    const subcategory = await Promise.all(
+      subcategoryData.map(async (sub) => {
+        // const innersubcategoryData = await Innersubcategory.findAll({
+        //   attributes: ['id', 'innersubcategory_name'],
+        //   where: { subcat_id: sub.id, status: 1 }
+        // });
 
-      const productsData = await Product.findAll({
-        attributes: [
-          'id',
-          'product_name',
-          'product_price',
-          'discounted_price',
-          'is_variation',
-          'sku',
-          'slug',
-        ],
-        include: [
-          {
-            model: ProductImage,
-            attributes: ['id', 'product_id', [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('productimage.image')), 'image_url'], 'alt_tag', 'image_title' ],
-            where: { media: 'Image' },
-            as: 'productimage'
+        const productsData = await Product.findAll({
+          attributes: [
+            "id",
+            "product_name",
+            "product_price",
+            "discounted_price",
+            "is_variation",
+            "sku",
+            "slug",
+          ],
+          include: [
+            {
+              model: ProductImage,
+              attributes: [
+                "id",
+                "product_id",
+                [
+                  sequelize.fn(
+                    "CONCAT",
+                    sequelize.literal(
+                      `'${apiUrl}/storage/app/public/images/products/'`
+                    ),
+                    sequelize.col("productimage.image")
+                  ),
+                  "image_url",
+                ],
+                "alt_tag",
+                "image_title",
+              ],
+              where: { media: "Image" },
+              as: "productimage",
+            },
+            {
+              model: Variation,
+              as: "variations",
+            },
+            {
+              model: Ratting,
+              as: "rattings",
+            },
+          ],
+          where: {
+            subcat_id: sub.id,
+            status: 1,
           },
-          {
-            model: Variation,
-            as: 'variations'
-          },
-          {
-            model: Ratting,
-            as: 'rattings'
-          }
-        ],
-        where: {
+          order: [["id", "DESC"]],
+        });
+
+        return {
           subcat_id: sub.id,
-          status: 1,
-        },
-        order: [['id', 'DESC']],
-      });
-
-      return {
-        subcat_id: sub.id,
-        subcategory_name: sub.subcategory_name,
-        subcategory_icon: sub.getDataValue('image_url'),
-        meta_title: sub.meta_title, 
-        meta_description: sub.meta_description, 
-        subcategory_title: sub.subcategory_title, 
-        subcategory_sub_title: sub.subcategory_sub_title,
-        slug: sub.slug,
-        // is_page_category: sub.category.is_page,
-        category: sub.category,
-        // innersubcategory: innersubcategoryData.map(inner => ({
-        //   id: inner.id,
-        //   innersubcategory_name: inner.innersubcategory_name
-        // })),
-        // productsData: productsData
-      };
-
-    }));
+          subcategory_name: sub.subcategory_name,
+          subcategory_icon: sub.getDataValue("image_url"),
+          meta_title: sub.meta_title,
+          meta_description: sub.meta_description,
+          subcategory_title: sub.subcategory_title,
+          subcategory_sub_title: sub.subcategory_sub_title,
+          slug: sub.slug,
+          location: sub.location,
+          // is_page_category: sub.category.is_page,
+          category: sub.category,
+          // innersubcategory: innersubcategoryData.map(inner => ({
+          //   id: inner.id,
+          //   innersubcategory_name: inner.innersubcategory_name
+          // })),
+          // productsData: productsData
+        };
+      })
+    );
 
     if (subcategory.length > 0) {
-      return res.status(200).json({ status: 1, message: 'Success', data: { subcategory } });
+      return res
+        .status(200)
+        .json({ status: 1, message: "Success", data: { subcategory } });
     } else {
-      return res.status(200).json({ status: 0, message: 'No subscategory data found' });
+      return res
+        .status(200)
+        .json({ status: 0, message: "No subscategory data found" });
     }
   } catch (error) {
-    return res.status(500).json({ status: 0, message: 'Error occurred', error: error.message });
+    return res
+      .status(500)
+      .json({ status: 0, message: "Error occurred", error: error.message });
   }
 };
 
@@ -178,95 +261,118 @@ exports.getCleaningSubcategory = async (req, res) => {
     if (!subcat_id) {
       return res.status(400).json({
         status: 0,
-        message: 'subcat_id is required',
+        message: "subcat_id is required",
       });
     }
 
     // Fetch subcategory data
     const subcategoryData = await Subcategory.findOne({
       attributes: [
-        'id',
-        'subcategory_name',
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`), 'image_url'],
-        [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`), 'banner'],
-        'video',
-        'thumbnail',
-        'slug',
-        'alt_tag',
-        'image_title'
+        "id",
+        "subcategory_name",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+          ),
+          "image_url",
+        ],
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`
+          ),
+          "banner",
+        ],
+        "video",
+        "thumbnail",
+        "slug",
+        "alt_tag",
+        "image_title",
+        "location",
       ],
       include: [
         {
           model: Category,
-          as: 'category',
+          as: "category",
           attributes: [
-            'id', 
-            'category_name', 
-            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`), 'image_url'],
-            'video',
-            'thumbnail',
-            'is_form',
-            'is_page',
-            'slug',
-            'alt_tag',
-            'image_title',
-            'meta_title',
-            'meta_description',
-            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`), 'motion_graphics'],
+            "id",
+            "category_name",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+              ),
+              "image_url",
+            ],
+            "video",
+            "thumbnail",
+            "is_form",
+            "is_page",
+            "slug",
+            "alt_tag",
+            "image_title",
+            "meta_title",
+            "meta_description",
+            "location",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`
+              ),
+              "motion_graphics",
+            ],
           ],
-        }
+        },
       ],
-      where: { 
-        id: subcat_id, 
-        status: 1 
-      }
+      where: {
+        id: subcat_id,
+        status: 1,
+      },
     });
 
     if (!subcategoryData) {
       return res.status(404).json({
         status: 0,
-        message: 'Subcategory not found or inactive',
+        message: "Subcategory not found or inactive",
       });
     }
 
     // Fetch products for the specific subcategory with detailed information
     const products = await Product.findAll({
-      where: { 
-        subcat_id: subcat_id, 
-        status: 1 
+      where: {
+        subcat_id: subcat_id,
+        status: 1,
       },
       attributes: [
-        'id', 
-        'product_name', 
-        'product_price', 
-        'cat_id',
-        'discounted_price', 
-        'description',
-        'tags',
-        'product_qty',
-        'is_variation',
-        'vendor_id',
-        'sku',
-        'free_shipping',
-        'shipping_cost',
-        'tax_type',
-        'tax',
-        'est_shipping_days',
-        'is_return',
-        'return_days',
-        'faqs',
-        'slug'
+        "id",
+        "product_name",
+        "product_price",
+        "cat_id",
+        "discounted_price",
+        "description",
+        "tags",
+        "product_qty",
+        "is_variation",
+        "vendor_id",
+        "sku",
+        "free_shipping",
+        "shipping_cost",
+        "tax_type",
+        "tax",
+        "est_shipping_days",
+        "is_return",
+        "return_days",
+        "faqs",
+        "slug",
+        "location",
       ],
       include: [
         {
           model: ProductImage,
           attributes: [
-            'id',
-            'product_id',
-            'media',
-            'thumbnail',
-            'alt_tag',
-            'image_title',
+            "id",
+            "product_id",
+            "media",
+            "thumbnail",
+            "alt_tag",
+            "image_title",
             [
               sequelize.literal(`
                 CASE 
@@ -275,154 +381,180 @@ exports.getCleaningSubcategory = async (req, res) => {
                   ELSE NULL
                 END
               `),
-              'image_url'
-            ]
+              "image_url",
+            ],
           ],
-          where: { media: 'Image' },
-          as: 'productimages'
+          where: { media: "Image" },
+          as: "productimages",
         },
         {
           model: Variation,
           attributes: [
-            'id',
-            'product_id',
-            'attribute_id',
-            'price',
-            'description',
-            'discounted_variation_price',
-            'variation',
-            'variation_interval',
-            'variation_times',
-            [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/attribute/', variations.image)`), 'image'],
-            'total_reviews',
-            'avg_rating',
-            'qty',
-            'created_at',
-            'updated_at'
+            "id",
+            "product_id",
+            "attribute_id",
+            "price",
+            "description",
+            "discounted_variation_price",
+            "variation",
+            "variation_interval",
+            "variation_times",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/attribute/', variations.image)`
+              ),
+              "image",
+            ],
+            "total_reviews",
+            "avg_rating",
+            "qty",
+            "created_at",
+            "updated_at",
           ],
           include: [
             {
               model: Attribute,
               attributes: [
-                'id', 
-                'attribute',
-                'specifications',
-                [sequelize.fn('CONCAT', `${apiUrl}/storage/app/public/images/variation/`, sequelize.col('variations->attribute.image')), 'image'],
-                'total_reviews',
-                'avg_rating',
+                "id",
+                "attribute",
+                "specifications",
+                [
+                  sequelize.fn(
+                    "CONCAT",
+                    `${apiUrl}/storage/app/public/images/variation/`,
+                    sequelize.col("variations->attribute.image")
+                  ),
+                  "image",
+                ],
+                "total_reviews",
+                "avg_rating",
               ],
               where: { status: 1 },
-              as: 'attribute',
+              as: "attribute",
             },
           ],
-          as: 'variations',
-          required: false
+          as: "variations",
+          required: false,
         },
         {
           model: Ratting,
-          as: 'rattings',
-          required: false
+          as: "rattings",
+          required: false,
         },
-        { model: Category, attributes: ['category_name', 'is_form', 'is_page',], as: 'category' },
-        { model: Subcategory, attributes: ['subcategory_name'], as: 'subcategory' }
+        {
+          model: Category,
+          attributes: ["category_name", "is_form", "is_page"],
+          as: "category",
+        },
+        {
+          model: Subcategory,
+          attributes: ["subcategory_name"],
+          as: "subcategory",
+        },
       ],
-      order: [['id', 'DESC']],
+      order: [["id", "DESC"]],
     });
     // Transform the products data
-    const transformedProducts = await Promise.all(products.map(async (product) => {
-      const plainProduct = product.get({ plain: true });
+    const transformedProducts = await Promise.all(
+      products.map(async (product) => {
+        const plainProduct = product.get({ plain: true });
 
-      const reviewsData = fetchProductReviews(product.id);
+        const reviewsData = fetchProductReviews(product.id);
 
-      // Group variations by attribute_id
-      const groupedVariations = plainProduct.variations.reduce((acc, variation) => {
-        // Create variation object without attribute info
-        const variationData = {
-          id: variation.id,
-          product_id: variation.product_id,
-          price: variation.price,
-          discounted_variation_price: variation.discounted_variation_price,
-          variation: variation.variation,
-          variation_interval: variation.variation_interval,
-          variation_times: variation.variation_times,
-          description: variation.description,
-          image: variation.image,
-          total_reviews: variation.total_reviews,
-          avg_rating: variation.avg_rating,
-          qty: variation.qty,
-          created_at: variation.created_at,
-          updated_at: variation.updated_at
+        // Group variations by attribute_id
+        const groupedVariations = plainProduct.variations.reduce(
+          (acc, variation) => {
+            // Create variation object without attribute info
+            const variationData = {
+              id: variation.id,
+              product_id: variation.product_id,
+              price: variation.price,
+              discounted_variation_price: variation.discounted_variation_price,
+              variation: variation.variation,
+              variation_interval: variation.variation_interval,
+              variation_times: variation.variation_times,
+              description: variation.description,
+              image: variation.image,
+              total_reviews: variation.total_reviews,
+              avg_rating: variation.avg_rating,
+              qty: variation.qty,
+              created_at: variation.created_at,
+              updated_at: variation.updated_at,
+            };
+
+            // Check if attribute group exists
+            const existingGroup = acc.find(
+              (group) => group.attribute_id === variation.attribute_id
+            );
+
+            if (existingGroup) {
+              // Add variation to existing group
+              existingGroup.variations.push(variationData);
+            } else {
+              // Create new attribute group
+              acc.push({
+                attribute_id: variation.attribute_id,
+                attribute_name: variation.attribute.attribute,
+                specifications: variation.attribute.specifications,
+                image: variation.attribute.image,
+                total_reviews: variation.attribute.total_reviews,
+                avg_rating: variation.attribute.avg_rating,
+                variations: [variationData],
+                reviewsData,
+              });
+            }
+
+            return acc;
+          },
+          []
+        );
+
+        // Get return policy
+        const returnPolicy = await User.findOne({
+          where: { id: product.vendor_id },
+          attributes: ["return_policies"],
+        });
+
+        // Remove the original variations array
+        delete plainProduct.variations;
+
+        return {
+          ...plainProduct,
+          attributes: groupedVariations,
+          return_policy: returnPolicy?.return_policies,
+          is_form: plainProduct.category.is_form,
+          is_page: plainProduct.category.is_page,
         };
-
-        // Check if attribute group exists
-        const existingGroup = acc.find(group => group.attribute_id === variation.attribute_id);
-
-        if (existingGroup) {
-          // Add variation to existing group
-          existingGroup.variations.push(variationData);
-        } else {
-          // Create new attribute group
-          acc.push({
-            attribute_id: variation.attribute_id,
-            attribute_name: variation.attribute.attribute,
-            specifications: variation.attribute.specifications,
-            image: variation.attribute.image,
-            total_reviews: variation.attribute.total_reviews,
-            avg_rating: variation.attribute.avg_rating,
-            variations: [variationData],
-            reviewsData
-          });
-        }
-
-        return acc;
-      }, []);
-
-      // Get return policy
-      const returnPolicy = await User.findOne({
-        where: { id: product.vendor_id },
-        attributes: ['return_policies']
-      });
-
-      // Remove the original variations array
-      delete plainProduct.variations;
-
-      return {
-        ...plainProduct,
-        attributes: groupedVariations,
-        return_policy: returnPolicy?.return_policies,
-        is_form: plainProduct.category.is_form,
-        is_page: plainProduct.category.is_page
-      };
-    }));
+      })
+    );
 
     // Structure the response
     const response = {
       subcategory_id: subcategoryData.id,
       subcategory_name: subcategoryData.subcategory_name,
-      subcategory_icon: subcategoryData.get('image_url'),
-      subcategory_banner: subcategoryData.get('banner'),
+      subcategory_icon: subcategoryData.get("image_url"),
+      subcategory_banner: subcategoryData.get("banner"),
+      subcategory_location: subcategoryData.get("location"),
       category: subcategoryData.category,
       video: subcategoryData.video,
       thumbnail: subcategoryData.thumbnail,
       slug: subcategoryData.slug,
       alt_tag: subcategoryData.alt_tag,
       image_title: subcategoryData.image_title,
-      products: transformedProducts
+      products: transformedProducts,
     };
 
     return res.status(200).json({
       status: 1,
-      message: 'Success',
-      data: response
+      message: "Success",
+      data: response,
     });
-
   } catch (error) {
     console.error("Error fetching subcategory data:", error);
     return res.status(500).json({
       status: 0,
-      message: 'Error occurred',
-      error: error.message
+      message: "Error occurred",
+      error: error.message,
     });
   }
 };
-
