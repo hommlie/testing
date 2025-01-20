@@ -26,8 +26,8 @@
                             </a> -->
                         </div>
                         
-                        <div class="card-body collapse show">
-                            <div class="card-block card-dashboard" id="table-display">
+                        <div class="card-body collapse show" >
+                            <div class="card-block card-dashboard" id="table-display"  style="width: auto; height: auto; overflow: auto;">
                                     @include('admin.banner.bannertable')
                             </div>
                         </div>

@@ -258,6 +258,7 @@
               </div>
             </div>
           </div>
+          {{-- PRODUCT RATING --}}
           <div class="card">
             <div class="card-header">
               <h6 class="card-title mb-0">Product Rating</h6>
@@ -277,7 +278,26 @@
               </div>
             </div>
           </div>
+          {{-- PRODUCT LOCATION  --}}
+          <div class="card">
+            <div class="card-header">
+              <h6 class="card-title mb-0">Location</h6>
+            </div>
+            <div class="card-body">
+              <div class="px-3">
+                <div class="form-group row" id="locationContainer">
+                  
+                </div>
+                <span class="text-danger" id="locationError" style="font-size:14px;"></span>
+                <div>
+                </div>
+                <span id="addLocation" class="btn btn-success mt-2">+</span>
+              </div>
+              
+            </div>
+          </div>
         </div>
+
         <div class="col-lg-12">
           <div class="card">
             <div class="card-header">
@@ -341,6 +361,7 @@
                   @endif
                   </div>
                 </div>
+
                 <div class="panel-body variation" @if ($data->is_variation != '1') style="display: none;" @endif>
                 <!-- FETCH ALL VARIATIONS DATA -->
                   @foreach ($variations as $ky => $variation)
@@ -473,8 +494,8 @@
                       <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
                       rating.</span>
                       @if ($errors->has('avg_rating'))
-              <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
-            @endif
+                    <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
+                   @endif
                     </div>
                     <div class="col-sm-1 nopadding">
                       <div class="form-group">
@@ -490,7 +511,7 @@
                       </div>
                     </div>
                     </div>
-          @endforeach
+                  @endforeach
                   <!-- -------------------------------------- -->
                   <div class="col-sm-1 nopadding">
                     <div class="form-group">
@@ -506,7 +527,7 @@
                 <div id="variation_fields"></div>
                 @if (old('update'))
                   <?php
-            $i = count($variations);
+                  $i = count($variations);
                       ?>
                   @foreach(old('update') as $quty)
             <input type="hidden" class="form-control" name="update[]" id="update">
@@ -517,8 +538,8 @@
               <input type="text" class="form-control" name="variation[{{$i}}]" id="variation"
               placeholder="Variation">
               @if ($errors->has('variation.' . $i))
-          <span class="text-danger">Required *</span>
-        @endif
+              <span class="text-danger">Required *</span>
+             @endif
             </div>
             </div>
 
@@ -529,7 +550,7 @@
               placeholder="Price">
               @if ($errors->has('price.' . $i))
           <span class="text-danger">Required *</span>
-        @endif
+              @endif
             </div>
             </div>
 
@@ -541,7 +562,7 @@
               placeholder="{{ trans('placeholder.discounted_variation_price') }}">
               @if ($errors->has('discounted_variation_price.' . $i))
           <span class="text-danger">Required *</span>
-        @endif
+            @endif
             </div>
             </div>
 
@@ -552,7 +573,7 @@
               value="{{old('qty')[$i]}}">
               @if ($errors->has('qty.' . $i))
           <span class="text-danger">Required *</span>
-        @endif
+            @endif
             </div>
             </div>
 
@@ -1375,11 +1396,46 @@
   });
 });
 
+// LOCATION 
+const locations = `{{ $data->location }}`;
+  const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
 
+  const container = document.getElementById('locationContainer');
+  function addLocationField(value = '', isRequired = false) {
+    const inputGroup = document.createElement('div');
+    inputGroup.className = 'col-sm-12 d-flex mb-2';
 
+    inputGroup.innerHTML = `
+      <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location" }>
+      <span class="btn btn-danger ml-3">-</span>
+    `;
+    inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
+      if (container.childElementCount > 1) {
+        container.removeChild(inputGroup);
+        document.getElementById('locationError').textContent = '';
+      } else {
+        document.getElementById('locationError').textContent = 'At least one location is required!';
+      }
+    });
 
-
-
+    container.appendChild(inputGroup);
+  }
+  if (locationArray.length > 0) {
+    locationArray.forEach((location, index) => addLocationField(location, index === 0)); 
+  } else {
+    addLocationField('', true);
+  }
+  document.getElementById('addLocation').addEventListener('click', function () {
+    addLocationField('', false);
+  });
+  document.querySelector('form').addEventListener('submit', function (e) {
+    const locationInputs = container.querySelectorAll('input[name="location[]"]');
+    const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
+    if (!hasValue) {
+      e.preventDefault();
+      document.getElementById('locationError').textContent = 'At least one location is required!';
+    }
+  });
 </script>
 
 @endsection

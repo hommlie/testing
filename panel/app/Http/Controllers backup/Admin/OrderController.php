@@ -64,7 +64,9 @@ class OrderController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(10000000000000);
 
-        return view('admin.orders.index', compact('data'));
+        $data1 = Order::all();
+        // return response()->json($data1);
+        return view('admin.orders.index', compact('data','data1'));
 
     }
 

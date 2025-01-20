@@ -68,9 +68,9 @@
                                                 <span class="text-danger">{{ $errors->first('sub_cat_banner') }}</span>
                                             @endif
                                         </div>
-                                       
+                                       <div  style="width: auto; height: auto; overflow: auto;">
                                         <img src='{!! asset("storage/app/public/images/subcategory/".$data->sub_cat_banner) !!}' class='media-object round-media height-50'>
-                                    
+                                        </div>
                                         <div class="form-group">
                                             <label for="subcategory_name">{{ trans('labels.subcategory_name') }}</label>
                                             <input type="text" id="subcategory_name" class="form-control" name="subcategory_name" value="{{$data->subcategory_name}}" placeholder="{{ trans('placeholder.subcategory') }}">

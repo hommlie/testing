@@ -85,6 +85,7 @@ class CategoryController extends Controller
                 return redirect()->back()->with('danger', 'No video file was uploaded.');
             }
             $isFormChecked = $request->has('is_form') ? 1 : 0;
+            $loca = $request->location ? implode(" | ", $request->location) : null;
             // Save category data
             $dataval = [
                 'category_name' => $request->category_name,
@@ -96,6 +97,7 @@ class CategoryController extends Controller
                 'meta_description' => $request->meta_description,
                 'video' => $videoName,
                 'is_form' => $isFormChecked,
+                'location' => $loca,
                 'slug' => Str::slug($request->category_name)
             ];
 
@@ -170,6 +172,7 @@ class CategoryController extends Controller
         // Check if a subcategory with the same slug already exists
         $checkslug = Category::where('slug', \Str::slug($request->category_name))->first();
         $isFormChecked = $request->has('is_form') ? 1 : 0;
+        $loca = $request->location ? implode(" | ", $request->location) : null;
         if (@$checkslug->slug) {
 
             // If slug exists, create a new slug combining category slug and subcategory name
@@ -185,6 +188,7 @@ class CategoryController extends Controller
                 'meta_title' => $request->meta_title,
                 'meta_description' => $request->meta_description,
                 'is_form' => $isFormChecked,
+                'location' => $loca,
                 'slug' => \Str::slug(uniqid() . '-' . $request->category_name),
             ];
         } else {
@@ -249,7 +253,7 @@ class CategoryController extends Controller
             'image_title' => 'required',
         ]);
          
-
+        $loca = $request->location ? implode(" | ", $request->location) : null;
         if (isset($request->icon)) {
 
             File::delete('storage/app/public/images/category/' . $request->old_img);
@@ -259,11 +263,11 @@ class CategoryController extends Controller
                 $icon = 'category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
                 $request->icon->move('storage/app/public/images/category', $icon);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'icon' => $icon, 'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag,  'location' => $loca, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'icon' => $icon, 'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag,  'location' => $loca, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }
 
@@ -276,11 +280,11 @@ class CategoryController extends Controller
                 $webicon = 'webcategory-' . uniqid() . '.' . $request->webicon->getClientOriginalExtension();
                 $request->webicon->move('storage/app/public/images/category', $webicon);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'web_icon' => $webicon,  'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag,  'image_title' => $request->image_title,  'location' => $loca, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'web_icon' => $webicon,  'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }       
         if (isset($request->motion_graphics)) {
@@ -290,11 +294,11 @@ class CategoryController extends Controller
                 $motion_graphics = 'motion_graphics-' . uniqid() . '.' . $request->motion_graphics->getClientOriginalExtension();
                 $request->motion_graphics->move('storage/app/public/images/category', $motion_graphics);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,  'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,  'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }
 

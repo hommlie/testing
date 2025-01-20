@@ -487,7 +487,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // MANAGE APP HEADER 
     Route::group(['prefix'=> 'appheader'], function () {
         Route::get('/', 'AppHeaderController@index')->name('appheader');
-
+        Route::post('/change/status', 'AppHeaderController@changeStatus')->name('appheader.changeStatus');
         Route::post('/update/{id}', 'AppHeaderController@update')->name('appheader.update');
     });
 

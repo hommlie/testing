@@ -95,6 +95,8 @@ class SubCategoryController extends Controller
             'video' => 'nullable',
         ]);
 
+        $loca = $request->location ? implode(" | ", $request->location) : null;
+
         // Generate unique file name and move the file
         $icon = 'sub_category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
         $request->icon->move('storage/app/public/images/subcategory', $icon);
@@ -137,6 +139,7 @@ class SubCategoryController extends Controller
                 'thumbnail' => $thumbnail, // Ensure icon is included here
                 'video' => $video, // Ensure icon is included here
                 'subcategory_name' => $request->subcategory_name,
+                'location' => $loca,
                 'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
             ];
         } else {
@@ -153,6 +156,7 @@ class SubCategoryController extends Controller
                 'meta_description' => $request->meta_description,
                 'subcategory_sub_title' => $request->subcategory_sub_title,
                 'subcategory_title' => $request->subcategory_title,
+                'location' => $loca,
                 'thumbnail' => $thumbnail, // Ensure icon is included here as well
                 'video' => $video, // Ensure icon is included here as well
             ];
@@ -204,8 +208,7 @@ class SubCategoryController extends Controller
 
         $icon = $request->old_img;
         $sub_cat_banner = $request->old_banner;
-
-
+        $loca = $request->location ? implode(" | ", $request->location) : null;
         if (isset($request->icon)) {
             File::delete('storage/app/public/images/subcategory/' . $request->old_img);
 
@@ -241,6 +244,7 @@ class SubCategoryController extends Controller
                 'subcategory_sub_title' => $request->subcategory_sub_title,
                 'subcategory_title' => $request->subcategory_title,
                 'subcategory_name' => $request->subcategory_name,
+                'location' => $loca,
                 'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
             ];
         } else {
@@ -256,6 +260,7 @@ class SubCategoryController extends Controller
                 'subcategory_sub_title' => $request->subcategory_sub_title,
                 'subcategory_title' => $request->subcategory_title,
                 'meta_description' => $request->meta_description,
+                'location' => $loca,
             ];
         }
 

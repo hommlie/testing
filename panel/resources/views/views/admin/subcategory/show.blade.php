@@ -10,7 +10,7 @@
         <section id="basic-form-layouts">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="content-header">{{ trans('labels.add_subcategory') }}</div>
+                    <div class="content-header">{{ trans('labels.edit_subcategory') }}</div>
                 </div>
             </div>
 
@@ -29,44 +29,51 @@
                             </div>
                             @endif
                             <div class="px-3">
-                                <form class="form" method="post" action="{{ route('admin.subcategory.store') }}" enctype="multipart/form-data">
+                                <form class="form" method="post" action="{{ route('admin.subcategory.update') }}"enctype="multipart/form-data">
                                 @csrf
                                     <div class="form-body">
-                                         <div class="form-group">
+                                        <input type="hidden" name="subcat_id" id="subcat_id" value="{{$data->id}}" class="form-control">
+                                         <input type="hidden" name="old_img" id="old_img" value="{{$data->icon}}">
+                                         <input type="hidden" name="old_banner" id="old_banner" value="{{$data->sub_cat_banner}}">
+
+                                        <div class="form-group">
                                             <label for="cat_id">{{ trans('labels.category') }}</label>
                                             <select class="form-control" name="cat_id" id="cat_id">
                                                 <option value="">{{ trans('placeholder.select_category') }}</option>
-                                                @foreach ($data as $category)
-                                                <option value="{{$category->id}}">{{$category->category_name}}</option>
+                                                @foreach ($category as $category)
+                                                <option value='{{$category->id}}' 
+                                                  {{($data->cat_id == $category->id) ? 'selected' : '' }}>
+                                                  {{$category->category_name}}</option>
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('cat_id'))
                                                 <span class="text-danger">{{ $errors->first('cat_id') }}</span>
                                             @endif
                                         </div>
-
-                                         <div class="form-group">
+                                           <div class="form-group">
                                             <label for="icon">{{ trans('labels.image') }}</label>
-                                            <input type="file" id="icon" class="form-control" name="icon" >
+                                            <input type="file" id="icon" class="form-control" name="icon" value="{{$data->icon}}">
                                             @if ($errors->has('icon'))
                                                 <span class="text-danger">{{ $errors->first('icon') }}</span>
                                             @endif
                                         </div>
-                                        <div class="gallery"></div>
-
+                                        
+                                        <img src='{!! asset("storage/app/public/images/subcategory/".$data->icon) !!}' class='media-object round-media height-50'>
+                                        <br/>
                                         <div class="form-group">
-                                            
+                                            <br/>
                                             <label for="sub_cat_banner">Sub Category Banner</label>
                                             <input type="file" id="sub_cat_banner" class="form-control" name="sub_cat_banner">
                                             @if ($errors->has('sub_cat_banner'))
                                                 <span class="text-danger">{{ $errors->first('sub_cat_banner') }}</span>
                                             @endif
                                         </div>
-                                    
-
+                                       <div  style="width: auto; height: auto; overflow: auto;">
+                                        <img src='{!! asset("storage/app/public/images/subcategory/".$data->sub_cat_banner) !!}' class='media-object round-media height-50'>
+                                        </div>
                                         <div class="form-group">
                                             <label for="subcategory_name">{{ trans('labels.subcategory_name') }}</label>
-                                            <input type="text" id="subcategory_name" class="form-control" name="subcategory_name" placeholder="{{ trans('placeholder.subcategory') }}">
+                                            <input type="text" id="subcategory_name" class="form-control" name="subcategory_name" value="{{$data->subcategory_name}}" placeholder="{{ trans('placeholder.subcategory') }}">
                                             @if ($errors->has('subcategory_name'))
                                                 <span class="text-danger">{{ $errors->first('subcategory_name') }}</span>
                                             @endif
@@ -76,7 +83,7 @@
                                         <div class="form-group">
                                             <label for="Image title" class="col-form-label">Subcategory title:</label>
                                             <input type="text" class="form-control" name="subcategory_title"
-                                                placeholder="Enter Subcategory Title" required >
+                                                placeholder="Enter Subcategory Title" required value="{{$data->subcategory_title}}" >
                                             @if ($errors->has('subcategory_title'))
                                                 <span class="text-danger">{{ $errors->first('subcategory_title') }}</span>
                                             @endif
@@ -87,17 +94,20 @@
                                         <div class="form-group">
                                             <label for="subcategory sub title" class="col-form-label">Subcategory Sub title :</label>
                                             <input type="text" class="form-control" name="subcategory_sub_title"
-                                                placeholder="Enter Subcategory Sub Title"required>
+                                                placeholder="Enter Subcategory Sub Title" value="{{$data->subcategory_sub_title}}" required>
 
                                         </div>
                                     </div>
+
+
+
 
 
                                         <div class="product gravity">
                                         <div class="form-group">
                                             <label for="all_tag" class="col-form-label">ALT tag:</label>
                                             <input type="text" class="form-control" name="alt_tag"
-                                                placeholder="Enter tag" required>
+                                                placeholder="Enter tag" required value="{{$data->alt_tag}}">
                                             @if ($errors->has('alt_tag'))
                                                 <span class="text-danger">{{ $errors->first('alt_tag') }}</span>
                                             @endif
@@ -110,17 +120,18 @@
                                         <div class="form-group">
                                             <label for="Image title" class="col-form-label">Image title:</label>
                                             <input type="text" class="form-control" name="image_title"
-                                                placeholder="Enter Image title" required>
-                                                @if ($errors->has('image_title'))
-                                            <span class="text-danger">{{ $errors->first('image_title') }}</span>
-                                        @endif
+                                                placeholder="Enter Image title" required value="{{$data->image_title}}">
+                                            @if ($errors->has('image_title'))
+                                                <span class="text-danger">{{ $errors->first('image_title') }}</span>
+                                            @endif
                                         </div>
                                     </div>
+
                                     <div class="product gravity">
                                         <div class="form-group">
                                             <label for="Image title" class="col-form-label">Meta title:</label>
                                             <input type="text" class="form-control" name="meta_title"
-                                                placeholder="Enter Image title">
+                                                placeholder="Enter Meta title" value="{{$data->meta_title}}">
 
                                         </div>
                                     </div>
@@ -129,33 +140,29 @@
                                             <label for="meta_description" class="col-form-label">Meta
                                                 Description:</label>
                                             <textarea class="form-control" name="meta_description"
-                                                placeholder="Enter Image title"></textarea>
+                                                placeholder="Enter Meta Description">{{ $data->meta_description }}</textarea>
                                         </div>
                                     </div>
-<!-- 
-                                        <div class="form-group">
-                                            <label for="icon">{{ trans('Video') }}</label>
-                                            <input type="file" name="video" accept="video/*">
-                                            @if ($errors->has('video'))
-                                                <span class="text-danger">{{ $errors->first('video') }}</span>
-                                            @endif
-                                        </div>
 
+                                    {{-- PRODUCT LOCATION --}}
+                                    <div class="product gravity">
                                         <div class="form-group">
-                                            <label for="thumbnail">{{ trans('Video Thumbnail') }}</label>
-                                            <input type="file" id="thumbnail" class="form-control" name="thumbnail" >
-                                            @if ($errors->has('thumbnail'))
-                                                <span class="text-danger">{{ $errors->first('thumbnail') }}</span>
-                                            @endif
-                                        </div> -->
+                                            <div class="form-group row" id="locationContainer">
+                                                <!-- Dynamically added location fields will appear here -->
+                                            </div>
+                                            <span class="text-danger" id="locationError" style="font-size:14px;"></span>
+                                        </div>
+                                        <span id="addLocation" class="btn btn-success">+</span>
+                                    </div>
+                                
                                     </div>
 
-                                    <div class="form-actions center">
+                                    <div class="form-actions center mt-5">
                                         <a href="{{ route('admin.subcategory') }}" class="btn btn-raised btn-warning mr-1">
                                             <i class="ft-x"></i> {{ trans('labels.cancel') }}
                                         </a>
                                         <button type="submit" class="btn btn-raised btn-primary">
-                                            <i class="fa fa-check-square-o"></i> {{ trans('labels.save') }}
+                                            <i class="fa fa-check-square-o"></i> {{ trans('labels.update') }}
                                         </button>
                                     </div>
                                 </form>
@@ -166,6 +173,48 @@
             </div>
         </section>
     </div>
+    <script>
+    //LOCATION SECTION 
+    const locations = `{{ $data->location }}`;
+    const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
+
+    const container = document.getElementById('locationContainer');
+    function addLocationField(value = '', isRequired = false) {
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'col-sm-12 d-flex mb-2';
+
+        inputGroup.innerHTML = `
+      <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location" }>
+      <span class="btn btn-danger ml-3">-</span>
+    `;
+        inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
+            if (container.childElementCount > 1) {
+                container.removeChild(inputGroup);
+                document.getElementById('locationError').textContent = '';
+            } else {
+                document.getElementById('locationError').textContent = 'At least one location is required!';
+            }
+        });
+
+        container.appendChild(inputGroup);
+    }
+    if (locationArray.length > 0) {
+        locationArray.forEach((location, index) => addLocationField(location, index === 0));
+    } else {
+        addLocationField('', true);
+    }
+    document.getElementById('addLocation').addEventListener('click', function () {
+        addLocationField('', false);
+    });
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const locationInputs = container.querySelectorAll('input[name="location[]"]');
+        const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
+        if (!hasValue) {
+            e.preventDefault();
+            document.getElementById('locationError').textContent = 'At least one location is required!';
+        }
+    });
+</script>
 
 
 @endsection

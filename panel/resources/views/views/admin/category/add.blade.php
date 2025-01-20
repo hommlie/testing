@@ -21,12 +21,12 @@
                     </div>
                     <div class="card-body">
                         @if(Session::has('danger'))
-                                                <div class="alert alert-danger">
-                                                    {{ Session::get('danger') }}
-                                                    @php
-                                                        Session::forget('danger');
-                                                    @endphp
-                                                </div>
+                        <div class="alert alert-danger">
+                            {{ Session::get('danger') }}
+                            @php
+                                Session::forget('danger');
+                            @endphp
+                        </div>
                         @endif
                         <div class="px-3">
                             <form class="form" method="post" action="{{ route('admin.category.store') }}"
@@ -59,14 +59,15 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group"><br/>
+                                    <div class="form-group"><br />
                                         <label for="icon">{{ trans('Motion Graphics') }}</label>
-                                        <input type="file" id="motion_graphics" class="form-control" name="motion_graphics">
+                                        <input type="file" id="motion_graphics" class="form-control"
+                                            name="motion_graphics">
                                         @if ($errors->has('motion_graphics'))
                                             <span class="text-danger">{{ $errors->first('motion_graphics') }}</span>
                                         @endif
                                     </div>
-                                    
+
                                     <div class="product gravity">
                                         <div class="form-group">
                                             <label for="all_tag" class="col-form-label">ALT tag:</label>
@@ -108,11 +109,25 @@
                                         </div>
                                     </div>
 
-
+                                    {{-- LOCATION --}}
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="meta_description" class="col-form-label">
+                                                Location </label>
+                                        <div id="locationContainer">
+                                        <div class="d-flex">
+                                                <input type="text" class="form-control" id="location[]" name="location"
+                                                    placeholder="Location" >
+                                                <span id="addLocation" class="btn btn-success ml-3">+</span><br />
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
 
                                     <div class="product gravity">
                                         <div class="form-group">
-                                            <label for="Image title" class="col-form-label">Enable inspection form:</label><br>
+                                            <label for="Image title" class="col-form-label">Enable inspection
+                                                form:</label><br>
                                             <input type="checkbox" name="is_form" value="1" @if(old('is_form')) checked
                                             @endif>
 
@@ -161,9 +176,26 @@
         </div>
     </section>
 </div>
+<script>
+  // LOCATION
+  document.getElementById('addLocation').addEventListener('click', () => {
+  const container = document.getElementById('locationContainer');
 
+  const newInputGroup = document.createElement('div');
+  newInputGroup.className = 'd-flex  mt-2';
+  newInputGroup.innerHTML = `
+    <input type="text" class="form-control" name="location[]" placeholder="Location">
+    <span class="btn btn-danger ml-3">-</span>
+  `;
 
+  newInputGroup.querySelector('span').addEventListener('click', () => 
+    container.removeChild(newInputGroup)
+  );
+
+  container.appendChild(newInputGroup);
+});
+</script>
 @endsection
 @section('scripttop')
-
 @section('scripts')
+

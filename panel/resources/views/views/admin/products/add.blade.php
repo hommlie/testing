@@ -65,14 +65,14 @@
                     <select class="form-control" name="cat_id" id="cat_id" required>
                       <option value="">{{ trans('placeholder.select_category') }}</option>
                       @foreach ($data as $category)
-              <option value="{{$category->id}}" {{ old('cat_id') == $category->id ? 'selected' : ''}}>
-              {{$category->category_name}}
-              </option>
-            @endforeach
+                    <option value="{{$category->id}}" {{ old('cat_id') == $category->id ? 'selected' : ''}}>
+                  {{$category->category_name}}
+                   </option>
+                  @endforeach
                     </select>
                     @if ($errors->has('cat_id'))
-            <span class="text-danger">{{ $errors->first('cat_id') }}</span>
-          @endif
+                 <span class="text-danger">{{ $errors->first('cat_id') }}</span>
+                @endif
                   </div>
                 </div>
                 <div class="form-group row">
@@ -82,8 +82,8 @@
                       <option value="">{{ trans('placeholder.select_subcategory') }}</option>
                     </select>
                     @if ($errors->has('subcat_id'))
-            <span class="text-danger">{{ $errors->first('subcat_id') }}</span>
-          @endif
+                       <span class="text-danger">{{ $errors->first('subcat_id') }}</span>
+                  @endif
                   </div>
                 </div>
                 <div class="form-group row">
@@ -92,8 +92,8 @@
                     <input type="text" class="form-control" id="product_name" name="product_name" required
                       placeholder="{{ trans('Enter Service Name') }}" value="{{old('product_name')}}">
                     @if ($errors->has('product_name'))
-            <span class="text-danger">{{ $errors->first('product_name') }}</span>
-          @endif
+                  <span class="text-danger">{{ $errors->first('product_name') }}</span>
+                  @endif
                   </div>
                 </div>
                 <div class="form-group row d-none">
@@ -102,8 +102,8 @@
                     <input type="text" class="form-control" id="sku" name="sku"
                       placeholder="{{ trans('placeholder.sku') }}" value="NA">
                     @if ($errors->has('sku'))
-            <span class="text-danger">{{ $errors->first('sku') }}</span>
-          @endif
+                   <span class="text-danger">{{ $errors->first('sku') }}</span>
+                  @endif
                   </div>
                 </div>
                 <div class="form-group row">
@@ -170,8 +170,8 @@
                     <input type="text" class="form-control" id="est_shipping_days" name="est_shipping_days"
                       placeholder="{{ trans('placeholder.est_shipping_days') }}" value="0">
                     @if ($errors->has('est_shipping_days'))
-            <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
-          @endif
+                    <span class="text-danger">{{ $errors->first('est_shipping_days') }}</span>
+                    @endif
                   </div>
                 </div>
               </div>
@@ -192,8 +192,8 @@
                     <input type="hidden" name="tags" id="tags-hidden" value="">
                     <p class="text-muted">Type a word and press enter to add a tag. Click a tag to remove it.</p>
                     @if ($errors->has('tags'))
-            <span class="text-danger">{{ $errors->first('tags') }}</span>
-          @endif
+                   <span class="text-danger">{{ $errors->first('tags') }}</span>
+                    @endif
                   </div>
                 </div>
               </div>
@@ -251,8 +251,8 @@
                     <input type="text" class="form-control" id="tax" name="tax"
                       placeholder="{{ trans('placeholder.tax') }}" value="0">
                     @if ($errors->has('tax'))
-            <span class="text-danger">{{ $errors->first('tax') }}</span>
-          @endif
+                    <span class="text-danger">{{ $errors->first('tax') }}</span>
+                    @endif
                   </div>
                   <div class="col-lg-6">
                     <select class="form-control" name="tax_type" id="tax_type">
@@ -264,6 +264,7 @@
               </div>
             </div>
           </div>
+          {{-- PRODUCT RATING --}}
           <div class="card">
             <div class="card-header">
               <h6 class="card-title mb-0">Product Rating</h6>
@@ -276,13 +277,32 @@
                       placeholder="Product Rating" required min="1" max="5" value="5">
                     <span id="ratingError" class="text-danger d-none">Rating must be between 1 and 5.</span>
                     @if ($errors->has('productRating'))
-            <span class="text-danger">{{ $errors->first('productRating') }}</span>
-          @endif
+                   <span class="text-danger">{{ $errors->first('productRating') }}</span>
+                    @endif
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {{-- LOCATION  --}}
+          <div class="card">
+            <div class="card-header">
+              <h6 class="card-title mb-0">Location</h6>
+            </div>
+            <div class="card-body">
+              <div class="px-3">
+                <div class="form-group row " id="locationContainer">
+                  <div class="col-sm-12 d-flex ">
+                    <input type="text" class="form-control" id="location[]" name="location"
+                      placeholder="Location" required>
+                    <span id="addLocation" class="btn btn-success ml-3">+</span><br/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
         <div class="col-lg-12">
           <div class="card">
@@ -305,16 +325,16 @@
                     <input type="text" class="form-control" id="product_price" name="product_price"
                       placeholder="{{ trans('Enter Actual Price') }}" value="{{old('product_price')}}">
                     @if ($errors->has('product_price'))
-            <span class="text-danger">{{ $errors->first('product_price') }}</span>
-          @endif
+                     <span class="text-danger">{{ $errors->first('product_price') }}</span>
+                    @endif
                   </div>
                   <label for="discounted_percentage" class="col-sm-2 col-form-label">Discount (%)</label>
                   <div class="col-sm-4">
                     <input type="text" class="form-control" id="discounted_percentage" name="discounted_percentage"
                       placeholder="{{ trans('Enter Discount %') }}" value="{{old('discounted_percentage')}}">
                     @if ($errors->has('discounted_percentage'))
-            <span class="text-danger">{{ $errors->first('discounted_percentage') }}</span>
-          @endif
+                    <span class="text-danger">{{ $errors->first('discounted_percentage') }}</span>
+                    @endif
                   </div>
                 </div>
                 <div class="form-group row default_price" @if (old('is_variation') == 'on') style="display: none;" @endif>
@@ -340,24 +360,24 @@
                   </div>
                 </div>
                 <div class="row panel-body variation pl-5 pt-3" @if (old('is_variation') != 'on')
-            style="display: none; border: solid 1px white; box-shadow: 0 4px 8px rgba(178, 236, 178, 0.5); border-radius: 5px;"
-          @endif>
+                style="display: none; border: solid 1px white; box-shadow: 0 4px 8px rgba(178, 236, 178, 0.5); border-radius: 5px;"
+              @endif>
 
                   @if (old('variation'))
             @foreach(old('variation') as $i => $quty)
-        <div class="row removeclass{{$loop->index}}">
+            <div class="row removeclass{{$loop->index}}">
 
-        <label for="attribute" class="col-sm-2 col-form-label">{{ trans('labels.attribute') }}</label>
-        <div class="col-sm-10">
-          <select class="form-control" name="attribute" id="attribute">
-          <option value="">{{ trans('placeholder.select_attribute') }}</option>
-          @foreach ($attribute as $attributes)
-        <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
-      @endforeach
+            <label for="attribute" class="col-sm-2 col-form-label">{{ trans('labels.attribute') }}</label>
+            <div class="col-sm-10">
+            <select class="form-control" name="attribute" id="attribute">
+              <option value="">{{ trans('placeholder.select_attribute') }}</option>
+            @foreach ($attribute as $attributes)
+          <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
+          @endforeach
           </select>
           @if ($errors->has('attribute'))
         <span class="text-danger">{{ $errors->first('attribute') }}</span>
-      @endif
+          @endif
         </div>
 
         <div class="col-sm-3 nopadding">
@@ -366,8 +386,8 @@
           <input type="text" class="form-control" name="variation[{{$i}}]" id="variation"
           value="{{$quty}}" placeholder="Variation">
           @if ($errors->has('variation.' . $i))
-        <span class="text-danger">Required *</span>
-      @endif
+          <span class="text-danger">Required *</span>
+          @endif
           </div>
         </div>
 
@@ -377,8 +397,8 @@
           <input type="text" class="form-control" id="price" name="price[{{$i}}]" pattern="[0-9]+"
           value="{{old('price')[$loop->index]}}" placeholder="Price">
           @if ($errors->has('price.' . $i))
-        <span class="text-danger">Required *</span>
-      @endif
+            <span class="text-danger">Required *</span>
+          @endif
           </div>
         </div>
 
@@ -390,7 +410,7 @@
           value="{{old('variation_discount_percentage')[$loop->index]}}" placeholder="e.g., 5">
           @if ($errors->has('variation_discount_percentage.' . $i))
         <span class="text-danger">Required *</span>
-      @endif
+          @endif
           </div>
         </div>
 
@@ -403,7 +423,7 @@
           value="{{old('discounted_variation_price')[$loop->index]}}">
           @if ($errors->has('discounted_variation_price.' . $i))
         <span class="text-danger">Required *</span>
-      @endif
+          @endif
           </div>
         </div>
 
@@ -414,7 +434,7 @@
           value="{{old('qty')[$loop->index]}}">
           @if ($errors->has('qty.' . $i))
         <span class="text-danger">Required *</span>
-      @endif
+        @endif
           </div>
         </div>
 
@@ -428,8 +448,8 @@
         </div>
         </div>
       </div>
-    @else
-    <div class="col-sm-1 nopadding">
+      @else
+      <div class="col-sm-1 nopadding">
       <div class="form-group">
       <div class="input-group">
       <div class="input-group-btn">
@@ -439,7 +459,7 @@
       </div>
       </div>
     </div>
-  @endif
+      @endif
         </div>
       @endforeach
           @else
@@ -452,7 +472,7 @@
             <option value="">{{ trans('placeholder.select_attribute') }}</option>
             @foreach ($attribute as $attributes)
         <option value="{{$attributes->id}}">{{$attributes->attribute}}</option>
-      @endforeach
+        @endforeach
           </select>
           </div>
         </div>
@@ -521,47 +541,47 @@
         <small id="error-message" class="text-danger"></small>
         @if ($errors->has('specifications'))
       <span class="text-danger">{{ $errors->first('specifications') }}</span>
-    @endif
-        </div>
-        <!-- VARIATION IMAGES -->
-        <div class="form-group col-md-3">
-        <label for="Image">Image</label>
-        <input type="file" class="form-control" name="attribute_image[]" id="attribute_image">
-        @if ($errors->has('attribute_image'))
-      <span class="text-danger">{{ $errors->first('attribute_image') }}</span>
-    @endif
-        </div>
-        <!-- VARIATION TOTAL REVIEWS -->
-        <div class="form-group col-md-2">
-        <label for="Total_reviews">Total reviews</label>
-        <input type="number" class="form-control" name="total_reviews[]" id="total_reviews"
-          placeholder="Enter Total reviews ">
-        @if ($errors->has('total_reviews'))
-      <span class="text-danger">{{ $errors->first('total_reviews') }}</span>
-    @endif
-        </div>
-        <!-- VARIATION AVG RATING -->
-        <div class="form-group col-md-2">
-        <label for="Avg_rating">Avg Rating</label>
-        <input type="text" class="form-control" name="avg_rating[]" id="avg_rating"
-          placeholder="Enter Avg Rating">
-        <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
-          rating.</span>
-        @if ($errors->has('avg_rating'))
-      <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
-    @endif
-        </div>
-        <!-- VARIATION PULS BUTTON -->
-        <div class="col-sm-1 nopadding">
-        <div class="form-group">
-          <div class="input-group">
-          <div class="input-group-btn">
-            <button class="btn btn-success" type="button" onclick="variation_fields();"> + </button>
-          </div>
-          </div>
-        </div>
-        </div>
-      @endif
+                  @endif
+                      </div>
+                      <!-- VARIATION IMAGES -->
+                      <div class="form-group col-md-3">
+                      <label for="Image">Image</label>
+                      <input type="file" class="form-control" name="attribute_image[]" id="attribute_image">
+                      @if ($errors->has('attribute_image'))
+                    <span class="text-danger">{{ $errors->first('attribute_image') }}</span>
+                  @endif
+                      </div>
+                      <!-- VARIATION TOTAL REVIEWS -->
+                      <div class="form-group col-md-2">
+                      <label for="Total_reviews">Total reviews</label>
+                      <input type="number" class="form-control" name="total_reviews[]" id="total_reviews"
+                        placeholder="Enter Total reviews ">
+                      @if ($errors->has('total_reviews'))
+                    <span class="text-danger">{{ $errors->first('total_reviews') }}</span>
+                  @endif
+                      </div>
+                      <!-- VARIATION AVG RATING -->
+                      <div class="form-group col-md-2">
+                      <label for="Avg_rating">Avg Rating</label>
+                      <input type="text" class="form-control" name="avg_rating[]" id="avg_rating"
+                        placeholder="Enter Avg Rating">
+                      <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
+                        rating.</span>
+                      @if ($errors->has('avg_rating'))
+                    <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
+                  @endif
+                      </div>
+                      <!-- VARIATION PULS BUTTON -->
+                      <div class="col-sm-1 nopadding">
+                      <div class="form-group">
+                        <div class="input-group">
+                        <div class="input-group-btn">
+                          <button class="btn btn-success" type="button" onclick="variation_fields();"> + </button>
+                        </div>
+                        </div>
+                      </div>
+                      </div>
+                    @endif
                   <div class="clear"></div>
                 </div>
                 <div id="variation_fields" style="border: solid 1 px green">
@@ -584,8 +604,8 @@
                       placeholder="{{ trans('Service description') }}">{{old('description')}}</textarea>
                     <div id="editor"></div>
                     @if ($errors->has('description'))
-            <span class="text-danger">{{ $errors->first('description') }}</span>
-          @endif
+                  <span class="text-danger">{{ $errors->first('description') }}</span>
+                  @endif
                   </div>
                 </div>
               </div>
@@ -605,8 +625,8 @@
                       placeholder=""></textarea>
                     <div id="faqeditor"></div>
                     @if ($errors->has('faqs'))
-            <span class="text-danger">{{ $errors->first('faqs') }}</span>
-          @endif
+                  <span class="text-danger">{{ $errors->first('faqs') }}</span>
+                  @endif
                   </div>
                 </div>
               </div>
@@ -1135,6 +1155,7 @@
         <input type="text" class="form-control" name="specifications[1][1]" placeholder="Enter Specification">
         <span class="btn btn-danger ml-3 remove-button">-</span>
       `;
+
     container.appendChild(newInput);
     newInput.querySelector('.remove-button').addEventListener('click', function () {
       newInput.remove();
@@ -1157,6 +1178,26 @@
       errorElement.style.display = 'none';
     }
   });
+
+
+  // LOCATION
+document.getElementById('addLocation').addEventListener('click', () => {
+  const container = document.getElementById('locationContainer');
+
+  const newInputGroup = document.createElement('div');
+  newInputGroup.className = 'col-sm-12 d-flex  mt-2';
+  newInputGroup.innerHTML = `
+    <input type="text" class="form-control" name="location[]" placeholder="Location">
+    <span class="btn btn-danger ml-3">-</span>
+  `;
+
+  newInputGroup.querySelector('span').addEventListener('click', () => 
+    container.removeChild(newInputGroup)
+  );
+
+  container.appendChild(newInputGroup);
+});
+
 </script>
 
 @endsection

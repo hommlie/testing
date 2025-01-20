@@ -364,6 +364,7 @@
 
     //Download Excel Data 
     document.getElementById("dwExcel").addEventListener("click", function () {
+        console.log(@json($data1));
         const data2 = @json($data1);
         const worksheet = XLSX.utils.json_to_sheet(data2);
         const header = worksheet['!cols'] = worksheet['!cols'] || [];
@@ -376,6 +377,7 @@
 
     //Download CSV Data
     document.getElementById("dwCsv").addEventListener("click", function () {
+        console.log(@json($data1));
         const data2 = @json($data1);
         const worksheet = XLSX.utils.json_to_sheet(data2);
         const csv = XLSX.utils.sheet_to_csv(worksheet);

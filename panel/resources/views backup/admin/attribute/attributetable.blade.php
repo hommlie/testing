@@ -3,6 +3,10 @@
         <tr>
             <th>#</th>
             <th>{{ trans('labels.attribute') }}</th>
+            <th>Specifications</th>
+            <th>Image</th>
+            <th>Total reviews</th>
+            <th>Avg_rating</th>
             <th>{{ trans('labels.status') }}</th>
             <th>{{ trans('labels.action') }}</th>
         </tr>
@@ -13,6 +17,12 @@
         <tr id="del-{{$row->id}}">
             <td>{{++$n}}</td>
             <td>{{$row->attribute}}</td>
+            <td>{{$row->specifications}}</td>
+            <td>
+                <img src="{{ asset('/storage/app/public/attribute/' . $row->image) }}" alt="" height="100px" width="100px">
+            </td>
+            <td>{{$row->total_reviews}}</td>
+            <td>{{$row->avg_rating}}</td>
             <td id="tdstatus{{$row->id}}"> 
                 @if($row->status=='1') 
                     <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus" data-status="2" data-id="{{$row->id}}">

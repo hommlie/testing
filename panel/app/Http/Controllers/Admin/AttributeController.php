@@ -110,15 +110,14 @@ class AttributeController extends Controller
             'specifications' => 'required|array',
             'total_reviews' => 'required|integer',
             'avg_rating' => 'required|numeric',
+            'attribute_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('attribute_image')) {
             $attributeImage = $request->file('attribute_image');
             $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
-            $attributeImage->move(public_path('storage/app/public/variation/'), $attributeImageFileName);
+            $attributeImage->move(public_path('/storage/app/public/attribute/'), $attributeImageFileName);
             $attributeImagePath = $attributeImageFileName;
-        } else {
-            $attributeImagePath = null;
         }
 
         $data = [
@@ -126,7 +125,7 @@ class AttributeController extends Controller
             'total_reviews' => $request->total_reviews,
             'avg_rating' => $request->avg_rating,
             'specifications' => implode(" | ", $request->specifications),
-            'attribute_image' => $attributeImagePath,
+            'image' => $attributeImagePath,
         ];
 
         $attribute = Attribute::find($request->attribute_id);
