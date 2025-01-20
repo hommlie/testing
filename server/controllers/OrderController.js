@@ -84,6 +84,12 @@ exports.order = async (req, res) => {
     return res.status(400).json({ status: 0, message: "Please login to save address" });
   }
 
+  const userData = await User.findByPk(user_id);
+
+  if (!userData) {
+    return res.status(400).json({ status: 0, message: "Invalid user ID" });
+  }
+
   try {
     let formattedTime = desired_time;
     if (desired_time) {
@@ -246,8 +252,6 @@ exports.order = async (req, res) => {
     const order_id = orders[0].id;
 
     await Cart.destroy({ where: { user_id } });
-
-    const userData = await User.findByPk(user_id);
 
     if (userData?.email) {
       try {
