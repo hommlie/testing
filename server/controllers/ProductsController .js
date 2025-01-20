@@ -758,6 +758,14 @@ exports.products = async (req, res) => {
         {
           model: Variation,
           as: "variations",
+          include: [
+            {
+              model: Attribute,
+              attributes: ["id", "attribute"],
+              where: { status: 1 },
+              as: "attribute",
+            },
+          ],
         },
         {
           model: Ratting,

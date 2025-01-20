@@ -26,6 +26,7 @@ import ServiceProviderRegistration from "./pages/RegisterFreeListing";
 import Wallet from "./pages/Wallet";
 import CategoryPage from "./pages/CategoryPage";
 import SubCategoryPage from "./pages/SubCategoryPage";
+import ProductListPage from "./pages/ProductListPage";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -69,7 +70,7 @@ const ProjectRoutes = () => {
     },
     {
       path: `${config.VITE_BASE_URL}/products/:subcategoryId/:location`,
-      element: <SubCategoryPage />,
+      element: <ProductListPage />,
     },
     {
       path: `${config.VITE_BASE_URL}/product/:id/:slug/:location`,
