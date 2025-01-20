@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { FaStar, FaUsers, FaMoneyBillWave } from "react-icons/fa";
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
@@ -111,6 +111,8 @@ const HomePageFirstSection = () => {
   const [isReferModalOpen, setIsReferModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [ClickedSubId, setClickedSubId] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -373,7 +375,10 @@ const HomePageFirstSection = () => {
               return (
                 <div
                   key={index}
-                  onClick={() => openCatModal([ct?.id, ct?.category_name])}
+                  onClick={() =>
+                    navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
+                  }
+                  // onClick={() => openCatModal([ct?.id, ct?.category_name])}
                   className="p-2 cursor-pointer"
                 >
                   <div className="mx-auto  w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">

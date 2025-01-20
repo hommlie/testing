@@ -574,17 +574,15 @@ exports.productDetails = async (req, res) => {
 
     plainProduct.is_form = isForm?.get("is_form");
 
-    return res
-      .status(200)
-      .json({
-        status: 1,
-        message: "Success",
-        data: plainProduct,
-        vendors,
-        related_products,
-        returnpolicy,
-        isForm,
-      });
+    return res.status(200).json({
+      status: 1,
+      message: "Success",
+      data: plainProduct,
+      vendors,
+      related_products,
+      returnpolicy,
+      isForm,
+    });
   } catch (error) {
     console.error("Error fetching product details:", error);
     return res
@@ -667,6 +665,61 @@ exports.products = async (req, res) => {
       .json({ status: 0, message: "Please select one category" });
   }
 
+  const subcategory = await Subcategory.findOne({
+    where: { id: subcategory_id },
+    attributes: [
+      "id",
+      "subcategory_name",
+      [
+        sequelize.literal(
+          `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+        ),
+        "image_url",
+      ],
+      "video",
+      [
+        sequelize.literal(
+          `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.thumbnail)`
+        ),
+        "thumbnail",
+      ],
+      "slug",
+      "alt_tag",
+      "image_title",
+      "meta_title",
+      "meta_description",
+      "subcategory_title",
+      "subcategory_sub_title",
+      "location",
+    ],
+    include: [
+      {
+        model: Category,
+        attributes: [
+          "id",
+          "category_name",
+          [
+            sequelize.literal(
+              `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+            ),
+            "image_url",
+          ],
+          // 'video',
+          // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
+          "is_form",
+          "is_page",
+          [
+            sequelize.literal(
+              `CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`
+            ),
+            "motion_graphics",
+          ],
+        ],
+        as: "category",
+      },
+    ],
+  });
+
   try {
     const products = await Product.findAll({
       attributes: [
@@ -678,6 +731,7 @@ exports.products = async (req, res) => {
         "is_variation",
         "sku",
         "slug",
+        "location",
       ],
       include: [
         {
@@ -741,7 +795,7 @@ exports.products = async (req, res) => {
     if (products.length > 0) {
       return res
         .status(200)
-        .json({ status: 1, message: "Success", data: products });
+        .json({ status: 1, message: "Success", data: products, subcategory });
     } else {
       return res.status(200).json({ status: 0, message: "No data found" });
     }

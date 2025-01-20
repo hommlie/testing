@@ -107,6 +107,39 @@ exports.getSubcategory = async (req, res) => {
   try {
     const { cat_id } = req.body;
 
+    const categoryData = await Category.findOne({
+      attributes: [
+        "id",
+        "category_name",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+          ),
+          "image_url",
+        ],
+        "video",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', thumbnail)`
+          ),
+          "thumbnail",
+        ],
+        "slug",
+        "alt_tag",
+        "image_title",
+        "meta_title",
+        "meta_description",
+        "location",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`
+          ),
+          "motion_graphics",
+        ],
+      ],
+      where: { id: cat_id },
+    });
+
     const subcategoryData = await Subcategory.findAll({
       attributes: [
         "id",
@@ -239,9 +272,11 @@ exports.getSubcategory = async (req, res) => {
     );
 
     if (subcategory.length > 0) {
-      return res
-        .status(200)
-        .json({ status: 1, message: "Success", data: { subcategory } });
+      return res.status(200).json({
+        status: 1,
+        message: "Success",
+        data: { subcategory, categoryData },
+      });
     } else {
       return res
         .status(200)
