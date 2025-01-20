@@ -7,6 +7,7 @@ const moment = require('moment');
 const crypto = require("crypto");
 const apiUrl = process.env.apiUrl;
 const { sendEmail } = require('../middleware/mailMiddleware');
+const { sendWhatsAppNotification } = require('../utils/sendWhatsAppNotification');
 
 exports.initiatePayment = async (req, res) => {
   try {
