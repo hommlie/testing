@@ -378,13 +378,13 @@ const CleaningProductPage = () => {
                 <img
                   src={innerSubCategoryData?.subcategory_banner}
                   alt={innerSubCategoryData?.innersubcategory_name}
-                  className="w-full h-[300px] object-cover rounded-lg"
+                  className="w-full h-[150px] md:h-[300px] rounded-lg"
                 />
               ) : (
                 <img
                   src={NoImage}
                   alt=""
-                  className="w-full h-[300px] object-cover rounded-lg opacity-40"
+                  className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
                 />
               )}
 

@@ -36,11 +36,53 @@ const ProductDetailModal = ({
         const selectedAttribute = product.attributes.find(
           (attr) => attr.attribute_id === selectedAttributeId
         );
+
+        // Sort variations before setting the attribute
+        const sortedAttribute = selectedAttribute
+          ? {
+              ...selectedAttribute,
+              variations: [...selectedAttribute.variations].sort((a, b) => {
+                // First try to sort by numeric value if the variation strings are numbers
+                const numA = parseFloat(a.variation);
+                const numB = parseFloat(b.variation);
+                if (!isNaN(numA) && !isNaN(numB)) {
+                  return numA - numB;
+                }
+                // Fall back to string comparison if not numbers
+                return a.variation.localeCompare(b.variation);
+              }),
+            }
+          : null;
+
         setDisplayedAttributes(
-          selectedAttribute ? [selectedAttribute] : product.attributes
+          sortedAttribute
+            ? [sortedAttribute]
+            : product.attributes.map((attr) => ({
+                ...attr,
+                variations: [...attr.variations].sort((a, b) => {
+                  const numA = parseFloat(a.variation);
+                  const numB = parseFloat(b.variation);
+                  if (!isNaN(numA) && !isNaN(numB)) {
+                    return numA - numB;
+                  }
+                  return a.variation.localeCompare(b.variation);
+                }),
+              }))
         );
       } else {
-        setDisplayedAttributes(product?.attributes || []);
+        setDisplayedAttributes(
+          product?.attributes?.map((attr) => ({
+            ...attr,
+            variations: [...attr.variations].sort((a, b) => {
+              const numA = parseFloat(a.variation);
+              const numB = parseFloat(b.variation);
+              if (!isNaN(numA) && !isNaN(numB)) {
+                return numA - numB;
+              }
+              return a.variation.localeCompare(b.variation);
+            }),
+          })) || []
+        );
       }
     } else {
       document.body.style.overflow = "unset";

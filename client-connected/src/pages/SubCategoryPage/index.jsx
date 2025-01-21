@@ -56,8 +56,11 @@ const SubCategoryPage = () => {
     },
   };
 
-  const locations = categoryData?.location.split("|") || [];
-  const currentLocation = location.charAt(0).toUpperCase() + location.slice(1);
+  const locations = categoryData?.location?.split("|") || [];
+  const currentLocation =
+    location?.charAt(0)?.toUpperCase() + location?.slice(1);
+  const currentLocationTitle =
+    location && currentLocation ? ` in ${currentLocation}` : "";
 
   if (isLoading) return <LoadingWrapper />;
 
@@ -66,7 +69,14 @@ const SubCategoryPage = () => {
       <Helmet>
         <title>{categoryData?.meta_title}</title>
         <meta name="description" content={categoryData?.meta_description} />
-        <meta property="og:title" content={categoryData?.meta_title} />
+        <meta
+          property="og:title"
+          content={
+            currentLocation
+              ? categoryData?.meta_title + currentLocationTitle
+              : categoryData?.meta_title
+          }
+        />
         <meta
           property="og:description"
           content={categoryData?.meta_description}
@@ -84,7 +94,8 @@ const SubCategoryPage = () => {
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center px-4">
-              {categoryData?.category_name} in {currentLocation}
+              {categoryData?.category_name}
+              {currentLocationTitle}
             </h1>
           </div>
         </div>
@@ -113,7 +124,7 @@ const SubCategoryPage = () => {
                 </div>
 
                 <div className="p-4">
-                  <h3 className="text-sm md:text-base font-semibold mb-3 line-clamp-2">
+                  <h3 className="h-14 text-sm md:text-base font-semibold mb-3 line-clamp-2">
                     {subCategory.subcategory_name}
                   </h3>
 
@@ -127,9 +138,7 @@ const SubCategoryPage = () => {
                     }}
                     className="w-full py-2 text-sm px-4 bg-[#10847E] text-white rounded-md hover:bg-[#0d6d68] transition-colors duration-300"
                   >
-                    {subCategory.category.is_page === 1
-                      ? "View Details"
-                      : "View Products"}
+                    View Services
                   </button>
                 </div>
               </motion.div>
@@ -137,33 +146,38 @@ const SubCategoryPage = () => {
           </motion.div>
 
           {/* Locations Section */}
-          <div className="mt-16 bg-gray-50 rounded-xl p-6 md:p-8">
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              Available Locations
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {locations.map((loc) => {
-                const formattedLoc = loc.trim();
-                const capitalizedLoc =
-                  formattedLoc.charAt(0).toUpperCase() + formattedLoc.slice(1);
-                return (
-                  <Link
-                    key={formattedLoc}
-                    to={`/${categoryData.slug}/${
-                      categoryData.id
-                    }/${formattedLoc.toLowerCase()}`}
-                    className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
-                  >
-                    <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                      <span className="text-lg">
-                        {categoryData.category_name} in {capitalizedLoc}
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
+          {locations && locations.length ? (
+            <div className="mt-16 bg-gray-50 rounded-xl p-6 md:p-8">
+              <h2 className="text-2xl font-bold mb-6 text-center">
+                Available Locations
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {locations?.map((loc) => {
+                  const formattedLoc = loc.trim();
+                  const capitalizedLoc =
+                    formattedLoc.charAt(0).toUpperCase() +
+                    formattedLoc.slice(1);
+                  return (
+                    <a
+                      key={formattedLoc}
+                      href={`/${
+                        categoryData.slug
+                      }-in-${formattedLoc.toLowerCase()}/${
+                        categoryData.id
+                      }/${formattedLoc.toLowerCase()}`}
+                      className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
+                    >
+                      <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <span className="text-lg">
+                          {categoryData.category_name} in {capitalizedLoc}
+                        </span>
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </>

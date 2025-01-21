@@ -307,7 +307,7 @@ const HomePageFirstSection = () => {
       />
 
       <section className="w-full relative group py-0">
-        <div className="w-full h-24 lg:h-[500px] rounded-xl overflow-hidden">
+        <div className="w-full h-24 md:h-40 lg:h-[500px] rounded-xl overflow-hidden">
           {bannerData?.sliders?.map((slide, index) => (
             <div
               key={index}
@@ -320,7 +320,7 @@ const HomePageFirstSection = () => {
                   src={slide.image_url}
                   title={slide.image_title}
                   alt={slide.alt_tag}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full"
                 />
               </a>
             </div>
@@ -359,7 +359,7 @@ const HomePageFirstSection = () => {
         </div>
       </section>
 
-      <section className="w-full mx-auto section md:px-8 py-5 md:py-10">
+      {/* <section className="w-full mx-auto section md:px-8 py-5 md:py-10">
         <h1 className="px-2 md:px-0 text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
           HELLO {user?.name ? user.name : null}{" "}
           <span className="waving-hand">👋</span>
@@ -381,7 +381,7 @@ const HomePageFirstSection = () => {
                   // onClick={() => openCatModal([ct?.id, ct?.category_name])}
                   className="p-2 cursor-pointer"
                 >
-                  <div className="mx-auto  w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
+                  <div className="mx-auto w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
                     <NavLink className="flex justify-end items-end h-full">
                       <img
                         className="w-full h-full object-cover"
@@ -396,18 +396,106 @@ const HomePageFirstSection = () => {
             }
           })}
         </div>
-      </section>
-
-      {/* <section className="flex flex-col md:flex-row gap-4 my-8">
-        <div className="w-full md:w-1/2 p-4 rounded-lg flex items-center gap-4" style={{backgroundColor: "#F8F9FF"}}>
-          <img src={joinPremiumIcon} alt="" />
-          <h3 className="font-semibold text-lg">Join Premium Club And Save 10% Off On Every Service @199</h3>
-        </div>
-        <div className="w-full md:w-1/2 p-4 rounded-lg flex items-center gap-4" style={{backgroundColor: "#F8F9FF"}}>
-          <img src={extraOffIcon} alt="" />
-          <h3 className="font-semibold text-lg">Extra 5 % Off On Every Service By Doing Online Payment Apply Code: 44949</h3>
-        </div>
       </section> */}
+
+      <section className="w-full mx-auto px-4 md:px-8 py-6 md:py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          {/* Welcome Header */}
+          <motion.h1
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-4"
+          >
+            HELLO {user?.name && <span className="font-bold">{user.name}</span>}{" "}
+            <span className="waving-hand animate-wave inline-block">👋</span>
+          </motion.h1>
+
+          {/* Category Header */}
+          <motion.h1
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]"
+          >
+            What are you looking for today?
+          </motion.h1>
+
+          {/* Category Grid */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
+                },
+              },
+            }}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6 lg:gap-8"
+          >
+            {categoryData?.data?.map((ct, index) => {
+              if (index === 6) return null;
+
+              return (
+                <motion.div
+                  key={index}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.5,
+                      },
+                    },
+                    hover: {
+                      scale: 1.05,
+                      transition: {
+                        duration: 0.2,
+                      },
+                    },
+                  }}
+                  whileHover="hover"
+                  className="relative group"
+                >
+                  <div
+                    // onClick={() =>
+                    //   navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
+                    // }
+                    onClick={() => openCatModal([ct?.id, ct?.category_name])}
+                    className="p-2 cursor-pointer transition-transform duration-300 ease-in-out"
+                  >
+                    <div className="relative overflow-hidden rounded-lg shadow-md bg-white">
+                      <div className="aspect-square">
+                        <NavLink className="block w-full h-full">
+                          <img
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            src={ct?.image_url}
+                            title={ct?.image_title}
+                            alt={ct?.alt_tag}
+                            loading="lazy"
+                          />
+                        </NavLink>
+                      </div>
+
+                      {/* Overlay with category name */}
+                      {/* <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-end">
+                        <div className="w-full p-3 text-white [#10847E] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-sm font-medium text-center">
+                            {ct?.category_name}
+                          </h3>
+                        </div>
+                      </div> */}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </section>
 
       {homeFeedData?.pest_control?.length ? (
         <CategorySlider

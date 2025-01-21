@@ -61,16 +61,20 @@ const ProjectRoutes = () => {
     { path: `${config.VITE_BASE_URL}/`, element: <Homescreen /> },
     { path: `${config.VITE_BASE_URL}/home`, element: <Homescreen /> },
     {
+      path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId`,
+      element: <SubCategoryPage />,
+    },
+    {
       path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId/:location`,
       element: <SubCategoryPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/subcategory/:subcategorySlug/:subcategoryId/:location`,
-      element: <SubCategoryPage />,
+      path: `${config.VITE_BASE_URL}/:subcategorySlug/:subcategoryId/:location`,
+      element: <ProductListPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/products/:subcategoryId/:location`,
-      element: <ProductListPage />,
+      path: `${config.VITE_BASE_URL}/product/:id/:slug`,
+      element: <ProductPage />,
     },
     {
       path: `${config.VITE_BASE_URL}/product/:id/:slug/:location`,
