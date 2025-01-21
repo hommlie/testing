@@ -490,7 +490,7 @@ exports.getCleaningSubcategory = async (req, res) => {
           as: "subcategory",
         },
       ],
-      order: [["id", "DESC"]],
+      order: [["id", "ASC"]],
     });
     // Transform the products data
     const transformedProducts = await Promise.all(
