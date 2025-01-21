@@ -472,6 +472,7 @@ exports.getCleaningSubcategory = async (req, res) => {
           ],
           as: "variations",
           required: false,
+          order: [["created_at", "ASC"]],
         },
         {
           model: Ratting,

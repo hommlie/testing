@@ -242,11 +242,36 @@ const ProductDetailModal = ({
               <X className="h-6 w-6" />
             </button>
           </div>
-          <div className="flex items-center mt-2">
-            <Star className="w-5 h-5 text-yellow-400 fill-current" />
-            <span className="ml-1 text-lg font-semibold">4.77</span>
-            <span className="ml-1 text-gray-500">(176K reviews)</span>
-          </div>
+          {(product?.rating || product.total_reviews) && (
+            <div className="flex items-center space-x-2">
+              {product.rating && (
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <Star
+                      key={index}
+                      className={`w-4 h-4 ${
+                        index < Math.floor(product.rating)
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                  <span className="ml-1 text-sm font-medium">
+                    {product.rating.toFixed(1)}
+                  </span>
+                </div>
+              )}
+              {product.total_reviews && (
+                <span className="text-sm text-gray-500">
+                  (
+                  {product.total_reviews >= 1000
+                    ? `${(product.total_reviews / 1000).toFixed(1)}K`
+                    : product.total_reviews}{" "}
+                  reviews)
+                </span>
+              )}
+            </div>
+          )}
           <div className="w-full flex space-x-4 mt-4">
             {tabs.map((tab) => (
               <button
@@ -401,15 +426,6 @@ const ProductDetailModal = ({
           {/* Reviews Section */}
           {selectedTab === "reviews" && (
             <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center">
-                  <Star className="w-8 h-8 text-yellow-400 fill-current" />
-                  <span className="ml-2 text-3xl font-bold">4.77</span>
-                </div>
-                <div className="text-gray-500">
-                  <p>176K reviews</p>
-                </div>
-              </div>
               <div className="space-y-4">
                 {product?.rattings?.length > 0 ? (
                   product.rattings.map((review) => (
