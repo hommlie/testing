@@ -8,15 +8,15 @@ import Loading from "../../components/Loading";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import ProductDetailModal from "../../components/ProductDetailsModal";
-import NoImage from '../../assets/bg/no-image.svg';
+import NoImage from "../../assets/bg/no-image.svg";
 
 const CartSection = ({ cart }) => {
   const calculateCartTotal = () => {
-    return cart.reduce((sum, item) => sum + (Number(item.price) * item.qty), 0);
+    return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
   };
 
   const calculateTaxTotal = () => {
-    return cart.reduce((sum, item) => sum + (Number(item.tax) * item.qty), 0);
+    return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0);
   };
 
   const calculateSavings = () => {
@@ -29,18 +29,25 @@ const CartSection = ({ cart }) => {
       <div className="space-y-4">
         <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
           <h2 className="text-xl font-semibold">Cart Summary</h2>
-          
+
           {cart?.length > 0 ? (
             <div className="space-y-3">
               {cart.map((item) => (
-                <div key={item.id} className="flex items-center justify-between py-2 border-b">
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between py-2 border-b"
+                >
                   <div className="flex flex-col">
                     <span className="font-medium">{item.product_name}</span>
-                    <span className="text-sm text-gray-500">{item.variation_name}</span>
+                    <span className="text-sm text-gray-500">
+                      {item.variation_name}
+                    </span>
                   </div>
                   <div className="text-right">
                     <span className="font-medium">₹{item.price}</span>
-                    <span className="text-sm text-gray-500 block">Qty: {item.qty}</span>
+                    <span className="text-sm text-gray-500 block">
+                      Qty: {item.qty}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -67,31 +74,33 @@ const CartSection = ({ cart }) => {
                 </div>
               )}
 
-              <button 
+              <button
                 className="bg-emerald-600 hover:bg-emerald-700 w-full text-white py-2 rounded-md transition"
-                onClick={() => window.location.href = '/add-to-cart'}
+                onClick={() => (window.location.href = "/add-to-cart")}
               >
                 Checkout Now
               </button>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center text-center text-gray-600 py-10">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                strokeWidth="1.5" 
-                stroke="currentColor" 
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
                 className="w-16 h-16 mb-4 text-gray-400"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  d="M3 3h18M3 7h18M3 7v14h18V7M8 11v6m4-6v6m4-6v6" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 3h18M3 7h18M3 7v14h18V7M8 11v6m4-6v6m4-6v6"
                 />
               </svg>
               <p className="text-lg font-semibold">Your cart is empty</p>
-              <p className="text-sm text-gray-500">Looks like you haven’t added anything to your cart yet.</p>
+              <p className="text-sm text-gray-500">
+                Looks like you haven’t added anything to your cart yet.
+              </p>
             </div>
           )}
         </section>
@@ -132,34 +141,37 @@ const CleaningProductPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  },[]);
+  }, []);
 
   useEffect(() => {
-      setIsLoading(true);
-      fetchSubCategoryData();
+    setIsLoading(true);
+    fetchSubCategoryData();
   }, [id]);
 
   const fetchSubCategoryData = async () => {
-      try {
-      const response = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { subcat_id: id });
+    try {
+      const response = await axios.post(
+        `${config.API_URL}/api/cleaningsubcategory`,
+        { subcat_id: id }
+      );
       console.log(response.data.data);
       if (response.data.status === 1) {
         setInnerSubCategoryData(response.data.data);
         setIsLoading(false);
       }
-      } catch (error) {
+    } catch (error) {
       console.error("Error fetching inner sub-category data:", error);
       setIsLoading(false);
-      }
+    }
   };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
-      setIsModalOpen(false);
-      const proceedBtn = document.getElementById('proceed-btn')?.onClick;
-      if (typeof(proceedBtn) == undefined) {
-          navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-      }
+    setIsModalOpen(false);
+    const proceedBtn = document.getElementById("proceed-btn")?.onClick;
+    if (typeof proceedBtn == undefined) {
+      navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+    }
   };
 
   const handleProductClick = (index) => {
@@ -168,8 +180,10 @@ const CleaningProductPage = () => {
   };
 
   const handleProductNavigate = (product) => {
-      const slug = product.product_name.toLowerCase().replace(/ /g, "-");
-      navigate(`${config.VITE_BASE_URL}/product/${product.id}/${slug}/tag/${tag}`);
+    const slug = product.product_name.toLowerCase().replace(/ /g, "-");
+    navigate(
+      `${config.VITE_BASE_URL}/product/${product.id}/${slug}/tag/${tag}`
+    );
   };
 
   const handlePrevProduct = () => {
@@ -177,12 +191,10 @@ const CleaningProductPage = () => {
       prevIndex === 0 ? innerSubCategoryData.products.length - 1 : prevIndex - 1
     );
     productRefs.current[
-      prevIndex === 0
-        ? innerSubCategoryData.products.length - 1
-        : prevIndex - 1
+      prevIndex === 0 ? innerSubCategoryData.products.length - 1 : prevIndex - 1
     ].scrollIntoView({ behavior: "smooth" });
   };
-  
+
   const handleNextProduct = () => {
     setCurrentProductIndex((prevIndex) =>
       prevIndex === innerSubCategoryData.products.length - 1 ? 0 : prevIndex + 1
@@ -193,96 +205,100 @@ const CleaningProductPage = () => {
   };
 
   const handleAddToCart = async () => {
-      if(user.length === 0) {
-          openModal();
-      } else {
-          setIsAddingToCart(true);
-          const product = {
-              user_id: user.id,
-              product_id: prod_id,
-              vendor_id: prodData.vendor_id,
-              product_name: prodData.product_name,
-              image: prodData?.productimages[0]?.image_url,
-              qty: 1,
-              price: totalAmount,
-              attribute: selectedVariation && selectedVariation.attribute_id,
-              variation: selectedVariation && selectedVariation.id,
-              tax: taxAmount,
-              shipping_cost: prodData.shipping_cost
-          };            
+    if (user.length === 0) {
+      openModal();
+    } else {
+      setIsAddingToCart(true);
+      const product = {
+        user_id: user.id,
+        product_id: prod_id,
+        vendor_id: prodData.vendor_id,
+        product_name: prodData.product_name,
+        image: prodData?.productimages[0]?.image_url,
+        qty: 1,
+        price: totalAmount,
+        attribute: selectedVariation && selectedVariation.attribute_id,
+        variation: selectedVariation && selectedVariation.id,
+        tax: taxAmount,
+        shipping_cost: prodData.shipping_cost,
+      };
 
-          try {
-              const response = await axios.post(`${config.API_URL}/api/addtocart`, product);
-              if(response.data.status === 1) {
-                  console.log(response.data);
-                  successNotify("Successfully added to Cart");
-                  getCart();
-              }
-          } catch (error) {
-              errorNotify(error);
-              console.log("error adding to cart:", error);
-          } finally {
-              setIsAddingToCart(false);
-          }
-          setCart(product);
-          const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-          existingCart.push(product);
-          localStorage.setItem('cart', JSON.stringify(existingCart));
+      try {
+        const response = await axios.post(
+          `${config.API_URL}/api/addtocart`,
+          product
+        );
+        if (response.data.status === 1) {
+          console.log(response.data);
+          successNotify("Successfully added to Cart");
           getCart();
+        }
+      } catch (error) {
+        errorNotify(error);
+        console.log("error adding to cart:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
+      setCart(product);
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      existingCart.push(product);
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+      getCart();
+    }
   };
 
   const handleQtyUpdate = async (id, qty) => {
     setIsAddingToCart(true);
-    
+
     const jwtToken = Cookies.get("HommlieUserjwtToken");
     if (jwtToken) {
-        if (qty === 0) {                
-            handleRemoveFromCart(id);
-        } else {
-            try {
-                const response = await axios.post(`${config.API_URL}/api/qtyUpdate`,
-                    { qty, cart_id: id },
-                    { headers: { Authorization: `Bearer ${jwtToken}` } }
-                );
-                if(response.data.status === 1) {
-                    console.log(response.data.message);
-                    getCart();
-                }
-            } catch (error) {
-                console.log("error updating cart:", error);
-            } finally {
-                setIsAddingToCart(false);
-            }
+      if (qty === 0) {
+        handleRemoveFromCart(id);
+      } else {
+        try {
+          const response = await axios.post(
+            `${config.API_URL}/api/qtyUpdate`,
+            { qty, cart_id: id },
+            { headers: { Authorization: `Bearer ${jwtToken}` } }
+          );
+          if (response.data.status === 1) {
+            console.log(response.data.message);
+            getCart();
+          }
+        } catch (error) {
+          console.log("error updating cart:", error);
+        } finally {
+          setIsAddingToCart(false);
         }
+      }
     }
   };
 
-  const handleRemoveFromCart = async(id) => {
+  const handleRemoveFromCart = async (id) => {
     setIsAddingToCart(true);
     const jwtToken = Cookies.get("HommlieUserjwtToken");
     if (jwtToken) {
-        
-        const user_id = jwtDecode(jwtToken).id;
-        try {
-            const response = await axios.post(`${config.API_URL}/api/deleteProduct`, 
-                { user_id, cart_id: id },
-                { headers: { Authorization: `Bearer ${jwtToken}` } }
-            );
-            if(response.data.status === 1) {
-                console.log(response.data.message);
-                getCart();
-            }
-        } catch (error) {
-            console.log("error removing from cart:", error);
-        } finally {
-            setIsAddingToCart(false);
+      const user_id = jwtDecode(jwtToken).id;
+      try {
+        const response = await axios.post(
+          `${config.API_URL}/api/deleteProduct`,
+          { user_id, cart_id: id },
+          { headers: { Authorization: `Bearer ${jwtToken}` } }
+        );
+        if (response.data.status === 1) {
+          console.log(response.data.message);
+          getCart();
         }
+      } catch (error) {
+        console.log("error removing from cart:", error);
+      } finally {
+        setIsAddingToCart(false);
+      }
     }
   };
 
   const handleViewDetails = (product, attributeId = null) => {
-    setSelectedProduct(product);    
+    setSelectedProduct(product);
     setSelectedAttributeId(attributeId);
     setIsDetailModalOpen(true);
   };
@@ -299,7 +315,9 @@ const CleaningProductPage = () => {
     <main className="min-h-screen">
       <div className=" mx-auto px-4 py-8">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
-          <a href="/" className="text-blue-500">Home</a>
+          <a href="/" className="text-blue-500">
+            Home
+          </a>
           <span>/</span>
           <span>{innerSubCategoryData?.category?.category_name}</span>
           <span>/</span>
@@ -323,13 +341,14 @@ const CleaningProductPage = () => {
                     <div
                       key={product.id}
                       className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
-                        index === currentProductIndex 
-                          ? "glow-border bg-blue-50" 
+                        index === currentProductIndex
+                          ? "glow-border bg-blue-50"
                           : "hover:bg-gray-50"
                       }`}
                       onClick={() => handleProductClick(index)}
                     >
-                      {product.productimages && product.productimages?.length > 0 ? (
+                      {product.productimages &&
+                      product.productimages?.length > 0 ? (
                         <img
                           src={product.productimages[0]?.image_url}
                           alt={product.product_name}
@@ -355,34 +374,37 @@ const CleaningProductPage = () => {
           {/* Main Content */}
           <div className="lg:w-1/2">
             <div className="space-y-6">
-              {
-                innerSubCategoryData?.subcategory_banner ?
+              {innerSubCategoryData?.subcategory_banner ? (
                 <img
                   src={innerSubCategoryData?.subcategory_banner}
                   alt={innerSubCategoryData?.innersubcategory_name}
                   className="w-full h-[300px] object-cover rounded-lg"
                 />
-                :
+              ) : (
                 <img
                   src={NoImage}
                   alt=""
                   className="w-full h-[300px] object-cover rounded-lg opacity-40"
                 />
-              }
-              
+              )}
+
               {innerSubCategoryData?.products?.map((product, index) => (
                 <section
                   key={product.id}
                   ref={(el) => (productRefs.current[index] = el)}
                   className="bg-white rounded-lg p-6 space-y-6 glow-border scroll-mt-4"
                 >
-                  <h3 className="text-2xl font-semibold">{product.product_name}</h3>
+                  <h3 className="text-2xl font-semibold">
+                    {product.product_name}
+                  </h3>
                   <div className="divide-y">
                     {product?.attributes?.map((attribute, attrIndex) => (
                       <div
                         key={attrIndex}
                         className={`py-6 ${
-                          attrIndex === product.attributes.length - 1 ? '' : 'border-gray-200'
+                          attrIndex === product.attributes.length - 1
+                            ? ""
+                            : "border-gray-200"
                         }`}
                       >
                         <div className="flex justify-between items-center gap-6">
@@ -391,9 +413,10 @@ const CleaningProductPage = () => {
                               <h3 className="text-lg font-medium">
                                 {attribute.attribute_name}
                               </h3>
-                              
+
                               {/* Rating and Reviews */}
-                              {(attribute.avg_rating || attribute.total_reviews) && (
+                              {(attribute.avg_rating ||
+                                attribute.total_reviews) && (
                                 <div className="flex items-center space-x-2">
                                   {attribute.avg_rating && (
                                     <div className="flex items-center">
@@ -401,7 +424,8 @@ const CleaningProductPage = () => {
                                         <Star
                                           key={index}
                                           className={`w-4 h-4 ${
-                                            index < Math.floor(attribute.avg_rating)
+                                            index <
+                                            Math.floor(attribute.avg_rating)
                                               ? "text-yellow-400 fill-current"
                                               : "text-gray-300"
                                           }`}
@@ -414,9 +438,13 @@ const CleaningProductPage = () => {
                                   )}
                                   {attribute.total_reviews && (
                                     <span className="text-sm text-gray-500">
-                                      ({attribute.total_reviews >= 1000 
-                                        ? `${(attribute.total_reviews / 1000).toFixed(1)}K` 
-                                        : attribute.total_reviews} reviews)
+                                      (
+                                      {attribute.total_reviews >= 1000
+                                        ? `${(
+                                            attribute.total_reviews / 1000
+                                          ).toFixed(1)}K`
+                                        : attribute.total_reviews}{" "}
+                                      reviews)
                                     </span>
                                   )}
                                 </div>
@@ -428,7 +456,11 @@ const CleaningProductPage = () => {
                                   <span className="flex gap-2 items-center">
                                     Starts from
                                     <span className="text-emerald-600 font-medium">
-                                      ₹{attribute.variations[0]?.discounted_variation_price}
+                                      ₹
+                                      {
+                                        attribute.variations[0]
+                                          ?.discounted_variation_price
+                                      }
                                     </span>
                                   </span>
                                 )}
@@ -438,15 +470,23 @@ const CleaningProductPage = () => {
                             {/* Specifications */}
                             {attribute.specifications && (
                               <div className="space-y-2">
-                                <h4 className="font-medium text-gray-700">Specifications:</h4>
+                                <h4 className="font-medium text-gray-700">
+                                  Specifications:
+                                </h4>
                                 <ul className="space-y-1">
-                                  {attribute.specifications.split('|')
+                                  {attribute.specifications
+                                    .split("|")
                                     .map((spec, index) => spec.trim())
-                                    .filter(spec => spec)
+                                    .filter((spec) => spec)
                                     .map((spec, index) => (
-                                      <li key={index} className="flex items-start space-x-2">
-                                        <span className="text-emerald-500 mt-1">•</span>
-                                        <span className="text-gray-600">{spec.replace(/^"|"$/g, '')}</span>
+                                      <li
+                                        key={index}
+                                        className="flex items-start space-x-2"
+                                      >
+                                        <span className="text-black">•</span>
+                                        <span className="text-gray-600">
+                                          {spec.replace(/^"|"$/g, "")}
+                                        </span>
                                       </li>
                                     ))}
                                 </ul>
@@ -455,25 +495,39 @@ const CleaningProductPage = () => {
 
                             <button
                               className="text-blue-500 hover:text-blue-600 font-semibold"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                              onClick={() =>
+                                handleViewDetails(
+                                  product,
+                                  attribute.attribute_id
+                                )
+                              }
                             >
                               View Details
                             </button>
                           </div>
-                          
+
                           {/* Image with overlapped Add button */}
                           <div className="relative w-32 flex-shrink-0">
                             <div className="relative w-32 h-32">
-                              <img 
-                                src={attribute.image || product?.productimages?.[0]?.image_url || NoImage} 
-                                alt="" 
+                              <img
+                                src={
+                                  attribute.image ||
+                                  product?.productimages?.[0]?.image_url ||
+                                  NoImage
+                                }
+                                alt=""
                                 className="w-full h-full rounded-lg object-cover"
                               />
                               <button
                                 className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
                                         bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
                                         hover:bg-emerald-50 transition-colors"
-                                onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                                onClick={() =>
+                                  handleViewDetails(
+                                    product,
+                                    attribute.attribute_id
+                                  )
+                                }
                               >
                                 Add
                               </button>
@@ -485,7 +539,6 @@ const CleaningProductPage = () => {
                   </div>
                 </section>
               ))}
-
             </div>
           </div>
 
@@ -498,13 +551,13 @@ const CleaningProductPage = () => {
         </div>
       </div>
 
-      <LoginSignup 
-        isOpen={isModalOpen} 
-        onClose={closeModal} 
-        checkoutPd={checkoutPd} 
+      <LoginSignup
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        checkoutPd={checkoutPd}
       />
 
-      <ProductDetailModal 
+      <ProductDetailModal
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         product={selectedProduct}
@@ -513,7 +566,6 @@ const CleaningProductPage = () => {
         isAddingToCart={isAddingToCart}
         selectedAttributeId={selectedAttributeId}
       />
-      
     </main>
   );
 };

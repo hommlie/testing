@@ -359,6 +359,8 @@ exports.productDetails = async (req, res) => {
         "meta_title",
         "meta_description",
         "location",
+        "rating",
+        "total_reviews",
       ],
       include: [
         {
@@ -502,6 +504,7 @@ exports.productDetails = async (req, res) => {
         "discounted_price",
         "is_variation",
         "sku",
+        "rating",
       ],
       include: [
         {
@@ -732,6 +735,8 @@ exports.products = async (req, res) => {
         "sku",
         "slug",
         "location",
+        "rating",
+        "total_reviews",
       ],
       include: [
         {

@@ -397,6 +397,8 @@ exports.getCleaningSubcategory = async (req, res) => {
         "faqs",
         "slug",
         "location",
+        "rating",
+        "total_reviews",
       ],
       include: [
         {
