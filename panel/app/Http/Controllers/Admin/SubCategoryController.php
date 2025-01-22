@@ -95,7 +95,9 @@ class SubCategoryController extends Controller
             'video' => 'nullable',
         ]);
 
-        $loca = $request->location ? implode(" | ", $request->location) : null;
+        $loca = isset($request->location)
+            ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+            : null;
 
         // Generate unique file name and move the file
         $icon = 'sub_category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
@@ -208,7 +210,9 @@ class SubCategoryController extends Controller
 
         $icon = $request->old_img;
         $sub_cat_banner = $request->old_banner;
-        $loca = $request->location ? implode(" | ", $request->location) : null;
+        $loca = isset($request->location)
+        ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+        : null;
         if (isset($request->icon)) {
             File::delete('storage/app/public/images/subcategory/' . $request->old_img);
 

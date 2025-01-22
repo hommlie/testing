@@ -37,7 +37,7 @@
                                     <div class="form-group">
                                         <label for="attribute">{{ trans('labels.attribute') }}</label>
                                         <input type="text" class="form-control" name="attribute" id="attribute"
-                                            placeholder="{{ trans('placeholder.attribute') }}">
+                                            placeholder="{{ trans('placeholder.attribute') }}" required>
                                         @if ($errors->has('attribute'))
                                             <span class="text-danger">{{ $errors->first('attribute') }}</span>
                                         @endif
@@ -47,7 +47,7 @@
                                         <div id="input-container">
                                             <div class="d-flex mb-2">
                                                 <input type="text" class="form-control" name="specifications[]"
-                                                    id="specifications" placeholder="Enter Specifications">
+                                                    id="specifications" placeholder="Enter Specifications" required>
                                                 <span class="btn btn-outline-success ml-3" id="add-button"><i
                                                         class="fa fa-plus"></i></span>
                                             </div>
@@ -60,7 +60,7 @@
                                     <div class="form-group">
                                         <label for="Image">Image</label>
                                         <input type="file" class="form-control" name="attribute_image"
-                                            id="attribute_image">
+                                            id="attribute_image" required>
                                         @if ($errors->has('attribute_image'))
                                             <span class="text-danger">{{ $errors->first('attribute_image') }}</span>
                                         @endif
@@ -68,7 +68,7 @@
                                     <div class="form-group">
                                         <label for="Total_reviews">Total reviews</label>
                                         <input type="number" class="form-control" name="total_reviews"
-                                            id="total_reviews" placeholder="Enter Total reviews ">
+                                            id="total_reviews" placeholder="Enter Total reviews " required>
                                         @if ($errors->has('total_reviews'))
                                             <span class="text-danger">{{ $errors->first('total_reviews') }}</span>
                                         @endif
@@ -77,7 +77,7 @@
                                         <label for="Avg_rating">Avg Rating</label>
                                         <input type="text" class="form-control" name="avg_rating"
                                             id="avg_rating"
-                                            placeholder="Enter Avg Rating">
+                                            placeholder="Enter Avg Rating" required>
                                             <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid rating.</span>
                                         @if ($errors->has('avg_rating'))
                                             <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
@@ -115,7 +115,7 @@
         const newInput = document.createElement('div');
         newInput.classList.add('d-flex', 'mb-2');
         newInput.innerHTML = `
-        <input type="text" class="form-control" name="specifications[]" id="specifications" placeholder="Enter Specifications">
+        <input type="text" class="form-control" name="specifications[]" id="specifications" placeholder="Enter Specifications" required>
         <span class="btn btn-outline-danger ml-3 remove-button"><i class="fa fa-minus"></i></span>
     `;
         container.appendChild(newInput);

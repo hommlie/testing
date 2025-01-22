@@ -76,9 +76,9 @@ class ProductController extends Controller
                 'discounted_variation_price.*' => 'nullable',
                 'qty.*' => 'nullable',
                 'specifications.*' => 'nullable',
-                'total_reviews.*' => 'nullable',
+                'pro_total_reviews.*' => 'nullable',
                 'avg_rating.*' => 'nullable',
-                'attribute_image.*' => 'nullable',
+                'product_image.*' => 'nullable',
             ]);
             $is_variation = 1;
             $product_price = $request->price[0];
@@ -156,7 +156,10 @@ class ProductController extends Controller
         // }
 
         // $tags = "na";
-        $loca = $request->location ? implode(" | ", $request->location) : null;
+        $loca = isset($request->location)
+            ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+            : null;
+
         // dd($loca);
         $dataval = array(
             'vendor_id' => Auth::user()->id,
@@ -188,7 +191,8 @@ class ProductController extends Controller
             'faqs' => $request->faqs,
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
-            'rating' => $request->productRating,
+            'rating' => $request->productRating ?? 0,
+            'total_reviews' => $request->pro_total_reviews ?? 0,
             'location' => $loca,
             'video' => 'NA',
             'video_thumbnail' => 'NA',
@@ -288,10 +292,13 @@ class ProductController extends Controller
             $total_reviews = $request->total_reviews;
             $avg_rating = $request->avg_rating;
 
-            $specification = array_map(function ($innerArray) {
-                return implode('|', $innerArray);
-            }, $request->specifications);
-    
+            $specification = isset($request->specifications) && is_array($request->specifications) 
+            ? array_map(function ($innerArray) {
+                return is_array($innerArray) ? implode('|', $innerArray) : $innerArray;
+            }, $request->specifications)
+            : [];
+        
+
             foreach ($price as $i => $no) {
                 $input['product_id'] = $data->id;
                 $input['price'] = $price[$i];
@@ -303,12 +310,12 @@ class ProductController extends Controller
                 $input['qty'] = $qty[$i];
                 $input['total_reviews'] = $total_reviews[$i];
                 $input['avg_rating'] = $avg_rating[$i];
-                $input['description'] = $specification[$i+1];
+                $input['description'] = $specification[$i + 1];
 
-                if ($request->hasFile('attribute_image') && isset($request->attribute_image[$i])) {
-                    $attributeImage = $request->file('attribute_image')[$i];
-                    $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
-                    $attributeImage->move(public_path('/storage/app/public/variation/'), $attributeImageFileName);
+                if ($request->hasFile('product_image') && isset($request->product_image[$i])) {
+                    $attributeImage = $request->file('product_image')[$i];
+                    $attributeImageFileName = 'product_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
+                    $attributeImage->move(public_path('/storage/app/public/images/variation/'), $attributeImageFileName);
                     $input['image'] = $attributeImageFileName;
                 }
 
@@ -338,9 +345,9 @@ class ProductController extends Controller
         $attribute = Attribute::select('id', 'attribute')->where('status', '1')->get();
         $images = ProductImages::select('id', 'product_id', 'alt_tag', 'image_title', \DB::raw("CONCAT('" . url('/storage/app/public/images/products/') . "/', image) AS image_url"))
             ->where('product_id', $id)
-            ->where('media', 'image') 
+            ->where('media', 'image')
             ->get();
-        $video = ProductImages::select('id', 'product_id', 'image') 
+        $video = ProductImages::select('id', 'product_id', 'image')
             ->where('product_id', $id)
             ->where('media', 'video') // Filter for videos only
             ->first(); // Retrieve only one record
@@ -387,7 +394,7 @@ class ProductController extends Controller
                 'specifications.*' => 'nullable',
                 'total_reviews.*' => 'nullable',
                 'avg_rating.*' => 'nullable',
-                'attribute_image.*' => 'nullable',
+                'product_image.*' => 'nullable',
             ]);
 
             $is_variation = 1;
@@ -404,9 +411,11 @@ class ProductController extends Controller
             $total_reviews = $request->total_reviews;
             $avg_rating = $request->avg_rating;
 
-            $specification = array_map(function ($innerArray) {
-                return implode('|', $innerArray);
-            }, $request->specifications);
+            $specification = isset($request->specifications) && is_array($request->specifications) 
+            ? array_map(function ($innerArray) {
+                return is_array($innerArray) ? implode('|', $innerArray) : $innerArray;
+            }, $request->specifications)
+            : [];
 
             if (is_array($variation) || is_object($variation)) {
                 foreach ($variation as $i => $no) {
@@ -421,17 +430,17 @@ class ProductController extends Controller
                             'qty' => $qty[$i],
                             'product_id' => $request->product_id,
                             'total_reviews' => $total_reviews[$i],
-                           'avg_rating'=> $avg_rating[$i],
+                            'avg_rating' => $avg_rating[$i],
                             'description' => $specification[$i],
                         ];
 
-                        if ($request->hasFile('attribute_image') && isset($request->attribute_image[$i])) {
-                            $attributeImage = $request->file('attribute_image')[$i];
-                            $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
-                            $attributeImage->move(public_path('/storage/app/public/variation/'), $attributeImageFileName);
+                        if ($request->hasFile('product_image') && isset($request->product_image[$i])) {
+                            $attributeImage = $request->file('product_image')[$i];
+                            $attributeImageFileName = 'product_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
+                            $attributeImage->move(public_path('/storage/app/public/images/variation/'), $attributeImageFileName);
                             $input['image'] = $attributeImageFileName;  // Corrected line
                         }
-                        
+
                         if (isset($request->variation_id[$i])) {
                             // Update existing variation
                             Variation::where('id', $request->variation_id[$i])->update($input);
@@ -500,7 +509,9 @@ class ProductController extends Controller
         $is_featured = $request->is_featured == "on" ? 1 : 2;
         // $tags = $request->tags ? implode(', ', $request->tags) : '';
         $tags = $request->tags;
-        $loca = $request->location ? implode(" | ", $request->location) : null;
+        $loca = isset($request->location)
+        ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+        : null;
         $data = [
             'vendor_id' => Auth::user()->id,
             'cat_id' => $request->cat_id,
@@ -529,7 +540,8 @@ class ProductController extends Controller
             'faqs' => $request->faqs,
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
-            'rating' => $request->productRating,
+            'rating' => $request->productRating ?? 0,
+            'total_reviews' => $request->pro_total_reviews ?? 0,
             'location' => $loca,
             'tax_type' => $request->tax_type,
             'tags' => $tags,

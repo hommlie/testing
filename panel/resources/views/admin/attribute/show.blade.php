@@ -32,6 +32,7 @@
                             <form class="form" method="post" action="{{ route('admin.attribute.update') }}"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="att_old_img" value="{{$data->image}}">
                                 <div class="form-body">
                                     <input type="hidden" name="attribute_id" id="attribute_id" value="{{$data->id}}"
                                         class="form-control">
@@ -71,7 +72,7 @@
                                         <span class="text-danger">{{ $errors->first('attribute_image') }}</span>
                                     @endif
                                     <br />
-                                    <img src="{{ asset('/storage/app/public/attribute/' . $data->image) }}" alt="">
+                                    <img src="{{ asset('/storage/app/public/images/attribute/' . $data->image) }}" alt="">
                                 </div>
                                 <div class="form-group">
                                     <label for="Total_reviews">Total reviews</label>

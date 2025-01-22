@@ -7,7 +7,7 @@
             <th>{{ trans('labels.subcategory') }}</th>
             <!-- <th>{{ trans('labels.innersubcategory') }}</th> -->
             <th>{{ trans('labels.product_name') }}</th>
-            <th>Product Rating</th>
+            <!-- <th>Product Rating</th> -->
             <th>{{ trans('Date') }}</th>
             <th>{{ trans('labels.status') }}</th>
             <th>{{ trans('labels.action') }}</th>
@@ -30,14 +30,14 @@
                 <td>
                     {{$row->product_name}}
                 </td>
-                <td>
+              {{--   <!-- <td>
                     @if($row->rating > 0)
                         {!! str_repeat('<span style="color: gold; font-size: 20px;">&#9733;</span>', $row->rating) !!}
                         {!! str_repeat('<span style="color: lightgray; font-size: 20px;">&#9733;</span>', 5 - $row->rating) !!}
                     @else
                         {!! str_repeat('<span style="color: lightgray; font-size: 20px;">&#9733;</span>', 5) !!}
                     @endif
-                </td>
+                </td> --> --}}
 
 
                 <td>{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>

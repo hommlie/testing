@@ -143,10 +143,21 @@
                                                 placeholder="Enter Meta Description">{{ $data->meta_description }}</textarea>
                                         </div>
                                     </div>
-                                   
+
+                                    {{-- PRODUCT LOCATION --}}
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <div class="form-group row" id="locationContainer">
+                                                <!-- Dynamically added location fields will appear here -->
+                                            </div>
+                                            <span class="text-danger" id="locationError" style="font-size:14px;"></span>
+                                        </div>
+                                        <span id="addLocation" class="btn btn-success">+</span>
+                                    </div>
+                                
                                     </div>
 
-                                    <div class="form-actions center">
+                                    <div class="form-actions center mt-5">
                                         <a href="{{ route('admin.subcategory') }}" class="btn btn-raised btn-warning mr-1">
                                             <i class="ft-x"></i> {{ trans('labels.cancel') }}
                                         </a>
@@ -162,6 +173,48 @@
             </div>
         </section>
     </div>
+    <script>
+    //LOCATION SECTION 
+    const locations = `{{ $data->location }}`;
+    const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
+
+    const container = document.getElementById('locationContainer');
+    function addLocationField(value = '', isRequired = false) {
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'col-sm-12 d-flex mb-2';
+
+        inputGroup.innerHTML = `
+      <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location" }>
+      <span class="btn btn-danger ml-3">-</span>
+    `;
+        inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
+            if (container.childElementCount > 1) {
+                container.removeChild(inputGroup);
+                document.getElementById('locationError').textContent = '';
+            } else {
+                document.getElementById('locationError').textContent = 'At least one location is required!';
+            }
+        });
+
+        container.appendChild(inputGroup);
+    }
+    if (locationArray.length > 0) {
+        locationArray.forEach((location, index) => addLocationField(location, index === 0));
+    } else {
+        addLocationField('', true);
+    }
+    document.getElementById('addLocation').addEventListener('click', function () {
+        addLocationField('', false);
+    });
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const locationInputs = container.querySelectorAll('input[name="location[]"]');
+        const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
+        if (!hasValue) {
+            e.preventDefault();
+            document.getElementById('locationError').textContent = 'At least one location is required!';
+        }
+    });
+</script>
 
 
 @endsection

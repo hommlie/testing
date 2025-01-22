@@ -156,7 +156,8 @@ class ProductController extends Controller
         // }
 
         // $tags = "na";
-
+        $loca = $request->location ? implode(" | ", $request->location) : null;
+        // dd($loca);
         $dataval = array(
             'vendor_id' => Auth::user()->id,
             'cat_id' => $request->cat_id,
@@ -188,6 +189,7 @@ class ProductController extends Controller
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'rating' => $request->productRating,
+            'location' => $loca,
             'video' => 'NA',
             'video_thumbnail' => 'NA',
         );
@@ -226,14 +228,10 @@ class ProductController extends Controller
             $files = $request->file('image');
             $altTags = $request->input('alt_tag');
             $imageTitles = $request->input('image_title');
-
-
             foreach ($files as $index => $file) {
                 $productimage = new ProductImages;
                 $image = 'product-' . uniqid() . '.' . $file->getClientOriginalExtension();
-
                 $file->move('storage/app/public/images/products', $image);
-
                 $productimage->product_id = $data->id;
                 $productimage->image = $image;
                 $productimage->media = 'Image';
@@ -502,7 +500,7 @@ class ProductController extends Controller
         $is_featured = $request->is_featured == "on" ? 1 : 2;
         // $tags = $request->tags ? implode(', ', $request->tags) : '';
         $tags = $request->tags;
-
+        $loca = $request->location ? implode(" | ", $request->location) : null;
         $data = [
             'vendor_id' => Auth::user()->id,
             'cat_id' => $request->cat_id,
@@ -532,7 +530,7 @@ class ProductController extends Controller
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'rating' => $request->productRating,
-            //  dd($request->productRating),
+            'location' => $loca,
             'tax_type' => $request->tax_type,
             'tags' => $tags,
         ];

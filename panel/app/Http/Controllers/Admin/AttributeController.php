@@ -63,7 +63,7 @@ class AttributeController extends Controller
         if ($request->hasFile('attribute_image')) {
             $attributeImage = $request->file('attribute_image');
             $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
-            $attributeImage->move(public_path('/storage/app/public/attribute/'), $attributeImageFileName);
+            $attributeImage->move(public_path('/storage/app/public/images/attribute/'), $attributeImageFileName);
             $attributeImagePath = $attributeImageFileName;
         }
 
@@ -104,39 +104,51 @@ class AttributeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
-    {
-        $this->validate($request, [
-            'attribute' => 'required',
-            'specifications' => 'required|array',
-            'total_reviews' => 'required|integer',
-            'avg_rating' => 'required|numeric',
-            'attribute_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    // Validate the request
+    $this->validate($request, [
+        'attribute' => 'required',
+        'specifications' => 'required|array',
+        'total_reviews' => 'required|integer',
+        'avg_rating' => 'required|numeric',
+        'attribute_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        if ($request->hasFile('attribute_image')) {
-            $attributeImage = $request->file('attribute_image');
-            $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
-            $attributeImage->move(public_path('/storage/app/public/attribute/'), $attributeImageFileName);
-            $attributeImagePath = $attributeImageFileName;
-        }
+    // Initialize the variable
+    $attributeImagePath = null;
 
-        $data = [
-            'attribute' => $request->attribute,
-            'total_reviews' => $request->total_reviews,
-            'avg_rating' => $request->avg_rating,
-            'specifications' => implode(" | ", $request->specifications),
-            'image' => $attributeImagePath,
-        ];
-
-        $attribute = Attribute::find($request->attribute_id);
-
-        if ($attribute) {
-            $attribute->update($data);
-            return redirect('admin/attribute')->with('success', 'Attribute has been updated');
-        } else {
-            return redirect()->back()->with('danger', 'Something went wrong');
-        }
+    // Handle file upload if provided
+    if ($request->hasFile('attribute_image')) {
+        $attributeImage = $request->file('attribute_image');
+        $attributeImageFileName = 'attribute_image_' . Str::uuid() . '.' . $attributeImage->getClientOriginalExtension();
+        $attributeImage->move(public_path('/storage/app/public/images/attribute/'), $attributeImageFileName);
+        $attributeImagePath = $attributeImageFileName;
     }
+
+    // Prepare data for updating
+    $data = [
+        'attribute' => $request->attribute,
+        'total_reviews' => $request->total_reviews,
+        'avg_rating' => $request->avg_rating,
+        'specifications' => implode(" | ", $request->specifications),
+    ];
+
+    // Add image to the data array only if it was uploaded
+    if ($attributeImagePath) {
+        $data['image'] = $attributeImagePath;
+    }
+
+    // Find the attribute and update
+    $attribute = Attribute::find($request->attribute_id);
+
+    if ($attribute) {
+        $attribute->update($data);
+        return redirect('admin/attribute')->with('success', 'Attribute has been updated');
+    } else {
+        return redirect()->back()->with('danger', 'Something went wrong');
+    }
+}
+
 
 
     /**
