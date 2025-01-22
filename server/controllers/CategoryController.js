@@ -438,7 +438,7 @@ exports.getCleaningSubcategory = async (req, res) => {
             "variation_times",
             [
               sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/attribute/', variations.image)`
+                `CONCAT('${apiUrl}/storage/app/public/images/variation/', variations.image)`
               ),
               "image",
             ],
@@ -458,7 +458,7 @@ exports.getCleaningSubcategory = async (req, res) => {
                 [
                   sequelize.fn(
                     "CONCAT",
-                    `${apiUrl}/storage/app/public/images/variation/`,
+                    `${apiUrl}/storage/app/public/images/attribute/`,
                     sequelize.col("variations->attribute.image")
                   ),
                   "image",
