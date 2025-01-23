@@ -528,6 +528,13 @@ exports.getCleaningSubcategory = async (req, res) => {
             if (existingGroup) {
               // Add variation to existing group
               existingGroup.variations.push(variationData);
+
+              // Update the starting_price by comparing the current variation's price
+              const currentPrice =
+                variationData.discounted_variation_price || variationData.price;
+              if (currentPrice < existingGroup.starting_price) {
+                existingGroup.starting_price = currentPrice;
+              }
             } else {
               // Create new attribute group
               acc.push({
@@ -539,6 +546,10 @@ exports.getCleaningSubcategory = async (req, res) => {
                 avg_rating: variation.attribute.avg_rating,
                 variations: [variationData],
                 reviewsData,
+                // Set the starting price to the price of the first variation
+                starting_price:
+                  variationData.discounted_variation_price ||
+                  variationData.price,
               });
             }
 
