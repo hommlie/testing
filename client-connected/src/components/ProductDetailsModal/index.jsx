@@ -7,6 +7,37 @@ import { jwtDecode } from "jwt-decode";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
 import LoginSignup from "../LoginModal";
+import { useNavigate } from "react-router-dom";
+
+const StarRating = ({ rating }) => {
+  return (
+    <div className="flex items-center">
+      {[1, 2, 3, 4, 5].map((star) => {
+        const starValue = star;
+        const fillPercentage = Math.max(
+          0,
+          Math.min(
+            100,
+            Math.round(Math.max(0, Math.min(1, rating - starValue + 1)) * 100)
+          )
+        );
+
+        return (
+          <div key={star} className="relative">
+            <Star className="w-4 h-4 text-gray-300" />
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{ width: `${fillPercentage}%` }}
+            >
+              <Star className="w-4 h-4 text-yellow-400 fill-current absolute top-0 left-0" />
+            </div>
+          </div>
+        );
+      })}
+      <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+    </div>
+  );
+};
 
 const ProductDetailModal = ({
   isOpen,
@@ -22,6 +53,7 @@ const ProductDetailModal = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const variationRefs = useRef({});
+  const navigate = useNavigate();
 
   const notify = useToast();
   const successNotify = (success) => notify(success, "success");
@@ -286,23 +318,7 @@ const ProductDetailModal = ({
           </div>
           {(product?.rating || product.total_reviews) && (
             <div className="flex items-center space-x-2">
-              {product.rating && (
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, index) => (
-                    <Star
-                      key={index}
-                      className={`w-4 h-4 ${
-                        index < Math.floor(product.rating)
-                          ? "text-yellow-400 fill-current"
-                          : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                  <span className="ml-1 text-sm font-medium">
-                    {product.rating.toFixed(1)}
-                  </span>
-                </div>
-              )}
+              {product.rating && <StarRating rating={product.rating} />}
               {product.total_reviews && (
                 <span className="text-sm text-gray-500">
                   (
@@ -359,22 +375,7 @@ const ProductDetailModal = ({
                               variation.total_reviews) && (
                               <div className="flex items-center space-x-2">
                                 {variation.avg_rating && (
-                                  <div className="flex items-center">
-                                    {[...Array(5)].map((_, index) => (
-                                      <Star
-                                        key={index}
-                                        className={`w-4 h-4 ${
-                                          index <
-                                          Math.floor(variation.avg_rating)
-                                            ? "text-yellow-400 fill-current"
-                                            : "text-gray-300"
-                                        }`}
-                                      />
-                                    ))}
-                                    <span className="ml-1 text-sm font-medium">
-                                      {variation.avg_rating.toFixed(1)}
-                                    </span>
-                                  </div>
+                                  <StarRating rating={variation.avg_rating} />
                                 )}
                                 {variation.total_reviews && (
                                   <span className="text-sm text-gray-500">
@@ -512,7 +513,7 @@ const ProductDetailModal = ({
                 <p className="text-emerald-600">₹{cartTotal.toFixed(2)}</p>
               </div>
               <button
-                onClick={() => navigate(`${config.VITE_BASE_URL}add-to-cart`)}
+                onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
                 className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700"
               >
                 Checkout Now

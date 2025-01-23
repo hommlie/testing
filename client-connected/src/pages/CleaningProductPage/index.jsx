@@ -10,6 +10,36 @@ import LoginSignup from "../../components/LoginModal";
 import ProductDetailModal from "../../components/ProductDetailsModal";
 import NoImage from "../../assets/bg/no-image.svg";
 
+const StarRating = ({ rating }) => {
+  return (
+    <div className="flex items-center">
+      {[1, 2, 3, 4, 5].map((star) => {
+        const starValue = star;
+        const fillPercentage = Math.max(
+          0,
+          Math.min(
+            100,
+            Math.round(Math.max(0, Math.min(1, rating - starValue + 1)) * 100)
+          )
+        );
+
+        return (
+          <div key={star} className="relative">
+            <Star className="w-4 h-4 text-gray-300" />
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{ width: `${fillPercentage}%` }}
+            >
+              <Star className="w-4 h-4 text-yellow-400 fill-current absolute top-0 left-0" />
+            </div>
+          </div>
+        );
+      })}
+      <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+    </div>
+  );
+};
+
 const CartSection = ({ cart }) => {
   const calculateCartTotal = () => {
     return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
@@ -154,7 +184,6 @@ const CleaningProductPage = () => {
         `${config.API_URL}/api/cleaningsubcategory`,
         { subcat_id: id }
       );
-      console.log(response.data.data);
       if (response.data.status === 1) {
         setInnerSubCategoryData(response.data.data);
         setIsLoading(false);
@@ -229,7 +258,6 @@ const CleaningProductPage = () => {
           product
         );
         if (response.data.status === 1) {
-          console.log(response.data);
           successNotify("Successfully added to Cart");
           getCart();
         }
@@ -418,24 +446,7 @@ const CleaningProductPage = () => {
                               {(attribute.avg_rating ||
                                 attribute.total_reviews) && (
                                 <div className="flex items-center space-x-2">
-                                  {attribute.avg_rating && (
-                                    <div className="flex items-center">
-                                      {[...Array(5)].map((_, index) => (
-                                        <Star
-                                          key={index}
-                                          className={`w-4 h-4 ${
-                                            index <
-                                            Math.floor(attribute.avg_rating)
-                                              ? "text-yellow-400 fill-current"
-                                              : "text-gray-300"
-                                          }`}
-                                        />
-                                      ))}
-                                      <span className="ml-1 text-sm font-medium">
-                                        {attribute.avg_rating.toFixed(1)}
-                                      </span>
-                                    </div>
-                                  )}
+                                  <StarRating rating={attribute.avg_rating} />
                                   {attribute.total_reviews && (
                                     <span className="text-sm text-gray-500">
                                       (
@@ -456,11 +467,7 @@ const CleaningProductPage = () => {
                                   <span className="flex gap-2 items-center">
                                     Starts from
                                     <span className="text-emerald-600 font-medium">
-                                      ₹
-                                      {
-                                        attribute.variations[0]
-                                          ?.discounted_variation_price
-                                      }
+                                      ₹{attribute?.starting_price}
                                     </span>
                                   </span>
                                 )}
