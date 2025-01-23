@@ -205,7 +205,14 @@ const CleaningProductPage = () => {
 
   const handleProductClick = (index) => {
     setCurrentProductIndex(index);
-    productRefs.current[index].scrollIntoView({ behavior: "smooth" });
+
+    const element = productRefs.current[index];
+    const offset = 175;
+
+    window.scrollTo({
+      top: element.offsetTop - offset,
+      behavior: "smooth",
+    });
   };
 
   const handleProductNavigate = (product) => {
@@ -341,7 +348,7 @@ const CleaningProductPage = () => {
 
   return (
     <main className="min-h-screen">
-      <div className=" mx-auto px-4 py-8">
+      <div className="mx-auto px-4 md:px-10 py-8">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">
             Home
@@ -352,7 +359,7 @@ const CleaningProductPage = () => {
           <span>{innerSubCategoryData?.subcategory_name}</span>
         </nav>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-4">
           {/* Left Sidebar */}
           <div className="lg:w-1/4">
             <div className="sticky top-44 transition-all duration-300 ease-in-out">
@@ -364,7 +371,7 @@ const CleaningProductPage = () => {
                   <span className="w-1/3 text-gray-500">Select a service</span>
                   <div className="bg-gray-300 h-0.5 w-2/3"></div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 max-h-[calc(100vh-16rem)] overflow-y-auto">
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-2 max-h-[calc(100vh-16rem)] overflow-y-auto">
                   {innerSubCategoryData?.products?.map((product, index) => (
                     <div
                       key={product.id}
@@ -389,7 +396,7 @@ const CleaningProductPage = () => {
                           className="w-20 h-20 rounded-md object-cover opacity-40"
                         />
                       )}
-                      <p className="text-xs text-center font-medium mt-2 truncate w-full">
+                      <p className="text-xs text-center font-medium mt-2 line-clamp-2 w-full">
                         {product.product_name}
                       </p>
                     </div>

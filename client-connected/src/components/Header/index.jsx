@@ -28,7 +28,23 @@ import config from "../../config/config";
 import { jwtDecode } from "jwt-decode";
 
 export default function Header({ logo, logoAlt }) {
-  const { prodData, user, isLoading, getSearchProdData, setUser, cart, getCart, setCart, setCartLength, cartLength, homeFeedData, getUser, totalPrice, getAddresses, bookings } = useCont();
+  const {
+    prodData,
+    user,
+    isLoading,
+    getSearchProdData,
+    setUser,
+    cart,
+    getCart,
+    setCart,
+    setCartLength,
+    cartLength,
+    homeFeedData,
+    getUser,
+    totalPrice,
+    getAddresses,
+    bookings,
+  } = useCont();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -42,7 +58,9 @@ export default function Header({ logo, logoAlt }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [isReferAndEarnOpen, setIsReferAndEarnOpen] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState("Get Current Location");
+  const [currentLocation, setCurrentLocation] = useState(
+    "Get Current Location"
+  );
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const navigate = useNavigate();
   const notify = useToast();
@@ -61,11 +79,17 @@ export default function Header({ logo, logoAlt }) {
   useEffect(() => {
     // console.log(user);
 
-    const handleClickOutside = event => {
-      if (loginDropdownRef.current && !loginDropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event) => {
+      if (
+        loginDropdownRef.current &&
+        !loginDropdownRef.current.contains(event.target)
+      ) {
         setIsLoginOpen(false);
       }
-      if (cartDropdownRef.current && !cartDropdownRef.current.contains(event.target)) {
+      if (
+        cartDropdownRef.current &&
+        !cartDropdownRef.current.contains(event.target)
+      ) {
         setIsCartOpen(false);
       }
     };
@@ -78,7 +102,8 @@ export default function Header({ logo, logoAlt }) {
 
   useEffect(() => {
     getCurrentLocation();
-    const featuredProd = homeFeedData?.featured_products?.map(pd => pd.product_name) || [];
+    const featuredProd =
+      homeFeedData?.featured_products?.map((pd) => pd.product_name) || [];
     setSearchPlaceholderData(featuredProd);
   }, [cartLength, bookings]);
 
@@ -86,14 +111,23 @@ export default function Header({ logo, logoAlt }) {
     if (searchPlaceholderData.length > 0) {
       const typingInterval = setInterval(() => {
         if (isTyping) {
-          if (currentPlaceholder.length < searchPlaceholderData[currentPlaceholderIndex].length) {
-            setCurrentPlaceholder(prev => prev + searchPlaceholderData[currentPlaceholderIndex][prev.length]);
+          if (
+            currentPlaceholder.length <
+            searchPlaceholderData[currentPlaceholderIndex].length
+          ) {
+            setCurrentPlaceholder(
+              (prev) =>
+                prev +
+                searchPlaceholderData[currentPlaceholderIndex][prev.length]
+            );
           } else {
             setIsTyping(false);
             setTimeout(() => {
               setIsTyping(true);
               setCurrentPlaceholder("");
-              setCurrentPlaceholderIndex(prev => (prev + 1) % searchPlaceholderData.length);
+              setCurrentPlaceholderIndex(
+                (prev) => (prev + 1) % searchPlaceholderData.length
+              );
             }, 2000);
           }
         }
@@ -101,10 +135,14 @@ export default function Header({ logo, logoAlt }) {
 
       return () => clearInterval(typingInterval);
     }
-  }, [searchPlaceholderData, currentPlaceholderIndex, currentPlaceholder, isTyping]);
+  }, [
+    searchPlaceholderData,
+    currentPlaceholderIndex,
+    currentPlaceholder,
+    isTyping,
+  ]);
 
   const getCurrentLocation = () => {
-
     if (!navigator.geolocation) {
       setCurrentLocation("Bannerghatta, Bangalore");
       return;
@@ -117,8 +155,8 @@ export default function Header({ logo, logoAlt }) {
           const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
           );
-          const data = await response.json();          
-          
+          const data = await response.json();
+
           if (data.results && data.results[0]) {
             // handleLocationSelect({
             //   name: data.results[0].formatted_address,
@@ -128,28 +166,29 @@ export default function Header({ logo, logoAlt }) {
             //     lng: longitude
             //   }
             // });
-            const locationStings = data.results[0]?.formatted_address.split(',');
+            const locationStings =
+              data.results[0]?.formatted_address.split(",");
             if (locationStings.length > 3) {
-              setCurrentLocation(locationStings?.slice(0, 4)?.join(','));
+              setCurrentLocation(locationStings?.slice(0, 4)?.join(","));
             } else {
               setCurrentLocation(data.results[0]?.formatted_address);
             }
           } else {
-            setCurrentLocation('Location could not be fetched');
+            setCurrentLocation("Location could not be fetched");
           }
         } catch (error) {
-          console.error('Error fetching location details:', error);
+          console.error("Error fetching location details:", error);
           setCurrentLocation("Bannerghatta, Bangalore");
         }
       },
       (error) => {
-        console.error('Geolocation error:', error);
+        console.error("Geolocation error:", error);
         setCurrentLocation("Bannerghatta, Bangalore");
       },
       {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 0
+        maximumAge: 0,
       }
     );
   };
@@ -178,7 +217,7 @@ export default function Header({ logo, logoAlt }) {
     navigate(`${config.VITE_BASE_URL}`);
   };
 
-  const handleRemoveFromCart = async id => {
+  const handleRemoveFromCart = async (id) => {
     const jwtToken = Cookies.get("HommlieUserjwtToken");
     if (jwtToken) {
       const user_id = jwtDecode(jwtToken);
@@ -237,14 +276,18 @@ export default function Header({ logo, logoAlt }) {
     }
   };
 
-  const handleSearchChange = e => {
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
     if (e.target.value === "") {
       setIsSearchOpen(false);
       setSearchResults([]);
     } else {
       setIsSearchOpen(true);
-      const results = prodData.filter(product => product.product_name.toLowerCase().includes(e.target.value.toLowerCase()));
+      const results = prodData.filter((product) =>
+        product.product_name
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase())
+      );
       setSearchResults(results);
     }
   };
@@ -253,12 +296,19 @@ export default function Header({ logo, logoAlt }) {
 
   return (
     <GoogleMapLoader>
-      <header ref={headerRef} className="sticky bg-[#c5dbca] top-0 z-20 shadow-md">
-        <div className="container mx-auto px-4">
+      <header
+        ref={headerRef}
+        className="sticky bg-[#c5dbca] top-0 z-20 shadow-md"
+      >
+        <div className="container px-10">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-4">
               <NavLink to={`${config.VITE_BASE_URL}/`}>
-                <img src={logo} alt={logoAlt} className="h-10 w-32 object-contain" />
+                <img
+                  src={logo}
+                  alt={logoAlt}
+                  className="h-10 w-32 object-contain"
+                />
               </NavLink>
 
               {/* <button
@@ -272,50 +322,102 @@ export default function Header({ logo, logoAlt }) {
                 </div>
               </button> */}
               <div className="">
-                <button 
-                  onClick={openPage} 
+                <button
+                  onClick={openPage}
                   className="flex items-center space-x-2 px-3 py-2 rounded-lg glow-border"
                 >
-                  <MdLocationOn className="text-sm md:text-xl" color="#32A071" />
+                  <MdLocationOn
+                    className="text-sm md:text-xl"
+                    color="#32A071"
+                  />
                   <div className="flex flex-col text-left">
-                    <span className="font-medium text-[10px] md:text-xs lg:text-sm max-w-[150px] md:max-w-[200px] lg:max-w-[350px] truncate">{currentLocation?.display_name ? currentLocation?.address?.neighbourhood : currentLocation}</span>
+                    <span className="font-medium text-[10px] md:text-xs lg:text-sm max-w-[150px] md:max-w-[200px] lg:max-w-[350px] truncate">
+                      {currentLocation?.display_name
+                        ? currentLocation?.address?.neighbourhood
+                        : currentLocation}
+                    </span>
                     {/* <span className="text-[10px] md:text-xs lg:text-sm max-w-[150px] md:max-w-[200px] lg:max-w-[300px] truncate">
                       {currentLocation?.address?.state_district} {currentLocation?.address?.state}
                     </span> */}
                   </div>
                 </button>
 
-                {isLocationModalOpen && <LocationModal onClose={closePage} setCurrentLocation={setCurrentLocation} />}
+                {isLocationModalOpen && (
+                  <LocationModal
+                    onClose={closePage}
+                    setCurrentLocation={setCurrentLocation}
+                  />
+                )}
               </div>
             </div>
 
             <div className="hidden md:flex items-center space-x-6">
-              <NavLink to={`${config.VITE_BASE_URL}/women-empowerment`} className="flex flex-col items-center space-x-2">
-                <img src={womenEmpLogo} className="h-6" alt="Women Empowerment" />
+              <NavLink
+                to={`${config.VITE_BASE_URL}/women-empowerment`}
+                className="flex flex-col items-center space-x-2"
+              >
+                <img
+                  src={womenEmpLogo}
+                  className="h-6"
+                  alt="Women Empowerment"
+                />
                 <span className="text-sm font-medium">Women Empowerment</span>
               </NavLink>
-              <NavLink to="https://b2b.hommlie.com/" className="flex flex-col items-center ">
-                <img src={commercialIcon} className="h-6" alt="Women Empowerment" />
+              <NavLink
+                to="https://b2b.hommlie.com/"
+                className="flex flex-col items-center "
+              >
+                <img
+                  src={commercialIcon}
+                  className="h-6"
+                  alt="Women Empowerment"
+                />
                 <span className="text-sm font-medium">Commercial</span>
               </NavLink>
               <div className="relative">
-                <button className="flex flex-col items-center " onClick={() => (user?.length !== 0 ? setIsLoginOpen(!isLoginOpen) : setIsModalOpen(true))}>
-                  <img src={user?.profileImage || userIcon} alt="user icon" className="h-6 w-6 rounded-full object-cover " />
-                  <span className="text-sm font-medium">{user?.length !== 0 ? user.name : "Profile"}</span>
+                <button
+                  className="flex flex-col items-center "
+                  onClick={() =>
+                    user?.length !== 0
+                      ? setIsLoginOpen(!isLoginOpen)
+                      : setIsModalOpen(true)
+                  }
+                >
+                  <img
+                    src={user?.profileImage || userIcon}
+                    alt="user icon"
+                    className="h-6 w-6 rounded-full object-cover "
+                  />
+                  <span className="text-sm font-medium">
+                    {user?.length !== 0 ? user.name : "Profile"}
+                  </span>
                 </button>
                 {isLoginOpen && (
-                  <div ref={loginDropdownRef} className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30">
+                  <div
+                    ref={loginDropdownRef}
+                    className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30"
+                  >
                     <NavLink
                       onClick={() => setIsLoginOpen(false)}
                       to={`${config.VITE_BASE_URL}/my-bookings`}
-                      className={`block px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/my-bookings` ? "bg-[#c5dbca]" : "hover:bg-gray-100"}`}
+                      className={`block px-4 py-2 text-sm text-gray-700 ${
+                        location.pathname ===
+                        `${config.VITE_BASE_URL}/my-bookings`
+                          ? "bg-[#c5dbca]"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       My Bookings
                     </NavLink>
                     <NavLink
                       onClick={() => setIsLoginOpen(false)}
                       to={`${config.VITE_BASE_URL}/edit-profile`}
-                      className={`block px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/edit-profile` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
+                      className={`block px-4 py-2 text-sm text-gray-700 ${
+                        location.pathname ===
+                        `${config.VITE_BASE_URL}/edit-profile`
+                          ? "bg-[#c5dbca]"
+                          : "hover:bg-gray-100"
+                      } `}
                     >
                       Edit Profile
                     </NavLink>
@@ -324,7 +426,12 @@ export default function Header({ logo, logoAlt }) {
                         setIsAddressModalOpen(true);
                         setIsLoginOpen(false);
                       }}
-                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/your-addresses` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
+                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${
+                        location.pathname ===
+                        `${config.VITE_BASE_URL}/your-addresses`
+                          ? "bg-[#c5dbca]"
+                          : "hover:bg-gray-100"
+                      } `}
                     >
                       Your Addresses
                     </button>
@@ -333,68 +440,111 @@ export default function Header({ logo, logoAlt }) {
                         setIsReferAndEarnOpen(true);
                         setIsLoginOpen(false);
                       }}
-                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/refer-and-earn` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
+                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${
+                        location.pathname ===
+                        `${config.VITE_BASE_URL}/refer-and-earn`
+                          ? "bg-[#c5dbca]"
+                          : "hover:bg-gray-100"
+                      } `}
                     >
                       Refer & Earn
                     </button>
                     <NavLink
                       onClick={() => setIsLoginOpen(false)}
                       to={`${config.VITE_BASE_URL}/contact-us`}
-                      className={`block px-4 py-2 text-sm text-gray-700 ${location.pathname === `${config.VITE_BASE_URL}/contact-us` ? "bg-[#c5dbca]" : "hover:bg-gray-100"} `}
+                      className={`block px-4 py-2 text-sm text-gray-700 ${
+                        location.pathname ===
+                        `${config.VITE_BASE_URL}/contact-us`
+                          ? "bg-[#c5dbca]"
+                          : "hover:bg-gray-100"
+                      } `}
                     >
                       Help Center
                     </NavLink>
-                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
                       Log out
                     </button>
                   </div>
                 )}
               </div>
               <div className="relative">
-                <button className="flex flex-col items-center space-x-2" onClick={() => setIsCartOpen(!isCartOpen)}>
+                <button
+                  className="flex flex-col items-center space-x-2"
+                  onClick={() => setIsCartOpen(!isCartOpen)}
+                >
                   <img src={cartIcon} alt="cart icon" className="h-7" />
                   <span className="text-sm font-medium">Bag</span>
-                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{cartLength || 0}</span>
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartLength || 0}
+                  </span>
                 </button>
                 {isCartOpen && (
-                  <div ref={cartDropdownRef} className="absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-white rounded-lg shadow-xl py-2 z-30 max-h-[80vh] overflow-y-auto">
+                  <div
+                    ref={cartDropdownRef}
+                    className="absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-white rounded-lg shadow-xl py-2 z-30 max-h-[80vh] overflow-y-auto"
+                  >
                     {cart?.length > 0 ? (
                       <>
                         {cart.map((item, index) => (
-                          <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 transition-colors border-b last:border-b-0">
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 hover:bg-gray-50 transition-colors border-b last:border-b-0"
+                          >
                             <div className="flex items-center space-x-3">
                               {/* <img src={item.image_url} alt={item.product_name} className="w-16 h-16 object-cover rounded-md" /> */}
                               <div>
-                                <p className="text-sm font-medium text-gray-800">{item.product_name}</p>
-                                <p className="text-xs text-gray-500">{item.attribute_name}</p>
-                                <p className="text-xs text-gray-500">{item.variation_name}</p>
-                                <p className="text-sm font-semibold text-gray-700 mt-1">₹{item.price * item.qty}</p>
+                                <p className="text-sm font-medium text-gray-800">
+                                  {item.product_name}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {item.attribute_name}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {item.variation_name}
+                                </p>
+                                <p className="text-sm font-semibold text-gray-700 mt-1">
+                                  ₹{item.price * item.qty}
+                                </p>
                               </div>
                             </div>
                             <div className="flex flex-col items-end space-y-2">
                               <div className="flex items-center space-x-2 bg-gray-100 rounded-full p-1">
                                 <button
-                                  onClick={() => handleQtyUpdate(item.id, item.qty - 1)}
+                                  onClick={() =>
+                                    handleQtyUpdate(item.id, item.qty - 1)
+                                  }
                                   className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
                                 >
                                   -
                                 </button>
-                                <span className="text-sm font-medium w-6 text-center">{item.qty}</span>
+                                <span className="text-sm font-medium w-6 text-center">
+                                  {item.qty}
+                                </span>
                                 <button
-                                  onClick={() => handleQtyUpdate(item.id, item.qty + 1)}
+                                  onClick={() =>
+                                    handleQtyUpdate(item.id, item.qty + 1)
+                                  }
                                   className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
                                 >
                                   +
                                 </button>
                               </div>
-                              <button onClick={() => handleRemoveFromCart(item.id)} className="text-red-500 hover:text-red-700 transition-colors">
+                              <button
+                                onClick={() => handleRemoveFromCart(item.id)}
+                                className="text-red-500 hover:text-red-700 transition-colors"
+                              >
                                 <RiDeleteBin5Line size={18} />
                               </button>
                             </div>
                           </div>
                         ))}
                         <div className="p-4 border-t">
-                          <p className="text-lg font-semibold text-gray-800">Total: ₹{totalPrice}</p>
+                          <p className="text-lg font-semibold text-gray-800">
+                            Total: ₹{totalPrice}
+                          </p>
                           <NavLink
                             to={`${config.VITE_BASE_URL}/add-to-cart`}
                             className="block w-full text-center bg-[#249370] text-white py-3 mt-3 hover:bg-[#1e7a5d] transition-colors font-medium"
@@ -414,7 +564,10 @@ export default function Header({ logo, logoAlt }) {
               </div>
             </div>
 
-            <button className="md:hidden text-2xl" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <button
+              className="md:hidden text-2xl"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
               {isMobileMenuOpen ? <RxCross1 /> : <AiOutlineMenu />}
             </button>
           </div>
@@ -438,15 +591,33 @@ export default function Header({ logo, logoAlt }) {
               </button>
               {isSearchOpen && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg z-20 max-h-96 overflow-y-auto lg:grid lg:grid-cols-4 py-4">
-                  {searchResults.map(product => (
-                    <button key={product.id} onClick={() => navigate(`${config.VITE_BASE_URL}/product/${product.id}/${product.slug}`)} className="block px-4 py-2 hover:bg-gray-100">
+                  {searchResults.map((product) => (
+                    <button
+                      key={product.id}
+                      onClick={() =>
+                        navigate(
+                          `${config.VITE_BASE_URL}/product/${product.id}/${product.slug}`
+                        )
+                      }
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       <div className="flex items-center space-x-2">
-                        <img src={product.productimage.image_url} alt={product.product_name} className="w-24 h-24 object-cover rounded" />
+                        <img
+                          src={product.productimage.image_url}
+                          alt={product.product_name}
+                          className="w-24 h-24 object-cover rounded"
+                        />
                         <div className="space-y-2">
-                          <p className="text-sm font-medium">{product.product_name}</p>
+                          <p className="text-sm font-medium">
+                            {product.product_name}
+                          </p>
                           <p className="flex gap-2">
-                            <span className="text-xs text-blue-600">₹{product.discounted_price}</span>
-                            <span className="text-xs line-through">₹{product.product_price}</span>
+                            <span className="text-xs text-blue-600">
+                              ₹{product.discounted_price}
+                            </span>
+                            <span className="text-xs line-through">
+                              ₹{product.product_price}
+                            </span>
                           </p>
                         </div>
                       </div>
@@ -462,11 +633,17 @@ export default function Header({ logo, logoAlt }) {
             </div>
 
             <div className="flex items-center space-x-4">
-              <button onClick={openWhatsApp} className="bg-[#249370] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-pulse">
+              <button
+                onClick={openWhatsApp}
+                className="bg-[#249370] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-pulse"
+              >
                 <FaWhatsapp />
                 <span className="hidden lg:inline">WhatsApp</span>
               </button>
-              <button onClick={callNumber} className="bg-[#FF3269] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-bounce">
+              <button
+                onClick={callNumber}
+                className="bg-[#FF3269] text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-bounce"
+              >
                 <FaPhoneAlt />
                 <span className="hidden lg:inline">Call Us</span>
               </button>
@@ -477,10 +654,16 @@ export default function Header({ logo, logoAlt }) {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-white py-4 px-4 space-y-4">
-            <NavLink to={`${config.VITE_BASE_URL}/women-empowerment`} className="block py-2">
+            <NavLink
+              to={`${config.VITE_BASE_URL}/women-empowerment`}
+              className="block py-2"
+            >
               <img src={womenEmpLogo} className="h-8" alt="Women Empowerment" />
             </NavLink>
-            <NavLink to="https://b2b.hommlie.com/" className="flex items-center space-x-2 py-2">
+            <NavLink
+              to="https://b2b.hommlie.com/"
+              className="flex items-center space-x-2 py-2"
+            >
               <PiBuildingApartmentFill className="h-6 w-6" />
               <span className="text-sm font-medium">Commercial</span>
             </NavLink>
@@ -489,14 +672,22 @@ export default function Header({ logo, logoAlt }) {
                 <NavLink
                   onClick={() => setIsMobileMenuOpen(false)}
                   to={`${config.VITE_BASE_URL}/my-bookings`}
-                  className={`block py-2 ${location.pathname === `${config.VITE_BASE_URL}/my-bookings` ? "bg-[#c5dbca]" : ""} `}
+                  className={`block py-2 ${
+                    location.pathname === `${config.VITE_BASE_URL}/my-bookings`
+                      ? "bg-[#c5dbca]"
+                      : ""
+                  } `}
                 >
                   My Bookings
                 </NavLink>
                 <NavLink
                   onClick={() => setIsMobileMenuOpen(false)}
                   to={`${config.VITE_BASE_URL}/edit-profile`}
-                  className={`block py-2 ${location.pathname === `${config.VITE_BASE_URL}/edit-profile` ? "bg-[#c5dbca]" : ""} `}
+                  className={`block py-2 ${
+                    location.pathname === `${config.VITE_BASE_URL}/edit-profile`
+                      ? "bg-[#c5dbca]"
+                      : ""
+                  } `}
                 >
                   Edit Profile
                 </NavLink>
@@ -505,7 +696,12 @@ export default function Header({ logo, logoAlt }) {
                     setIsAddressModalOpen(true);
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`block w-full text-left py-2 ${location.pathname === `${config.VITE_BASE_URL}/your-addresses` ? "bg-[#c5dbca]" : ""} `}
+                  className={`block w-full text-left py-2 ${
+                    location.pathname ===
+                    `${config.VITE_BASE_URL}/your-addresses`
+                      ? "bg-[#c5dbca]"
+                      : ""
+                  } `}
                 >
                   Your Addresses
                 </button>
@@ -514,29 +710,49 @@ export default function Header({ logo, logoAlt }) {
                     setIsReferAndEarnOpen(true);
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`block w-full text-left py-2 ${location.pathname === `${config.VITE_BASE_URL}/refer-and-earn` ? "bg-[#c5dbca]" : ""} `}
+                  className={`block w-full text-left py-2 ${
+                    location.pathname ===
+                    `${config.VITE_BASE_URL}/refer-and-earn`
+                      ? "bg-[#c5dbca]"
+                      : ""
+                  } `}
                 >
                   Refer & Earn
                 </button>
                 <NavLink
                   onClick={() => setIsMobileMenuOpen(false)}
                   to={`${config.VITE_BASE_URL}/contact-us`}
-                  className={`block py-2 ${location.pathname === `${config.VITE_BASE_URL}/contact-us` ? "bg-[#c5dbca]" : ""} `}
+                  className={`block py-2 ${
+                    location.pathname === `${config.VITE_BASE_URL}/contact-us`
+                      ? "bg-[#c5dbca]"
+                      : ""
+                  } `}
                 >
                   Help Center
                 </NavLink>
-                <button onClick={handleLogout} className="block w-full text-left py-2">
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left py-2"
+                >
                   Log out
                 </button>
               </>
             ) : (
-              <button onClick={() => setIsModalOpen(true)} className="block w-full text-left py-2">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="block w-full text-left py-2"
+              >
                 Login / Sign Up
               </button>
             )}
-            <button className="flex items-center space-x-2 py-2" onClick={() => setIsCartOpen(!isCartOpen)}>
+            <button
+              className="flex items-center space-x-2 py-2"
+              onClick={() => setIsCartOpen(!isCartOpen)}
+            >
               <img src={cartIcon} alt="cart icon" className="h-6" />
-              <span className="text-sm font-medium">Bag ({cartLength || 0})</span>
+              <span className="text-sm font-medium">
+                Bag ({cartLength || 0})
+              </span>
             </button>
           </div>
         )}
@@ -546,47 +762,76 @@ export default function Header({ logo, logoAlt }) {
             <div className="bg-white w-11/12 max-w-md rounded-lg shadow-xl max-h-[80vh] overflow-y-auto">
               <div className="flex justify-between items-center p-4 border-b">
                 <h2 className="text-lg font-semibold">Your Cart</h2>
-                <button onClick={() => setIsCartOpen(false)} className="text-gray-500 hover:text-gray-700">
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
                   <RxCross1 size={24} />
                 </button>
               </div>
               {cart?.length > 0 ? (
                 <>
                   {cart.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border-b">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 border-b"
+                    >
                       <div className="flex items-center space-x-3">
-                        <img src={item.image_url} alt={item.product_name} className="w-16 h-16 object-cover rounded-md" />
+                        <img
+                          src={item.image_url}
+                          alt={item.product_name}
+                          className="w-16 h-16 object-cover rounded-md"
+                        />
                         <div>
-                          <p className="text-sm font-medium text-gray-800">{item.product_name}</p>
-                          <p className="text-xs text-gray-500">{item.attribute_name}</p>
-                          <p className="text-xs text-gray-500">{item.variation_name}</p>
-                          <p className="text-sm font-semibold text-gray-700 mt-1">₹{item.price * item.qty}</p>
+                          <p className="text-sm font-medium text-gray-800">
+                            {item.product_name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {item.attribute_name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {item.variation_name}
+                          </p>
+                          <p className="text-sm font-semibold text-gray-700 mt-1">
+                            ₹{item.price * item.qty}
+                          </p>
                         </div>
                       </div>
                       <div className="flex flex-col items-end space-y-2">
                         <div className="flex items-center space-x-2 bg-gray-100 rounded-full p-1">
                           <button
-                            onClick={() => handleQtyUpdate(item.id, item.qty - 1)}
+                            onClick={() =>
+                              handleQtyUpdate(item.id, item.qty - 1)
+                            }
                             className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
                           >
                             -
                           </button>
-                          <span className="text-sm font-medium w-6 text-center">{item.qty}</span>
+                          <span className="text-sm font-medium w-6 text-center">
+                            {item.qty}
+                          </span>
                           <button
-                            onClick={() => handleQtyUpdate(item.id, item.qty + 1)}
+                            onClick={() =>
+                              handleQtyUpdate(item.id, item.qty + 1)
+                            }
                             className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
                           >
                             +
                           </button>
                         </div>
-                        <button onClick={() => handleRemoveFromCart(item.id)} className="text-red-500 hover:text-red-700 transition-colors">
+                        <button
+                          onClick={() => handleRemoveFromCart(item.id)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
                           <RiDeleteBin5Line size={18} />
                         </button>
                       </div>
                     </div>
                   ))}
                   <div className="p-4">
-                    <p className="text-lg font-semibold text-gray-800">Total: ₹{totalPrice}</p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      Total: ₹{totalPrice}
+                    </p>
                     <NavLink
                       to={`${config.VITE_BASE_URL}/add-to-cart`}
                       className="block w-full text-center bg-[#249370] text-white py-3 mt-3 hover:bg-[#1e7a5d] transition-colors font-medium rounded-md"
@@ -598,7 +843,11 @@ export default function Header({ logo, logoAlt }) {
                 </>
               ) : (
                 <div className="p-4 flex flex-col items-center">
-                  <img src={emptyCart} className="w-full max-w-xs" alt="Empty Cart" />
+                  <img
+                    src={emptyCart}
+                    className="w-full max-w-xs"
+                    alt="Empty Cart"
+                  />
                   <p className="text-gray-500 mt-4">Your cart is empty</p>
                 </div>
               )}
@@ -607,9 +856,18 @@ export default function Header({ logo, logoAlt }) {
         )}
 
         {/* Modals */}
-        <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-        <AddressModal isOpen={isAddressModalOpen} onClose={() => setIsAddressModalOpen(false)} />
-        <ReferAndEarn isOpen={isReferAndEarnOpen} onClose={() => setIsReferAndEarnOpen(false)} />
+        <LoginSignup
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+        <AddressModal
+          isOpen={isAddressModalOpen}
+          onClose={() => setIsAddressModalOpen(false)}
+        />
+        <ReferAndEarn
+          isOpen={isReferAndEarnOpen}
+          onClose={() => setIsReferAndEarnOpen(false)}
+        />
       </header>
     </GoogleMapLoader>
   );

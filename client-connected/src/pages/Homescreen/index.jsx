@@ -359,46 +359,7 @@ const HomePageFirstSection = () => {
         </div>
       </section>
 
-      {/* <section className="w-full mx-auto section md:px-8 py-5 md:py-10">
-        <h1 className="px-2 md:px-0 text-[#035240] text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
-          HELLO {user?.name ? user.name : null}{" "}
-          <span className="waving-hand">👋</span>
-        </h1>
-        <h1 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-8 text-[#10847E]">
-          What you are looking for today
-        </h1>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-8">
-          {categoryData?.data?.map((ct, index) => {
-            if (index === 6) {
-              return null;
-            } else {
-              return (
-                <div
-                  key={index}
-                  onClick={() =>
-                    navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
-                  }
-                  // onClick={() => openCatModal([ct?.id, ct?.category_name])}
-                  className="p-2 cursor-pointer"
-                >
-                  <div className="mx-auto w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex flex-col justify-center">
-                    <NavLink className="flex justify-end items-end h-full">
-                      <img
-                        className="w-full h-full object-cover"
-                        src={ct?.image_url}
-                        title={ct?.image_title}
-                        alt={ct?.alt_tag}
-                      />
-                    </NavLink>
-                  </div>
-                </div>
-              );
-            }
-          })}
-        </div>
-      </section> */}
-
-      <section className="w-full mx-auto px-4 md:px-8 py-6 md:py-12 bg-gray-50">
+      <section className="w-full mx-auto px-4 md:px-10 py-6 md:py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           {/* Welcome Header */}
           <motion.h1
@@ -609,7 +570,7 @@ const HomePageFirstSection = () => {
         </div>
       </div>
 
-      <section className="md:px-8 py-5 md:py-10">
+      <section className="md:px-10 py-5 md:py-10">
         {homeFeedData?.most_booked_services?.length ? (
           <ProdSection
             openExploreModal={openExploreModal}
@@ -619,7 +580,7 @@ const HomePageFirstSection = () => {
         ) : null}
       </section>
 
-      <section className="mt-12 md:px-8 py-5 md:py-10">
+      <section className="mt-12 md:px-10 py-5 md:py-10">
         <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold md:mb-8 text-[#10847E]">
           Discover
         </h2>
@@ -694,7 +655,7 @@ const HomePageFirstSection = () => {
       </section>
 
       {homeFeedData?.videos?.length ? (
-        <section className="mt-12 px-2 md:px-8 py-5 md:py-10">
+        <section className="mt-12 px-2 md:px-10 py-5 md:py-10">
           <h2 className="px-2 md:px-0 text-xl sm:text-2xl lg:text-3xl font-semibold mb-5 md:mb-8 text-[#10847E]">
             Thoughtful Curations
           </h2>
@@ -768,7 +729,7 @@ const HomePageFirstSection = () => {
         </section>
       ) : null}
 
-      <section className="w-full mx-auto section px-2 md:px-8 py-5 md:py-10">
+      <section className="w-full mx-auto section px-2 md:px-10 py-5 md:py-10">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6 text-[#10847E]">
           Why Hommlie
         </h2>
@@ -798,7 +759,7 @@ const HomePageFirstSection = () => {
             setIsReferModalOpen(true);
           }
         }}
-        className="w-full mx-auto section px-4 py-5 md:py-10 rounded-lg mt-8 md:px-8"
+        className="w-full mx-auto section px-4 py-5 md:py-10 rounded-lg mt-8 md:px-10"
         style={{ backgroundColor: "#D9EFDE" }}
       >
         <div className="flex flex-col sm:flex-row items-center">
