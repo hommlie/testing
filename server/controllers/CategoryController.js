@@ -18,6 +18,42 @@ const { fetchProductReviews } = require("../middleware/getCommonData");
 
 const apiUrl = process.env.apiUrl;
 
+const advancedSort = (a, b) => {
+  // Try parsing numeric values first
+  const numA = parseFloat(a.variation);
+  const numB = parseFloat(b.variation);
+
+  // If both are valid numbers, sort numerically
+  if (!isNaN(numA) && !isNaN(numB)) {
+    return numA - numB;
+  }
+
+  // If one is a number and the other isn't, put numbers first
+  if (!isNaN(numA) && isNaN(numB)) return -1;
+  if (isNaN(numA) && !isNaN(numB)) return 1;
+
+  // If neither are numbers, do a natural string comparison
+  return a.variation.localeCompare(b.variation, undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
+};
+
+// Sorting function for the entire product list
+const sortProductList = (products) => {
+  return products
+    .map((product) => ({
+      ...product,
+      attributes: product.attributes
+        .map((attr) => ({
+          ...attr,
+          variations: [...attr.variations].sort(advancedSort),
+        }))
+        .sort((a, b) => a.attribute_name.localeCompare(b.attribute_name)),
+    }))
+    .sort((a, b) => a.product_name.localeCompare(b.product_name));
+};
+
 exports.getCategory = async (req, res) => {
   try {
     const categoryData = await Category.findAll({
@@ -553,9 +589,19 @@ exports.getCleaningSubcategory = async (req, res) => {
               });
             }
 
+            // Sort variations within each attribute group
+            acc.forEach((group) => {
+              group.variations.sort(advancedSort);
+            });
+
             return acc;
           },
           []
+        );
+
+        // Sort attributes by name
+        groupedVariations.sort((a, b) =>
+          a.attribute_name.localeCompare(b.attribute_name)
         );
 
         // Get return policy
