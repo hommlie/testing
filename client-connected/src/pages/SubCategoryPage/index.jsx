@@ -5,6 +5,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import config from "../../config/config";
 import LoadingWrapper from "../../components/Loading/LoadingWrapper";
+import Loading from "../../components/Loading";
 
 const SubCategoryPage = () => {
   const { categoryId, categorySlug, location } = useParams();
@@ -62,7 +63,10 @@ const SubCategoryPage = () => {
   const currentLocationTitle =
     location && currentLocation ? ` in ${currentLocation}` : "";
 
-  if (isLoading) return <LoadingWrapper />;
+  if (isLoading) return;
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <Loading />
+  </div>;
 
   return (
     <>
@@ -88,9 +92,9 @@ const SubCategoryPage = () => {
         {/* Banner Section */}
         <div className="relative w-full h-[300px] md:h-[400px]">
           <img
-            src={categoryData?.image_url}
+            src={categoryData?.motion_graphics}
             alt={categoryData?.alt_tag}
-            className="w-full h-full object-cover"
+            className="w-full h-full"
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center px-4">
@@ -101,7 +105,7 @@ const SubCategoryPage = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-grow container mx-auto px-4 lg:px-8 py-12">
+        <div className="flex-grow container mx-auto px-4 lg:px-10 py-12">
           <motion.div
             variants={container}
             initial="hidden"
@@ -132,8 +136,8 @@ const SubCategoryPage = () => {
                     onClick={() => {
                       const path =
                         subCategory.category.is_page === 1
-                          ? `/subcategory/${subCategory.slug}/${subCategory.subcat_id}/${location}`
-                          : `/products/${subCategory.subcat_id}/${location}`;
+                          ? `/${subCategory.category?.slug}/${subCategory.slug}/${subCategory.subcat_id}/${location}`
+                          : `/products/${subCategory.slug}/${subCategory.subcat_id}/${location}`;
                       navigate(path);
                     }}
                     className="w-full py-2 text-sm px-4 bg-[#10847E] text-white rounded-md hover:bg-[#0d6d68] transition-colors duration-300"

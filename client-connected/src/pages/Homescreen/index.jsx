@@ -422,10 +422,10 @@ const HomePageFirstSection = () => {
                   className="relative group"
                 >
                   <div
-                    // onClick={() =>
-                    //   navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
-                    // }
-                    onClick={() => openCatModal([ct?.id, ct?.category_name])}
+                    onClick={() =>
+                      navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
+                    }
+                    // onClick={() => openCatModal([ct?.id, ct?.category_name])}
                     className="p-2 cursor-pointer transition-transform duration-300 ease-in-out"
                   >
                     <div className="relative overflow-hidden rounded-lg shadow-md bg-white">

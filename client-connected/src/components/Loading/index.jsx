@@ -1,5 +1,5 @@
-import React from 'react';
-import loadingImg from '../../assets/images/loading/loading-img.png';
+import React from "react";
+import loadingImg from "../../assets/images/loading/loading-img.png";
 
 const Loading = () => {
   return (

@@ -68,10 +68,29 @@ const ProjectRoutes = () => {
       path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId/:location`,
       element: <SubCategoryPage />,
     },
+
+    {
+      path: `${config.VITE_BASE_URL}/subcategory/:slug/:id`,
+      element: <CleaningProductPage />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/:categorySlug/:slug/:id`,
+      element: <CleaningProductPage />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/:categorySlug/:slug/:id/:location`,
+      element: <CleaningProductPage />,
+    },
+
+    {
+      path: `${config.VITE_BASE_URL}/:subcategorySlug/:subcategoryId`,
+      element: <ProductListPage />,
+    },
     {
       path: `${config.VITE_BASE_URL}/:subcategorySlug/:subcategoryId/:location`,
       element: <ProductListPage />,
     },
+
     {
       path: `${config.VITE_BASE_URL}/product/:id/:slug`,
       element: <ProductPage />,
@@ -83,11 +102,6 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/product/:id/:slug/tag/:tag`,
       element: <ProductPage />,
-    },
-
-    {
-      path: `${config.VITE_BASE_URL}/subcategory/:slug/:id`,
-      element: <CleaningProductPage />,
     },
 
     {

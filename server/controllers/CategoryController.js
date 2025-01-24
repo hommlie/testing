@@ -218,6 +218,7 @@ exports.getSubcategory = async (req, res) => {
             // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
             "is_form",
             "is_page",
+            "slug",
             [
               sequelize.literal(
                 `CONCAT('${apiUrl}/storage/app/public/images/category/', motion_graphics)`
