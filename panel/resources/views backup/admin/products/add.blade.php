@@ -267,23 +267,34 @@
           {{-- PRODUCT RATING --}}
           <div class="card">
             <div class="card-header">
-              <h6 class="card-title mb-0">Product Rating</h6>
+              <h6 class="card-title mb-0">Product Rating and Reviews</h6>
             </div>
             <div class="card-body">
               <div class="px-3">
                 <div class="form-group row">
-                  <div class="col-sm-12">
-                    <input type="number" class="form-control" id="productRating" name="productRating"
-                      placeholder="Product Rating" required min="1" max="5" value="5">
+                  <div class="col-sm-6">
+                    <label for="" class="">Rating</label>
+                    <input type="number" class="form-control" id="" name="productRating"
+                      placeholder="Product Rating" step="0.1">
                     <span id="ratingError" class="text-danger d-none">Rating must be between 1 and 5.</span>
                     @if ($errors->has('productRating'))
                    <span class="text-danger">{{ $errors->first('productRating') }}</span>
+                    @endif
+                  </div>
+                  <div class="col-sm-6">
+                  <label for="" class="">Total Reviews</label>
+                    <input type="number" class="form-control" id="" name="pro_total_reviews"
+                      placeholder="Product Reviews" >
+                    <span id="total_reviews" class="text-danger d-none">Rating must be between 1 and 5.</span>
+                    @if ($errors->has('pro_total_reviews'))
+                   <span class="text-danger">{{ $errors->first('pro_total_reviews') }}</span>
                     @endif
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
 
           {{-- LOCATION  --}}
           <div class="card">
@@ -295,7 +306,7 @@
                 <div class="form-group row " id="locationContainer">
                   <div class="col-sm-12 d-flex ">
                     <input type="text" class="form-control" id="location[]" name="location"
-                      placeholder="Location" required>
+                      placeholder="Location" >
                     <span id="addLocation" class="btn btn-success ml-3">+</span><br/>
                   </div>
                 </div>
@@ -546,9 +557,9 @@
                       <!-- VARIATION IMAGES -->
                       <div class="form-group col-md-3">
                       <label for="Image">Image</label>
-                      <input type="file" class="form-control" name="attribute_image[]" id="attribute_image">
-                      @if ($errors->has('attribute_image'))
-                    <span class="text-danger">{{ $errors->first('attribute_image') }}</span>
+                      <input type="file" class="form-control" name="product_image[]" id="product_image">
+                      @if ($errors->has('product_image'))
+                    <span class="text-danger">{{ $errors->first('product_image') }}</span>
                   @endif
                       </div>
                       <!-- VARIATION TOTAL REVIEWS -->
@@ -563,8 +574,8 @@
                       <!-- VARIATION AVG RATING -->
                       <div class="form-group col-md-2">
                       <label for="Avg_rating">Avg Rating</label>
-                      <input type="text" class="form-control" name="avg_rating[]" id="avg_rating"
-                        placeholder="Enter Avg Rating">
+                      <input type="number" class="form-control" name="avg_rating[]" id="avg_rating"
+                        placeholder="Enter Avg Rating" step="0.1">
                       <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
                         rating.</span>
                       @if ($errors->has('avg_rating'))
@@ -733,7 +744,7 @@
         <!-- VARIATION IMAGES -->
         <div class="form-group col-md-3">
         <label for="Image">Image</label>
-        <input type="file" class="form-control" name="attribute_image[]" id="attribute_image">
+        <input type="file" class="form-control" name="product_image[]" id="product_image">
         </div>
         <!-- VARIATION TOTAL REVIEWS -->
         <div class="form-group col-md-2">
@@ -744,8 +755,8 @@
         <!-- VARIATION AVG RATING -->
         <div class="form-group col-md-2">
         <label for="Avg_rating">Avg Rating</label>
-        <input type="text" class="form-control" name="avg_rating[]" id="avg_rating"
-          placeholder="Enter Avg Rating">
+        <input type="number" class="form-control" name="avg_rating[]" id="avg_rating"
+          placeholder="Enter Avg Rating" step="0.1">
         <span id="avg_rating_error" class="text-danger" style="display: none;">Please enter a valid
           rating.</span>
         </div>

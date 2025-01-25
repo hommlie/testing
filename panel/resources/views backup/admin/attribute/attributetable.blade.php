@@ -19,7 +19,7 @@
             <td>{{$row->attribute}}</td>
             <td>{{$row->specifications}}</td>
             <td>
-                <img src="{{ asset('/storage/app/public/attribute/' . $row->image) }}" alt="" height="100px" width="100px">
+                <img src="{{ asset('/storage/app/public/images/attribute/' . $row->image) }}" alt="" height="100px" width="100px">
             </td>
             <td>{{$row->total_reviews}}</td>
             <td>{{$row->avg_rating}}</td>

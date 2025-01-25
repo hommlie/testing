@@ -692,13 +692,9 @@
     </div>
   </section>
 </div>
-
-@endsection
-
-<!-- Add Item Image -->
 <div class="modal fade" id="AddProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal-dialog" role="document">
     <form method="post" action="{{ route('admin.products.storeimages') }}" class="addproduct"
       enctype="multipart/form-data">
       @csrf
@@ -730,14 +726,16 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('labels.close') }}</button>
           @if (env('Environment') == 'sendbox')
         <button type="button" class="btn btn-primary" onclick="myFunction()">{{ trans('labels.save') }}</button>
-        @else
-        <button type="submit" name="submit" id="submit" class="btn btn-primary">{{ trans('labels.save') }}</button>
-        @endif
+      @else
+      <button type="submit" name="submit" id="submit" class="btn btn-primary">{{ trans('labels.save') }}</button>
+      @endif
         </div>
       </div>
     </form>
   </div>
-</div>
+  </div>
+
+@endsection
 @section('scripttop')
 @endsection
 @section('scripts')
@@ -804,76 +802,61 @@
     }
   });
 
-  // Product Reting 
-  const productRatingInput = document.getElementById('productRating');
-  const ratingError = document.getElementById('ratingError');
-
-  productRatingInput.addEventListener('input', function () {
-    if (this.value > 5) {
-      ratingError.classList.remove('d-none');
-      ratingError.textContent = 'Rating cannot exceed 5.';
-    } else if (this.value < 0) {
-      this.value = 0;
-      ratingError.classList.remove('d-none');
-      ratingError.textContent = 'Rating cannot be less than 0.';
-    } else {
-      ratingError.classList.add('d-none');
-    }
-  });
+ 
 
   // ADD PRODUCT ALT TAG NAME AND IMAGES Title
   $(document).ready(function () {
 
-    var imagesPreview = function (input, placeToInsertImagePreview) {
-      if (input.files) {
-        var filesAmount = input.files.length;
-        $('div.gallery').html('');
-        var n = 0;
+var imagesPreview = function (input, placeToInsertImagePreview) {
+  if (input.files) {
+    var filesAmount = input.files.length;
+    $('div.gallery').html('');
+    var n = 0;
 
-        for (var i = 0; i < filesAmount; i++) {
-          var reader = new FileReader();
-          reader.onload = function (event) {
-            var imagePreviewDiv = $($.parseHTML('<div>'))
-              .attr('class', 'imgdiv col-4 col-md-4 position-relative')
-              .attr('id', 'img_' + n)
-              .html(`
-                    <img src="${event.target.result}" class="img-fluid rounded-0" alt="Image ${n + 1}" title="Image ${n + 1}">
-                    <!-- Image preview container -->
-                    <div class="image-info ">
-                        <!-- ALT Tag input field -->
-                        <label for="alt_tag_${n}" class="form-label">ALT Tag</label>
-                        <div class="mb-3">
-                            <input type="text" id="alt_tag_${n}" name="alt_tag[]" class="form-control" placeholder="ALT tag" required>
-                        </div>
-                        
-                        <!-- Image Title input field -->
-                        <label for="image_title_${n}" class="form-label">Image Title</label>
-                        <div class="mb-3">
-                            <input type="text" id="image_title_${n}" name="image_title[]" class="form-control" placeholder="Image title" required>
-                        </div>
-                    </div
-                    <!-- Remove button -->
-                   <!-- <button type="button" class="btn rounded-0 btn-danger remove-image" data-id="img_${n}" style="position: absolute; top: 0px; font-size: 10px; right: 5px;">
-                        Remove
-                    </button> -->
-                `);
+    for (var i = 0; i < filesAmount; i++) {
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        var imagePreviewDiv = $($.parseHTML('<div>'))
+          .attr('class', 'imgdiv col-4 col-md-4 position-relative')
+          .attr('id', 'img_' + n)
+          .html(`
+                <img src="${event.target.result}" class="img-fluid rounded-0" alt="Image ${n + 1}" title="Image ${n + 1}">
+                <!-- Image preview container -->
+                <div class="image-info ">
+                    <!-- ALT Tag input field -->
+                    <label for="alt_tag_${n}" class="form-label">ALT Tag</label>
+                    <div class="mb-3">
+                        <input type="text" id="alt_tag_${n}" name="alt_tag[]" class="form-control" placeholder="ALT tag" required>
+                    </div>
+                    
+                    <!-- Image Title input field -->
+                    <label for="image_title_${n}" class="form-label">Image Title</label>
+                    <div class="mb-3">
+                        <input type="text" id="image_title_${n}" name="image_title[]" class="form-control" placeholder="Image title" required>
+                    </div>
+                </div
+                <!-- Remove button -->
+               <!-- <button type="button" class="btn rounded-0 btn-danger remove-image" data-id="img_${n}" style="position: absolute; top: 0px; font-size: 10px; right: 5px;">
+                    Remove
+                </button> -->
+            `);
 
 
-            $(placeToInsertImagePreview).append(imagePreviewDiv);
-            imagePreviewDiv.find('.remove-image').on('click', function () {
-              var imageId = $(this).data('id');
-              $('#' + imageId).remove();
-            });
-            n++;
-          };
-          reader.readAsDataURL(input.files[i]);
-        }
-      }
-    };
-    $('#prod_image').on('change', function () {
-      imagesPreview(this, 'div.gallery');
-    });
-  });
+        $(placeToInsertImagePreview).append(imagePreviewDiv);
+        imagePreviewDiv.find('.remove-image').on('click', function () {
+          var imageId = $(this).data('id');
+          $('#' + imageId).remove();
+        });
+        n++;
+      };
+      reader.readAsDataURL(input.files[i]);
+    }
+  }
+};
+$('#prod_image').on('change', function () {
+  imagesPreview(this, 'div.gallery');
+});
+});
 
 
 
@@ -1232,7 +1215,7 @@
       }
     })
   }
-
+  
   function DeleteImage(id, product_id) {
     Swal.fire({
       title: '{{ trans('labels.are_you_sure') }}',
