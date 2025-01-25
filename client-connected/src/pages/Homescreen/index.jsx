@@ -359,8 +359,8 @@ const HomePageFirstSection = () => {
         </div>
       </section>
 
-      <section className="w-full mx-auto px-4 md:px-10 py-6 md:py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
+      <section className="w-full px-4 md:px-10 py-6 md:py-12 bg-gray-50">
+        <div className="">
           {/* Welcome Header */}
           <motion.h1
             initial={{ opacity: 0, x: -20 }}
@@ -422,10 +422,10 @@ const HomePageFirstSection = () => {
                   className="relative group"
                 >
                   <div
-                    onClick={() =>
-                      navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
-                    }
-                    // onClick={() => openCatModal([ct?.id, ct?.category_name])}
+                    // onClick={() =>
+                    //   navigate(`${config.VITE_BASE_URL}/${ct?.slug}/${ct?.id}`)
+                    // }
+                    onClick={() => openCatModal([ct?.id, ct?.category_name])}
                     className="p-2 cursor-pointer transition-transform duration-300 ease-in-out"
                   >
                     <div className="relative overflow-hidden rounded-lg shadow-md bg-white">
@@ -729,7 +729,7 @@ const HomePageFirstSection = () => {
         </section>
       ) : null}
 
-      <section className="w-full mx-auto section px-2 md:px-10 py-5 md:py-10">
+      <section className="w-full section px-2 md:px-10 py-5 md:py-10">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6 text-[#10847E]">
           Why Hommlie
         </h2>
@@ -759,7 +759,7 @@ const HomePageFirstSection = () => {
             setIsReferModalOpen(true);
           }
         }}
-        className="w-full mx-auto section px-4 py-5 md:py-10 rounded-lg mt-8 md:px-10"
+        className="w-full section px-4 py-5 md:py-10 rounded-lg mt-8 md:px-10"
         style={{ backgroundColor: "#D9EFDE" }}
       >
         <div className="flex flex-col sm:flex-row items-center">
@@ -793,8 +793,8 @@ const HomePageFirstSection = () => {
         <TestimonialSection testimonials={homeFeedData.testimonials} />
       )}
 
-      <section className="w-full mx-auto py-10">
-        <div className="flex flex-col items-center gap-4 mx-auto px-4">
+      <section className="w-full py-10">
+        <div className="flex flex-col items-center gap-4 px-4">
           <motion.h2
             className="text-2xl font-semibold text-center"
             style={{ color: "#035240" }}

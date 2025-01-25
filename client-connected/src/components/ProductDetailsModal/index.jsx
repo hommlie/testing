@@ -124,6 +124,11 @@ const ProductDetailModal = ({
       }
     });
 
+    const taxAmount =
+      product.tax_type === "amount"
+        ? Number(product.tax)
+        : (Number(product.tax) / 100) * variation.discounted_variation_price;
+
     const cartItem = {
       user_id: user.id,
       product_id: product.id,
@@ -134,7 +139,7 @@ const ProductDetailModal = ({
       price: variation.discounted_variation_price,
       attribute: displayedAttributes[0].attribute_id,
       variation: variation.id,
-      tax: product.tax || 0,
+      tax: taxAmount,
       shipping_cost: product.shipping_cost || 0,
     };
 

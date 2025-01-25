@@ -240,98 +240,6 @@ const CleaningProductPage = () => {
     ].scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleAddToCart = async () => {
-    if (user.length === 0) {
-      openModal();
-    } else {
-      setIsAddingToCart(true);
-      const product = {
-        user_id: user.id,
-        product_id: prod_id,
-        vendor_id: prodData.vendor_id,
-        product_name: prodData.product_name,
-        image: prodData?.productimages[0]?.image_url,
-        qty: 1,
-        price: totalAmount,
-        attribute: selectedVariation && selectedVariation.attribute_id,
-        variation: selectedVariation && selectedVariation.id,
-        tax: taxAmount,
-        shipping_cost: prodData.shipping_cost,
-      };
-
-      try {
-        const response = await axios.post(
-          `${config.API_URL}/api/addtocart`,
-          product
-        );
-        if (response.data.status === 1) {
-          successNotify("Successfully added to Cart");
-          getCart();
-        }
-      } catch (error) {
-        errorNotify(error);
-        console.log("error adding to cart:", error);
-      } finally {
-        setIsAddingToCart(false);
-      }
-      setCart(product);
-      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-      existingCart.push(product);
-      localStorage.setItem("cart", JSON.stringify(existingCart));
-      getCart();
-    }
-  };
-
-  const handleQtyUpdate = async (id, qty) => {
-    setIsAddingToCart(true);
-
-    const jwtToken = Cookies.get("HommlieUserjwtToken");
-    if (jwtToken) {
-      if (qty === 0) {
-        handleRemoveFromCart(id);
-      } else {
-        try {
-          const response = await axios.post(
-            `${config.API_URL}/api/qtyUpdate`,
-            { qty, cart_id: id },
-            { headers: { Authorization: `Bearer ${jwtToken}` } }
-          );
-          if (response.data.status === 1) {
-            console.log(response.data.message);
-            getCart();
-          }
-        } catch (error) {
-          console.log("error updating cart:", error);
-        } finally {
-          setIsAddingToCart(false);
-        }
-      }
-    }
-  };
-
-  const handleRemoveFromCart = async (id) => {
-    setIsAddingToCart(true);
-    const jwtToken = Cookies.get("HommlieUserjwtToken");
-    if (jwtToken) {
-      const user_id = jwtDecode(jwtToken).id;
-      try {
-        const response = await axios.post(
-          `${config.API_URL}/api/deleteProduct`,
-          { user_id, cart_id: id },
-          { headers: { Authorization: `Bearer ${jwtToken}` } }
-        );
-        if (response.data.status === 1) {
-          console.log(response.data.message);
-          getCart();
-        }
-      } catch (error) {
-        console.log("error removing from cart:", error);
-      } finally {
-        setIsAddingToCart(false);
-      }
-    }
-  };
-
   const handleViewDetails = (product, attributeId = null) => {
     setSelectedProduct(product);
     setSelectedAttributeId(attributeId);
@@ -348,7 +256,7 @@ const CleaningProductPage = () => {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto px-4 md:px-10 py-8">
+      <div className="px-4 md:px-10 py-8">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">
             Home
@@ -575,9 +483,6 @@ const CleaningProductPage = () => {
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         product={selectedProduct}
-        handleAddToCart={handleAddToCart}
-        handleQtyUpdate={handleQtyUpdate}
-        isAddingToCart={isAddingToCart}
         selectedAttributeId={selectedAttributeId}
       />
     </main>

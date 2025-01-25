@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -57,16 +57,26 @@ const SubCategoryPage = () => {
     },
   };
 
+  const handleSubCategoryClick = (subCategory) => {
+    const path =
+      subCategory.category.is_page === 1
+        ? `/subcategory/${subCategory.slug}/${subCategory.subcat_id}`
+        : `/products/${subCategory.slug}/${subCategory.subcat_id}`;
+    navigate(path);
+  };
+
   const locations = categoryData?.location?.split("|") || [];
   const currentLocation =
     location?.charAt(0)?.toUpperCase() + location?.slice(1);
   const currentLocationTitle =
     location && currentLocation ? ` in ${currentLocation}` : "";
 
-  if (isLoading) return;
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <Loading />
-  </div>;
+  if (isLoading)
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <Loading />
+      </div>
+    );
 
   return (
     <>
@@ -110,40 +120,50 @@ const SubCategoryPage = () => {
             variants={container}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
           >
             {subCategories.map((subCategory) => (
               <motion.div
                 key={subCategory.subcat_id}
                 variants={item}
-                className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
-                whileHover={{ scale: 1.02 }}
+                className="group"
+                whileHover={{ scale: 1.05 }}
+                onClick={() => handleSubCategoryClick(subCategory)}
               >
-                <div className="relative aspect-square overflow-hidden rounded-t-lg">
-                  <img
-                    src={subCategory.subcategory_icon}
-                    alt={subCategory.subcategory_name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <div className="bg-white shadow-lg overflow-hidden transition-all duration-300 transform hover:shadow-2xl cursor-pointer">
+                  <div className="relative aspect-square overflow-hidden">
+                    <img
+                      src={subCategory.subcategory_icon}
+                      alt={subCategory.subcategory_name}
+                      className="w-full h-full transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  </div>
 
-                <div className="p-4">
-                  <h3 className="h-14 text-sm md:text-base font-semibold mb-3 line-clamp-2">
-                    {subCategory.subcategory_name}
-                  </h3>
-
-                  <button
-                    onClick={() => {
-                      const path =
-                        subCategory.category.is_page === 1
-                          ? `/subcategory/${subCategory.slug}/${subCategory.subcat_id}`
-                          : `/products/${subCategory.slug}/${subCategory.subcat_id}`;
-                      navigate(path);
-                    }}
-                    className="w-full py-2 text-sm px-4 bg-[#10847E] text-white rounded-md hover:bg-[#0d6d68] transition-colors duration-300"
-                  >
-                    View Services
-                  </button>
+                  <div className="p-4 text-center">
+                    <h3 className="text-base md:text-lg font-semibold mb-2 line-clamp-2 group-hover:text-[#10847E] transition-colors duration-300">
+                      {subCategory.subcategory_name}
+                    </h3>
+                    <div className="flex items-center justify-center">
+                      <span className="text-sm text-gray-500 group-hover:text-[#10847E] transition-colors duration-300">
+                        Explore Services
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-2 inline-block transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}

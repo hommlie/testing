@@ -298,9 +298,9 @@ export default function Header({ logo, logoAlt }) {
     <GoogleMapLoader>
       <header
         ref={headerRef}
-        className="sticky bg-[#c5dbca] top-0 z-20 shadow-md"
+        className="w-full sticky bg-[#c5dbca] top-0 z-20 shadow-md"
       >
-        <div className="container px-10">
+        <div className="w-full px-10">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-4">
               <NavLink to={`${config.VITE_BASE_URL}/`}>

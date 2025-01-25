@@ -10,7 +10,8 @@
   }
 } */
 
-body, html {
+body,
+html {
   height: 100%;
   user-select: none;
   -webkit-user-select: none;
@@ -44,12 +45,12 @@ header {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 /* customizing react toastify */
@@ -93,8 +94,12 @@ input[type="number"] {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .scrollbar-hide::-webkit-scrollbar {

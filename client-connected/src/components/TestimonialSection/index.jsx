@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaQuoteLeft, FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa';
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaQuoteLeft,
+  FaChevronLeft,
+  FaChevronRight,
+  FaStar,
+} from "react-icons/fa";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 
@@ -14,11 +19,11 @@ const ReadMoreText = ({ text, maxLength = 90 }) => {
   return (
     <p className="text-gray-600">
       {isExpanded ? text : `${text.slice(0, maxLength)}...`}
-      <span 
+      <span
         onClick={() => setIsExpanded(!isExpanded)}
         className="text-[#10847E] cursor-pointer font-semibold ml-2 hover:underline"
       >
-        {isExpanded ? 'Read Less' : 'Read More'}
+        {isExpanded ? "Read Less" : "Read More"}
       </span>
     </p>
   );
@@ -30,8 +35,8 @@ const TestimonialSection = ({ testimonials }) => {
   useEffect(() => {
     if (testimonials?.length > 0) {
       const interval = setInterval(() => {
-        setActiveIndex((prevIndex) => 
-          (prevIndex + 1 >= testimonials.length ? 0 : prevIndex + 1)
+        setActiveIndex((prevIndex) =>
+          prevIndex + 1 >= testimonials.length ? 0 : prevIndex + 1
         );
       }, 5000);
       return () => clearInterval(interval);
@@ -39,14 +44,14 @@ const TestimonialSection = ({ testimonials }) => {
   }, [testimonials]);
 
   const nextTestimonial = () => {
-    setActiveIndex((prevIndex) => 
-      (prevIndex + 1 >= testimonials.length ? 0 : prevIndex + 1)
+    setActiveIndex((prevIndex) =>
+      prevIndex + 1 >= testimonials.length ? 0 : prevIndex + 1
     );
   };
-  
+
   const prevTestimonial = () => {
-    setActiveIndex((prevIndex) => 
-      (prevIndex - 1 < 0 ? testimonials.length - 1 : prevIndex - 1)
+    setActiveIndex((prevIndex) =>
+      prevIndex - 1 < 0 ? testimonials.length - 1 : prevIndex - 1
     );
   };
 
@@ -55,8 +60,11 @@ const TestimonialSection = ({ testimonials }) => {
   }
 
   return (
-    <section className="w-full mx-auto py-4 md:py-12" style={{ backgroundColor: '#F8F9FF' }}>
-      <div className="max-w-6xl mx-auto px-4">
+    <section
+      className="w-full px-4 md:px-10 py-4 md:py-12"
+      style={{ backgroundColor: "#F8F9FF" }}
+    >
+      <div className="px-4">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#10847E] md:mb-8">
           What people say
         </h2>
@@ -84,21 +92,33 @@ const TestimonialSection = ({ testimonials }) => {
                 className="flex space-x-8 lg:px-10"
               >
                 {[0, 1].map((offset) => {
-                  const testimonial = testimonials[(activeIndex + offset) % testimonials.length];
+                  const testimonial =
+                    testimonials[(activeIndex + offset) % testimonials.length];
                   return (
-                    <div key={testimonial.id} className="w-full lg:w-1/2 flex-shrink-0">
+                    <div
+                      key={testimonial.id}
+                      className="w-full lg:w-1/2 flex-shrink-0"
+                    >
                       <div className="bg-white p-8 rounded-lg shadow-md h-full flex flex-col justify-between gap-4">
                         <div className="flex items-center">
                           <div className="relative">
-                            <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4 object-cover" />
-                            <FcGoogle className="absolute bottom-1 right-3 text-xl bg-white rounded-full"/>
+                            <img
+                              src={testimonial.image}
+                              alt={testimonial.name}
+                              className="w-12 h-12 rounded-full mr-4 object-cover"
+                            />
+                            <FcGoogle className="absolute bottom-1 right-3 text-xl bg-white rounded-full" />
                           </div>
                           <div>
                             <div className="flex gap-2 items-center">
-                              <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                              <h4 className="font-semibold text-gray-800">
+                                {testimonial.name}
+                              </h4>
                               <RiVerifiedBadgeFill className="text-blue-500" />
                             </div>
-                            <p className="text-gray-500">{testimonial.location}</p>
+                            <p className="text-gray-500">
+                              {testimonial.location}
+                            </p>
                           </div>
                         </div>
                         <div className="flex gap-2 text-yellow-500">
