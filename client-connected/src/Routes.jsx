@@ -74,20 +74,16 @@ const ProjectRoutes = () => {
       element: <CleaningProductPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/:categorySlug/:slug/:id`,
-      element: <CleaningProductPage />,
-    },
-    {
-      path: `${config.VITE_BASE_URL}/:categorySlug/:slug/:id/:location`,
+      path: `${config.VITE_BASE_URL}/subcategory/:slug/:id/:location`,
       element: <CleaningProductPage />,
     },
 
     {
-      path: `${config.VITE_BASE_URL}/:subcategorySlug/:subcategoryId`,
+      path: `${config.VITE_BASE_URL}/products/:subcategorySlug/:subcategoryId`,
       element: <ProductListPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/:subcategorySlug/:subcategoryId/:location`,
+      path: `${config.VITE_BASE_URL}/products/:subcategorySlug/:subcategoryId/:location`,
       element: <ProductListPage />,
     },
 

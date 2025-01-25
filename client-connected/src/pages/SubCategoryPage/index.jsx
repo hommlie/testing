@@ -136,8 +136,8 @@ const SubCategoryPage = () => {
                     onClick={() => {
                       const path =
                         subCategory.category.is_page === 1
-                          ? `/${subCategory.category?.slug}/${subCategory.slug}/${subCategory.subcat_id}/${location}`
-                          : `/products/${subCategory.slug}/${subCategory.subcat_id}/${location}`;
+                          ? `/subcategory/${subCategory.slug}/${subCategory.subcat_id}`
+                          : `/products/${subCategory.slug}/${subCategory.subcat_id}`;
                       navigate(path);
                     }}
                     className="w-full py-2 text-sm px-4 bg-[#10847E] text-white rounded-md hover:bg-[#0d6d68] transition-colors duration-300"

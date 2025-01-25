@@ -39,7 +39,7 @@ const ProductListPage = () => {
       // Initialize selected attributes and variations
       const initialAttributes = {};
       const initialVariations = {};
-      response.data.data.forEach((product) => {
+      response?.data?.data?.forEach((product) => {
         if (product.variations && product.variations.length > 0) {
           const attributes = [
             ...new Set(product.variations.map((v) => v.attribute_name)),
@@ -213,7 +213,7 @@ const ProductListPage = () => {
             animate="show"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {products.map((product) => {
+            {products?.map((product) => {
               const attributes = getAttributesForProduct(product);
               const selectedAttribute = selectedAttributes[product.id];
               const variations = selectedAttribute
@@ -262,9 +262,8 @@ const ProductListPage = () => {
                     </div>
 
                     {/* Variations Selection */}
-                    {attributes.length > 0 && (
+                    {/* {attributes.length > 0 && (
                       <div className="space-y-4 mt-auto">
-                        {/* Frequency Selection */}
                         <div className="relative">
                           <select
                             value={selectedAttribute || ""}
@@ -283,7 +282,6 @@ const ProductListPage = () => {
                           <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                         </div>
 
-                        {/* BHK Selection */}
                         {selectedAttribute && (
                           <div className="relative">
                             <select
@@ -310,10 +308,9 @@ const ProductListPage = () => {
                           </div>
                         )}
                       </div>
-                    )}
+                    )} */}
 
-                    {/* Price Display */}
-                    {selectedVariation && (
+                    {/* {selectedVariation && (
                       <div className="mt-4">
                         <div className="flex items-center gap-2">
                           <span className="text-2xl font-bold text-[#10847E]">
@@ -330,10 +327,10 @@ const ProductListPage = () => {
                           </p>
                         )}
                       </div>
-                    )}
+                    )} */}
 
                     {/* Add to Cart Button */}
-                    <button
+                    {/* <button
                       onClick={() => handleAddToCart(product)}
                       disabled={
                         !selectedVariation || isAddingToCart[product.id]
@@ -345,6 +342,16 @@ const ProductListPage = () => {
                       }`}
                     >
                       {isAddingToCart[product.id] ? "Adding..." : "Add to Cart"}
+                    </button> */}
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `${config.VITE_BASE_URL}/product/${product.id}/${product.slug}`
+                        )
+                      }
+                      className={`w-full py-3 px-4 rounded-md transition-colors duration-300 mt-4 bg-[#10847E] text-white hover:bg-[#0d6d68]`}
+                    >
+                      More Details
                     </button>
                   </div>
                 </motion.div>

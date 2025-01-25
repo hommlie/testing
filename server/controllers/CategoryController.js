@@ -558,23 +558,16 @@ exports.getCleaningSubcategory = async (req, res) => {
             };
 
             // Check if attribute group exists
-            const existingGroup = acc.find(
+            let existingGroup = acc.find(
               (group) => group.attribute_id === variation.attribute_id
             );
 
             if (existingGroup) {
               // Add variation to existing group
               existingGroup.variations.push(variationData);
-
-              // Update the starting_price by comparing the current variation's price
-              const currentPrice =
-                variationData.discounted_variation_price || variationData.price;
-              if (currentPrice < existingGroup.starting_price) {
-                existingGroup.starting_price = currentPrice;
-              }
             } else {
               // Create new attribute group
-              acc.push({
+              existingGroup = {
                 attribute_id: variation.attribute_id,
                 attribute_name: variation.attribute.attribute,
                 specifications: variation.attribute.specifications,
@@ -583,17 +576,24 @@ exports.getCleaningSubcategory = async (req, res) => {
                 avg_rating: variation.attribute.avg_rating,
                 variations: [variationData],
                 reviewsData,
-                // Set the starting price to the price of the first variation
-                starting_price:
-                  variationData.discounted_variation_price ||
-                  variationData.price,
-              });
+              };
+              acc.push(existingGroup);
             }
 
+            // Calculate starting price ONLY from discounted_variation_price
+            const validDiscountedPrices = existingGroup.variations
+              .map((v) => v.discounted_variation_price)
+              .filter((price) => price !== null && price !== undefined);
+
+            // Set starting price to the minimum discounted price,
+            // fallback to original price if no discounted prices exist
+            existingGroup.starting_price =
+              validDiscountedPrices.length > 0
+                ? Math.min(...validDiscountedPrices)
+                : Math.min(...existingGroup.variations.map((v) => v.price));
+
             // Sort variations within each attribute group
-            acc.forEach((group) => {
-              group.variations.sort(advancedSort);
-            });
+            existingGroup.variations.sort(advancedSort);
 
             return acc;
           },
