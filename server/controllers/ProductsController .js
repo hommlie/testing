@@ -760,18 +760,18 @@ exports.products = async (req, res) => {
           where: { media: "Image" },
           as: "productimage",
         },
-        {
-          model: Variation,
-          as: "variations",
-          include: [
-            {
-              model: Attribute,
-              attributes: ["id", "attribute"],
-              where: { status: 1 },
-              as: "attribute",
-            },
-          ],
-        },
+        // {
+        //   model: Variation,
+        //   as: "variations",
+        //   include: [
+        //     {
+        //       model: Attribute,
+        //       attributes: ["id", "attribute"],
+        //       where: { status: 1 },
+        //       as: "attribute",
+        //     },
+        //   ],
+        // },
         {
           model: Ratting,
           as: "rattings",
