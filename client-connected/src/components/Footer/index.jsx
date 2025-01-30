@@ -21,7 +21,7 @@ export default function Footer({
 }) {
   return (
     <footer className="footer mt-[40px] z-10 px-4 md:px-10">
-      <div className="container-sm max-w-7xl mx-auto pt-5 lg:pt-24 pb-5 space-y-8">
+      <div className="container-sm max-w-7xl mx-auto px-10 pt-5 lg:pt-24 pb-5 space-y-8">
         <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">
