@@ -315,12 +315,12 @@ exports.getSubcategory = async (req, res) => {
           subcategory_sub_title: sub.subcategory_sub_title,
           slug: sub.slug,
           location: sub.location,
+          specifications: sub.specifications,
+          banner: sub.banner,
+          total_reviews: sub.total_reviews,
+          avg_rating: sub.avg_rating,
           // is_page_category: sub.category.is_page,
-          category: sub.category,
-          // innersubcategory: innersubcategoryData.map(inner => ({
-          //   id: inner.id,
-          //   innersubcategory_name: inner.innersubcategory_name
-          // })),
+          // category: sub.category,
           // productsData: productsData
         };
       })
