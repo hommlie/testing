@@ -254,6 +254,8 @@ const CleaningProductPage = () => {
     );
   }
 
+  const locations = innerSubCategoryData?.location?.split("|") || [];
+
   return (
     <main className="max-w-7xl">
       <div className="">
@@ -472,6 +474,79 @@ const CleaningProductPage = () => {
           </div>
         </div>
       </div>
+
+      {/* About Section */}
+      {innerSubCategoryData?.about && (
+        <section className="mt-12 bg-white rounded-xl p-6 shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">
+            About {innerSubCategoryData?.category_name}
+          </h2>
+          <div
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: innerSubCategoryData.about }}
+          />
+        </section>
+      )}
+
+      {/* FAQs Section */}
+      {innerSubCategoryData?.faqs && (
+        <section className="mt-8 bg-white rounded-xl p-6 shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">
+            Frequently Asked Questions
+          </h2>
+          <div
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: innerSubCategoryData.faqs }}
+          />
+        </section>
+      )}
+
+      {/* Quick Links Section */}
+      <section className="mt-8 bg-white rounded-xl shadow-lg">
+        <h2 className="text-2xl font-semibold p-6">Quick Links</h2>
+
+        <QuickLinkSection
+          title="Also available in"
+          isOpen={openSection === "locations"}
+          onToggle={() =>
+            setOpenSection(openSection === "locations" ? "" : "locations")
+          }
+        >
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {locations.map((location, index) => (
+              <a
+                key={index}
+                href={`${
+                  config.VITE_BASE_URL
+                }/${categorySlug}-in-${location.trim()}/${categoryId}/${location.trim()}`}
+                className="text-blue-600 hover:underline"
+              >
+                {location.trim()}
+              </a>
+            ))}
+          </div>
+        </QuickLinkSection>
+
+        <QuickLinkSection
+          title="Other services we provide"
+          isOpen={openSection === "services"}
+          onToggle={() =>
+            setOpenSection(openSection === "services" ? "" : "services")
+          }
+        >
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {innerSubCategoryData?.other_services?.map((service) => (
+              <a
+                key={service.id}
+                href={`/product/${service.slug}/${service.id}`}
+                className="text-blue-600 hover:underline"
+              >
+                {service.category_name}
+              </a>
+            ))}
+          </div>
+        </QuickLinkSection>
+      </section>
 
       <LoginSignup
         isOpen={isModalOpen}
