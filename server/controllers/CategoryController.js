@@ -245,8 +245,6 @@ exports.getSubcategory = async (req, res) => {
               ),
               "image_url",
             ],
-            // 'video',
-            // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
             "is_form",
             "is_page",
             "slug",
@@ -279,25 +277,30 @@ exports.getSubcategory = async (req, res) => {
           banner: sub.banner,
           total_reviews: sub.total_reviews,
           avg_rating: sub.avg_rating,
-          // is_page_category: sub.category.is_page,
           category: sub.category,
         };
       })
     );
 
     if (subcategory.length > 0) {
+      // Extract only the necessary data from categoryData
+      const simplifiedCategoryData = {
+        ...categoryData.get({ plain: true }),
+        other_services: productsData || [],
+      };
+
       return res.status(200).json({
         status: 1,
         message: "Success",
         data: {
           subcategory,
-          categoryData: { ...categoryData, other_services: productsData || [] },
+          categoryData: simplifiedCategoryData,
         },
       });
     } else {
       return res
         .status(200)
-        .json({ status: 0, message: "No subscategory data found" });
+        .json({ status: 0, message: "No subcategory data found" });
     }
   } catch (error) {
     return res
