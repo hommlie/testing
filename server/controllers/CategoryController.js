@@ -320,7 +320,7 @@ exports.getSubcategory = async (req, res) => {
           total_reviews: sub.total_reviews,
           avg_rating: sub.avg_rating,
           // is_page_category: sub.category.is_page,
-          // category: sub.category,
+          category: sub.category,
           // productsData: productsData
         };
       })

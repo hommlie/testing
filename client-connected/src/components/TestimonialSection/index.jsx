@@ -62,7 +62,7 @@ const TestimonialSection = ({ testimonials }) => {
   return (
     <section
       className="w-full px-4 md:px-10 py-4 md:py-12"
-      style={{ backgroundColor: "#F8F9FF" }}
+      // style={{ backgroundColor: "#F8F9FF" }}
     >
       <div className="px-4">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#10847E] md:mb-8">
@@ -89,7 +89,7 @@ const TestimonialSection = ({ testimonials }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="flex space-x-8 lg:px-10"
+                className="flex gap-8 lg:px-14"
               >
                 {[0, 1].map((offset) => {
                   const testimonial =

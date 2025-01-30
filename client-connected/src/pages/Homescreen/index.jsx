@@ -254,7 +254,7 @@ const HomePageFirstSection = () => {
   }
 
   return (
-    <main className="content w-full bg-[#f5f5f5] scroll-smooth space-y-2 lg:space-y-3">
+    <main className="content w-full scroll-smooth space-y-2 lg:space-y-3">
       <Helmet>
         <script
           async
@@ -306,7 +306,7 @@ const HomePageFirstSection = () => {
         onClose={() => setIsReferModalOpen(false)}
       />
 
-      <section className="w-full relative group py-0">
+      <div className="w-full relative group py-0">
         <div className="w-full h-24 md:h-40 lg:h-[500px] rounded-xl overflow-hidden">
           {bannerData?.sliders?.map((slide, index) => (
             <div
@@ -357,9 +357,9 @@ const HomePageFirstSection = () => {
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      <section className="w-full px-4 md:px-10 py-6 md:py-12 bg-gray-50">
+      <section className="w-full px-4 md:px-10 py-6 md:py-12">
         <div className="">
           {/* Welcome Header */}
           <motion.h1

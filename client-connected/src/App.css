@@ -26,13 +26,26 @@ html {
   background-color: white;
 }
 
+main {
+  max-width: 96rem;
+  margin: 0 auto;
+}
+
+section {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
 header {
   z-index: 1;
   width: 100%;
+  background-color: white;
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.1);
 }
 
 .footer {
-  background-color: #c5dbca;
+  /* background-color: #c5dbca; */
+  background-color: white;
   z-index: 1000;
   padding: 1rem;
   width: 100%;

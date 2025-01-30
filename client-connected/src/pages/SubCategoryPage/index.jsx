@@ -79,7 +79,7 @@ const SubCategoryPage = () => {
     );
 
   return (
-    <>
+    <main>
       <Helmet>
         <title>{categoryData?.meta_title}</title>
         <meta name="description" content={categoryData?.meta_description} />
@@ -204,7 +204,7 @@ const SubCategoryPage = () => {
           ) : null}
         </div>
       </div>
-    </>
+    </main>
   );
 };
 
