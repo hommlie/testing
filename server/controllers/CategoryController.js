@@ -380,6 +380,8 @@ exports.getCleaningSubcategory = async (req, res) => {
             "specifications",
             "total_reviews",
             "avg_rating",
+            "faqs",
+            "about",
           ],
         },
       ],
@@ -387,6 +389,14 @@ exports.getCleaningSubcategory = async (req, res) => {
         id: subcat_id,
         status: 1,
       },
+    });
+
+    const otherServices = await Subcategory.findAll({
+      attributes: ["id", "subcategory_name", "slug"],
+      where: {
+        status: 1,
+      },
+      order: [["id", "DESC"]],
     });
 
     if (!subcategoryData) {
@@ -624,6 +634,8 @@ exports.getCleaningSubcategory = async (req, res) => {
       subcategory_specifications: subcategoryData.get("specifications"),
       subcategory_avg_rating: subcategoryData.get("avg_rating"),
       subcategory_total_reviews: subcategoryData.get("total_reviews"),
+      faq: subcategoryData.get("faq"),
+      about: subcategoryData.get("about"),
       category: subcategoryData.category,
       video: subcategoryData.video,
       thumbnail: subcategoryData.thumbnail,
@@ -631,6 +643,7 @@ exports.getCleaningSubcategory = async (req, res) => {
       alt_tag: subcategoryData.alt_tag,
       image_title: subcategoryData.image_title,
       products: transformedProducts,
+      other_services: otherServices,
     };
 
     return res.status(200).json({

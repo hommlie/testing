@@ -226,7 +226,7 @@ const SubCategoryPage = () => {
 
   return (
     <main className="max-w-7xl w-full">
-      <div className="container px-4">
+      <div className="container px-4 mt-5">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm mb-6">
           <a href="/" className="text-emerald-600 hover:text-emerald-700">
