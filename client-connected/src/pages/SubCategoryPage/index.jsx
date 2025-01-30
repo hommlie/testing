@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Star, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { Star, ArrowRight, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../../components/Loading";
 import axios from "axios";
 import config from "../../config/config";
@@ -21,7 +21,7 @@ const StarRating = ({ rating, reviews }) => {
           />
         ))}
       </div>
-      <span className="text-sm text-gray-600">
+      <span className="text-sm text-white">
         {rating} ({reviews > 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews}{" "}
         reviews)
       </span>
@@ -87,14 +87,50 @@ const CartSection = ({ cart }) => {
   );
 };
 
+const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
+  return (
+    <div className="">
+      <button
+        onClick={onToggle}
+        className="w-full py-4 px-6 flex justify-between items-center"
+      >
+        <span className="font-medium">{title}</span>
+        <ChevronDown
+          className={`w-5 h-5 transition-transform ${
+            isOpen ? "transform rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-4">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const SubCategoryPage = () => {
   const { categoryId, categorySlug, location } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({
     subcategory: [],
     categoryData: null,
+    other_services: [],
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState(null);
+  const [openSection, setOpenSection] = useState("");
+
+  const sectionRefs = useRef({});
 
   useEffect(() => {
     fetchData();
@@ -114,6 +150,38 @@ const SubCategoryPage = () => {
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY + 100;
+    let currentSection = null;
+
+    Object.entries(sectionRefs.current).forEach(([key, ref]) => {
+      if (ref && ref.offsetTop <= scrollPosition) {
+        currentSection = key;
+      }
+    });
+
+    setActiveSection(currentSection);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = sectionRefs.current[sectionId];
+    if (element) {
+      const offset = 175;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -139,6 +207,14 @@ const SubCategoryPage = () => {
     },
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
   const handleSubCategoryClick = (subCategory) => {
     const path =
       subCategory.category.is_page === 1
@@ -148,18 +224,6 @@ const SubCategoryPage = () => {
   };
 
   const locations = data?.categoryData?.location?.split("|") || [];
-  const currentLocation =
-    location?.charAt(0)?.toUpperCase() + location?.slice(1);
-  const currentLocationTitle =
-    location && currentLocation ? ` in ${currentLocation}` : "";
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loading />
-      </div>
-    );
-  }
 
   return (
     <main className="max-w-7xl w-full">
@@ -183,9 +247,9 @@ const SubCategoryPage = () => {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center text-white">
-              <h1 className="text-4xl font-bold mb-4">
-                {data?.categoryData?.category_name}
+            <div className="flex flex-col items-center text-center text-white">
+              <h1 className="text-4xl font-bold mb-4 uppercase">
+                {location ? location : data?.categoryData?.category_name}
               </h1>
               {data?.categoryData?.avg_rating && (
                 <StarRating
@@ -194,6 +258,32 @@ const SubCategoryPage = () => {
                 />
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Services Quick Nav */}
+        <div className="flex justify-center bg-white rounded-lg glow-border mb-8 overflow-x-auto">
+          <div className="flex gap-4 p-4">
+            {data?.subcategory?.map((cat) => (
+              <div
+                key={cat.subcat_id}
+                onClick={() => scrollToSection(cat.subcat_id)}
+                className={`w-32 flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
+                  activeSection === cat.subcat_id
+                    ? "bg-emerald-600 text-white"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                <img
+                  src={cat.subcategory_icon}
+                  alt=""
+                  className="w-20 h-20 rounded-md object-cover"
+                />
+                <p className="text-xs text-center font-medium mt-2 line-clamp-2 w-full">
+                  {cat.subcategory_name}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -210,6 +300,7 @@ const SubCategoryPage = () => {
                 <motion.div
                   key={cat.subcat_id}
                   variants={item}
+                  ref={(el) => (sectionRefs.current[cat.subcat_id] = el)}
                   className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-6">
@@ -263,6 +354,79 @@ const SubCategoryPage = () => {
                 </motion.div>
               ))}
             </motion.div>
+
+            {/* About Section */}
+            {data?.categoryData?.about && (
+              <section className="mt-12 bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-semibold mb-4">
+                  About {data?.categoryData?.category_name}
+                </h2>
+                <div
+                  className="prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: data.categoryData.about }}
+                />
+              </section>
+            )}
+
+            {/* FAQs Section */}
+            {data?.categoryData?.faqs && (
+              <section className="mt-8 bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Frequently Asked Questions
+                </h2>
+                <div
+                  className="prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: data.categoryData.faqs }}
+                />
+              </section>
+            )}
+
+            {/* Quick Links Section */}
+            <section className="mt-8 bg-white rounded-xl shadow-lg">
+              <h2 className="text-2xl font-semibold p-6">Quick Links</h2>
+
+              <QuickLinkSection
+                title="Also available in"
+                isOpen={openSection === "locations"}
+                onToggle={() =>
+                  setOpenSection(openSection === "locations" ? "" : "locations")
+                }
+              >
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {locations.map((location, index) => (
+                    <a
+                      key={index}
+                      href={`${
+                        config.VITE_BASE_URL
+                      }/${categorySlug}/${categoryId}/${location.trim()}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {location.trim()}
+                    </a>
+                  ))}
+                </div>
+              </QuickLinkSection>
+
+              <QuickLinkSection
+                title="Other services we provide"
+                isOpen={openSection === "services"}
+                onToggle={() =>
+                  setOpenSection(openSection === "services" ? "" : "services")
+                }
+              >
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {data?.other_services?.map((service) => (
+                    <a
+                      key={service.id}
+                      href={`/product/${service.slug}/${service.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {service.name}
+                    </a>
+                  ))}
+                </div>
+              </QuickLinkSection>
+            </section>
           </div>
 
           {/* Right Section - Cart */}

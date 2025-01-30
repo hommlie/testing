@@ -262,46 +262,7 @@ exports.getSubcategory = async (req, res) => {
         // });
 
         const productsData = await Product.findAll({
-          attributes: [
-            "id",
-            "product_name",
-            "product_price",
-            "discounted_price",
-            "is_variation",
-            "sku",
-            "slug",
-          ],
-          include: [
-            {
-              model: ProductImage,
-              attributes: [
-                "id",
-                "product_id",
-                [
-                  sequelize.fn(
-                    "CONCAT",
-                    sequelize.literal(
-                      `'${apiUrl}/storage/app/public/images/products/'`
-                    ),
-                    sequelize.col("productimage.image")
-                  ),
-                  "image_url",
-                ],
-                "alt_tag",
-                "image_title",
-              ],
-              where: { media: "Image" },
-              as: "productimage",
-            },
-            {
-              model: Variation,
-              as: "variations",
-            },
-            {
-              model: Ratting,
-              as: "rattings",
-            },
-          ],
+          attributes: ["id", "product_name", "slug"],
           where: {
             subcat_id: sub.id,
             status: 1,
@@ -325,7 +286,7 @@ exports.getSubcategory = async (req, res) => {
           avg_rating: sub.avg_rating,
           // is_page_category: sub.category.is_page,
           category: sub.category,
-          // productsData: productsData
+          other_services: productsData,
         };
       })
     );
