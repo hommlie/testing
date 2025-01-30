@@ -262,8 +262,52 @@ const SubCategoryPage = () => {
         </div>
 
         {/* Services Quick Nav */}
-        <div className="flex justify-center bg-white rounded-lg glow-border mb-8 overflow-x-auto">
-          <div className="flex gap-4 p-4">
+        <div className="flex items-center justify-center bg-white rounded-lg glow-border mb-8 relative">
+          {/* Left Arrow */}
+          <div
+            className="absolute left-0 z-10 p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
+            onClick={() => {
+              const container = document.getElementById("scroll-container");
+              container.scrollBy({ left: -200, behavior: "smooth" });
+            }}
+            style={{ display: "none" }} // Initially hidden
+            id="left-arrow"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </div>
+
+          {/* Scrollable Content */}
+          <div
+            id="scroll-container"
+            className="flex gap-4 p-4 overflow-x-auto scrollbar-hide"
+            onScroll={(e) => {
+              const container = e.target;
+              const leftArrow = document.getElementById("left-arrow");
+              const rightArrow = document.getElementById("right-arrow");
+
+              // Show/hide arrows based on scroll position
+              leftArrow.style.display =
+                container.scrollLeft > 0 ? "block" : "none";
+              rightArrow.style.display =
+                container.scrollLeft <
+                container.scrollWidth - container.clientWidth
+                  ? "block"
+                  : "none";
+            }}
+          >
             {data?.subcategory?.map((cat) => (
               <div
                 key={cat.subcat_id}
@@ -277,13 +321,39 @@ const SubCategoryPage = () => {
                 <img
                   src={cat.subcategory_icon}
                   alt=""
-                  className="w-20 h-20 rounded-md object-cover"
+                  className="w-20 h-20 rounded-md"
                 />
                 <p className="text-xs text-center font-medium mt-2 line-clamp-2 w-full">
                   {cat.subcategory_name}
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Right Arrow */}
+          <div
+            className="absolute right-0 z-10 p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
+            onClick={() => {
+              const container = document.getElementById("scroll-container");
+              container.scrollBy({ left: 200, behavior: "smooth" });
+            }}
+            style={{ display: "none" }} // Initially hidden
+            id="right-arrow"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </div>
         </div>
 
@@ -398,7 +468,7 @@ const SubCategoryPage = () => {
                       key={index}
                       href={`${
                         config.VITE_BASE_URL
-                      }/${categorySlug}/${categoryId}/${location.trim()}`}
+                      }/${categorySlug}-in-${location.trim()}/${categoryId}/${location.trim()}`}
                       className="text-blue-600 hover:underline"
                     >
                       {location.trim()}
@@ -421,7 +491,7 @@ const SubCategoryPage = () => {
                       href={`/product/${service.slug}/${service.id}`}
                       className="text-blue-600 hover:underline"
                     >
-                      {service.name}
+                      {service.product_name}
                     </a>
                   ))}
                 </div>

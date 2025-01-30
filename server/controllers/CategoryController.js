@@ -187,6 +187,15 @@ exports.getSubcategory = async (req, res) => {
       where: { id: cat_id },
     });
 
+    const productsData = await Product.findAll({
+      attributes: ["id", "product_name", "slug"],
+      where: {
+        cat_id: cat_id,
+        status: 1,
+      },
+      order: [["id", "DESC"]],
+    });
+
     const subcategoryData = await Subcategory.findAll({
       attributes: [
         "id",
@@ -256,20 +265,6 @@ exports.getSubcategory = async (req, res) => {
 
     const subcategory = await Promise.all(
       subcategoryData.map(async (sub) => {
-        // const innersubcategoryData = await Innersubcategory.findAll({
-        //   attributes: ['id', 'innersubcategory_name'],
-        //   where: { subcat_id: sub.id, status: 1 }
-        // });
-
-        const productsData = await Product.findAll({
-          attributes: ["id", "product_name", "slug"],
-          where: {
-            subcat_id: sub.id,
-            status: 1,
-          },
-          order: [["id", "DESC"]],
-        });
-
         return {
           subcat_id: sub.id,
           subcategory_name: sub.subcategory_name,
@@ -286,7 +281,6 @@ exports.getSubcategory = async (req, res) => {
           avg_rating: sub.avg_rating,
           // is_page_category: sub.category.is_page,
           category: sub.category,
-          other_services: productsData,
         };
       })
     );
@@ -295,7 +289,10 @@ exports.getSubcategory = async (req, res) => {
       return res.status(200).json({
         status: 1,
         message: "Success",
-        data: { subcategory, categoryData },
+        data: {
+          subcategory,
+          categoryData: { ...categoryData, other_services: productsData || [] },
+        },
       });
     } else {
       return res
