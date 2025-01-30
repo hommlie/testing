@@ -57,6 +57,14 @@ Subcategory.init(
       type: DataTypes.FLOAT,
       allowNull: true,
     },
+    faqs: {
+      type: DataTypes.TEXT("long"),
+      allowNull: false,
+    },
+    about: {
+      type: DataTypes.TEXT("long"),
+      allowNull: false,
+    },
   },
   {
     sequelize,

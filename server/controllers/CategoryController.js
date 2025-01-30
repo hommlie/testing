@@ -181,6 +181,8 @@ exports.getSubcategory = async (req, res) => {
         ],
         "total_reviews",
         "avg_rating",
+        "faqs",
+        "about",
       ],
       where: { id: cat_id },
     });
@@ -219,6 +221,8 @@ exports.getSubcategory = async (req, res) => {
         ],
         "total_reviews",
         "avg_rating",
+        "faqs",
+        "about",
       ],
       include: [
         {
@@ -381,6 +385,8 @@ exports.getCleaningSubcategory = async (req, res) => {
         "specifications",
         "total_reviews",
         "avg_rating",
+        "faqs",
+        "about",
       ],
       include: [
         {

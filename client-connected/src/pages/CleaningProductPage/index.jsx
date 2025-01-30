@@ -255,7 +255,7 @@ const CleaningProductPage = () => {
   }
 
   return (
-    <main className="">
+    <main className="max-w-7xl">
       <div className="">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">

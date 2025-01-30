@@ -1,18 +1,100 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { Star, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import config from "../../config/config";
-import LoadingWrapper from "../../components/Loading/LoadingWrapper";
 import Loading from "../../components/Loading";
+import axios from "axios";
+import config from "../../config/config";
+
+const StarRating = ({ rating, reviews }) => {
+  return (
+    <div className="flex items-center space-x-2">
+      <div className="flex">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`w-4 h-4 ${
+              star <= Math.round(rating)
+                ? "text-yellow-400 fill-current"
+                : "text-gray-300"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="text-sm text-gray-600">
+        {rating} ({reviews > 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews}{" "}
+        reviews)
+      </span>
+    </div>
+  );
+};
+
+const CartSection = ({ cart }) => {
+  return (
+    <div className="space-y-6">
+      <div className="bg-white glow-border rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-semibold mb-4">Cart Summary</h2>
+        {cart?.length > 0 ? (
+          <div className="space-y-4">
+            {/* Cart items would go here */}
+            <div className="pt-4 border-t">
+              <button className="w-full bg-emerald-600 text-white py-2 rounded-md hover:bg-emerald-700 transition">
+                Checkout Now
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-gray-500">
+            <div className="flex justify-center mb-4">
+              <svg
+                className="w-16 h-16"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                />
+              </svg>
+            </div>
+            <p className="font-medium">Your cart is empty</p>
+            <p className="text-sm">Add some services to get started</p>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white glow-border rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-semibold mb-4">Features</h2>
+        <ul className="space-y-2">
+          <li className="flex items-center space-x-2">
+            <span className="text-emerald-600">✓</span>
+            <span>Verified Professionals</span>
+          </li>
+          <li className="flex items-center space-x-2">
+            <span className="text-emerald-600">✓</span>
+            <span>100% Satisfaction</span>
+          </li>
+          <li className="flex items-center space-x-2">
+            <span className="text-emerald-600">✓</span>
+            <span>Expert Service</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
 
 const SubCategoryPage = () => {
   const { categoryId, categorySlug, location } = useParams();
-  const [subCategories, setSubCategories] = useState([]);
-  const [categoryData, setCategoryData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [data, setData] = useState({
+    subcategory: [],
+    categoryData: null,
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -26,8 +108,8 @@ const SubCategoryPage = () => {
         { cat_id: categoryId }
       );
 
-      setSubCategories(subCatResponse.data.data.subcategory);
-      setCategoryData(subCatResponse.data.data.categoryData);
+      setData(subCatResponse.data.data);
+      console.log("Sub categories:", subCatResponse.data.data.subcategory);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -65,143 +147,130 @@ const SubCategoryPage = () => {
     navigate(path);
   };
 
-  const locations = categoryData?.location?.split("|") || [];
+  const locations = data?.categoryData?.location?.split("|") || [];
   const currentLocation =
     location?.charAt(0)?.toUpperCase() + location?.slice(1);
   const currentLocationTitle =
     location && currentLocation ? ` in ${currentLocation}` : "";
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="flex items-center justify-center min-h-screen">
         <Loading />
       </div>
     );
+  }
 
   return (
-    <main>
-      <Helmet>
-        <title>{categoryData?.meta_title}</title>
-        <meta name="description" content={categoryData?.meta_description} />
-        <meta
-          property="og:title"
-          content={
-            currentLocation
-              ? categoryData?.meta_title + currentLocationTitle
-              : categoryData?.meta_title
-          }
-        />
-        <meta
-          property="og:description"
-          content={categoryData?.meta_description}
-        />
-        <meta property="og:image" content={categoryData?.image_url} />
-      </Helmet>
+    <main className="max-w-7xl w-full">
+      <div className="container px-4">
+        {/* Breadcrumb */}
+        <nav className="flex items-center space-x-2 text-sm mb-6">
+          <a href="/" className="text-emerald-600 hover:text-emerald-700">
+            Home
+          </a>
+          <span className="text-gray-500">/</span>
+          <span className="text-gray-500">
+            {data?.categoryData?.category_name}
+          </span>
+        </nav>
 
-      <div className="flex flex-col min-h-screen">
         {/* Banner Section */}
-        <div className="relative w-full h-[300px] md:h-[400px]">
+        <div className="relative w-full h-[300px] rounded-xl overflow-hidden mb-8">
           <img
-            src={categoryData?.motion_graphics}
-            alt={categoryData?.alt_tag}
-            className="w-full h-full"
+            src={data?.categoryData?.motion_graphics}
+            alt={data?.categoryData?.category_name}
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center px-4">
-              {categoryData?.category_name}
-              {currentLocationTitle}
-            </h1>
+            <div className="text-center text-white">
+              <h1 className="text-4xl font-bold mb-4">
+                {data?.categoryData?.category_name}
+              </h1>
+              {data?.categoryData?.avg_rating && (
+                <StarRating
+                  rating={data?.categoryData.avg_rating}
+                  reviews={data?.categoryData.total_reviews}
+                />
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-grow container mx-auto px-4 lg:px-10 py-12">
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-          >
-            {subCategories.map((subCategory) => (
-              <motion.div
-                key={subCategory.subcat_id}
-                variants={item}
-                className="group"
-                whileHover={{ scale: 1.05 }}
-                onClick={() => handleSubCategoryClick(subCategory)}
-              >
-                <div className="bg-white shadow-lg overflow-hidden transition-all duration-300 transform hover:shadow-2xl cursor-pointer">
-                  <div className="relative aspect-square overflow-hidden">
-                    <img
-                      src={subCategory.subcategory_icon}
-                      alt={subCategory.subcategory_name}
-                      className="w-full h-full transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                  </div>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left Section - Category Details */}
+          <div className="lg:w-3/4">
+            <motion.div
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="grid gap-6"
+            >
+              {data?.subcategory?.map((cat) => (
+                <motion.div
+                  key={cat.subcat_id}
+                  variants={item}
+                  className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="flex gap-6">
+                    <div className="flex-1">
+                      <h2 className="text-xl font-semibold mb-2">
+                        {cat.subcategory_name}
+                      </h2>
+                      {cat.avg_rating && (
+                        <StarRating
+                          rating={cat.avg_rating}
+                          reviews={cat.total_reviews}
+                        />
+                      )}
 
-                  <div className="p-4 text-center">
-                    <h3 className="text-base md:text-lg font-semibold mb-2 line-clamp-2 group-hover:text-[#10847E] transition-colors duration-300">
-                      {subCategory.subcategory_name}
-                    </h3>
-                    <div className="flex items-center justify-center">
-                      <span className="text-sm text-gray-500 group-hover:text-[#10847E] transition-colors duration-300">
-                        Explore Services
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 ml-2 inline-block transform group-hover:translate-x-1 transition-transform"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          />
-                        </svg>
-                      </span>
+                      {cat.specifications && (
+                        <div className="mt-4">
+                          <h3 className="font-medium mb-2">Specifications:</h3>
+                          <ul className="space-y-1">
+                            {cat.specifications
+                              .split("|")
+                              .map((spec, index) => (
+                                <li
+                                  key={index}
+                                  className="flex items-start space-x-2 text-gray-600"
+                                >
+                                  <span className="text-black">•</span>
+                                  <span>{spec.trim()}</span>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <button
+                        onClick={() => handleSubCategoryClick(cat)}
+                        className="mt-4 flex items-center text-emerald-600 hover:text-emerald-700 font-medium group"
+                      >
+                        View Details
+                        <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+                      </button>
+                    </div>
+
+                    <div className="w-32 h-32 flex-shrink-0">
+                      <img
+                        src={cat.subcategory_icon}
+                        alt={cat.subcategory_name}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
 
-          {/* Locations Section */}
-          {locations && locations.length ? (
-            <div className="mt-16 bg-gray-50 rounded-xl p-6 md:p-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">
-                Available Locations
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {locations?.map((loc) => {
-                  const formattedLoc = loc.trim();
-                  const capitalizedLoc =
-                    formattedLoc.charAt(0).toUpperCase() +
-                    formattedLoc.slice(1);
-                  return (
-                    <a
-                      key={formattedLoc}
-                      href={`/${
-                        categoryData.slug
-                      }-in-${formattedLoc.toLowerCase()}/${
-                        categoryData.id
-                      }/${formattedLoc.toLowerCase()}`}
-                      className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
-                    >
-                      <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                        <span className="text-lg">
-                          {categoryData.category_name} in {capitalizedLoc}
-                        </span>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
+          {/* Right Section - Cart */}
+          <div className="lg:w-1/4">
+            <div className="sticky top-44 space-y-6">
+              <CartSection cart={[]} />
             </div>
-          ) : null}
+          </div>
         </div>
       </div>
     </main>
