@@ -213,7 +213,7 @@ exports.getSubcategory = async (req, res) => {
         "specifications",
         [
           sequelize.literal(
-            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.banner)`
+            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`
           ),
           "banner",
         ],

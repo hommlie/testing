@@ -45,7 +45,7 @@ Subcategory.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    banner: {
+    sub_cat_banner: {
       type: DataTypes.STRING,
       allowNull: true,
     },
