@@ -412,12 +412,6 @@ exports.getCleaningSubcategory = async (req, res) => {
               "motion_graphics",
             ],
             "specifications",
-            [
-              sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/category/', Category.banner)`
-              ),
-              "banner",
-            ],
             "total_reviews",
             "avg_rating",
           ],
