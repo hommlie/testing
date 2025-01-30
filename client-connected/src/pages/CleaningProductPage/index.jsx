@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { Star } from "lucide-react";
+import { ChevronDown, Star } from "lucide-react";
 import axios from "axios";
 import config from "../../config/config";
 import Loading from "../../components/Loading";
@@ -9,6 +9,7 @@ import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import ProductDetailModal from "../../components/ProductDetailsModal";
 import NoImage from "../../assets/bg/no-image.svg";
+import { motion, AnimatePresence } from "framer-motion";
 
 const StarRating = ({ rating }) => {
   return (
@@ -149,6 +150,37 @@ const CartSection = ({ cart }) => {
   );
 };
 
+const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
+  return (
+    <div className="">
+      <button
+        onClick={onToggle}
+        className="w-full py-4 px-6 flex justify-between items-center"
+      >
+        <span className="font-medium">{title}</span>
+        <ChevronDown
+          className={`w-5 h-5 transition-transform ${
+            isOpen ? "transform rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-4">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const CleaningProductPage = () => {
   const location = useLocation();
   const { id, tag } = useParams();
@@ -166,6 +198,7 @@ const CleaningProductPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeImage, setActiveImage] = useState();
   const [selectedAttributeId, setSelectedAttributeId] = useState();
+  const [openSection, setOpenSection] = useState("");
 
   const productRefs = useRef([]);
 
@@ -258,13 +291,18 @@ const CleaningProductPage = () => {
 
   return (
     <main className="max-w-7xl">
-      <div className="">
+      <div className="mt-5">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">
             Home
           </a>
           <span>/</span>
-          <span>{innerSubCategoryData?.category?.category_name}</span>
+          <a
+            href={`/${innerSubCategoryData?.category?.slug}/${innerSubCategoryData?.category?.id}`}
+            className="text-blue-500"
+          >
+            {innerSubCategoryData?.category?.category_name}
+          </a>
           <span>/</span>
           <span>{innerSubCategoryData?.subcategory_name}</span>
         </nav>
@@ -277,6 +315,23 @@ const CleaningProductPage = () => {
                 <h2 className="text-lg font-semibold">
                   {innerSubCategoryData?.subcategory_name}
                 </h2>
+                {(innerSubCategoryData.avg_rating ||
+                  innerSubCategoryData.total_reviews) && (
+                  <div className="flex items-center space-x-2">
+                    <StarRating rating={innerSubCategoryData.avg_rating} />
+                    {innerSubCategoryData.total_reviews && (
+                      <span className="text-sm text-gray-500">
+                        (
+                        {innerSubCategoryData.total_reviews >= 1000
+                          ? `${(
+                              innerSubCategoryData.total_reviews / 1000
+                            ).toFixed(1)}K`
+                          : innerSubCategoryData.total_reviews}{" "}
+                        reviews)
+                      </span>
+                    )}
+                  </div>
+                )}
                 <div className="text-sm flex items-center">
                   <span className="w-1/3 text-gray-500">Select a service</span>
                   <div className="bg-gray-300 h-0.5 w-2/3"></div>
@@ -538,10 +593,10 @@ const CleaningProductPage = () => {
             {innerSubCategoryData?.other_services?.map((service) => (
               <a
                 key={service.id}
-                href={`/product/${service.slug}/${service.id}`}
+                href={`/subcategory/${service.slug}/${service.id}`}
                 className="text-blue-600 hover:underline"
               >
-                {service.category_name}
+                {service.subcategory_name}
               </a>
             ))}
           </div>

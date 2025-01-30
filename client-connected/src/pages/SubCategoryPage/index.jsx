@@ -487,7 +487,7 @@ const SubCategoryPage = () => {
                   {data?.categoryData?.other_services?.map((service) => (
                     <a
                       key={service.id}
-                      href={`/product/${service.slug}/${service.id}`}
+                      href={`/${service.slug}/${service.id}`}
                       className="text-blue-600 hover:underline"
                     >
                       {service.category_name}
