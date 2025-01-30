@@ -187,10 +187,9 @@ exports.getSubcategory = async (req, res) => {
       where: { id: cat_id },
     });
 
-    const productsData = await Product.findAll({
-      attributes: ["id", "product_name", "slug"],
+    const otherServices = await Category.findAll({
+      attributes: ["id", "category_name", "slug"],
       where: {
-        cat_id: cat_id,
         status: 1,
       },
       order: [["id", "DESC"]],
@@ -286,7 +285,7 @@ exports.getSubcategory = async (req, res) => {
       // Extract only the necessary data from categoryData
       const simplifiedCategoryData = {
         ...categoryData.get({ plain: true }),
-        other_services: productsData || [],
+        other_services: otherServices || [],
       };
 
       return res.status(200).json({

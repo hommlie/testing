@@ -124,7 +124,6 @@ const SubCategoryPage = () => {
   const [data, setData] = useState({
     subcategory: [],
     categoryData: null,
-    other_services: [],
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState(null);
@@ -485,13 +484,13 @@ const SubCategoryPage = () => {
                 }
               >
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {data?.other_services?.map((service) => (
+                  {data?.categoryData?.other_services?.map((service) => (
                     <a
                       key={service.id}
                       href={`/product/${service.slug}/${service.id}`}
                       className="text-blue-600 hover:underline"
                     >
-                      {service.product_name}
+                      {service.category_name}
                     </a>
                   ))}
                 </div>
