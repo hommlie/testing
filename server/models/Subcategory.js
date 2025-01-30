@@ -1,53 +1,71 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("../config/connection");
 
 class Subcategory extends Model {}
 
-Subcategory.init({
+Subcategory.init(
+  {
     cat_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     subcategory_name: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     sub_title: {
-        type: DataTypes.STRING,
-        allowNull: true
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     status: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     slug: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     icon: {
-        type: DataTypes.STRING,
-        allowNull: false 
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    //create banner
     meta_title: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     meta_description: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     subcategory_title: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     subcategory_sub_title: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
-}, {
+    specifications: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    banner: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    total_reviews: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    avg_rating: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+  },
+  {
     sequelize,
-    modelName: 'Subcategory',
-    tableName: 'subcategories',
+    modelName: "Subcategory",
+    tableName: "subcategories",
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at' 
-});
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+  }
+);
 
 module.exports = Subcategory;

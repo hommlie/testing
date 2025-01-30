@@ -44,8 +44,7 @@ export default function ProductPage() {
     coupons,
     getCoupons,
   } = useCont();
-  const location = useLocation();
-  const { id, tag } = useParams();
+  const { id, tag, location } = useParams();
   const prod_id = id;
   const navigate = useNavigate();
 
@@ -605,6 +604,12 @@ export default function ProductPage() {
       );
     }
   };
+
+  const locations = prodData?.location?.split("|") || [];
+  const currentLocation =
+    location?.charAt(0)?.toUpperCase() + location?.slice(1);
+  const currentLocationTitle =
+    location && currentLocation ? ` in ${currentLocation}` : "";
 
   return (
     <main className="main-div flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
@@ -1397,6 +1402,40 @@ export default function ProductPage() {
             </section>
 
             <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+              {/* Locations Section */}
+              {locations && locations?.length ? (
+                <div className="bg-gray-50 rounded-xl p-6 md:p-8">
+                  <h2 className="text-2xl font-bold mb-6 text-center">
+                    Available Locations
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {locations?.map((loc, index) => {
+                      const formattedLoc = loc.trim();
+                      const capitalizedLoc =
+                        formattedLoc.charAt(0).toUpperCase() +
+                        formattedLoc.slice(1);
+                      return (
+                        <a
+                          key={index}
+                          href={`${config.VITE_BASE_URL}/product/${
+                            prodData.id
+                          }/${
+                            prodData.slug
+                          }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
+                          className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
+                        >
+                          <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <span className="text-lg">
+                              {prodData.product_name} in {capitalizedLoc}
+                            </span>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
               <div
                 className="flex justify-between items-center cursor-pointer"
                 onClick={toggleExpansion}

@@ -128,8 +128,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
                   <img
                     className="w-full h-full object-cover"
                     src={category?.image_url}
-                    title={category?.image_title}
-                    alt={category?.alt_tag}
+                    alt={category?.subcategory_name}
                     loading="lazy"
                   />
                 </div>

@@ -172,6 +172,15 @@ exports.getSubcategory = async (req, res) => {
           ),
           "motion_graphics",
         ],
+        "specifications",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', banner)`
+          ),
+          "banner",
+        ],
+        "total_reviews",
+        "avg_rating",
       ],
       where: { id: cat_id },
     });
@@ -201,6 +210,15 @@ exports.getSubcategory = async (req, res) => {
         "subcategory_title",
         "subcategory_sub_title",
         "location",
+        "specifications",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.banner)`
+          ),
+          "banner",
+        ],
+        "total_reviews",
+        "avg_rating",
       ],
       include: [
         {
@@ -360,6 +378,9 @@ exports.getCleaningSubcategory = async (req, res) => {
         "alt_tag",
         "image_title",
         "location",
+        "specifications",
+        "total_reviews",
+        "avg_rating",
       ],
       include: [
         {
@@ -390,6 +411,15 @@ exports.getCleaningSubcategory = async (req, res) => {
               ),
               "motion_graphics",
             ],
+            "specifications",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/category/', banner)`
+              ),
+              "banner",
+            ],
+            "total_reviews",
+            "avg_rating",
           ],
         },
       ],
@@ -631,6 +661,9 @@ exports.getCleaningSubcategory = async (req, res) => {
       subcategory_icon: subcategoryData.get("image_url"),
       subcategory_banner: subcategoryData.get("banner"),
       subcategory_location: subcategoryData.get("location"),
+      subcategory_specifications: subcategoryData.get("specifications"),
+      subcategory_avg_rating: subcategoryData.get("avg_rating"),
+      subcategory_total_reviews: subcategoryData.get("total_reviews"),
       category: subcategoryData.category,
       video: subcategoryData.video,
       thumbnail: subcategoryData.thumbnail,
