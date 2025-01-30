@@ -184,17 +184,16 @@ exports.getSubcategory = async (req, res) => {
         "faqs",
         "about",
       ],
-      include: [
-        {
-          model: Product,
-          attributes: ["id", "product_name", "slug"],
-          where: {
-            status: 1,
-          },
-          order: [["id", "DESC"]],
-        },
-      ],
       where: { id: cat_id },
+    });
+
+    const productsData = await Product.findAll({
+      attributes: ["id", "product_name", "slug"],
+      where: {
+        cat_id: cat_id,
+        status: 1,
+      },
+      order: [["id", "DESC"]],
     });
 
     const subcategoryData = await Subcategory.findAll({
@@ -292,7 +291,7 @@ exports.getSubcategory = async (req, res) => {
         message: "Success",
         data: {
           subcategory,
-          categoryData,
+          categoryData: { ...categoryData, other_services: productsData || [] },
         },
       });
     } else {
