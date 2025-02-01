@@ -36,52 +36,6 @@ exports.getPageBySlug = async (req, res) => {
           model: Subcategory,
           attributes: ["id", "subcategory_name"],
           as: "subcategory",
-          include: [
-            {
-              model: Product,
-              where: { status: 1 },
-              attributes: [
-                "id",
-                "product_name",
-                "product_price",
-                "discounted_price",
-                "is_variation",
-                "vendor_id",
-                "sku",
-                "free_shipping",
-                "shipping_cost",
-                "tax_type",
-                "tax",
-                "rating",
-                "total_reviews",
-              ],
-              //   include: [
-              //     {
-              //       model: Variation,
-              //       attributes: [
-              //         "id",
-              //         "attribute_id",
-              //         "price",
-              //         "discounted_variation_price",
-              //         "variation",
-              //         "variation_interval",
-              //         "variation_times",
-              //         "qty",
-              //       ],
-              //       include: [
-              //         {
-              //           model: Attribute,
-              //           attributes: ["id", "attribute"],
-              //           where: { status: 1 },
-              //           as: "attribute",
-              //         },
-              //       ],
-              //       as: "variations",
-              //       required: false,
-              //     },
-              //   ],
-            },
-          ],
         },
       ],
       where: { slug, status: 1 },
@@ -91,9 +45,55 @@ exports.getPageBySlug = async (req, res) => {
       return res.status(404).json({ status: 0, message: "Page not found" });
     }
 
-    return res
-      .status(200)
-      .json({ status: 1, message: "Success", data: pageData });
+    const products = await Product.findAll({
+      where: { id: pageData?.subcategory?.id, status: 1 },
+      attributes: [
+        "id",
+        "product_name",
+        "product_price",
+        "discounted_price",
+        "is_variation",
+        "vendor_id",
+        "sku",
+        "free_shipping",
+        "shipping_cost",
+        "tax_type",
+        "tax",
+        "rating",
+        "total_reviews",
+      ],
+      include: [
+        {
+          model: Variation,
+          attributes: [
+            "id",
+            "attribute_id",
+            "price",
+            "discounted_variation_price",
+            "variation",
+            "variation_interval",
+            "variation_times",
+            "qty",
+          ],
+          include: [
+            {
+              model: Attribute,
+              attributes: ["id", "attribute"],
+              where: { status: 1 },
+              as: "attribute",
+            },
+          ],
+          as: "variations",
+          required: false,
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: 1,
+      message: "Success",
+      data: { pageData, services: products || [] },
+    });
   } catch (error) {
     console.log(error);
     return res
