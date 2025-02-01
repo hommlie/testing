@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Star, ArrowRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../../components/Loading";
@@ -119,7 +119,9 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 };
 
 const SubCategoryPage = () => {
-  const { categoryId, categorySlug, location } = useParams();
+  const locationState = useLocation().state;
+  const location = locationState?.location;
+  const { categoryId, categorySlug } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({
     subcategory: [],
@@ -222,7 +224,27 @@ const SubCategoryPage = () => {
     navigate(path);
   };
 
-  const locations = data?.categoryData?.location?.split("|") || [];
+  const getLocations = () => {
+    const locations = data?.categoryData?.location?.split("|") || [];
+
+    const locationObjects = locations.map((location) => {
+      // Trim any extra spaces
+      const trimmedLocation = location.trim();
+
+      // Convert the title to a slug
+      const slug = trimmedLocation
+        .toLowerCase() // Convert to lowercase
+        .replace(/\s+/g, "-") // Replace spaces with hyphens
+        .replace(/[^a-z0-9-]/g, ""); // Remove any non-alphanumeric characters except hyphens
+
+      return {
+        title: trimmedLocation,
+        slug: slug,
+      };
+    });
+
+    return locationObjects;
+  };
 
   return (
     <main className="max-w-7xl w-full">
@@ -462,15 +484,26 @@ const SubCategoryPage = () => {
                 }
               >
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {locations.map((location, index) => (
+                  {getLocations()?.map((location, index) => (
                     <a
                       key={index}
                       href={`${
                         config.VITE_BASE_URL
-                      }/${categorySlug}-in-${location.trim()}/${categoryId}/${location.trim()}`}
+                      }/${location?.slug?.trim()}/${categoryId}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(
+                          `${
+                            config.VITE_BASE_URL
+                          }/${location?.slug?.trim()}/${categoryId}`,
+                          {
+                            state: { location: location?.title?.trim() },
+                          }
+                        );
+                      }}
                       className="text-blue-600 hover:underline"
                     >
-                      {location.trim()}
+                      {location?.title?.trim()}
                     </a>
                   ))}
                 </div>

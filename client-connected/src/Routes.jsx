@@ -27,6 +27,7 @@ import Wallet from "./pages/Wallet";
 import CategoryPage from "./pages/CategoryPage";
 import SubCategoryPage from "./pages/SubCategoryPage";
 import ProductListPage from "./pages/ProductListPage";
+import SEOPage from "./pages/SEOPage";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -98,6 +99,10 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/product/:id/:slug/tag/:tag`,
       element: <ProductPage />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/page/:slug`,
+      element: <SEOPage />,
     },
 
     {

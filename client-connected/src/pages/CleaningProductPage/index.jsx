@@ -182,7 +182,8 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 };
 
 const CleaningProductPage = () => {
-  const location = useLocation();
+  const locationState = useLocation().state;
+  const location = locationState?.location;
   const { id, tag } = useParams();
   const navigate = useNavigate();
   const { cart, user, checkoutPd } = useCont();
@@ -204,7 +205,7 @@ const CleaningProductPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -287,7 +288,27 @@ const CleaningProductPage = () => {
     );
   }
 
-  const locations = innerSubCategoryData?.location?.split("|") || [];
+  const getLocations = () => {
+    const locations = innerSubCategoryData?.location?.split("|") || [];
+
+    const locationObjects = locations.map((location) => {
+      // Trim any extra spaces
+      const trimmedLocation = location.trim();
+
+      // Convert the title to a slug
+      const slug = trimmedLocation
+        .toLowerCase() // Convert to lowercase
+        .replace(/\s+/g, "-") // Replace spaces with hyphens
+        .replace(/[^a-z0-9-]/g, ""); // Remove any non-alphanumeric characters except hyphens
+
+      return {
+        title: trimmedLocation,
+        slug: slug,
+      };
+    });
+
+    return locationObjects;
+  };
 
   return (
     <main className="max-w-7xl">
@@ -313,7 +334,7 @@ const CleaningProductPage = () => {
             <div className="sticky top-44 transition-all duration-300 ease-in-out">
               <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
                 <h2 className="text-lg font-semibold">
-                  {innerSubCategoryData?.subcategory_name}
+                  {location ? location : innerSubCategoryData?.subcategory_name}
                 </h2>
                 {(innerSubCategoryData.avg_rating ||
                   innerSubCategoryData.total_reviews) && (
@@ -568,15 +589,30 @@ const CleaningProductPage = () => {
           }
         >
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {locations.map((location, index) => (
+            {getLocations()?.map((location, index) => (
               <a
                 key={index}
                 href={`${
                   config.VITE_BASE_URL
-                }/${categorySlug}-in-${location.trim()}/${categoryId}/${location.trim()}`}
+                }/subcategory/${location?.slug?.trim()}/${
+                  innerSubCategoryData?.subcategory_id
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(
+                    `${
+                      config.VITE_BASE_URL
+                    }/subcategory/${location?.slug?.trim()}/${
+                      innerSubCategoryData?.subcategory_id
+                    }`,
+                    {
+                      state: { location: location?.title?.trim() },
+                    }
+                  );
+                }}
                 className="text-blue-600 hover:underline"
               >
-                {location.trim()}
+                {location?.title?.trim()}
               </a>
             ))}
           </div>
