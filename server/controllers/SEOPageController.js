@@ -95,6 +95,7 @@ exports.getPageBySlug = async (req, res) => {
       .status(200)
       .json({ status: 1, message: "Success", data: pageData });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ status: 0, message: "Error occurred", error });
