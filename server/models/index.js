@@ -107,6 +107,8 @@ Product.hasMany(Order, {
   as: "orders",
 });
 
+Subcategory.hasMany(Product, { foreignKey: "subcat_id" });
+
 Banner.belongsTo(Category, {
   foreignKey: "cat_id",
   as: "category",
