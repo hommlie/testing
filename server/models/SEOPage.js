@@ -9,6 +9,14 @@ SEOPage.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    subcat_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      // references: {
+      //     model: 'subcategories',
+      //     key: 'id'
+      // }
+    },
     sub_title: {
       type: DataTypes.STRING,
       allowNull: true,

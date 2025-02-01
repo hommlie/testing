@@ -186,6 +186,8 @@ Wishlist.belongsTo(User, { foreignKey: "user_id", as: "user" });
 Wallet.hasMany(WalletTransaction, { foreignKey: "wallet_id" });
 WalletTransaction.belongsTo(Wallet, { foreignKey: "wallet_id" });
 
+SEOPage.belongsTo(Subcategory, { foreignKey: "subcat_id", as: "subcategory" });
+
 module.exports = {
   sequelize,
   About,

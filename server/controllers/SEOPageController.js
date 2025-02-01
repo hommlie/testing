@@ -1,4 +1,10 @@
-const { SEOPage } = require("../models");
+const {
+  SEOPage,
+  Subcategory,
+  Product,
+  Variation,
+  Attribute,
+} = require("../models");
 const sequelize = require("../config/connection");
 const apiUrl = process.env.apiUrl;
 
@@ -24,6 +30,59 @@ exports.getPageBySlug = async (req, res) => {
         "image_title",
         "meta_title",
         "meta_description",
+      ],
+      include: [
+        {
+          model: Subcategory,
+          attributes: ["id", "subcategory_name"],
+          as: "subcategory",
+          include: [
+            {
+              model: Product,
+              where: { status: 1 },
+              attributes: [
+                "id",
+                "product_name",
+                "product_price",
+                "discounted_price",
+                "is_variation",
+                "vendor_id",
+                "sku",
+                "free_shipping",
+                "shipping_cost",
+                "tax_type",
+                "tax",
+                "rating",
+                "total_reviews",
+              ],
+              include: [
+                {
+                  model: Variation,
+                  attributes: [
+                    "id",
+                    "attribute_id",
+                    "price",
+                    "discounted_variation_price",
+                    "variation",
+                    "variation_interval",
+                    "variation_times",
+                    "qty",
+                  ],
+                  include: [
+                    {
+                      model: Attribute,
+                      attributes: ["id", "attribute"],
+                      where: { status: 1 },
+                      as: "attribute",
+                    },
+                  ],
+                  as: "variations",
+                  required: false,
+                },
+              ],
+            },
+          ],
+        },
       ],
       where: { slug, status: 1 },
     });

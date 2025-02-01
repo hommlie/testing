@@ -67,7 +67,7 @@ const SEOPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen">
       {/* Hero Section */}
       <motion.section
         initial="initial"
@@ -117,12 +117,12 @@ const SEOPage = () => {
         transition={{ delay: 0.6 }}
         className="container mx-auto px-4 py-12 md:py-16 lg:py-20"
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-4 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="bg-white rounded-2xl shadow-xl overflow-hidden"
+            className="w-full md:w-2/3 bg-white rounded-2xl shadow-xl overflow-hidden"
           >
             <div className="p-6 md:p-8 lg:p-10">
               <div
@@ -131,32 +131,12 @@ const SEOPage = () => {
               />
             </div>
           </motion.div>
-
-          {/* Additional Content Cards */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="grid md:grid-cols-2 gap-6 mt-12"
+            className="w-full md:w-1/3 sticky top-40"
           >
-            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-xl font-semibold mb-4">Key Features</h3>
-              <ul className="space-y-3">
-                {pageData.description
-                  .split(".")
-                  .slice(0, 4)
-                  .map(
-                    (point, index) =>
-                      point.trim() && (
-                        <li key={index} className="flex items-start space-x-2">
-                          <span className="text-emerald-500 mt-1">•</span>
-                          <span>{point.trim()}</span>
-                        </li>
-                      )
-                  )}
-              </ul>
-            </div>
-
             <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl p-6 shadow-lg">
               <h3 className="text-xl font-semibold mb-4">Quick Overview</h3>
               <p className="text-gray-100">{pageData.meta_description}</p>
