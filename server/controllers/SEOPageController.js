@@ -46,7 +46,7 @@ exports.getPageBySlug = async (req, res) => {
     }
 
     const products = await Product.findAll({
-      where: { id: pageData?.subcategory?.id, status: 1 },
+      //   where: { id: pageData?.subcategory?.id, status: 1 },
       attributes: [
         "id",
         "product_name",
