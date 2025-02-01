@@ -47,46 +47,46 @@ exports.getPageBySlug = async (req, res) => {
 
     const products = await Product.findAll({
       where: { id: pageData?.subcategory?.id, status: 1 },
-      attributes: [
-        "id",
-        "product_name",
-        "product_price",
-        "discounted_price",
-        "is_variation",
-        "vendor_id",
-        "sku",
-        "free_shipping",
-        "shipping_cost",
-        "tax_type",
-        "tax",
-        "rating",
-        "total_reviews",
-      ],
-      include: [
-        {
-          model: Variation,
-          attributes: [
-            "id",
-            "attribute_id",
-            "price",
-            "discounted_variation_price",
-            "variation",
-            "variation_interval",
-            "variation_times",
-            "qty",
-          ],
-          include: [
-            {
-              model: Attribute,
-              attributes: ["id", "attribute"],
-              where: { status: 1 },
-              as: "attribute",
-            },
-          ],
-          as: "variations",
-          required: false,
-        },
-      ],
+      //   attributes: [
+      //     "id",
+      //     "product_name",
+      //     "product_price",
+      //     "discounted_price",
+      //     "is_variation",
+      //     "vendor_id",
+      //     "sku",
+      //     "free_shipping",
+      //     "shipping_cost",
+      //     "tax_type",
+      //     "tax",
+      //     "rating",
+      //     "total_reviews",
+      //   ],
+      //   include: [
+      //     {
+      //       model: Variation,
+      //       attributes: [
+      //         "id",
+      //         "attribute_id",
+      //         "price",
+      //         "discounted_variation_price",
+      //         "variation",
+      //         "variation_interval",
+      //         "variation_times",
+      //         "qty",
+      //       ],
+      //       include: [
+      //         {
+      //           model: Attribute,
+      //           attributes: ["id", "attribute"],
+      //           where: { status: 1 },
+      //           as: "attribute",
+      //         },
+      //       ],
+      //       as: "variations",
+      //       required: false,
+      //     },
+      //   ],
     });
 
     return res.status(200).json({

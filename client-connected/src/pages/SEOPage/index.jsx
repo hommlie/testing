@@ -24,18 +24,20 @@ const SEOPage = () => {
         const response = await axios.get(
           `${config.API_URL}/api/seopage/getPageBySlug/${slug}`
         );
-        setPageData(response.data.data);
+        if (response.data?.status === 1) {
+          setPageData(response.data?.data?.pageData);
 
-        // Update meta tags
-        document.title = response.data.data.meta_title;
-        const metaDescription = document.querySelector(
-          'meta[name="description"]'
-        );
-        if (metaDescription) {
-          metaDescription.setAttribute(
-            "content",
-            response.data.data.meta_description
+          // Update meta tags
+          document.title = response.data.data.meta_title;
+          const metaDescription = document.querySelector(
+            'meta[name="description"]'
           );
+          if (metaDescription) {
+            metaDescription.setAttribute(
+              "content",
+              response.data.data.meta_description
+            );
+          }
         }
       } catch (error) {
         setError(error.response?.data?.message || "An error occurred");
