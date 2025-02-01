@@ -62,31 +62,31 @@ exports.getPageBySlug = async (req, res) => {
         "rating",
         "total_reviews",
       ],
-      //   include: [
-      //     {
-      //       model: Variation,
-      //       attributes: [
-      //         "id",
-      //         "attribute_id",
-      //         "price",
-      //         "discounted_variation_price",
-      //         "variation",
-      //         "variation_interval",
-      //         "variation_times",
-      //         "qty",
-      //       ],
-      //       include: [
-      //         {
-      //           model: Attribute,
-      //           attributes: ["id", "attribute"],
-      //           where: { status: 1 },
-      //           as: "attribute",
-      //         },
-      //       ],
-      //       as: "variations",
-      //       required: false,
-      //     },
-      //   ],
+      include: [
+        {
+          model: Variation,
+          attributes: [
+            "id",
+            "attribute_id",
+            "price",
+            "discounted_variation_price",
+            "variation",
+            "variation_interval",
+            "variation_times",
+            "qty",
+          ],
+          include: [
+            {
+              model: Attribute,
+              attributes: ["id", "attribute"],
+              where: { status: 1 },
+              as: "attribute",
+            },
+          ],
+          as: "variations",
+          required: false,
+        },
+      ],
     });
 
     return res.status(200).json({
