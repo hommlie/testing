@@ -37,6 +37,9 @@ const ListingForm = require("./ListingForm");
 const Wallet = require("./Wallet");
 const WalletTransaction = require("./WalletTransaction");
 const SEOPage = require("./SEOPage");
+const Blog = require("./Blog");
+const BlogCategory = require("./BlogCategory");
+const Comment = require("./Comment");
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -190,6 +193,26 @@ WalletTransaction.belongsTo(Wallet, { foreignKey: "wallet_id" });
 
 SEOPage.belongsTo(Subcategory, { foreignKey: "subcat_id", as: "subcategory" });
 
+Blog.belongsTo(BlogCategory, {
+  foreignKey: "category_id",
+});
+Blog.hasMany(Comment, {
+  foreignKey: "blog_id",
+});
+
+Comment.belongsTo(Blog, {
+  foreignKey: "blog_id",
+  // as: 'blog'
+});
+Comment.belongsTo(Comment, {
+  foreignKey: "parent_id",
+  // as: 'parent'
+});
+Comment.hasMany(Comment, {
+  foreignKey: "parent_id",
+  // as: 'replies'
+});
+
 module.exports = {
   sequelize,
   About,
@@ -230,4 +253,7 @@ module.exports = {
   Wallet,
   WalletTransaction,
   SEOPage,
+  Blog,
+  BlogCategory,
+  Comment,
 };

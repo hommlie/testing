@@ -29,6 +29,7 @@ const InspectionController = require("../controllers/InspectionController");
 const ListingFormController = require("../controllers/ListingFormController");
 const WalletController = require("../controllers/WalletController");
 const SEOPageController = require("../controllers/SEOPageController");
+const blogController = require("../controllers/BlogController");
 
 const app = express();
 
@@ -165,5 +166,10 @@ app.post("/wallet/transactions", WalletController.getWalletTransactions);
 
 //SEO Page
 app.get("/seopage/getPageBySlug/:slug", SEOPageController.getPageBySlug);
+
+//Blogs
+app.get("/blogs/getall", blogController.getAllPublished);
+app.get("/blogs/getbyslug/:slug", blogController.getBySlug);
+app.get("/blogs/getbyid/:id", blogController.getById);
 
 module.exports = app;

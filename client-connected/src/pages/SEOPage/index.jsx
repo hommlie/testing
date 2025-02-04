@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import config from "../../config/config";
 import Loading from "../../components/Loading";
+import { FaCartPlus } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa6";
+import InspectionModal from "../../components/InspectionModal";
+import ServiceSelector from "./ServiceSelector";
+import InspectionForm from "./ServiceForm";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -14,8 +19,10 @@ const fadeIn = {
 const SEOPage = () => {
   const { slug } = useParams();
   const [pageData, setPageData] = useState(null);
+  const [services, setServices] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isInspectionModalOpen, setIsInspectionModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPageData = async () => {
@@ -26,6 +33,7 @@ const SEOPage = () => {
         );
         if (response.data?.status === 1) {
           setPageData(response.data?.data?.pageData);
+          setServices(response.data?.data?.services);
 
           // Update meta tags
           document.title = response.data.data.meta_title;
@@ -117,14 +125,14 @@ const SEOPage = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="container mx-auto px-4 py-12 md:py-16 lg:py-20"
+        className="mx-auto px-4 py-12 md:py-16 lg:py-20"
       >
         <div className="flex flex-col md:flex-row gap-4 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="w-full md:w-2/3 bg-white rounded-2xl shadow-xl overflow-hidden"
+            className="w-full md:w-3/5 bg-white rounded-2xl shadow-xl overflow-hidden"
           >
             <div className="p-6 md:p-8 lg:p-10">
               <div
@@ -137,15 +145,13 @@ const SEOPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="w-full md:w-1/3 sticky top-40"
+            className="w-full md:w-2/5"
           >
-            <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl p-6 shadow-lg">
-              <h3 className="text-xl font-semibold mb-4">Quick Overview</h3>
-              <p className="text-gray-100">{pageData.meta_description}</p>
-              <button className="mt-6 px-6 py-2 bg-white text-emerald-600 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Learn More
-              </button>
-            </div>
+            <ServiceSelector
+              services={services}
+              onCallClick={() => setIsInspectionModalOpen(true)}
+            />
+            {/* <InspectionForm /> */}
           </motion.div>
         </div>
       </motion.section>
@@ -170,6 +176,11 @@ const SEOPage = () => {
           </button>
         </div>
       </motion.section>
+
+      <InspectionModal
+        isOpen={isInspectionModalOpen}
+        onClose={() => setIsInspectionModalOpen(false)}
+      />
     </main>
   );
 };
