@@ -19,6 +19,7 @@ const blogController = {
           "slug",
           "meta_title",
           "meta_description",
+          "category_id",
           [
             sequelize.literal(
               `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`

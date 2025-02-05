@@ -73,7 +73,7 @@ const BlogPage = () => {
     // Apply category filter
     if (selectedCategory !== "all") {
       filtered = filtered.filter(
-        (blog) => blog.category_id.toString() === selectedCategory
+        (blog) => blog?.category_id === selectedCategory
       );
     }
 
@@ -217,13 +217,13 @@ const BlogPage = () => {
                       } gap-6 w-full`}
                     >
                       <div className="w-1/2">
-                        <div className="relative aspect-[4/3] overflow-hidden">
+                        <div className="relative h-full overflow-hidden">
                           <img
                             src={
                               blog.featured_image || "/api/placeholder/400/500"
                             }
                             alt={blog.title}
-                            className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+                            className="w-full h-full object-contain object-center transition-transform duration-500 hover:scale-105"
                           />
                         </div>
                       </div>
