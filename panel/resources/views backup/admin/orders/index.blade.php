@@ -363,30 +363,30 @@
     });
 
     //Download Excel Data 
-    document.getElementById("dwExcel").addEventListener("click", function () {
-        console.log(@json($data1));
-        const data2 = @json($data1);
-        const worksheet = XLSX.utils.json_to_sheet(data2);
-        const header = worksheet['!cols'] = worksheet['!cols'] || [];
-        header[0] = { width: 30 };
-        header[1] = { width: 50 };
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
-        XLSX.writeFile(workbook, "orders.xlsx");
-    });
+    // document.getElementById("dwExcel").addEventListener("click", function () {
+    //   {{--  console.log(@json($data1)); --}} 
+    //  {{--   const data2 = @json($data1); --}}
+    //     const worksheet = XLSX.utils.json_to_sheet(data2);
+    //     const header = worksheet['!cols'] = worksheet['!cols'] || [];
+    //     header[0] = { width: 30 };
+    //     header[1] = { width: 50 };
+    //     const workbook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+    //     XLSX.writeFile(workbook, "orders.xlsx");
+    // });
 
     //Download CSV Data
-    document.getElementById("dwCsv").addEventListener("click", function () {
-        console.log(@json($data1));
-        const data2 = @json($data1);
-        const worksheet = XLSX.utils.json_to_sheet(data2);
-        const csv = XLSX.utils.sheet_to_csv(worksheet);
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "orders.csv";
-        link.click();
-    });
+    // document.getElementById("dwCsv").addEventListener("click", function () {
+    //  {{--    console.log(@json($data1)); --}}
+    //   {{--  const data2 = @json($data1); --}}
+    //     const worksheet = XLSX.utils.json_to_sheet(data2);
+    //     const csv = XLSX.utils.sheet_to_csv(worksheet);
+    //     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    //     const link = document.createElement("a");
+    //     link.href = URL.createObjectURL(blob);
+    //     link.download = "orders.csv";
+    //     link.click();
+    // });
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>

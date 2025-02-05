@@ -594,6 +594,7 @@ class ProductController extends Controller
 
     public function storeimages(Request $request)
     {
+        
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $altTags = $request->input('alt_tag');

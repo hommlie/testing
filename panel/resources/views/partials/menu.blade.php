@@ -1206,11 +1206,139 @@
                         </ul>
                     </li>
                 @endcan
+                {{-- MANAGE BLOGS --}}
+                @can('blogs_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/blogs*') ? 'menu-open' : '' }} {{ request()->is('admin/blogs/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-newspaper mr-2"></i>
+                            </i>
+                            <p>
+                                <span> Manage Blogs </span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('blogs_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.blogs.add") }}"
+                                        class="nav-link {{ request()->is('admin/blogs/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        </i>
+                                        {{-- ADD BLOGS --}}
+                                        <p>
+                                            <span>Add Blogs</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('blogs_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.blogs") }}"
+                                        class="nav-link {{ request()->is('admin/blogs') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+                                        </i>
+                                        {{-- VIEW BLOGS --}}
+                                        <p>
+                                            <span>View Blogs</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan 
 
+                        </ul>
+                    </li>
+                @endcan
+                {{-- ADD PINCODE --}}
+                @can('pincode_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/addpincode*') ? 'menu-open' : '' }} {{ request()->is('admin/addpincode/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-map-pin mr-2"></i>
+                            </i>
+                            <p>
+                                <span> Add Pincode </span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('pincode_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.addpincode") }}"
+                                        class="nav-link {{ request()->is('admin/addpincode') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+                                        </i>
+                                        {{-- ADD PINCODE --}}
+                                        <p>
+                                            <span>View Pincode</span>
 
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('pincode_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.addpincode.add") }}"
+                                        class="nav-link {{ request()->is('admin/addpincode/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                       
+                                        </i>
+                                        {{-- VIEW PINCODE --}}
+                                        <p>
+                                            <span>Add Pincode</span>
+                                        </p>
+                                    </a>
+                                </li>   
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+                {{--MAGAGE SEOPAGE --}}
+                @can('seopage_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/seopages*') ? 'menu-open' : '' }} {{ request()->is('admin/seopages/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-search mr-2"></i>
+                            </i>
+                            <p>
+                                <span> Manage Seo Page </span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('seopages_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.seopages") }}"
+                                        class="nav-link {{ request()->is('admin/seopages') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+                                        </i>
+                                        {{-- ADD SEO --}}
+                                        <p>
+                                            <span>View SEO</span>
 
-
-
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('seopages_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.seopages.add") }}"
+                                        class="nav-link {{ request()->is('admin/seopages/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        
+                                        </i>
+                                        {{-- VIEW SEO --}}
+                                        <p>
+                                            <span>Add SEO</span>
+                                        </p>
+                                    </a>
+                                </li>   
+                            @endcan
+                        </ul>
+                        
+                    </li>
+                @endcan
+                
                 @can('user_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
@@ -1507,8 +1635,8 @@
                         <input type="text" name="image_title" id="image_title" class="form-control"
                             placeholder="Image Title" required>
                             @error('image_title')
-        <span class="text-danger">{{ $message }}</span>
-        @enderror
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         <input type="hidden" name="removeimg" id="removeimg">
                     </div>
                     <div class="galleryim"></div>

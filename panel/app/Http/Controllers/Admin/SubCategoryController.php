@@ -85,7 +85,7 @@ class SubCategoryController extends Controller
         $this->validate($request, [
             'subcategory_name' => 'required',
             'cat_id' => 'required',
-            'icon' => 'required|mimes:png,jpg,jpeg',
+            'icon' => 'required|mimes:png,jpg,jpeg,gif',
             'sub_cat_banner' => 'required|mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
@@ -93,6 +93,11 @@ class SubCategoryController extends Controller
             'subcategory_title' => 'required',
             'thumbnail' => 'nullable',
             'video' => 'nullable',
+            'faqs' => 'required',
+            'about' => 'required',
+            'specifications' => 'required|array',
+            'total_reviews' => 'required|integer',
+            'avg_rating' => 'required|numeric',
         ]);
 
         $loca = isset($request->location)
@@ -142,6 +147,11 @@ class SubCategoryController extends Controller
                 'video' => $video, // Ensure icon is included here
                 'subcategory_name' => $request->subcategory_name,
                 'location' => $loca,
+                'specifications' =>  implode(" | ", $request->specifications), 
+                'faqs' => $request->faqs, 
+                'about' => $request->about, 
+                'total_reviews' => $request->total_reviews,
+                'avg_rating' => $request->avg_rating,
                 'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
             ];
         } else {
@@ -159,6 +169,11 @@ class SubCategoryController extends Controller
                 'subcategory_sub_title' => $request->subcategory_sub_title,
                 'subcategory_title' => $request->subcategory_title,
                 'location' => $loca,
+                'specifications' =>  implode(" | ", $request->specifications), 
+                'faqs' => $request->faqs, 
+                'about' => $request->about, 
+                'total_reviews' => $request->total_reviews,
+                'avg_rating' => $request->avg_rating,
                 'thumbnail' => $thumbnail, // Ensure icon is included here as well
                 'video' => $video, // Ensure icon is included here as well
             ];
@@ -202,10 +217,15 @@ class SubCategoryController extends Controller
             'cat_id' => 'required',
             'subcategory_sub_title' => 'required',
             'subcategory_title' => 'required',
-            'icon' =>  'mimes:png,jpg,jpeg',
+            'icon' =>  'mimes:png,jpg,jpeg,gif',
             'sub_cat_banner' => 'mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
+            'faqs' => 'required',
+            'about' => 'required',
+            'specifications' => 'required|array',
+            'total_reviews' => 'required|integer',
+            'avg_rating' => 'required|numeric',
         ]);
 
         $icon = $request->old_img;
@@ -249,6 +269,11 @@ class SubCategoryController extends Controller
                 'subcategory_title' => $request->subcategory_title,
                 'subcategory_name' => $request->subcategory_name,
                 'location' => $loca,
+                'specifications' =>  implode(" | ", $request->specifications), 
+                'faqs' => $request->faqs, 
+                'about' => $request->about, 
+                'total_reviews' => $request->total_reviews,
+                'avg_rating' => $request->avg_rating,
                 'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
             ];
         } else {
@@ -265,6 +290,11 @@ class SubCategoryController extends Controller
                 'subcategory_title' => $request->subcategory_title,
                 'meta_description' => $request->meta_description,
                 'location' => $loca,
+                'specifications' =>  implode(" | ", $request->specifications), 
+                'faqs' => $request->faqs, 
+                'about' => $request->about, 
+                'total_reviews' => $request->total_reviews,
+                'avg_rating' => $request->avg_rating,
             ];
         }
 

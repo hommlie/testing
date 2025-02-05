@@ -85,7 +85,9 @@ class CategoryController extends Controller
                 return redirect()->back()->with('danger', 'No video file was uploaded.');
             }
             $isFormChecked = $request->has('is_form') ? 1 : 0;
-            $loca = $request->location ? implode(" | ", $request->location) : null;
+            $loca = isset($request->location)
+            ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+            : null;
             // Save category data
             $dataval = [
                 'category_name' => $request->category_name,
@@ -253,7 +255,9 @@ class CategoryController extends Controller
             'image_title' => 'required',
         ]);
          
-        $loca = $request->location ? implode(" | ", $request->location) : null;
+        $loca = isset($request->location)
+        ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+        : null;
         if (isset($request->icon)) {
 
             File::delete('storage/app/public/images/category/' . $request->old_img);

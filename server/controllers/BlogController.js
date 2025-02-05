@@ -20,10 +20,8 @@ const blogController = {
           "meta_title",
           "meta_description",
           [
-            sequelize.fn(
-              "CONCAT",
-              storagebaseUrl + "/blogImages/",
-              sequelize.col("featured_image")
+            sequelize.literal(
+              `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
             ),
             "featured_image",
           ],
@@ -73,10 +71,8 @@ const blogController = {
           "meta_description",
           "category_id",
           [
-            sequelize.fn(
-              "CONCAT",
-              storagebaseUrl + "/blogImages/",
-              sequelize.col("featured_image")
+            sequelize.literal(
+              `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
             ),
             "featured_image",
           ],
@@ -133,10 +129,8 @@ const blogController = {
           "meta_description",
           "category_id",
           [
-            sequelize.fn(
-              "CONCAT",
-              storagebaseUrl + "/blogImages/",
-              sequelize.col("featured_image")
+            sequelize.literal(
+              `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
             ),
             "featured_image",
           ],
