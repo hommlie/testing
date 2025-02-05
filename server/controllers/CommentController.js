@@ -28,14 +28,14 @@ const commentController = {
           });
         }
       }
-
-      const comment = await Comment.create({
+      console.log({
         content,
         blog_id: blogId,
         parent_id: parentId || null,
         author_id: authorId,
       });
-      console.log({
+
+      const comment = await Comment.create({
         content,
         blog_id: blogId,
         parent_id: parentId || null,
