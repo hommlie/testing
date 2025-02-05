@@ -72,7 +72,7 @@ const BlogPost = () => {
         }
       );
 
-      if (res.data.success) {
+      if (res.data.status === 1) {
         setComments((prev) => [...prev, res.data.data]);
         setNewComment("");
         setReplyingTo(null);
@@ -97,7 +97,7 @@ const BlogPost = () => {
         }
       );
 
-      if (res.data.success) {
+      if (res.data.status === 1) {
         setComments((prev) =>
           prev.map((comment) =>
             comment.id === commentId ? res.data.data : comment
@@ -122,7 +122,7 @@ const BlogPost = () => {
         `${config.API_URL}/api/comments/delete/${commentId}/${user.id}`
       );
 
-      if (res.data.success) {
+      if (res.data.status === 1) {
         setComments((prev) =>
           prev.filter((comment) => comment.id !== commentId)
         );

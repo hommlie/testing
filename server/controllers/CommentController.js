@@ -10,7 +10,7 @@ const commentController = {
       const blog = await Blog.findByPk(blogId);
       if (!blog) {
         return res.status(404).json({
-          success: false,
+          status: 0,
           message: "Blog post not found",
         });
       }
@@ -20,7 +20,7 @@ const commentController = {
         const parentComment = await Comment.findByPk(parentId);
         if (!parentComment) {
           return res.status(404).json({
-            success: false,
+            status: 0,
             message: "Parent comment not found",
           });
         }
@@ -45,12 +45,12 @@ const commentController = {
       });
 
       return res.status(201).json({
-        success: true,
+        status: 1,
         data: commentWithDetails,
       });
     } catch (error) {
       return res.status(500).json({
-        success: false,
+        status: 0,
         message: "Error creating comment",
         error: error.message,
       });
@@ -103,7 +103,7 @@ const commentController = {
       });
 
       return res.status(200).json({
-        success: true,
+        status: 1,
         data: comments.rows,
         pagination: {
           total: comments.count,
@@ -113,7 +113,7 @@ const commentController = {
       });
     } catch (error) {
       return res.status(500).json({
-        success: false,
+        status: 0,
         message: "Error fetching comments",
         error: error.message,
       });
@@ -130,7 +130,7 @@ const commentController = {
 
       if (!comment) {
         return res.status(404).json({
-          success: false,
+          status: 0,
           message: "Comment not found",
         });
       }
@@ -138,7 +138,7 @@ const commentController = {
       // Check if user is the author
       if (comment.author_id !== authorId) {
         return res.status(403).json({
-          success: false,
+          status: 0,
           message: "Unauthorized to update this comment",
         });
       }
@@ -148,12 +148,12 @@ const commentController = {
       });
 
       return res.status(200).json({
-        success: true,
+        status: 1,
         data: updatedComment,
       });
     } catch (error) {
       return res.status(500).json({
-        success: false,
+        status: 0,
         message: "Error updating comment",
         error: error.message,
       });
@@ -168,7 +168,7 @@ const commentController = {
 
       if (!comment) {
         return res.status(404).json({
-          success: false,
+          status: 0,
           message: "Comment not found",
         });
       }
@@ -179,7 +179,7 @@ const commentController = {
         const blog = await Blog.findByPk(comment.blog_id);
         if (blog.author_id !== authorId) {
           return res.status(403).json({
-            success: false,
+            status: 0,
             message: "Unauthorized to delete this comment",
           });
         }
@@ -188,12 +188,12 @@ const commentController = {
       await comment.destroy();
 
       return res.status(200).json({
-        success: true,
+        status: 1,
         message: "Comment deleted successfully",
       });
     } catch (error) {
       return res.status(500).json({
-        success: false,
+        status: 0,
         message: "Error deleting comment",
         error: error.message,
       });
@@ -210,7 +210,7 @@ const commentController = {
 
       if (!comment) {
         return res.status(404).json({
-          success: false,
+          status: 0,
           message: "Comment not found",
         });
       }
@@ -219,7 +219,7 @@ const commentController = {
       // This is just a placeholder - implement your own logic
       if (!req.user.isAdmin) {
         return res.status(403).json({
-          success: false,
+          status: 0,
           message: "Unauthorized to moderate comments",
         });
       }
@@ -229,12 +229,12 @@ const commentController = {
       });
 
       return res.status(200).json({
-        success: true,
+        status: 1,
         data: updatedComment,
       });
     } catch (error) {
       return res.status(500).json({
-        success: false,
+        status: 0,
         message: "Error moderating comment",
         error: error.message,
       });
