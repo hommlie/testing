@@ -175,15 +175,15 @@ const commentController = {
       }
 
       // Check if user is the author or blog owner
-      if (comment.author_id !== authorId) {
+      if (comment.author_id !== parseInt(authorId)) {
         // Check if user is blog owner
-        const blog = await Blog.findByPk(comment.blog_id);
-        if (blog.author_id !== authorId) {
-          return res.status(403).json({
-            status: 0,
-            message: "Unauthorized to delete this comment",
-          });
-        }
+        // const blog = await Blog.findByPk(comment.blog_id);
+        // if (blog.author_id !== authorId) {
+        return res.status(403).json({
+          status: 0,
+          message: "Unauthorized to delete this comment",
+        });
+        // }
       }
 
       await comment.destroy();
