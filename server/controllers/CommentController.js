@@ -35,23 +35,23 @@ const commentController = {
         author_id: authorId,
       });
 
-      const comment = await Comment.create({
-        content,
-        blog_id: blogId,
-        parent_id: parentId || null,
-        author_id: authorId,
-      });
+      // const comment = await Comment.create({
+      //   content,
+      //   blog_id: blogId,
+      //   parent_id: parentId || null,
+      //   author_id: authorId,
+      // });
 
-      // Fetch the created comment with author details
-      const commentWithDetails = await Comment.findByPk(comment.id, {
-        include: [
-          {
-            model: User,
-            as: "author",
-            attributes: ["id", "name"],
-          },
-        ],
-      });
+      // // Fetch the created comment with author details
+      // const commentWithDetails = await Comment.findByPk(comment.id, {
+      //   include: [
+      //     {
+      //       model: User,
+      //       as: "author",
+      //       attributes: ["id", "name"],
+      //     },
+      //   ],
+      // });
 
       return res.status(201).json({
         status: 1,
