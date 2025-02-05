@@ -29,7 +29,7 @@ const commentController = {
       const comment = await Comment.create({
         content,
         blogId,
-        parentId,
+        parentId: parentId || null,
         authorId: req.params.authorId,
       });
 

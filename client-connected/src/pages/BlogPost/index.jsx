@@ -5,6 +5,7 @@ import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
 import { useCont } from "../../context/MyContext";
+import LoginSignup from "../../components/LoginModal";
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -17,6 +18,7 @@ const BlogPost = () => {
   const [editingComment, setEditingComment] = useState(null);
   const [replyingTo, setReplyingTo] = useState(null);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const notify = useToast();
   const notifyOnSuccess = (success) => notify(success, "success");
@@ -52,6 +54,12 @@ const BlogPost = () => {
   // Comment handlers
   const handleCommentSubmit = async (e, parentId = null) => {
     e.preventDefault();
+
+    if (!user && !user.length) {
+      setIsLoginOpen(true);
+      return null;
+    }
+
     const content = parentId ? replyingTo.content : newComment;
 
     try {
@@ -76,6 +84,11 @@ const BlogPost = () => {
   };
 
   const handleCommentEdit = async (commentId) => {
+    if (!user && !user.length) {
+      setIsLoginOpen(true);
+      return null;
+    }
+
     try {
       const res = await axios.put(
         `${config.API_URL}/api/comments/update/${commentId}/${user.id}`,
@@ -99,6 +112,11 @@ const BlogPost = () => {
   };
 
   const handleCommentDelete = async (commentId) => {
+    if (!user && !user.length) {
+      setIsLoginOpen(true);
+      return null;
+    }
+
     try {
       const res = await axios.delete(
         `${config.API_URL}/api/comments/delete/${commentId}/${user.id}`
@@ -391,6 +409,8 @@ const BlogPost = () => {
           </button>
         </div>
       </div>
+
+      <LoginSignup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </main>
   );
 };
