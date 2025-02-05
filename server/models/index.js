@@ -206,19 +206,19 @@ Blog.hasMany(Comment, {
 
 Comment.belongsTo(Blog, {
   foreignKey: "blog_id",
-  // as: 'blog'
+  as: "blog",
 });
 Comment.belongsTo(User, {
   foreignKey: "author_id",
-  // as: 'author'
+  as: "author",
 });
 Comment.belongsTo(Comment, {
   foreignKey: "parent_id",
-  // as: 'parent'
+  as: "parent",
 });
 Comment.hasMany(Comment, {
   foreignKey: "parent_id",
-  // as: 'replies'
+  as: "replies",
 });
 
 module.exports = {

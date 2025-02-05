@@ -30,6 +30,7 @@ const ListingFormController = require("../controllers/ListingFormController");
 const WalletController = require("../controllers/WalletController");
 const SEOPageController = require("../controllers/SEOPageController");
 const blogController = require("../controllers/BlogController");
+const commentController = require("../controllers/CommentController");
 
 const app = express();
 
@@ -172,5 +173,10 @@ app.get("/blogs/getall", blogController.getAllPublished);
 app.get("/blogs/getbyslug/:slug", blogController.getBySlug);
 app.get("/blogs/getbyid/:id", blogController.getById);
 app.get("/blogcategory/getall", blogController.getAllBlogCategories);
+
+//Blog comments
+app.get("/comments/create/:authorId", commentController.create);
+app.get("/comments/update/:id/:authorId", commentController.update);
+app.get("/comments/delete/:id/:authorId", commentController.delete);
 
 module.exports = app;

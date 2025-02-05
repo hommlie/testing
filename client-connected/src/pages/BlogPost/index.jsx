@@ -1,43 +1,143 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Share2, MessageSquare, Edit2, Trash2, Send, X } from "lucide-react";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
+import { useCont } from "../../context/MyContext";
 
 const BlogPost = () => {
   const { slug } = useParams();
+  const { user } = useCont();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [editingComment, setEditingComment] = useState(null);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [shareMenuOpen, setShareMenuOpen] = useState(false);
 
   const notify = useToast();
   const notifyOnSuccess = (success) => notify(success, "success");
   const notifyOnFail = (error) => notify(error, "error");
 
+  // Fetch blog and comments
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const fetchBlog = async () => {
+    const fetchData = async () => {
       try {
         const res = await axios.get(
           `${config.API_URL}/api/blogs/getbyslug/${slug}`
         );
         if (res.data.status === 1) {
           setBlog(res.data.data);
+          setComments(res.data.data?.Comments);
         } else {
           notifyOnFail(res.data.message);
           return null;
         }
       } catch (error) {
-        console.error("Error fetching blog:", error);
+        console.error("Error fetching data:", error);
         navigate("/404");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchBlog();
+    fetchData();
   }, [slug, navigate]);
+
+  // Comment handlers
+  const handleCommentSubmit = async (e, parentId = null) => {
+    e.preventDefault();
+    const content = parentId ? replyingTo.content : newComment;
+
+    try {
+      const res = await axios.post(
+        `${config.API_URL}/api/comments/create/${user.id}`,
+        {
+          content,
+          blogId: blog.id,
+          parentId,
+        }
+      );
+
+      if (res.data.success) {
+        setComments((prev) => [...prev, res.data.data]);
+        setNewComment("");
+        setReplyingTo(null);
+        notifyOnSuccess("Comment posted successfully!");
+      }
+    } catch (error) {
+      notifyOnFail("Failed to post comment");
+    }
+  };
+
+  const handleCommentEdit = async (commentId) => {
+    try {
+      const res = await axios.put(
+        `${config.API_URL}/api/comments/update/${commentId}/${user.id}`,
+        {
+          content: editingComment.content,
+        }
+      );
+
+      if (res.data.success) {
+        setComments((prev) =>
+          prev.map((comment) =>
+            comment.id === commentId ? res.data.data : comment
+          )
+        );
+        setEditingComment(null);
+        notifyOnSuccess("Comment updated successfully!");
+      }
+    } catch (error) {
+      notifyOnFail("Failed to update comment");
+    }
+  };
+
+  const handleCommentDelete = async (commentId) => {
+    try {
+      const res = await axios.delete(
+        `${config.API_URL}/api/comments/delete/${commentId}/${user.id}`
+      );
+
+      if (res.data.success) {
+        setComments((prev) =>
+          prev.filter((comment) => comment.id !== commentId)
+        );
+        notifyOnSuccess("Comment deleted successfully!");
+      }
+    } catch (error) {
+      notifyOnFail("Failed to delete comment");
+    }
+  };
+
+  // Social sharing handlers
+  const handleShare = (platform) => {
+    const url = window.location.href;
+    const title = blog.title;
+
+    const shareUrls = {
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        title
+      )}&url=${encodeURIComponent(url)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        url
+      )}`,
+      email: `mailto:?subject=${encodeURIComponent(
+        title
+      )}&body=${encodeURIComponent(url)}`,
+    };
+
+    window.open(shareUrls[platform], "_blank", "width=600,height=400");
+    setShareMenuOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -52,7 +152,7 @@ const BlogPost = () => {
   }
 
   return (
-    <main className="min-h-screen bg-white max-w-7xl">
+    <main className="min-h-screen">
       {/* Hero Section */}
       <div className="relative h-[500px]">
         <img
@@ -70,40 +170,222 @@ const BlogPost = () => {
 
       {/* Content Section */}
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="prose prose-lg max-w-none">
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[#6B1F40]">{blog.category?.name}</span>
-                <span className="mx-2">•</span>
-                <span className="text-gray-500">
-                  {new Date(blog.created_at).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-              </div>
-              {/* Add social share buttons here if needed */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="capitalize text-emerald-500">
+                {blog.BlogCategory?.title}
+              </span>
+              <span className="mx-2">•</span>
+              <span className="text-gray-500">
+                {new Date(blog.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
+
+            {/* Share Button */}
+            <div className="relative">
+              <button
+                onClick={() => setShareMenuOpen(!shareMenuOpen)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Share2 className="w-5 h-5" />
+              </button>
+
+              {shareMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+                  <button
+                    onClick={() => handleShare("twitter")}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                  >
+                    Share on Twitter
+                  </button>
+                  <button
+                    onClick={() => handleShare("facebook")}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                  >
+                    Share on Facebook
+                  </button>
+                  <button
+                    onClick={() => handleShare("linkedin")}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                  >
+                    Share on LinkedIn
+                  </button>
+                  <button
+                    onClick={() => handleShare("email")}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                  >
+                    Share via Email
+                  </button>
+                </div>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Blog Content */}
-          <div className="ck-content">
-            <div
-              className="space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: blog.content,
-              }}
-            />
+        {/* Blog Content */}
+        <div className="ck-content">
+          <div
+            className="space-y-4 prose prose-sm sm:prose lg:prose-xl max-w-none"
+            dangerouslySetInnerHTML={{
+              __html: blog.content,
+            }}
+          />
+        </div>
+
+        {/* Comments Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold mb-8">Comments</h2>
+
+          {/* New Comment Form */}
+          <form onSubmit={handleCommentSubmit} className="mb-12">
+            <div className="flex gap-4">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                className="flex-1 p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
+              />
+              <button
+                type="submit"
+                disabled={!newComment.trim()}
+                className="px-6 py-2 h-fit bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Post
+              </button>
+            </div>
+          </form>
+
+          {/* Comments List */}
+          <div className="space-y-8">
+            {comments.map((comment) => (
+              <div
+                key={comment.id}
+                className="bg-white rounded-lg p-6 border border-gray-200 transition-all hover:shadow-md"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="font-semibold">{comment.author.name}</h3>
+                    <p className="text-sm text-gray-500">
+                      {new Date(comment.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  {/* Comment Actions */}
+                  {comment.author_id === blog.author_id && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setEditingComment(comment)}
+                        className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleCommentDelete(comment.id)}
+                        className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Comment Content */}
+                {editingComment?.id === comment.id ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleCommentEdit(comment.id);
+                    }}
+                    className="mt-2"
+                  >
+                    <textarea
+                      value={editingComment.content}
+                      onChange={(e) =>
+                        setEditingComment({
+                          ...editingComment,
+                          content: e.target.value,
+                        })
+                      }
+                      className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingComment(null)}
+                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <p className="text-gray-700">{comment.content}</p>
+                )}
+
+                {/* Reply Button */}
+                <button
+                  onClick={() => setReplyingTo(comment)}
+                  className="mt-4 text-sm text-gray-500 hover:text-gray-700 flex items-center gap-2"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Reply
+                </button>
+
+                {/* Reply Form */}
+                {replyingTo?.id === comment.id && (
+                  <form
+                    onSubmit={(e) => handleCommentSubmit(e, comment.id)}
+                    className="mt-4"
+                  >
+                    <textarea
+                      value={replyingTo.content}
+                      onChange={(e) =>
+                        setReplyingTo({
+                          ...replyingTo,
+                          content: e.target.value,
+                        })
+                      }
+                      placeholder="Write a reply..."
+                      className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                      >
+                        Reply
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setReplyingTo(null)}
+                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Navigation Buttons */}
-        <div className="mt-12 flex justify-between">
+        <div className="mt-12">
           <button
-            onClick={() => navigate(`${config.VITE_BASE_WEBSITE_URL}/blogs`)}
-            className="px-6 py-2 bg-[#6B1F40] text-white hover:bg-[#5a1935] transition-colors"
+            onClick={() => navigate(`${config.VITE_BASE_URL}/blogs`)}
+            className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
           >
             Back to Blogs
           </button>
