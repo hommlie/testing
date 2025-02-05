@@ -84,7 +84,7 @@ const blogController = {
         include: [
           {
             model: Comment,
-            as: "comments",
+            // as: "comments",
             include: [
               {
                 model: User,
@@ -144,7 +144,7 @@ const blogController = {
         include: [
           {
             model: Comment,
-            as: "comments",
+            // as: "comments",
             include: [
               {
                 model: User,
