@@ -15,11 +15,10 @@ const commentController = {
           message: "Blog post not found",
         });
       }
+      console.log(blog);
 
       // If it's a reply, verify parent comment exists
       if (parentId) {
-        console.log(parentId);
-
         const parentComment = await Comment.findByPk(parentId);
         if (!parentComment) {
           return res.status(404).json({
@@ -28,30 +27,25 @@ const commentController = {
           });
         }
       }
-      console.log({
+      console.log(blog.id);
+
+      const comment = await Comment.create({
         content,
         blog_id: blogId,
         parent_id: parentId || null,
         author_id: authorId,
       });
 
-      // const comment = await Comment.create({
-      //   content,
-      //   blog_id: blogId,
-      //   parent_id: parentId || null,
-      //   author_id: authorId,
-      // });
-
-      // // Fetch the created comment with author details
-      // const commentWithDetails = await Comment.findByPk(comment.id, {
-      //   include: [
-      //     {
-      //       model: User,
-      //       as: "author",
-      //       attributes: ["id", "name"],
-      //     },
-      //   ],
-      // });
+      // Fetch the created comment with author details
+      const commentWithDetails = await Comment.findByPk(comment.id, {
+        include: [
+          {
+            model: User,
+            as: "author",
+            attributes: ["id", "name"],
+          },
+        ],
+      });
 
       return res.status(201).json({
         status: 1,
