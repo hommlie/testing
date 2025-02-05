@@ -6,6 +6,7 @@ const commentController = {
     try {
       const { content, blogId, parentId } = req.body;
       const { authorId } = req.params;
+      console.log(authorId);
 
       // Verify blog exists
       const blog = await Blog.findByPk(blogId);
