@@ -171,5 +171,6 @@ app.get("/seopage/getPageBySlug/:slug", SEOPageController.getPageBySlug);
 app.get("/blogs/getall", blogController.getAllPublished);
 app.get("/blogs/getbyslug/:slug", blogController.getBySlug);
 app.get("/blogs/getbyid/:id", blogController.getById);
+app.get("/blogcategory/getall", blogController.getAllBlogCategories);
 
 module.exports = app;

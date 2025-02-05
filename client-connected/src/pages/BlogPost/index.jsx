@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getBlogBySlug } from "../../services/api.blogs";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import config from "../../config/config";
+import { useToast } from "../../context/ToastProvider";
+import axios from "axios";
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -11,11 +12,22 @@ const BlogPost = () => {
   const [blog, setBlog] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const notify = useToast();
+  const notifyOnSuccess = (success) => notify(success, "success");
+  const notifyOnFail = (error) => notify(error, "error");
+
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await getBlogBySlug(slug);
-        setBlog(response.data);
+        const res = await axios.get(
+          `${config.API_URL}/blogs/getbyslug/${slug}`
+        );
+        if (res.data.status === 1) {
+          setBlog(res.data.data);
+        } else {
+          notifyOnFail(res.data.message);
+          return null;
+        }
       } catch (error) {
         console.error("Error fetching blog:", error);
         navigate("/404");

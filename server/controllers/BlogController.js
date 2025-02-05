@@ -195,6 +195,23 @@ const blogController = {
       });
     }
   },
+
+  async getAllBlogCategories(req, res) {
+    try {
+      const categories = await BlogCategory.findAll();
+      res.status(200).json({
+        status: 1,
+        message: "Categories fetched successfully",
+        data: categories,
+      });
+    } catch (error) {
+      res.status(200).json({
+        status: 0,
+        message: "Error fetching blog categories",
+        error: error.message,
+      });
+    }
+  },
 };
 
 module.exports = blogController;

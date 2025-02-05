@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
-import { getAllBlogs, getAllBlogCategories } from "../../services/api.blogs";
 import config from "../../config/config";
+import { useToast } from "../../context/ToastProvider";
+import axios from "axios";
 
 const BlogPage = () => {
   const navigate = useNavigate();
@@ -19,16 +20,22 @@ const BlogPage = () => {
   const [categories, setCategories] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
 
+  const notify = useToast();
+  const notifyOnSuccess = (success) => notify(success, "success");
+  const notifyOnFail = (error) => notify(error, "error");
+
   const blogsPerPage = 8;
 
   // Fetch all blogs
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const response = await getAllBlogs();
-      console.log(response);
-
-      setAllBlogs(response.data || []);
+      const res = await axios.get(`${config.API_URL}/blogs/getall`);
+      if (res.data.status === 1) {
+        setAllBlogs(res.data?.data || []);
+      } else {
+        notifyOnFail(res.data.message);
+      }
     } catch (error) {
       console.error("Error fetching blogs:", error);
     } finally {
@@ -39,8 +46,13 @@ const BlogPage = () => {
   // Fetch categories
   const fetchCategories = async () => {
     try {
-      const response = await getAllBlogCategories();
-      setCategories(response.data || []);
+      const res = await axios.get(`${config.API_URL}/blogcategory/getall`);
+      if (res.data.status === 1) {
+        setCategories(res.data.data || []);
+      } else {
+        notifyOnFail(res.data.message);
+        return null;
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
