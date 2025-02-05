@@ -294,7 +294,7 @@ const BlogPost = () => {
                   </div>
 
                   {/* Comment Actions */}
-                  {comment.author_id === blog.author_id && (
+                  {comment.author_id === user.id && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => setEditingComment(comment)}

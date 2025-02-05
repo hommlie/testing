@@ -15,7 +15,6 @@ const commentController = {
           message: "Blog post not found",
         });
       }
-      console.log(blog);
 
       // If it's a reply, verify parent comment exists
       if (parentId) {
@@ -27,7 +26,6 @@ const commentController = {
           });
         }
       }
-      console.log(blog.id);
 
       const comment = await Comment.create({
         content,
@@ -137,6 +135,10 @@ const commentController = {
           message: "Comment not found",
         });
       }
+      console.log(comment.author_id);
+      console.log(authorId);
+      console.log(typeof comment.author_id);
+      console.log(typeof authorId);
 
       // Check if user is the author
       if (comment.author_id !== authorId) {
