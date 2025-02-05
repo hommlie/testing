@@ -28,9 +28,9 @@ const commentController = {
 
       const comment = await Comment.create({
         content,
-        blogId,
-        parentId: parentId || null,
-        authorId: req.params.authorId,
+        blog_id: blogId,
+        parent_id: parentId || null,
+        author_id: req.params.authorId,
       });
 
       // Fetch the created comment with author details
@@ -68,8 +68,8 @@ const commentController = {
       // Get only top-level comments (no parentId)
       const comments = await Comment.findAndCountAll({
         where: {
-          blogId,
-          parentId: null,
+          blog_id: blogId,
+          parent_id: null,
           status: "approved",
         },
         include: [
@@ -136,7 +136,7 @@ const commentController = {
       }
 
       // Check if user is the author
-      if (comment.authorId !== authorId) {
+      if (comment.author_id !== authorId) {
         return res.status(403).json({
           success: false,
           message: "Unauthorized to update this comment",
@@ -174,10 +174,10 @@ const commentController = {
       }
 
       // Check if user is the author or blog owner
-      if (comment.authorId !== authorId) {
+      if (comment.author_id !== authorId) {
         // Check if user is blog owner
-        const blog = await Blog.findByPk(comment.blogId);
-        if (blog.authorId !== authorId) {
+        const blog = await Blog.findByPk(comment.blog_id);
+        if (blog.author_id !== authorId) {
           return res.status(403).json({
             success: false,
             message: "Unauthorized to delete this comment",
