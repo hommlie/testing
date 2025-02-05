@@ -6,7 +6,6 @@ const commentController = {
     try {
       const { content, blogId, parentId } = req.body;
       const { authorId } = req.params;
-      console.log(authorId);
 
       // Verify blog exists
       const blog = await Blog.findByPk(blogId);
@@ -32,7 +31,7 @@ const commentController = {
         content,
         blog_id: blogId,
         parent_id: parentId || null,
-        author_id: authorId,
+        // author_id: authorId,
       });
 
       // Fetch the created comment with author details
