@@ -135,13 +135,9 @@ const commentController = {
           message: "Comment not found",
         });
       }
-      console.log(comment.author_id);
-      console.log(authorId);
-      console.log(typeof comment.author_id);
-      console.log(typeof authorId);
 
       // Check if user is the author
-      if (comment.author_id !== authorId) {
+      if (comment.author_id !== parseInt(authorId)) {
         return res.status(403).json({
           status: 0,
           message: "Unauthorized to update this comment",
