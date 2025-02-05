@@ -20,7 +20,7 @@ const BlogPost = () => {
     const fetchBlog = async () => {
       try {
         const res = await axios.get(
-          `${config.API_URL}/blogs/getbyslug/${slug}`
+          `${config.API_URL}/api/blogs/getbyslug/${slug}`
         );
         if (res.data.status === 1) {
           setBlog(res.data.data);

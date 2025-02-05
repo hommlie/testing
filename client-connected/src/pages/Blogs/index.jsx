@@ -30,7 +30,7 @@ const BlogPage = () => {
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get(`${config.API_URL}/blogs/getall`);
+      const res = await axios.get(`${config.API_URL}/api/blogs/getall`);
       if (res.data.status === 1) {
         setAllBlogs(res.data?.data || []);
       } else {
@@ -46,7 +46,7 @@ const BlogPage = () => {
   // Fetch categories
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${config.API_URL}/blogcategory/getall`);
+      const res = await axios.get(`${config.API_URL}/api/blogcategory/getall`);
       if (res.data.status === 1) {
         setCategories(res.data.data || []);
       } else {

@@ -30,11 +30,6 @@ const blogController = {
         ],
         include: [
           {
-            model: User,
-            // as: 'author',
-            attributes: ["id", "first_name", "email"],
-          },
-          {
             model: BlogCategory,
           },
         ],
@@ -88,11 +83,6 @@ const blogController = {
         ],
         where: { slug: req.params.slug },
         include: [
-          {
-            model: User,
-            // as: 'author',
-            attributes: ["id", "first_name", "email"],
-          },
           {
             model: Comment,
             // as: 'comments',
@@ -153,11 +143,6 @@ const blogController = {
         ],
         where: { id: req.params.id },
         include: [
-          {
-            model: User,
-            // as: 'author',
-            attributes: ["id", "first_name", "email"],
-          },
           {
             model: Comment,
             // as: 'comments',
