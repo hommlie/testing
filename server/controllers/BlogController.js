@@ -84,11 +84,11 @@ const blogController = {
         include: [
           {
             model: Comment,
-            // as: 'comments',
+            as: "comments",
             include: [
               {
                 model: User,
-                // as: 'author',
+                as: "author",
                 attributes: ["id", "name"],
               },
             ],
@@ -144,11 +144,11 @@ const blogController = {
         include: [
           {
             model: Comment,
-            // as: 'comments',
+            as: "comments",
             include: [
               {
                 model: User,
-                // as: 'author',
+                as: "author",
                 attributes: ["id", "first_name"],
               },
             ],
