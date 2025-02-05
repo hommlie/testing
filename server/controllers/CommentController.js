@@ -18,6 +18,8 @@ const commentController = {
 
       // If it's a reply, verify parent comment exists
       if (parentId) {
+        console.log(parentId);
+
         const parentComment = await Comment.findByPk(parentId);
         if (!parentComment) {
           return res.status(404).json({
@@ -31,7 +33,13 @@ const commentController = {
         content,
         blog_id: blogId,
         parent_id: parentId || null,
-        // author_id: authorId,
+        author_id: authorId,
+      });
+      console.log({
+        content,
+        blog_id: blogId,
+        parent_id: parentId || null,
+        author_id: authorId,
       });
 
       // Fetch the created comment with author details
