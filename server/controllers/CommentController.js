@@ -5,6 +5,7 @@ const commentController = {
   async create(req, res) {
     try {
       const { content, blogId, parentId } = req.body;
+      const { authorId } = req.params;
 
       // Verify blog exists
       const blog = await Blog.findByPk(blogId);
@@ -30,7 +31,7 @@ const commentController = {
         content,
         blog_id: blogId,
         parent_id: parentId || null,
-        author_id: req.params.authorId,
+        author_id: authorId,
       });
 
       // Fetch the created comment with author details
