@@ -175,8 +175,8 @@ app.get("/blogs/getbyid/:id", blogController.getById);
 app.get("/blogcategory/getall", blogController.getAllBlogCategories);
 
 //Blog comments
-app.get("/comments/create/:authorId", commentController.create);
-app.get("/comments/update/:id/:authorId", commentController.update);
-app.get("/comments/delete/:id/:authorId", commentController.delete);
+app.post("/comments/create/:authorId", commentController.create);
+app.put("/comments/update/:id/:authorId", commentController.update);
+app.delete("/comments/delete/:id/:authorId", commentController.delete);
 
 module.exports = app;
