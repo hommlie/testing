@@ -241,10 +241,10 @@ const BlogPage = () => {
                         <button
                           onClick={() =>
                             navigate(
-                              `${config.VITE_BASE_WEBSITE_URL}/blogs/${blog.slug}`
+                              `${config.VITE_BASE_URL}/blog/${blog.slug}`
                             )
                           }
-                          className="px-6 py-2 bg-[#6B1F40] text-white hover:bg-[#5a1935] transition-colors"
+                          className="px-6 py-2 bg-emerald-500 text-white transition-colors"
                         >
                           Read More
                         </button>
