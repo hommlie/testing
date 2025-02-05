@@ -25,10 +25,12 @@ const blogController = {
             ),
             "featured_image",
           ],
+          "created_at",
         ],
         include: [
           {
             model: BlogCategory,
+            attributes: ["id", "title"],
           },
         ],
         where: {
@@ -69,13 +71,14 @@ const blogController = {
           "slug",
           "meta_title",
           "meta_description",
-          "category_id",
+          // "category_id",
           [
             sequelize.literal(
               `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
             ),
             "featured_image",
           ],
+          "created_at",
         ],
         where: { slug: req.params.slug },
         include: [
@@ -92,6 +95,7 @@ const blogController = {
           },
           {
             model: BlogCategory,
+            attributes: ["id", "title"],
           },
         ],
       });
@@ -127,13 +131,14 @@ const blogController = {
           "slug",
           "meta_title",
           "meta_description",
-          "category_id",
+          // "category_id",
           [
             sequelize.literal(
               `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
             ),
             "featured_image",
           ],
+          "created_at",
         ],
         where: { id: req.params.id },
         include: [
@@ -150,6 +155,7 @@ const blogController = {
           },
           {
             model: BlogCategory,
+            attributes: ["id", "title"],
           },
         ],
       });

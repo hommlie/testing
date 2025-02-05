@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
@@ -17,6 +15,8 @@ const BlogPost = () => {
   const notifyOnFail = (error) => notify(error, "error");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchBlog = async () => {
       try {
         const res = await axios.get(
@@ -52,7 +52,7 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white max-w-7xl">
       {/* Hero Section */}
       <div className="relative h-[500px]">
         <img
@@ -90,13 +90,10 @@ const BlogPost = () => {
 
           {/* Blog Content */}
           <div className="ck-content">
-            <CKEditor
-              editor={ClassicEditor}
-              data={blog.content}
-              disabled={true}
-              config={{
-                toolbar: [],
-                removePlugins: ["Toolbar"],
+            <div
+              className="space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: blog.content,
               }}
             />
           </div>
@@ -112,7 +109,7 @@ const BlogPost = () => {
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

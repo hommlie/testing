@@ -60,6 +60,8 @@ const BlogPage = () => {
 
   // Initial data fetch
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     fetchBlogs();
     fetchCategories();
   }, []);
@@ -106,7 +108,7 @@ const BlogPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
       {/* Banner Section */}
       <div className="relative h-[400px] bg-gray-900">
         {/* <img
@@ -296,7 +298,7 @@ const BlogPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 };
 
