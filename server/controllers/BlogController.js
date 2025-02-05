@@ -86,7 +86,7 @@ const blogController = {
               {
                 model: User,
                 // as: 'author',
-                attributes: ["id", "first_name"],
+                attributes: ["id", "name"],
               },
             ],
           },
