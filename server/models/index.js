@@ -193,10 +193,6 @@ WalletTransaction.belongsTo(Wallet, { foreignKey: "wallet_id" });
 
 SEOPage.belongsTo(Subcategory, { foreignKey: "subcat_id", as: "subcategory" });
 
-Blog.belongsTo(User, {
-  foreignKey: "author_id",
-  // as: 'author'
-});
 Blog.belongsTo(BlogCategory, {
   foreignKey: "category_id",
 });
