@@ -80,6 +80,7 @@ exports.getLandingPageBySlug = async (req, res) => {
               attributes: ["discounted_variation_price", "price"],
               where: { status: 1 },
               required: false,
+              as: "variations",
             },
           ],
         },
@@ -117,7 +118,7 @@ exports.getLandingPageBySlug = async (req, res) => {
     const formattedSubcategories = subcategoryData?.map((sub) => {
       // Collect all variation prices for the subcategory
       const allVariations = sub.Products.reduce((acc, product) => {
-        return acc.concat(product.Variations || []);
+        return acc.concat(product.variations || []);
       }, []);
 
       // Get valid discounted prices (non-null and non-undefined)
