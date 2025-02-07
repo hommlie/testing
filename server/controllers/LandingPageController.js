@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 const LandingPage = require("../models/LandingPage");
 const { fetchProductReviews } = require("../middleware/getCommonData");
-const { Subcategory, Category } = require("../models");
+const { Subcategory, Category, Product, Variation } = require("../models");
 
 const apiUrl = process.env.apiUrl;
 
@@ -47,7 +47,7 @@ exports.getLandingPageBySlug = async (req, res) => {
       });
     }
 
-    // Get subcategories for the category
+    // Get subcategories with their products and variations
     const subcategoryData = await Subcategory.findAll({
       attributes: [
         "id",
@@ -68,6 +68,22 @@ exports.getLandingPageBySlug = async (req, res) => {
         cat_id: landingPageData.cat_id,
         status: 1,
       },
+      include: [
+        {
+          model: Product,
+          attributes: ["id"],
+          where: { status: 1 },
+          required: false,
+          include: [
+            {
+              model: Variation,
+              attributes: ["discounted_variation_price", "price"],
+              where: { status: 1 },
+              required: false,
+            },
+          ],
+        },
+      ],
     });
 
     // Get all active categories with their subcategories
@@ -97,17 +113,44 @@ exports.getLandingPageBySlug = async (req, res) => {
       })),
     }));
 
-    // Format subcategories with review data
-    const formattedSubcategories = subcategoryData.map((sub) => ({
-      id: sub.id,
-      subcategory_name: sub.subcategory_name,
-      image_url: sub.getDataValue("image_url"),
-      slug: sub.slug,
-      subcategory_title: sub.subcategory_title,
-      subcategory_sub_title: sub.subcategory_sub_title,
-      total_reviews: sub.total_reviews,
-      avg_rating: sub.avg_rating,
-    }));
+    // Format subcategories with review data and starting price
+    const formattedSubcategories = subcategoryData?.map((sub) => {
+      // Collect all variation prices for the subcategory
+      const allVariations = sub.Products.reduce((acc, product) => {
+        return acc.concat(product.Variations || []);
+      }, []);
+
+      // Get valid discounted prices (non-null and non-undefined)
+      const validDiscountedPrices = allVariations
+        .map((v) => v.discounted_variation_price)
+        .filter((price) => price !== null && price !== undefined && price > 0);
+
+      // Calculate starting price
+      const starting_price =
+        validDiscountedPrices.length > 0
+          ? Math.min(...validDiscountedPrices)
+          : allVariations.length > 0
+          ? Math.min(
+              ...allVariations
+                .map((v) => v.price)
+                .filter(
+                  (price) => price !== null && price !== undefined && price > 0
+                )
+            )
+          : 0;
+
+      return {
+        id: sub.id,
+        subcategory_name: sub.subcategory_name,
+        image_url: sub.getDataValue("image_url"),
+        slug: sub.slug,
+        subcategory_title: sub.subcategory_title,
+        subcategory_sub_title: sub.subcategory_sub_title,
+        total_reviews: sub.total_reviews,
+        avg_rating: sub.avg_rating,
+        starting_price: starting_price || 0,
+      };
+    });
 
     return res.status(200).json({
       status: 1,

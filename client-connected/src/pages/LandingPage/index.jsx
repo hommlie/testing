@@ -7,62 +7,13 @@ import Customers from "../../assets/icons/customer.svg";
 import Reviews from "../../assets/icons/reviews.svg";
 import Cities from "../../assets/icons/cities.svg";
 import Warranty from "../../assets/icons/warranty.svg";
-
-import HeroBanner from "../../assets/hero-banner.svg";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { IoCallOutline, IoLocationOutline } from "react-icons/io5";
 import axios from "axios";
 import config from "../../config/config";
 
-// Dummy API data
-const dummyData = {
-  hero: {
-    title: "Effective Pest Control for a Safe Home",
-    subtitle: "Protect Your Space from Unwanted Guests",
-    banner: HeroBanner,
-  },
-  services: [
-    {
-      id: 1,
-      slug: "ant-control",
-      title: "Ant Control",
-      rating: 4.5,
-      price: 299,
-      image: "/api/placeholder/400/300",
-    },
-    {
-      id: 2,
-      slug: "rodent-control",
-      title: "Rodent Control",
-      rating: 4.5,
-      price: 299,
-      image: "/api/placeholder/400/300",
-    },
-    {
-      id: 3,
-      slug: "mosquito-control",
-      title: "Mosquito Control",
-      rating: 4.6,
-      price: 299,
-      image: "/api/placeholder/400/300",
-    },
-    {
-      id: 4,
-      slug: "termite-control",
-      title: "Termite Control",
-      rating: 4.7,
-      price: 349,
-      image: "/api/placeholder/400/300",
-    },
-    {
-      id: 5,
-      slug: "bed-bug-control",
-      title: "Bed Bug Control",
-      rating: 4.8,
-      price: 399,
-      image: "/api/placeholder/400/300",
-    },
-  ],
+// Static data for other sections
+const staticData = {
   features: [
     {
       id: 1,
@@ -113,26 +64,8 @@ const dummyData = {
       icon: Warranty,
     },
   ],
-  categories: {
-    mainCategories: [
-      { id: 1, name: "Pest Control", slug: "pest-control" },
-      { id: 2, name: "Home Cleaning", slug: "home-cleaning" },
-      { id: 3, name: "Bird Control", slug: "bird-control" },
-      { id: 4, name: "Mosquito Mesh", slug: "mosquito-mesh" },
-    ],
-    subcategories: [
-      { id: 1, name: "Rodent Control", slug: "rodent-control" },
-      { id: 2, name: "Cockroach Control", slug: "cockroach-control" },
-      { id: 3, name: "Mosquito Control", slug: "mosquito-control" },
-      { id: 4, name: "Wood Borer", slug: "wood-borer" },
-      { id: 5, name: "Termite Control", slug: "termite-control" },
-      { id: 6, name: "Honey Bee Removal", slug: "honey-bee-removal" },
-      { id: 7, name: "Bed Bug Control", slug: "bed-bug-control" },
-    ],
-  },
 };
 
-// Custom typing animation hook
 const useTypewriter = (text = "", speed = 100) => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -164,6 +97,7 @@ const useTypewriter = (text = "", speed = 100) => {
 const LandingPage = () => {
   const { slug } = useParams();
   const [pageData, setPageData] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
   const [showAllServices, setShowAllServices] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -177,18 +111,21 @@ const LandingPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const { displayText } = useTypewriter(pageData?.hero?.title || "");
+  const { displayText } = useTypewriter(pageData?.landing_page?.title || "");
 
   useEffect(() => {
-    // Simulating API call
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `${config.API_URL}/api/landing/getPageBySlug/${slug}`
         );
-        // Simulated API delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setPageData(dummyData);
+        if (response.data.status === 1) {
+          setPageData(response.data.data);
+          // Set initial active category
+          if (response.data.data.all_categories?.length > 0) {
+            setActiveCategory(response.data.data.all_categories[0].id);
+          }
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -197,7 +134,7 @@ const LandingPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [slug]);
 
   const scrollToForm = () => {
     const formElement = document.getElementById("contact-form");
@@ -226,7 +163,7 @@ const LandingPage = () => {
 
     setLoading(true);
     try {
-      // Simulated form submission
+      // Add your form submission logic here
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setSubmitted(true);
       setFormData({
@@ -250,6 +187,10 @@ const LandingPage = () => {
     );
   }
 
+  const activeTabContent = pageData?.all_categories?.find(
+    (category) => category.id === activeCategory
+  );
+
   return (
     <main className="min-h-screen max-w-7xl font-poppins space-y-20">
       {/* Hero Section */}
@@ -259,10 +200,9 @@ const LandingPage = () => {
             <div className="md:w-1/2 mb-10 md:mb-0">
               <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
                 {displayText}
-                {/* <span className="animate-pulse">|</span> */}
               </h1>
               <p className="text-lg text-gray-600 mb-8">
-                {pageData?.hero?.subtitle}
+                {pageData?.landing_page?.sub_title}
               </p>
               <button
                 onClick={scrollToForm}
@@ -273,9 +213,9 @@ const LandingPage = () => {
             </div>
             <div className="md:w-1/2">
               <img
-                src={pageData?.hero?.banner}
-                alt={pageData?.hero?.title}
-                className=""
+                src={pageData?.landing_page?.hero_image}
+                alt={pageData?.landing_page?.alt_tag}
+                className="w-full"
               />
             </div>
           </div>
@@ -300,7 +240,7 @@ const LandingPage = () => {
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {pageData?.services
+            {pageData?.subcategories
               ?.slice(0, showAllServices ? undefined : 3)
               ?.map((service) => (
                 <div
@@ -308,24 +248,24 @@ const LandingPage = () => {
                   className="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300"
                 >
                   <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-48 object-cover"
+                    src={service.image_url}
+                    alt={service.subcategory_name}
+                    className="w-full h-auto"
                   />
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-2">
-                      {service.title}
+                      {service.subcategory_name}
                     </h3>
                     <div className="flex items-center mb-4">
                       <div className="flex items-center">
                         <span className="text-yellow-400">★</span>
                         <span className="ml-1 text-gray-600">
-                          {service.rating}
+                          {service.avg_rating || "New"}
                         </span>
                       </div>
                       <span className="mx-2 text-gray-300">|</span>
                       <span className="text-gray-600">
-                        From ₹{service.price}/service
+                        {service.subcategory_sub_title}
                       </span>
                     </div>
                     <button
@@ -370,7 +310,7 @@ const LandingPage = () => {
             </motion.div>
 
             <div className="space-y-8">
-              {pageData?.features?.map((feature, index) => (
+              {staticData?.features?.map((feature, index) => (
                 <motion.div
                   key={feature.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -421,7 +361,7 @@ const LandingPage = () => {
               <img
                 src={ScheduleImg}
                 alt="Pest Control Professional"
-                className=""
+                className="h-full"
               />
             </div>
           </div>
@@ -600,9 +540,8 @@ const LandingPage = () => {
                 </button>
               </form>
 
-              {/* Success Message */}
               {submitted && (
-                <div className="mt-6 p-4 bg-hommlie border border-green-400 text-green-700 rounded-md">
+                <div className="mt-6 p-4 bg-green-50 border border-green-400 text-green-700 rounded-md">
                   <div className="flex items-center">
                     <svg
                       className="w-5 h-5 mr-2"
@@ -630,14 +569,14 @@ const LandingPage = () => {
       <section className="px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {pageData?.stats.map((stat) => (
+            {staticData.stats.map((stat) => (
               <div
                 key={stat.id}
                 className="bg-white p-6 rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="mb-4 p-3 bg-gray-50 rounded-full">
-                    <img src={stat.icon} alt="" />
+                    <img src={stat.icon} alt={stat.title} className="h-8 w-8" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     {stat.count}
@@ -650,40 +589,45 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Popular Categories Section */}
+      {/* Popular Categories Section with Tabs */}
       <section className="px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold mb-8">Popular Categories</h2>
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-4">
-              {pageData?.categories.mainCategories.map((category) => (
+
+          {/* Category Tabs */}
+          <div className="mb-8 border-b border-gray-200">
+            <div className="flex overflow-x-auto space-x-4">
+              {pageData?.all_categories?.map((category) => (
                 <button
                   key={category.id}
-                  onClick={() => handleServiceClick(category.slug, category.id)}
-                  className="px-6 py-2 bg-white border border-gray-200 rounded-full hover:bg-green-50 hover:border-green-500 transition-colors duration-300"
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+                    activeCategory === category.id
+                      ? "border-b-2 border-hommlie text-hommlie"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
                 >
-                  {category.name}
+                  {category.category_name}
                 </button>
               ))}
             </div>
           </div>
-          <div className="text-sm text-gray-600 leading-relaxed space-y-4">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <p key={index} className="hover:text-green-600">
-                {pageData?.categories.subcategories.map((subcat, idx) => (
-                  <React.Fragment key={subcat.id}>
-                    <button
-                      onClick={() => handleServiceClick(subcat.slug, subcat.id)}
-                      className="hover:text-green-600 hover:underline"
-                    >
-                      {subcat.name}
-                    </button>
-                    {idx < pageData.categories.subcategories.length - 1 && (
-                      <span className="mx-2 text-gray-400">|</span>
-                    )}
-                  </React.Fragment>
-                ))}
-              </p>
+
+          {/* Subcategories Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activeTabContent?.subcategories?.map((subcat) => (
+              <button
+                key={subcat.id}
+                onClick={() => handleServiceClick(subcat.slug, subcat.id)}
+                className="p-4 text-left bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {subcat.subcategory_name}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Click to view service details
+                </p>
+              </button>
             ))}
           </div>
         </div>
