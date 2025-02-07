@@ -30,6 +30,7 @@ import ProductListPage from "./pages/ProductListPage";
 import SEOPage from "./pages/SEOPage";
 import BlogPage from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
+import LandingPage from "./pages/LandingPage";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -105,6 +106,10 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/page/:slug`,
       element: <SEOPage />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/service/:slug`,
+      element: <LandingPage />,
     },
 
     {

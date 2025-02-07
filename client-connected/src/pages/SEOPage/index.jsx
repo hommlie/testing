@@ -25,6 +25,8 @@ const SEOPage = () => {
   const [isInspectionModalOpen, setIsInspectionModalOpen] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchPageData = async () => {
       try {
         setIsLoading(true);

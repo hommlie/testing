@@ -134,6 +134,8 @@ const SubCategoryPage = () => {
   const sectionRefs = useRef({});
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     fetchData();
   }, [categoryId, location]);
 

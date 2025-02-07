@@ -72,6 +72,8 @@ const BlogPage = () => {
 
     // Apply category filter
     if (selectedCategory !== "all") {
+      console.log(typeof selectedCategory);
+
       filtered = filtered.filter(
         (blog) => blog?.category_id === selectedCategory
       );
@@ -174,7 +176,7 @@ const BlogPage = () => {
                     <button
                       key={category.id}
                       onClick={() => {
-                        setSelectedCategory(category.id.toString());
+                        setSelectedCategory(category.id);
                         setIsDropdownOpen(false);
                       }}
                       className="w-full px-4 py-2 text-left hover:bg-gray-100"

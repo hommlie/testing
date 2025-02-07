@@ -31,6 +31,7 @@ const WalletController = require("../controllers/WalletController");
 const SEOPageController = require("../controllers/SEOPageController");
 const blogController = require("../controllers/BlogController");
 const commentController = require("../controllers/CommentController");
+const LandingPageController = require("../controllers/LandingPageController");
 
 const app = express();
 
@@ -178,5 +179,11 @@ app.get("/blogcategory/getall", blogController.getAllBlogCategories);
 app.post("/comments/create/:authorId", commentController.create);
 app.put("/comments/update/:id/:authorId", commentController.update);
 app.delete("/comments/delete/:id/:authorId", commentController.delete);
+
+//Landing page
+app.get(
+  "/landing/getPageBySlug/:slug",
+  LandingPageController.getLandingPageBySlug
+);
 
 module.exports = app;

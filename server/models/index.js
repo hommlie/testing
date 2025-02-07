@@ -40,6 +40,7 @@ const SEOPage = require("./SEOPage");
 const Blog = require("./Blog");
 const BlogCategory = require("./BlogCategory");
 const Comment = require("./Comment");
+const LandingPage = require("./LandingPage");
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -216,6 +217,8 @@ Comment.hasMany(Comment, {
   foreignKey: "parent_id",
   as: "replies",
 });
+
+LandingPage.belongsTo(Category, { foreignKey: "cat_id", as: "category" });
 
 module.exports = {
   sequelize,
