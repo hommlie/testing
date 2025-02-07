@@ -78,7 +78,6 @@ exports.getLandingPageBySlug = async (req, res) => {
             {
               model: Variation,
               attributes: ["discounted_variation_price", "price"],
-              where: { status: 1 },
               required: false,
               as: "variations",
             },
