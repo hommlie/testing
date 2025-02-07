@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import WhyChooseBg from "../../assets/bg/why-choose-img.jpg";
 import ScheduleImg from "../../assets/bg/schedule-img.svg";
@@ -11,6 +11,8 @@ import Warranty from "../../assets/icons/warranty.svg";
 import HeroBanner from "../../assets/hero-banner.svg";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { IoCallOutline, IoLocationOutline } from "react-icons/io5";
+import axios from "axios";
+import config from "../../config/config";
 
 // Dummy API data
 const dummyData = {
@@ -160,6 +162,7 @@ const useTypewriter = (text = "", speed = 100) => {
 };
 
 const LandingPage = () => {
+  const { slug } = useParams();
   const [pageData, setPageData] = useState(null);
   const [showAllServices, setShowAllServices] = useState(false);
   const [formData, setFormData] = useState({
@@ -180,6 +183,9 @@ const LandingPage = () => {
     // Simulating API call
     const fetchData = async () => {
       try {
+        const response = await axios.get(
+          `${config.API_URL}/api/landing/getPageBySlug/${slug}`
+        );
         // Simulated API delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setPageData(dummyData);

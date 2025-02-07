@@ -127,6 +127,7 @@ Subcategory.belongsTo(Category, {
   foreignKey: "cat_id",
   as: "category",
 });
+Category.hasMany(Subcategory, { foreignKey: "cat_id" });
 
 Innersubcategory.belongsTo(Category, {
   foreignKey: "cat_id",
