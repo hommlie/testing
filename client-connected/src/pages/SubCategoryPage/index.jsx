@@ -13,7 +13,7 @@ const StarRating = ({ rating, reviews }) => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${
+            className={`w-2 md:w-4 h-2 md:h-4 ${
               star <= Math.round(rating)
                 ? "text-yellow-400 fill-current"
                 : "text-gray-300"
@@ -21,10 +21,10 @@ const StarRating = ({ rating, reviews }) => {
           />
         ))}
       </div>
-      <span className="text-sm text-white">
+      <div className="text-sm text-white">
         {rating} ({reviews > 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews}{" "}
         reviews)
-      </span>
+      </div>
     </div>
   );
 };
@@ -249,7 +249,7 @@ const SubCategoryPage = () => {
   };
 
   return (
-    <main className="max-w-7xl w-full">
+    <main className="md:max-w-7xl w-full">
       <div className="container px-4 mt-5">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm mb-6">
@@ -288,7 +288,7 @@ const SubCategoryPage = () => {
         <div className="flex items-center justify-center bg-white rounded-lg glow-border mb-8 relative">
           {/* Left Arrow */}
           <div
-            className="absolute left-0 z-10 p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
+            className="absolute left-0 z-10 p-1 md:p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
             onClick={() => {
               const container = document.getElementById("scroll-container");
               container.scrollBy({ left: -200, behavior: "smooth" });
@@ -298,7 +298,7 @@ const SubCategoryPage = () => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-3 md:h-6 w-3 md:w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -315,7 +315,7 @@ const SubCategoryPage = () => {
           {/* Scrollable Content */}
           <div
             id="scroll-container"
-            className="flex gap-4 p-4 overflow-x-auto scrollbar-hide"
+            className="flex gap-2 md:gap-4 p-4 overflow-x-auto scrollbar-hide"
             onScroll={(e) => {
               const container = e.target;
               const leftArrow = document.getElementById("left-arrow");
@@ -346,7 +346,7 @@ const SubCategoryPage = () => {
                   alt=""
                   className="w-20 h-20 rounded-md"
                 />
-                <p className="text-xs text-center font-medium mt-2 line-clamp-2 w-full">
+                <p className="w-32 text-xs text-center font-medium mt-2 line-clamp-2">
                   {cat.subcategory_name}
                 </p>
               </div>
@@ -355,7 +355,7 @@ const SubCategoryPage = () => {
 
           {/* Right Arrow */}
           <div
-            className="absolute right-0 z-10 p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
+            className="absolute right-0 z-10 p-1 md:p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
             onClick={() => {
               const container = document.getElementById("scroll-container");
               container.scrollBy({ left: 200, behavior: "smooth" });
@@ -365,7 +365,7 @@ const SubCategoryPage = () => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-3 md:h-6 w-3 md:w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -382,23 +382,23 @@ const SubCategoryPage = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Section - Category Details */}
-          <div className="lg:w-3/4">
+          <div className="w-full lg:w-3/4">
             <motion.div
               variants={container}
               initial="hidden"
               animate="show"
-              className="grid gap-6"
+              className="grid gap-3 lg:gap-6"
             >
               {data?.subcategory?.map((cat) => (
                 <motion.div
                   key={cat.subcat_id}
                   variants={item}
                   ref={(el) => (sectionRefs.current[cat.subcat_id] = el)}
-                  className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                  className="bg-white rounded-xl p-2 md:p-6 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="flex gap-6">
+                  <div className="flex gap-1 md:gap-6">
                     <div className="flex-1">
-                      <h2 className="text-xl font-semibold mb-2">
+                      <h2 className="text-lg md:text-xl font-semibold mb-2">
                         {cat.subcategory_name}
                       </h2>
                       {cat.avg_rating && (
@@ -409,9 +409,11 @@ const SubCategoryPage = () => {
                       )}
 
                       {cat.specifications && (
-                        <div className="mt-4">
-                          <h3 className="font-medium mb-2">Specifications:</h3>
-                          <ul className="space-y-1">
+                        <div className="md:mt-4">
+                          <h3 className="text-sm md:text-base font-medium md:mb-2">
+                            Specifications:
+                          </h3>
+                          <ul className="text-xs md:text-base space-y-1">
                             {cat.specifications
                               .split("|")
                               .map((spec, index) => (
@@ -429,14 +431,14 @@ const SubCategoryPage = () => {
 
                       <button
                         onClick={() => handleSubCategoryClick(cat)}
-                        className="mt-4 flex items-center text-emerald-600 hover:text-emerald-700 font-medium group"
+                        className="mt-2 md:mt-4 flex items-center text-xs md:text-base text-emerald-600 hover:text-emerald-700 font-medium group"
                       >
                         View Details
-                        <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+                        <ArrowRight className="w-2 md:w-4 h-2 md:h-4 ml-1 transition-transform group-hover:translate-x-1" />
                       </button>
                     </div>
 
-                    <div className="w-32 h-32 flex-shrink-0">
+                    <div className="w-24 md:w-32 h-24 md:h-32 flex-shrink-0">
                       <img
                         src={cat.subcategory_icon}
                         alt={cat.subcategory_name}
@@ -450,8 +452,8 @@ const SubCategoryPage = () => {
 
             {/* About Section */}
             {data?.categoryData?.about && (
-              <section className="mt-12 bg-white rounded-xl p-6 shadow-lg">
-                <h2 className="text-2xl font-semibold mb-4">
+              <section className="mt-4 md:mt-12 bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-lg md:text-2xl font-semibold mb-4">
                   About {data?.categoryData?.category_name}
                 </h2>
                 <div
@@ -463,8 +465,8 @@ const SubCategoryPage = () => {
 
             {/* FAQs Section */}
             {data?.categoryData?.faqs && (
-              <section className="mt-8 bg-white rounded-xl p-6 shadow-lg">
-                <h2 className="text-2xl font-semibold mb-4">
+              <section className="mt-4 md:mt-8 bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-lg md:text-2xl font-semibold mb-4">
                   Frequently Asked Questions
                 </h2>
                 <div
@@ -475,8 +477,10 @@ const SubCategoryPage = () => {
             )}
 
             {/* Quick Links Section */}
-            <section className="mt-8 bg-white rounded-xl shadow-lg">
-              <h2 className="text-2xl font-semibold p-6">Quick Links</h2>
+            <section className="mt-4 md:mt-8 bg-white rounded-xl shadow-lg">
+              <h2 className="text-lg md:text-2xl font-semibold p-6">
+                Quick Links
+              </h2>
 
               <QuickLinkSection
                 title="Also available in"

@@ -26,12 +26,12 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-            <Star className="w-4 h-4 text-gray-300" />
+            <Star className="w-2 md:w-4 h-2 md:h-4 text-gray-300" />
             <div
               className="absolute inset-0 overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
             >
-              <Star className="w-4 h-4 text-yellow-400 fill-current absolute top-0 left-0" />
+              <Star className="w-2 md:w-4 h-2 md:h-4 text-yellow-400 fill-current absolute top-0 left-0" />
             </div>
           </div>
         );
@@ -56,10 +56,10 @@ const CartSection = ({ cart }) => {
   };
 
   return (
-    <div className=" overflow-y-auto">
+    <div className="overflow-y-auto">
       <div className="space-y-4">
         <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-          <h2 className="text-xl font-semibold">Cart Summary</h2>
+          <h2 className="text-base md:text-xl font-semibold">Cart Summary</h2>
 
           {cart?.length > 0 ? (
             <div className="space-y-3">
@@ -69,7 +69,9 @@ const CartSection = ({ cart }) => {
                   className="flex items-center justify-between py-2 border-b"
                 >
                   <div className="flex flex-col">
-                    <span className="font-medium">{item.product_name}</span>
+                    <span className="text-sm md:text-base font-medium">
+                      {item.product_name}
+                    </span>
                     <span className="text-sm text-gray-500">
                       {item.variation_name}
                     </span>
@@ -137,8 +139,10 @@ const CartSection = ({ cart }) => {
         </section>
 
         <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-          <h2 className="text-xl font-semibold">Hommlie Features</h2>
-          <ul className="space-y-2 text-gray-600">
+          <h2 className="text-base md:text-xl font-semibold">
+            Hommlie Features
+          </h2>
+          <ul className="text-sm md:text-base space-y-2 text-gray-600">
             <li>✓ Verified Professionals</li>
             <li>✓ Safe Chemicals</li>
             <li>✓ Service in 4hr</li>
@@ -311,7 +315,7 @@ const CleaningProductPage = () => {
   };
 
   return (
-    <main className="max-w-7xl">
+    <main className="md:max-w-7xl w-full">
       <div className="mt-5">
         <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
           <a href="/" className="text-blue-500">
@@ -415,14 +419,14 @@ const CleaningProductPage = () => {
                   ref={(el) => (productRefs.current[index] = el)}
                   className="bg-white rounded-lg p-6 space-y-6 glow-border scroll-mt-4"
                 >
-                  <h3 className="text-2xl font-semibold">
+                  <h3 className="text-base md:text-2xl font-semibold">
                     {product.product_name}
                   </h3>
                   <div className="divide-y">
                     {product?.attributes?.map((attribute, attrIndex) => (
                       <div
                         key={attrIndex}
-                        className={`py-6 ${
+                        className={`md:py-6 ${
                           attrIndex === product.attributes.length - 1
                             ? ""
                             : "border-gray-200"
@@ -431,7 +435,7 @@ const CleaningProductPage = () => {
                         <div className="flex justify-between items-center gap-6">
                           <div className="space-y-4 flex-1">
                             <div className="space-y-2">
-                              <h3 className="text-lg font-medium">
+                              <h3 className="text-sm md:text-lg font-medium">
                                 {attribute.attribute_name}
                               </h3>
 
@@ -441,7 +445,7 @@ const CleaningProductPage = () => {
                                 <div className="flex items-center space-x-2">
                                   <StarRating rating={attribute.avg_rating} />
                                   {attribute.total_reviews && (
-                                    <span className="text-sm text-gray-500">
+                                    <span className="text-xs md:text-sm text-gray-500">
                                       (
                                       {attribute.total_reviews >= 1000
                                         ? `${(
@@ -457,7 +461,7 @@ const CleaningProductPage = () => {
                               {/* Price */}
                               <p className="text-gray-500">
                                 {attribute.variations?.length > 0 && (
-                                  <span className="flex gap-2 items-center">
+                                  <span className="text-xs md:text-base flex gap-2 items-center">
                                     Starts from
                                     <span className="text-emerald-600 font-medium">
                                       ₹{attribute?.starting_price}
@@ -470,7 +474,7 @@ const CleaningProductPage = () => {
                             {/* Specifications */}
                             {attribute.specifications && (
                               <div className="space-y-2">
-                                <h4 className="font-medium text-gray-700">
+                                <h4 className="text-sm md:text-base font-medium text-gray-700">
                                   Specifications:
                                 </h4>
                                 <ul className="space-y-1">
@@ -481,7 +485,7 @@ const CleaningProductPage = () => {
                                     .map((spec, index) => (
                                       <li
                                         key={index}
-                                        className="flex items-start space-x-2"
+                                        className="text-xs md:text-base flex items-start space-x-2"
                                       >
                                         <span className="text-black">•</span>
                                         <span className="text-gray-600">
@@ -494,7 +498,7 @@ const CleaningProductPage = () => {
                             )}
 
                             <button
-                              className="text-blue-500 hover:text-blue-600 font-semibold"
+                              className="text-sm md:text-base text-blue-500 hover:text-blue-600 font-semibold"
                               onClick={() =>
                                 handleViewDetails(
                                   product,
@@ -507,8 +511,8 @@ const CleaningProductPage = () => {
                           </div>
 
                           {/* Image with overlapped Add button */}
-                          <div className="relative w-32 flex-shrink-0">
-                            <div className="relative w-32 h-32">
+                          <div className="relative w-24 md:w-32 flex-shrink-0">
+                            <div className="relative w-24 md:w-32 h-24 md:h-32">
                               <img
                                 src={
                                   attribute.image ||
@@ -554,7 +558,7 @@ const CleaningProductPage = () => {
       {/* About Section */}
       {innerSubCategoryData?.about && (
         <section className="mt-12 bg-white rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-semibold mb-4">
+          <h2 className="text-base md:text-2xl font-semibold mb-4">
             About {innerSubCategoryData?.category_name}
           </h2>
           <div
@@ -567,7 +571,7 @@ const CleaningProductPage = () => {
       {/* FAQs Section */}
       {innerSubCategoryData?.faqs && (
         <section className="mt-8 bg-white rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-semibold mb-4">
+          <h2 className="text-base md:text-2xl font-semibold mb-4">
             Frequently Asked Questions
           </h2>
           <div
@@ -579,7 +583,7 @@ const CleaningProductPage = () => {
 
       {/* Quick Links Section */}
       <section className="mt-8 bg-white rounded-xl shadow-lg">
-        <h2 className="text-2xl font-semibold p-6">Quick Links</h2>
+        <h2 className="text-base md:text-2xl font-semibold p-6">Quick Links</h2>
 
         <QuickLinkSection
           title="Also available in"
