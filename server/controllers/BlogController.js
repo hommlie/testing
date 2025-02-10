@@ -121,14 +121,13 @@ const blogController = {
           "created_at",
         ],
         where: {
-          id: { [sequelize.Op.ne]: blog.id },
+          id: { [Op.ne]: blog.id },
           category_id: blog.category_id,
         },
         include: [
           {
             model: BlogCategory,
             attributes: ["id", "title"],
-            where: { id: blog.BlogCategory.id },
           },
         ],
         limit: 4,
