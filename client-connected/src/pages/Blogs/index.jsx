@@ -1,19 +1,79 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Clock,
+} from "lucide-react";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
+import { motion } from "framer-motion";
+
+const BlogCard = ({ blog, categories, index }) => {
+  const navigate = useNavigate();
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+    >
+      <div className="aspect-w-16 aspect-h-9 overflow-hidden">
+        <img
+          src={blog.featured_image || "/api/placeholder/400/300"}
+          alt={blog.title}
+          className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+      <div className="p-6">
+        <div className="flex items-center gap-4 mb-4">
+          <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-sm font-medium rounded-full">
+            {categories?.find((c) => c.id === blog.category_id)?.title}
+          </span>
+          <div className="flex items-center text-gray-500 text-sm">
+            <Calendar className="w-4 h-4 mr-1" />
+            {new Date(blog.created_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        </div>
+
+        <h3 className="text-2xl font-semibold mb-3 group-hover:text-emerald-600 transition-colors line-clamp-2">
+          {blog.title}
+        </h3>
+
+        <p className="text-gray-600 mb-6 line-clamp-3">
+          {blog.meta_description}
+        </p>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => navigate(`${config.VITE_BASE_URL}/blog/${blog.slug}`)}
+          className="w-full px-6 py-3 bg-emerald-500 text-white rounded-lg font-medium 
+                   hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"
+        >
+          Read Article
+          <ChevronRight className="w-4 h-4" />
+        </motion.button>
+      </div>
+    </motion.article>
+  );
+};
 
 const BlogPage = () => {
   const navigate = useNavigate();
-  // State for UI controls
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // State for data
   const [isLoading, setIsLoading] = useState(false);
   const [allBlogs, setAllBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
@@ -24,7 +84,7 @@ const BlogPage = () => {
   const notifyOnSuccess = (success) => notify(success, "success");
   const notifyOnFail = (error) => notify(error, "error");
 
-  const blogsPerPage = 8;
+  const blogsPerPage = 9;
 
   // Fetch all blogs
   const fetchBlogs = async () => {
@@ -110,194 +170,168 @@ const BlogPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Banner Section */}
-      <div className="relative h-[400px] bg-gray-900">
-        {/* <img
-          src="/api/placeholder/1920/400"
-          alt="Blog Banner"
-          className="w-full h-full object-cover opacity-50"
-        /> */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-5xl font-italiana mb-4">Read Our Blogs</h1>
-            <p className="text-xl max-w-2xl mx-auto px-4">
-              Discover the latest trends, insights, and stories from our fashion
-              experts
+    <main className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative bg-gradient-to-r from-emerald-600 to-emerald-800 py-24"
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-center text-white"
+          >
+            <h1 className="text-5xl font-bold mb-6">Our Latest Insights</h1>
+            <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
+              Discover the latest trends, insights, and stories from our experts
             </p>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Search and Filter Section */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-12">
-          {/* Search Input */}
-          <div className="relative w-full md:w-96">
-            <input
-              type="text"
-              placeholder="Search blogs..."
-              className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B1F40] focus:border-transparent"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          </div>
+      <div className="max-w-7xl mx-auto px-4 -mt-8">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="bg-white rounded-xl shadow-lg p-6 mb-12"
+        >
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-200 focus:ring-2 
+                         focus:ring-emerald-500 focus:border-transparent transition-all"
+              />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            </div>
 
-          {/* Category Dropdown */}
-          <div className="relative w-full md:w-[200px]">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B1F40] text-left flex justify-between items-center"
-            >
-              <span>
-                {selectedCategory === "all"
-                  ? "All Categories"
-                  : categories?.find(
-                      (c) => c.id.toString() === selectedCategory
-                    )?.title || "Select Category"}
-              </span>
-              <Filter className="w-4 h-4 text-gray-400" />
-            </button>
+            <div className="relative w-full md:w-64">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 
+                         focus:ring-emerald-500 text-left flex justify-between items-center"
+              >
+                <span>
+                  {selectedCategory === "all"
+                    ? "All Categories"
+                    : categories?.find(
+                        (c) => c.id.toString() === selectedCategory
+                      )?.title}
+                </span>
+                <Filter className="w-5 h-5 text-gray-400" />
+              </button>
 
-            {isDropdownOpen && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-                <div className="py-1">
-                  <button
-                    onClick={() => {
-                      setSelectedCategory("all");
-                      setIsDropdownOpen(false);
-                    }}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
-                  >
-                    All Categories
-                  </button>
-                  {categories?.map((category) => (
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg"
+                >
+                  <div className="py-1">
                     <button
-                      key={category.id}
                       onClick={() => {
-                        setSelectedCategory(category.id);
+                        setSelectedCategory("all");
                         setIsDropdownOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                      className="w-full px-4 py-2 text-left hover:bg-emerald-50 transition-colors"
                     >
-                      {category.title}
+                      All Categories
                     </button>
-                  ))}
-                </div>
-              </div>
-            )}
+                    {categories?.map((category) => (
+                      <button
+                        key={category.id}
+                        onClick={() => {
+                          setSelectedCategory(category.id);
+                          setIsDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-emerald-50 transition-colors"
+                      >
+                        {category.title}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Blog Grid */}
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6B1F40]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
           </div>
         ) : filteredBlogs.length === 0 ? (
-          <div className="text-center py-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16"
+          >
             <h3 className="text-xl text-gray-600">
-              No blogs found matching your criteria
+              No articles found matching your criteria
             </h3>
-          </div>
+          </motion.div>
         ) : (
-          <div className="flex flex-col space-y-20">
-            {blogPairs?.map((pair, pairIndex) => (
-              <div
-                key={pairIndex}
-                className="grid md:grid-cols-2 gap-8 lg:gap-16"
-              >
-                {pair?.map((blog) => (
-                  <div
-                    key={blog.id}
-                    className="flex flex-col md:flex-row gap-6 items-start"
-                  >
-                    <div
-                      className={`flex ${
-                        pairIndex % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                      } gap-6 w-full`}
-                    >
-                      <div className="w-1/2">
-                        <div className="relative h-full overflow-hidden">
-                          <img
-                            src={
-                              blog.featured_image || "/api/placeholder/400/500"
-                            }
-                            alt={blog.title}
-                            className="w-full h-full object-contain object-center transition-transform duration-500 hover:scale-105"
-                          />
-                        </div>
-                      </div>
-                      <div className="w-1/2 flex flex-col items-start">
-                        <span className="text-sm text-[#6B1F40] mb-2">
-                          {
-                            categories?.find((c) => c.id === blog.category_id)
-                              ?.title
-                          }
-                        </span>
-                        <h3 className="text-2xl font-light mb-4">
-                          {blog.title}
-                        </h3>
-                        <p className="text-gray-600 mb-6 text-sm line-clamp-4">
-                          {blog.meta_description}
-                        </p>
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `${config.VITE_BASE_URL}/blog/${blog.slug}`
-                            )
-                          }
-                          className="px-6 py-2 bg-emerald-500 text-white transition-colors"
-                        >
-                          Read More
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {getCurrentPageBlogs().map((blog, index) => (
+              <BlogCard
+                key={blog.id}
+                blog={blog}
+                categories={categories}
+                index={index}
+              />
             ))}
           </div>
         )}
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-end items-center space-x-4 mt-16">
-            <div className="flex items-center space-x-6">
-              {currentPage > 1 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center items-center space-x-2 mt-16 mb-8"
+          >
+            <button
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded-lg border border-gray-200 disabled:opacity-50 
+                       hover:bg-emerald-50 transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (number) => (
                 <button
-                  onClick={() => setCurrentPage((prev) => prev - 1)}
-                  className="text-[#6B1F40] hover:text-[#5a1935]"
+                  key={number}
+                  onClick={() => setCurrentPage(number)}
+                  className={`w-10 h-10 rounded-lg border ${
+                    currentPage === number
+                      ? "bg-emerald-500 text-white border-emerald-500"
+                      : "border-gray-200 hover:bg-emerald-50"
+                  } transition-colors`}
                 >
-                  <ChevronLeft className="w-6 h-6" />
+                  {number}
                 </button>
-              )}
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (number) => (
-                  <button
-                    key={number}
-                    className={`text-xl ${
-                      currentPage === number
-                        ? "text-[#6B1F40] font-medium"
-                        : "text-gray-400 hover:text-gray-600"
-                    }`}
-                    onClick={() => setCurrentPage(number)}
-                  >
-                    {number.toString().padStart(2, "0")}
-                  </button>
-                )
-              )}
-              {currentPage < totalPages && (
-                <button
-                  onClick={() => setCurrentPage((prev) => prev + 1)}
-                  className="text-[#6B1F40] hover:text-[#5a1935]"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              )}
-            </div>
-          </div>
+              )
+            )}
+
+            <button
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-lg border border-gray-200 disabled:opacity-50 
+                       hover:bg-emerald-50 transition-colors"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </motion.div>
         )}
       </div>
     </main>

@@ -6,6 +6,7 @@ import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
+import RelatedBlogs from "./RelatedBlogs";
 
 const Comment = React.memo(
   ({
@@ -167,6 +168,7 @@ const BlogPost = () => {
   const [replyingTo, setReplyingTo] = useState(null);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
 
   const notify = useToast();
   const notifyOnSuccess = (success) => notify(success, "success");
@@ -204,6 +206,7 @@ const BlogPost = () => {
       );
       if (res.data.status === 1) {
         setBlog(res.data.data);
+        setRelatedBlogs(res.data.data.relatedBlogs || []);
         const organizedComments = organizeComments(
           res.data.data?.Comments || []
         );
@@ -451,6 +454,8 @@ const BlogPost = () => {
             ))}
           </div>
         </div>
+
+        <RelatedBlogs blogs={relatedBlogs} />
 
         <div className="mt-12">
           <button
