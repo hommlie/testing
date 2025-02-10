@@ -22,6 +22,22 @@ LandingPage.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    why_choose_title: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    why_choose_subtitle: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    why_choose_banner: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    why_choose_content: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     cat_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

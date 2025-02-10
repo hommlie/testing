@@ -2,18 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
 import config from "../../config/config";
 
-const LocationSuggestion = ({ 
-  value, 
-  onChange, 
-  name = "address"
-}) => {
+const LocationSuggestion = ({ value, onChange, name = "address" }) => {
   const [searchQuery, setSearchQuery] = useState(value || "");
   const [isLoading, setIsLoading] = useState(false);
   const [locationError, setLocationError] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  
+
   const inputRef = useRef(null);
   const placesServiceRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -50,7 +46,9 @@ const LocationSuggestion = ({
   useEffect(() => {
     if (isScriptLoaded && !placesServiceRef.current) {
       const dummyElement = document.createElement("div");
-      placesServiceRef.current = new window.google.maps.places.PlacesService(dummyElement);
+      placesServiceRef.current = new window.google.maps.places.PlacesService(
+        dummyElement
+      );
     }
   }, [isScriptLoaded]);
 
@@ -82,9 +80,9 @@ const LocationSuggestion = ({
     };
 
     // Add click event listener to document
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -96,9 +94,13 @@ const LocationSuggestion = ({
       types: ["geocode", "establishment"],
     };
 
-    const autocompleteService = new window.google.maps.places.AutocompleteService();
+    const autocompleteService =
+      new window.google.maps.places.AutocompleteService();
     autocompleteService.getPlacePredictions(request, (predictions, status) => {
-      if (status !== window.google.maps.places.PlacesServiceStatus.OK || !predictions) {
+      if (
+        status !== window.google.maps.places.PlacesServiceStatus.OK ||
+        !predictions
+      ) {
         setSearchResults([]);
         setIsDropdownVisible(false);
         return;
@@ -121,12 +123,12 @@ const LocationSuggestion = ({
     const selectEvent = {
       target: {
         name: name,
-        value: result.fullText
-      }
+        value: result.fullText,
+      },
     };
 
     setSearchQuery(result.fullText);
-    onChange(selectEvent);  // Pass synthetic event to match handleFormChange
+    onChange(selectEvent); // Pass synthetic event to match handleFormChange
     setSearchResults([]);
     setIsDropdownVisible(false);
   };
@@ -134,13 +136,13 @@ const LocationSuggestion = ({
   // Handle input change
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
-    
+
     // Create a synthetic event to match handleFormChange
     const syntheticEvent = {
       target: {
         name: name,
-        value: inputValue
-      }
+        value: inputValue,
+      },
     };
 
     setSearchQuery(inputValue);
@@ -163,11 +165,11 @@ const LocationSuggestion = ({
         value={searchQuery}
         onChange={handleInputChange}
         onFocus={handleFocus}
-        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+        className="mt-1 p-2 border block w-full rounded-md shadow-sm"
         placeholder="Search for your location"
       />
       {isDropdownVisible && searchQuery && (
-        <div 
+        <div
           ref={dropdownRef}
           className="absolute w-full bg-white shadow-lg rounded-md z-10 max-h-64 overflow-y-auto"
         >

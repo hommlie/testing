@@ -64,6 +64,11 @@ const ProjectRoutes = () => {
     { path: "*", element: <NotFound /> },
     { path: `${config.VITE_BASE_URL}/`, element: <Homescreen /> },
     { path: `${config.VITE_BASE_URL}/home`, element: <Homescreen /> },
+    { path: `${config.VITE_BASE_URL}/banashankari`, element: <Homescreen /> },
+    {
+      path: `${config.VITE_BASE_URL}/ramamurthynagar`,
+      element: <Homescreen />,
+    },
     {
       path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId`,
       element: <SubCategoryPage />,

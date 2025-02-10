@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import WhyChooseBg from "../../assets/bg/why-choose-img.jpg";
 import ScheduleImg from "../../assets/bg/schedule-img.svg";
 import Customers from "../../assets/icons/customer.svg";
@@ -11,24 +13,22 @@ import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { IoCallOutline, IoLocationOutline } from "react-icons/io5";
 import axios from "axios";
 import config from "../../config/config";
+import LocationSuggestion from "../../components/LocationSuggestion";
 
 // Static data for other sections
 const staticData = {
   features: [
     {
-      id: 1,
       title: "24/7 SERVICE",
       description:
         "Pests Don't Wait, And Neither Do We! Whether It's A Sudden Infestation Or An Urgent Pest Issue, Our Emergency Response Team Is Available 24/7 To Assist You.",
     },
     {
-      id: 2,
       title: "ECO-FRIENDLY & SAFE SOLUTIONS",
       description:
         "We Prioritize The Safety Of Your Family, Pets, And The Environment By Using Non-Toxic, Eco-Friendly Pest.",
     },
     {
-      id: 3,
       title: "CERTIFIED & EXPERIENCED TECHNICIANS",
       description:
         "Our Team Consists Of Licensed And Highly Trained Pest Control Professionals With Years Of Experience In Handling All Types Of Pests.",
@@ -105,11 +105,23 @@ const LandingPage = () => {
     phone: "",
     address: "",
     message: "",
+    latitude: "",
+    longitude: "",
+    date: new Date(),
+    time: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const timeSlots = [
+    "9 to 11 AM",
+    "11 to 1 PM",
+    "1 to 3 PM",
+    "3 to 5 PM",
+    "5 to 7 PM",
+  ];
 
   const { displayText } = useTypewriter(pageData?.landing_page?.title || "");
 
@@ -138,7 +150,15 @@ const LandingPage = () => {
 
   const scrollToForm = () => {
     const formElement = document.getElementById("contact-form");
-    formElement?.scrollIntoView({ behavior: "smooth" });
+    if (formElement) {
+      const offset = 180;
+      const elementPosition =
+        formElement.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: elementPosition - offset,
+        behavior: "smooth",
+      });
+    }
   };
 
   const handleServiceClick = (slug, id) => {
@@ -148,11 +168,12 @@ const LandingPage = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Invalid email format";
     if (!formData.phone.trim()) newErrors.phone = "Phone is required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.time) newErrors.time = "Time slot is required";
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -163,20 +184,52 @@ const LandingPage = () => {
 
     setLoading(true);
     try {
-      // Add your form submission logic here
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSubmitted(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        message: "",
-      });
+      const dataToSend = {
+        fullName: formData.name,
+        address: formData.address,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+        mobile: formData.phone,
+        email: formData.email,
+        date: formData.date.toISOString(),
+        time: formData.time,
+        message: formData.message,
+      };
+
+      const response = await axios.post(
+        `${config.API_URL}/api/createInspection`,
+        dataToSend,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        setSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
+          message: "",
+          latitude: "",
+          longitude: "",
+          date: new Date(),
+          time: "",
+        });
+      } else {
+        setErrors({
+          submit: "Failed to submit inspection request. Please try again.",
+        });
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error:", error.response?.data || error.message);
+      setErrors({ submit: "An error occurred. Please try again later." });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (loading && !pageData) {
@@ -232,16 +285,10 @@ const LandingPage = () => {
             <h2 className="text-3xl font-bold text-gray-900">
               Our Pest Control Services
             </h2>
-            <button
-              onClick={() => setShowAllServices(!showAllServices)}
-              className="px-4 border border-hommlie text-hommlie py-2 rounded hover:bg-hommlie hover:text-white transition-colors duration-300"
-            >
-              {showAllServices ? "Show Less" : "View All"}
-            </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {pageData?.subcategories
-              ?.slice(0, showAllServices ? undefined : 3)
+              ?.slice(0, showAllServices ? undefined : 4)
               ?.map((service) => (
                 <div
                   key={service.id}
@@ -250,7 +297,7 @@ const LandingPage = () => {
                   <img
                     src={service.image_url}
                     alt={service.subcategory_name}
-                    className="w-full h-auto"
+                    className="w-full h-auto object-cover"
                   />
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-2">
@@ -265,7 +312,7 @@ const LandingPage = () => {
                       </div>
                       <span className="mx-2 text-gray-300">|</span>
                       <span className="text-gray-600">
-                        {service.subcategory_sub_title}
+                        From ₹{service.starting_price}/service
                       </span>
                     </div>
                     <button
@@ -279,6 +326,14 @@ const LandingPage = () => {
                   </div>
                 </div>
               ))}
+          </div>
+          <div className="w-full flex justify-center">
+            <button
+              onClick={() => setShowAllServices(!showAllServices)}
+              className="px-4 border border-hommlie text-hommlie py-2 rounded hover:bg-hommlie hover:text-white transition-colors duration-300"
+            >
+              {showAllServices ? "Show Less" : "View All"}
+            </button>
           </div>
         </div>
       </section>
@@ -316,7 +371,7 @@ const LandingPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="flex gap-6"
+                  className="flex gap-6 pb-2 border-b last:border-none"
                 >
                   <div className="flex-shrink-0">
                     <span className="text-4xl font-light text-gray-300">
@@ -376,7 +431,7 @@ const LandingPage = () => {
               <p className="text-hommlie font-semibold mb-4">INSPECTION</p>
               <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
               <p className="text-gray-600 mb-8">We're here to help you!</p>
-              <div className="space-y-6">
+              <div className="space-y-10">
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full text-hommlie flex items-center justify-center mr-4">
                     <MdOutlineLocalPostOffice />
@@ -418,7 +473,7 @@ const LandingPage = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Name
+                    Full Name
                   </label>
                   <input
                     type="text"
@@ -434,24 +489,28 @@ const LandingPage = () => {
                     <p className="mt-1 text-sm text-red-500">{errors.name}</p>
                   )}
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email
+                    Address
                   </label>
-                  <input
-                    type="email"
-                    value={formData.email}
+                  <LocationSuggestion
+                    value={formData.address}
                     onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
+                      setFormData({
+                        ...formData,
+                        address: e.target.value,
+                      })
                     }
-                    className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                      errors.email ? "border-red-500" : "border-gray-300"
-                    }`}
+                    name="address"
                   />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                  {errors.address && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.address}
+                    </p>
                   )}
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Phone
@@ -470,29 +529,70 @@ const LandingPage = () => {
                     <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
                   )}
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Address
+                    Email (Optional)
                   </label>
                   <input
-                    type="text"
-                    value={formData.address}
+                    type="email"
+                    value={formData.email}
                     onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
+                      setFormData({ ...formData, email: e.target.value })
                     }
                     className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                      errors.address ? "border-red-500" : "border-gray-300"
+                      errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                   />
-                  {errors.address && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.address}
-                    </p>
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
                   )}
                 </div>
+
+                <div className="flex space-x-4">
+                  <div className="w-1/2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Date
+                    </label>
+                    <DatePicker
+                      selected={formData.date}
+                      onChange={(date) =>
+                        setFormData({ ...formData, date: date })
+                      }
+                      className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      minDate={new Date()}
+                    />
+                  </div>
+
+                  <div className="w-1/2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Time
+                    </label>
+                    <select
+                      value={formData.time}
+                      onChange={(e) =>
+                        setFormData({ ...formData, time: e.target.value })
+                      }
+                      className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                        errors.time ? "border-red-500" : "border-gray-300"
+                      }`}
+                    >
+                      <option value="">Select a time slot</option>
+                      {timeSlots.map((slot, index) => (
+                        <option key={index} value={slot}>
+                          {slot}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.time && (
+                      <p className="mt-1 text-sm text-red-500">{errors.time}</p>
+                    )}
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Message
+                    Message (Optional)
                   </label>
                   <textarea
                     value={formData.message}
@@ -503,6 +603,13 @@ const LandingPage = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
+
+                {errors.submit && (
+                  <div className="p-4 bg-red-50 border border-red-400 text-red-700 rounded-md">
+                    {errors.submit}
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   disabled={loading}
@@ -532,10 +639,10 @@ const LandingPage = () => {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                       </svg>
-                      Sending...
+                      Submitting...
                     </span>
                   ) : (
-                    "Submit"
+                    "Submit Inspection Request"
                   )}
                 </button>
               </form>
@@ -555,7 +662,8 @@ const LandingPage = () => {
                       />
                     </svg>
                     <p>
-                      Thank you for your message! We'll get back to you soon.
+                      Thank you for your inspection request! We'll get back to
+                      you soon.
                     </p>
                   </div>
                 </div>
@@ -614,7 +722,7 @@ const LandingPage = () => {
           </div>
 
           {/* Subcategories Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {activeTabContent?.subcategories?.map((subcat) => (
               <button
                 key={subcat.id}

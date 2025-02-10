@@ -72,7 +72,6 @@ const blogController = {
           "slug",
           "meta_title",
           "meta_description",
-          // "category_id",
           [
             sequelize.literal(
               `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
@@ -85,7 +84,6 @@ const blogController = {
         include: [
           {
             model: Comment,
-            // as: "comments",
             include: [
               {
                 model: User,
@@ -108,10 +106,42 @@ const blogController = {
         });
       }
 
+      // Fetch related blogs from the same category
+      const relatedBlogs = await Blog.findAll({
+        attributes: [
+          "id",
+          "title",
+          "slug",
+          [
+            sequelize.literal(
+              `CONCAT('${storagebaseUrl}/storage/app/public/images/blogs/', featured_image)`
+            ),
+            "featured_image",
+          ],
+          "created_at",
+        ],
+        where: {
+          id: { [sequelize.Op.ne]: blog.id },
+          "$BlogCategory.id$": blog.BlogCategory.id,
+        },
+        include: [
+          {
+            model: BlogCategory,
+            attributes: ["id", "title"],
+            where: { id: blog.BlogCategory.id },
+          },
+        ],
+        limit: 4,
+        order: [["created_at", "DESC"]],
+      });
+
       return res.status(200).json({
         status: 1,
         message: "Blog post fetched successfully",
-        data: blog,
+        data: {
+          ...blog.toJSON(),
+          relatedBlogs,
+        },
       });
     } catch (error) {
       return res.status(200).json({
