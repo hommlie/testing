@@ -122,7 +122,7 @@ const blogController = {
         ],
         where: {
           id: { [sequelize.Op.ne]: blog.id },
-          "$BlogCategory.id$": blog.BlogCategory.id,
+          category_id: blog.category_id,
         },
         include: [
           {
