@@ -634,7 +634,7 @@ exports.getCleaningSubcategory = async (req, res) => {
       specifications: subcategoryData.get("specifications"),
       avg_rating: subcategoryData.get("avg_rating"),
       total_reviews: subcategoryData.get("total_reviews"),
-      faq: subcategoryData.get("faq"),
+      faqs: subcategoryData.get("faq"),
       about: subcategoryData.get("about"),
       category: subcategoryData.category,
       video: subcategoryData.video,
