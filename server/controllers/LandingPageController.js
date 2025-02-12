@@ -34,7 +34,6 @@ exports.getLandingPageBySlug = async (req, res) => {
         "meta_description",
         "cat_id",
         "why_choose_title",
-        ,
         "why_choose_subtitle",
         [
           sequelize.literal(
