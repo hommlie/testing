@@ -33,6 +33,16 @@ exports.getLandingPageBySlug = async (req, res) => {
         "meta_title",
         "meta_description",
         "cat_id",
+        "why_choose_title",
+        ,
+        "why_choose_subtitle",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/landing/', why_choose_banner)`
+          ),
+          "why_choose_banner",
+        ],
+        "why_choose_content",
       ],
       where: {
         slug,
