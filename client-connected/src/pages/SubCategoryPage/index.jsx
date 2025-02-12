@@ -21,10 +21,51 @@ const StarRating = ({ rating, reviews }) => {
           />
         ))}
       </div>
-      <div className="text-sm text-white">
+      <div className="text-sm">
         {rating} ({reviews > 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews}{" "}
         reviews)
       </div>
+    </div>
+  );
+};
+
+const CollapsibleSection = ({ title, content, isHtml = false }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full p-6 flex justify-between items-center hover:bg-gray-50 transition-colors"
+      >
+        <h2 className="text-lg md:text-2xl font-semibold text-left">{title}</h2>
+        <ChevronDown
+          className={`w-6 h-6 transition-transform duration-300 ${
+            isOpen ? "transform rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <div className="px-6 pb-6">
+              {isHtml ? (
+                <div
+                  className="prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              ) : (
+                <div className="prose max-w-none">{content}</div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -89,14 +130,14 @@ const CartSection = ({ cart }) => {
 
 const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
   return (
-    <div className="">
+    <div className="border-t border-gray-100 first:border-t-0">
       <button
         onClick={onToggle}
-        className="w-full py-4 px-6 flex justify-between items-center"
+        className="w-full py-4 px-6 flex justify-between items-center hover:bg-gray-50 transition-colors"
       >
         <span className="font-medium">{title}</span>
         <ChevronDown
-          className={`w-5 h-5 transition-transform ${
+          className={`w-5 h-5 transition-transform duration-300 ${
             isOpen ? "transform rotate-180" : ""
           }`}
         />
@@ -107,7 +148,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
             <div className="px-6 pb-4">{children}</div>
@@ -263,7 +304,7 @@ const SubCategoryPage = () => {
         </nav>
 
         {/* Banner Section */}
-        <div className="relative w-full h-[300px] rounded-xl overflow-hidden mb-8">
+        <div className="relative w-full h-[150px] md:h-[300px] rounded-xl overflow-hidden mb-8">
           <img
             src={data?.categoryData?.motion_graphics}
             alt={data?.categoryData?.category_name}
@@ -271,7 +312,7 @@ const SubCategoryPage = () => {
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <div className="flex flex-col items-center text-center text-white">
-              <h1 className="text-4xl font-bold mb-4 uppercase">
+              <h1 className="text-2xl md:text-4xl font-bold mb-1 md:mb-4 uppercase">
                 {location ? location : data?.categoryData?.category_name}
               </h1>
               {data?.categoryData?.avg_rating && (
@@ -285,7 +326,7 @@ const SubCategoryPage = () => {
         </div>
 
         {/* Services Quick Nav */}
-        <div className="flex items-center justify-center bg-white rounded-lg glow-border mb-8 relative">
+        <div className="flex items-center bg-white rounded-lg glow-border mb-8 relative">
           {/* Left Arrow */}
           <div
             className="absolute left-0 z-10 p-1 md:p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
@@ -452,28 +493,24 @@ const SubCategoryPage = () => {
 
             {/* About Section */}
             {data?.categoryData?.about && (
-              <section className="mt-4 md:mt-12 bg-white rounded-xl p-6 shadow-lg">
-                <h2 className="text-lg md:text-2xl font-semibold mb-4">
-                  About {data?.categoryData?.category_name}
-                </h2>
-                <div
-                  className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: data.categoryData.about }}
+              <div className="mt-4 md:mt-12">
+                <CollapsibleSection
+                  title={`About ${data?.categoryData?.category_name}`}
+                  content={data.categoryData.about}
+                  isHtml={true}
                 />
-              </section>
+              </div>
             )}
 
             {/* FAQs Section */}
             {data?.categoryData?.faqs && (
-              <section className="mt-4 md:mt-8 bg-white rounded-xl p-6 shadow-lg">
-                <h2 className="text-lg md:text-2xl font-semibold mb-4">
-                  Frequently Asked Questions
-                </h2>
-                <div
-                  className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: data.categoryData.faqs }}
+              <div className="mt-4 md:mt-8">
+                <CollapsibleSection
+                  title="Frequently Asked Questions"
+                  content={data.categoryData.faqs}
+                  isHtml={true}
                 />
-              </section>
+              </div>
             )}
 
             {/* Quick Links Section */}
@@ -489,28 +526,32 @@ const SubCategoryPage = () => {
                   setOpenSection(openSection === "locations" ? "" : "locations")
                 }
               >
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="text-sm md:text-base leading-relaxed">
                   {getLocations()?.map((location, index) => (
-                    <a
-                      key={index}
-                      href={`${
-                        config.VITE_BASE_URL
-                      }/${location?.slug?.trim()}/${categoryId}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(
-                          `${
-                            config.VITE_BASE_URL
-                          }/${location?.slug?.trim()}/${categoryId}`,
-                          {
-                            state: { location: location?.title?.trim() },
-                          }
-                        );
-                      }}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {location?.title?.trim()}
-                    </a>
+                    <React.Fragment key={index}>
+                      {index > 0 && (
+                        <span className="mx-2 text-gray-400">•</span>
+                      )}
+                      <a
+                        href={`${
+                          config.VITE_BASE_URL
+                        }/${location?.slug?.trim()}/${categoryId}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate(
+                            `${
+                              config.VITE_BASE_URL
+                            }/${location?.slug?.trim()}/${categoryId}`,
+                            {
+                              state: { location: location?.title?.trim() },
+                            }
+                          );
+                        }}
+                        className="text-blue-600 hover:underline inline-block"
+                      >
+                        {location?.title?.trim()}
+                      </a>
+                    </React.Fragment>
                   ))}
                 </div>
               </QuickLinkSection>
@@ -522,15 +563,19 @@ const SubCategoryPage = () => {
                   setOpenSection(openSection === "services" ? "" : "services")
                 }
               >
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {data?.categoryData?.other_services?.map((service) => (
-                    <a
-                      key={service.id}
-                      href={`/${service.slug}/${service.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {service.category_name}
-                    </a>
+                <div className="text-sm md:text-base leading-relaxed">
+                  {data?.categoryData?.other_services?.map((service, index) => (
+                    <React.Fragment key={service.id}>
+                      {index > 0 && (
+                        <span className="mx-2 text-gray-400">•</span>
+                      )}
+                      <a
+                        href={`/${service.slug}/${service.id}`}
+                        className="text-blue-600 hover:underline inline-block"
+                      >
+                        {service.category_name}
+                      </a>
+                    </React.Fragment>
                   ))}
                 </div>
               </QuickLinkSection>

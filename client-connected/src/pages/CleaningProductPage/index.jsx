@@ -41,6 +41,78 @@ const StarRating = ({ rating }) => {
   );
 };
 
+const CollapsibleSection = ({ title, content, isHtml = false }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full p-6 flex justify-between items-center hover:bg-gray-50 transition-colors"
+      >
+        <h2 className="text-lg md:text-2xl font-semibold text-left">{title}</h2>
+        <ChevronDown
+          className={`w-6 h-6 transition-transform duration-300 ${
+            isOpen ? "transform rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <div className="px-6 pb-6">
+              {isHtml ? (
+                <div
+                  className="prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              ) : (
+                <div className="prose max-w-none">{content}</div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
+  return (
+    <div className="border-t border-gray-100 first:border-t-0">
+      <button
+        onClick={onToggle}
+        className="w-full py-4 px-6 flex justify-between items-center hover:bg-gray-50 transition-colors"
+      >
+        <span className="font-medium">{title}</span>
+        <ChevronDown
+          className={`w-5 h-5 transition-transform duration-300 ${
+            isOpen ? "transform rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-4">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const CartSection = ({ cart }) => {
   const calculateCartTotal = () => {
     return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
@@ -150,37 +222,6 @@ const CartSection = ({ cart }) => {
           </ul>
         </section>
       </div>
-    </div>
-  );
-};
-
-const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
-  return (
-    <div className="">
-      <button
-        onClick={onToggle}
-        className="w-full py-4 px-6 flex justify-between items-center"
-      >
-        <span className="font-medium">{title}</span>
-        <ChevronDown
-          className={`w-5 h-5 transition-transform ${
-            isOpen ? "transform rotate-180" : ""
-          }`}
-        />
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="px-6 pb-4">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
@@ -316,216 +357,194 @@ const CleaningProductPage = () => {
 
   return (
     <main className="md:max-w-7xl w-full">
-      <div className="mt-5">
-        <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
-          <a href="/" className="text-blue-500">
-            Home
-          </a>
-          <span>/</span>
-          <a
-            href={`/${innerSubCategoryData?.category?.slug}/${innerSubCategoryData?.category?.id}`}
-            className="text-blue-500"
-          >
-            {innerSubCategoryData?.category?.category_name}
-          </a>
-          <span>/</span>
-          <span>{innerSubCategoryData?.subcategory_name}</span>
-        </nav>
+      <div className="container px-4 mt-5">
+        <div className="mt-5">
+          <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
+            <a href="/" className="text-blue-500">
+              Home
+            </a>
+            <span>/</span>
+            <a
+              href={`/${innerSubCategoryData?.category?.slug}/${innerSubCategoryData?.category?.id}`}
+              className="text-blue-500"
+            >
+              {innerSubCategoryData?.category?.category_name}
+            </a>
+            <span>/</span>
+            <span>{innerSubCategoryData?.subcategory_name}</span>
+          </nav>
 
-        <div className="flex flex-col lg:flex-row gap-4">
-          {/* Left Sidebar */}
-          <div className="lg:w-1/4">
-            <div className="sticky top-44 transition-all duration-300 ease-in-out">
-              <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-                <h2 className="text-lg font-semibold">
-                  {location ? location : innerSubCategoryData?.subcategory_name}
-                </h2>
-                {(innerSubCategoryData.avg_rating ||
-                  innerSubCategoryData.total_reviews) && (
-                  <div className="flex items-center space-x-2">
-                    <StarRating rating={innerSubCategoryData.avg_rating} />
-                    {innerSubCategoryData.total_reviews && (
-                      <span className="text-sm text-gray-500">
-                        (
-                        {innerSubCategoryData.total_reviews >= 1000
-                          ? `${(
-                              innerSubCategoryData.total_reviews / 1000
-                            ).toFixed(1)}K`
-                          : innerSubCategoryData.total_reviews}{" "}
-                        reviews)
-                      </span>
-                    )}
-                  </div>
-                )}
-                <div className="text-sm flex items-center">
-                  <span className="w-1/3 text-gray-500">Select a service</span>
-                  <div className="bg-gray-300 h-0.5 w-2/3"></div>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-2 gap-2 max-h-[calc(100vh-16rem)] overflow-y-auto">
-                  {innerSubCategoryData?.products?.map((product, index) => (
-                    <div
-                      key={product.id}
-                      className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
-                        index === currentProductIndex
-                          ? "glow-border bg-blue-50"
-                          : "hover:bg-gray-50"
-                      }`}
-                      onClick={() => handleProductClick(index)}
-                    >
-                      {product.productimages &&
-                      product.productimages?.length > 0 ? (
-                        <img
-                          src={product.productimages[0]?.image_url}
-                          alt={product.product_name}
-                          className="w-20 h-20 rounded-md object-cover"
-                        />
-                      ) : (
-                        <img
-                          src={NoImage}
-                          alt=""
-                          className="w-20 h-20 rounded-md object-cover opacity-40"
-                        />
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Left Sidebar */}
+            <div className="lg:w-1/4">
+              <div className="sticky top-44 transition-all duration-300 ease-in-out">
+                <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+                  <h2 className="text-lg font-semibold">
+                    {location
+                      ? location
+                      : innerSubCategoryData?.subcategory_name}
+                  </h2>
+                  {(innerSubCategoryData.avg_rating ||
+                    innerSubCategoryData.total_reviews) && (
+                    <div className="flex items-center space-x-2">
+                      <StarRating rating={innerSubCategoryData.avg_rating} />
+                      {innerSubCategoryData.total_reviews && (
+                        <span className="text-sm text-gray-500">
+                          (
+                          {innerSubCategoryData.total_reviews >= 1000
+                            ? `${(
+                                innerSubCategoryData.total_reviews / 1000
+                              ).toFixed(1)}K`
+                            : innerSubCategoryData.total_reviews}{" "}
+                          reviews)
+                        </span>
                       )}
-                      <p className="text-xs text-center font-medium mt-2 line-clamp-2 w-full">
-                        {product.product_name}
-                      </p>
                     </div>
-                  ))}
-                </div>
-              </section>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:w-1/2">
-            <div className="space-y-6">
-              {innerSubCategoryData?.subcategory_banner ? (
-                <img
-                  src={innerSubCategoryData?.subcategory_banner}
-                  alt={innerSubCategoryData?.innersubcategory_name}
-                  className="w-full h-[150px] md:h-[300px] rounded-lg"
-                />
-              ) : (
-                <img
-                  src={NoImage}
-                  alt=""
-                  className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
-                />
-              )}
-
-              {innerSubCategoryData?.products?.map((product, index) => (
-                <section
-                  key={product.id}
-                  ref={(el) => (productRefs.current[index] = el)}
-                  className="bg-white rounded-lg p-6 space-y-6 glow-border scroll-mt-4"
-                >
-                  <h3 className="text-base md:text-2xl font-semibold">
-                    {product.product_name}
-                  </h3>
-                  <div className="divide-y">
-                    {product?.attributes?.map((attribute, attrIndex) => (
+                  )}
+                  <div className="text-sm flex items-center">
+                    <span className="w-1/3 text-gray-500">
+                      Select a service
+                    </span>
+                    <div className="bg-gray-300 h-0.5 w-2/3"></div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 max-h-[calc(100vh-16rem)] overflow-y-auto">
+                    {innerSubCategoryData?.products?.map((product, index) => (
                       <div
-                        key={attrIndex}
-                        className={`md:py-6 ${
-                          attrIndex === product.attributes.length - 1
-                            ? ""
-                            : "border-gray-200"
+                        key={product.id}
+                        className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
+                          index === currentProductIndex
+                            ? "glow-border bg-blue-50"
+                            : "hover:bg-gray-50"
                         }`}
+                        onClick={() => handleProductClick(index)}
                       >
-                        <div className="flex justify-between items-center gap-6">
-                          <div className="space-y-4 flex-1">
-                            <div className="space-y-2">
-                              <h3 className="text-sm md:text-lg font-medium">
-                                {attribute.attribute_name}
-                              </h3>
+                        {product.productimages &&
+                        product.productimages?.length > 0 ? (
+                          <img
+                            src={product.productimages[0]?.image_url}
+                            alt={product.product_name}
+                            className="w-20 h-20 rounded-md object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={NoImage}
+                            alt=""
+                            className="w-20 h-20 rounded-md object-cover opacity-40"
+                          />
+                        )}
+                        <p className="text-xs text-center font-medium mt-2 line-clamp-2 w-full">
+                          {product.product_name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </div>
 
-                              {/* Rating and Reviews */}
-                              {(attribute.avg_rating ||
-                                attribute.total_reviews) && (
-                                <div className="flex items-center space-x-2">
-                                  <StarRating rating={attribute.avg_rating} />
-                                  {attribute.total_reviews && (
-                                    <span className="text-xs md:text-sm text-gray-500">
-                                      (
-                                      {attribute.total_reviews >= 1000
-                                        ? `${(
-                                            attribute.total_reviews / 1000
-                                          ).toFixed(1)}K`
-                                        : attribute.total_reviews}{" "}
-                                      reviews)
+            {/* Main Content */}
+            <div className="lg:w-1/2">
+              <div className="space-y-6">
+                {innerSubCategoryData?.subcategory_banner ? (
+                  <img
+                    src={innerSubCategoryData?.subcategory_banner}
+                    alt={innerSubCategoryData?.innersubcategory_name}
+                    className="w-full h-[150px] md:h-[300px] rounded-lg"
+                  />
+                ) : (
+                  <img
+                    src={NoImage}
+                    alt=""
+                    className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
+                  />
+                )}
+
+                {innerSubCategoryData?.products?.map((product, index) => (
+                  <section
+                    key={product.id}
+                    ref={(el) => (productRefs.current[index] = el)}
+                    className="bg-white rounded-lg p-6 space-y-6 glow-border scroll-mt-4"
+                  >
+                    <h3 className="text-base md:text-2xl font-semibold">
+                      {product.product_name}
+                    </h3>
+                    <div className="divide-y">
+                      {product?.attributes?.map((attribute, attrIndex) => (
+                        <div
+                          key={attrIndex}
+                          className={`py-4 md:py-6 ${
+                            attrIndex === product.attributes.length - 1
+                              ? ""
+                              : "border-gray-200"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center gap-6">
+                            <div className="space-y-4 flex-1">
+                              <div className="space-y-2">
+                                <h3 className="text-sm md:text-lg font-medium">
+                                  {attribute.attribute_name}
+                                </h3>
+
+                                {/* Rating and Reviews */}
+                                {(attribute.avg_rating ||
+                                  attribute.total_reviews) && (
+                                  <div className="flex items-center space-x-2">
+                                    <StarRating rating={attribute.avg_rating} />
+                                    {attribute.total_reviews && (
+                                      <span className="text-xs md:text-sm text-gray-500">
+                                        (
+                                        {attribute.total_reviews >= 1000
+                                          ? `${(
+                                              attribute.total_reviews / 1000
+                                            ).toFixed(1)}K`
+                                          : attribute.total_reviews}{" "}
+                                        reviews)
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+
+                                {/* Price */}
+                                <p className="text-gray-500">
+                                  {attribute.variations?.length > 0 && (
+                                    <span className="text-xs md:text-base flex gap-2 items-center">
+                                      Starts from
+                                      <span className="text-emerald-600 font-medium">
+                                        ₹{attribute?.starting_price}
+                                      </span>
                                     </span>
                                   )}
+                                </p>
+                              </div>
+
+                              {/* Specifications */}
+                              {attribute.specifications && (
+                                <div className="space-y-2">
+                                  <h4 className="text-sm md:text-base font-medium text-gray-700">
+                                    Specifications:
+                                  </h4>
+                                  <ul className="space-y-1">
+                                    {attribute.specifications
+                                      .split("|")
+                                      .map((spec, index) => spec.trim())
+                                      .filter((spec) => spec)
+                                      .map((spec, index) => (
+                                        <li
+                                          key={index}
+                                          className="text-xs md:text-base flex items-start space-x-2"
+                                        >
+                                          <span className="text-black">•</span>
+                                          <span className="text-gray-600">
+                                            {spec.replace(/^"|"$/g, "")}
+                                          </span>
+                                        </li>
+                                      ))}
+                                  </ul>
                                 </div>
                               )}
 
-                              {/* Price */}
-                              <p className="text-gray-500">
-                                {attribute.variations?.length > 0 && (
-                                  <span className="text-xs md:text-base flex gap-2 items-center">
-                                    Starts from
-                                    <span className="text-emerald-600 font-medium">
-                                      ₹{attribute?.starting_price}
-                                    </span>
-                                  </span>
-                                )}
-                              </p>
-                            </div>
-
-                            {/* Specifications */}
-                            {attribute.specifications && (
-                              <div className="space-y-2">
-                                <h4 className="text-sm md:text-base font-medium text-gray-700">
-                                  Specifications:
-                                </h4>
-                                <ul className="space-y-1">
-                                  {attribute.specifications
-                                    .split("|")
-                                    .map((spec, index) => spec.trim())
-                                    .filter((spec) => spec)
-                                    .map((spec, index) => (
-                                      <li
-                                        key={index}
-                                        className="text-xs md:text-base flex items-start space-x-2"
-                                      >
-                                        <span className="text-black">•</span>
-                                        <span className="text-gray-600">
-                                          {spec.replace(/^"|"$/g, "")}
-                                        </span>
-                                      </li>
-                                    ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            <button
-                              className="text-sm md:text-base text-blue-500 hover:text-blue-600 font-semibold"
-                              onClick={() =>
-                                handleViewDetails(
-                                  product,
-                                  attribute.attribute_id
-                                )
-                              }
-                            >
-                              View Details
-                            </button>
-                          </div>
-
-                          {/* Image with overlapped Add button */}
-                          <div className="relative w-24 md:w-32 flex-shrink-0">
-                            <div className="relative w-24 md:w-32 h-24 md:h-32">
-                              <img
-                                src={
-                                  attribute.image ||
-                                  product?.productimages?.[0]?.image_url ||
-                                  NoImage
-                                }
-                                alt=""
-                                className="w-full h-full rounded-lg object-cover"
-                              />
                               <button
-                                className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
-                                        bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
-                                        hover:bg-emerald-50 transition-colors"
+                                className="text-sm md:text-base text-blue-500 hover:text-blue-600 font-semibold"
                                 onClick={() =>
                                   handleViewDetails(
                                     product,
@@ -533,128 +552,158 @@ const CleaningProductPage = () => {
                                   )
                                 }
                               >
-                                Add
+                                View Details
                               </button>
+                            </div>
+
+                            {/* Image with overlapped Add button */}
+                            <div className="relative w-24 md:w-32 flex-shrink-0">
+                              <div className="relative w-24 md:w-32 h-24 md:h-32">
+                                <img
+                                  src={
+                                    attribute.image ||
+                                    product?.productimages?.[0]?.image_url ||
+                                    NoImage
+                                  }
+                                  alt=""
+                                  className="w-full h-full rounded-lg object-cover"
+                                />
+                                <button
+                                  className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
+                                        bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
+                                        hover:bg-emerald-50 transition-colors"
+                                  onClick={() =>
+                                    handleViewDetails(
+                                      product,
+                                      attribute.attribute_id
+                                    )
+                                  }
+                                >
+                                  Add
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              ))}
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Right Cart Section */}
-          <div className="lg:w-1/4">
-            <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
-              <CartSection cart={cart} />
+            {/* Right Cart Section */}
+            <div className="lg:w-1/4">
+              <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
+                <CartSection cart={cart} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* About Section */}
-      {innerSubCategoryData?.about && (
-        <section className="mt-12 bg-white rounded-xl p-6 shadow-lg">
-          <h2 className="text-base md:text-2xl font-semibold mb-4">
-            About {innerSubCategoryData?.category_name}
+        {/* About Section */}
+        {innerSubCategoryData?.about && (
+          <div className="mt-4 md:mt-12">
+            <CollapsibleSection
+              title={`About ${innerSubCategoryData?.subcategory_name}`}
+              content={innerSubCategoryData.about}
+              isHtml={true}
+            />
+          </div>
+        )}
+
+        {/* FAQs Section */}
+        {innerSubCategoryData?.faqs && (
+          <div className="mt-4 md:mt-8">
+            <CollapsibleSection
+              title="Frequently Asked Questions"
+              content={innerSubCategoryData.faqs}
+              isHtml={true}
+            />
+          </div>
+        )}
+
+        {/* Quick Links Section */}
+        <section className="mt-8 bg-white rounded-xl shadow-lg">
+          <h2 className="text-base md:text-2xl font-semibold p-6">
+            Quick Links
           </h2>
-          <div
-            className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: innerSubCategoryData.about }}
-          />
-        </section>
-      )}
 
-      {/* FAQs Section */}
-      {innerSubCategoryData?.faqs && (
-        <section className="mt-8 bg-white rounded-xl p-6 shadow-lg">
-          <h2 className="text-base md:text-2xl font-semibold mb-4">
-            Frequently Asked Questions
-          </h2>
-          <div
-            className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: innerSubCategoryData.faqs }}
-          />
-        </section>
-      )}
-
-      {/* Quick Links Section */}
-      <section className="mt-8 bg-white rounded-xl shadow-lg">
-        <h2 className="text-base md:text-2xl font-semibold p-6">Quick Links</h2>
-
-        <QuickLinkSection
-          title="Also available in"
-          isOpen={openSection === "locations"}
-          onToggle={() =>
-            setOpenSection(openSection === "locations" ? "" : "locations")
-          }
-        >
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {getLocations()?.map((location, index) => (
-              <a
-                key={index}
-                href={`${
-                  config.VITE_BASE_URL
-                }/subcategory/${location?.slug?.trim()}/${
-                  innerSubCategoryData?.subcategory_id
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(
-                    `${
+          <QuickLinkSection
+            title="Also available in"
+            isOpen={openSection === "locations"}
+            onToggle={() =>
+              setOpenSection(openSection === "locations" ? "" : "locations")
+            }
+          >
+            <div className="text-sm md:text-base leading-relaxed">
+              {getLocations()?.map((location, index) => (
+                <React.Fragment key={index}>
+                  {index > 0 && <span className="mx-2 text-gray-400">•</span>}
+                  <a
+                    href={`${
                       config.VITE_BASE_URL
                     }/subcategory/${location?.slug?.trim()}/${
                       innerSubCategoryData?.subcategory_id
-                    }`,
-                    {
-                      state: { location: location?.title?.trim() },
-                    }
-                  );
-                }}
-                className="text-blue-600 hover:underline"
-              >
-                {location?.title?.trim()}
-              </a>
-            ))}
-          </div>
-        </QuickLinkSection>
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(
+                        `${
+                          config.VITE_BASE_URL
+                        }/subcategory/${location?.slug?.trim()}/${
+                          innerSubCategoryData?.subcategory_id
+                        }`,
+                        {
+                          state: { location: location?.title?.trim() },
+                        }
+                      );
+                    }}
+                    className="text-blue-600 hover:underline inline-block"
+                  >
+                    {location?.title?.trim()}
+                  </a>
+                </React.Fragment>
+              ))}
+            </div>
+          </QuickLinkSection>
 
-        <QuickLinkSection
-          title="Other services we provide"
-          isOpen={openSection === "services"}
-          onToggle={() =>
-            setOpenSection(openSection === "services" ? "" : "services")
-          }
-        >
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {innerSubCategoryData?.other_services?.map((service) => (
-              <a
-                key={service.id}
-                href={`/subcategory/${service.slug}/${service.id}`}
-                className="text-blue-600 hover:underline"
-              >
-                {service.subcategory_name}
-              </a>
-            ))}
-          </div>
-        </QuickLinkSection>
-      </section>
+          <QuickLinkSection
+            title="Other services we provide"
+            isOpen={openSection === "services"}
+            onToggle={() =>
+              setOpenSection(openSection === "services" ? "" : "services")
+            }
+          >
+            <div className="text-sm md:text-base leading-relaxed">
+              {innerSubCategoryData?.other_services?.map((service, index) => (
+                <React.Fragment key={service.id}>
+                  {index > 0 && <span className="mx-2 text-gray-400">•</span>}
+                  <a
+                    href={`/subcategory/${service.slug}/${service.id}`}
+                    className="text-blue-600 hover:underline inline-block"
+                  >
+                    {service.subcategory_name}
+                  </a>
+                </React.Fragment>
+              ))}
+            </div>
+          </QuickLinkSection>
+        </section>
 
-      <LoginSignup
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        checkoutPd={checkoutPd}
-      />
+        <LoginSignup
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          checkoutPd={checkoutPd}
+        />
 
-      <ProductDetailModal
-        isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
-        product={selectedProduct}
-        selectedAttributeId={selectedAttributeId}
-      />
+        <ProductDetailModal
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+          product={selectedProduct}
+          selectedAttributeId={selectedAttributeId}
+        />
+      </div>
     </main>
   );
 };
