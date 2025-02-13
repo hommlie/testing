@@ -882,7 +882,7 @@ exports.getHomePageData = async (req, res) => {
     const manipulatedResponse = allCategories?.map((category) => ({
       ...category.get({ plain: true }),
       subcategories:
-        category.subcategories?.map((subcategory) => ({
+        category.Subcategories?.map((subcategory) => ({
           ...subcategory.get({ plain: true }),
           products: groupVariationsByAttribute(subcategory.products ?? []), // Ensure products is always an array
         })) ?? [], // Ensure subcategories is always an array
