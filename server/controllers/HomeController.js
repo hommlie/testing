@@ -801,6 +801,7 @@ exports.getHomePageData = async (req, res) => {
           include: [
             {
               model: Product,
+              attributes: ["id", "product_name", "product_price", "cat_id"],
             },
           ],
         },
