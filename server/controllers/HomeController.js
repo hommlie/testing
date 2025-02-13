@@ -789,12 +789,12 @@ exports.getHomePageData = async (req, res) => {
             "id",
             "subcategory_name",
             "slug",
-            [
-              sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`
-              ),
-              "image_url",
-            ],
+            // [
+            //   sequelize.literal(
+            //     `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`
+            //   ),
+            //   "image_url",
+            // ],
           ],
           where: { status: 1 },
           required: false,
