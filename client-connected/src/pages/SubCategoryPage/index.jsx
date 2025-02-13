@@ -450,8 +450,8 @@ const SubCategoryPage = () => {
                       )}
 
                       {cat.specifications && (
-                        <div className="md:mt-4">
-                          <h3 className="text-sm md:text-base font-medium md:mb-2">
+                        <div className="mt-2 md:mt-4">
+                          <h3 className="text-sm md:text-base font-medium mb-2">
                             Specifications:
                           </h3>
                           <ul className="text-xs md:text-base space-y-1">
@@ -472,7 +472,7 @@ const SubCategoryPage = () => {
 
                       <button
                         onClick={() => handleSubCategoryClick(cat)}
-                        className="mt-2 md:mt-4 flex items-center text-xs md:text-base text-emerald-600 hover:text-emerald-700 font-medium group"
+                        className="mt-3 md:mt-4 flex items-center text-xs md:text-base text-emerald-600 hover:text-emerald-700 font-medium group"
                       >
                         View Details
                         <ArrowRight className="w-2 md:w-4 h-2 md:h-4 ml-1 transition-transform group-hover:translate-x-1" />

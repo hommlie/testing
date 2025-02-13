@@ -245,7 +245,7 @@ const LandingPage = () => {
   );
 
   return (
-    <main className="min-h-screen max-w-7xl font-poppins space-y-20">
+    <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl font-poppins space-y-20">
       {/* Hero Section */}
       <section className="relative px-4 sm:px-6 lg:px-8">
         <div className="">
@@ -343,10 +343,10 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-              Why Choose Us
+              {pageData?.landing_page?.why_choose_title}
             </h2>
             <p className="mt-4 text-gray-600">
-              Experience the Best Pest Control Service with Our Expert Team!
+              {pageData?.landing_page?.why_choose_subtitle}
             </p>
           </div>
 
@@ -358,52 +358,71 @@ const LandingPage = () => {
               className="relative"
             >
               <img
-                src={WhyChooseBg}
+                src={pageData?.landing_page?.why_choose_banner}
                 alt="Pest control technician"
                 className="rounded-lg shadow-xl w-full h-96 object-cover"
               />
             </motion.div>
 
             <div className="space-y-8">
-              {staticData?.features?.map((feature, index) => (
-                <motion.div
-                  key={feature.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="flex gap-6 pb-2 border-b last:border-none"
-                >
-                  <div className="flex-shrink-0">
-                    <span className="text-4xl font-light text-gray-300">
-                      {String(index + 1).padStart(2, "0")}.
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-hommlie mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+              {pageData?.landing_page?.why_choose_content?.map(
+                (feature, index) => (
+                  <motion.div
+                    key={feature.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                    className="flex gap-6 pb-2 border-b last:border-none"
+                  >
+                    <div className="flex-shrink-0">
+                      <span className="text-4xl font-light text-gray-300">
+                        {String(index + 1).padStart(2, "0")}.
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-hommlie mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                )
+              )}
             </div>
           </div>
         </div>
       </section>
 
       {/* Schedule Section */}
-      <section className="bg-hommlie-gradient px-4 sm:px-6 lg:px-8 rounded-lg">
-        <div className="max-w-6xl mx-auto">
+      <section
+        className="bg-hommlie-gradient px-4 sm:px-6 lg:px-8 rounded-lg"
+        style={{
+          backgroundImage: `url(${
+            pageData?.landing_page?.banner || ScheduleImg
+          })`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          backgroundBlendMode: "multiply",
+          backgroundOrigin: "border-box",
+          backgroundClip: "border-box",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto py-12">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h2 className="text-3xl font-bold text-white mb-4">
-                Schedule Your Pest Control Today!
+                Schedule Your Inspection Today!
               </h2>
               <p className="text-white opacity-90 mb-6">
-                Fill out the form below to book your pest control service and
-                reclaim your space.
+                Fill out the form below to book your inspection and reclaim your
+                space.
               </p>
               <button
                 onClick={scrollToForm}
@@ -411,13 +430,6 @@ const LandingPage = () => {
               >
                 Book Now
               </button>
-            </div>
-            <div className="md:w-1/2 flex justify-end">
-              <img
-                src={ScheduleImg}
-                alt="Pest Control Professional"
-                className="h-full"
-              />
             </div>
           </div>
         </div>

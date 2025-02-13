@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import NotFound from "./pages/NotFound";
 import Homescreen from "./pages/Homescreen/index";
+import HomePage from "./pages/Homescreen/newhome";
 import ProductPage from "./pages/ProductPage";
 import AddtoCart from "./pages/AddtoCart";
 import ReviewBooking from "./pages/ReviewBooking";
@@ -63,7 +64,7 @@ const ProjectRoutes = () => {
   let element = useRoutes([
     { path: "*", element: <NotFound /> },
     { path: `${config.VITE_BASE_URL}/`, element: <Homescreen /> },
-    { path: `${config.VITE_BASE_URL}/home`, element: <Homescreen /> },
+    { path: `${config.VITE_BASE_URL}/home`, element: <HomePage /> },
     { path: `${config.VITE_BASE_URL}/banashankari`, element: <Homescreen /> },
     {
       path: `${config.VITE_BASE_URL}/ramamurthynagar`,

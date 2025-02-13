@@ -8,7 +8,7 @@ const Loading = () => {
       {/* <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p> */}
       <div className="relative w-80 flex flex-col items-center">
         {/* <div className="absolute inset-0 rounded-full opacity-75"></div> */}
-        <img src={loadingImg} className="h-16 relative z-10" alt="Loading" />
+        <img src={loadingImg} className="h-10 relative z-10" alt="Loading" />
         <div className="w-48 mt-4 h-1 bg-gray-200 rounded-full overflow-hidden">
           <div className="h-full bg-green-500 animate-loading-full-width"></div>
         </div>

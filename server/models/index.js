@@ -41,6 +41,7 @@ const Blog = require("./Blog");
 const BlogCategory = require("./BlogCategory");
 const Comment = require("./Comment");
 const LandingPage = require("./LandingPage");
+const HomepageSection = require("./HomePageSections");
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -264,4 +265,5 @@ module.exports = {
   Blog,
   BlogCategory,
   Comment,
+  HomepageSection,
 };
