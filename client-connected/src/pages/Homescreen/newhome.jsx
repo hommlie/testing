@@ -237,6 +237,7 @@ const HomePage = () => {
                 }`}
                 onClick={() => handleCategorySelect(category.id)}
               >
+                <img src={category.icon} className="w-5 h-5" alt="" />
                 {category.category_name}
               </motion.button>
             ))}

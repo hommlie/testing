@@ -776,7 +776,7 @@ exports.getHomePageData = async (req, res) => {
         "slug",
         [
           sequelize.literal(
-            `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', Category.web_icon)`
           ),
           "icon",
         ],
