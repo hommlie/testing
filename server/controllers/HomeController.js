@@ -612,20 +612,6 @@ exports.getHomePageData = async (req, res) => {
         as: "variation",
         required: false,
       },
-      {
-        model: Ratting,
-        as: "rattings",
-        required: false,
-      },
-      {
-        model: User,
-        attributes: [],
-        where: {
-          is_available: 1,
-        },
-        required: true,
-        as: "vendor",
-      },
     ];
 
     const sliders = await Slider.findAll({
@@ -830,6 +816,7 @@ exports.getHomePageData = async (req, res) => {
                     // ],
                     "total_reviews",
                     "avg_rating",
+                    "attribute_id", // Include attribute_id to group by
                   ],
                   include: [
                     {
@@ -864,6 +851,40 @@ exports.getHomePageData = async (req, res) => {
       ],
       order: [["id", "DESC"]],
     });
+
+    // Function to group variations by attribute_id
+    const groupVariationsByAttribute = (products) => {
+      return products.map((product) => {
+        const groupedVariations = product.variations.reduce(
+          (acc, variation) => {
+            const attributeId = variation.attribute_id;
+            if (!acc[attributeId]) {
+              acc[attributeId] = {
+                ...variation.attribute.get({ plain: true }),
+                variations: [],
+              };
+            }
+            acc[attributeId].variations.push(variation.get({ plain: true }));
+            return acc;
+          },
+          {}
+        );
+
+        return {
+          ...product.get({ plain: true }),
+          attributes: Object.values(groupedVariations),
+        };
+      });
+    };
+
+    // Manipulate the response to group variations under attributes
+    const manipulatedResponse = allCategories.map((category) => ({
+      ...category.get({ plain: true }),
+      subcategories: category.subcategories.map((subcategory) => ({
+        ...subcategory.get({ plain: true }),
+        products: groupVariationsByAttribute(subcategory.products),
+      })),
+    }));
 
     // const products = await Product.findAll({
     //     where: {
@@ -1100,7 +1121,7 @@ exports.getHomePageData = async (req, res) => {
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
           faqs: data.faqs || [],
-          all_categories: allCategories,
+          all_categories: manipulatedResponse,
         },
       });
     } else {
