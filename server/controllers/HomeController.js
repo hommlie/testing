@@ -877,13 +877,13 @@ exports.getHomePageData = async (req, res) => {
     };
 
     // Manipulate the response to group variations under attributes
-    const manipulatedResponse = allCategories?.map((category) => ({
-      ...category.get({ plain: true }),
-      subcategories: category.subcategories.map((subcategory) => ({
-        ...subcategory.get({ plain: true }),
-        products: groupVariationsByAttribute(subcategory.products),
-      })),
-    }));
+    // const manipulatedResponse = allCategories?.map((category) => ({
+    //   ...category.get({ plain: true }),
+    //   subcategories: category.subcategories.map((subcategory) => ({
+    //     ...subcategory.get({ plain: true }),
+    //     products: groupVariationsByAttribute(subcategory.products),
+    //   })),
+    // }));
 
     // const products = await Product.findAll({
     //     where: {
