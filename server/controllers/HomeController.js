@@ -836,14 +836,14 @@ exports.getHomePageData = async (req, res) => {
                         "id",
                         "attribute",
                         "specifications",
-                        [
-                          sequelize.fn(
-                            "CONCAT",
-                            `${apiUrl}/storage/app/public/images/attribute/`,
-                            sequelize.col("variations->attribute.image")
-                          ),
-                          "image",
-                        ],
+                        // [
+                        //   sequelize.fn(
+                        //     "CONCAT",
+                        //     `${apiUrl}/storage/app/public/images/attribute/`,
+                        //     sequelize.col("variations->attribute.image")
+                        //   ),
+                        //   "image",
+                        // ],
                         "total_reviews",
                         "avg_rating",
                       ],
