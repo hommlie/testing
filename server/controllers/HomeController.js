@@ -877,7 +877,7 @@ exports.getHomePageData = async (req, res) => {
     };
 
     // Manipulate the response to group variations under attributes
-    const manipulatedResponse = allCategories.map((category) => ({
+    const manipulatedResponse = allCategories?.map((category) => ({
       ...category.get({ plain: true }),
       subcategories: category.subcategories.map((subcategory) => ({
         ...subcategory.get({ plain: true }),
