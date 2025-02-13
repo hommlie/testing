@@ -18,6 +18,7 @@ const {
   Slider,
   HomepageSection,
   Banner,
+  Attribute,
 } = require("../models");
 const apiUrl = process.env.apiUrl;
 
@@ -773,7 +774,6 @@ exports.getHomePageData = async (req, res) => {
       attributes: [
         "id",
         "category_name",
-        "slug",
         [
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/category/', Category.web_icon)`
@@ -788,7 +788,6 @@ exports.getHomePageData = async (req, res) => {
           attributes: [
             "id",
             "subcategory_name",
-            "slug",
             // [
             //   sequelize.literal(
             //     `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`
@@ -801,25 +800,68 @@ exports.getHomePageData = async (req, res) => {
           include: [
             {
               model: Product,
-              attributes: ["id", "product_name", "product_price", "cat_id"],
+              where: {
+                status: 1,
+              },
+              attributes: [
+                "id",
+                "product_name",
+                "product_price",
+                "discounted_price",
+              ],
+              include: [
+                {
+                  model: Variation,
+                  attributes: [
+                    "id",
+                    "price",
+                    "description",
+                    "discounted_variation_price",
+                    "variation",
+                    "variation_interval",
+                    "variation_times",
+                    [
+                      sequelize.literal(
+                        `CONCAT('${apiUrl}/storage/app/public/images/variation/', variations.image)`
+                      ),
+                      "image",
+                    ],
+                    "total_reviews",
+                    "avg_rating",
+                  ],
+                  include: [
+                    {
+                      model: Attribute,
+                      attributes: [
+                        "id",
+                        "attribute",
+                        "specifications",
+                        [
+                          sequelize.fn(
+                            "CONCAT",
+                            `${apiUrl}/storage/app/public/images/attribute/`,
+                            sequelize.col("variations->attribute.image")
+                          ),
+                          "image",
+                        ],
+                        "total_reviews",
+                        "avg_rating",
+                      ],
+                      where: { status: 1 },
+                      as: "attribute",
+                    },
+                  ],
+                  as: "variations",
+                  required: false,
+                  order: [["created_at", "ASC"]],
+                },
+              ],
             },
           ],
         },
       ],
       order: [["id", "DESC"]],
     });
-
-    // Format categories and subcategories
-    const formattedCategories = allCategories.map((category) => ({
-      id: category.id,
-      category_name: category.category_name,
-      slug: category.slug,
-      subcategories: category.Subcategories.map((sub) => ({
-        id: sub.id,
-        subcategory_name: sub.subcategory_name,
-        slug: sub.slug,
-      })),
-    }));
 
     // const products = await Product.findAll({
     //     where: {
