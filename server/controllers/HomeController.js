@@ -877,13 +877,14 @@ exports.getHomePageData = async (req, res) => {
     };
 
     // Manipulate the response to group variations under attributes
-    // const manipulatedResponse = allCategories?.map((category) => ({
-    //   ...category.get({ plain: true }),
-    //   subcategories: category.subcategories.map((subcategory) => ({
-    //     ...subcategory.get({ plain: true }),
-    //     products: groupVariationsByAttribute(subcategory.products),
-    //   })),
-    // }));
+    const manipulatedResponse = allCategories?.map((category) => ({
+      ...category.get({ plain: true }),
+      subcategories:
+        category.subcategories?.map((subcategory) => ({
+          ...subcategory.get({ plain: true }),
+          products: groupVariationsByAttribute(subcategory.products ?? []), // Ensure products is always an array
+        })) ?? [], // Ensure subcategories is always an array
+    }));
 
     // const products = await Product.findAll({
     //     where: {
@@ -1120,7 +1121,7 @@ exports.getHomePageData = async (req, res) => {
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
           faqs: data.faqs || [],
-          all_categories: allCategories,
+          all_categories: manipulatedResponse,
         },
       });
     } else {
