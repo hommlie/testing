@@ -1120,7 +1120,7 @@ exports.getHomePageData = async (req, res) => {
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
           faqs: data.faqs || [],
-          all_categories: manipulatedResponse,
+          all_categories: allCategories,
         },
       });
     } else {
