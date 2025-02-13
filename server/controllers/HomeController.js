@@ -589,7 +589,7 @@ exports.getHomePageData = async (req, res) => {
               sequelize.literal(
                 `'${apiUrl}/storage/app/public/images/products/'`
               ),
-              sequelize.col("ProductImage.image")
+              sequelize.col("productimage.image")
             ),
             "image_url",
           ],
