@@ -816,7 +816,6 @@ exports.getHomePageData = async (req, res) => {
                     // ],
                     "total_reviews",
                     "avg_rating",
-                    "attribute_id", // Include attribute_id to group by
                   ],
                   include: [
                     {
