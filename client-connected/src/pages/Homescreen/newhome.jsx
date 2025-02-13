@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import OrdersIcon from "/assets/icons/orders-icon.svg";
 import ComplaintIcon from "/assets/icons/complaint-icon.svg";
 import InspectionIcon from "/assets/icons/inspection-icon.svg";
+import config from "../../config/config";
+import { IoIosArrowForward } from "react-icons/io";
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,6 +23,7 @@ const HomePage = () => {
 
   // Add states for all dynamic data
   const [heroSlides, setHeroSlides] = useState([]);
+  const [heroSections, setHeroSections] = useState([]);
   const [categories, setCategories] = useState([]);
   const [offers, setOffers] = useState([]);
   const [mostBooked, setMostBooked] = useState([]);
@@ -28,35 +31,36 @@ const HomePage = () => {
 
   // Fetch initial data
   useEffect(() => {
-    const fetchHomeData = async () => {
-      try {
-        const response = await axios.get(`${config.API_URL}/api/homepage`);
-        if (response.data.status === 1) {
-          const {
-            sliders,
-            heroSections,
-            banners,
-            offerBanners,
-            most_booked_services,
-            thoughtfulVideos,
-            testimonials,
-            faqs,
-            all_categories,
-          } = response.data.data;
-
-          setHeroSlides(sliders);
-          setCategories(all_categories);
-          setOffers(offerBanners);
-          setMostBooked(most_booked_services);
-          setThoughtfulContent(thoughtfulVideos);
-        }
-      } catch (error) {
-        console.error("Error fetching homepage data:", error);
-      }
-    };
-
     fetchHomeData();
   }, []);
+
+  const fetchHomeData = async () => {
+    try {
+      const response = await axios.get(`${config.API_URL}/api/homepage`);
+      if (response.data.status === 1) {
+        const {
+          sliders,
+          heroSections,
+          banners,
+          offerBanners,
+          most_booked_services,
+          thoughtfulVideos,
+          testimonials,
+          faqs,
+          all_categories,
+        } = response.data.data;
+
+        setHeroSlides(sliders);
+        setHeroSections(heroSections);
+        setCategories(all_categories);
+        setOffers(offerBanners);
+        setMostBooked(most_booked_services);
+        setThoughtfulContent(thoughtfulVideos);
+      }
+    } catch (error) {
+      console.error("Error fetching homepage data:", error);
+    }
+  };
 
   // Handle search functionality
   const handleSearch = async (term) => {
@@ -158,7 +162,7 @@ const HomePage = () => {
           </div>
 
           {/* Hero Slider and Features */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {/* Main Slider */}
             <div className="md:col-span-2 relative h-64 md:h-80 rounded-xl overflow-hidden">
               <motion.div
@@ -167,44 +171,50 @@ const HomePage = () => {
                 className="flex h-full"
               >
                 {heroSlides?.map((slide, index) => (
-                  <div key={index} className="min-w-full h-full relative">
+                  <a
+                    key={index}
+                    href={slide.link}
+                    className="min-w-full h-full relative"
+                  >
                     <img
-                      src={slide.image}
-                      alt={slide.title}
+                      src={slide.image_url}
+                      alt={slide.alt_tag}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60">
-                      <h3 className="text-white text-xl font-bold">
-                        {slide.title}
-                      </h3>
-                      <p className="text-white">{slide.subtitle}</p>
-                    </div>
-                  </div>
+                  </a>
                 ))}
               </motion.div>
             </div>
 
             {/* Feature Cards */}
-            {[1, 2, 3].map((feature) => (
+            {heroSections?.map((feature, index) => (
               <motion.div
-                key={feature}
+                key={index}
                 whileHover={{ scale: 1.05 }}
-                className="bg-white p-4 rounded-xl shadow-sm"
+                className="relative bg-white rounded-xl shadow-sm"
               >
                 <img
-                  src={`/feature-${feature}.jpg`}
-                  alt={`Feature ${feature}`}
-                  className="w-full h-32 object-cover rounded-lg mb-4"
+                  src={feature.image}
+                  alt={feature.alt_tag}
+                  className="w-full h-full object-cover rounded-xl"
                 />
-                <h3 className="font-semibold mb-2">Feature Title</h3>
-                <p className="text-sm text-gray-600 mb-4">Subtitle goes here</p>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg"
-                >
-                  Explore
-                </motion.button>
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-center">
+                  <div className="p-4">
+                    <h3 className="text-white text-2xl font-bold mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-white mb-4">{feature.sub_title}</p>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => (window.location.href = feature.btn_link)}
+                    className="w-fit flex justify-between gap-2 px-4 items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
+                  >
+                    <span>{feature.btn_text}</span>
+                    <IoIosArrowForward />
+                  </motion.button>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -227,7 +237,7 @@ const HomePage = () => {
                 }`}
                 onClick={() => handleCategorySelect(category.id)}
               >
-                {category.name}
+                {category.category_name}
               </motion.button>
             ))}
           </div>
@@ -278,26 +288,13 @@ const HomePage = () => {
               <motion.div
                 key={offer.id}
                 whileHover={{ scale: 1.02 }}
-                className="relative h-48 rounded-xl overflow-hidden"
+                className="h-48 rounded-xl overflow-hidden"
               >
                 <img
                   src={offer.image}
                   alt={offer.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 p-6 flex flex-col justify-center">
-                  <h3 className="text-white text-2xl font-bold mb-2">
-                    {offer.title}
-                  </h3>
-                  <p className="text-white mb-4">{offer.description}</p>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-fit bg-white text-black px-6 py-2 rounded-lg"
-                  >
-                    Book Now
-                  </motion.button>
-                </div>
               </motion.div>
             ))}
           </div>

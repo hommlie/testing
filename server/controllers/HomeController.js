@@ -770,14 +770,39 @@ exports.getHomePageData = async (req, res) => {
 
     // Get all active categories with their subcategories
     const allCategories = await Category.findAll({
-      attributes: ["id", "category_name", "slug"],
+      attributes: [
+        "id",
+        "category_name",
+        "slug",
+        [
+          sequelize.literal(
+            `CONCAT('${apiUrl}/storage/app/public/images/category/', web_icon)`
+          ),
+          "icon",
+        ],
+      ],
       where: { status: 1 },
       include: [
         {
           model: Subcategory,
-          attributes: ["id", "subcategory_name", "slug"],
+          attributes: [
+            "id",
+            "subcategory_name",
+            "slug",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+              ),
+              "image_url",
+            ],
+          ],
           where: { status: 1 },
           required: false,
+          include: [
+            {
+              model: Product,
+            },
+          ],
         },
       ],
       order: [["id", "DESC"]],
@@ -794,6 +819,223 @@ exports.getHomePageData = async (req, res) => {
         slug: sub.slug,
       })),
     }));
+
+    // const products = await Product.findAll({
+    //     where: {
+    //       subcat_id: subcat_id,
+    //       status: 1,
+    //     },
+    //     attributes: [
+    //       "id",
+    //       "product_name",
+    //       "product_price",
+    //       "cat_id",
+    //       "discounted_price",
+    //       "description",
+    //       "tags",
+    //       "product_qty",
+    //       "is_variation",
+    //       "vendor_id",
+    //       "sku",
+    //       "free_shipping",
+    //       "shipping_cost",
+    //       "tax_type",
+    //       "tax",
+    //       "est_shipping_days",
+    //       "is_return",
+    //       "return_days",
+    //       "faqs",
+    //       "slug",
+    //       "location",
+    //       "rating",
+    //       "total_reviews",
+    //     ],
+    //     include: [
+    //       {
+    //         model: ProductImage,
+    //         attributes: [
+    //           "id",
+    //           "product_id",
+    //           "media",
+    //           "thumbnail",
+    //           "alt_tag",
+    //           "image_title",
+    //           [
+    //             sequelize.literal(`
+    //               CASE
+    //                 WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', productimages.image)
+    //                 WHEN media = 'Video' THEN productimages.image
+    //                 ELSE NULL
+    //               END
+    //             `),
+    //             "image_url",
+    //           ],
+    //         ],
+    //         where: { media: "Image" },
+    //         as: "productimages",
+    //       },
+    //       {
+    //         model: Variation,
+    //         attributes: [
+    //           "id",
+    //           "product_id",
+    //           "attribute_id",
+    //           "price",
+    //           "description",
+    //           "discounted_variation_price",
+    //           "variation",
+    //           "variation_interval",
+    //           "variation_times",
+    //           [
+    //             sequelize.literal(
+    //               `CONCAT('${apiUrl}/storage/app/public/images/variation/', variations.image)`
+    //             ),
+    //             "image",
+    //           ],
+    //           "total_reviews",
+    //           "avg_rating",
+    //           "qty",
+    //           "created_at",
+    //           "updated_at",
+    //         ],
+    //         include: [
+    //           {
+    //             model: Attribute,
+    //             attributes: [
+    //               "id",
+    //               "attribute",
+    //               "specifications",
+    //               [
+    //                 sequelize.fn(
+    //                   "CONCAT",
+    //                   `${apiUrl}/storage/app/public/images/attribute/`,
+    //                   sequelize.col("variations->attribute.image")
+    //                 ),
+    //                 "image",
+    //               ],
+    //               "total_reviews",
+    //               "avg_rating",
+    //             ],
+    //             where: { status: 1 },
+    //             as: "attribute",
+    //           },
+    //         ],
+    //         as: "variations",
+    //         required: false,
+    //         order: [["created_at", "ASC"]],
+    //       },
+    //       {
+    //         model: Ratting,
+    //         as: "rattings",
+    //         required: false,
+    //       },
+    //       {
+    //         model: Category,
+    //         attributes: ["category_name", "is_form", "is_page"],
+    //         as: "category",
+    //       },
+    //       {
+    //         model: Subcategory,
+    //         attributes: ["subcategory_name"],
+    //         as: "subcategory",
+    //       },
+    //     ],
+    //     order: [["id", "DESC"]],
+    //   });
+    // Transform the products data
+    //   const transformedProducts = await Promise.all(
+    //     products.map(async (product) => {
+    //       const plainProduct = product.get({ plain: true });
+
+    //       const reviewsData = fetchProductReviews(product.id);
+
+    //       // Group variations by attribute_id
+    //       const groupedVariations = plainProduct.variations.reduce(
+    //         (acc, variation) => {
+    //           // Create variation object without attribute info
+    //           const variationData = {
+    //             id: variation.id,
+    //             product_id: variation.product_id,
+    //             price: variation.price,
+    //             discounted_variation_price: variation.discounted_variation_price,
+    //             variation: variation.variation,
+    //             variation_interval: variation.variation_interval,
+    //             variation_times: variation.variation_times,
+    //             description: variation.description,
+    //             image: variation.image,
+    //             total_reviews: variation.total_reviews,
+    //             avg_rating: variation.avg_rating,
+    //             qty: variation.qty,
+    //             created_at: variation.created_at,
+    //             updated_at: variation.updated_at,
+    //           };
+
+    //           // Check if attribute group exists
+    //           let existingGroup = acc.find(
+    //             (group) => group.attribute_id === variation.attribute_id
+    //           );
+
+    //           if (existingGroup) {
+    //             // Add variation to existing group
+    //             existingGroup.variations.push(variationData);
+    //           } else {
+    //             // Create new attribute group
+    //             existingGroup = {
+    //               attribute_id: variation.attribute_id,
+    //               attribute_name: variation.attribute.attribute,
+    //               specifications: variation.attribute.specifications,
+    //               image: variation.attribute.image,
+    //               total_reviews: variation.attribute.total_reviews,
+    //               avg_rating: variation.attribute.avg_rating,
+    //               variations: [variationData],
+    //               reviewsData,
+    //             };
+    //             acc.push(existingGroup);
+    //           }
+
+    //           // Calculate starting price ONLY from discounted_variation_price
+    //           const validDiscountedPrices = existingGroup.variations
+    //             .map((v) => v.discounted_variation_price)
+    //             .filter((price) => price !== null && price !== undefined);
+
+    //           // Set starting price to the minimum discounted price,
+    //           // fallback to original price if no discounted prices exist
+    //           existingGroup.starting_price =
+    //             validDiscountedPrices.length > 0
+    //               ? Math.min(...validDiscountedPrices)
+    //               : Math.min(...existingGroup.variations.map((v) => v.price));
+
+    //           // Sort variations within each attribute group
+    //           existingGroup.variations.sort(advancedSort);
+
+    //           return acc;
+    //         },
+    //         []
+    //       );
+
+    //       // Sort attributes by name
+    //       groupedVariations.sort((a, b) =>
+    //         a.attribute_name.localeCompare(b.attribute_name)
+    //       );
+
+    //       // Get return policy
+    //       const returnPolicy = await User.findOne({
+    //         where: { id: product.vendor_id },
+    //         attributes: ["return_policies"],
+    //       });
+
+    //       // Remove the original variations array
+    //       delete plainProduct.variations;
+
+    //       return {
+    //         ...plainProduct,
+    //         attributes: groupedVariations,
+    //         return_policy: returnPolicy?.return_policies,
+    //         is_form: plainProduct.category.is_form,
+    //         is_page: plainProduct.category.is_page,
+    //       };
+    //     })
+    //   );
 
     if (
       //   heroSections.length > 0 &&
