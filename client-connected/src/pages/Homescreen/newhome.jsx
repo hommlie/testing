@@ -223,21 +223,21 @@ const HomePage = () => {
 
       {/* Services Section */}
       <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-4 overflow-x-auto mb-8">
+        <div className="container max-w-4xl mx-auto px-4">
+          <div className="flex gap-4 overflow-x-auto mb-8 p-2">
             {categories?.map((category) => (
               <motion.button
                 key={category.id}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-6 py-2 rounded-full ${
+                className={`flex gap-2 items-center px-6 py-2 rounded-lg ${
                   selectedCategory === category.id
-                    ? "bg-green-600 text-white"
-                    : "bg-gray-100"
+                    ? "bg-hommlie text-white border"
+                    : "bg-gray-100 border border-hommlie text-hommlie"
                 }`}
                 onClick={() => handleCategorySelect(category.id)}
               >
-                <img src={category.icon} className="w-5 h-5" alt="" />
+                <img src={category.icon_url} className="w-5 h-5" alt="" />
                 {category.category_name}
               </motion.button>
             ))}
@@ -289,7 +289,7 @@ const HomePage = () => {
               <motion.div
                 key={offer.id}
                 whileHover={{ scale: 1.02 }}
-                className="h-48 rounded-xl overflow-hidden"
+                className="h-80 rounded-xl overflow-hidden"
               >
                 <img
                   src={offer.image}
@@ -304,7 +304,8 @@ const HomePage = () => {
 
       {/* Most Booked Services */}
       <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 mb-2">
+          <p className="text-hommlie font-semibold">Services</p>
           <h2 className="text-2xl font-bold mb-8">Most Booked Services</h2>
           <div className="relative">
             <div className="flex gap-6 overflow-x-auto pb-4">
@@ -316,13 +317,16 @@ const HomePage = () => {
                 >
                   <div className="relative h-48">
                     <img
-                      src={service.image}
-                      alt={service.title}
+                      src={service.productimage?.image_url}
+                      alt={service.productimage?.alt_tag}
+                      title={service.productimage?.image_title}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="p-4">
-                    <h3 className="font-semibold mb-2">{service.title}</h3>
+                    <h3 className="font-semibold mb-2">
+                      {service.product_name}
+                    </h3>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <span className="text-yellow-400 mr-1">⭐</span>
@@ -331,7 +335,7 @@ const HomePage = () => {
                           ({service.reviews})
                         </span>
                       </div>
-                      <span>From ₹{service.price}/service</span>
+                      <span>From ₹{service.discounted_price}/service</span>
                     </div>
                     <motion.button
                       whileHover={{ scale: 1.05 }}

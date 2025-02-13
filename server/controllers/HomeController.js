@@ -571,6 +571,8 @@ exports.getHomePageData = async (req, res) => {
       "is_variation",
       "sku",
       "slug",
+      "rating",
+      "total_reviews",
     ];
 
     const commonIncludes = [
