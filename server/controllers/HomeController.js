@@ -884,7 +884,7 @@ exports.getHomePageData = async (req, res) => {
       subcategories:
         category.Subcategories?.map((subcategory) => ({
           ...subcategory.get({ plain: true }),
-          products: groupVariationsByAttribute(subcategory.products ?? []), // Ensure products is always an array
+          products: groupVariationsByAttribute(subcategory.Products ?? []), // Ensure products is always an array
         })) ?? [], // Ensure subcategories is always an array
     }));
 
