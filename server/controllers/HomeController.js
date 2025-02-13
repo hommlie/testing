@@ -1056,7 +1056,7 @@ exports.getHomePageData = async (req, res) => {
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
           faqs: data.faqs || [],
-          all_categories: formattedCategories,
+          all_categories: allCategories,
         },
       });
     } else {
