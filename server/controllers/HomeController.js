@@ -822,7 +822,7 @@ exports.getHomePageData = async (req, res) => {
                     "variation_times",
                     [
                       sequelize.literal(
-                        `CONCAT('${apiUrl}/storage/app/public/images/variation/', variations.image)`
+                        `CONCAT('${apiUrl}/storage/app/public/images/variation/', variation.image)`
                       ),
                       "image",
                     ],
