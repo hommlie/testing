@@ -605,7 +605,7 @@ const HomePage = () => {
 
       {/* Services Section */}
       <section className="px-10 py-12">
-        <div className="flex overflow-x-auto space-x-4 mb-8">
+        <div className="flex overflow-x-auto space-x-4 mb-8 py-2">
           {data.all_categories.map((category) => (
             <motion.button
               key={category.id}

@@ -848,7 +848,7 @@ exports.getHomePageData = async (req, res) => {
           ],
         },
       ],
-      order: [["id", "DESC"]],
+      order: [["id", "ASC"]],
     });
 
     // Function to group variations by attribute_id
