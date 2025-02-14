@@ -884,7 +884,6 @@ exports.getHomePageData = async (req, res) => {
       ...category.get({ plain: true }),
       subcategories:
         category.Subcategories?.map((subcategory) => ({
-          //   ...subcategory.get({ plain: true }),
           id: subcategory.id,
           subcategory_name: subcategory.subcategory_name,
           products: groupVariationsByAttribute(subcategory.Products ?? []),
@@ -909,7 +908,7 @@ exports.getHomePageData = async (req, res) => {
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
           faqs: data.faqs || [],
-          all_categories: manipulatedResponse[0].subcategories,
+          all_categories: manipulatedResponse,
         },
       });
     } else {
