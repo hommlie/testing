@@ -876,7 +876,7 @@ exports.getHomePageData = async (req, res) => {
       });
     };
 
-    console.log(allCategories.SubCategories);
+    console.log(allCategories);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
