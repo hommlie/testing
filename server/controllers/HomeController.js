@@ -868,7 +868,10 @@ exports.getHomePageData = async (req, res) => {
           },
           {}
         );
-        console.log("attributes:", Object.values(groupedVariations));
+        console.log("groupedvariations:", {
+          ...product.get({ plain: true }),
+          attributes: Object.values(groupedVariations),
+        });
 
         return {
           ...product.get({ plain: true }),
@@ -883,7 +886,7 @@ exports.getHomePageData = async (req, res) => {
       subcategories:
         category.Subcategories?.map((subcategory) => ({
           ...subcategory.get({ plain: true }),
-          products: groupVariationsByAttribute(subcategory.Products ?? []), // Ensure products is always an array
+          products: groupVariationsByAttribute(subcategory.Products ?? []),
         })) ?? [],
     }));
 
