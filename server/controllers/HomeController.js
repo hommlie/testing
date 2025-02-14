@@ -890,7 +890,10 @@ exports.getHomePageData = async (req, res) => {
         })) ?? [],
     }));
 
-    console.log("manipulatedResponse:", manipulatedResponse[0].subcategories);
+    console.log(
+      "manipulatedResponse:",
+      manipulatedResponse[0].subcategories[0]?.products
+    );
 
     if (
       //   heroSections.length > 0 &&
