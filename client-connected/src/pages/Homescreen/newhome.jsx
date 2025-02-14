@@ -10,14 +10,10 @@ import config from "../../config/config";
 import { IoIosArrowForward, IoMdPlay } from "react-icons/io";
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const HomePage = () => {
   const [location, setLocation] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [selectedAttribute, setSelectedAttribute] = useState("");
-  const [variations, setVariations] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -30,7 +26,25 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { cartLength, prodData } = useCont();
 
+  // States for services section
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const [variations, setVariations] = useState([]);
+
   // Add states for all dynamic data
+  const [data, setData] = useState({
+    sliders: [],
+    heroSections: [],
+    banners: [],
+    offerBanners: [],
+    most_booked_services: [],
+    thoughtfulVideos: [],
+    all_categories: [],
+    testimonials: [],
+    faqs: [],
+  });
   const [heroSlides, setHeroSlides] = useState([]);
   const [heroSections, setHeroSections] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -38,10 +52,24 @@ const HomePage = () => {
   const [mostBooked, setMostBooked] = useState([]);
   const [thoughtfulContent, setThoughtfulContent] = useState([]);
 
+  // States for carousel sections
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+
+  // FAQ state
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
   // Fetch initial data
   useEffect(() => {
     fetchHomeData();
   }, []);
+
+  useEffect(() => {
+    // Set initial category when data loads
+    if (data.all_categories?.length > 0) {
+      setSelectedCategory(data.all_categories[0]);
+    }
+  }, [data.all_categories]);
 
   const fetchHomeData = async () => {
     try {
@@ -58,6 +86,7 @@ const HomePage = () => {
           faqs,
           all_categories,
         } = response.data.data;
+        setData(response.data.data);
 
         setHeroSlides(sliders);
         setHeroSections(heroSections);
@@ -173,6 +202,241 @@ const HomePage = () => {
       console.error("Add to cart error:", error);
     }
   };
+
+  // Services Section Card Component
+  const ServiceCard = ({ variation }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-lg shadow-md p-6"
+    >
+      <div
+        className={`${
+          variation.recommended ? "bg-emerald-800" : "bg-white"
+        } p-6 rounded-lg`}
+      >
+        <span
+          className={`text-sm ${
+            variation.recommended ? "text-white" : "text-gray-600"
+          }`}
+        >
+          {variation.recommended ? "RECOMMENDED" : ""}
+        </span>
+        <h3
+          className={`text-2xl font-bold mb-4 ${
+            variation.recommended ? "text-white" : "text-gray-800"
+          }`}
+        >
+          ₹{variation.price}/-
+        </h3>
+        <p
+          className={`mb-4 ${
+            variation.recommended ? "text-white" : "text-gray-600"
+          }`}
+        >
+          {variation.description}
+        </p>
+        <ul className="space-y-3 mb-6">
+          {variation.features?.map((feature, index) => (
+            <li
+              key={index}
+              className={`flex items-center ${
+                variation.recommended ? "text-white" : "text-gray-600"
+              }`}
+            >
+              <span className="mr-2">✓</span>
+              {feature}
+            </li>
+          ))}
+        </ul>
+        <button
+          className={`w-full py-3 rounded-lg ${
+            variation.recommended
+              ? "bg-white text-emerald-800"
+              : "bg-emerald-800 text-white"
+          } font-medium transition-colors hover:opacity-90`}
+          onClick={() => handleAddToCart(variation)}
+        >
+          Book Now
+        </button>
+      </div>
+    </motion.div>
+  );
+
+  // Banner Carousel
+  const BannerCarousel = () => (
+    <div className="relative overflow-hidden">
+      <div className="flex">
+        {data.banners?.map((banner, index) => (
+          <motion.div
+            key={index}
+            className="min-w-full"
+            initial={{ opacity: 0 }}
+            onClick={() => {
+              window.location.href = banner.link;
+            }}
+            animate={{ opacity: index === currentBannerIndex ? 1 : 0 }}
+          >
+            <img
+              src={banner.image}
+              alt={banner.alt_tag}
+              className="w-full h-64 object-cover rounded-lg"
+            />
+          </motion.div>
+        ))}
+      </div>
+      <CarouselButtons
+        currentIndex={currentBannerIndex}
+        setCurrentIndex={setCurrentBannerIndex}
+        length={data.banners.length}
+      />
+    </div>
+  );
+
+  // Testimonial Carousel
+  const TestimonialCarousel = () => (
+    <div className="relative overflow-hidden bg-white rounded-lg p-6">
+      <div className="flex">
+        {data.testimonials.map((testimonial, index) => (
+          <motion.div
+            key={index}
+            className="min-w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === currentTestimonialIndex ? 1 : 0 }}
+          >
+            <div className="flex flex-col items-center text-center">
+              <img
+                src={testimonial.image}
+                alt={testimonial.name}
+                className="w-16 h-16 rounded-full mb-4"
+              />
+              <p className="text-gray-600 mb-4">{testimonial.feedback}</p>
+              <h4 className="font-bold">{testimonial.name}</h4>
+              <p className="text-sm text-gray-500">{testimonial.location}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      <CarouselButtons
+        currentIndex={currentTestimonialIndex}
+        setCurrentIndex={setCurrentTestimonialIndex}
+        length={data.testimonials.length}
+      />
+    </div>
+  );
+
+  // Carousel Navigation Buttons
+  const CarouselButtons = ({ currentIndex, setCurrentIndex, length }) => (
+    <div className="absolute bottom-4 right-4 flex space-x-2">
+      <button
+        onClick={() =>
+          setCurrentIndex((prev) => (prev === 0 ? length - 1 : prev - 1))
+        }
+        className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={() =>
+          setCurrentIndex((prev) => (prev === length - 1 ? 0 : prev + 1))
+        }
+        className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+
+  // FAQ Section
+  const FaqSection = () => (
+    <div className="max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold mb-8 text-center">
+        Frequently Asked Questions
+      </h2>
+      <div className="space-y-4">
+        {data.faqs.map((faq, index) => (
+          <motion.div
+            key={index}
+            className="border rounded-lg overflow-hidden"
+            initial={false}
+          >
+            <button
+              className="w-full flex justify-between items-center p-4 text-left"
+              onClick={() =>
+                setOpenFaqIndex(openFaqIndex === index ? null : index)
+              }
+            >
+              <span className="font-medium">{faq.question}</span>
+              <ChevronRight
+                className={`w-5 h-5 transform transition-transform ${
+                  openFaqIndex === index ? "rotate-90" : ""
+                }`}
+              />
+            </button>
+            <AnimatePresence>
+              {openFaqIndex === index && (
+                <motion.div
+                  initial={{ height: 0 }}
+                  animate={{ height: "auto" }}
+                  exit={{ height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <p className="p-4 bg-gray-50">{faq.answer}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // App Download Section
+  const AppDownloadSection = () => (
+    <div className="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h2 className="text-3xl font-bold mb-4">Get Things Done Easily.</h2>
+        <h3 className="text-2xl font-bold mb-6">Download The Hommlie App</h3>
+        <p className="text-gray-600 mb-8">
+          Book Appointments, Manage Projects and stay connected with Service
+          Providers - all on the go!
+        </p>
+        <div className="space-y-4 mb-8">
+          <div className="flex items-center">
+            <span className="mr-2">✓</span>
+            Easy Booking and appointment Scheduling
+          </div>
+          <div className="flex items-center">
+            <span className="mr-2">✓</span>
+            Secure Online Payments
+          </div>
+          <div className="flex items-center">
+            <span className="mr-2">✓</span>
+            Easy Booking Process - Instant online reservations
+          </div>
+          <div className="flex items-center">
+            <span className="mr-2">✓</span>
+            Manage Communication with Service Providers
+          </div>
+        </div>
+        <div className="flex space-x-4">
+          <img src="/api/placeholder/150/50" alt="App Store" className="h-12" />
+          <img
+            src="/api/placeholder/150/50"
+            alt="Play Store"
+            className="h-12"
+          />
+        </div>
+      </div>
+      <div>
+        <img
+          src="/api/placeholder/300/600"
+          alt="App Screenshot"
+          className="mx-auto"
+        />
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -340,62 +604,37 @@ const HomePage = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-12 bg-white">
-        <div className="container max-w-4xl mx-auto px-4">
-          <div className="flex gap-4 overflow-x-auto mb-8 p-2">
-            {categories?.map((category) => (
-              <motion.button
-                key={category.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`flex gap-2 items-center px-6 py-2 rounded-lg ${
-                  selectedCategory === category.id
-                    ? "bg-hommlie text-white border"
-                    : "bg-gray-100 border border-hommlie text-hommlie"
-                }`}
-                onClick={() => handleCategorySelect(category.id)}
-              >
-                <img src={category.icon_url} className="w-5 h-5" alt="" />
-                {category.category_name}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Service Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {variations.map((variation) => (
-              <motion.div
-                key={variation.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-xl shadow-sm overflow-hidden"
-              >
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{variation.title}</h3>
-                  <p className="text-2xl font-bold mb-4">
-                    ₹{variation.price}/-
-                  </p>
-                  <ul className="space-y-2 mb-4">
-                    {variation.features.map((feature, index) => (
-                      <li key={index} className="flex items-center">
-                        <span className="mr-2">✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full bg-green-600 text-white py-3 rounded-lg"
-                    onClick={() => handleAddToCart(variation.id)}
-                  >
-                    Book Now
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+      <section className="px-10 py-12">
+        <div className="flex overflow-x-auto space-x-4 mb-8">
+          {data.all_categories.map((category) => (
+            <motion.button
+              key={category.id}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center px-6 py-3 rounded-lg ${
+                selectedCategory?.id === category.id
+                  ? "bg-emerald-800 text-white"
+                  : "bg-white text-gray-800 border"
+              }`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              <img src={category.icon_url} alt="" className="w-5 h-5 mr-2" />
+              {category.category_name}
+            </motion.button>
+          ))}
         </div>
+
+        {/* Service Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {variations.map((variation) => (
+            <ServiceCard key={variation.id} variation={variation} />
+          ))}
+        </div>
+      </section>
+
+      {/* Banner Section */}
+      <section className="px-10 py-12">
+        <BannerCarousel />
       </section>
 
       {/* Offers Section */}
@@ -498,6 +737,41 @@ const HomePage = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Refer & Earn */}
+      <section className="px-10 py-12">
+        <div className="bg-green-50 p-6 rounded-lg">
+          <div className="flex items-center space-x-4">
+            <img
+              src="/api/placeholder/50/50"
+              alt="Refer Icon"
+              className="w-12 h-12"
+            />
+            <div>
+              <h3 className="font-bold">Refer & Get Free Services</h3>
+              <p className="text-gray-600">
+                Invite Your Friends and Family and get instant 45% off on your
+                next Booking
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial */}
+      <section className="px-10 py-12">
+        <TestimonialCarousel />
+      </section>
+
+      {/* App Download Section */}
+      <section className="px-10 py-12">
+        <AppDownloadSection />
+      </section>
+
+      {/* FAQ Section */}
+      <section className="px-10 py-12">
+        <FaqSection />
       </section>
 
       {/* Video Modal */}

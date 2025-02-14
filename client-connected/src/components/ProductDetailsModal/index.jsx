@@ -496,10 +496,10 @@ const ProductDetailModal = ({
     if (product?.category?.is_form === 1) {
       return (
         <button
-          className="absolute bottom-4 right-4 text-white bg-emerald-600 rounded-lg px-4 py-2 hover:bg-emerald-700 transition-colors shadow-lg flex items-center space-x-2"
+          className="absolute bottom-4 right-5 text-white bg-emerald-600 rounded-lg px-4 py-2 hover:bg-emerald-700 transition-colors shadow-lg flex items-center space-x-2"
           onClick={() => setIsInspectionModalOpen(true)}
         >
-          <Calendar className="w-4 h-4" />
+          {/* <Calendar className="w-4 h-4" /> */}
           <span>Book Inspection</span>
         </button>
       );
@@ -512,7 +512,7 @@ const ProductDetailModal = ({
 
     if (isAddingToCart) {
       return (
-        <div className="absolute bottom-4 right-4 w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
+        <div className="absolute bottom-0 right-12 w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
           <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       );
@@ -520,7 +520,7 @@ const ProductDetailModal = ({
 
     if (specificCart.length !== 0) {
       return (
-        <div className="absolute bottom-4 right-4 w-28 h-9 flex justify-around items-center text-2xl font-semibold rounded-lg bg-white shadow-lg">
+        <div className="absolute bottom-0 right-6 w-28 h-9 flex justify-around items-center text-2xl font-semibold rounded-lg bg-white shadow-lg">
           <button
             onClick={() =>
               handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty - 1)
@@ -544,7 +544,7 @@ const ProductDetailModal = ({
 
     return (
       <button
-        className="absolute bottom-4 right-4 text-emerald-600 rounded-lg px-4 py-2 bg-white shadow-lg hover:bg-emerald-50"
+        className="absolute bottom-0 right-12 text-emerald-600 rounded-lg px-4 py-2 bg-white shadow-lg hover:bg-emerald-50"
         onClick={() => handleAddToCart(variation)}
       >
         Add
@@ -690,12 +690,12 @@ const ProductDetailModal = ({
                           </div>
 
                           {/* Image Section with Overlapped Add Button */}
-                          <div className="relative w-full md:w-64 h-48">
+                          <div className="relative w-40 h-40 flex items-center p-4">
                             {variation.image && (
                               <img
                                 src={variation.image}
                                 alt={variation.variation}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full rounded-lg object-cover"
                               />
                             )}
                             <AddButton variation={variation} />
