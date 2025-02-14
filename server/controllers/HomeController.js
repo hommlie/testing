@@ -890,6 +890,8 @@ exports.getHomePageData = async (req, res) => {
         })) ?? [],
     }));
 
+    console.log("manipulatedResponse:", manipulatedResponse[0].subcategories);
+
     if (
       //   heroSections.length > 0 &&
       //   banners.length > 0 &&
