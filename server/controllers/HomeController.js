@@ -868,7 +868,7 @@ exports.getHomePageData = async (req, res) => {
           },
           {}
         );
-        console.log(Object.values(groupedVariations));
+        console.log("attributes:", Object.values(groupedVariations));
 
         return {
           ...product.get({ plain: true }),
@@ -876,8 +876,6 @@ exports.getHomePageData = async (req, res) => {
         };
       });
     };
-
-    console.log(allCategories[0].Subcategories);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
@@ -888,8 +886,6 @@ exports.getHomePageData = async (req, res) => {
           products: groupVariationsByAttribute(subcategory.Products ?? []), // Ensure products is always an array
         })) ?? [],
     }));
-
-    console.log("manipulatedResponse:", manipulatedResponse);
 
     if (
       //   heroSections.length > 0 &&
