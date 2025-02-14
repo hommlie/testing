@@ -870,7 +870,6 @@ exports.getHomePageData = async (req, res) => {
         );
 
         return {
-          //   ...product.get({ plain: true }),
           id: product.id,
           product_name: product.product_name,
           product_price: product.product_price,
@@ -885,15 +884,12 @@ exports.getHomePageData = async (req, res) => {
       ...category.get({ plain: true }),
       subcategories:
         category.Subcategories?.map((subcategory) => ({
-          ...subcategory.get({ plain: true }),
+          //   ...subcategory.get({ plain: true }),
+          id: subcategory.id,
+          subcategory_name: subcategory.subcategory_name,
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })) ?? [],
     }));
-
-    console.log(
-      "manipulatedResponse:",
-      manipulatedResponse[0].subcategories[0]?.products
-    );
 
     if (
       //   heroSections.length > 0 &&
