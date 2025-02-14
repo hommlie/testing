@@ -913,7 +913,7 @@ exports.getHomePageData = async (req, res) => {
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
           faqs: data.faqs || [],
-          all_categories: manipulatedResponse,
+          all_categories: manipulatedResponse[0].subcategories[0]?.products,
         },
       });
     } else {
