@@ -869,7 +869,11 @@ exports.getHomePageData = async (req, res) => {
           {}
         );
         console.log("groupedvariations:", {
-          ...product.get({ plain: true }),
+          //   ...product.get({ plain: true }),
+          id: product.id,
+          product_name: product.product_name,
+          product_price: product.product_price,
+          discounted_price: product.discounted_price,
           attributes: Object.values(groupedVariations),
         });
 
