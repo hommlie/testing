@@ -77,26 +77,6 @@ exports.viewAllListing = async (req, res) => {
         as: "rattings",
         required: false,
       },
-      // {
-      //     model: Wishlist,
-      //     attributes: [
-      //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-      //     ],
-      //     where: {
-      //         user_id: user_id
-      //     },
-      //     required: false,
-      //     as: 'wishlist'
-      // },
-      // {
-      //     model: User,
-      //     attributes: [],
-      //     where: {
-      //         is_available: 1
-      //     },
-      //     required: true,
-      //     as: 'vendor'
-      // }
     ];
 
     switch (type) {
@@ -144,10 +124,10 @@ exports.viewAllListing = async (req, res) => {
             ...commonProductAttributes,
             [
               sequelize.literal(`(
-                          SELECT COUNT(*)
-                          FROM orders
-                          WHERE orders.product_id = Product.id
-                      )`),
+                  SELECT COUNT(*)
+                  FROM orders
+                  WHERE orders.product_id = Product.id
+                )`),
               "order_count",
             ],
           ],
@@ -156,7 +136,31 @@ exports.viewAllListing = async (req, res) => {
             status: 1,
           },
           order: [[sequelize.literal("order_count"), "DESC"]],
-          group: ["Product.id"],
+          group: [
+            "Product.id",
+            "Product.product_name",
+            "Product.product_price",
+            "Product.discounted_price",
+            "Product.is_variation",
+            "Product.sku",
+            "Product.slug",
+            "Product.rating",
+            "Product.total_reviews",
+            "productimage.id",
+            "productimage.product_id",
+            "productimage.alt_tag",
+            "productimage.image_title",
+            "productimage.image_url",
+            "variation.id",
+            "variation.product_id",
+            "variation.price",
+            "variation.discounted_variation_price",
+            "variation.variation",
+            "variation.qty",
+            "rattings.id",
+            "rattings.product_id",
+            // Add other necessary columns here
+          ],
           limit: 10,
         });
         break;
