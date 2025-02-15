@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import React, { useState, useRef } from "react";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-const bannerDatalider = ({ bannerData }) => {
+const BannerDatalider = ({ bannerData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
 
@@ -10,7 +10,7 @@ const bannerDatalider = ({ bannerData }) => {
       setCurrentIndex(currentIndex - 1);
       sliderRef.current.scrollTo({
         left: (currentIndex - 1) * sliderRef.current.offsetWidth,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -20,7 +20,7 @@ const bannerDatalider = ({ bannerData }) => {
       setCurrentIndex(currentIndex + 1);
       sliderRef.current.scrollTo({
         left: (currentIndex + 1) * sliderRef.current.offsetWidth,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -38,7 +38,7 @@ const bannerDatalider = ({ bannerData }) => {
           >
             <a href={banner.link}>
               <img
-                src={banner.image_url}
+                src={banner.image}
                 title={banner.image_title}
                 alt={banner.alt_tag}
                 className="w-full h-32 lg:h-[290px] object-contain rounded-lg border"
@@ -63,4 +63,4 @@ const bannerDatalider = ({ bannerData }) => {
   );
 };
 
-export default bannerDatalider;
+export default BannerDatalider;

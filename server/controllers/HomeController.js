@@ -730,7 +730,7 @@ exports.getHomePageData = async (req, res) => {
         //   [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-videos/'`), sequelize.col('video')), 'video']
         "video",
       ],
-      limit: 4,
+      //   limit: 4,
     });
 
     const testimonials = await Testimonials.findAll({

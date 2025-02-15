@@ -11,6 +11,14 @@ import { IoIosArrowForward, IoMdPlay } from "react-icons/io";
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ServiceSection from "../../components/ServiceSection";
+import BannerDatalider from "../../components/BannerSection";
+
+import DownloadAppImg from "/assets/bg/download-app.svg";
+import Playstore from "/assets/icons/playstore.svg";
+import Appstore from "/assets/icons/appstore.svg";
+import ReferEarnImg from "/assets/bg/refer-earn.svg";
+import TestimonialCarousel from "../../components/TestimonialCarousel";
 
 const HomePage = () => {
   const [location, setLocation] = useState("");
@@ -158,173 +166,6 @@ const HomePage = () => {
     }
   };
 
-  // Handle search functionality
-  const handleSearch = async (term) => {
-    if (term.length < 2) {
-      setSearchResults([]);
-      return;
-    }
-    try {
-      const response = await axios.get(`/api/search?term=${term}`);
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error("Search error:", error);
-    }
-  };
-
-  // Handle category selection and variation fetch
-  const handleCategorySelect = async (category) => {
-    setSelectedCategory(category);
-    try {
-      const response = await axios.get("/api/variations", {
-        params: {
-          categoryId: category,
-          subCategoryId: selectedSubCategory,
-          productId: selectedProduct,
-          attributeId: selectedAttribute,
-        },
-      });
-      setVariations(response.data);
-    } catch (error) {
-      console.error("Error fetching variations:", error);
-    }
-  };
-
-  // Handle add to cart
-  const handleAddToCart = async (variationId) => {
-    try {
-      await axios.post("/api/cart/add", {
-        variationId,
-        quantity: 1,
-      });
-      // Show success message or update cart count
-    } catch (error) {
-      console.error("Add to cart error:", error);
-    }
-  };
-
-  // Services Section Card Component
-  const ServiceCard = ({ variation }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-lg shadow-md p-6"
-    >
-      <div
-        className={`${
-          variation.recommended ? "bg-emerald-800" : "bg-white"
-        } p-6 rounded-lg`}
-      >
-        <span
-          className={`text-sm ${
-            variation.recommended ? "text-white" : "text-gray-600"
-          }`}
-        >
-          {variation.recommended ? "RECOMMENDED" : ""}
-        </span>
-        <h3
-          className={`text-2xl font-bold mb-4 ${
-            variation.recommended ? "text-white" : "text-gray-800"
-          }`}
-        >
-          ₹{variation.price}/-
-        </h3>
-        <p
-          className={`mb-4 ${
-            variation.recommended ? "text-white" : "text-gray-600"
-          }`}
-        >
-          {variation.description}
-        </p>
-        <ul className="space-y-3 mb-6">
-          {variation.features?.map((feature, index) => (
-            <li
-              key={index}
-              className={`flex items-center ${
-                variation.recommended ? "text-white" : "text-gray-600"
-              }`}
-            >
-              <span className="mr-2">✓</span>
-              {feature}
-            </li>
-          ))}
-        </ul>
-        <button
-          className={`w-full py-3 rounded-lg ${
-            variation.recommended
-              ? "bg-white text-emerald-800"
-              : "bg-emerald-800 text-white"
-          } font-medium transition-colors hover:opacity-90`}
-          onClick={() => handleAddToCart(variation)}
-        >
-          Book Now
-        </button>
-      </div>
-    </motion.div>
-  );
-
-  // Banner Carousel
-  const BannerCarousel = () => (
-    <div className="relative overflow-hidden">
-      <div className="flex">
-        {data.banners?.map((banner, index) => (
-          <motion.div
-            key={index}
-            className="min-w-full"
-            initial={{ opacity: 0 }}
-            onClick={() => {
-              window.location.href = banner.link;
-            }}
-            animate={{ opacity: index === currentBannerIndex ? 1 : 0 }}
-          >
-            <img
-              src={banner.image}
-              alt={banner.alt_tag}
-              className="w-full h-64 object-cover rounded-lg"
-            />
-          </motion.div>
-        ))}
-      </div>
-      <CarouselButtons
-        currentIndex={currentBannerIndex}
-        setCurrentIndex={setCurrentBannerIndex}
-        length={data.banners.length}
-      />
-    </div>
-  );
-
-  // Testimonial Carousel
-  const TestimonialCarousel = () => (
-    <div className="relative overflow-hidden bg-white rounded-lg p-6">
-      <div className="flex">
-        {data.testimonials.map((testimonial, index) => (
-          <motion.div
-            key={index}
-            className="min-w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: index === currentTestimonialIndex ? 1 : 0 }}
-          >
-            <div className="flex flex-col items-center text-center">
-              <img
-                src={testimonial.image}
-                alt={testimonial.name}
-                className="w-16 h-16 rounded-full mb-4"
-              />
-              <p className="text-gray-600 mb-4">{testimonial.feedback}</p>
-              <h4 className="font-bold">{testimonial.name}</h4>
-              <p className="text-sm text-gray-500">{testimonial.location}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-      <CarouselButtons
-        currentIndex={currentTestimonialIndex}
-        setCurrentIndex={setCurrentTestimonialIndex}
-        length={data.testimonials.length}
-      />
-    </div>
-  );
-
   // Carousel Navigation Buttons
   const CarouselButtons = ({ currentIndex, setCurrentIndex, length }) => (
     <div className="absolute bottom-4 right-4 flex space-x-2">
@@ -420,20 +261,16 @@ const HomePage = () => {
           </div>
         </div>
         <div className="flex space-x-4">
-          <img src="/api/placeholder/150/50" alt="App Store" className="h-12" />
-          <img
-            src="/api/placeholder/150/50"
-            alt="Play Store"
-            className="h-12"
-          />
+          <motion.button>
+            <img src={Playstore} alt="App Store" className="h-12" />
+          </motion.button>
+          <motion.button>
+            <img src={Appstore} alt="Play Store" className="h-12" />
+          </motion.button>
         </div>
       </div>
       <div>
-        <img
-          src="/api/placeholder/300/600"
-          alt="App Screenshot"
-          className="mx-auto"
-        />
+        <img src={DownloadAppImg} alt="App Screenshot" className="mx-auto" />
       </div>
     </div>
   );
@@ -447,12 +284,14 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           className="container mx-auto px-4 pt-8"
         >
-          <h1 className="hidden md:block text-3xl md:text-4xl font-bold text-center mb-8">
-            Explore Top Rated Certified experts nearby
-          </h1>
+          <div className="flex justify-center py-2">
+            <h1 className="hidden md:block max-w-3xl text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
+              Explore Top Rated Certified experts nearby
+            </h1>
+          </div>
 
           {/* Search Bar */}
-          <div className="max-w-3xl mx-auto mb-8">
+          <div className="max-w-3xl mx-auto mb-8 py-2">
             <div className="flex flex-col md:flex-row gap-4">
               {/* Mobile Cart Button */}
               <div className="flex md:hidden justify-between items-center mb-4">
@@ -544,9 +383,9 @@ const HomePage = () => {
           </div>
 
           {/* Hero Slider and Features */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Main Slider */}
-            <div className="md:col-span-2 relative h-64 md:h-80 rounded-xl overflow-hidden">
+            <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
               <motion.div
                 animate={{ x: `-${currentSlide * 100}%` }}
                 transition={{ duration: 0.5 }}
@@ -569,72 +408,50 @@ const HomePage = () => {
             </div>
 
             {/* Feature Cards */}
-            {heroSections?.map((feature, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                className="relative bg-white rounded-xl shadow-sm"
-              >
-                <img
-                  src={feature.image}
-                  alt={feature.alt_tag}
-                  className="w-full h-full object-cover rounded-xl"
-                />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-center">
-                  <div className="p-4">
-                    <h3 className="text-white text-2xl font-bold mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-white mb-4">{feature.sub_title}</p>
+            <div className="grid grid-cols-3 gap-4">
+              {heroSections?.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.05 }}
+                  className="relative bg-white rounded-xl shadow-sm"
+                >
+                  <img
+                    src={feature.image}
+                    alt={feature.alt_tag}
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-center">
+                    <div className="p-4">
+                      <h3 className="text-white text-2xl font-bold mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-white mb-4">{feature.sub_title}</p>
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => (window.location.href = feature.btn_link)}
+                      className="w-fit flex justify-between gap-2 px-4 items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
+                    >
+                      <span>{feature.btn_text}</span>
+                      <IoIosArrowForward />
+                    </motion.button>
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => (window.location.href = feature.btn_link)}
-                    className="w-fit flex justify-between gap-2 px-4 items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
-                  >
-                    <span>{feature.btn_text}</span>
-                    <IoIosArrowForward />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </motion.div>
       </section>
 
       {/* Services Section */}
-      <section className="px-10 py-12">
-        <div className="flex overflow-x-auto space-x-4 mb-8 py-2">
-          {data.all_categories.map((category) => (
-            <motion.button
-              key={category.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`flex items-center px-6 py-3 rounded-lg ${
-                selectedCategory?.id === category.id
-                  ? "bg-emerald-800 text-white"
-                  : "bg-white text-gray-800 border"
-              }`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              <img src={category.icon_url} alt="" className="w-5 h-5 mr-2" />
-              {category.category_name}
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Service Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {variations.map((variation) => (
-            <ServiceCard key={variation.id} variation={variation} />
-          ))}
-        </div>
-      </section>
+      <ServiceSection categories={data.all_categories} />
 
       {/* Banner Section */}
-      <section className="px-10 py-12">
-        <BannerCarousel />
+      <section className="py-12">
+        {data?.banners?.length ? (
+          <BannerDatalider bannerData={data?.banners} />
+        ) : null}
       </section>
 
       {/* Offers Section */}
@@ -741,13 +558,9 @@ const HomePage = () => {
 
       {/* Refer & Earn */}
       <section className="px-10 py-12">
-        <div className="bg-green-50 p-6 rounded-lg">
+        <div className="bg-[#D8EEDD] p-6 rounded-lg">
           <div className="flex items-center space-x-4">
-            <img
-              src="/api/placeholder/50/50"
-              alt="Refer Icon"
-              className="w-12 h-12"
-            />
+            <img src={ReferEarnImg} alt="Refer Icon" className="w-fit h-28" />
             <div>
               <h3 className="font-bold">Refer & Get Free Services</h3>
               <p className="text-gray-600">
@@ -759,13 +572,13 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonial */}
+      {/* Testimonial Section */}
       <section className="px-10 py-12">
-        <TestimonialCarousel />
+        <TestimonialCarousel testimonials={data.testimonials} />
       </section>
 
       {/* App Download Section */}
-      <section className="px-10 py-12">
+      <section className="px-10 py-12 bg-[#F8F8F8]">
         <AppDownloadSection />
       </section>
 
