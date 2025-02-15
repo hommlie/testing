@@ -19,6 +19,11 @@ import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
 import ReferEarnImg from "/assets/bg/refer-earn.svg";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
+import ThoughtfulSlider from "../../components/ThoughtfulSlider";
+import ProductSlider from "../../components/ProductSlider";
+import StatsSection from "../../components/StatsSection";
+import PopularCategorySection from "../../components/PopularCategorySection";
+import InspectionFormSection from "../../components/InspectionFormSection";
 
 const HomePage = () => {
   const [location, setLocation] = useState("");
@@ -278,7 +283,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative h-[500px] bg-white">
+      <section className="relative bg-white py-12">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -478,81 +483,19 @@ const HomePage = () => {
 
       {/* Most Booked Services */}
       <section className="py-12 bg-white">
-        <div className="container mx-auto px-4 mb-2">
-          <p className="text-hommlie font-semibold">Services</p>
-          <h2 className="text-2xl font-bold mb-8">Most Booked Services</h2>
-          <div className="relative">
-            <div className="flex gap-6 p-2 overflow-x-auto scrollbar-hide pb-4">
-              {mostBooked?.map((service) => (
-                <motion.div
-                  key={service.id}
-                  whileHover={{ scale: 1.02 }}
-                  className="min-w-[300px] bg-white rounded-xl shadow-sm border border-hommlie overflow-hidden"
-                >
-                  <div className="relative h-48">
-                    <img
-                      src={service.productimage?.image_url}
-                      alt={service.productimage?.alt_tag}
-                      title={service.productimage?.image_title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold h-14 mb-2">
-                      {service.product_name}
-                    </h3>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <span className="text-yellow-400 mr-1">⭐</span>
-                        <span>{service.rating}</span>
-                        <span className="text-gray-500">
-                          ({service.total_reviews})
-                        </span>
-                      </div>
-                      <span>From ₹{service.discounted_price}/service</span>
-                    </div>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-fit px-4 mt-4 bg-white text-hommlie border border-hommlie py-2 rounded-lg"
-                    >
-                      Book Now
-                    </motion.button>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <ProductSlider
+          title={"Most Booked Services"}
+          services={data?.most_booked_services}
+        />
       </section>
 
       {/* Thoughtful Curations */}
       <section className="px-10 py-12 bg-[#F5F5F5]">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">Thoughtful Curations</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {thoughtfulContent?.map((content, index) => (
-              <motion.div
-                key={content.id}
-                whileHover={{ scale: 1.05 }}
-                className="relative w-full max-w-[320px] aspect-[9/16] rounded-xl overflow-hidden cursor-pointer"
-                onClick={() => setCurrentVideoIndex(index)}
-              >
-                <img
-                  src={content.thumbnail}
-                  alt={content.title}
-                  className="w-full h-full"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-[#FFFFFF4D] rounded-full flex items-center justify-center">
-                    <span className="text-2xl text-[#FFFFFF4D]">
-                      <IoMdPlay />
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <ThoughtfulSlider
+            videos={thoughtfulContent}
+            onVideoClick={setCurrentVideoIndex}
+          />
         </div>
       </section>
 
@@ -585,6 +528,21 @@ const HomePage = () => {
       {/* FAQ Section */}
       <section className="px-10 py-12">
         <FaqSection />
+      </section>
+
+      {/* Stats Section */}
+      <section className="px-10 py-12">
+        <StatsSection />
+      </section>
+
+      {/* inspection form section */}
+      <section className="px-10 py-12">
+        <InspectionFormSection />
+      </section>
+
+      {/* Popular Categories Section with Tabs */}
+      <section className="px-10 py-12">
+        <PopularCategorySection data={data?.all_categories} />
       </section>
 
       {/* Video Modal */}

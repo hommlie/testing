@@ -210,7 +210,7 @@ const ServiceSection = ({ categories }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <section className="max-w-7xl mx-auto px-4 py-12">
       {/* Category Cards */}
       <div className="flex overflow-x-auto gap-4 pb-6 hide-scrollbar">
         {categories.map((category) => (
@@ -271,7 +271,7 @@ const ServiceSection = ({ categories }) => {
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
