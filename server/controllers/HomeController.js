@@ -700,10 +700,10 @@ exports.getHomePageData = async (req, res) => {
         ...commonProductAttributes,
         [
           sequelize.literal(`(
-                        SELECT COUNT(*)
-                        FROM orders
-                        WHERE orders.product_id = Product.id
-                    )`),
+                          SELECT COUNT(*)
+                          FROM orders
+                          WHERE orders.product_id = Product.id
+                      )`),
           "order_count",
         ],
       ],
