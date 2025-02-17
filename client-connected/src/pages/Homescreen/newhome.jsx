@@ -7,7 +7,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { RxCross1 } from "react-icons/rx";
 import cartIcon from "../../assets/images/cart-icon.svg";
 import config from "../../config/config";
-import { IoIosArrowForward, IoMdPlay } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward, IoMdPlay } from "react-icons/io";
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -24,6 +24,9 @@ import ProductSlider from "../../components/ProductSlider";
 import StatsSection from "../../components/StatsSection";
 import PopularCategorySection from "../../components/PopularCategorySection";
 import InspectionFormSection from "../../components/InspectionFormSection";
+import ReferAndEarn from "../../components/ReferAndEarnModal";
+import InspectionModal from "../../components/InspectionModal";
+import MobileNavigation from "../../components/MobileNavigation";
 
 const HomePage = () => {
   const [location, setLocation] = useState("");
@@ -64,6 +67,8 @@ const HomePage = () => {
   const [offers, setOffers] = useState([]);
   const [mostBooked, setMostBooked] = useState([]);
   const [thoughtfulContent, setThoughtfulContent] = useState([]);
+  const [isInspectionModalOpen, setIsInspectionModalOpen] = useState(false);
+  const [isReferModalOpen, setIsReferModalOpen] = useState(false);
 
   // States for carousel sections
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -131,8 +136,8 @@ const HomePage = () => {
           if (data.results && data.results[0]) {
             const locationStings =
               data.results[0]?.formatted_address.split(",");
-            if (locationStings.length > 3) {
-              setCurrentLocation(locationStings?.slice(0, 4)?.join(","));
+            if (locationStings.length > 2) {
+              setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
             } else {
               setCurrentLocation(data.results[0]?.formatted_address);
             }
@@ -170,28 +175,6 @@ const HomePage = () => {
       setSearchResults(results);
     }
   };
-
-  // Carousel Navigation Buttons
-  const CarouselButtons = ({ currentIndex, setCurrentIndex, length }) => (
-    <div className="absolute bottom-4 right-4 flex space-x-2">
-      <button
-        onClick={() =>
-          setCurrentIndex((prev) => (prev === 0 ? length - 1 : prev - 1))
-        }
-        className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-      <button
-        onClick={() =>
-          setCurrentIndex((prev) => (prev === length - 1 ? 0 : prev + 1))
-        }
-        className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
-    </div>
-  );
 
   // FAQ Section
   const FaqSection = () => (
@@ -240,7 +223,7 @@ const HomePage = () => {
   // App Download Section
   const AppDownloadSection = () => (
     <div className="grid md:grid-cols-2 gap-8 items-center">
-      <div>
+      <div className="hidden md:block">
         <h2 className="text-3xl font-bold mb-4">Get Things Done Easily.</h2>
         <h3 className="text-2xl font-bold mb-6">Download The Hommlie App</h3>
         <p className="text-gray-600 mb-8">
@@ -277,11 +260,19 @@ const HomePage = () => {
       <div>
         <img src={DownloadAppImg} alt="App Screenshot" className="mx-auto" />
       </div>
+      <div className="flex md:hidden space-x-4">
+        <motion.button>
+          <img src={Playstore} alt="App Store" className="h-12" />
+        </motion.button>
+        <motion.button>
+          <img src={Appstore} alt="Play Store" className="h-12" />
+        </motion.button>
+      </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-white py-12">
         <motion.div
@@ -289,8 +280,8 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           className="container mx-auto px-4 pt-8"
         >
-          <div className="flex justify-center py-2">
-            <h1 className="hidden md:block max-w-3xl text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
+          <div className="hidden md:block flex justify-center py-2">
+            <h1 className="max-w-3xl text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
               Explore Top Rated Certified experts nearby
             </h1>
           </div>
@@ -375,10 +366,10 @@ const HomePage = () => {
                         }
                         className="w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors flex items-center justify-between group"
                       >
-                        <span className="text-gray-800 group-hover:text-blue-600">
+                        <span className="text-gray-800 group-hover:text-hommlie">
                           {result.product_name}
                         </span>
-                        <IoIosArrowForward className="text-gray-400 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-transform" />
+                        <IoIosArrowForward className="text-gray-400 group-hover:text-hommlie transform group-hover:translate-x-1 transition-transform" />
                       </button>
                     </motion.div>
                   ))}
@@ -390,10 +381,10 @@ const HomePage = () => {
           {/* Hero Slider and Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Main Slider */}
-            <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
+            <div className="relative h-40 md:h-80 rounded-xl overflow-hidden">
               <motion.div
                 animate={{ x: `-${currentSlide * 100}%` }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
                 className="flex h-full"
               >
                 {heroSlides?.map((slide, index) => (
@@ -410,15 +401,49 @@ const HomePage = () => {
                   </a>
                 ))}
               </motion.div>
+
+              {/* Slider Controls */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                {heroSlides?.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      currentSlide === index ? "w-4 bg-white" : "bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Navigation Buttons */}
+              <button
+                onClick={() =>
+                  setCurrentSlide((prev) =>
+                    prev === 0 ? heroSlides.length - 1 : prev - 1
+                  )
+                }
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-colors"
+              >
+                <IoIosArrowBack className="text-gray-800 text-xl" />
+              </button>
+              <button
+                onClick={() =>
+                  setCurrentSlide((prev) =>
+                    prev === heroSlides.length - 1 ? 0 : prev + 1
+                  )
+                }
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-colors"
+              >
+                <IoIosArrowForward className="text-gray-800 text-xl" />
+              </button>
             </div>
 
             {/* Feature Cards */}
             <div className="grid grid-cols-3 gap-4">
               {heroSections?.map((feature, index) => (
-                <motion.div
+                <div
                   key={index}
-                  whileHover={{ scale: 1.05 }}
-                  className="relative bg-white rounded-xl shadow-sm"
+                  className="relative bg-white rounded-xl shadow-sm overflow-hidden"
                 >
                   <img
                     src={feature.image}
@@ -432,17 +457,23 @@ const HomePage = () => {
                       </h3>
                       <p className="text-white mb-4">{feature.sub_title}</p>
                     </div>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => (window.location.href = feature.btn_link)}
-                      className="w-fit flex justify-between gap-2 px-4 items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
-                    >
-                      <span>{feature.btn_text}</span>
-                      <IoIosArrowForward />
-                    </motion.button>
+                    <div className="relative overflow-hidden">
+                      <motion.div
+                        whileHover={{ x: 0 }}
+                        initial={{ x: "calc(100% - 220px)" }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        className="w-fit flex items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
+                      >
+                        <span className="px-4 whitespace-nowrap">
+                          {feature.btn_text}
+                        </span>
+                        <div className="w-10 flex justify-center">
+                          <IoIosArrowForward />
+                        </div>
+                      </motion.div>
+                    </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -468,7 +499,7 @@ const HomePage = () => {
               <motion.div
                 key={offer.id}
                 whileHover={{ scale: 1.02 }}
-                className="h-80 rounded-xl overflow-hidden"
+                className="h-40 md:h-80 rounded-xl overflow-hidden"
               >
                 <img
                   src={offer.image}
@@ -501,9 +532,12 @@ const HomePage = () => {
 
       {/* Refer & Earn */}
       <section className="px-10 py-12">
-        <div className="bg-[#D8EEDD] p-6 rounded-lg">
-          <div className="flex items-center space-x-4">
-            <img src={ReferEarnImg} alt="Refer Icon" className="w-fit h-28" />
+        <div
+          onClick={() => setIsReferModalOpen(true)}
+          className="bg-[#D8EEDD] p-6 rounded-lg"
+        >
+          <div className="flex flex-col md:flex-row items-center space-x-4">
+            <img src={ReferEarnImg} alt="Refer Icon" className="w-fit h-32" />
             <div>
               <h3 className="font-bold">Refer & Get Free Services</h3>
               <p className="text-gray-600">
@@ -566,6 +600,8 @@ const HomePage = () => {
         </div>
       )}
 
+      <MobileNavigation />
+
       {/* Location Modal */}
       {isLocationModalOpen && (
         <LocationModal
@@ -573,6 +609,15 @@ const HomePage = () => {
           setCurrentLocation={setCurrentLocation}
         />
       )}
+
+      <InspectionModal
+        isOpen={isInspectionModalOpen}
+        onClose={() => setIsInspectionModalOpen(false)}
+      />
+      <ReferAndEarn
+        isOpen={isReferModalOpen}
+        onClose={() => setIsReferModalOpen(false)}
+      />
     </div>
   );
 };

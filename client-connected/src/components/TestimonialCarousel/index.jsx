@@ -69,7 +69,7 @@ const TestimonialCarousel = ({ testimonials = [] }) => {
       </div>
 
       <div className="relative overflow-hidden py-2">
-        <div className="relative h-[400px]">
+        <div className="relative h-[450px]">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentIndex}

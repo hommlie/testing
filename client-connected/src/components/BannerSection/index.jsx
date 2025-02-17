@@ -48,13 +48,13 @@ const BannerDatalider = ({ bannerData }) => {
         ))}
       </div>
       <button
-        className="hidden md:block absolute top-1/2 -translate-y-1/2 left-4 text-2xl rounded-full p-2 bg-gray-400 hover:bg-gray-500 text-white"
+        className="hidden md:block absolute top-1/2 -translate-y-1/2 left-4 text-2xl rounded-full p-2 bg-white hover:bg-gray-400 text-black shadow-lg"
         onClick={prevSlide}
       >
         <IoIosArrowBack />
       </button>
       <button
-        className="hidden md:block absolute top-1/2 -translate-y-1/2 right-4 text-2xl rounded-full p-2 bg-gray-400 hover:bg-gray-500 text-white"
+        className="hidden md:block absolute top-1/2 -translate-y-1/2 right-4 text-2xl rounded-full p-2 bg-white hover:bg-gray-400 text-black shadow-lg"
         onClick={nextSlide}
       >
         <IoIosArrowForward />

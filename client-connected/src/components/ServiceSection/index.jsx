@@ -10,40 +10,88 @@ const ServiceSection = ({ categories }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
   const [currentVariations, setCurrentVariations] = useState([]);
+  const [showAllVariations, setShowAllVariations] = useState(false);
 
-  // Initialize first category when component mounts
+  // Initialize selections when component mounts
   useEffect(() => {
     if (categories?.length > 0 && !selectedCategory) {
-      setSelectedCategory(categories[0].id);
+      const firstCategory = categories[0];
+      setSelectedCategory(firstCategory.id);
+
+      if (firstCategory.subcategories?.length > 0) {
+        const firstSubcategory = firstCategory.subcategories[0];
+        setSelectedSubCategory(firstSubcategory.id);
+
+        if (firstSubcategory.products?.length > 0) {
+          const firstProduct = firstSubcategory.products[0];
+          setSelectedProduct(firstProduct.id);
+
+          if (firstProduct.attributes?.length > 0) {
+            setSelectedAttribute(firstProduct.attributes[0].id);
+          }
+        }
+      }
     }
   }, [categories]);
 
   // Reset dependent selections when category changes
   useEffect(() => {
     if (selectedCategory) {
-      setSelectedSubCategory(null);
-      setSelectedProduct(null);
-      setSelectedAttribute(null);
-      setCurrentVariations([]);
+      const category = categories.find((c) => c.id === selectedCategory);
+      if (category?.subcategories?.length > 0) {
+        setSelectedSubCategory(category.subcategories[0].id);
+        const firstSubcategory = category.subcategories[0];
+
+        if (firstSubcategory.products?.length > 0) {
+          setSelectedProduct(firstSubcategory.products[0].id);
+          const firstProduct = firstSubcategory.products[0];
+
+          if (firstProduct.attributes?.length > 0) {
+            setSelectedAttribute(firstProduct.attributes[0].id);
+          }
+        }
+      }
+      setShowAllVariations(false);
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, categories]);
 
   // Reset dependent selections when subcategory changes
   useEffect(() => {
     if (selectedSubCategory) {
-      setSelectedProduct(null);
-      setSelectedAttribute(null);
-      setCurrentVariations([]);
+      const category = categories.find((c) => c.id === selectedCategory);
+      const subcategory = category?.subcategories.find(
+        (s) => s.id === selectedSubCategory
+      );
+
+      if (subcategory?.products?.length > 0) {
+        setSelectedProduct(subcategory.products[0].id);
+        const firstProduct = subcategory.products[0];
+
+        if (firstProduct.attributes?.length > 0) {
+          setSelectedAttribute(firstProduct.attributes[0].id);
+        }
+      }
+      setShowAllVariations(false);
     }
-  }, [selectedSubCategory]);
+  }, [selectedSubCategory, selectedCategory, categories]);
 
   // Reset dependent selections when product changes
   useEffect(() => {
     if (selectedProduct) {
-      setSelectedAttribute(null);
-      setCurrentVariations([]);
+      const category = categories.find((c) => c.id === selectedCategory);
+      const subcategory = category?.subcategories.find(
+        (s) => s.id === selectedSubCategory
+      );
+      const product = subcategory?.products.find(
+        (p) => p.id === selectedProduct
+      );
+
+      if (product?.attributes?.length > 0) {
+        setSelectedAttribute(product.attributes[0].id);
+      }
+      setShowAllVariations(false);
     }
-  }, [selectedProduct]);
+  }, [selectedProduct, selectedCategory, selectedSubCategory, categories]);
 
   // Update variations when attribute changes
   useEffect(() => {
@@ -61,6 +109,7 @@ const ServiceSection = ({ categories }) => {
 
       if (attribute?.variations) {
         setCurrentVariations(attribute.variations);
+        setShowAllVariations(false);
       }
     }
   }, [
@@ -70,6 +119,14 @@ const ServiceSection = ({ categories }) => {
     selectedSubCategory,
     selectedProduct,
   ]);
+
+  // Get visible variations based on showAllVariations state
+  const getVisibleVariations = () => {
+    if (showAllVariations || currentVariations.length <= 3) {
+      return currentVariations;
+    }
+    return currentVariations.slice(0, 3);
+  };
 
   // Get current subcategories
   const getCurrentSubcategories = () => {
@@ -122,14 +179,14 @@ const ServiceSection = ({ categories }) => {
         >
           <div className="p-6 flex flex-col h-full">
             {isRecommended && (
-              <div className="mb-4">
-                <span className="text-white text-sm font-medium">
+              <div className="flex justify-center mb-4">
+                <span className="bg-white rounded-full py-1 px-4 text-hommlie text-sm font-medium">
                   RECOMMENDED
                 </span>
               </div>
             )}
 
-            <div className="mb-6">
+            <div className="mb-6 text-center">
               <div
                 className={`text-3xl font-bold mb-2 ${
                   isRecommended ? "text-white" : "text-gray-900"
@@ -231,7 +288,7 @@ const ServiceSection = ({ categories }) => {
               ${
                 selectedCategory === category.id
                   ? "bg-emerald-800 text-white"
-                  : "bg-white text-gray-800 border border-gray-200"
+                  : "bg-white text-gray-800 border border-hommlie"
               }`}
           >
             {category.icon_url && (
@@ -269,15 +326,31 @@ const ServiceSection = ({ categories }) => {
 
       {/* Variation Cards */}
       {currentVariations.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentVariations.map((variation, index) => (
-            <VariationCard
-              key={variation.id}
-              variation={variation}
-              isRecommended={index === 0}
-              product={getCurrentProduct()}
-            />
-          ))}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {getVisibleVariations().map((variation, index) => (
+              <VariationCard
+                key={variation.id}
+                variation={variation}
+                isRecommended={index === 0}
+                product={getCurrentProduct()}
+              />
+            ))}
+          </div>
+
+          {/* View All Button */}
+          {currentVariations.length > 3 && (
+            <div className="flex justify-center">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowAllVariations(!showAllVariations)}
+                className="px-6 py-3 bg-emerald-800 text-white rounded-lg font-medium hover:bg-emerald-900 transition-colors"
+              >
+                {showAllVariations ? "Show Less" : "View All"}
+              </motion.button>
+            </div>
+          )}
         </div>
       )}
     </section>

@@ -612,7 +612,7 @@ export default function ProductPage() {
     location && currentLocation ? ` in ${currentLocation}` : "";
 
   return (
-    <main className="main-div flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
+    <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <Loading />
@@ -647,7 +647,7 @@ export default function ProductPage() {
             )}
           </nav>
 
-          <div className="flex flex-col lg:flex-row lg:space-x-4 scroll-smooth">
+          <section className="flex flex-col lg:flex-row lg:space-x-4 scroll-smooth">
             <div className="flex-1 space-y-6 lg:w-2/3">
               <LoginSignup
                 isOpen={isModalOpen}
@@ -681,7 +681,7 @@ export default function ProductPage() {
                 </div>
                 <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between mt-10">
                   <div className="space-y-1 sm:space-y-3 lg:space-y-4">
-                    <p className="text-2xl sm:text-5xl font-bold mb-2">
+                    <p className="text-2xl sm:text-4xl font-bold mb-2">
                       {prodData?.product_name}
                     </p>
                     <div className="flex items-center mb-2">
@@ -1390,7 +1390,7 @@ export default function ProductPage() {
                 </div>
               )}
             </div>
-          </div>
+          </section>
 
           <div className="flex flex-col gap-4 mt-4">
             <section className="bg-white rounded-lg w-full p-4 glow-border">
