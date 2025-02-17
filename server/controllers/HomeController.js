@@ -591,7 +591,7 @@ exports.getHomePageData = async (req, res) => {
               sequelize.literal(
                 `'${apiUrl}/storage/app/public/images/products/'`
               ),
-              sequelize.col("productimage.image")
+              sequelize.col("image")
             ),
             "image_url",
           ],
@@ -613,6 +613,20 @@ exports.getHomePageData = async (req, res) => {
         ],
         as: "variation",
         required: false,
+      },
+      {
+        model: Ratting,
+        as: "rattings",
+        required: false,
+      },
+      {
+        model: User,
+        attributes: [],
+        where: {
+          is_available: 1,
+        },
+        required: true,
+        as: "vendor",
       },
     ];
 
