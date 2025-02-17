@@ -150,7 +150,7 @@ exports.viewAllListing = async (req, res) => {
             "productimage.product_id",
             "productimage.alt_tag",
             "productimage.image_title",
-            "productimage.image_url",
+            "productimage.image",
             "variation.id",
             "variation.product_id",
             "variation.price",

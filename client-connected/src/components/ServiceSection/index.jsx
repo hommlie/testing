@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ServiceSection = ({ categories }) => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
   const [currentVariations, setCurrentVariations] = useState([]);
+
+  // Initialize first category when component mounts
+  useEffect(() => {
+    if (categories?.length > 0 && !selectedCategory) {
+      setSelectedCategory(categories[0].id);
+    }
+  }, [categories]);
 
   // Reset dependent selections when category changes
   useEffect(() => {
@@ -64,14 +73,14 @@ const ServiceSection = ({ categories }) => {
 
   // Get current subcategories
   const getCurrentSubcategories = () => {
-    const category = categories.find((c) => c.id === selectedCategory);
+    const category = categories?.find((c) => c.id === selectedCategory);
     return category?.subcategories || [];
   };
 
   // Get current products
   const getCurrentProducts = () => {
-    const category = categories.find((c) => c.id === selectedCategory);
-    const subcategory = category?.subcategories.find(
+    const category = categories?.find((c) => c.id === selectedCategory);
+    const subcategory = category?.subcategories?.find(
       (s) => s.id === selectedSubCategory
     );
     return subcategory?.products || [];
@@ -79,70 +88,103 @@ const ServiceSection = ({ categories }) => {
 
   // Get current attributes
   const getCurrentAttributes = () => {
-    const category = categories.find((c) => c.id === selectedCategory);
-    const subcategory = category?.subcategories.find(
+    const category = categories?.find((c) => c.id === selectedCategory);
+    const subcategory = category?.subcategories?.find(
       (s) => s.id === selectedSubCategory
     );
-    const product = subcategory?.products.find((p) => p.id === selectedProduct);
+    const product = subcategory?.products?.find(
+      (p) => p.id === selectedProduct
+    );
     return product?.attributes || [];
   };
 
+  // Format description points
+  const formatDescription = (description) => {
+    return description?.split("|").filter((point) => point.trim());
+  };
+
   // Variation Card Component
-  const VariationCard = ({ variation, isRecommended }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`rounded-lg overflow-hidden ${
-        isRecommended ? "bg-emerald-800" : "bg-white border border-gray-200"
-      }`}
-    >
-      <div className="p-6">
-        {isRecommended && (
-          <div className="mb-4">
-            <span className="text-white text-sm font-medium">RECOMMENDED</span>
-          </div>
-        )}
+  const VariationCard = ({ variation, isRecommended, product }) => {
+    const descriptionPoints = formatDescription(variation.description);
 
-        <div className="mb-6">
-          <div
-            className={`text-3xl font-bold mb-2 ${
-              isRecommended ? "text-white" : "text-gray-900"
-            }`}
-          >
-            ₹{variation.discounted_variation_price || variation.price}/-
-          </div>
-          <h3
-            className={`text-lg ${
-              isRecommended ? "text-white" : "text-gray-700"
-            }`}
-          >
-            {variation.variation}
-          </h3>
-        </div>
-
-        {variation.description && (
-          <div
-            className={`mb-6 ${isRecommended ? "text-white" : "text-gray-600"}`}
-          >
-            <p>{variation.description}</p>
-          </div>
-        )}
-
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className={`w-full py-3 rounded-lg font-medium transition-colors
-            ${
-              isRecommended
-                ? "bg-white text-emerald-800 hover:bg-gray-100"
-                : "bg-emerald-800 text-white hover:bg-emerald-900"
-            }`}
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="h-full"
+      >
+        <div
+          className={`rounded-lg overflow-hidden h-full ${
+            isRecommended
+              ? "bg-emerald-800"
+              : "bg-white border border-emerald-800"
+          }`}
         >
-          Book Now
-        </motion.button>
-      </div>
-    </motion.div>
-  );
+          <div className="p-6 flex flex-col h-full">
+            {isRecommended && (
+              <div className="mb-4">
+                <span className="text-white text-sm font-medium">
+                  RECOMMENDED
+                </span>
+              </div>
+            )}
+
+            <div className="mb-6">
+              <div
+                className={`text-3xl font-bold mb-2 ${
+                  isRecommended ? "text-white" : "text-gray-900"
+                }`}
+              >
+                ₹{variation.discounted_variation_price || variation.price}/-
+              </div>
+              <h3
+                className={`text-lg ${
+                  isRecommended ? "text-white" : "text-gray-700"
+                }`}
+              >
+                {variation.variation}
+              </h3>
+            </div>
+
+            {descriptionPoints && (
+              <div
+                className={`mb-6 flex-grow ${
+                  isRecommended ? "text-white" : "text-gray-600"
+                }`}
+              >
+                <ul className="space-y-2">
+                  {descriptionPoints.map((point, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="mr-2">✓</span>
+                      {point.trim()}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="mt-auto">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() =>
+                  product?.slug &&
+                  navigate(`/product/${product.slug}/${product.id}`)
+                }
+                className={`w-full py-3 rounded-lg font-medium transition-colors ${
+                  isRecommended
+                    ? "bg-white text-emerald-800 hover:bg-gray-100"
+                    : "bg-emerald-800 text-white hover:bg-emerald-900"
+                }`}
+              >
+                Book Now
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
 
   // Dropdown Component
   const Dropdown = ({ label, value, options, onChange, disabled }) => (
@@ -166,54 +208,20 @@ const ServiceSection = ({ categories }) => {
     </div>
   );
 
-  const handleAddToCart = async () => {
-    if (user.length === 0) {
-      openModal();
-    } else {
-      setIsAddingToCart(true);
-      const product = {
-        user_id: user.id,
-        product_id: prod_id,
-        vendor_id: prodData.vendor_id,
-        product_name: prodData.product_name,
-        image: imageItems[0]?.image_url,
-        qty: 1,
-        price: totalAmount,
-        attribute: selectedVariation && selectedVariation.attribute_id,
-        variation: selectedVariation && selectedVariation.id,
-        tax: taxAmount,
-        shipping_cost: prodData.shipping_cost,
-      };
-
-      try {
-        const response = await axios.post(
-          `${config.API_URL}/api/addtocart`,
-          product
-        );
-        if (response.data.status === 1) {
-          console.log(response.data);
-          successNotify("Successfully added to Cart");
-          getCart();
-        }
-      } catch (error) {
-        errorNotify(error);
-        console.log("error adding to cart:", error);
-      } finally {
-        setIsAddingToCart(false);
-      }
-      setCart(product);
-      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-      existingCart.push(product);
-      localStorage.setItem("cart", JSON.stringify(existingCart));
-      getCart();
-    }
+  // Get current product for navigation
+  const getCurrentProduct = () => {
+    const category = categories?.find((c) => c.id === selectedCategory);
+    const subcategory = category?.subcategories?.find(
+      (s) => s.id === selectedSubCategory
+    );
+    return subcategory?.products?.find((p) => p.id === selectedProduct);
   };
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
       {/* Category Cards */}
-      <div className="flex overflow-x-auto gap-4 pb-6 hide-scrollbar">
-        {categories.map((category) => (
+      <div className="flex justify-center overflow-x-auto gap-4 pb-6 hide-scrollbar">
+        {categories?.map((category) => (
           <motion.button
             key={category.id}
             whileHover={{ scale: 1.02 }}
@@ -261,12 +269,13 @@ const ServiceSection = ({ categories }) => {
 
       {/* Variation Cards */}
       {currentVariations.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentVariations.map((variation, index) => (
             <VariationCard
               key={variation.id}
               variation={variation}
-              isRecommended={index === 0} // First variation is recommended
+              isRecommended={index === 0}
+              product={getCurrentProduct()}
             />
           ))}
         </div>

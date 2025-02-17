@@ -7,7 +7,7 @@ const PopularCategorySection = ({ data }) => {
     if (data?.length > 0) {
       setActiveCategory(data[0].id);
     }
-  }, []);
+  }, [data]);
 
   const activeTabContent = data?.find(
     (category) => category.id === activeCategory
