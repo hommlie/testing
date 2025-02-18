@@ -679,7 +679,7 @@ exports.getHomePageData = async (req, res) => {
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/banner/', image)`
           ),
-          "image",
+          "image_url",
         ],
       ],
       include: {
