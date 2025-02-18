@@ -27,7 +27,7 @@ import axios from "axios";
 import config from "../../config/config";
 import { jwtDecode } from "jwt-decode";
 
-export default function Header({ logo, logoAlt }) {
+export default function OldHeader({ logo, logoAlt }) {
   const {
     prodData,
     user,
