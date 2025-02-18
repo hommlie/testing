@@ -502,7 +502,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
       Route::group(['prefix'=> 'blogs'], function () {
         Route::get('/', 'BlogsController@index')->name('blogs');
         Route::get('/add', 'BlogsController@create')->name('blogs.add');
-        Route::post('/store', 'BlogsController@store')->name('inspections.store');
+        Route::post('/store', 'BlogsController@store')->name('blogs.store');
+        Route::get('/edit/{id}', 'BlogsController@edit')->name('blogs.edit');
+        Route::post('/update/{id}', 'BlogsController@update')->name('blogs.update');
+        Route::post('/change/status', 'BlogsController@changeStatus')->name('blogs.changeStatus');
+        Route::post('/delete', 'BlogsController@destroy')->name('blogs.delete');
+
+        // MANAGE BLOG CATEGORY
+        Route::get('/blogcategoryindex', 'BlogsController@blogCategoryIndex')->name('blogs.blogcategoryindex');
+        Route::get('/blogcategoryadd', 'BlogsController@blogCategoryCreate')->name('blogs.blogcategoryadd');
+        Route::post('/blogcategorystore', 'BlogsController@blogCategoryStore')->name('blogs.blogcategorystore');
+        Route::get('/blogcategoryedit/{id}', 'BlogsController@blogCategoryEdit')->name('blogs.blogcategoryedit');
+        Route::post('/blogcategoryupdate/{id}', 'BlogsController@blogCategoryUpdate')->name('blogs.blogcategoryupdate');
+        Route::post('/blogcategorychange/status', 'BlogsController@changeStatus')->name('blogs.blogcategorychange');
+        Route::post('/blogcategorydelete', 'BlogsController@blogCategoryDestroy')->name('blogs.blogcategorydelete');
     });
 
     // ADD PINCODE

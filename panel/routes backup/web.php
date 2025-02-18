@@ -498,6 +498,35 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         return response()->json($states);
     });
 
+      // MANAGE BLOGS 
+      Route::group(['prefix'=> 'blogs'], function () {
+        Route::get('/', 'BlogsController@index')->name('blogs');
+        Route::get('/add', 'BlogsController@create')->name('blogs.add');
+        Route::post('/store', 'BlogsController@store')->name('inspections.store');
+    });
+
+    // ADD PINCODE
+    Route::group(['prefix'=> 'addpincode'], function () {
+        Route::get('/', 'AddPincodeController@index')->name('addpincode');
+        Route::get('/add', 'AddPincodeController@create')->name('addpincode.add');
+        Route::post('/store', 'AddPincodeController@store')->name('addpincode.store');
+        Route::get('/edit/{id}', 'AddPincodeController@edit')->name('addpincode.edit');
+        Route::post('/update/{id}', 'AddPincodeController@update')->name('addpincode.update');
+        Route::post('/change/status', 'AddPincodeController@changeStatus')->name('addpincode.changeStatus');
+        Route::post('/delete{id}', 'AddPincodeController@destroy')->name('addpincode.delete');
+    });
+
+    // SEO PAGE
+    Route::group(['prefix'=> 'seopages'], function () {
+        Route::get('/', 'SeoPagesController@index')->name('seopages');
+        Route::get('/add', 'SeoPagesController@create')->name('seopages.add');
+        Route::post('/store', 'SeoPagesController@store')->name('seopages.store');
+        Route::get('/edit/{id}', 'SeoPagesController@edit')->name('seopages.edit');
+        Route::post('/update/{id}', 'SeoPagesController@update')->name('seopages.update');
+        Route::post('/change/status', 'SeoPagesController@changeStatus')->name('seopages.changeStatus');
+        Route::post('/delete', 'SeoPagesController@destroy')->name('seopages.delete');
+    });
+
     
 
 

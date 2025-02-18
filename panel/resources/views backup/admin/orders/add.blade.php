@@ -977,21 +977,21 @@
 
 
     const newCustomerOptions = `
-<option value="" disabled selected>- Business Lead -</option>
-<option value="exhibition">Exhibition</option>
-<option value="webLead">Web Lead</option>
-<option value="serviceLead">Service Lead</option>
-<option value="customerReferral">Customer Referral</option>
-<option value="coldCall">Cold Call</option>
-<option value="socialMedia">Social Media</option>
-<option value="whatsappChatBot">What's App Chat Bot</option>
-<option value="vendors">Vendors</option>
-<option value="others">Others</option>
-`;
-
-    const existingCustomerOption = `
-<option value="na" selected>N/A</option>
-`;
+    <option value="" disabled selected>- Business Lead -</option>
+    <option value="exhibition">Exhibition</option>
+    <option value="webLead">Web Lead</option>
+    <option value="serviceLead">Service Lead</option>
+    <option value="customerReferral">Customer Referral</option>
+    <option value="coldCall">Cold Call</option>
+    <option value="socialMedia">Social Media</option>
+    <option value="whatsappChatBot">What's App Chat Bot</option>
+    <option value="vendors">Vendors</option>
+    <option value="others">Others</option>
+    `;
+    
+        const existingCustomerOption = `
+    <option value="na" selected>N/A</option>
+    `;
 
     customerTypeDropdown.addEventListener('change', function () {
         if (this.value === 'newCustomer') {

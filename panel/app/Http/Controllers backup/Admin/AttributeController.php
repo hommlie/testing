@@ -116,6 +116,7 @@ class AttributeController extends Controller
 
     // Initialize the variable
     $attributeImagePath = null;
+    
 
     // Handle file upload if provided
     if ($request->hasFile('attribute_image')) {

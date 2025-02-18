@@ -151,6 +151,68 @@
                                             </div>
                                         </div>
                                     </div>
+                                                                        {{-- SPECIFICATIONS --}}
+                                                                        <div class="form-group">
+                                        <label for="Specifications">Specifications</label>
+                                        <div id="input-container">
+                                            <div class="d-flex mb-2">
+                                                <input type="text" class="form-control" name="specifications[]"
+                                                    id="specifications" placeholder="Enter Specifications" value=""
+                                                    required>
+                                                <span class="btn btn-outline-success ml-3" id="add-button">
+                                                    <i class="fa fa-plus"></i>
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <small id="error-message" class="text-danger"></small>
+                                        @if ($errors->has('specifications'))
+                                            <span class="text-danger">{{ $errors->first('specifications') }}</span>
+                                        @endif
+                                    </div>
+
+                                    {{-- TOTAL REVIEWS --}}
+
+                                    <div class="form-group">
+                                        <label for="Total_reviews">Total reviews</label>
+                                        <input type="number" class="form-control" name="total_reviews"
+                                            id="total_reviews" placeholder="Enter Total reviews " value="">
+                                        @if ($errors->has('total_reviews'))
+                                            <span class="text-danger">{{ $errors->first('total_reviews') }}</span>
+                                        @endif
+                                    </div>
+
+                                    {{-- AVG RATING --}}
+                                    <div class="form-group">
+                                        <label for="Avg_rating">Avg Rating</label>
+                                        <input type="text" class="form-control" name="avg_rating" id="avg_rating"
+                                            placeholder="Enter Avg Rating" value="">
+                                        <span id="avg_rating_error" class="text-danger" style="display: none;">Please
+                                            enter
+                                            a valid rating.</span>
+                                        @if ($errors->has('avg_rating'))
+                                            <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
+                                        @endif
+                                    </div>
+                                    {{-- DESCRIPTION --}}
+                                    <div class="form-group">
+                                        <label for="faqs" class="col-form-label">FAQS:</label>
+                                        <textarea class="form-control" id="editor" name="faqs"
+                                            placeholder="Enter FAQS"></textarea>
+                                        @if ($errors->has('faqs'))
+                                            <span class="text-danger">{{ $errors->first('faqs') }}</span>
+                                        @endif
+                                    </div>
+
+                                    {{-- ABOUT --}}
+                                    <div class="form-group">
+                                        <label for="about" class="col-form-label">About:</label>
+                                        <textarea class="form-control" id="editor2" name="about"
+                                            placeholder="Enter About"></textarea>
+                                        @if ($errors->has('about'))
+                                            <span class="text-danger">{{ $errors->first('about') }}</span>
+                                        @endif
+                                    </div>
 
                                     <!-- 
                                         <div class="form-group">
@@ -186,6 +248,7 @@
         </div>
     </section>
 </div>
+<script src="https://cdn.ckeditor.com/4.20.1/standard/ckeditor.js"></script>
 <script>
   // LOCATION
   document.getElementById('addLocation').addEventListener('click', () => {
@@ -204,6 +267,45 @@
 
   container.appendChild(newInputGroup);
 });
+    //SPECIFICATIONS SECTION
+    document.getElementById('add-button').addEventListener('click', function () {
+        const container = document.getElementById('input-container');
+        const errorMessage = document.getElementById('error-message');
+        const addButton = this;
+        if (container.querySelectorAll('input[name="specifications[]"]').length >= 2) {
+            errorMessage.textContent = 'Maximum 2 specifications allowed.';
+            addButton.disabled = true;
+            return;
+        }
+        const newInput = document.createElement('div');
+        newInput.classList.add('d-flex', 'mb-2');
+        newInput.innerHTML = `
+        <input type="text" class="form-control" name="specifications[]" id="specifications" placeholder="Enter Specifications" required>
+        <span class="btn btn-outline-danger ml-3 remove-button"><i class="fa fa-minus"></i></span>
+    `;
+        container.appendChild(newInput);
+        newInput.querySelector('.remove-button').addEventListener('click', function () {
+            newInput.remove();
+            if (container.querySelectorAll('input[name="specifications[]"]').length < 2) {
+                errorMessage.textContent = '';
+                addButton.disabled = false;
+            }
+        });
+    });
+
+    // CK EDITOR
+    document.addEventListener("DOMContentLoaded", function () {
+        if (document.getElementById('editor')) {
+            CKEDITOR.replace('editor', {
+                removeButtons: 'PasteFromWord'
+            });
+        }
+        if (document.getElementById('editor2')) {
+            CKEDITOR.replace('editor2', {
+                removeButtons: 'PasteFromWord'
+            });
+        }
+    });
 </script>
 @endsection
 @section('scripttop')
