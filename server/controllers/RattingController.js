@@ -101,8 +101,8 @@ exports.addRatting = async (req, res) => {
         .status(200)
         .json({ status: 0, message: "You have already written the review." });
     } else {
-      if (req.files.length > 0) {
-        const reviewImages = req.files.map((file) => ({
+      if (req?.files?.length > 0) {
+        const reviewImages = req?.files?.map((file) => ({
           review_id: newReview.id,
           image: file.filename,
         }));
