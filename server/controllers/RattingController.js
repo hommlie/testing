@@ -112,8 +112,8 @@ exports.addRatting = async (req, res) => {
       const data = await Ratting.create({
         product_id,
         order_id,
-        emp_id: employee.id,
-        emp_name: emp_name,
+        emp_id: employee?.id,
+        emp_name: employee?.emp_name,
         user_id,
         ratting,
         comment,
