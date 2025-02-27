@@ -60,11 +60,9 @@ const ProductSlider = ({ title, services = [] }) => {
     <div className="w-full px-4 py-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-2 text-green-800 uppercase tracking-wide text-sm font-semibold">
-          {title}
+          Services
         </div>
-        <h2 className="text-4xl font-bold mb-8 text-gray-900">
-          Most Booked Services
-        </h2>
+        <h2 className="text-4xl font-bold mb-8 text-gray-900">{title}</h2>
 
         <div className="relative group">
           {hasPrevious && (
@@ -132,25 +130,27 @@ const ProductSlider = ({ title, services = [] }) => {
                     </div>
 
                     <div className="p-4">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex items-center">
-                          <span className="text-yellow-400 text-lg">⭐</span>
-                          <span className="ml-1 text-sm font-medium">
-                            {service.rating}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center">
+                            <span className="text-yellow-400 text-lg">⭐</span>
+                            <span className="ml-1 text-sm font-medium">
+                              {service.rating}
+                            </span>
+                          </div>
+                          <span className="text-sm text-gray-600">
+                            (
+                            {service.total_reviews > 1000
+                              ? `${(service.total_reviews / 1000).toFixed(1)}K`
+                              : service.total_reviews}{" "}
+                            )
                           </span>
                         </div>
-                        <span className="text-sm text-gray-600">
-                          ({service.total_reviews})
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between">
                         <div className="text-sm">
                           From{" "}
                           <span className="font-semibold">
                             ₹{service.discounted_price}
                           </span>
-                          /service
                         </div>
                         <button
                           onClick={() =>

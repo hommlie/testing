@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 const TestimonialCarousel = ({ testimonials = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -115,8 +116,9 @@ const TestimonialCarousel = ({ testimonials = [] }) => {
                         />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">
+                        <h4 className="flex gap-2 items-center font-semibold text-gray-900">
                           {testimonial?.name}
+                          <RiVerifiedBadgeFill className="text-blue-500" />
                         </h4>
                         <p className="text-sm text-gray-500">
                           {testimonial?.location}

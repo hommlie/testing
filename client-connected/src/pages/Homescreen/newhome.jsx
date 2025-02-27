@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { BiSearchAlt } from "react-icons/bi";
 import { RxCross1 } from "react-icons/rx";
@@ -18,6 +18,10 @@ import DownloadAppImg from "/assets/bg/download-app.svg";
 import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
 import ReferEarnImg from "/assets/bg/refer-earn.svg";
+import discoverImg1 from "../../assets/images/discover-1.png";
+import discoverImg3 from "../../assets/images/discover-3.png";
+import discoverImg4 from "../../assets/images/discover-4.png";
+
 import TestimonialCarousel from "../../components/TestimonialCarousel";
 import ThoughtfulSlider from "../../components/ThoughtfulSlider";
 import ProductSlider from "../../components/ProductSlider";
@@ -176,6 +180,19 @@ const HomePage = () => {
     }
   };
 
+  const scrollToInspection = () => {
+    const inspectionSection = document.querySelector("#inspection-section");
+    if (inspectionSection) {
+      const offset = 130;
+      const sectionPosition =
+        inspectionSection.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: sectionPosition - offset,
+        behavior: "smooth",
+      });
+    }
+  };
+
   // FAQ Section
   const FaqSection = () => (
     <div className="max-w-3xl mx-auto">
@@ -280,8 +297,8 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           className="container mx-auto px-4 pt-8"
         >
-          <div className="hidden md:block flex justify-center py-2">
-            <h1 className="max-w-3xl text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
+          <div className="w-full hidden md:block flex justify-center py-2 text-center">
+            <h1 className="max-w-3xl mx-auto text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
               Explore Top Rated Certified experts nearby
             </h1>
           </div>
@@ -483,6 +500,58 @@ const HomePage = () => {
       {/* Services Section */}
       <ServiceSection categories={data.all_categories} />
 
+      {/* Discover Section */}
+      <section className="mt-12 md:px-10 py-5 md:py-10">
+        <h2 className="text-2xl font-bold mb-8">Discover</h2>
+        <div className="w-full flex flex-wrap justify-around rounded-2xl border border-hommlie py-3">
+          <NavLink
+            to={`${config.VITE_BASE_URL}/my-bookings`}
+            className="flex flex-col gap-2 items-center group"
+          >
+            <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
+              <img
+                src={discoverImg1}
+                className="h-full w-full"
+                alt="Discover our services"
+              />
+            </div>
+            <span className="text-sm text-center text-[#035240] font-semibold transition-colors">
+              My Orders
+            </span>
+          </NavLink>
+          <NavLink
+            to={`${config.VITE_BASE_URL}/contact-us`}
+            className="flex flex-col gap-2 items-center group"
+          >
+            <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
+              <img
+                src={discoverImg3}
+                className="h-full w-full"
+                alt="Discover"
+              />
+            </div>
+            <span className="text-sm text-center text-[#035240] font-semibold transition-colors">
+              Complaints
+            </span>
+          </NavLink>
+          <button
+            onClick={scrollToInspection}
+            className="flex flex-col it gap-2 items-center group"
+          >
+            <div className="w-10 h-10 mt-4 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 transition-colors">
+              <img
+                src={discoverImg4}
+                className="h-full w-full"
+                alt="Discover"
+              />
+            </div>
+            <span className="text-sm text-center text-[#035240] font-semibold transition-colors">
+              Book an Inspection
+            </span>
+          </button>
+        </div>
+      </section>
+
       {/* Banner Section */}
       <section className="py-12">
         {data?.banners?.length ? (
@@ -570,7 +639,7 @@ const HomePage = () => {
       </section>
 
       {/* inspection form section */}
-      <section className="px-10 py-12">
+      <section id="inspection-section" className="px-10 py-12">
         <InspectionFormSection />
       </section>
 

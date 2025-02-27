@@ -888,6 +888,7 @@ exports.getHomePageData = async (req, res) => {
         return {
           id: product.id,
           product_name: product.product_name,
+          slug: product.slug,
           product_price: product.product_price,
           discounted_price: product.discounted_price,
           attributes: Object.values(groupedVariations),

@@ -2,15 +2,27 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../../config/config";
+import LoginSignup from "../LoginModal";
+import { useCont } from "../../context/MyContext";
+import { useToast } from "../../context/ToastProvider";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
+  const { user } = useCont();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
   const [currentVariations, setCurrentVariations] = useState([]);
   const [showAllVariations, setShowAllVariations] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const notify = useToast();
+  const successNotify = (success) => notify(success, "success");
+  const errorNotify = (error) => notify(error, "error");
 
   // Initialize selections when component mounts
   useEffect(() => {
@@ -160,6 +172,53 @@ const ServiceSection = ({ categories }) => {
     return description?.split("|").filter((point) => point.trim());
   };
 
+  const handleAddToCart = async (variation, product) => {
+    if (!user || user.length === 0) {
+      setIsModalOpen(true);
+      return;
+    }
+
+    setIsAddingToCart(true);
+
+    const cartItem = {
+      user_id: user.id,
+      product_id: product.id,
+      vendor_id: product.vendor_id,
+      product_name: product.product_name,
+      image: product.image_url, // Assuming the first image from product
+      qty: 1,
+      price: variation.discounted_variation_price || variation.price,
+      attribute: selectedAttribute,
+      variation: variation.id,
+      tax: product.tax_amount || 0,
+      shipping_cost: product.shipping_cost || 0,
+    };
+
+    try {
+      const response = await axios.post(
+        `${config.API_URL}/api/addtocart`,
+        cartItem
+      );
+
+      if (response.data.status === 1) {
+        successNotify("Successfully added to Cart");
+
+        // Update local storage
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        existingCart.push(cartItem);
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+
+        // Refresh cart data
+        getCart();
+      }
+    } catch (error) {
+      errorNotify(error.message || "Error adding to cart");
+      console.error("Error adding to cart:", error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
   // Variation Card Component
   const VariationCard = ({ variation, isRecommended, product }) => {
     const descriptionPoints = formatDescription(variation.description);
@@ -199,7 +258,7 @@ const ServiceSection = ({ categories }) => {
                   isRecommended ? "text-white" : "text-gray-700"
                 }`}
               >
-                {variation.variation}
+                {product?.product_name}
               </h3>
             </div>
 
@@ -219,22 +278,42 @@ const ServiceSection = ({ categories }) => {
                 </ul>
               </div>
             )}
+            <div
+              className={`${
+                isRecommended ? "border border-white" : "border border-hommlie"
+              } mb-6 text-center rounded-lg py-2 px-4`}
+            >
+              <h3
+                className={`text-lg ${
+                  isRecommended ? "text-white" : "text-gray-700"
+                }`}
+              >
+                {variation.variation}
+              </h3>
+            </div>
+
+            <a
+              href={`${config.VITE_BASE_URL}/product/${product?.id}/${product?.slug}`}
+              className={`${
+                isRecommended ? "text-white" : "text-hommlie"
+              } text-left underline underline-offset-4 hover:no-underline mb-4`}
+            >
+              Learn More
+            </a>
 
             <div className="mt-auto">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() =>
-                  product?.slug &&
-                  navigate(`/product/${product.slug}/${product.id}`)
-                }
+                onClick={() => handleAddToCart(variation, product)}
+                disabled={isAddingToCart}
                 className={`w-full py-3 rounded-lg font-medium transition-colors ${
                   isRecommended
                     ? "bg-white text-emerald-800 hover:bg-gray-100"
                     : "bg-emerald-800 text-white hover:bg-emerald-900"
-                }`}
+                } ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
               >
-                Book Now
+                {isAddingToCart ? "Adding..." : "Book Now"}
               </motion.button>
             </div>
           </div>
@@ -277,7 +356,7 @@ const ServiceSection = ({ categories }) => {
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
       {/* Category Cards */}
-      <div className="flex justify-center overflow-x-auto gap-4 pb-6 hide-scrollbar">
+      <div className="flex justify-center overflow-x-auto gap-4 pb-6 hide-scrollbar p-2 scrollbar-hide">
         {categories?.map((category) => (
           <motion.button
             key={category.id}
@@ -353,6 +432,12 @@ const ServiceSection = ({ categories }) => {
           )}
         </div>
       )}
+
+      <LoginSignup
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        // checkoutPd={checkoutPd}
+      />
     </section>
   );
 };
