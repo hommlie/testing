@@ -92,7 +92,6 @@ exports.addRatting = async (req, res) => {
     const checkRatting = await Ratting.findAll({
       where: {
         product_id,
-        vendor_id,
         user_id,
       },
     });
@@ -111,7 +110,6 @@ exports.addRatting = async (req, res) => {
       }
 
       const data = await Ratting.create({
-        vendor_id,
         product_id,
         order_id,
         emp_id: employee.id,
