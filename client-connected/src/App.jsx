@@ -87,6 +87,7 @@ function App() {
                 linkedin={settings?.linkedin}
                 twitter={settings?.twitter}
                 youtube={settings?.youtube}
+                locations={settings?.locations}
               />
             </Router>
           </ToastProvider>

@@ -8,8 +8,6 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import config from "../../config/config";
-import Playstore from "/assets/icons/playstore.svg";
-import Appstore from "/assets/icons/appstore.svg";
 
 export default function Footer({
   logo,
@@ -20,7 +18,6 @@ export default function Footer({
   linkedin,
   twitter,
   youtube,
-  locations,
 }) {
   return (
     <footer className="footer mt-[40px] z-10 px-4 md:px-10">
@@ -28,10 +25,10 @@ export default function Footer({
         <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">
-            <div className="h-10 lg:h-12">
+            <div className="h-10 lg:h-14">
               <img src={logo} alt={logoAlt} className="h-full w-fit" />
             </div>
-            <p className="text-sm text-gray-500 max-w-[250px]">
+            <p className="text-sm text-gray-500 max-w-[300px]">
               One click to transform your home into a sparkling haven with our
               professional cleaning services. From deep cleans.
             </p>
@@ -46,23 +43,6 @@ export default function Footer({
 
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <FooterSection
-              title="Company Info"
-              links={[
-                { title: "Home", link: `${config.VITE_BASE_URL}` },
-                { title: "About us", link: `${config.VITE_BASE_URL}/about-us` },
-                { title: "Services", link: `${config.VITE_BASE_URL}/services` },
-                {
-                  title: "Partner us",
-                  link: `${config.VITE_BASE_URL}/partner-us`,
-                },
-                {
-                  title: "Contact us",
-                  link: `${config.VITE_BASE_URL}/contact-us`,
-                },
-              ]}
-            />
-
-            <FooterSection
               title="Our Brands"
               links={[
                 { title: "Hommlie", link: "https://www.hommlie.com/" },
@@ -74,46 +54,83 @@ export default function Footer({
             />
 
             <FooterSection
-              title="Quick Links"
+              title="Company Info"
+              links={[
+                { title: "About us", link: `${config.VITE_BASE_URL}/about-us` },
+                // { title: "Why Hygiene", link: "#" },
+                // { title: "Mission", link: "#" },
+                // { title: "FAQs", link: "#" },
+                { title: "Careers", link: `${config.VITE_BASE_URL}/careers` },
+                {
+                  title: "Partner us",
+                  link: `${config.VITE_BASE_URL}/partner-us`,
+                },
+              ]}
+            />
+
+            {/* <FooterSection
+              title="Our Services"
+              links={[
+                { title: "Pest Control", link: "#" },
+                { title: "Cleaning Services", link: "#" },
+                { title: "Sanitization", link: "#" },
+                { title: "Bird Netting", link: "#" },
+                { title: "Mosquito Mesh", link: "#" }
+              ]}
+            /> */}
+
+            <FooterSection
+              title="For Commercial Services"
               links={[
                 {
-                  title: "Community",
-                  link: `${config.VITE_BASE_URL}/community`,
+                  title: "Industries",
+                  link: "https://b2b.hommlie.com/Industries.html",
                 },
                 {
-                  title: "Blogs",
-                  link: `${config.VITE_BASE_URL}/blogs`,
-                },
-                {
-                  title: "Women Empowerment",
-                  link: `${config.VITE_BASE_URL}/women-empowerment`,
-                },
-                {
-                  title: "B2B Services",
+                  title: "Commercial Pest Management",
                   link: "https://b2b.hommlie.com/",
                 },
                 {
-                  title: "Register as Professional",
-                  link: `${config.VITE_BASE_URL}/partner-us`,
+                  title: "Commercial Cleaning Services",
+                  link: "https://b2b.hommlie.com/",
+                },
+                {
+                  title: "Why Hommlie",
+                  link: `${config.VITE_BASE_URL}/about-us`,
+                },
+                {
+                  title: "Contact Us",
+                  link: `${config.VITE_BASE_URL}/contact-us`,
                 },
               ]}
             />
           </div>
 
           <div className="hidden lg:block">
-            <div className="flex flex-col gap-4 text-white">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
-                className="rounded-xl flex flex-row justify-center items-center gap-2"
+            <p className="capitalize text-[19px] font-medium !text-gray-900_03">
+              Get the app
+            </p>
+            <div className="flex flex-col mt-[30px] gap-4 text-white">
+              <button
+                className="w-[165px] h-[60px] rounded-xl flex flex-row justify-center items-center gap-2"
+                style={{ backgroundColor: "#035240" }}
               >
-                <img src={Playstore} alt="" />
-              </a>
-              <a
-                href="#"
-                className="rounded-xl flex flex-row justify-center items-center gap-2"
+                <IoLogoApple className="text-white w-[29px] h-[29px]" />
+                <div className="flex flex-col items-start">
+                  <p className="text-xs">Download on the</p>
+                  <p className="text-sm">Apple Store</p>
+                </div>
+              </button>
+              <button
+                className="w-[165px] h-[60px] rounded-xl flex flex-row justify-center items-center gap-2"
+                style={{ backgroundColor: "#035240" }}
               >
-                <img src={Appstore} alt="" />
-              </a>
+                <IoLogoGooglePlaystore className="text-white w-[29px] h-[29px]" />
+                <div className="flex flex-col items-start">
+                  <p className="text-xs">Get it on</p>
+                  <p className="text-sm">Google Play</p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
