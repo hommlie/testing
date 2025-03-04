@@ -778,7 +778,6 @@ exports.getHomePageData = async (req, res) => {
       attributes: [
         "id",
         "category_name",
-        "web_icon",
         [
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/category/', Category.web_icon)`
@@ -896,14 +895,12 @@ exports.getHomePageData = async (req, res) => {
         };
       });
     };
-    console.log(allCategories[0]?.web_icon);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
       id: category.id,
       category_name: category.category_name,
-      icon_url:
-        `${apiUrl}/storage/app/public/images/category/` + category.web_icon,
+      icon_url: category.getDataValue("icon_url"),
       subcategories:
         category.Subcategories?.map((subcategory) => ({
           id: subcategory.id,
@@ -911,7 +908,6 @@ exports.getHomePageData = async (req, res) => {
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })) ?? [],
     }));
-    console.log(manipulatedResponse[0]);
 
     if (
       //   heroSections.length > 0 &&
