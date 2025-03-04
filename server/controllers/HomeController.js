@@ -868,7 +868,7 @@ exports.getHomePageData = async (req, res) => {
       ],
       order: [["id", "ASC"]],
     });
-    console.log(allCategories[0]?.subcategories[0]?.products[0]?.variations);
+    console.log(allCategories[0]?.subcategories[0]?.products);
 
     // Function to group variations by attribute_id
     const groupVariationsByAttribute = (products) => {
