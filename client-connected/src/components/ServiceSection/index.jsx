@@ -357,7 +357,7 @@ const ServiceSection = ({ categories }) => {
                 }`
               }
             >
-              {showRecommended && index === 0 ? (
+              {showRecommended && option?.is_recommended === 1 ? (
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-emerald-600">
                     ✓ Recommended
