@@ -76,7 +76,8 @@ function App() {
         <AuthProvider>
           <ToastProvider>
             <Router>
-              <OldHeader logo={settings?.logo} logoAlt={settings?.site_title} />
+              {/* <OldHeader logo={settings?.logo} logoAlt={settings?.site_title} /> */}
+              <Header logo={settings?.logo} logoAlt={settings?.site_title} />
               <Routes />
               <Footer
                 logo={settings?.logo}

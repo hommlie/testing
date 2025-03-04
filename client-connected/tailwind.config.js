@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         poppins: ["Poppin", "sans-serif"],
+        headerFont: ["Roboto", "Helvetica", "Arial", "sans-serif"],
       },
       colors: {
         hommlie: "#02513E",

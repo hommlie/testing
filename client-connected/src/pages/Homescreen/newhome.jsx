@@ -289,7 +289,7 @@ const HomePage = () => {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen  font-headerFont">
       {/* Hero Section */}
       <section className="relative bg-white py-12">
         <motion.div
@@ -299,7 +299,7 @@ const HomePage = () => {
         >
           <div className="w-full hidden md:block flex justify-center py-2 text-center">
             <h1 className="max-w-3xl mx-auto text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
-              Explore Top Rated Certified experts nearby
+              Explore Top Rated Certified Experts Nearby
             </h1>
           </div>
 
@@ -467,7 +467,7 @@ const HomePage = () => {
                     alt={feature.alt_tag}
                     className="w-full h-full object-cover rounded-xl"
                   />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-center">
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-around">
                     <div className="p-4">
                       <h3 className="text-white text-2xl font-bold mb-2">
                         {feature.title}

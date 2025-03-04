@@ -68,7 +68,7 @@ const Header = ({ logo, logoAlt }) => {
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-20 bg-white shadow-md"
+      className="w-full sticky top-0 z-20 bg-white shadow-md font-headerFont"
     >
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Top Header */}
@@ -81,18 +81,21 @@ const Header = ({ logo, logoAlt }) => {
                 className="h-8 w-28 object-contain"
               />
             </NavLink>
+          </div>
+
+          <div className="flex items-center space-x-4">
             <nav className="hidden md:flex items-center space-x-6">
-              <NavLink
-                to="https://b2b.hommlie.com/"
-                className="text-gray-700 hover:text-green-700 font-medium"
-              >
-                B2B
-              </NavLink>
               <NavLink
                 to="/services"
                 className="text-gray-700 hover:text-green-700 font-medium"
               >
                 Services
+              </NavLink>
+              <NavLink
+                to="https://b2b.hommlie.com/"
+                className="text-gray-700 hover:text-green-700 font-medium"
+              >
+                B2B
               </NavLink>
               <NavLink
                 to="/hub"
@@ -113,9 +116,6 @@ const Header = ({ logo, logoAlt }) => {
                 Community
               </NavLink>
             </nav>
-          </div>
-
-          <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
               className="hidden md:block px-4 py-2 text-green-700 border border-green-700 rounded hover:bg-green-50 transition-colors font-medium"

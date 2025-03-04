@@ -22,6 +22,9 @@ export default function Footer({
   youtube,
   locations,
 }) {
+  // Parse locations string and create array of location names
+  const locationArray = locations ? locations.split("|") : [];
+
   return (
     <footer className="footer mt-[40px] z-10 px-4 md:px-10">
       <div className="container-sm max-w-7xl mx-auto px-10 pt-5 lg:pt-24 pb-5 space-y-8">
@@ -117,26 +120,45 @@ export default function Footer({
             </div>
           </div>
         </div>
-        <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
-        <div className="pt-4">
-          <p className="text-sm text-gray-400">
-            Read{" "}
+
+        {/* Dynamic location links with pipe separators */}
+        <div className="flex flex-wrap items-center">
+          <span className="text-sm mr-2">We are available in:</span>
+          {locationArray.map((location, index) => (
+            <React.Fragment key={location}>
+              <a
+                href={`${config.VITE_BASE_URL}/${location
+                  .trim()
+                  .toLowerCase()}`}
+                className="text-sm text-[#035240] hover:underline"
+              >
+                {location.trim()}
+              </a>
+              {/* Add pipe separator between locations but not after the last one */}
+              {index < locationArray.length - 1 && (
+                <span className="mx-2 text-gray-400">|</span>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+
+        <div className="border border-black"></div>
+        <div className="flex gap-4 items-center pt-2 text-sm text-gray-400">
+          <p className="">{copyright}</p>
+          <p className="flex gap-3">
             <a
               href={`${config.VITE_BASE_URL}/privacy-policy`}
               className="underline"
             >
               Privacy Policy
-            </a>{" "}
-            and{" "}
+            </a>
             <a
               href={`${config.VITE_BASE_URL}/terms-conditions`}
               className="underline"
             >
               Terms & Conditions
-            </a>{" "}
-            of service apply.
+            </a>
           </p>
-          <p className="text-sm text-gray-400 mt-2">{copyright}</p>
         </div>
       </div>
     </footer>
