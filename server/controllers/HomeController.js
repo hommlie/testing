@@ -849,7 +849,7 @@ exports.getHomePageData = async (req, res) => {
         const groupedVariations = new Map();
 
         product.variations.forEach((variation) => {
-          const attributeId = variation.attribute_id;
+          const attributeId = variation.attribute?.id;
 
           if (!groupedVariations.has(attributeId)) {
             groupedVariations.set(attributeId, {
