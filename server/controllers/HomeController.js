@@ -895,12 +895,13 @@ exports.getHomePageData = async (req, res) => {
         };
       });
     };
+    console.log(allCategories[0]);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
       id: category.id,
       category_name: category.category_name,
-      icon_url: category.icon_url,
+      icon: category.icon_url,
       subcategories:
         category.Subcategories?.map((subcategory) => ({
           id: subcategory.id,
