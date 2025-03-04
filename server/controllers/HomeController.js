@@ -726,7 +726,6 @@ exports.getHomePageData = async (req, res) => {
         status: 1,
       },
       order: [[sequelize.literal("order_count"), "DESC"]],
-      // group: ['Product.id'],
       limit: 10,
     });
 
@@ -743,10 +742,8 @@ exports.getHomePageData = async (req, res) => {
           ),
           "thumbnail",
         ],
-        //   [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/thoughtfull-videos/'`), sequelize.col('video')), 'video']
         "video",
       ],
-      //   limit: 4,
     });
 
     const testimonials = await Testimonials.findAll({
@@ -789,16 +786,7 @@ exports.getHomePageData = async (req, res) => {
       include: [
         {
           model: Subcategory,
-          attributes: [
-            "id",
-            "subcategory_name",
-            // [
-            //   sequelize.literal(
-            //     `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`
-            //   ),
-            //   "image_url",
-            // ],
-          ],
+          attributes: ["id", "subcategory_name"],
           where: { status: 1 },
           required: false,
           include: [
@@ -826,12 +814,6 @@ exports.getHomePageData = async (req, res) => {
                     "variation",
                     "variation_interval",
                     "variation_times",
-                    // [
-                    //   sequelize.literal(
-                    //     `CONCAT('${apiUrl}/storage/app/public/images/variation/', variation.image)`
-                    //   ),
-                    //   "image",
-                    // ],
                     "total_reviews",
                     "avg_rating",
                   ],
@@ -842,14 +824,6 @@ exports.getHomePageData = async (req, res) => {
                         "id",
                         "attribute",
                         "specifications",
-                        // [
-                        //   sequelize.fn(
-                        //     "CONCAT",
-                        //     `${apiUrl}/storage/app/public/images/attribute/`,
-                        //     sequelize.col("variations->attribute.image")
-                        //   ),
-                        //   "image",
-                        // ],
                         "total_reviews",
                         "avg_rating",
                       ],
@@ -872,20 +846,22 @@ exports.getHomePageData = async (req, res) => {
     // Function to group variations by attribute_id
     const groupVariationsByAttribute = (products) => {
       return products.map((product) => {
-        const groupedVariations = product.variations.reduce(
-          (acc, variation) => {
-            const attributeId = variation.attribute_id;
-            if (!acc[attributeId]) {
-              acc[attributeId] = {
-                ...variation.attribute.get({ plain: true }),
-                variations: [],
-              };
-            }
-            acc[attributeId].variations.push(variation.get({ plain: true }));
-            return acc;
-          },
-          {}
-        );
+        const groupedVariations = new Map();
+
+        product.variations.forEach((variation) => {
+          const attributeId = variation.attribute_id;
+
+          if (!groupedVariations.has(attributeId)) {
+            groupedVariations.set(attributeId, {
+              ...variation.attribute.get({ plain: true }),
+              variations: [],
+            });
+          }
+
+          groupedVariations
+            .get(attributeId)
+            .variations.push(variation.get({ plain: true }));
+        });
 
         return {
           id: product.id,
@@ -894,11 +870,10 @@ exports.getHomePageData = async (req, res) => {
           is_recommended: product.getDataValue("is_recommended"),
           product_price: product.product_price,
           discounted_price: product.discounted_price,
-          attributes: Object.values(groupedVariations),
+          attributes: Array.from(groupedVariations.values()),
         };
       });
     };
-    console.log(allCategories[0]?.Subcategories[0]?.Products[0]?.variations);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
@@ -913,12 +888,7 @@ exports.getHomePageData = async (req, res) => {
         })) ?? [],
     }));
 
-    if (
-      //   heroSections.length > 0 &&
-      //   banners.length > 0 &&
-      //   sliders.length > 0 &&
-      most_booked_services.length > 0
-    ) {
+    if (most_booked_services.length > 0) {
       res.status(200).json({
         status: 1,
         message: "Success",
