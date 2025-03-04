@@ -897,6 +897,7 @@ exports.getHomePageData = async (req, res) => {
         };
       });
     };
+    console.log(allCategories[0].Subcategories[0].Products[0]);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
