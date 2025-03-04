@@ -813,6 +813,7 @@ exports.getHomePageData = async (req, res) => {
                 "product_price",
                 "discounted_price",
                 "is_recommended",
+                "slug",
               ],
               include: [
                 {
