@@ -826,6 +826,7 @@ exports.getHomePageData = async (req, res) => {
                         "specifications",
                         "total_reviews",
                         "avg_rating",
+                        "is_recommended",
                       ],
                       where: { status: 1 },
                       as: "attribute",
