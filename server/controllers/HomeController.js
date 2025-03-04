@@ -895,7 +895,6 @@ exports.getHomePageData = async (req, res) => {
         };
       });
     };
-    console.log(allCategories[0]);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
@@ -909,6 +908,7 @@ exports.getHomePageData = async (req, res) => {
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })) ?? [],
     }));
+    console.log(manipulatedResponse[0]);
 
     if (
       //   heroSections.length > 0 &&
