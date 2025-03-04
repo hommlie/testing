@@ -7,6 +7,7 @@ import config from "../../config/config";
 import LoginSignup from "../LoginModal";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
+import { Listbox } from "@headlessui/react";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
@@ -323,25 +324,62 @@ const ServiceSection = ({ categories }) => {
   };
 
   // Dropdown Component
-  const Dropdown = ({ label, value, options, onChange, disabled }) => (
-    <div className="relative">
-      <select
-        value={value || ""}
-        onChange={(e) => onChange(Number(e.target.value))}
-        disabled={disabled}
-        className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg appearance-none 
+  const Dropdown = ({
+    label,
+    value,
+    options,
+    onChange,
+    disabled,
+    showRecommended,
+  }) => (
+    <Listbox value={value} onChange={onChange} disabled={disabled}>
+      <div className="relative">
+        <Listbox.Button
+          className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-left
           ${disabled ? "cursor-not-allowed bg-gray-50" : "cursor-pointer"}
           focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-      >
-        <option value="">{label}</option>
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.subcategory_name || option.product_name || option.attribute}
-          </option>
-        ))}
-      </select>
-      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none w-5 h-5" />
-    </div>
+        >
+          {value
+            ? options.find((option) => option.id === value)?.subcategory_name ||
+              options.find((option) => option.id === value)?.product_name ||
+              options.find((option) => option.id === value)?.attribute
+            : label}
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+        </Listbox.Button>
+        <Listbox.Options className="absolute mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+          {options.map((option, index) => (
+            <Listbox.Option
+              key={option.id}
+              value={option.id}
+              className={({ active }) =>
+                `cursor-pointer select-none p-3 ${
+                  active ? "bg-emerald-50 text-emerald-800" : "text-gray-900"
+                }`
+              }
+            >
+              {showRecommended && index === 0 ? (
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium text-emerald-600">
+                    ✓ Recommended
+                  </span>
+                  <span className="text-base font-semibold">
+                    {option.subcategory_name ||
+                      option.product_name ||
+                      option.attribute}
+                  </span>
+                </div>
+              ) : (
+                <span>
+                  {option.subcategory_name ||
+                    option.product_name ||
+                    option.attribute}
+                </span>
+              )}
+            </Listbox.Option>
+          ))}
+        </Listbox.Options>
+      </div>
+    </Listbox>
   );
 
   // Get current product for navigation
@@ -393,6 +431,7 @@ const ServiceSection = ({ categories }) => {
           options={getCurrentProducts()}
           onChange={setSelectedProduct}
           disabled={!selectedSubCategory}
+          showRecommended
         />
         <Dropdown
           label="Select Attribute"

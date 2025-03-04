@@ -11,6 +11,7 @@
     "build-sitemap": "node generateSitemap.js"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@material-tailwind/react": "^2.1.9",
     "@react-google-maps/api": "^2.19.3",

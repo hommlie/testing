@@ -812,6 +812,7 @@ exports.getHomePageData = async (req, res) => {
                 "product_name",
                 "product_price",
                 "discounted_price",
+                "is_recommended",
               ],
               include: [
                 {
@@ -889,6 +890,7 @@ exports.getHomePageData = async (req, res) => {
           id: product.id,
           product_name: product.product_name,
           slug: product.slug,
+          is_recommended: product.is_recommended,
           product_price: product.product_price,
           discounted_price: product.discounted_price,
           attributes: Object.values(groupedVariations),

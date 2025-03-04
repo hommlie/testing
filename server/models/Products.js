@@ -104,6 +104,9 @@ Product.init(
     is_featured: {
       type: DataTypes.INTEGER,
     },
+    is_recommended: {
+      type: DataTypes.INTEGER,
+    },
     available_stock: {
       type: DataTypes.STRING,
     },
