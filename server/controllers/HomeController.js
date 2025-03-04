@@ -868,7 +868,6 @@ exports.getHomePageData = async (req, res) => {
       ],
       order: [["id", "ASC"]],
     });
-    console.log(allCategories[0]?.subcategories[0]?.products);
 
     // Function to group variations by attribute_id
     const groupVariationsByAttribute = (products) => {
@@ -899,6 +898,7 @@ exports.getHomePageData = async (req, res) => {
         };
       });
     };
+    console.log(allCategories[0]?.Subcategories[0]?.Products[0]?.variations);
 
     // Manipulate the response to group variations under attributes
     const manipulatedResponse = allCategories?.map((category) => ({
