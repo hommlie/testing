@@ -902,7 +902,8 @@ exports.getHomePageData = async (req, res) => {
     const manipulatedResponse = allCategories?.map((category) => ({
       id: category.id,
       category_name: category.category_name,
-      icon: category.icon_url,
+      icon_url:
+        `${apiUrl}/storage/app/public/images/category/` + category.web_icon,
       subcategories:
         category.Subcategories?.map((subcategory) => ({
           id: subcategory.id,
