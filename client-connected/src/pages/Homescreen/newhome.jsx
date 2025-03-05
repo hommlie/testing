@@ -624,12 +624,25 @@ const HomePage = () => {
       <section className="py-5 md:py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">Today's Offers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            className="flex overflow-x-auto space-x-4 gap-4 
+      md:grid md:grid-cols-2 md:gap-6 
+      md:overflow-visible 
+      scrollbar-hide"
+          >
             {offers?.slice(0, 2).map((offer) => (
               <motion.div
                 key={offer.id}
                 whileHover={{ scale: 1.02 }}
-                className="h-52 md:h-80 rounded-xl overflow-hidden"
+                className="h-52 md:h-80 
+            rounded-xl 
+            overflow-hidden 
+            flex-shrink-0 
+            w-[calc(100vw-4rem)] 
+            md:w-auto 
+            max-w-full 
+            first:ml-4 last:mr-4 
+            md:first:ml-0 md:last:mr-0"
               >
                 <img
                   src={offer.image}

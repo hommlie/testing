@@ -168,6 +168,15 @@ const ServiceSection = ({ categories }) => {
     return product?.attributes || [];
   };
 
+  // Handle category selection with dynamic navigation
+  const handleCategorySelect = (category) => {
+    if (category.is_form === 1) {
+      navigate(`${config.VITE_BASE_URL}/${category.slug}/${category.id}`);
+      return;
+    }
+    setSelectedCategory(category.id);
+  };
+
   // Format description points
   const formatDescription = (description) => {
     return description?.split("|").filter((point) => point.trim());
@@ -431,7 +440,7 @@ const ServiceSection = ({ categories }) => {
             key={category.id}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => setSelectedCategory(category.id)}
+            onClick={() => handleCategorySelect(category)}
             className={`flex flex-col md:flex-row items-center gap-3 px-3 md:px-6 py-2 md:py-4 rounded-lg whitespace-nowrap md:min-w-[200px]
               ${
                 selectedCategory === category.id
