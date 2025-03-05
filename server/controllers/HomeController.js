@@ -775,6 +775,7 @@ exports.getHomePageData = async (req, res) => {
       attributes: [
         "id",
         "category_name",
+        "is_form",
         [
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/category/', Category.web_icon)`
@@ -880,6 +881,7 @@ exports.getHomePageData = async (req, res) => {
     const manipulatedResponse = allCategories?.map((category) => ({
       id: category.id,
       category_name: category.category_name,
+      is_form: category.getDataValue("is_form"),
       icon_url: category.getDataValue("icon_url"),
       subcategories:
         category.Subcategories?.map((subcategory) => ({
