@@ -7,21 +7,21 @@ import Warranty from "../../assets/icons/warranty.svg";
 const statsData = [
   {
     id: 1,
-    count: "10 Lacs+",
+    count: "5000+",
     title: "Happy Customers",
     description: "Happy Customers",
     icon: Customers,
   },
   {
     id: 2,
-    count: "04/05",
-    title: "400+ Reviews on Google",
-    description: "400+ Reviews on Google",
+    count: "4.9/5",
+    title: "500+ Reviews on Google",
+    description: "500+ Reviews on Google",
     icon: Reviews,
   },
   {
     id: 3,
-    count: "30+ Cities",
+    count: "15+ Cities",
     title: "Presence Across India",
     description: "Presence Across India",
     icon: Cities,

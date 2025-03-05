@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IoCallOutline, IoLocationOutline } from "react-icons/io5";
+import { IoBusiness, IoCallOutline, IoLocationOutline } from "react-icons/io5";
 import axios from "axios";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
@@ -114,39 +114,38 @@ const InspectionFormSection = () => {
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div>
-          <p className="text-hommlie font-semibold mb-4">INSPECTION</p>
           <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
           <p className="text-gray-600 mb-8">We're here to help you!</p>
           <div className="space-y-10">
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full text-hommlie flex items-center justify-center mr-4">
+            <div className="flex items-start">
+              <div className="w-12 h-12 text-2xl rounded-full text-hommlie flex items-center justify-center mr-4">
                 <MdOutlineLocalPostOffice />
               </div>
               <div>
                 <p className="text-sm text-gray-600">Email</p>
-                <p className="font-medium">info@pestcontrol.com</p>
+                <p className="font-medium">reach@hommlie.com</p>
               </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full text-hommlie flex items-center justify-center mr-4">
+            <div className="flex items-start">
+              <div className="w-12 h-12 text-2xl rounded-full text-hommlie flex items-center justify-center mr-4">
                 <IoCallOutline />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Phone</p>
-                <p className="font-medium">+1 (555) 123-4567</p>
+                <p className="text-sm text-gray-600">Customer Care</p>
+                <p className="font-medium">+91-6363865658</p>
               </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full text-hommlie flex items-center justify-center mr-4">
-                <IoLocationOutline />
+            <div className="flex items-start">
+              <div className="w-12 h-12 text-2xl rounded-full text-hommlie flex items-center justify-center mr-4">
+                <IoBusiness />
               </div>
               <div className="max-w-sm">
-                <p className="text-sm text-gray-600">Office</p>
-                <p className="font-medium">
-                  57 2nd floor, Place building, 6th Main Rd, Nagendra Block,
-                  Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka
-                  560050
-                </p>
+                <p className="text-sm text-gray-600">Offices</p>
+                <p className="font-medium">Bangalore</p>
+                <p className="font-medium">Hyderabad</p>
+                <p className="font-medium">Chennai</p>
+                <p className="font-medium">Delhi</p>
+                <p className="font-medium">Kolkata</p>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { useMediaQuery } from "react-responsive";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { BiSearchAlt } from "react-icons/bi";
@@ -33,7 +34,6 @@ import InspectionModal from "../../components/InspectionModal";
 import MobileNavigation from "../../components/MobileNavigation";
 
 const HomePage = () => {
-  const [location, setLocation] = useState("");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -45,13 +45,15 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const { cartLength, prodData } = useCont();
+  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+  const [isExploreButtonVisible, setIsExploreButtonVisible] = useState(false);
+
+  const handleExploreButtonClick = () => {
+    setIsExploreButtonVisible(true);
+  };
 
   // States for services section
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedAttribute, setSelectedAttribute] = useState(null);
-  const [variations, setVariations] = useState([]);
 
   // Add states for all dynamic data
   const [data, setData] = useState({
@@ -73,10 +75,6 @@ const HomePage = () => {
   const [thoughtfulContent, setThoughtfulContent] = useState([]);
   const [isInspectionModalOpen, setIsInspectionModalOpen] = useState(false);
   const [isReferModalOpen, setIsReferModalOpen] = useState(false);
-
-  // States for carousel sections
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
 
   // FAQ state
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
@@ -195,7 +193,7 @@ const HomePage = () => {
 
   // FAQ Section
   const FaqSection = () => (
-    <div className="max-w-3xl mx-auto">
+    <div className="w-full mx-auto">
       <h2 className="text-2xl font-bold mb-8 text-center">
         Frequently Asked Questions
       </h2>
@@ -291,11 +289,11 @@ const HomePage = () => {
   return (
     <div className="min-h-screen  font-headerFont">
       {/* Hero Section */}
-      <section className="relative bg-white py-12">
+      <section className="relative bg-white py-5 md:py-10">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="container mx-auto px-4 pt-8"
+          className="container mx-auto px-4 md:pt-8"
         >
           <div className="w-full hidden md:block flex justify-center py-2 text-center">
             <h1 className="max-w-3xl mx-auto text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
@@ -304,10 +302,10 @@ const HomePage = () => {
           </div>
 
           {/* Search Bar */}
-          <div className="max-w-3xl mx-auto mb-8 py-2">
+          <div className="max-w-3xl mx-auto mb-4 md:mb-8 py-2">
             <div className="flex flex-col md:flex-row gap-4">
               {/* Mobile Cart Button */}
-              <div className="flex md:hidden justify-between items-center mb-4">
+              <div className="flex md:hidden justify-between items-center md:mb-4">
                 <div className="flex-1">
                   <div className="relative">
                     <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -320,7 +318,7 @@ const HomePage = () => {
                     />
                   </div>
                 </div>
-                <div
+                {/* <div
                   onClick={() =>
                     navigate(`${config.VITE_BASE_URL}/add-to-cart`)
                   }
@@ -330,7 +328,7 @@ const HomePage = () => {
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {cartLength || 0}
                   </span>
-                </div>
+                </div> */}
               </div>
 
               {/* Location Input - Hidden on Mobile */}
@@ -460,19 +458,76 @@ const HomePage = () => {
               {heroSections?.map((feature, index) => (
                 <div
                   key={index}
-                  className="relative bg-white rounded-xl shadow-sm overflow-hidden"
+                  className="relative bg-white md:rounded-xl shadow-sm overflow-hidden"
                 >
                   <img
                     src={feature.image}
                     alt={feature.alt_tag}
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover md:rounded-xl"
                   />
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-around">
-                    <div className="p-4">
-                      <h3 className="text-white text-2xl font-bold mb-2">
+                    <div className="p-2 md:p-4">
+                      <h3 className="text-white text-sm md:text-2xl font-bold mb-2">
                         {feature.title}
                       </h3>
-                      <p className="text-white mb-4">{feature.sub_title}</p>
+                      <p className="text-xs text-white mb-4">
+                        {feature.sub_title}
+                      </p>
+                    </div>
+                    <div className="relative overflow-hidden">
+                      {isMobile ? (
+                        <a
+                          href={feature.btn_link}
+                          className="w-fit flex items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
+                        >
+                          <span className="text-sm px-2 whitespace-nowrap">
+                            {feature.btn_text}
+                          </span>
+                          <div className="w-5 flex justify-center">
+                            <IoIosArrowForward />
+                          </div>
+                        </a>
+                      ) : (
+                        <motion.div
+                          whileHover={{ x: 0 }}
+                          initial={{ x: "calc(100% - 220px)" }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                          className="w-fit flex items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
+                        >
+                          <a href={feature.btn_link}>
+                            <span className="px-4 whitespace-nowrap">
+                              {feature.btn_text}
+                            </span>
+                          </a>
+                          <div className="w-10 flex justify-center">
+                            <IoIosArrowForward />
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* <div className="grid grid-cols-3 gap-4">
+              {heroSections?.map((feature, index) => (
+                <div
+                  key={index}
+                  className="relative bg-white md:rounded-xl shadow-sm overflow-hidden"
+                >
+                  <img
+                    src={feature.image}
+                    alt={feature.alt_tag}
+                    className="w-full h-full object-cover md:rounded-xl"
+                  />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-around">
+                    <div className="p-2 md:p-4">
+                      <h3 className="text-white text-base md:text-2xl font-bold mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-sm text-white mb-4">
+                        {feature.sub_title}
+                      </p>
                     </div>
                     <div className="relative overflow-hidden">
                       <motion.div
@@ -492,7 +547,7 @@ const HomePage = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </motion.div>
       </section>
@@ -500,9 +555,11 @@ const HomePage = () => {
       {/* Services Section */}
       <ServiceSection categories={data.all_categories} />
 
+      <div className="block md:hidden h-2 bg-gray-200"></div>
+
       {/* Discover Section */}
-      <section className="mt-12 md:px-10 py-5 md:py-10">
-        <h2 className="text-2xl font-bold mb-8">Discover</h2>
+      <section className="px-4 md:px-10 py-5 md:py-10">
+        <h2 className="text-2xl font-bold mb-4 md:mb-8">Discover</h2>
         <div className="w-full flex flex-wrap justify-around rounded-2xl border border-hommlie py-3">
           <NavLink
             to={`${config.VITE_BASE_URL}/my-bookings`}
@@ -552,15 +609,19 @@ const HomePage = () => {
         </div>
       </section>
 
+      <div className="block md:hidden h-2 bg-gray-200"></div>
+
       {/* Banner Section */}
-      <section className="py-12">
+      <section className="py-5 md:py-10">
         {data?.banners?.length ? (
           <BannerDatalider bannerData={data?.banners} />
         ) : null}
       </section>
 
+      <div className="block md:hidden h-2 bg-gray-200"></div>
+
       {/* Offers Section */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-5 md:py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">Today's Offers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -568,7 +629,7 @@ const HomePage = () => {
               <motion.div
                 key={offer.id}
                 whileHover={{ scale: 1.02 }}
-                className="h-40 md:h-80 rounded-xl overflow-hidden"
+                className="h-52 md:h-80 rounded-xl overflow-hidden"
               >
                 <img
                   src={offer.image}
@@ -582,7 +643,7 @@ const HomePage = () => {
       </section>
 
       {/* Most Booked Services */}
-      <section className="py-12 bg-white">
+      <section className="py-5 md:py-10 bg-white">
         <ProductSlider
           title={"Most Booked Services"}
           services={data?.most_booked_services}
@@ -590,7 +651,7 @@ const HomePage = () => {
       </section>
 
       {/* Thoughtful Curations */}
-      <section className="px-10 py-12 bg-[#F5F5F5]">
+      <section className="px-10 py-5 md:py-10 bg-[#F5F5F5]">
         <div className="container mx-auto px-4">
           <ThoughtfulSlider
             videos={thoughtfulContent}
@@ -600,7 +661,7 @@ const HomePage = () => {
       </section>
 
       {/* Refer & Earn */}
-      <section className="px-10 py-12">
+      <section className="px-10 py-5 md:py-10">
         <div
           onClick={() => setIsReferModalOpen(true)}
           className="bg-[#D8EEDD] p-6 rounded-lg"
@@ -619,32 +680,32 @@ const HomePage = () => {
       </section>
 
       {/* Testimonial Section */}
-      <section className="px-10 py-12">
+      <section className="px-10 py-5 md:py-10">
         <TestimonialCarousel testimonials={data.testimonials} />
       </section>
 
       {/* App Download Section */}
-      <section className="px-10 py-12 bg-[#F8F8F8]">
+      <section className="px-10 py-5 md:py-10 bg-[#F8F8F8]">
         <AppDownloadSection />
       </section>
 
       {/* FAQ Section */}
-      <section className="px-10 py-12">
+      <section className="px-10 py-5 md:py-10">
         <FaqSection />
       </section>
 
       {/* Stats Section */}
-      <section className="px-10 py-12">
+      <section className="px-10 py-5 md:py-10">
         <StatsSection />
       </section>
 
       {/* inspection form section */}
-      <section id="inspection-section" className="px-10 py-12">
+      <section id="inspection-section" className="px-10 py-5 md:py-10">
         <InspectionFormSection />
       </section>
 
       {/* Popular Categories Section with Tabs */}
-      <section className="px-10 py-12">
+      <section className="px-10 py-5 md:py-10">
         <PopularCategorySection data={data?.all_categories} />
       </section>
 

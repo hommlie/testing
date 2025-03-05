@@ -64,13 +64,11 @@ const TestimonialCarousel = ({ testimonials = [] }) => {
         <h2 className="text-sm uppercase tracking-wider text-teal-800 mb-2">
           REVIEWS
         </h2>
-        <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-          What Our Users Say
-        </h3>
+        <h3 className="text-2xl font-bold text-gray-900">What Our Users Say</h3>
       </div>
 
       <div className="relative overflow-hidden py-2">
-        <div className="relative h-[450px]">
+        <div className="relative h-[400px]">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentIndex}

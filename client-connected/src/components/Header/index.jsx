@@ -84,7 +84,7 @@ const Header = ({ logo, logoAlt }) => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="text-lg hidden md:flex items-center space-x-6">
               <NavLink
                 to="/services"
                 className="text-gray-700 hover:text-green-700 font-medium"

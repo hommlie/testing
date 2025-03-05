@@ -59,10 +59,7 @@ const ProductSlider = ({ title, services = [] }) => {
   return (
     <div className="w-full px-4 py-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-2 text-green-800 uppercase tracking-wide text-sm font-semibold">
-          Services
-        </div>
-        <h2 className="text-4xl font-bold mb-8 text-gray-900">{title}</h2>
+        <h2 className="text-2xl font-bold mb-8 text-gray-900">{title}</h2>
 
         <div className="relative group">
           {hasPrevious && (

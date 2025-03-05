@@ -26,8 +26,8 @@ export default function Footer({
   const locationArray = locations ? locations.split("|") : [];
 
   return (
-    <footer className="footer mt-[40px] z-10 px-4 md:px-10">
-      <div className="container-sm max-w-7xl mx-auto px-10 pt-5 lg:pt-24 pb-5 space-y-8">
+    <footer className="footer mt-10 z-10 px-4 md:px-10 pb-4">
+      <div className="container-sm max-w-7xl mx-auto px-10 space-y-8">
         <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">

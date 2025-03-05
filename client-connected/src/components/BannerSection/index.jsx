@@ -26,7 +26,7 @@ const BannerDatalider = ({ bannerData }) => {
   };
 
   return (
-    <div className="relative bg-white w-full overflow-hidden md:px-8 py-5 md:py-10">
+    <div className="relative bg-white w-full overflow-hidden md:px-8">
       <div
         className="flex h-full overflow-x-auto scroll-smooth gap-5 md:gap-10 md:gap-9 scrollbar-hide"
         ref={sliderRef}
@@ -41,7 +41,7 @@ const BannerDatalider = ({ bannerData }) => {
                 src={banner.image_url}
                 title={banner.image_title}
                 alt={banner.alt_tag}
-                className="w-full h-32 lg:h-[230px] object-contain rounded-lg border"
+                className="w-full h-48 lg:h-[340px] object-contain rounded-lg border"
               />
             </a>
           </div>

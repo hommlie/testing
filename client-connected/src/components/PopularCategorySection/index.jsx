@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import config from "../../config/config";
 
 const PopularCategorySection = ({ data }) => {
   const [activeCategory, setActiveCategory] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data?.length > 0) {
@@ -13,9 +16,13 @@ const PopularCategorySection = ({ data }) => {
     (category) => category.id === activeCategory
   );
 
+  const handleServiceClick = (slug, id) => {
+    navigate(`${config.VITE_BASE_URL}/subcategory/${slug}/${id}`);
+  };
+
   return (
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold mb-8">Popular Categories</h2>
+      <h2 className="text-2xl font-bold mb-8">Popular Service Categories</h2>
 
       {/* Category Tabs */}
       <div className="mb-8 border-b border-gray-200">

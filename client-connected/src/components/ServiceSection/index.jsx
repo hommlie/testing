@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/config";
@@ -237,7 +237,7 @@ const ServiceSection = ({ categories }) => {
               : "bg-white border border-emerald-800"
           }`}
         >
-          <div className="p-6 flex flex-col h-full">
+          <div className="p-4 md:p-6 flex flex-col h-full">
             {isRecommended && (
               <div className="flex justify-center mb-4">
                 <span className="bg-white rounded-full py-1 px-4 text-hommlie text-sm font-medium">
@@ -246,14 +246,34 @@ const ServiceSection = ({ categories }) => {
               </div>
             )}
 
-            <div className="mb-6 text-center">
+            <div className="w-80 md:w-auto mb-6 text-center">
               <div
-                className={`text-3xl font-bold mb-2 ${
+                className={`${
+                  isRecommended ? "border border-white" : ""
+                } mb-4 text-3xl font-bold text-center rounded-lg py-2 px-4`}
+              >
+                <h3 className={`${isRecommended ? "text-white" : ""}`}>
+                  {variation.variation}
+                </h3>
+              </div>
+              <div
+                className={`flex gap-4 justify-center text-3xl font-bold mb-2 ${
                   isRecommended ? "text-white" : "text-gray-900"
                 }`}
               >
-                ₹{variation.discounted_variation_price || variation.price}/-
+                <span>₹{variation.discounted_variation_price}/-</span>
+                <span className="line-through text-gray-600">
+                  ₹{variation.price}/-
+                </span>
               </div>
+              {variation?.avg_rating && (
+                <div className="flex justify-center py-2">
+                  <StarRating
+                    rating={variation?.avg_rating}
+                    reviews={variation?.total_reviews}
+                  />
+                </div>
+              )}
               <h3
                 className={`text-lg ${
                   isRecommended ? "text-white" : "text-gray-700"
@@ -279,19 +299,6 @@ const ServiceSection = ({ categories }) => {
                 </ul>
               </div>
             )}
-            <div
-              className={`${
-                isRecommended ? "border border-white" : "border border-hommlie"
-              } mb-6 text-center rounded-lg py-2 px-4`}
-            >
-              <h3
-                className={`text-lg ${
-                  isRecommended ? "text-white" : "text-gray-700"
-                }`}
-              >
-                {variation.variation}
-              </h3>
-            </div>
 
             <a
               href={`${config.VITE_BASE_URL}/product/${product?.id}/${product?.slug}`}
@@ -299,7 +306,7 @@ const ServiceSection = ({ categories }) => {
                 isRecommended ? "text-white" : "text-hommlie"
               } text-left underline underline-offset-4 hover:no-underline mb-4`}
             >
-              Learn More
+              View Details
             </a>
 
             <div className="mt-auto">
@@ -320,6 +327,30 @@ const ServiceSection = ({ categories }) => {
           </div>
         </div>
       </motion.div>
+    );
+  };
+
+  const StarRating = ({ rating, reviews }) => {
+    return (
+      <div className="flex items-center space-x-2">
+        <div className="flex">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              className={`w-2 md:w-4 h-2 md:h-4 ${
+                star <= Math.round(rating)
+                  ? "text-yellow-400 fill-current"
+                  : "text-gray-300"
+              }`}
+            />
+          ))}
+        </div>
+        <div className="text-sm">
+          {rating} (
+          {reviews > 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews}{" "}
+          reviews)
+        </div>
+      </div>
     );
   };
 
@@ -392,16 +423,16 @@ const ServiceSection = ({ categories }) => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-12">
+    <section className="max-w-7xl mx-auto px-4 py-5 md:py-10">
       {/* Category Cards */}
-      <div className="flex justify-center overflow-x-auto gap-4 pb-6 hide-scrollbar p-2 scrollbar-hide">
+      <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-4 pb-6 p-2">
         {categories?.map((category) => (
           <motion.button
             key={category.id}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setSelectedCategory(category.id)}
-            className={`flex items-center gap-3 px-6 py-4 rounded-lg whitespace-nowrap min-w-[200px]
+            className={`flex flex-col md:flex-row items-center gap-3 px-3 md:px-6 py-2 md:py-4 rounded-lg whitespace-nowrap md:min-w-[200px]
               ${
                 selectedCategory === category.id
                   ? "bg-emerald-800 text-white"
@@ -439,18 +470,19 @@ const ServiceSection = ({ categories }) => {
           options={getCurrentAttributes()}
           onChange={setSelectedAttribute}
           disabled={!selectedProduct}
+          showRecommended
         />
       </div>
 
       {/* Variation Cards */}
       {currentVariations.length > 0 && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="h-[450px] md:h-auto overflow-y-auto flex gap-4 md:overflow-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
             {getVisibleVariations().map((variation, index) => (
               <VariationCard
                 key={variation.id}
                 variation={variation}
-                isRecommended={index === 0}
+                // isRecommended={index === 0}
                 product={getCurrentProduct()}
               />
             ))}
