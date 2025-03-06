@@ -512,45 +512,6 @@ const HomePage = () => {
                 </div>
               ))}
             </div>
-            {/* <div className="grid grid-cols-3 gap-4">
-              {heroSections?.map((feature, index) => (
-                <div
-                  key={index}
-                  className="relative bg-white md:rounded-xl shadow-sm overflow-hidden"
-                >
-                  <img
-                    src={feature.image}
-                    alt={feature.alt_tag}
-                    className="w-full h-full object-cover md:rounded-xl"
-                  />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-around">
-                    <div className="p-2 md:p-4">
-                      <h3 className="text-white text-base md:text-2xl font-bold mb-2">
-                        {feature.title}
-                      </h3>
-                      <p className="text-sm text-white mb-4">
-                        {feature.sub_title}
-                      </p>
-                    </div>
-                    <div className="relative overflow-hidden">
-                      <motion.div
-                        whileHover={{ x: 0 }}
-                        initial={{ x: "calc(100% - 220px)" }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="w-fit flex items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
-                      >
-                        <span className="px-4 whitespace-nowrap">
-                          {feature.btn_text}
-                        </span>
-                        <div className="w-10 flex justify-center">
-                          <IoIosArrowForward />
-                        </div>
-                      </motion.div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div> */}
           </div>
         </motion.div>
       </section>
