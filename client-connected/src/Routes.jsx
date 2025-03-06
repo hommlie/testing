@@ -63,9 +63,9 @@ const ProjectRoutes = () => {
 
   let element = useRoutes([
     { path: "*", element: <NotFound /> },
-    { path: `${config.VITE_BASE_URL}/`, element: <Homescreen /> },
+    { path: `${config.VITE_BASE_URL}/`, element: <HomePage /> },
     { path: `${config.VITE_BASE_URL}/home`, element: <HomePage /> },
-    { path: `${config.VITE_BASE_URL}/:location`, element: <Homescreen /> },
+    { path: `${config.VITE_BASE_URL}/:location`, element: <HomePage /> },
     {
       path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId`,
       element: <SubCategoryPage />,
