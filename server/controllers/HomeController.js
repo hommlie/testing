@@ -776,6 +776,7 @@ exports.getHomePageData = async (req, res) => {
         "id",
         "category_name",
         "is_form",
+        "slug",
         [
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/category/', Category.web_icon)`
@@ -787,7 +788,7 @@ exports.getHomePageData = async (req, res) => {
       include: [
         {
           model: Subcategory,
-          attributes: ["id", "subcategory_name"],
+          attributes: ["id", "subcategory_name", "slug"],
           where: { status: 1 },
           required: false,
           include: [
@@ -881,12 +882,14 @@ exports.getHomePageData = async (req, res) => {
     const manipulatedResponse = allCategories?.map((category) => ({
       id: category.id,
       category_name: category.category_name,
+      slug: category.getDataValue("slug"),
       is_form: category.getDataValue("is_form"),
       icon_url: category.getDataValue("icon_url"),
       subcategories:
         category.Subcategories?.map((subcategory) => ({
           id: subcategory.id,
           subcategory_name: subcategory.subcategory_name,
+          slug: subcategory.getDataValue("slug"),
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })) ?? [],
     }));

@@ -4,8 +4,15 @@ import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
-import { MdLocationOn } from "react-icons/md";
+import {
+  FaWhatsapp,
+  FaPhoneAlt,
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+} from "react-icons/fa";
+import { MdLocationOn, MdEmail } from "react-icons/md";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import userIcon from "../../assets/images/user-icon.svg";
 import cartIcon from "../../assets/images/cart-icon.svg";
@@ -47,7 +54,7 @@ const Header = ({ logo, logoAlt }) => {
   const loginDropdownRef = useRef(null);
   const cartDropdownRef = useRef(null);
 
-  const showBottomHeader = !["/", "/home"].includes(location.pathname);
+  const isHomePage = ["/", "/home"].includes(location.pathname);
 
   const handleLogout = () => {
     setUser([]);
@@ -70,8 +77,71 @@ const Header = ({ logo, logoAlt }) => {
       ref={headerRef}
       className="w-full sticky top-0 z-20 bg-white shadow-md font-headerFont"
     >
+      {/* Top Header for Homepage with contact and social info */}
+      {isHomePage && (
+        <div className="bg-gray-100 py-2 border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between">
+              {/* Contact Information */}
+              <div className="flex items-center space-x-4 mb-2 sm:mb-0">
+                <a
+                  href="tel:+916363865658"
+                  className="flex items-center text-hommlie hover:text-green-700 transition-colors text-sm"
+                >
+                  <FaPhoneAlt className="mr-2 text-green-700" />
+                  <span>+91 6363865658</span>
+                </a>
+                <a
+                  href="mailto:reach@hommlie.com"
+                  className="flex items-center text-hommlie hover:text-green-700 transition-colors text-sm hidden sm:flex"
+                >
+                  <MdEmail className="mr-2 text-hommlie" />
+                  <span>info@hommlie.com</span>
+                </a>
+              </div>
+
+              {/* Social Media Icons */}
+              <div className="flex items-center space-x-4">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-hommlie hover:text-green-600 transition-all transform hover:scale-110"
+                >
+                  <FaFacebook />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-hommlie hover:text-green-400 transition-all transform hover:scale-110"
+                >
+                  <FaTwitter />
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-hommlie hover:text-green-600 transition-all transform hover:scale-110"
+                >
+                  <FaInstagram />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-hommlie hover:text-green-700 transition-all transform hover:scale-110"
+                >
+                  <FaLinkedin />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        {/* Top Header */}
+        {/* Main Header */}
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
             <NavLink to="/">
@@ -201,7 +271,7 @@ const Header = ({ logo, logoAlt }) => {
         </div>
 
         {/* Bottom Header - Only show if not on home page */}
-        {showBottomHeader && (
+        {!isHomePage && (
           <div className="transition-all duration-300 ease-in-out">
             <div className="flex items-center justify-between py-4">
               <div className="relative flex-grow mr-4">
@@ -226,16 +296,16 @@ const Header = ({ logo, logoAlt }) => {
                       "_blank"
                     )
                   }
-                  className="bg-green-600 text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-pulse"
+                  className="bg-green-600 text-white flex items-center space-x-2 px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
                 >
-                  <FaWhatsapp />
+                  <FaWhatsapp className="animate-pulse" />
                   <span className="hidden lg:inline">WhatsApp</span>
                 </button>
                 <button
                   onClick={() => (window.location.href = "tel:+916363865658")}
-                  className="bg-red-500 text-white flex items-center space-x-2 px-4 py-2 rounded-md animate-bounce"
+                  className="bg-red-500 text-white flex items-center space-x-2 px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
                 >
-                  <FaPhoneAlt />
+                  <FaPhoneAlt className="animate-pulse" />
                   <span className="hidden lg:inline">Call Us</span>
                 </button>
               </div>

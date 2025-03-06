@@ -32,8 +32,10 @@ import InspectionFormSection from "../../components/InspectionFormSection";
 import ReferAndEarn from "../../components/ReferAndEarnModal";
 import InspectionModal from "../../components/InspectionModal";
 import MobileNavigation from "../../components/MobileNavigation";
+import LoginSignup from "../../components/LoginModal";
 
 const HomePage = () => {
+  const { user } = useCont();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -47,6 +49,7 @@ const HomePage = () => {
   const { cartLength, prodData } = useCont();
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [isExploreButtonVisible, setIsExploreButtonVisible] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleExploreButtonClick = () => {
     setIsExploreButtonVisible(true);
@@ -676,10 +679,16 @@ const HomePage = () => {
       {/* Refer & Earn */}
       <section className="px-10 py-5 md:py-10">
         <div
-          onClick={() => setIsReferModalOpen(true)}
+          onClick={() => {
+            if (!user || user.length === 0) {
+              setIsLoginModalOpen(true);
+              return;
+            }
+            setIsReferModalOpen(true);
+          }}
           className="bg-[#D8EEDD] p-6 rounded-lg"
         >
-          <div className="flex flex-col md:flex-row items-center space-x-4">
+          <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-4">
             <img src={ReferEarnImg} alt="Refer Icon" className="w-fit h-32" />
             <div>
               <h3 className="font-bold">Refer & Get Free Services</h3>
@@ -760,6 +769,11 @@ const HomePage = () => {
       <ReferAndEarn
         isOpen={isReferModalOpen}
         onClose={() => setIsReferModalOpen(false)}
+      />
+      <LoginSignup
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        // checkoutPd={checkoutPd}
       />
     </div>
   );
