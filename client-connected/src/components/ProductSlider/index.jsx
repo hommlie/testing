@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import config from "../../config/config";
@@ -9,8 +9,12 @@ import "slick-carousel/slick/slick-theme.css";
 const ProductSlider = ({ title, services = [] }) => {
   const [slidesToShow, setSlidesToShow] = useState(3);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
-  const sliderRef = React.useRef(null);
+  const sliderRef = useRef(null);
+
+  // Check if services array exists and has content
+  const hasServices = Array.isArray(services) && services.length > 0;
 
   useEffect(() => {
     const handleResize = () => {
@@ -21,7 +25,16 @@ const ProductSlider = ({ title, services = [] }) => {
 
     handleResize();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    // Small delay to ensure data is loaded and component is properly mounted
+    const timer = setTimeout(() => {
+      setIsInitialized(true);
+    }, 100);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timer);
+    };
   }, []);
 
   // Custom arrow components
@@ -54,11 +67,11 @@ const ProductSlider = ({ title, services = [] }) => {
 
   // Slick settings
   const settings = {
-    dots: false, // Disable default dots
+    dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: slidesToShow,
+    slidesToScroll: 1,
     initialSlide: 0,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -67,7 +80,7 @@ const ProductSlider = ({ title, services = [] }) => {
         breakpoint: 1280,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll: 1,
         },
       },
       {
@@ -75,6 +88,8 @@ const ProductSlider = ({ title, services = [] }) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          centerMode: false,
+          centerPadding: "20px",
         },
       },
     ],
@@ -82,88 +97,124 @@ const ProductSlider = ({ title, services = [] }) => {
   };
 
   // Calculate number of dot groups
-  const totalGroups = Math.ceil(services.length / slidesToShow);
+  const totalGroups = Math.ceil(
+    hasServices ? services.length / slidesToShow : 0
+  );
+
+  // Render placeholder if no services available
+  if (!hasServices) {
+    return (
+      <div className="w-full px-4 py-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold mb-8 text-gray-900">
+            {title || "Most Booked Services"}
+          </h2>
+          <div className="bg-gray-100 rounded-xl p-8 text-center">
+            <p className="text-gray-500">
+              No services available at the moment.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-4 py-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl font-bold mb-8 text-gray-900">{title}</h2>
 
-        <div className="relative group mx-6">
-          <Slider ref={sliderRef} {...settings}>
-            {services.map((service) => (
-              <div key={service.id} className="px-3">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-                  <div className="relative aspect-[4/3]">
-                    <img
-                      src={service.productimage?.image_url}
-                      alt={service.productimage?.alt_tag}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50" />
-                    <h3 className="absolute bottom-4 left-4 right-4 text-white text-xl font-semibold">
-                      {service.product_name}
-                    </h3>
-                  </div>
+        {/* Only render slider when there's data and component is initialized */}
+        <div className={`relative ${isInitialized ? "" : "opacity-0"}`}>
+          <div className="mx-4 md:mx-6">
+            <Slider ref={sliderRef} {...settings}>
+              {services.map((service) => (
+                <div key={service.id} className="px-2">
+                  <div className="bg-white rounded-xl overflow-hidden shadow-lg">
+                    <div className="relative aspect-[4/3]">
+                      <img
+                        src={service.productimage?.image_url}
+                        alt={service.productimage?.alt_tag || "Product image"}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src =
+                            "https://via.placeholder.com/400x300?text=Image+Not+Available";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50" />
+                      <h3 className="absolute bottom-4 left-4 right-4 text-white text-xl font-semibold">
+                        {service.product_name || "Service"}
+                      </h3>
+                    </div>
 
-                  <div className="p-4">
-                    <div className="flex flex-col md:flex-row justify-center md:items-center md:justify-between gap-2">
-                      <div className="flex items-center gap-2">
+                    <div className="p-4">
+                      <div className="flex flex-col md:flex-row justify-center md:items-center md:justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <div className="flex items-center">
-                            <span className="text-yellow-400 text-lg">⭐</span>
-                            <span className="ml-1 text-sm font-medium">
-                              {service.rating}
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center">
+                              <span className="text-yellow-400 text-lg">
+                                ⭐
+                              </span>
+                              <span className="ml-1 text-sm font-medium">
+                                {service.rating || "N/A"}
+                              </span>
+                            </div>
+                            <span className="text-sm text-gray-600">
+                              (
+                              {service.total_reviews > 1000
+                                ? `${(service.total_reviews / 1000).toFixed(
+                                    1
+                                  )}K`
+                                : service.total_reviews || 0}{" "}
+                              )
                             </span>
                           </div>
-                          <span className="text-sm text-gray-600">
-                            (
-                            {service.total_reviews > 1000
-                              ? `${(service.total_reviews / 1000).toFixed(1)}K`
-                              : service.total_reviews}{" "}
+                          <div className="text-sm">
+                            From{" "}
+                            <span className="font-semibold">
+                              ₹{service.discounted_price || service.price || 0}
+                            </span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `${config.VITE_BASE_URL}/product/${service.id}/${
+                                service.slug || service.id
+                              }`
                             )
-                          </span>
-                        </div>
-                        <div className="text-sm">
-                          From{" "}
-                          <span className="font-semibold">
-                            ₹{service.discounted_price}
-                          </span>
-                        </div>
+                          }
+                          className="bg-white text-hommlie border border-hommlie px-4 py-2 rounded-lg hover:bg-hommlie hover:text-white transition-colors duration-200"
+                        >
+                          Book Now
+                        </button>
                       </div>
-                      <button
-                        onClick={() =>
-                          navigate(
-                            `${config.VITE_BASE_URL}/product/${service.id}/${service.slug}`
-                          )
-                        }
-                        className="bg-white text-hommlie border border-hommlie px-4 py-2 rounded-lg hover:bg-hommlie hover:text-white transition-colors duration-200"
-                      >
-                        Book Now
-                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          </div>
         </div>
 
-        {/* Custom Dots */}
-        <div className="flex justify-center mt-6 gap-2">
-          {[...Array(totalGroups)].map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleDotClick(idx)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                Math.floor(currentSlide / slidesToShow) === idx
-                  ? "bg-hommlie w-4"
-                  : "bg-gray-300"
-              }`}
-              aria-label={`Go to service group ${idx + 1}`}
-            />
-          ))}
-        </div>
+        {/* Custom Dots - only show if there are items */}
+        {totalGroups > 0 && (
+          <div className="flex justify-center mt-6 gap-2">
+            {[...Array(totalGroups)].map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleDotClick(idx)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  Math.floor(currentSlide / slidesToShow) === idx
+                    ? "bg-hommlie w-4"
+                    : "bg-gray-300"
+                }`}
+                aria-label={`Go to service group ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

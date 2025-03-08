@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IoMdPlay } from "react-icons/io";
@@ -11,7 +11,8 @@ const ThoughtfulSlider = ({ videos = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const sliderRef = React.useRef(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,8 +23,15 @@ const ThoughtfulSlider = ({ videos = [] }) => {
 
     handleResize();
     window.addEventListener("resize", handleResize);
+
+    // Set initialized after component mounts
+    setIsInitialized(true);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Check if videos array exists and has content
+  const hasVideos = Array.isArray(videos) && videos.length > 0;
 
   // Custom arrow components
   const PrevArrow = ({ onClick }) => (
@@ -59,7 +67,7 @@ const ThoughtfulSlider = ({ videos = [] }) => {
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: slidesToShow,
+    slidesToScroll: 1, // Changed to 1 to ensure smoother scrolling
     initialSlide: 0,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -68,7 +76,8 @@ const ThoughtfulSlider = ({ videos = [] }) => {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll: 1,
+          centerMode: false,
         },
       },
       {
@@ -76,6 +85,9 @@ const ThoughtfulSlider = ({ videos = [] }) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          centerMode: false,
+          centerPadding: "20px",
+          initialSlide: 0,
         },
       },
     ],
@@ -83,37 +95,52 @@ const ThoughtfulSlider = ({ videos = [] }) => {
   };
 
   // Calculate number of dot groups
-  const totalGroups = Math.ceil(videos.length / slidesToShow);
+  const totalGroups = Math.ceil(hasVideos ? videos.length / slidesToShow : 0);
+
+  // Render placeholder if no videos available
+  if (!hasVideos) {
+    return (
+      <div className="relative w-full">
+        <h2 className="text-2xl font-bold mb-8">Thoughtful Curations</h2>
+        <div className="bg-gray-100 rounded-xl p-8 text-center">
+          <p className="text-gray-500">No videos available at the moment.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full">
       <h2 className="text-2xl font-bold mb-8">Thoughtful Curations</h2>
 
-      <div className="relative group mx-6">
-        <Slider ref={sliderRef} {...settings}>
-          {videos.map((content, index) => (
-            <div key={content.id} className="px-2">
-              <div
-                className="relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer group"
-                onClick={() => {
-                  setCurrentVideo(content);
-                  setIsModalOpen(true);
-                }}
-              >
-                <img
-                  src={content.thumbnail}
-                  alt={content.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center group-hover:bg-opacity-30 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white bg-opacity-30 rounded-full flex items-center justify-center transform transition-transform duration-300 hover:scale-110">
-                    <IoMdPlay className="text-2xl text-white" />
+      {/* Ensure content is visible on initial load */}
+      <div className={`relative group ${isInitialized ? "" : "opacity-0"}`}>
+        <div className="mx-4 md:mx-6 lg:mx-8">
+          <Slider ref={sliderRef} {...settings}>
+            {videos.map((content, index) => (
+              <div key={content.id || index} className="px-2">
+                <div
+                  className="relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer group"
+                  onClick={() => {
+                    setCurrentVideo(content);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <img
+                    src={content.thumbnail}
+                    alt={content.title || "Video thumbnail"}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center group-hover:bg-opacity-30 transition-all duration-300">
+                    <div className="w-12 h-12 bg-white bg-opacity-30 rounded-full flex items-center justify-center transform transition-transform duration-300 hover:scale-110">
+                      <IoMdPlay className="text-2xl text-white" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </div>
 
       {/* Custom Dots */}
@@ -132,11 +159,13 @@ const ThoughtfulSlider = ({ videos = [] }) => {
         ))}
       </div>
 
-      <VideoModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        videoUrl={currentVideo?.video}
-      />
+      {currentVideo && (
+        <VideoModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          videoUrl={currentVideo.video}
+        />
+      )}
     </div>
   );
 };
