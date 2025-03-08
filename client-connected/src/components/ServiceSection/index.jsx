@@ -220,6 +220,8 @@ const ServiceSection = ({ categories }) => {
 
         // Refresh cart data
         getCart();
+
+        navigate(`${config.VITE_BASE_URL}/add-to-cart`);
       }
     } catch (error) {
       errorNotify(error.message || "Error adding to cart");
