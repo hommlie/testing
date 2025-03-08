@@ -893,6 +893,7 @@ exports.getHomePageData = async (req, res) => {
           is_recommended: product.getDataValue("is_recommended"),
           product_price: product.product_price,
           discounted_price: product.discounted_price,
+          image_url: product.productimage[0]?.image_url,
           attributes: Array.from(groupedVariations.values()),
         };
       });

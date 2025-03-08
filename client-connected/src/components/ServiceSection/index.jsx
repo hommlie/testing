@@ -195,7 +195,7 @@ const ServiceSection = ({ categories }) => {
       product_id: product.id,
       // vendor_id: product.vendor_id,
       product_name: product.product_name,
-      image: product?.productimage[0]?.image_url,
+      image: product?.image_url,
       qty: 1,
       price: variation.discounted_variation_price || variation.price,
       attribute: selectedAttribute,
