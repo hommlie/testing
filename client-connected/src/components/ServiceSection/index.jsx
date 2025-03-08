@@ -11,7 +11,7 @@ import { Listbox } from "@headlessui/react";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
-  const { user } = useCont();
+  const { user, getCart } = useCont();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -375,7 +375,7 @@ const ServiceSection = ({ categories }) => {
     <Listbox value={value} onChange={onChange} disabled={disabled}>
       <div className="relative">
         <Listbox.Button
-          className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-left
+          className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-left truncate
           ${disabled ? "cursor-not-allowed bg-gray-50" : "cursor-pointer"}
           focus:outline-none focus:ring-2 focus:ring-emerald-500`}
         >

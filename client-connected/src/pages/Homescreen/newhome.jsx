@@ -37,7 +37,6 @@ import LoginSignup from "../../components/LoginModal";
 const HomePage = () => {
   const { user } = useCont();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(
     "Get Current Location"
@@ -48,15 +47,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { cartLength, prodData } = useCont();
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const [isExploreButtonVisible, setIsExploreButtonVisible] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-  const handleExploreButtonClick = () => {
-    setIsExploreButtonVisible(true);
-  };
-
-  // States for services section
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Add states for all dynamic data
   const [data, setData] = useState({
@@ -86,13 +77,6 @@ const HomePage = () => {
   useEffect(() => {
     fetchHomeData();
   }, []);
-
-  useEffect(() => {
-    // Set initial category when data loads
-    if (data.all_categories?.length > 0) {
-      setSelectedCategory(data.all_categories[0]);
-    }
-  }, [data.all_categories]);
 
   const fetchHomeData = async () => {
     try {
@@ -632,7 +616,7 @@ const HomePage = () => {
         <div className="container mx-auto px-4">
           <ThoughtfulSlider
             videos={thoughtfulContent}
-            onVideoClick={setCurrentVideoIndex}
+            // onVideoClick={setCurrentVideoIndex}
           />
         </div>
       </section>
@@ -691,27 +675,6 @@ const HomePage = () => {
       <section className="px-10 py-5 md:py-10">
         <PopularCategorySection data={data?.all_categories} />
       </section>
-
-      {/* Video Modal */}
-      {currentVideoIndex !== null && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-          <div className="relative w-full max-w-lg mx-4">
-            <button
-              className="absolute -top-10 right-0 text-white text-xl"
-              onClick={() => setCurrentVideoIndex(null)}
-            >
-              ✕
-            </button>
-            <div className="aspect-video">
-              <iframe
-                src={thoughtfulContent[currentVideoIndex].videoUrl}
-                className="w-full h-full"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       <MobileNavigation />
 
