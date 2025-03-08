@@ -12,8 +12,6 @@ import { IoIosArrowBack, IoIosArrowForward, IoMdPlay } from "react-icons/io";
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import ServiceSection from "../../components/ServiceSection";
-import BannerDatalider from "../../components/BannerSection";
 
 import DownloadAppImg from "/assets/bg/download-app.svg";
 import Playstore from "/assets/icons/playstore.svg";
@@ -23,6 +21,8 @@ import discoverImg1 from "../../assets/images/discover-1.png";
 import discoverImg3 from "../../assets/images/discover-3.png";
 import discoverImg4 from "../../assets/images/discover-4.png";
 
+import ServiceSection from "../../components/ServiceSection";
+import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
 import ThoughtfulSlider from "../../components/ThoughtfulSlider";
 import ProductSlider from "../../components/ProductSlider";

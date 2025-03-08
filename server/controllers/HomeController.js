@@ -807,6 +807,24 @@ exports.getHomePageData = async (req, res) => {
               ],
               include: [
                 {
+                  model: ProductImage,
+                  where: { media: "Image" },
+                  attributes: [
+                    "id",
+                    [
+                      sequelize.fn(
+                        "CONCAT",
+                        sequelize.literal(
+                          `'${apiUrl}/storage/app/public/images/products/'`
+                        ),
+                        sequelize.col("productimage.image")
+                      ),
+                      "image_url",
+                    ],
+                  ],
+                  as: "productimage",
+                },
+                {
                   model: Variation,
                   attributes: [
                     "id",
