@@ -32,7 +32,7 @@ export default function Footer({
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">
             <div className="h-10 lg:h-12">
-              <img src={logo} alt={logoAlt} className="h-full w-fit" />
+              <img src={logo} alt={logoAlt} className="h-full w-auto" />
             </div>
             <p className="text-sm text-gray-500 md:max-w-[250px]">
               One click to transform your home into a sparkling haven with our
