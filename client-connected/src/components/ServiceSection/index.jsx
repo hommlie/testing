@@ -193,7 +193,7 @@ const ServiceSection = ({ categories }) => {
     const cartItem = {
       user_id: user.id,
       product_id: product.id,
-      // vendor_id: product.vendor_id,
+      vendor_id: product.vendor_id,
       product_name: product.product_name,
       image: product?.productimage?.image_url,
       qty: 1,

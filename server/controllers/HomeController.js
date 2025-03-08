@@ -804,6 +804,7 @@ exports.getHomePageData = async (req, res) => {
                 "discounted_price",
                 "is_recommended",
                 "slug",
+                "vendor_id",
               ],
               include: [
                 {
@@ -893,6 +894,7 @@ exports.getHomePageData = async (req, res) => {
           is_recommended: product.getDataValue("is_recommended"),
           product_price: product.product_price,
           discounted_price: product.discounted_price,
+          vendor_id: product.vendor_id,
           productimage: product.productimage,
           attributes: Array.from(groupedVariations.values()),
         };

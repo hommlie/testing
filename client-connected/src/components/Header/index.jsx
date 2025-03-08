@@ -285,6 +285,13 @@ const Header = ({ logo, logoAlt }) => {
                   className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30"
                 >
                   <NavLink
+                    to="/add-to-cart"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setIsLoginOpen(false)}
+                  >
+                    My Cart
+                  </NavLink>
+                  <NavLink
                     to="/my-bookings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     onClick={() => setIsLoginOpen(false)}
