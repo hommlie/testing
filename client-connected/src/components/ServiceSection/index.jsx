@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -373,10 +373,45 @@ const ServiceSection = ({ categories }) => {
     onChange,
     disabled,
     showRecommended,
-  }) => (
-    <Listbox value={value} onChange={onChange} disabled={disabled}>
-      <div className="relative">
-        <Listbox.Button
+  }) => {
+    // Add state to track if the dropdown is open
+    const [isOpen, setIsOpen] = useState(false);
+
+    // Add a ref to detect clicks outside the dropdown
+    const dropdownRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target)
+        ) {
+          setIsOpen(false);
+        }
+      };
+
+      // Only add the listener when the dropdown is open
+      if (isOpen) {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [isOpen]);
+
+    // Handle option selection
+    const handleSelect = (optionId) => {
+      onChange(optionId);
+      setIsOpen(false);
+    };
+
+    return (
+      <div className="relative" ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={() => !disabled && setIsOpen(!isOpen)}
           className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-left truncate
           ${disabled ? "cursor-not-allowed bg-gray-50" : "cursor-pointer"}
           focus:outline-none focus:ring-2 focus:ring-emerald-500`}
@@ -387,42 +422,41 @@ const ServiceSection = ({ categories }) => {
               options.find((option) => option.id === value)?.attribute
             : label}
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
-        </Listbox.Button>
-        <Listbox.Options className="absolute mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-          {options.map((option, index) => (
-            <Listbox.Option
-              key={option.id}
-              value={option.id}
-              className={({ active }) =>
-                `cursor-pointer select-none p-3 ${
-                  active ? "bg-emerald-50 text-emerald-800" : "text-gray-900"
-                }`
-              }
-            >
-              {showRecommended && option?.is_recommended === 1 ? (
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium text-emerald-600">
-                    ✓ Recommended
-                  </span>
-                  <span className="text-base font-semibold">
+        </button>
+
+        {isOpen && (
+          <div className="absolute mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+            {options.map((option) => (
+              <div
+                key={option.id}
+                onClick={() => handleSelect(option.id)}
+                className={`cursor-pointer select-none p-3 hover:bg-emerald-50 hover:text-emerald-800 text-gray-900`}
+              >
+                {showRecommended && option?.is_recommended === 1 ? (
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-emerald-600">
+                      ✓ Recommended
+                    </span>
+                    <span className="text-base font-semibold">
+                      {option.subcategory_name ||
+                        option.product_name ||
+                        option.attribute}
+                    </span>
+                  </div>
+                ) : (
+                  <span>
                     {option.subcategory_name ||
                       option.product_name ||
                       option.attribute}
                   </span>
-                </div>
-              ) : (
-                <span>
-                  {option.subcategory_name ||
-                    option.product_name ||
-                    option.attribute}
-                </span>
-              )}
-            </Listbox.Option>
-          ))}
-        </Listbox.Options>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    </Listbox>
-  );
+    );
+  };
 
   // Get current product for navigation
   const getCurrentProduct = () => {
