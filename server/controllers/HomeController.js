@@ -862,6 +862,7 @@ exports.getHomePageData = async (req, res) => {
               ],
             },
           ],
+          order: [["id", "ASC"]],
         },
       ],
       order: [["id", "ASC"]],

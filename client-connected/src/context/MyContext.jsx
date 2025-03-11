@@ -337,15 +337,15 @@ export function ContProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    fetchAllData();
+    // fetchAllData();
     getUser();
     getCart();
-    getBookings();
-    getAddresses();
+    // getBookings();
+    // getAddresses();
     // getCoupons();
-    getPaymentList();
-    getCMSPagesData();
-    getSearchProdData();
+    // getPaymentList();
+    // getCMSPagesData();
+    // getSearchProdData();
   }, [getHomeFeeds]);
 
   const fetchAllData = async () => {

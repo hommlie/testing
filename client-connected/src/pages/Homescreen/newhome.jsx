@@ -8,7 +8,12 @@ import { BiSearchAlt } from "react-icons/bi";
 import { RxCross1 } from "react-icons/rx";
 import cartIcon from "../../assets/images/cart-icon.svg";
 import config from "../../config/config";
-import { IoIosArrowBack, IoIosArrowForward, IoMdPlay } from "react-icons/io";
+import {
+  IoIosArrowBack,
+  IoIosArrowDown,
+  IoIosArrowForward,
+  IoMdPlay,
+} from "react-icons/io";
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -283,7 +288,7 @@ const HomePage = () => {
           className="container mx-auto px-4 md:pt-8"
         >
           <div className="w-full hidden md:block flex justify-center py-2 text-center">
-            <h1 className="max-w-3xl mx-auto text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
+            <h1 className="max-w-2xl mx-auto text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
               Explore Top Rated Certified Experts Nearby
             </h1>
           </div>
@@ -328,6 +333,7 @@ const HomePage = () => {
                   <span className="flex-1 text-left truncate">
                     {currentLocation}
                   </span>
+                  <IoIosArrowDown />
                 </button>
               </div>
 
@@ -337,7 +343,7 @@ const HomePage = () => {
                 <input
                   type="text"
                   placeholder="What Service do you Need?"
-                  className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-3 border hover:border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />

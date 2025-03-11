@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import Cookies from "js-cookie";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
 import config from "../../config/config";
 import PhoneInput from "react-phone-input-2";
-import 'react-phone-input-2/lib/style.css';
+import "react-phone-input-2/lib/style.css";
 
 export default function EditProfile() {
   const { user, setUser, getUser } = useCont();
@@ -16,8 +16,8 @@ export default function EditProfile() {
   const [selectedPic, setSelectedPic] = useState(null);
 
   const notify = useToast();
-  const successNotify = (success) => notify(success, 'success');
-  const errorNotify = (error) => notify(error, 'error');
+  const successNotify = (success) => notify(success, "success");
+  const errorNotify = (error) => notify(error, "error");
 
   const [errors, setErrors] = useState({});
 
@@ -72,29 +72,31 @@ export default function EditProfile() {
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      const errorMessages = Object.values(newErrors).join(' & ');
+      const errorMessages = Object.values(newErrors).join(" & ");
       errorNotify(errorMessages);
       return;
     }
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('user_id', user.id);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("user_id", user.id);
     if (profile_pic) {
-      formData.append('profile_pic', profile_pic);
+      formData.append("profile_pic", profile_pic);
     }
 
     try {
       const jwtToken = Cookies.get("HommlieUserjwtToken");
-      const response = await axios.post(`${config.API_URL}/api/editprofile`, 
-        formData, 
+      const response = await axios.post(
+        `${config.API_URL}/api/editprofile`,
+        formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${jwtToken}`,
           },
-      });
+        }
+      );
 
       if (response.status === 200) {
         getUser();
@@ -102,12 +104,12 @@ export default function EditProfile() {
         setSelectedPic(null);
         successNotify("Profile updated successfully");
       } else {
-        console.error('Error updating profile:', response.data);
-        errorNotify('Error updating profile!!!');
+        console.error("Error updating profile:", response.data);
+        errorNotify("Error updating profile!!!");
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      errorNotify('Error updating profile. Please try again later!!!');
+      console.error("Error updating profile:", error);
+      errorNotify("Error updating profile. Please try again later!!!");
     }
   };
 
@@ -119,7 +121,9 @@ export default function EditProfile() {
           <div className="my-8">
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div className="flex flex-col gap-4">
-                <label htmlFor="name" className="text-sm font-bold">Name *</label>
+                <label htmlFor="name" className="text-sm font-bold">
+                  Name *
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -127,22 +131,34 @@ export default function EditProfile() {
                   value={name}
                   onChange={handleInputChange}
                   placeholder="Full Name"
-                  className={`h-[50px] w-full pl-4 text-sm rounded ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                  style={{ backgroundColor: "rgba(249, 249, 249, 1)", border: "1px solid rgba(230, 230, 230, 1)" }}
+                  className={`h-[50px] w-full pl-4 text-sm rounded ${
+                    errors.name ? "border-red-500" : "border-gray-300"
+                  }`}
+                  style={{
+                    backgroundColor: "rgba(249, 249, 249, 1)",
+                    border: "1px solid rgba(230, 230, 230, 1)",
+                  }}
                 />
-                {errors.name && <p className="text-xs mt-1" style={{color: "red"}}>{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-xs mt-1" style={{ color: "red" }}>
+                    {errors.name}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col gap-4">
-                <label 
-                    htmlFor="mobile" 
-                    className="text-sm font-bold flex flex-row justify-between items-center"
+                <label
+                  htmlFor="mobile"
+                  className="text-sm font-bold flex flex-row justify-between items-center"
                 >
-                    Mobile * <span className="text-xs font-normal">OTP Verified</span>
+                  Mobile *{" "}
+                  <span className="text-xs font-normal">OTP Verified</span>
                 </label>
                 <span
                   className="h-[50px] w-full pl-4 text-sm rounded bg-gray-100 flex items-center"
                   style={{ border: "1px solid rgba(230, 230, 230, 1)" }}
-                >{mobile}</span>
+                >
+                  {mobile}
+                </span>
               </div>
               {/* <div className="flex flex-col gap-4">
                 <label htmlFor="secondaryMobile" className="text-sm font-bold">Secondary Mobile</label>
@@ -171,7 +187,9 @@ export default function EditProfile() {
                 />
               </div> */}
               <div className="flex flex-col gap-4">
-                <label htmlFor="email" className="text-sm font-bold">Email *</label>
+                <label htmlFor="email" className="text-sm font-bold">
+                  Email *
+                </label>
                 <input
                   type="email"
                   name="email"
@@ -179,13 +197,24 @@ export default function EditProfile() {
                   value={email}
                   onChange={handleInputChange}
                   placeholder="example@gmail.com"
-                  className={`h-[50px] w-full pl-4 text-sm rounded ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-                  style={{ backgroundColor: "rgba(249, 249, 249, 1)", border: "1px solid rgba(230, 230, 230, 1)" }}
+                  className={`h-[50px] w-full pl-4 text-sm rounded ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  }`}
+                  style={{
+                    backgroundColor: "rgba(249, 249, 249, 1)",
+                    border: "1px solid rgba(230, 230, 230, 1)",
+                  }}
                 />
-                {errors.email && <p className="text-xs mt-1" style={{color: "red"}}>{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-xs mt-1" style={{ color: "red" }}>
+                    {errors.email}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col gap-4">
-                <label htmlFor="profile_pic" className="text-sm font-bold">Profile Image</label>
+                <label htmlFor="profile_pic" className="text-sm font-bold">
+                  Profile Image
+                </label>
                 <input
                   type="file"
                   name="profile_pic"
@@ -193,11 +222,24 @@ export default function EditProfile() {
                   accept="image/*"
                   onChange={handleProfilePicChange}
                   className="h-[50px] w-full text-sm"
-                  style={{ backgroundColor: "rgba(249, 249, 249, 1)", border: "1px solid rgba(230, 230, 230, 1)" }}
+                  style={{
+                    backgroundColor: "rgba(249, 249, 249, 1)",
+                    border: "1px solid rgba(230, 230, 230, 1)",
+                  }}
                 />
                 {profile_pic ? (
                   <div className="mt-4">
-                    <img src={selectedPic != null ? URL.createObjectURL(profile_pic) : user?.profile_pic ? user?.profile_pic : ""} alt="Profile" className="h-36 w-36 rounded-full object-cover" />
+                    <img
+                      src={
+                        selectedPic != null
+                          ? URL.createObjectURL(profile_pic)
+                          : user?.profile_pic
+                          ? user?.profile_pic
+                          : ""
+                      }
+                      alt="Profile"
+                      className="h-36 w-36 rounded-full object-cover"
+                    />
                   </div>
                 ) : null}
               </div>

@@ -52,7 +52,7 @@ export default function MyBookings() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    console.log(bookings);
+    getBookings();
   }, []);
 
   useEffect(() => {
