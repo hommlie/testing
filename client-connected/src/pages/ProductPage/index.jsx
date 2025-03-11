@@ -73,7 +73,8 @@ export default function ProductPage() {
   const [discountPercentage, setDiscountPercentage] = useState(0);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isLocationsExpanded, setisLocationsExpanded] = useState(false);
+  const [isKeywordsExpanded, setIsKeywordsExpanded] = useState(false);
   const [attributes, setAttributes] = useState([]);
   const [selectedAttribute, setSelectedAttribute] = useState("");
   const [variations, setVariations] = useState([]);
@@ -140,8 +141,12 @@ export default function ProductPage() {
     setCouponDiscount(0);
   };
 
-  const toggleExpansion = () => {
-    setIsExpanded(!isExpanded);
+  const toggleLocationsExpansion = () => {
+    setisLocationsExpanded(!isLocationsExpanded);
+  };
+
+  const toggleKeywordsExpansion = () => {
+    setIsKeywordsExpanded(!isKeywordsExpanded);
   };
 
   const handleAddToCart = async () => {
@@ -911,7 +916,7 @@ export default function ProductPage() {
               )}
             </div>
 
-            <div className="sticky top-40 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
+            <div className="sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
               <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                 <div className="flex justify-between items-center">
                   <div className="flex flex-row items-center">
@@ -1401,68 +1406,86 @@ export default function ProductPage() {
               />
             </section>
 
-            <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
+            <section className="w-full bg-white rounded-lg p-4 space-y-4 glow-border">
               {/* Locations Section */}
               {locations && locations?.length ? (
-                <div className="bg-gray-50 rounded-xl p-6 md:p-8">
-                  <h2 className="text-2xl font-bold mb-6 text-center">
-                    Available Locations
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {locations?.map((loc, index) => {
-                      const formattedLoc = loc.trim();
-                      const capitalizedLoc =
-                        formattedLoc.charAt(0).toUpperCase() +
-                        formattedLoc.slice(1);
-                      return (
-                        <a
-                          key={index}
-                          href={`${config.VITE_BASE_URL}/product/${
-                            prodData.id
-                          }/${
-                            prodData.slug
-                          }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
-                          className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
-                        >
-                          <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                            <span className="text-lg">
-                              {prodData.product_name} in {capitalizedLoc}
-                            </span>
-                          </div>
-                        </a>
-                      );
-                    })}
+                <div>
+                  <div
+                    className="flex justify-between items-center cursor-pointer"
+                    onClick={toggleLocationsExpansion}
+                  >
+                    <h2 className="text-base lg:text-2xl font-semibold">
+                      Available Locations
+                    </h2>
+                    {isLocationsExpanded ? (
+                      <IoIosArrowUp size={24} />
+                    ) : (
+                      <IoIosArrowDown size={24} />
+                    )}
                   </div>
+
+                  {isLocationsExpanded && (
+                    <div className="mt-6 transition-all duration-300 ease-in-out">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {locations?.map((loc, index) => {
+                          const formattedLoc = loc.trim();
+                          const capitalizedLoc =
+                            formattedLoc.charAt(0).toUpperCase() +
+                            formattedLoc.slice(1);
+                          return (
+                            <a
+                              key={index}
+                              href={`${config.VITE_BASE_URL}/product/${
+                                prodData.id
+                              }/${
+                                prodData.slug
+                              }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
+                              className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
+                            >
+                              <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                                <span className="text-lg">
+                                  {prodData.product_name} in {capitalizedLoc}
+                                </span>
+                              </div>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : null}
 
-              <div
-                className="flex justify-between items-center cursor-pointer"
-                onClick={toggleExpansion}
-              >
-                <h2 className="text-base lg:text-2xl font-semibold">
-                  Keywords
-                </h2>
-                {isExpanded ? (
-                  <IoIosArrowUp size={24} />
-                ) : (
-                  <IoIosArrowDown size={24} />
+              {/* Keywords Section */}
+              <div className="border-t border-t-gray-200">
+                <div
+                  className="flex justify-between items-center cursor-pointer"
+                  onClick={toggleKeywordsExpansion}
+                >
+                  <h2 className="text-base lg:text-2xl font-semibold">
+                    Keywords
+                  </h2>
+                  {isKeywordsExpanded ? (
+                    <IoIosArrowUp size={24} />
+                  ) : (
+                    <IoIosArrowDown size={24} />
+                  )}
+                </div>
+
+                {isKeywordsExpanded && prodData?.tags && (
+                  <div className="mt-4 transition-all duration-300 ease-in-out">
+                    {prodData.tags.split(",").map((tag, index) => (
+                      <a
+                        key={index}
+                        onClick={() => handleTagClick(tag)}
+                        className="text-blue-500 hover:underline cursor-pointer mr-2"
+                      >
+                        #{tag.trim()}
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
-
-              {isExpanded && prodData?.tags && (
-                <div className="mt-4 transition-all duration-300 ease-in-out">
-                  {prodData.tags.split(",").map((tag, index) => (
-                    <a
-                      key={index}
-                      onClick={() => handleTagClick(tag)}
-                      className="text-blue-500 hover:underline cursor-pointer mr-2"
-                    >
-                      #{tag.trim()}
-                    </a>
-                  ))}
-                </div>
-              )}
             </section>
           </div>
         </>

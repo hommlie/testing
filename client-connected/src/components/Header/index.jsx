@@ -26,7 +26,15 @@ import config from "../../config/config";
 import LocationModal from "../LocationModal";
 import { IoIosArrowForward } from "react-icons/io";
 
-const Header = ({ logo, logoAlt }) => {
+const Header = ({
+  logo,
+  logoAlt,
+  facebook,
+  instagram,
+  linkedin,
+  twitter,
+  youtube,
+}) => {
   const {
     user,
     getSearchProdData,
@@ -169,7 +177,7 @@ const Header = ({ logo, logoAlt }) => {
             {/* Social Media Icons */}
             <div className="hidden md:flex items-center space-x-4">
               <a
-                href="https://facebook.com"
+                href={facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-hommlie hover:text-green-600 transition-all transform hover:scale-110"
@@ -177,7 +185,7 @@ const Header = ({ logo, logoAlt }) => {
                 <FaFacebook />
               </a>
               <a
-                href="https://twitter.com"
+                href={twitter}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-hommlie hover:text-green-400 transition-all transform hover:scale-110"
@@ -185,7 +193,7 @@ const Header = ({ logo, logoAlt }) => {
                 <FaTwitter />
               </a>
               <a
-                href="https://instagram.com"
+                href={instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-hommlie hover:text-green-600 transition-all transform hover:scale-110"
@@ -193,7 +201,7 @@ const Header = ({ logo, logoAlt }) => {
                 <FaInstagram />
               </a>
               <a
-                href="https://linkedin.com"
+                href={linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-hommlie hover:text-green-700 transition-all transform hover:scale-110"

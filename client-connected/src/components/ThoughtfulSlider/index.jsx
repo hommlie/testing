@@ -67,7 +67,7 @@ const ThoughtfulSlider = ({ videos = [] }) => {
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: 1, // Changed to 1 to ensure smoother scrolling
+    slidesToScroll: 1,
     initialSlide: 0,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -120,7 +120,7 @@ const ThoughtfulSlider = ({ videos = [] }) => {
             {videos.map((content, index) => (
               <div key={content.id || index} className="px-2">
                 <div
-                  className="relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer group"
+                  className="relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer"
                   onClick={() => {
                     setCurrentVideo(content);
                     setIsModalOpen(true);
@@ -129,9 +129,9 @@ const ThoughtfulSlider = ({ videos = [] }) => {
                   <img
                     src={content.thumbnail}
                     alt={content.title || "Video thumbnail"}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center group-hover:bg-opacity-30 transition-all duration-300">
+                  <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all duration-300">
                     <div className="w-12 h-12 bg-white bg-opacity-30 rounded-full flex items-center justify-center transform transition-transform duration-300 hover:scale-110">
                       <IoMdPlay className="text-2xl text-white" />
                     </div>

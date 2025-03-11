@@ -637,7 +637,7 @@ const HomePage = () => {
             }
             setIsReferModalOpen(true);
           }}
-          className="bg-[#D8EEDD] p-6 rounded-lg"
+          className="bg-[#D8EEDD] p-6 rounded-lg hover:scale-105 cursor-pointer transition-transform duration-300"
         >
           <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-4">
             <img src={ReferEarnImg} alt="Refer Icon" className="w-fit h-32" />

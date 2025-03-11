@@ -77,7 +77,15 @@ function App() {
           <ToastProvider>
             <Router>
               {/* <OldHeader logo={settings?.logo} logoAlt={settings?.site_title} /> */}
-              <Header logo={settings?.logo} logoAlt={settings?.site_title} />
+              <Header
+                logo={settings?.logo}
+                logoAlt={settings?.site_title}
+                facebook={settings?.facebook}
+                instagram={settings?.instagram}
+                linkedin={settings?.linkedin}
+                twitter={settings?.twitter}
+                youtube={settings?.youtube}
+              />
               <Routes />
               <Footer
                 logo={settings?.logo}

@@ -260,6 +260,8 @@ const SubCategoryPage = () => {
   }
 
   const handleSubCategoryClick = (subCategory) => {
+    console.log(subCategory);
+
     const path =
       subCategory.category.is_page === 1
         ? `/subcategory/${subCategory.slug}/${subCategory.subcat_id}`
@@ -435,7 +437,8 @@ const SubCategoryPage = () => {
                   key={cat.subcat_id}
                   variants={item}
                   ref={(el) => (sectionRefs.current[cat.subcat_id] = el)}
-                  className="bg-white rounded-xl p-2 md:p-6 shadow-sm hover:shadow-md transition-shadow"
+                  onClick={() => handleSubCategoryClick(cat)}
+                  className="bg-white rounded-xl p-2 md:p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <div className="flex gap-1 md:gap-6">
                     <div className="flex-1">
