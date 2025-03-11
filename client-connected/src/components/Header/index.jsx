@@ -25,6 +25,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import config from "../../config/config";
 import LocationModal from "../LocationModal";
 import { IoIosArrowForward } from "react-icons/io";
+import { IoCartOutline } from "react-icons/io5";
 
 const Header = ({
   logo,
@@ -265,6 +266,22 @@ const Header = ({
             >
               Free Listing
             </NavLink>
+
+            {user?.length !== 0 ? (
+              <div className="relative">
+                <button
+                  onClick={() =>
+                    navigate(`${config.VITE_BASE_URL}/add-to-cart`)
+                  }
+                  className="flex items-center space-x-2 "
+                >
+                  <span className="absolute -top-2 -right-1 bg-hommlie text-white rounded-full w-4 h-4 flex items-center justify-center text-gray-700 hover:text-green-700 text-xs">
+                    {cart?.length}
+                  </span>
+                  <IoCartOutline className="w-7 h-7" />
+                </button>
+              </div>
+            ) : null}
 
             <div className="relative">
               {user?.length !== 0 ? (
