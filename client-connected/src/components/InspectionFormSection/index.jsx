@@ -77,6 +77,7 @@ const InspectionFormSection = () => {
       );
 
       if (response.data.status === 1) {
+        successNotify("Inspection request submitted successfully!");
         setSubmitted(true);
         setFormData({
           name: "",
@@ -90,15 +91,28 @@ const InspectionFormSection = () => {
           time: "",
         });
       } else {
+        errorNotify("Failed to submit inspection request. Please try again.");
         setErrors({
           submit: "Failed to submit inspection request. Please try again.",
         });
       }
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
+      errorNotify("An error occurred. Please try again later.");
       setErrors({ submit: "An error occurred. Please try again later." });
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handle coordinates from LocationSuggestion
+  const handleCoordinatesChange = (coordinates) => {
+    if (coordinates) {
+      setFormData({
+        ...formData,
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      });
     }
   };
 
@@ -187,6 +201,7 @@ const InspectionFormSection = () => {
                     address: e.target.value,
                   })
                 }
+                onCoordinatesChange={handleCoordinatesChange}
                 name="address"
               />
               {errors.address && (
@@ -198,16 +213,23 @@ const InspectionFormSection = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Phone
               </label>
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                  errors.phone ? "border-red-500" : "border-gray-300"
-                }`}
-              />
+              <div className="relative">
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  minLength={10}
+                  maxLength={10}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className={`w-full px-4 pl-10 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                    errors.phone ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+                <label className="absolute top-1/2 transform -translate-y-1/2 left-2 block text-sm font-medium text-gray-700 mb-1">
+                  +91
+                </label>
+              </div>
               {errors.phone && (
                 <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
               )}
@@ -349,6 +371,12 @@ const InspectionFormSection = () => {
               </div>
             </div>
           )}
+
+          {/* Debug info - remove in production */}
+          {/* <div className="mt-4 p-2 bg-gray-100 text-xs">
+            <p>Latitude: {formData.latitude}</p>
+            <p>Longitude: {formData.longitude}</p>
+          </div> */}
         </div>
       </div>
     </div>

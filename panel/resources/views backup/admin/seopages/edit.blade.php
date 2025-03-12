@@ -106,7 +106,6 @@
             <button type="submit" class="btn btn-primary">Update</button>
             <a href="{{ route('admin.seopages') }}" class="btn btn-secondary">Back</a>
         </form>
-        </>
     </div>
     <script src="https://cdn.ckeditor.com/4.20.1/standard/ckeditor.js"></script>
     <script>

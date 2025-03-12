@@ -6,17 +6,20 @@ use App\Http\Controllers\Controller;
 
 class ComplaintController extends Controller
 {
+    // COMPLAINTS
     public function index()
     {
         $complaint = Complaint::orderBy('created_at', 'desc')->get();
         return view('admin.complaint.index', compact('complaint'));
     }
 
+    // COMPLAINTS CREATE
     public function create()
     {
         return view('admin.complaint.add');
     }
 
+    // COMPLAINTS SEND SMS
     public function sendSMS($mobileNumber, $message)
     {
         // Validate mobile number format
@@ -85,20 +88,20 @@ class ComplaintController extends Controller
         return json_encode(['status' => 'success', 'message' => 'SMS sent successfully']);
     }
 
-
+    // COMPLAINTS SEND SMS TEST
     public function testSMS()
     {
-        $mobileNumber = '82633730XX'; // Replace with a valid 10-digit number
+        $mobileNumber = '82633730XX'; 
         $message = 'Hello, your complaint has been registered successfully.';
 
         $response = $this->sendSMS($mobileNumber, $message);
 
-        dd($response); // Show final response
+        dd($response); 
     }
 
 
 
-
+    // COMPLAINTS STORE
     public function store(Request $request)
     {
         $validated = $request->validate([

@@ -1163,7 +1163,6 @@
                 @endcan
 
                 <!-- MANAGE Business DETAILS   -->
-                
                 @can('businessregistration_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/businessregistration*') ? 'menu-open' : '' }} {{ request()->is('admin/businessregistration/index*') ? 'menu-open' : '' }} ">
@@ -1272,9 +1271,6 @@
                                 </li>
                             @endcan
                           
-
-
-
                         </ul>
                     </li>
                 @endcan
@@ -1363,6 +1359,78 @@
                                     </a>
                                 </li>   
                             @endcan
+                        </ul>
+                        
+                    </li>
+                @endcan
+                {{--MANAGE HOMEPAGE SECTION --}}
+                @can('homepage_sections_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/homepagesections*') ? 'menu-open' : '' }} {{ request()->is('admin/homepagesections/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-home"></i>
+                            </i>
+                            <p>
+                                <span> Manage home Page</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        {{-- ADD  HERO SECTION--}}
+                        <ul class="nav nav-treeview ml-4">
+                            @can('homepage_sections_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.homepagesections") }}"
+                                        class="nav-link {{ request()->is('admin/homepagesections') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+                                        </i>
+                                        {{-- ADD SEO --}}
+                                        <p>
+                                            <span>View hero Section</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            {{--VIEW OFFER SECTION --}}
+                            @can('homepage_sections_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.homepagesections.addhero") }}"
+                                        class="nav-link {{ request()->is('admin/homepagesections/addhero') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        </i>
+                                        {{-- VIEW SEO --}}
+                                        <p>
+                                            <span>Add hero Section</span>
+                                        </p>
+                                    </a>
+                                </li>   
+                            @endcan
+                           {{-- @can('seopages_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.seopages.add") }}"
+                                        class="nav-link {{ request()->is('admin/seopages/add') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+                                        </i>
+                                        
+                                        <p>
+                                            <span>View Offer Section</span>
+                                        </p>
+                                    </a>
+                                </li>   
+                            @endcan
+                            @can('seopages_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.seopages.add") }}"
+                                        class="nav-link {{ request()->is('admin/seopages/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        </i>
+                                      
+                                        <p>
+                                            <span>Add Offer Section</span>
+                                        </p>
+                                    </a>
+                                </li>   
+                            @endcan 
+                            --}}
                         </ul>
                         
                     </li>

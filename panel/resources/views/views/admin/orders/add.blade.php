@@ -61,12 +61,12 @@
         <div class="row">
             <div class="col-12">
                 @if(Session::has('success'))
-                                <div class="alert alert-success">
-                                    {{ Session::get('success') }}
-                                    @php
-                                        Session::forget('success');
-                                    @endphp
-                                </div>
+                    <div class="alert alert-success">
+                        {{ Session::get('success') }}
+                        @php
+                            Session::forget('success');
+                        @endphp
+                    </div>
                 @endif
                 <div class="card">
                     <div class="card-header bg-light d-flex align-items-center">
@@ -81,13 +81,13 @@
                             </select>
                         </div>
 
-                        <!-- ADD BUSINESS SUB REGION BUTTON (Right aligned) -->
+                        <!-- ADD BUSINESS SUB REGION BUTTON-->
                         <a href="#" class="btn btn-raised btn-primary text-light ml-auto btn-min-width mb-0"
                             data-bs-toggle="modal" data-bs-target="#addBusinessRegionModal">
                             Add Business Region
                         </a>
 
-                        <!-- ADD BUSINESS REGION BUTTON (Right aligned) -->
+                        <!-- ADD BUSINESS REGION BUTTON -->
                         <a href="#" class="btn btn-raised btn-primary text-light ml-auto btn-min-width mb-0"
                             data-bs-toggle="modal" data-bs-target="#addBusinesSub">
                             Service Center
@@ -100,7 +100,7 @@
                         </a>
                     </div>
 
-
+                    <!-- ORDER FORM -->
                     <div class="card-body p-3">
                         <form action="{{ route('admin.orders.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
@@ -134,7 +134,6 @@
                                         <br />
 
                                         {{-- ACCOUNT TYPE --}}
-
                                         <label for="accountType">Account Type</label>
                                         <select name="accountType" id="accountType" name="accountType"
                                             class="form-control" required>
@@ -189,7 +188,6 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                         <br />
-
                                     </div>
 
                                     <div class="col-lg-4">
@@ -278,6 +276,8 @@
                             <!-- <label for=""><u>Basic Details</u></label> -->
                             <div class="row ">
                                 <div class="col-lg-6">
+                                    <!-- CAREGORY -->
+
                                     <label for="category">Category</label>
                                     <select name="category" id="order_category" class="form-control" required>
                                         <option value="">-Select Category-</option>
@@ -289,6 +289,8 @@
                                         <span class="text-danger">{{ $errors->first('category') }}</span>
                                     @endif
                                     <br>
+                                    
+                                    {{-- SUB-CATEGORY --}}
 
                                     <label for="subcategory">Sub-Category</label>
                                     <select name="subcategory" id="order_subcategory" class="form-control" required>
@@ -298,6 +300,7 @@
                                         <span class="text-danger">{{ $errors->first('subcategory') }}</span>
                                     @endif
                                     <br>
+                                    {{-- SERVICE --}}
 
                                     <label for="service">Service</label>
                                     <select name="service" id="order_service" class="form-control" required>
@@ -308,6 +311,7 @@
                                     @endif
 
                                     <br>
+                                    {{-- SERVICE TYPE --}}
                                     <label for="variation">Variation</label>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -318,6 +322,7 @@
                                                 <span class="text-danger">The Variation field is required.</span>
                                             @endif
                                         </div>
+                                    {{-- AREA --}}
                                         <div class="col-lg-6">
                                             <select name="order_service_area" id="order_service_area"
                                                 class="form-control" required>
@@ -342,6 +347,8 @@
                                             @endif
 
                                         </div>
+                                        {{-- SHEDULED EVERY DAY   --}}
+
                                         <div class="col-md-6">
                                             <label for="">Scheduled every </label>
                                             <input type="text" name="srInterval" placeholder="SR-Scheduled every"
@@ -355,10 +362,9 @@
 
                                     </div><br>
                                     <div class="row">
-
+                                        {{-- SELECT QUANTITY --}}
                                         <div class="col-md-4">
                                             <label for="">Select Quantity </label>
-
                                             <span class="border rounded  form-control">
                                                 <span class="px-2 ms-4 bg-light decrement"
                                                     style="cursor: pointer;">-</span>
@@ -377,22 +383,8 @@
                                         </div>
                                     </div>
                                     <br>
-                                    {{--NEW SECTION FOR DATE --}}
-                                    {{-- <div class="row">
-                                        <div class="col-md-6">
-                                            {{-- CONTRACT START DATE
-                                            <label for="contractStartDate">Contract Start Date</label>
-                                            <input type="text" name="contractStartDate" id="contractStartDate"
-                                                class="form-control" placeholder="Contract Start Date" readonly><br />
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{-- CONTRACT END DATE
-                                            <label for="contractEndDate">Contract End Date</label>
-                                            <input type="text" name="contractEndDate" id="contractEndDate"
-                                                class="form-control" placeholder="Contract End Date" readonly><br />
-                                        </div>
-
-                                    </div> --}}
+                                    {{-- PRICE --}}
+                               
                                     <label for="price">Price (Without GST)</label>
                                     <input type="text" name="price" placeholder="Price" id="order_price" readonly
                                         class="form-control" required />
@@ -400,9 +392,7 @@
                                         <span class="text-danger">{{ $errors->first('price') }}</span>
                                     @endif
                                     <br>
-
-
-
+                                    {{-- CONTRACT START DATE --}}
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <label for="desired_date">Contract Start Date</label>
@@ -412,6 +402,7 @@
                                                 <span class="text-danger">{{ $errors->first('desired_date') }}</span>
                                             @endif
                                         </div>
+                                        {{-- TIME --}}
                                         <div class="col-lg-6">
                                             <label for="desired_time"> Time</label>
                                             <input type="time" name="desired_time" placeholder="desired_time"
@@ -421,9 +412,10 @@
                                             @endif
                                         </div>
                                     </div>
-
                                 </div>
+                               
                                 <div class="col-lg-6">
+                                     {{-- COSTOMER NAME --}}
                                     <label for="fullname">Customer Name</label>
                                     <input type="text" name="fullname" placeholder="Enter Customer name" id="fullname"
                                         class="form-control"  required />
@@ -431,6 +423,7 @@
                                         <span class="text-danger">{{ $errors->first('fullname') }}</span>
                                     @endif
                                     <br>
+                                    {{-- EMAIL --}}
                                     <label for="email">Email</label>
                                     <input type="email" name="email" placeholder="Enter Customer email" id="email"
                                         class="form-control" required  />
@@ -438,6 +431,7 @@
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif
                                     <br>
+                                    {{-- MOBILE NUMBER--}}
                                     <label for="mobile">Mobile Number</label>
                                     <input type="text" name="mobile" placeholder="Enter Customer mobile Number"
                                         id="mobile" class="form-control" required />
@@ -445,6 +439,7 @@
                                         <span class="text-danger">{{ $errors->first('mobile') }}</span>
                                     @endif
                                     <br>
+                                    {{-- LANDMARK --}}
                                     <label for="landmark">Landmark</label>
                                     <input type="text" name="landmark" placeholder="Enter Customer landmark"
                                         id="landmark" class="form-control" required  />
@@ -452,6 +447,7 @@
                                         <span class="text-danger">{{ $errors->first('landmark') }}</span>
                                     @endif
                                     <br>
+                                    {{-- ADDRESS --}}
                                     <label for="address">Address</label>
                                     <input type="text" name="address" placeholder="Enter Customer address" id="address"
                                         class="form-control"  required />
@@ -459,6 +455,7 @@
                                         <span class="text-danger">{{ $errors->first('address') }}</span>
                                     @endif
                                     <br>
+                                    {{-- PINCODE --}}
                                     <label for="pincode">Pincode</label>
                                     <input type="number" name="pincode" placeholder="Enter Customer pincode"
                                         id="pincode" class="form-control" required />
@@ -473,8 +470,8 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4>Search Location</h4>
 
+                                                    <h4>Search Location</h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
@@ -501,6 +498,7 @@
 
                                     {{--NEW SECTION --}}
                                     <div class="row">
+                                        
                                         <div class="col-md-6">
                                             <label for="">House / Flat Number</label>
                                             <input type="text" name="houseNo" id="houseNo" class="form-control"

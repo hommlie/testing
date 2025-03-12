@@ -1245,6 +1245,35 @@
                                     </a>
                                 </li>
                             @endcan 
+                            @can('blogs_add_access')  
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.blogs.blogcategoryindex") }}"
+                                        class="nav-link {{ request()->is('admin/blogs/blogcategoryindex') ? '' : '' }}">
+                                        <i class="fa fa-check-circle mr-2">
+                                        </i>
+                                        {{-- VIEW BLOGS --}}
+                                        <p>
+                                            <span>View Blogs Categories</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan 
+                            @can('blogs_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.blogs.blogcategoryadd") }}"
+                                        class="nav-link {{ request()->is('admin/blogs/blogcategoryadd') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        </i>
+                                        {{-- ADD BLOGS --}}
+                                        <p>
+                                            <span>Add Blogs Categories</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                          
+
+
 
                         </ul>
                     </li>

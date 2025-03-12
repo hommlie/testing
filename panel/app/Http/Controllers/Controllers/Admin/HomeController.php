@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Products;
 use App\Models\Customers;
 use App\Models\Employees;
+use App\Models\Complaint;
 
 class HomeController
 {
@@ -19,8 +20,10 @@ class HomeController
         // Get the count of customers, orders, employees, and products
         $customerCount = Customers::count();
         $orderCount = Order::count();
+        $orderComplete = Order::where('order_status', 4)->count();
         $employeeCount = Employees::count();
         $productCount = Products::count();
+        $complaintCount = Complaint::count();
     
         // Get the count of today's orders
         $todayOrderCount = Order::whereDate('created_at', Carbon::today())->count();
@@ -54,7 +57,7 @@ class HomeController
         ->get();
     
         // Pass the data to the view
-        return view('home', compact('customerCount', 'orderCount', 'employeeCount', 'productCount', 'todayOrderCount', 'tomorrowOrderCount', 'data'));
+        return view('home', compact('customerCount', 'orderCount','orderComplete', 'employeeCount', 'productCount', 'todayOrderCount', 'tomorrowOrderCount','complaintCount', 'data'));
     }
     
     

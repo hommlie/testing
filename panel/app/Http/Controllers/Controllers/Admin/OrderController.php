@@ -86,19 +86,13 @@ class OrderController extends Controller
         // dd($request);
 
         $order = Order::find($request->order_id);
-
         if (!$order) {
             return redirect()->back()->with('danger', 'Order not found.');
         }
-
         $dataval = [
             'assigned_to' => $request->employee,
         ];
-
         $order->update($dataval);
-
-
-
         if ($order) {
             return redirect('admin/manualorderassign')->with('success', 'Employee Successfully Assigned successfully.');
         } else {
@@ -223,7 +217,7 @@ class OrderController extends Controller
         //     ->get();
 
         // Additional data
-
+        $userdata = User::where('id', Auth::user()->id)->get();
         $data = Order::findOrFail($id);
         $category = Category::orderBy('id', 'asc')->get();
         $variations = Variation::orderBy('id', 'asc')->get();
@@ -236,7 +230,7 @@ class OrderController extends Controller
         // $ExplodedVariations = explode(',', $data->variation);
 
         // return view('admin.orders.edit', compact('data', 'category', 'subcategory', 'product', 'order_info', 'order_data', 'getCategoryId','variations', 'ExplodedVariations','businessregion','employees'));
-        return view('admin.orders.edit', compact('data', 'category', 'subcategory', 'product', 'order_info', 'order_data', 'getCategoryId', 'businessregion', 'employees'));
+        return view('admin.orders.edit', compact('data', 'userdata', 'category', 'subcategory', 'product', 'order_info', 'order_data', 'getCategoryId', 'businessregion', 'employees'));
     }
 
     public function getSubcategories($categoryId)
@@ -315,11 +309,10 @@ class OrderController extends Controller
 
 
 
-
+    // ADD ORDER 
     public function storeorder(Request $request)
     {
-
-
+        // VALIDATION 
         $this->validate($request, [
             'hidden_quantity' => 'required|integer',
             'hidden_total_price' => 'required|numeric',
@@ -358,16 +351,18 @@ class OrderController extends Controller
             // 'serviceAreaPriceValue' => 'required',
         ]);
 
-
+        // ADD ATTRIBUTE
         if ($request->has('attribute')) {
             $attributes = $request->input('attribute');
             list($serviceId, $productId) = explode('|', $attributes);
         }
-
+        // ADD LOCATION
         if ($request->has('clatlon')) {
             $clatlon = $request->input('clatlon');
             list($latitude, $longitude) = explode(',', $clatlon);
         }
+        
+        // TECHNICIAN ASSIGN 
         if (!$request->technicianAssign == '') {
             $ORST = '2'; // ORDER STATUS STORE 2 IN DATABASE 
         } else {
@@ -825,16 +820,12 @@ class OrderController extends Controller
     // SERACH ORDER DATA USING ORDER-ID 
     public function getOrderData($orderID)
     {
-      
         $orderData = Order::where('order_number', 'LIKE', "%$orderID%")
-                          ->orWhere('id', 'LIKE', "%$orderID%")
-                          ->get();
+            ->orWhere('id', 'LIKE', "%$orderID%")
+            ->get();
         return response()->json($orderData);
     }
     
-
-
-
     // ADD BUSINESS REGION
     public function businessStore(Request $request)
     {

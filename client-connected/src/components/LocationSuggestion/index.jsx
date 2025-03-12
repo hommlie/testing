@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
 import config from "../../config/config";
 
-const LocationSuggestion = ({ value, onChange, name = "address" }) => {
+const LocationSuggestion = ({
+  value,
+  onChange,
+  name = "address",
+  onCoordinatesChange,
+}) => {
   const [searchQuery, setSearchQuery] = useState(value || "");
   const [isLoading, setIsLoading] = useState(false);
   const [locationError, setLocationError] = useState(null);
@@ -12,6 +17,7 @@ const LocationSuggestion = ({ value, onChange, name = "address" }) => {
 
   const inputRef = useRef(null);
   const placesServiceRef = useRef(null);
+  const geocoderRef = useRef(null);
   const dropdownRef = useRef(null);
 
   // Load Google Maps script
@@ -42,13 +48,19 @@ const LocationSuggestion = ({ value, onChange, name = "address" }) => {
     loadGoogleMapsScript();
   }, []);
 
-  // Initialize Places Service
+  // Initialize Places Service and Geocoder
   useEffect(() => {
-    if (isScriptLoaded && !placesServiceRef.current) {
-      const dummyElement = document.createElement("div");
-      placesServiceRef.current = new window.google.maps.places.PlacesService(
-        dummyElement
-      );
+    if (isScriptLoaded) {
+      if (!placesServiceRef.current) {
+        const dummyElement = document.createElement("div");
+        placesServiceRef.current = new window.google.maps.places.PlacesService(
+          dummyElement
+        );
+      }
+
+      if (!geocoderRef.current) {
+        geocoderRef.current = new window.google.maps.Geocoder();
+      }
     }
   }, [isScriptLoaded]);
 
@@ -79,7 +91,6 @@ const LocationSuggestion = ({ value, onChange, name = "address" }) => {
       }
     };
 
-    // Add click event listener to document
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -118,17 +129,47 @@ const LocationSuggestion = ({ value, onChange, name = "address" }) => {
     });
   };
 
+  // Get coordinates from place ID
+  const getCoordinatesFromPlaceId = (placeId, callback) => {
+    if (!geocoderRef.current) return;
+
+    geocoderRef.current.geocode({ placeId: placeId }, (results, status) => {
+      if (status === "OK" && results && results.length > 0) {
+        const location = results[0].geometry.location;
+        const coordinates = {
+          latitude: location.lat(),
+          longitude: location.lng(),
+        };
+        callback(coordinates);
+      } else {
+        console.error("Geocoder failed due to: " + status);
+        callback(null);
+      }
+    });
+  };
+
   // Handle location selection
   const handleLocationSelect = (result) => {
-    const selectEvent = {
+    setSearchQuery(result.fullText);
+
+    // Create address change event
+    const addressEvent = {
       target: {
         name: name,
         value: result.fullText,
       },
     };
 
-    setSearchQuery(result.fullText);
-    onChange(selectEvent); // Pass synthetic event to match handleFormChange
+    // Pass address to parent component
+    onChange(addressEvent);
+
+    // Get and pass coordinates
+    getCoordinatesFromPlaceId(result.placeId, (coordinates) => {
+      if (coordinates && onCoordinatesChange) {
+        onCoordinatesChange(coordinates);
+      }
+    });
+
     setSearchResults([]);
     setIsDropdownVisible(false);
   };

@@ -49,40 +49,31 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Title</th>
-                        <th>Content</th>
-                        <th>Slug</th>
-                        <th>Featured Image</th>
-                        <th>Status</th>
-                        <th>Author</th>
-                        <th>Meta Title</th>
-                        <th>Meta Description</th>
-                        <th>Actions</th>
+                        <th>Category Name</th>
+                        <th>Image</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($blogs as $blog)
+                    @php
+                    $n=0;
+                    @endphp
+                    @foreach ($blogCategory as $blogCat)
                         <tr>
-                            <td>{{ $blog->id }}</td>
-                            <td>{{ Str::words($blog->title, 5, '...') }}</td>
-                            <td>{{ Str::words($blog->content, 5, '...') }}</td>
-                            <td>{{ Str::words($blog->slug, 5, '...') }}</td>
+                            <td>{{ ++$n }}</td>
+                            <td>{{ Str::words($blogCat->title, 5, '...') }}</td>
                             <td class="text-center">
-                                @if ($blog->featured_image)
-                                    <img src="{{ asset('/storage/app/public/images/blogs/'. $blog->featured_image) }}" width="50" height="50">
+                                @if ($blogCat->image)
+                                    <img src="{{ asset('/storage/app/public/images/blogs/'. $blogCat->image) }}" width="50" height="50">
                                 @else
                                     No Image
                                 @endif
                             </td>
-                            <td>{{ ucfirst($blog->status) }}</td>
-                            <td>{{ Str::words($blog->author_name, 5, '...') }}</td>
-                            <td>{{ Str::words($blog->meta_title, 5, '...') }}</td>
-                            <td>{{ Str::words($blog->meta_description, 5, '...') }}</td>
                             <td>
-                                <a href="{{route('admin.blogs.edit',$blog->id)}}" class="btn text-primary"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="{{route('admin.blogs.blogcategoryedit',$blogCat->id)}}" class="btn text-primary"><i class="fa fa-pencil-alt"></i></a>
                                 <a href="javascript:void(0);" class="danger p-0 text-danger ml-2" 
-                                    data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.delete') }}"
-                                    onclick="do_delete('{{$blog->id}}','{{route('admin.blogs.delete')}}','{{ trans('labels.delete_slider') }}','{{ trans('labels.delete') }}')">
+                                    data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.blogcategorydelete') }}"
+                                    onclick="do_delete('{{$blogCat->id}}','{{route('admin.blogs.blogcategorydelete')}}','{{ trans('labels.delete_slider') }}','{{ trans('labels.delete') }}')">
                                     <i class="ft-trash font-medium-3"></i>
                                 </a>
                             </td>

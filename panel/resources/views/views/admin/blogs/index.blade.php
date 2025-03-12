@@ -61,9 +61,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php $n = 0; @endphp
+
                     @foreach ($blogs as $blog)
+                    
                         <tr>
-                            <td>{{ $blog->id }}</td>
+                            <td>{{ ++$n }}</td>
                             <td>{{ Str::words($blog->title, 5, '...') }}</td>
                             <td>{{ Str::words($blog->content, 5, '...') }}</td>
                             <td>{{ Str::words($blog->slug, 5, '...') }}</td>
@@ -100,11 +103,13 @@
 <script>
     $(document).ready(function () {
         var table = $('#data_table_bootstrap').DataTable({
+            "pageLength": 10,
             "columnDefs": [
                 {
                     "targets": 0,
                     "orderable": false,
                     "searchable": false
+
                 }
             ]
         });

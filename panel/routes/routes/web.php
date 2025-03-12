@@ -463,11 +463,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         
     });
 
-    // COMPALINT MANAGEMENT (Help's) 
+    // COMPALINT MANAGEMENT 
     Route::group(['prefix'=> 'complaint'], function () {
         Route::get('/', 'ComplaintController@index')->name('complaint');
         Route::get('/add', 'ComplaintController@create')->name('complaint.add');
         Route::post('/store', 'ComplaintController@store')->name('complaint.store'); 
+        Route::get('/edit{id}', 'ComplaintController@edit')->name('complaint.edit');
+        Route::post('/update/{id}', 'ComplaintController@update')->name('complaint.update');
+        Route::delete('/complaint/{id}/delete', 'ComplaintController@destroy')->name('complaint.delete');
     });
 
     //MANAGE 
@@ -540,7 +543,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/delete', 'SeoPagesController@destroy')->name('seopages.delete');
     });
 
+    // MANAGE HOME PAGE SECTIONS
+    Route::group(['prefix'=> 'homepagesections'], function () {
+        Route::get('/', 'HomePageSectionsController@index')->name('homepagesections');
+        Route::get('/addhero', 'HomePageSectionsController@createHero')->name('homepagesections.addhero');
+        Route::post('/storehero', 'HomePageSectionsController@storeHero')->name('homepagesections.storehero');
+        Route::get('/edithero/{id}', 'HomePageSectionsController@editHero')->name('homepagesections.edithero');
+        Route::post('/updatehero/{id}', 'HomePageSectionsController@updateHero')->name('homepagesections.updatehero');
+        Route::post('/changestatushero/status', 'HomePageSectionsController@changeStatusHero')->name('homepagesections.changestatushero');
+        Route::post('/deletehero', 'HomePageSectionsController@destroyHero')->name('homepagesections.deletehero'); 
+    });
     
-
-
 });
