@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Star, ArrowRight, ChevronDown } from "lucide-react";
+import { Search, ChevronDown, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import config from "../../config/config";
@@ -9,9 +9,10 @@ import Loading from "../../components/Loading";
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeLocation, setActiveLocation] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [expandedCategory, setExpandedCategory] = useState(null);
   const navigate = useNavigate();
-  const scrollContainerRefs = useRef({});
+  const categoryRefs = useRef({});
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,17 +23,7 @@ const CategoryPage = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(`${config.API_URL}/api/category`);
-      const categoriesData = response.data.data;
-
-      // Initialize active location state
-      const initialActiveLocations = {};
-      categoriesData.forEach((category) => {
-        initialActiveLocations[category.id] =
-          getLocationsFromCategory(category)[0]?.title || "";
-      });
-
-      setActiveLocation(initialActiveLocations);
-      setCategories(categoriesData);
+      setCategories(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     } finally {
@@ -40,50 +31,35 @@ const CategoryPage = () => {
     }
   };
 
-  const getLocationsFromCategory = (category) => {
-    if (!category.location) return [];
-
-    const locations = category.location.split("|") || [];
-
-    return locations.map((location) => {
-      const trimmedLocation = location.trim();
-      const slug = trimmedLocation
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
-
-      return {
-        title: trimmedLocation,
-        slug: slug,
-      };
-    });
-  };
-
-  const handleArrowClick = (categoryId, direction) => {
-    const container = scrollContainerRefs.current[categoryId];
-    if (container) {
-      container.scrollBy({
-        left: direction === "left" ? -200 : 200,
-        behavior: "smooth",
-      });
+  const handleCategoryClick = (categoryId) => {
+    if (expandedCategory === categoryId) {
+      setExpandedCategory(null);
+    } else {
+      setExpandedCategory(categoryId);
+      // Scroll to the category if it's not already visible
+      setTimeout(() => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+          const yOffset = -100;
+          const y =
+            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 100);
     }
   };
 
-  const handleScroll = (categoryId, e) => {
-    const container = e.target;
-    const leftArrow = document.getElementById(`left-arrow-${categoryId}`);
-    const rightArrow = document.getElementById(`right-arrow-${categoryId}`);
-
-    if (leftArrow && rightArrow) {
-      // Show/hide arrows based on scroll position
-      leftArrow.style.display = container.scrollLeft > 0 ? "block" : "none";
-      rightArrow.style.display =
-        container.scrollLeft < container.scrollWidth - container.clientWidth
-          ? "block"
-          : "none";
-    }
+  const handleSubCategoryClick = (category, subcategory) => {
+    navigate(
+      `/${category.slug}/${category.id}/${subcategory.slug}/${subcategory.id}`
+    );
   };
 
+  const filteredCategories = categories.filter((category) =>
+    category.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Animation variants
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -101,6 +77,18 @@ const CategoryPage = () => {
       y: 0,
       transition: {
         type: "spring",
+        stiffness: 80,
+      },
+    },
+  };
+
+  const subcategoryItem = {
+    hidden: { opacity: 0, x: -10 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
         stiffness: 100,
       },
     },
@@ -115,231 +103,139 @@ const CategoryPage = () => {
   }
 
   return (
-    <main className="md:max-w-7xl w-full mx-auto">
-      <div className="container px-4 mt-5">
-        {/* Breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm mb-6">
-          <a href="/" className="text-emerald-600 hover:text-emerald-700">
-            Home
-          </a>
-          <span className="text-gray-500">/</span>
-          <span className="text-gray-500">Categories</span>
-        </nav>
+    <main className="md:max-w-7xl mx-auto w-full">
+      <div className="container px-4 pt-6 md:pt-10">
+        {/* Banner Section */}
+        <div className="relative bg-hommlie w-full h-[150px] md:h-[300px] rounded-xl overflow-hidden mb-8">
+          <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center">
+            <h1 className="text-2xl md:text-4xl font-bold mb-4 text-white uppercase">
+              Our Services
+            </h1>
 
+            {/* Search Bar */}
+            <div className="relative w-full max-w-md px-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full py-2 px-4 pr-10 rounded-full border-0 shadow-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                />
+                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Categories */}
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="space-y-8"
+          className="space-y-6 mb-10"
         >
-          {categories?.map((category) => (
+          {filteredCategories?.map((category) => (
             <motion.div
               key={category.id}
               variants={item}
-              className="bg-white rounded-xl shadow-lg overflow-hidden"
+              ref={(el) => (categoryRefs.current[category.id] = el)}
+              className="bg-white rounded-xl shadow-md overflow-hidden glow-border transition-all duration-300"
             >
-              {/* Banner Section */}
-              <div className="relative w-full h-[150px] md:h-[250px] overflow-hidden">
-                <img
-                  src={category.motion_graphics || category.image_url}
-                  alt={category.alt_tag}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <div className="flex flex-col items-center text-center text-white">
-                    <h1 className="text-2xl md:text-4xl font-bold mb-1 md:mb-4 uppercase">
-                      {category.category_name}
-                    </h1>
-                  </div>
-                </div>
-              </div>
-
-              {/* Locations Quick Nav */}
-              <div className="flex items-center bg-white rounded-lg mb-4 relative p-4">
-                <h2 className="text-lg md:text-xl font-semibold mr-4 md:mr-6 whitespace-nowrap">
-                  Available in:
-                </h2>
-
-                {/* Left Arrow */}
-                <div
-                  id={`left-arrow-${category.id}`}
-                  className="absolute left-24 md:left-36 z-10 p-1 md:p-2 cursor-pointer bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
-                  onClick={() => handleArrowClick(category.id, "left")}
-                  style={{ display: "none" }} // Initially hidden
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 md:h-6 w-3 md:w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </div>
-
-                {/* Scrollable Locations */}
-                <div
-                  ref={(el) => (scrollContainerRefs.current[category.id] = el)}
-                  className="flex gap-2 md:gap-4 overflow-x-auto scrollbar-hide flex-1"
-                  onScroll={(e) => handleScroll(category.id, e)}
-                >
-                  {getLocationsFromCategory(category).map((location, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setActiveLocation({
-                          ...activeLocation,
-                          [category.id]: location.title,
-                        });
-                      }}
-                      className={`px-3 py-2 rounded-md cursor-pointer transition-all duration-200 whitespace-nowrap ${
-                        activeLocation[category.id] === location.title
-                          ? "bg-emerald-600 text-white"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      <p className="text-xs md:text-sm font-medium">
-                        {location.title}
-                      </p>
+              {/* Category Header */}
+              <div
+                className="cursor-pointer"
+                onClick={() => handleCategoryClick(category.id)}
+              >
+                <div className="relative h-[150px] md:h-[300px] overflow-hidden">
+                  <img
+                    src={category.motion_graphics || category.image_url}
+                    alt={category.alt_tag}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                    <div className="p-4 md:p-6 w-full flex justify-between items-center">
+                      <h2 className="text-xl md:text-2xl font-bold text-white">
+                        {category.category_name}
+                      </h2>
+                      <ChevronDown
+                        className={`w-6 h-6 text-white transition-transform duration-300 ${
+                          expandedCategory === category.id
+                            ? "transform rotate-180"
+                            : ""
+                        }`}
+                      />
                     </div>
-                  ))}
-                </div>
-
-                {/* Right Arrow */}
-                <div
-                  id={`right-arrow-${category.id}`}
-                  className="absolute right-4 z-10 p-1 md:p-2 cursor-pointer bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
-                  onClick={() => handleArrowClick(category.id, "right")}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 md:h-6 w-3 md:w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  </div>
                 </div>
               </div>
 
-              {/* Category Details */}
-              <div className="p-4 md:p-6">
-                <div className="flex gap-4 md:gap-8">
-                  <div className="flex-1">
-                    <h2 className="text-xl md:text-2xl font-semibold mb-3">
-                      {`${category.category_name} in ${
-                        activeLocation[category.id] || "Your Area"
-                      }`}
-                    </h2>
-
-                    <p className="text-sm md:text-base text-gray-600 mb-4">
-                      {category.meta_description ||
-                        `Professional ${category.category_name.toLowerCase()} services providing reliable and high-quality solutions for your needs.`}
-                    </p>
-
-                    <div className="mt-2 md:mt-4">
-                      <h3 className="text-sm md:text-base font-medium mb-2">
-                        Why Choose Our Services:
-                      </h3>
-                      <ul className="text-xs md:text-base space-y-1">
-                        <li className="flex items-start space-x-2 text-gray-600">
-                          <span className="text-emerald-500">✓</span>
-                          <span>Highly-rated professional service</span>
-                        </li>
-                        <li className="flex items-start space-x-2 text-gray-600">
-                          <span className="text-emerald-500">✓</span>
-                          <span>Comprehensive solutions for your needs</span>
-                        </li>
-                        <li className="flex items-start space-x-2 text-gray-600">
-                          <span className="text-emerald-500">✓</span>
-                          <span>Fast and reliable service delivery</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        const activeLocationObj = getLocationsFromCategory(
-                          category
-                        ).find(
-                          (loc) => loc.title === activeLocation[category.id]
-                        ) || { slug: "" };
-
-                        navigate(
-                          `/${category.slug}/${category.id}${
-                            activeLocationObj.slug
-                              ? `/${activeLocationObj.slug}`
-                              : ""
-                          }`,
-                          {
-                            state: { location: activeLocation[category.id] },
-                          }
-                        );
-                      }}
-                      className="mt-4 md:mt-6 flex items-center text-emerald-600 hover:text-emerald-700 font-medium group"
+              {/* Subcategories */}
+              <AnimatePresence>
+                {expandedCategory === category.id &&
+                  category.Subcategories &&
+                  category.Subcategories.length > 0 && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      View Services
-                      <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
-                    </button>
-                  </div>
-
-                  <div className="w-24 md:w-32 h-24 md:h-32 flex-shrink-0 self-center">
-                    <img
-                      src={category.app_icon || category.image_url}
-                      alt={category.category_name}
-                      className="w-full h-full object-contain rounded-lg"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Other Locations Quick Links */}
-              <div className="bg-gray-50 p-4 md:p-6 border-t border-gray-100">
-                <h3 className="text-sm md:text-base font-medium mb-2">
-                  Popular Areas:
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {getLocationsFromCategory(category)
-                    .slice(0, 8) // Limit to 8 locations for cleaner display
-                    .map((location, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          navigate(
-                            `/${category.slug}/${category.id}/${location.slug}`,
-                            {
-                              state: { location: location.title },
-                            }
-                          );
-                        }}
-                        className="text-xs md:text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                      <motion.div
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                        className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                       >
-                        {location.title}
-                      </button>
-                    ))}
-
-                  {getLocationsFromCategory(category).length > 8 && (
-                    <span className="text-xs md:text-sm text-gray-500">
-                      + {getLocationsFromCategory(category).length - 8} more
-                      areas
-                    </span>
+                        {category.Subcategories.map((subcategory) => (
+                          <motion.div
+                            key={subcategory.id}
+                            variants={subcategoryItem}
+                            className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                            onClick={() =>
+                              handleSubCategoryClick(category, subcategory)
+                            }
+                          >
+                            <div className="flex gap-3 items-center">
+                              <div className="w-12 h-12 md:w-16 md:h-16 rounded-md overflow-hidden flex-shrink-0">
+                                <img
+                                  src={subcategory.app_icon}
+                                  alt={subcategory.subcategory_name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-sm md:text-base font-medium line-clamp-2">
+                                  {subcategory.subcategory_name}
+                                </h3>
+                                <div className="flex items-center mt-1 text-xs md:text-sm text-emerald-600 group">
+                                  <span>View Details</span>
+                                  <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-1" />
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </motion.div>
                   )}
-                </div>
-              </div>
+              </AnimatePresence>
             </motion.div>
           ))}
+
+          {filteredCategories.length === 0 && (
+            <div className="text-center py-10">
+              <h3 className="text-lg text-gray-500">
+                No services found matching "{searchTerm}"
+              </h3>
+              <button
+                onClick={() => setSearchTerm("")}
+                className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition"
+              >
+                Clear Search
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </main>
