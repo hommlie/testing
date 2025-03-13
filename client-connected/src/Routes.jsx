@@ -110,6 +110,10 @@ const ProjectRoutes = () => {
       element: <SEOPage />,
     },
     {
+      path: `${config.VITE_BASE_URL}/services`,
+      element: <CategoryPage />,
+    },
+    {
       path: `${config.VITE_BASE_URL}/service/:slug`,
       element: <LandingPage />,
     },

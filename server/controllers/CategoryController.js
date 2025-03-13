@@ -89,6 +89,22 @@ exports.getCategory = async (req, res) => {
           "motion_graphics",
         ],
       ],
+      include: [
+        {
+          model: Subcategory,
+          attributes: [
+            "id",
+            "subcategory_name",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', icon)`
+              ),
+              "app_icon",
+            ],
+            "slug",
+          ],
+        },
+      ],
       where: { status: 1 },
       limit: 6,
     });

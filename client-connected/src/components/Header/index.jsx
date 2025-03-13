@@ -242,13 +242,13 @@ const Header = ({
                 B2B
               </NavLink>
               <NavLink
-                to="/hub"
+                to="/register-free-listing"
                 className="text-gray-700 hover:text-green-700 font-medium"
               >
                 Hub
               </NavLink>
               <NavLink
-                to="/konnect"
+                to="/register-free-listing"
                 className="text-gray-700 hover:text-green-700 font-medium"
               >
                 Konnect
@@ -456,14 +456,14 @@ const Header = ({
               Services
             </NavLink>
             <NavLink
-              to="/hub"
+              to="/register-free-listing"
               className="block py-2 text-gray-700 hover:text-green-700"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Hub
             </NavLink>
             <NavLink
-              to="/konnect"
+              to="/register-free-listing"
               className="block py-2 text-gray-700 hover:text-green-700"
               onClick={() => setIsMobileMenuOpen(false)}
             >
