@@ -49,7 +49,7 @@
                                 <td>{{ Str::words($homepage->sub_title, 5, '...') }}</td>
                                 <td class="text-center">
                                     @if ($homepage->image)
-                                        <img src="{{ asset('/storage/app/public/images/homesections/' . $homepage->image) }}" width="50"
+                                        <img src="{{ asset('storage/images/homesections/' . $homepage->image) }}" width="50"
                                             height="50">
                                     @else
                                         No Image

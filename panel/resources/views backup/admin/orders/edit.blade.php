@@ -140,8 +140,8 @@
                                         {{-- EMPLOYEE NAME --}}
                                         <label for="employeeName">Employee Name</label>
                                         <input type="text" name="employeeName" id="employeeName" class="form-control"
-                                            value="{{$data->employee_name}}" readonly>
-                                        @error('employeeName')
+                                            value="{{ $data->employee_name ?? optional($userdata->first())->name ?? 'Default Name' }}" readonly>
+                                        @error('employeeName')\
                                             <div class="text-danger">{{ $message }}</div>
 
                                         @enderror

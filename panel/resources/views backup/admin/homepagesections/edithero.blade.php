@@ -85,7 +85,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                             @if ($homepageSection->image)
-                                <img src="{{ asset('/storage/app/public/images/homesections/' . $homepageSection->image) }}" width="100">
+                                <img src="{{ asset('storage/images/homesections/' . $homepageSection->image) }}" width="100">
                             @endif
                         </div>
                     </div>

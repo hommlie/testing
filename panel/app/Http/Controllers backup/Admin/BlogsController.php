@@ -6,9 +6,6 @@ use App\Models\Blogs;
 use App\Models\BlogsCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
-
-
-
 class BlogsController extends Controller{
 
     // INDEX FUNATION(index.blade.php)
@@ -120,6 +117,7 @@ class BlogsController extends Controller{
         $this->validate($request,[
             'id' => 'required',
         ]);
+        
         $data=Blogs::where('id',$request->id)->delete();
         if($data) {
             return 1000;

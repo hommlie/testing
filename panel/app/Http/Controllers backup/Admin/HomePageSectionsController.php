@@ -33,7 +33,7 @@ class HomePageSectionsController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageFileName = 'image_' . Str::uuid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('/storage/app/public/images/homesections/'), $imageFileName);
+            $image->move(public_path('storage/images/homesections/'), $imageFileName);
             $homepageSection->image = $imageFileName;
         }
         $homepageSection->title = $request->title;
@@ -68,11 +68,11 @@ class HomePageSectionsController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageFileName = 'image_' . Str::uuid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('/storage/app/public/images/homesections/'), $imageFileName);
+            $image->move(public_path('storage/images/homesections/'), $imageFileName);
 
             // Delete old image if exists
-            if ($homepageSection->image && file_exists(public_path('/storage/app/public/images/homesections/' . $homepageSection->image))) {
-                unlink(public_path('/storage/app/public/images/homesections/' . $homepageSection->image));
+            if ($homepageSection->image && file_exists(public_path('storage/images/homesections/' . $homepageSection->image))) {
+                unlink(public_path('storage/images/homesections/' . $homepageSection->image));
             }
             $homepageSection->image = $imageFileName;
         }

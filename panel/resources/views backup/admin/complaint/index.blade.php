@@ -52,6 +52,7 @@
                         <th>Email</th>
                         <th>Subject</th>
                         <th>View Message</th> 
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,12 +65,16 @@
                             <td>{{ $complaint->email }}</td>
                             <td>{{ $complaint->subject }}</td>
                             <td>
-                               
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#viewMessageModal" data-message="{{ $complaint->message }}">
-                                    View
-                                </button>
+                            <a href="" class="text-primary">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="javascript:void(0);" class="danger p-0 text-danger ml-2" 
+                                    data-original-title="" title=""
+                                    onclick="do_delete('','','{{ trans('labels.delete_slider') }}','{{ trans('labels.delete') }}')">
+                                    <i class="ft-trash font-medium-3"></i>
+                                </a>
                             </td>
+                
                         </tr>
                     @endforeach
                 </tbody>
