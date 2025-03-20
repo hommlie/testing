@@ -13,6 +13,8 @@ class Complaint extends Model
         'email',
         'subject',
         'message',
+        'order_id',
+        'c_status'
        
     ];
 }

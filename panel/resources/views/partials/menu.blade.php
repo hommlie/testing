@@ -1404,10 +1404,10 @@
                                     </a>
                                 </li>   
                             @endcan
-                           {{-- @can('seopages_add_access')  
+                            @can('seopages_add_access')  
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.seopages.add") }}"
-                                        class="nav-link {{ request()->is('admin/seopages/add') ? '' : '' }}">
+                                    <a href="{{ route("admin.homepagesections.viewOffer") }}"
+                                        class="nav-link {{ request()->is('admin/seopages/viewOffer') ? '' : '' }}">
                                         <i class="fa fa-check-circle mr-2">
                                         </i>
                                         
@@ -1419,8 +1419,8 @@
                             @endcan
                             @can('seopages_add_access')  
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.seopages.add") }}"
-                                        class="nav-link {{ request()->is('admin/seopages/add') ? '' : '' }}">
+                                    <a href="{{ route("admin.homepagesections.addOffer") }}"
+                                        class="nav-link {{ request()->is('admin/homepagesections/addOffer') ? '' : '' }}">
                                         <i class="fa fa-plus-circle mr-2">
                                         </i>
                                       
@@ -1430,7 +1430,7 @@
                                     </a>
                                 </li>   
                             @endcan 
-                            --}}
+                            
                         </ul>
                         
                     </li>

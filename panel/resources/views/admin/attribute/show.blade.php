@@ -92,6 +92,19 @@
                                         <span class="text-danger">{{ $errors->first('avg_rating') }}</span>
                                     @endif
                                 </div>
+                                <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="Image title" class="col-form-label">Enable Is Recommended
+
+                                            </label><br>
+                                            <input type="checkbox" name="is_recommended" value="1" @if($data->is_recommended == 1)
+                                            checked @endif>
+
+                                            @if ($errors->has('is_form'))
+                                                <span class="text-danger">{{ $errors->first('is_form') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
 
                                 <div class="form-actions center">
                                     <a href="{{ route('admin.attribute') }}" class="btn btn-raised btn-warning mr-1">

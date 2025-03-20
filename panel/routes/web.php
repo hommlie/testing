@@ -468,16 +468,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::get('/', 'ComplaintController@index')->name('complaint');
         Route::get('/add', 'ComplaintController@create')->name('complaint.add');
         Route::post('/store', 'ComplaintController@store')->name('complaint.store'); 
-        Route::get('/edit{id}', 'ComplaintController@edit')->name('complaint.edit');
+        Route::get('/edit/{id}', 'ComplaintController@edit')->name('complaint.edit');
+        Route::get('/view/{id}', 'ComplaintController@view')->name('complaint.view');
         Route::post('/update/{id}', 'ComplaintController@update')->name('complaint.update');
-        Route::delete('/complaint/{id}/delete', 'ComplaintController@destroy')->name('complaint.delete');
+        Route::post('/delete', 'ComplaintController@destroy')->name('complaint.delete'); 
+        Route::get('get-Order-data/{orderID}', 'ComplaintController@getOrderData')->name('complaint.getOrderData');
     });
 
-    //MANAGE 
+    //MANAGE businessregistration
     Route::group(['prefix'=> 'businessregistration'], function () {
         Route::get('/', 'BusinessRegistrationController@index')->name('businessregistration');
         Route::get('/add', 'BusinessRegistrationController@create')->name('businessregistration.add');
-        Route::post('/store', 'BusinessRegistrationController@store')->name('complaint.store'); 
+        Route::get('/edit/{id}', 'BusinessRegistrationController@edit')->name('businessregistration.edit');
+        Route::post('/update/{id}', 'BusinessRegistrationController@update')->name('businessregistration.update');
+        Route::post('/delete', 'BusinessRegistrationController@destroy')->name('BusinessRegistrationController.delete'); 
     });
 
     // INSPECTIONS MANAGEMENT  
@@ -511,7 +515,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/change/status', 'BlogsController@changeStatus')->name('blogs.changeStatus');
         Route::post('/delete', 'BlogsController@destroy')->name('blogs.delete');
 
-        // MANAGE BLOG CATEGORY
+    // MANAGE BLOG CATEGORY
         Route::get('/blogcategoryindex', 'BlogsController@blogCategoryIndex')->name('blogs.blogcategoryindex');
         Route::get('/blogcategoryadd', 'BlogsController@blogCategoryCreate')->name('blogs.blogcategoryadd');
         Route::post('/blogcategorystore', 'BlogsController@blogCategoryStore')->name('blogs.blogcategorystore');
@@ -551,7 +555,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::get('/edithero/{id}', 'HomePageSectionsController@editHero')->name('homepagesections.edithero');
         Route::post('/updatehero/{id}', 'HomePageSectionsController@updateHero')->name('homepagesections.updatehero');
         Route::post('/changestatushero/status', 'HomePageSectionsController@changeStatusHero')->name('homepagesections.changestatushero');
-        Route::post('/deletehero', 'HomePageSectionsController@destroyHero')->name('homepagesections.deletehero'); 
+        Route::post('/deletehero', 'HomePageSectionsController@destroyHero')->name('homepagesections.deletehero');
+
+        Route::get('/viewOffer', 'HomePageSectionsController@viewOffer')->name('homepagesections.viewOffer');
+        Route::get('/addOffer', 'HomePageSectionsController@addOffer')->name('homepagesections.addOffer');
+        Route::post('/storeOffer', 'HomePageSectionsController@storeOffer')->name('homepagesections.storeOffer');
+        Route::get('/editOffer/{id}', 'HomePageSectionsController@editOffer')->name('homepagesections.editOffer');
+        Route::post('/updateOffer/{id}', 'HomePageSectionsController@updateOffer')->name('homepagesections.updateOffer');
+        
     });
     
 });

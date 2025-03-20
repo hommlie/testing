@@ -44,6 +44,15 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="category_name">{{ trans('Category Title') }}</label>
+                                        <input type="text" id="category_title" class="form-control" name="category_title"
+                                            placeholder="Category Title">
+                                        @if ($errors->has('category_title'))
+                                            <span class="text-danger">{{ $errors->first('category_title') }}</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="icon">{{ trans('App Icon') }}</label>
                                         <input type="file" id="icon" class="form-control" name="icon">
                                         @if ($errors->has('icon'))
@@ -78,9 +87,6 @@
                                             @endif
                                         </div>
                                     </div>
-
-
-
                                     <div class="product gravity">
                                         <div class="form-group">
                                             <label for="Image title" class="col-form-label">Image title:</label>

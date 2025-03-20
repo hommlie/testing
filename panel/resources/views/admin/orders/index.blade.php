@@ -39,12 +39,12 @@
         <div class="row">
             <div class="col-12">
                 @if(Session::has('success'))
-                                <div class="alert alert-success">
-                                    {{ Session::get('success') }}
-                                    @php
-                                        Session::forget('success');
-                                    @endphp
-                                </div>
+                    <div class="alert alert-success">
+                        {{ Session::get('success') }}
+                        @php
+                            Session::forget('success');
+                        @endphp
+                    </div>
                 @endif
                 <div class="card">
                     <div class="card-header bg-light d-flex justify-content-between align-items-center">

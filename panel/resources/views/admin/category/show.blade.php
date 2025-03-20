@@ -48,6 +48,17 @@
                                             <span class="text-danger">{{ $errors->first('category_name') }}</span>
                                         @endif
                                     </div>
+                                    {{-- CATEGORY  TITLE--}}
+                                    <div class="form-group">
+                                        <label for="category_name">Category Title</label>
+                                        <input type="text" id="category_title" class="form-control" name="category_title"
+                                            value="{{$data->category_title}}"
+                                            placeholder="Category Title">
+                                        @if ($errors->has('category_title'))
+                                            <span class="text-danger">{{ $errors->first('category_title') }}</span>
+                                        @endif
+                                    </div>
+
                                     {{-- IMAGES --}}
                                     <div class="form-group">
                                         <label for="icon">{{ trans('image') }}</label>

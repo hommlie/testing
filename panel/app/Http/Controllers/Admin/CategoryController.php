@@ -126,6 +126,7 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
             'category_name' => 'required',
+            'category_title'=> 'required',
             'icon' => 'required|mimes:png,jpg,jpeg,gif',
             'webicon' => 'required|mimes:png,jpg,jpeg,gif',
             'motion_graphics' => 'required|mimes:png,jpg,jpeg,gif',
@@ -210,6 +211,7 @@ class CategoryController extends Controller
                 'banner' => $banner, // Ensure icon is included here
                 'motion_graphics' => $motion_graphics, 
                 'category_name' => $request->category_name,
+                'category_title' => $request->category_title,
                 'alt_tag' => $request->alt_tag,
                 'image_title' => $request->image_title,
                 'meta_title' => $request->meta_title,
@@ -227,6 +229,7 @@ class CategoryController extends Controller
             // Default case where the slug does not exist
             $dataval = [
                 'category_name' => $request->category_name,
+                'category_title' => $request->category_title,
                 'web_icon' => $webicon, // Ensure icon is included here
                 'motion_graphics' => $motion_graphics, 
                 'banner' => $banner,
@@ -283,6 +286,7 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
             'category_name' => 'required',
+            'category_title'=> 'required',
             'icon' => 'mimes:jpeg,png,jpg',
             'webicon' => 'mimes:jpeg,png,jpg',
             'motion_graphics' => 'mimes:png,jpg,jpeg,gif',
@@ -295,6 +299,8 @@ class CategoryController extends Controller
             'avg_rating' => 'required|numeric',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        
 
         
 
@@ -311,11 +317,11 @@ class CategoryController extends Controller
                 $icon = 'category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
                 $request->icon->move('storage/app/public/images/category', $icon);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag,  'location' => $loca,  'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'icon' => $icon, 'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag,  'location' => $loca,  'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'icon' => $icon, 'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'image_title' => $request->image_title, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'is_form' => $request->has('is_form') ? 1 : 0, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }
 
@@ -328,11 +334,11 @@ class CategoryController extends Controller
                 $webicon = 'webcategory-' . uniqid() . '.' . $request->webicon->getClientOriginalExtension();
                 $request->webicon->move('storage/app/public/images/category', $webicon);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag,  'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),  'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'web_icon' => $webicon,  'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag,  'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),  'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'web_icon' => $webicon,  'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),   'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating,'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),   'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating,'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }       
         if (isset($request->motion_graphics)) {
@@ -342,11 +348,11 @@ class CategoryController extends Controller
                 $motion_graphics = 'motion_graphics-' . uniqid() . '.' . $request->motion_graphics->getClientOriginalExtension();
                 $request->motion_graphics->move('storage/app/public/images/category', $motion_graphics);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs,  'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,  'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs,  'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description,'motion_graphics' => $motion_graphics,  'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),  'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),  'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }
 
@@ -357,11 +363,11 @@ class CategoryController extends Controller
                 $banner = 'motion_graphics-' . uniqid() . '.' . $request->banner->getClientOriginalExtension();
                 $request->banner->move('storage/app/public/images/category', $banner);
 
-                $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs,  'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'banner' => $banner, 'slug' => \Str::slug($request->category_name));
+                $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications), 'faqs' => $request->faqs,  'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'banner' => $banner, 'slug' => \Str::slug($request->category_name));
                 $category = Category::find($request->cat_id)->update($data);
             }
         } else {
-            $data = array('category_name' => $request->category_name, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),  'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
+            $data = array('category_name' => $request->category_name, 'category_title' => $request->category_title, 'alt_tag' => $request->alt_tag, 'image_title' => $request->image_title,  'location' => $loca, 'specifications' =>  implode(" | ", $request->specifications),  'faqs' => $request->faqs, 'about' => $request->about, 'total_reviews' => $request->total_reviews,'avg_rating' => $request->avg_rating, 'meta_title' => $request->meta_title, 'meta_description' => $request->meta_description, 'slug' => \Str::slug($request->category_name));
             $category = Category::find($request->cat_id)->update($data);
         }
 

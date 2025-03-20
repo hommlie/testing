@@ -64,6 +64,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+       
         if ($request->is_variation == "on") {
             $this->validate($request, [
                 'available_stock' => 'nullable',
@@ -96,6 +97,7 @@ class ProductController extends Controller
                 'product_qty' => 'nullable',
                 'image.*' => 'nullable',
                 'description' => 'nullable',
+                'specifications.*' => 'required',
             ]);
             $is_variation = 0;
             $product_price = $request->product_price;
@@ -160,6 +162,10 @@ class ProductController extends Controller
             ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
             : null;
 
+        $pro_specifications = isset($request->pro_specifications)
+        ? (is_array($request->pro_specifications) ? implode(" | ", $request->pro_specifications) : $request->pro_specifications)
+         : null;
+
         // dd($loca);
         $dataval = array(
             'vendor_id' => Auth::user()->id,
@@ -169,6 +175,7 @@ class ProductController extends Controller
             'product_name' => $request->product_name,
             'brand' => $request->brand,
             'description' => $request->description,
+            'pro_specifications' => $pro_specifications,
             'product_price' => $product_price,
             'discounted_price' => $discounted_price,
             'slug' => \Str::slug($request->product_name),
@@ -182,6 +189,7 @@ class ProductController extends Controller
             'is_return' => $is_return,
             'return_days' => $return_days,
             'is_featured' => $is_featured,
+            'is_recommended' => $request->has('is_recommended') ? 1 : 0, 
             'available_stock' => $request->available_stock,
             'sku' => $request->sku,
             'est_shipping_days' => $request->est_shipping_days,
@@ -189,6 +197,8 @@ class ProductController extends Controller
             'tax_type' => $request->tax_type,
             'tags' => $request->tags,
             'faqs' => $request->faqs,
+            'faqs_for_mobile' => $request->faqs_for_mobile,
+            'description_for_mobile' => $request->description_for_mobile,
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'rating' => $request->productRating ?? 0,
@@ -198,34 +208,7 @@ class ProductController extends Controller
             'video_thumbnail' => 'NA',
         );
 
-        // $dataval=array(
-        //     'vendor_id'=>Auth::user()->id,
-        //     'cat_id'=>'5',
-        //     'subcat_id'=>'10',
-        //     // 'innersubcat_id'=>$request->innersubcat_id,
-        //     'product_name'=>'ascd',
-        //     'brand'=>'dcvs',
-        //     'description'=>'fsdsf',
-        //     'product_price'=>'500',
-        //     'discounted_price'=>'100',            
-        //     'slug'=>'$request->product_name',
-        //     'is_variation'=>'$is_variation',
-        //     'attribute'=>'$request->attribute',
-        //     'product_qty'=>'$product_qty',
-        //     'is_hot'=>'$is_hot',
-        //     'free_shipping'=>'$free_shipping',
-        //     'flat_rate'=>'$flat_rate',
-        //     'shipping_cost'=>'$shipping_cost',
-        //     'is_return'=>'$is_return',
-        //     'return_days'=>'$return_days',
-        //     'is_featured'=>'$is_featured',
-        //     'available_stock'=>'$request->available_stock',
-        //     'sku'=>'$request->sku',
-        //     'est_shipping_days'=>'$request->est_shipping_days',
-        //     'tax'=>'$request->tax',
-        //     'tax_type'=>'$request->tax_type',
-        //     'tags'=>'$tags',
-        // );
+      
         $data = Products::create($dataval);
 
         if ($request->hasFile('image')) {
@@ -454,7 +437,7 @@ class ProductController extends Controller
 
         } else {
 
-
+        
 
             $this->validate($request, [
                 'cat_id' => 'required',
@@ -468,6 +451,7 @@ class ProductController extends Controller
                 'product_price' => 'required',
                 'product_qty' => 'required',
                 'discounted_price' => 'required',
+                'specifications.*' => 'required',
             ]);
 
             $is_variation = 0;
@@ -508,10 +492,15 @@ class ProductController extends Controller
         $return_days = $is_return == 1 ? $request->return_days : 0;
         $is_featured = $request->is_featured == "on" ? 1 : 2;
         // $tags = $request->tags ? implode(', ', $request->tags) : '';
+
         $tags = $request->tags;
         $loca = isset($request->location)
         ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
         : null;
+
+        $pro_specifications = isset($request->pro_specifications)
+        ? (is_array($request->pro_specifications) ? implode(" | ", $request->pro_specifications) : $request->pro_specifications)
+         : null;
         $data = [
             'vendor_id' => Auth::user()->id,
             'cat_id' => $request->cat_id,
@@ -520,6 +509,7 @@ class ProductController extends Controller
             'product_name' => $request->product_name,
             'brand' => $request->brand,
             'description' => $request->description,
+            'pro_specifications' => $pro_specifications,
             'product_price' => $product_price,
             'discounted_price' => $discounted_price,
             'product_qty' => $product_qty ? $product_qty : "NA",
@@ -533,6 +523,7 @@ class ProductController extends Controller
             'is_return' => $is_return,
             'return_days' => $return_days,
             'is_featured' => $is_featured,
+            'is_recommended' => $request->has('is_recommended') ? 1 : 0, 
             'available_stock' => $request->available_stock,
             'sku' => $request->sku,
             'est_shipping_days' => $request->est_shipping_days,
@@ -540,6 +531,8 @@ class ProductController extends Controller
             'faqs' => $request->faqs,
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
+            'faqs_for_mobile' => $request->faqs_for_mobile,
+            'description_for_mobile' => $request->description_for_mobile,
             'rating' => $request->productRating ?? 0,
             'total_reviews' => $request->pro_total_reviews ?? 0,
             'location' => $loca,

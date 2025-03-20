@@ -85,6 +85,80 @@ class HomePageSectionsController extends Controller
         $homepageSection->save();
         return redirect()->route('admin.homepagesections')->with('success', 'Section updated successfully!');
     }
+    
+
+    // HOME PAGE OFFER SECTION
+    public function viewOffer(){
+        $homepageSections = homepageSections::where('type', 'offer')->get();
+        return view('admin.homepagesections.indexoffer', compact('homepageSections'));
+    }
+
+
+    public function addOffer(){
+        return view('admin.homepagesections.addoffer');
+    }
+
+    // STORE OFFER SECTION
+    public function storeOffer(Request $request){
+        $request->validate([
+            'title' => 'required',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+        $homepageSection = new HomepageSections();
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageFileName = 'image_offer_' . Str::uuid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('/storage/app/public/images/homesections/'), $imageFileName);
+            $homepageSection->image = $imageFileName;
+        }
+        $homepageSection->title = $request->title;
+        $homepageSection->alt_tag = $request->alt_tag;
+        $homepageSection->image_title = $request->image_title;
+        $homepageSection->type ='offer';
+        $homepageSection->save();
+        return redirect()->route('admin.homepagesections.viewOffer')->with('success', 'New section added successfully!');
+    }
+    // EDIT OFFER SECTION
+    public function editOffer($id)
+    {
+        $homepageSection = homepageSections::where('id', $id)
+            ->where('type', 'offer')
+            ->first();
+        if (!$homepageSection) {
+            return redirect()->back()->with('error', 'Offer not found.');
+        }
+        return view('admin.homepagesections.editoffer', compact('homepageSection'));
+    }
+    // UPDATED OFFER SECTION
+    public function updateOffer(Request $request, $id){
+        $request->validate([
+            'title' => 'required',
+            'alt_tag' => 'required',
+            'image_title' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+        $homepageSection = homepageSections::findOrFail($id);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageFileName = 'image_offer_' . Str::uuid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('/storage/app/public/images/homesections/'), $imageFileName);
+
+            // Delete old image if exists
+            if ($homepageSection->image && file_exists(public_path('/storage/app/public/images/homesections/' . $homepageSection->image))) {
+                unlink(public_path('/storage/app/public/images/homesections/' . $homepageSection->image));
+            }
+            $homepageSection->image = $imageFileName;
+        }
+        $homepageSection->title = $request->title;
+        $homepageSection->alt_tag = $request->alt_tag;
+        $homepageSection->image_title = $request->image_title;
+        $homepageSection->save();
+        return redirect()->route('admin.homepagesections.viewOffer')->with('success', 'Section updated successfully!');
+    }
+
+    // CHNAGE STATUS HERO AND OFFER SECTION 
     public function changeStatusHero(Request $request)
     {
         $this->validate($request, [
@@ -100,6 +174,8 @@ class HomePageSectionsController extends Controller
             return 2000;
         }
     }
+
+    // DELETE HERO AND OFFER SECTION
     public function destroyHero(Request $request)
     {
         $this->validate($request, [
@@ -112,6 +188,8 @@ class HomePageSectionsController extends Controller
             return 2000;
         }
     }
+
+
 }
 
 ?>

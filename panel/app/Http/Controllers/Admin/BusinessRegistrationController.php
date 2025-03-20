@@ -9,7 +9,7 @@ class BusinessRegistrationController extends Controller
     public function index()
     {
         $Data = BusinessRegistration::orderBy('id', 'desc')->get();
-        return view('admin.businessregistration.index', compact('Data')); 
+        return view('admin.businessregistration.index', compact('Data'));
     }
 
     public function create()
@@ -17,34 +17,58 @@ class BusinessRegistrationController extends Controller
         return view('admin.businessregistration.add');
     }
 
-   
 
-
-
-
-    public function store(Request $request)
+    public function edit($id)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'mobile' => 'required|numeric|digits:10',
-            'email' => 'required|email|max:255',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
+        $data = BusinessRegistration::find($id);
+
+        if (!$data) {
+            return redirect()->back()->with('error', 'Complaint not found.');
+        }
+
+        return view('admin.businessregistration.edit', compact('data'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'businessName' => 'required|string|max:255',
+            'userName' => 'required|string|max:255',
+            'phoneNumber' => 'required|string|max:15',
+            'address' => 'required|string',
+            'city' => 'required|string|max:100',
+            'pincode' => 'required|string|max:10',
+            'area' => 'required|string|max:255',
+            'landmark' => 'required|string|max:255',
+            'state' => 'required|string|max:100',
+            'status' => 'nullable|string|in:active,pending,rejected'
         ]);
 
-        $complaint = new Complaint();
-        $complaint->first_name = $validated['first_name'];
-        $complaint->last_name = $validated['last_name'];
-        $complaint->mobile = $validated['mobile'];
-        $complaint->email = $validated['email'];
-        $complaint->subject = $validated['subject'];
-        $complaint->message = $validated['message'];
+        $data = BusinessRegistration::find($id);
+        if (!$data) {
+            return redirect()->back()->with('error', 'Business not found.');
+        }
+        $data->update($request->all());
 
-
-            $complaint->save();
-            return redirect()->back()->with('success', 'Complaint submitted successfully.');
+        return redirect()->route('admin.businessregistration')->with('success', 'Business updated successfully.');
     }
+
+
+    
+    public function destroy(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+        ]);
+        $delete = BusinessRegistration::where('id', $request->id)->delete();
+        if ($delete) {
+            return 1000;
+        } else {
+            return 2000;
+        }
+    }
+
+
 }
 
 

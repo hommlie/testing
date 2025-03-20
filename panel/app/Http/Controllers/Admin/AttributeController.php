@@ -66,13 +66,14 @@ class AttributeController extends Controller
             $attributeImage->move(public_path('/storage/app/public/images/attribute/'), $attributeImageFileName);
             $attributeImagePath = $attributeImageFileName;
         }
-
+        $isRecommended = $request->has('is_recommended') ? 1 : 0;
         $specification = implode(" | ", $request->specifications);
         $dataval = [
             'attribute' => $request->attribute,
             'specifications' => $specification,
             'total_reviews' => $request->total_reviews,
             'avg_rating' => $request->avg_rating,
+            'is_recommended' => $isRecommended,
             'image' => $attributeImagePath,
         ];
         $data = Attribute::create($dataval);
@@ -131,6 +132,7 @@ class AttributeController extends Controller
         'attribute' => $request->attribute,
         'total_reviews' => $request->total_reviews,
         'avg_rating' => $request->avg_rating,
+        'is_recommended' => $request->has('is_recommended') ? 1 : 0, 
         'specifications' => implode(" | ", $request->specifications),
     ];
 

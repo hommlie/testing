@@ -80,7 +80,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Image</label>
-                            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" required>
+                            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" >
                             @error('image')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
