@@ -1020,9 +1020,7 @@ exports.allProductsList = async (req, res) => {
       where: {
         status: 1,
       },
-      attributes: {
-        include: ["id", "product_name", "slug"],
-      },
+      attributes: ["id", "product_name", "slug"],
       order: [["id", "DESC"]],
     });
 
