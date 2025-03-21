@@ -18,7 +18,7 @@ import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import DownloadAppImg from "/assets/bg/download-app.svg";
+import DownloadAppImg from "/assets/bg/download-app.png";
 import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
 import ReferEarnImg from "/assets/bg/refer-earn.svg";
@@ -190,7 +190,7 @@ const HomePage = () => {
         Frequently Asked Questions
       </h2>
       <div className="space-y-4">
-        {data.faqs.map((faq, index) => (
+        {data?.faqs?.map((faq, index) => (
           <motion.div
             key={index}
             className="border rounded-lg overflow-hidden"
@@ -279,7 +279,7 @@ const HomePage = () => {
   );
 
   return (
-    <div className="min-h-screen  font-headerFont">
+    <div className="min-h-screen font-headerFont">
       {/* Hero Section */}
       <section className="relative bg-white py-5 md:py-10">
         <motion.div

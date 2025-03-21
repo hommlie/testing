@@ -1,5 +1,3 @@
-
-
 section {
   background-color: white;
   padding-top: 10px;
@@ -7,87 +5,84 @@ section {
 }
 
 .pd-imgs {
-    transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .pd-imgs:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .power-saver-bnr {
-    background: url("/src/assets/images/power-saver-banner.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+  background: url("/src/assets/images/power-saver-banner.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .explore-icon {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .why-sec {
-    background-color: #F8F9FF;
+  background-color: #f8f9ff;
 }
 
 .app-bnr {
-    background-image: linear-gradient( to right, #10847E, #67D8BE);
+  background-image: linear-gradient(to right, #10847e, #67d8be);
 }
 
 /* slider animations */
-  /* Slider container */
-  .slider-container {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
-  
-  /* Slider content */
-  .slider-content {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-  }
-  
-  /* Individual slide */
-  .slide {
-    min-width: 100%;
-    transition: opacity 0.5s ease-in-out;
-  }
-  
-  /* Arrow buttons */
-  .arrow-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    z-index: 10;
-  }
-  
-  .arrow-left {
-    left: 10px;
-  }
-  
-  .arrow-right {
-    right: 10px;
-  }
+/* Slider container */
+.slider-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
 
-  @keyframes wave {
-    0%, 100% {
-      transform: rotate(0deg);
-    }
-    50% {
-      transform: rotate(15deg);
-    }
+/* Slider content */
+.slider-content {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Individual slide */
+.slide {
+  min-width: 100%;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Arrow buttons */
+.arrow-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.arrow-left {
+  left: 10px;
+}
+
+.arrow-right {
+  right: 10px;
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
   }
-  
-  .waving-hand {
-    display: inline-block;
-    animation: wave 1s infinite;
+  50% {
+    transform: rotate(15deg);
   }
-  
-  
-  
-  
+}
+
+.waving-hand {
+  display: inline-block;
+  animation: wave 1s infinite;
+}

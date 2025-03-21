@@ -59,6 +59,7 @@ app.get("/homepage", HomeController.getHomePageData);
 
 //Product
 app.post("/products", ProductsController.products);
+app.get("/allproducts", ProductsController.allProductsList);
 app.post("/viewalllisting", ProductsController.viewAllListing);
 app.post("/productdetails", ProductsController.productDetails);
 app.post("/vendorproducts", ProductsController.vendorProducts);

@@ -1013,3 +1013,30 @@ exports.filter = async (req, res) => {
       .json({ status: 0, message: "Something went wrong", error });
   }
 };
+
+exports.allProductsList = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        status: 1,
+      },
+      attributes: {
+        include: ["id", "product_name", "slug"],
+      },
+      order: [["id", "DESC"]],
+    });
+
+    if (!products.length) {
+      return res.status(404).json({ status: 0, message: "No products found" });
+    }
+
+    return res
+      .status(200)
+      .json({ status: 1, message: "Success", data: products });
+  } catch (error) {
+    console.error("Error:", error);
+    return res
+      .status(500)
+      .json({ status: 0, message: "Something went wrong", error });
+  }
+};

@@ -1,6 +1,10 @@
-const fs = require("fs");
-const path = require("path");
-const axios = require("axios");
+import fs from "fs";
+import path from "path";
+import axios from "axios";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const BASE_URL = "https://www.hommlie.com/";
 const BASE_API_URL = "https://www.hommlie.com/hommlieserver";
@@ -8,7 +12,7 @@ const BASE_API_URL = "https://www.hommlie.com/hommlieserver";
 async function generateSitemap() {
   try {
     // Fetch dynamic routes (e.g., products and categories)
-    const productsResponse = await axios.get(`${BASE_API_URL}/api/products`);
+    const productsResponse = await axios.get(`${BASE_API_URL}/api/allproducts`);
     const categoriesResponse = await axios.get(`${BASE_API_URL}/api/category`);
 
     const products = productsResponse.data || [];
