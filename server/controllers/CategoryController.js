@@ -676,3 +676,45 @@ exports.getCleaningSubcategory = async (req, res) => {
     });
   }
 };
+
+exports.getAllCategories = async (req, res) => {
+  try {
+    const categories = await Category.findAll({
+      attributes: ["id", "category_name", "slug"],
+    });
+
+    return res.status(200).json({
+      status: 1,
+      message: "Success",
+      data: categories,
+    });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Error occurred",
+      error: error.message,
+    });
+  }
+};
+
+exports.getAllSubcategories = async (req, res) => {
+  try {
+    const subcategories = await Subcategory.findAll({
+      attributes: ["id", "subcategory_name", "slug"],
+    });
+
+    return res.status(200).json({
+      status: 1,
+      message: "Success",
+      data: subcategories,
+    });
+  } catch (error) {
+    console.error("Error fetching subcategories:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Error occurred",
+      error: error.message,
+    });
+  }
+};

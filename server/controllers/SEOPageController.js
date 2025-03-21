@@ -101,3 +101,25 @@ exports.getPageBySlug = async (req, res) => {
       .json({ status: 0, message: "Error occurred", error });
   }
 };
+
+exports.getAllSEOPages = async (req, res) => {
+  try {
+    const pages = await SEOPage.findAll({
+      attributes: ["id", "title", "slug"],
+      where: { status: 1 },
+    });
+
+    return res.status(200).json({
+      status: 1,
+      message: "Success",
+      data: pages,
+    });
+  } catch (error) {
+    console.error("Error fetching pages:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Error occurred",
+      error: error.message,
+    });
+  }
+};

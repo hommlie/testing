@@ -178,3 +178,25 @@ exports.getLandingPageBySlug = async (req, res) => {
     });
   }
 };
+
+exports.getAllLandingPages = async (req, res) => {
+  try {
+    const landingPages = await LandingPage.findAll({
+      attributes: ["id", "title", "slug"],
+      where: { status: 1 },
+    });
+
+    return res.status(200).json({
+      status: 1,
+      message: "Success",
+      data: landingPages,
+    });
+  } catch (error) {
+    console.error("Error fetching landing pages:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Error occurred",
+      error: error.message,
+    });
+  }
+};

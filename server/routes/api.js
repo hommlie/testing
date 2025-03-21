@@ -84,6 +84,8 @@ app.get("/google-reviews", RattingController.getGoogleReviews);
 app.get("/category", CategoryController.getCategory);
 app.post("/subcategory", CategoryController.getSubcategory);
 app.post("/cleaningsubcategory", CategoryController.getCleaningSubcategory);
+app.get("/allcategories", CategoryController.getAllCategories);
+app.get("/allsubcategories", CategoryController.getAllSubcategories);
 
 //Bannermanagement
 app.get("/banner", BannerController.getBanner);
@@ -170,6 +172,7 @@ app.post("/wallet/transactions", WalletController.getWalletTransactions);
 
 //SEO Page
 app.get("/seopage/getPageBySlug/:slug", SEOPageController.getPageBySlug);
+app.get("/seopage/getall", SEOPageController.getAllSEOPages);
 
 //Blogs
 app.get("/blogs/getall", blogController.getAllPublished);
@@ -183,9 +186,6 @@ app.put("/comments/update/:id/:authorId", commentController.update);
 app.delete("/comments/delete/:id/:authorId", commentController.delete);
 
 //Landing page
-app.get(
-  "/landing/getPageBySlug/:slug",
-  LandingPageController.getLandingPageBySlug
-);
+app.get("/landing/getall", LandingPageController.getAllLandingPages);
 
 module.exports = app;
