@@ -389,7 +389,7 @@ const HomePage = () => {
           {/* Hero Slider and Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Main Slider */}
-            <div className="relative h-40 md:h-80 rounded-xl overflow-hidden">
+            <div className="relative h-48 md:h-80 rounded-xl overflow-hidden">
               <motion.div
                 animate={{ x: `-${currentSlide * 100}%` }}
                 transition={{ duration: 0.7, ease: "easeInOut" }}

@@ -67,8 +67,10 @@ const ThoughtfulSlider = ({ videos = [] }) => {
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: 1,
+    slidesToScroll: slidesToShow,
     initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 5000,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
@@ -76,8 +78,7 @@ const ThoughtfulSlider = ({ videos = [] }) => {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
-          centerMode: false,
+          slidesToScroll: 2,
         },
       },
       {
@@ -85,7 +86,7 @@ const ThoughtfulSlider = ({ videos = [] }) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          centerMode: false,
+
           centerPadding: "20px",
           initialSlide: 0,
         },

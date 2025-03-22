@@ -68,11 +68,13 @@ const ProductSlider = ({ title, services = [] }) => {
   // Slick settings
   const settings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: 1,
+    slidesToScroll: slidesToShow,
     initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 5000,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
@@ -80,7 +82,7 @@ const ProductSlider = ({ title, services = [] }) => {
         breakpoint: 1280,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
+          slidesToScroll: 2,
         },
       },
       {
@@ -88,7 +90,7 @@ const ProductSlider = ({ title, services = [] }) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          centerMode: false,
+
           centerPadding: "20px",
         },
       },
