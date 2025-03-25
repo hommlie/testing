@@ -56,8 +56,10 @@ const BannerDataSlider = ({ bannerData = [] }) => {
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: 1,
+    slidesToScroll: slidesToShow,
     initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 5000,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     beforeChange: (current, next) => setCurrentSlide(next),
@@ -69,7 +71,7 @@ const BannerDataSlider = ({ bannerData = [] }) => {
         breakpoint: 1024,
         settings: {
           slidesToShow: Math.min(slidesToShow, 2),
-          slidesToScroll: 1,
+          slidesToScroll: 2,
         },
       },
       {

@@ -46,8 +46,8 @@ export default function AddtoCart() {
     selectedCoupon,
     setSelectedCoupon,
     getAddresses,
-    getCoupons,
-    coupons,
+    // getCoupons,
+    // coupons,
     paymentType,
     setPaymentType,
     paymentList,
@@ -74,8 +74,9 @@ export default function AddtoCart() {
   useEffect(() => {
     window.scrollTo(0, 0);
     getCart();
-    // getAddresses();
+    getAddresses();
     // getCoupons();
+    getPaymentList();
 
     getProductDetails();
   }, [cartLength]);

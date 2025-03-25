@@ -30,7 +30,7 @@ exports.registerOrLogin = async (req, res) => {
       url: "https://control.msg91.com/api/v5/otp",
       params: {
         otp_expiry: "3",
-        template_id: "67d0065ad6fc055648017574",
+        template_id: "67dbc6c5d6fc054cf76c19f3",
         mobile: mobile,
         authkey: "403754ASWGpJz366b09ec2P1",
         realTimeResponse: "1",
@@ -146,14 +146,12 @@ exports.verifyOtp = async (req, res) => {
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "30d" }
           );
-          return res
-            .status(200)
-            .json({
-              status: 1,
-              message: response.data.message,
-              token,
-              user_id: user.id,
-            });
+          return res.status(200).json({
+            status: 1,
+            message: response.data.message,
+            token,
+            user_id: user.id,
+          });
         } else {
           return res
             .status(200)
