@@ -233,12 +233,12 @@ exports.order = async (req, res) => {
             phoneNumber: userData.mobile,
             userName: userData.name,
             templateParams: [
-              userData.name,
-              order_number,
+              userData.name?.toString(),
+              order_number?.toString(),
               currentDate.toLocaleDateString(),
-              currentTime,
+              currentTime?.toString(),
               product_name,
-              order.price,
+              order.price?.toString(),
             ],
           });
         }
@@ -286,12 +286,12 @@ exports.order = async (req, res) => {
           phoneNumber: userData.mobile,
           userName: userData.name,
           templateParams: [
-            userData.name,
-            order_number,
+            userData.name?.toString(),
+            order_number?.toString(),
             currentDate.toLocaleDateString(),
-            currentTime,
+            currentTime?.toString(),
             product_name,
-            order.price,
+            order.price?.toString(),
           ],
         });
       }
