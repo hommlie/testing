@@ -508,7 +508,7 @@ exports.orderdetails = async (req, res) => {
         "tax",
         "shipping_cost",
         "discount_amount",
-        "status",
+        "order_status",
         "attribute",
         "variation",
         [
