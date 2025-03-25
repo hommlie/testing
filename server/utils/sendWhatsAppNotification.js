@@ -7,8 +7,6 @@ const sendWhatsAppNotification = async ({
   templateParams,
 }) => {
   try {
-    console.log(campaignName, phoneNumber, userName, templateParams);
-
     const options = {
       method: "POST",
       url: "https://backend.aisensy.com/campaign/t1/api/v2",
