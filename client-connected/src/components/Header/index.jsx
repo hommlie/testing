@@ -270,9 +270,10 @@ const Header = ({
             {user?.length !== 0 ? (
               <div className="relative">
                 <button
-                  onClick={() =>
-                    navigate(`${config.VITE_BASE_URL}/add-to-cart`)
-                  }
+                  onClick={() => {
+                    navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+                    setIsLoginOpen(false);
+                  }}
                   className="flex items-center space-x-2 "
                 >
                   <span className="absolute -top-2 -right-1 bg-hommlie text-white rounded-full w-4 h-4 flex items-center justify-center text-gray-700 hover:text-green-700 text-xs">

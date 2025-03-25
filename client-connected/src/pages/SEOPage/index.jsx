@@ -158,27 +158,6 @@ const SEOPage = () => {
         </div>
       </motion.section>
 
-      {/* Call to Action */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-16"
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Get Started?
-          </h2>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who have already taken the
-            first step towards their goals.
-          </p>
-          <button className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors">
-            Contact Us Now
-          </button>
-        </div>
-      </motion.section>
-
       <InspectionModal
         isOpen={isInspectionModalOpen}
         onClose={() => setIsInspectionModalOpen(false)}

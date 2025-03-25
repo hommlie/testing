@@ -556,11 +556,11 @@ export default function AddtoCart() {
               <div className="space-y-4">
                 <div className="flex justify-between text-gray-600">
                   <span>Items ({itemCount})</span>
-                  <span>₹{totalItemPrice}</span>
+                  <span>₹{totalItemPrice?.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Tax & Fees</span>
-                  <span>₹{tax}</span>
+                  <span>₹{tax?.toFixed(2)}</span>
                 </div>
                 {couponDiscount > 0 && (
                   <div className="flex justify-between text-green-600">

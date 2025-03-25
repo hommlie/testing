@@ -132,8 +132,6 @@ exports.verifyOtp = async (req, res) => {
             campaignName: "Welcome Login Message",
             phoneNumber: user.mobile,
             userName: name,
-            // mediaUrl,
-            // mediaName,
             templateParams: [name],
           });
           const token = jwt.sign(
