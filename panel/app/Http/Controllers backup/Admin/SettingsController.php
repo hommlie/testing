@@ -18,8 +18,8 @@ class SettingsController extends Controller
     {
         abort_unless(\Gate::allows('settings_access'), 403);
 
-        $data=Settings::first();
-        return view('admin.settings.index',compact('data'));
+        $data           = Settings::first();
+        return view('admin.settings.index', compact('data')); 
     }
 
     /**
@@ -31,6 +31,7 @@ class SettingsController extends Controller
      */
     public function update(Request $request)
     {
+        // dd($request->all());
         $this->validate($request,[
             'firebase_key' => 'required',
             'currency' => 'required',
@@ -59,7 +60,7 @@ class SettingsController extends Controller
                 $logo = 'logo-' . uniqid() . '.' . $request->logo->getClientOriginalExtension();
                 $request->logo->move('storage/app/public/images/settings', $logo);
                 $data->logo=$logo;
-            }            
+            }
         }
 
         if(isset($request->favicon)){
@@ -70,7 +71,7 @@ class SettingsController extends Controller
                 $favicon = 'favicon-' . uniqid() . '.' . $request->favicon->getClientOriginalExtension();
                 $request->favicon->move('storage/app/public/images/settings', $favicon);
                 $data->favicon=$favicon;
-            }            
+            }
         }
 
         if(isset($request->og_image)){
@@ -81,8 +82,11 @@ class SettingsController extends Controller
                 $og_image = 'og_image-' . uniqid() . '.' . @$request->og_image->getClientOriginalExtension();
                 $request->og_image->move('storage/app/public/images/settings', $og_image);
                 $data->og_image=$og_image;
-            }            
+            }
         }
+
+        $faqsContent = array_values($request->faqs ?? []);
+        $formattedFaqsContent = json_encode($faqsContent, JSON_UNESCAPED_UNICODE);
 
         $data->firebase_key =$request->firebase_key;
         $data->currency =$request->currency;
@@ -101,6 +105,7 @@ class SettingsController extends Controller
         $data->twitter =$request->twitter;
         $data->instagram =$request->instagram;
         $data->linkedin =$request->linkedin;
+        $data->faqs = $formattedFaqsContent;
         $data->save();
 
         if ($data) {
