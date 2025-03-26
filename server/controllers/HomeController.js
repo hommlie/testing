@@ -916,7 +916,7 @@ exports.getHomePageData = async (req, res) => {
           slug: subcategory.getDataValue("slug"),
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })).sort((a, b) =>
-          b.subcategory_name.localeCompare(a.subcategory_name)
+          a.subcategory_name.localeCompare(b.subcategory_name)
         ) ?? [],
     }));
 
