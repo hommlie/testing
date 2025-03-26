@@ -791,6 +791,7 @@ exports.getHomePageData = async (req, res) => {
           attributes: ["id", "subcategory_name", "slug"],
           where: { status: 1 },
           required: false,
+          order: [["subcategory_name", "DESC"]],
           include: [
             {
               model: Product,
@@ -862,7 +863,6 @@ exports.getHomePageData = async (req, res) => {
               ],
             },
           ],
-          order: [["id", "ASC"]],
         },
       ],
       order: [["id", "ASC"]],
