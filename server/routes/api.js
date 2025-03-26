@@ -148,6 +148,7 @@ app.post("/help", UserController.help);
 
 //Settings
 app.get("/settings", SettingsController.settings);
+app.get("/settings/appversions", SettingsController.getAppVersions);
 
 //Message
 app.post("/message", MessageController.Message);
@@ -187,5 +188,9 @@ app.delete("/comments/delete/:id/:authorId", commentController.delete);
 
 //Landing page
 app.get("/landing/getall", LandingPageController.getAllLandingPages);
+app.get(
+  "/landing/getPageBySlug/:slug",
+  LandingPageController.getLandingPageBySlug
+);
 
 module.exports = app;

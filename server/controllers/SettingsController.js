@@ -54,3 +54,24 @@ exports.settings = async (req, res) => {
       .json({ status: 0, message: "Failed to fetch settings", error });
   }
 };
+
+exports.getAppVersions = async (req, res) => {
+  try {
+    const appVersions = await Settings.findOne({
+      attributes: ["version_code_user", "version_code_partner"],
+    });
+
+    if (appVersions.length > 0) {
+      return res
+        .status(200)
+        .json({ status: 1, message: "Success", appVersions });
+    } else {
+      return res.status(200).json({ status: 0, message: "No data found" });
+    }
+  } catch (error) {
+    console.error("Error fetching app versions:", error);
+    return res
+      .status(500)
+      .json({ status: 0, message: "Failed to fetch app versions", error });
+  }
+};
