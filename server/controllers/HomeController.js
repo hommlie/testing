@@ -915,7 +915,9 @@ exports.getHomePageData = async (req, res) => {
           subcategory_name: subcategory.subcategory_name,
           slug: subcategory.getDataValue("slug"),
           products: groupVariationsByAttribute(subcategory.Products ?? []),
-        })) ?? [],
+        })).sort((a, b) =>
+          b.subcategory_name.localeCompare(a.subcategory_name)
+        ) ?? [],
     }));
 
     if (most_booked_services.length > 0) {
