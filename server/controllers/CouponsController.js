@@ -61,13 +61,11 @@ exports.coupons = async (req, res) => {
     }
   } catch (error) {
     console.error("Error fetching coupons:", error);
-    return res
-      .status(500)
-      .json({
-        status: 0,
-        message: "Failed to fetch coupons",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: 0,
+      message: "Failed to fetch coupons",
+      error: error.message,
+    });
   }
 };
 
