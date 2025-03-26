@@ -1,9 +1,7 @@
 @extends('layouts.admin')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
 
 @section('content')
+
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -22,26 +20,25 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Add SEO </h4>
+        <h4 class="card-title">Add SEO</h4>
     </div>
 
-    <div class="card-body collapse show"
-        style=" overflow-y: scroll; scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
-        <div class="card-block card-dashboard" id="table-display">
-            <table id="data_table_bootstrap" class="table table-striped table-responsive-sm datatable">
+    <div class="card-body" style="overflow-y: auto;">
+        <div class="table-responsive">
+            <table id="data_table_bootstrap" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>title</th>
-                        <th>subcat_id</th>
-                        <th>sub_title</th>
-                        <th>banner</th>
-                        <th>description</th>
-                        <th>slug</th>
-                        <th>alt_tag</th>
-                        <th>image_title</th>
-                        <th>meta_title</th>
-                        <th>meta_description</th>
+                        <th>Title</th>
+                        <th>Subcategory</th>
+                        <th>Subtitle</th>
+                        <th>Banner</th>
+                        <th>Description</th>
+                        <th>Slug</th>
+                        <th>Alt Tag</th>
+                        <th>Image Title</th>
+                        <th>Meta Title</th>
+                        <th>Meta Description</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -54,14 +51,16 @@
                             <td>{{ Str::limit($seo->title, 20, '...') }}</td>
                             <td>
                                 @foreach ($subCategory as $subCat)
-                                        @if ($subCat->id == $seo->subcat_id)
-                                                {{ Str::limit($subCat->subcategory_name, 20, '...') }}
-                                            </td>
-                                        @endif
+                                    @if ($subCat->id == $seo->subcat_id)
+                                        {{ Str::limit($subCat->subcategory_name, 20, '...') }}
+                                    @endif
                                 @endforeach
                             </td>
                             <td>{{ Str::limit($seo->sub_title, 20, '...') }}</td>
-                            <td> <img  src="{{ asset('/storage/app/public/images/seo/' . $seo->banner) }}" alt="seo banner" height="50" width="200" ></td>
+                            <td>
+                                <img src="{{ asset('/storage/app/public/images/seo/' . $seo->banner) }}" 
+                                     alt="seo banner" height="50" width="200">
+                            </td>
                             <td>{{ Str::limit($seo->description, 20, '...') }}</td>
                             <td>{{ Str::limit($seo->slug, 20, '...') }}</td>
                             <td>{{ Str::limit($seo->alt_tag, 20, '...') }}</td>
@@ -71,26 +70,23 @@
 
                             <td>
                                 @if($seo->status == 1)
-                                    <span class="btn btn-raised btn-outline-success round btn-min-width mr-1 mb-1 changeStatus"
-                                        data-status="2" data-id="{{ $seo->id }}">Active</span>
+                                    <span class="btn btn-outline-success changeStatus" data-status="2" data-id="{{ $seo->id }}">
+                                        Active
+                                    </span>
                                 @else
-                                    <span class="btn btn-raised btn-outline-danger round btn-min-width mr-1 mb-1 changeStatus"
-                                        data-status="1" data-id="{{ $seo->id }}">Deactive</span>
+                                    <span class="btn btn-outline-danger changeStatus" data-status="1" data-id="{{ $seo->id }}">
+                                        Deactive
+                                    </span>
                                 @endif
-
                             </td>
                             <td>
                                 <a href="{{ route('admin.seopages.edit', $seo->id) }}" class="text-primary">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a href="javascript:void(0);" class="danger p-0 text-danger ml-2" 
-                                    data-original-title="{{ trans('labels.delete') }}" title="{{ trans('labels.delete') }}"
-                                    onclick="do_delete('{{$seo->id}}','{{route('admin.seopages.delete')}}','{{ trans('labels.delete_slider') }}','{{ trans('labels.delete') }}')">
-                                    <i class="ft-trash font-medium-3"></i>
+                                <a href="javascript:void(0);" class="text-danger ml-2" 
+                                   onclick="do_delete('{{ $seo->id }}', '{{ route('admin.seopages.delete') }}')">
+                                    <i class="fa fa-trash"></i>
                                 </a>
-                            </td>
-                            <td>
-
                             </td>
                         </tr>
                     @endforeach
@@ -98,131 +94,91 @@
             </table>
         </div>
     </div>
-
 </div>
 
+<!-- Include Required Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap4.min.css">
+
 <script>
-    //Change Status
-    $('body').on('click', '.changeStatus', function () {
-        let status = $(this).attr('data-status');
-        let id = $(this).attr('data-id');
-        Swal.fire({
-            title: '{{ trans('labels.are_you_sure') }}',
-            text: "{{ trans('labels.change_status') }}",
-            type: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '{{ trans('labels.yes') }}',
-            cancelButtonText: '{{ trans('labels.no') }}'
-        }).then((t) => {
-            if (t.value == true) {
-                $('#preloader').show();
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '{{route("admin.seopages.changeStatus")}}',
-                    type: "POST",
-                    data: { 'id': id, 'status': status },
-                    success: function (data) {
-                        $('#preloader').hide();
-                        if (data == 1000) {
-                            Swal.fire({ type: 'success', title: "{{ trans('labels.success') }}", showConfirmButton: false, timer: 1500 });
-                            location.reload();
-                        }
-                        else {
-                            Swal.fire({ type: 'error', title: '{{ trans('labels.cancelled') }}', showConfirmButton: false, timer: 1500 });
-                        }
-
-                    }, error: function (data) {
-                        $('#preloader').hide();
-                        console.log("AJAX error in request: " + JSON.stringify(data, null, 2));
-                    }
-                });
-            }
-            else {
-                Swal.fire({ type: 'error', title: '{{ trans('labels.cancelled') }}', showConfirmButton: false, timer: 1500 });
-
-            }
-        });
-    });
-
-    function do_delete(id, page_name, name, titles) {
-        Swal.fire({
-            title: '{{ trans('labels.are_you_sure') }}',
-            text: "{{ trans('labels.delete_text') }} " + name + "!",
-            type: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '{{ trans('labels.yes') }}',
-            cancelButtonText: '{{ trans('labels.no') }}'
-        }).then((t) => {
-            if (t.value == true) {
-                $('#preloader').show();
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: page_name,
-                    type: "POST",
-                    data: { 'id': id },
-
-                    success: function (data) {
-                        $('#preloader').hide();
-                        if (data == 1000) {
-                            $('#del-' + id).remove();
-                            Swal.fire({ type: 'success', title: '{{ trans('labels.success') }}', showConfirmButton: false, timer: 1500 });
-                            location.reload();
-                        }
-                        else {
-                            Swal.fire({ type: 'error', title: '{{ trans('labels.cancelled') }}', showConfirmButton: false, timer: 1500 });
-                        }
-                    }, error: function (data) {
-                        $('#preloader').hide();
-                        console.log("AJAX error in request: " + JSON.stringify(data, null, 2));
-                    }
-                });
-            }
-            else {
-                Swal.fire({ type: 'error', title: '{{ trans('labels.cancelled') }}', showConfirmButton: false, timer: 1500 });
-
-            }
-        });
-
-    }
-
-
-
     $(document).ready(function () {
-
-        var table = $('#data_table_bootstrap').DataTable({
-            "columnDefs": [
-
-                {
-                    "targets": 0,
-                    "orderable": false,
-                    "searchable": false
-                }
-            ]
-        });
-
-        var dateColumnIndex = table.column(':contains(Date)').index();
-        console.log("Date column index: " + dateColumnIndex);
-
-        table.rows().every(function (rowIdx, tableLoop, rowLoop) {
-            var data = this.data();
-            var date = data[dateColumnIndex];
-            console.log("Date in Row " + rowIdx + ": " + date);
-        });
-        $('#viewMessageModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var message = button.data('message');
-            var modal = $(this);
-            modal.find('#complaintMessage').text(message);
+        $('#data_table_bootstrap').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "pageLength": 10,
         });
     });
+
+    // Change Status Function
+    $('body').on('click', '.changeStatus', function () {
+        let status = $(this).data('status');
+        let id = $(this).data('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You are about to change the status.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{ route("admin.seopages.changeStatus") }}',
+                    type: "POST",
+                    data: { id: id, status: status },
+                    success: function (response) {
+                        Swal.fire("Success!", "Status changed successfully.", "success");
+                        location.reload();
+                    },
+                    error: function (error) {
+                        Swal.fire("Error!", "Something went wrong.", "error");
+                    }
+                });
+            }
+        });
+    });
+
+    // Delete Function
+    function do_delete(id, url) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "This action cannot be undone!",
+            icon: "error",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: url,
+                    type: "POST",
+                    data: { id: id },
+                    success: function (response) {
+                        Swal.fire("Deleted!", "The record has been deleted.", "success");
+                        location.reload();
+                    },
+                    error: function (error) {
+                        Swal.fire("Error!", "Something went wrong.", "error");
+                    }
+                });
+            }
+        });
+    }
 </script>
+
 @endsection

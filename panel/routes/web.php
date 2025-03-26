@@ -180,25 +180,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'OrderController@index')->name('orders');
         Route::get('addorder', 'OrderController@addorder')->name('orders.add');
+        // Route::get('importOrderData', 'OrderController@importOrderData')->name('orders.importOrderData');
        
-
-        
-
-
         // SERVICES CENTER/ BUSINESS STORE / GET BRANCH CODE / GET CERVICES CENTER BASED ON REGION ID / ADDRESS DETAILS 
         Route::post('serviceStore', 'OrderController@serviceStore')->name('orders.serviceStore');
         Route::post('businessStore', 'OrderController@businessStore')->name('orders.businessStore');
         // Route::put('businessUpdate', 'OrderController@UpdateBusinessRegion')->name('orders.businessUpdate');
         Route::get('region', 'OrderController@viewBusinessRegion')->name('orders.region');
         Route::get('services-center', 'OrderController@viewServicesCenter')->name('orders.services-center');
-      
         Route::get('get-branch-code', 'OrderController@getbranchcode')->name('orders.getbranchcode');
         Route::get('get_services_center/{regionId}', 'OrderController@getServiceCenter')->name('orders.getServiceCenter');
         Route::get('get-customer-data/{cusID}', 'OrderController@getCustomerData')->name('orders.getCustomerData');
         // GET ORDER DATA USING ORDER ID 
         Route::get('get-Order-data/{orderID}', 'OrderController@getOrderData')->name('orders.getOrderData');
-
-
         // ADD RESIDENTIAL ORDERS
         Route::get('/get-subcategories/{categoryId}', 'OrderController@getSubcategories')->name('orders.getSubcategories');
         Route::get('/get-services/{subcategoryId}', 'OrderController@getServices')->name('orders.getServices');
@@ -535,6 +529,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/change/status', 'AddPincodeController@changeStatus')->name('addpincode.changeStatus');
         Route::post('/delete{id}', 'AddPincodeController@destroy')->name('addpincode.delete');
     });
+
+    // MANAGE LANDING PAGE TEMPLATE
+    Route::group(['prefix'=> 'landingpage'], function () {
+        Route::get('/', 'LandingPageController@index')->name('landingpage');
+        Route::get('/add', 'LandingPageController@create')->name('landingpage.add');
+        Route::post('/store', 'LandingPageController@store')->name('landingpage.store');
+        Route::get('/edit/{id}', 'LandingPageController@edit')->name('landingpage.edit');
+        Route::post('/update/{id}', 'LandingPageController@update')->name('landingpage.update');
+        Route::post('/change/status', 'LandingPageController@changeStatus')->name('landingpage.changeStatus');
+        Route::post('/delete', 'LandingPageController@destroy')->name('landingpage.delete');
+    });
+
 
     // SEO PAGE
     Route::group(['prefix'=> 'seopages'], function () {

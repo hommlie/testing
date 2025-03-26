@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
     protected $fillable = [
-        'vendor_id','cat_id','subcat_id','innersubcat_id','product_name','brand','description','tags','old_price','product_price','discounted_price','slug','is_variation','attribute','status','is_hot','free_shipping','flat_rate','shipping_cost','is_return','return_days','is_featured','available_stock','est_shipping_days','tax','tax_type','sku','product_qty','video','video_thumbnail','rating','faqs','meta_title','meta_description','location','total_reviews'
+        'vendor_id','cat_id','subcat_id','innersubcat_id','product_name','brand','description','tags','old_price','product_price','discounted_price','slug','is_variation','attribute','status','is_hot','free_shipping','flat_rate','shipping_cost','is_return','return_days','is_featured','available_stock','est_shipping_days','tax','tax_type','sku','product_qty','video','video_thumbnail','rating','faqs','meta_title','meta_description','location','total_reviews','is_recommended','description_for_mobile','faqs_for_mobile','pro_specifications'
     ];
 
     public function category(){

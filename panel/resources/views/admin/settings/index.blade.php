@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title')
-    
+
 @endsection
 @section('css')
 
@@ -334,8 +334,40 @@
                                         </div>
 
                                     </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12 mt-3">
+                                            <label class="form-label">Faqs</label>
+                                            <div id="faqs">
+                                                @php
+                                                    $faqsData = json_decode($data->faqs, true);
+                                                @endphp
 
-                                    <div class="form-actions text-right">
+                                                @if(!empty($faqsData))
+                                                    @foreach($faqsData as $key => $item)
+                                                        <div class="card mt-2 faq-card p-3" style="border: solid 1px white; box-shadow: 0 4px 8px rgba(178, 236, 178, 0.5); border-radius: 5px;">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <label class="form-label">Question</label>
+                                                                    <input type="text" name="faqs[{{ $key }}][question]" value="{{ $item['question'] }}" class="form-control" required>
+                                                                </div>
+                                                                <div class="col-md-12 mt-2">
+                                                                    <label class="form-label">Answer</label>
+                                                                    <textarea name="faqs[{{ $key }}][answer]" class="form-control" rows="1" required>{{ $item['answer'] }}</textarea>
+                                                                </div>
+                                                                <div class="col-md-12 text-end mt-2">
+                                                                    <button type="button" class="btn btn-danger remove-faq float-right">-</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                                <span id="faqsError" class="text-danger"></span>
+                                            </div>
+                                            <button type="button" class="btn btn-success mt-2 float-right" id="addFaq">+</button>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-actions text-right mt-5">
                                         <button type="submit" class="btn btn-raised btn-primary">
                                             <i class="fa fa-check-square-o"></i> Update
                                         </button>
@@ -351,5 +383,61 @@
 
 
 @endsection
-@section('scripttop')
+@section('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let faqsContainer = document.getElementById("faqs");
+    let addFaqButton = document.getElementById("addFaq");
+    let errorMessage = document.getElementById("faqsError");
+    let form = document.querySelector("form");
+
+    addFaqButton.addEventListener("click", function () {
+        let index = document.querySelectorAll(".faq-card").length;
+
+        let newCard = document.createElement("div");
+        newCard.classList.add("card", "mt-2", "p-3", "faq-card");
+        newCard.style.border = "solid 1px white";
+        newCard.style.boxShadow = "0 4px 8px rgba(178, 236, 178, 0.5)";
+        newCard.style.borderRadius = "5px";
+
+        newCard.innerHTML = `
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="form-label">Question</label>
+                    <input type="text" name="faqs[${index}][question]" class="form-control" required>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="form-label">Answer</label>
+                    <textarea name="faqs[${index}][answer]" class="form-control" rows="1" required></textarea>
+                </div>
+                <div class="col-md-12 text-end mt-2">
+                    <button type="button" class="btn btn-danger remove-faq float-right">-</button>
+                </div>
+            </div>
+        `;
+
+        faqsContainer.appendChild(newCard);
+    });
+
+    faqsContainer.addEventListener("click", function (event) {
+        if (event.target.classList.contains("remove-faq")) {
+            let cards = document.querySelectorAll(".faq-card");
+            if (cards.length > 1) {
+                event.target.closest(".faq-card").remove();
+            } else {
+                errorMessage.innerText = "At least one FAQ field is required.";
+            }
+        }
+    });
+
+    form.addEventListener("submit", function (event) {
+        let faqCards = document.querySelectorAll(".faq-card");
+        if (faqCards.length === 0) {
+            event.preventDefault(); // Prevent form submission
+            errorMessage.innerText = "At least one FAQ field is required.";
+        }
+    });
+});
+</script>
+
 @endsection

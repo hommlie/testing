@@ -131,6 +131,20 @@
                       placeholder="Enter Meta Description"></textarea>
                   </div>
                 </div>
+                {{-- PRODUCT SPECIFICATIONS --}}
+                <div class="form-group">
+                  <label for="product-specifications">Product Specifications</label>
+                  <div id="product-specifications-container">
+                      <div class="d-flex mb-2">
+                          <input type="text" class="form-control" name="pro_specifications[]" id="product-specifications" placeholder="Enter Product Specification" required>
+                          <span class="btn btn-outline-success ml-3" id="add-product-specification-btn"><i class="fa fa-plus"></i></span>
+                      </div>
+                  </div>
+                  <small id="product-specifications-error" class="text-danger"></small>
+                  @if ($errors->has('pro_specifications'))
+                      <span class="text-danger">{{ $errors->first('pro_specifications') }}</span>
+                  @endif
+              </div>
               </div>
             </div>
           </div>
@@ -206,20 +220,32 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header">
-              <h6 class="card-title mb-0">Featured</h6>
+              <h6 class="card-title mb-0">Features</h6>
             </div>
             <div class="card-body">
-              <div class="px-3">
-                <div class="form-group pb-1">
-                  <label for="is_featured" class="col-sm-4 col-form-label">Status</label>
-                  <div class="float-right">
-                    <label class="switch checkbox-wrapper-25">
-                      <input type="checkbox" name="is_featured" id="is_featured">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
+                <div class="px-3">
+                    <div class="form-group pb-1 d-flex justify-content-between align-items-center">
+                        <label for="is_featured" class="col-form-label">Quick Book Service</label>
+                        <label class="switch checkbox-wrapper-25">
+                            <input type="checkbox" name="is_featured" id="is_featured">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                                    
+                    <div class="product gravity">
+                        <div class="form-group pb-1 d-flex justify-content-between align-items-center">
+                            <label for="is_recommended" class="col-form-label">Enable Is Recommended</label>
+                            <label class="switch checkbox-wrapper-25">
+                                <input type="checkbox" name="is_recommended" value="1" @if(old('is_form')) checked @endif>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                                    
+                        @if ($errors->has('is_form'))
+                            <span class="text-danger">{{ $errors->first('is_form') }}</span>
+                        @endif
+                    </div>
                 </div>
-              </div>
             </div>
           </div>
           <div class="card d-none">
@@ -643,6 +669,50 @@
               </div>
             </div>
           </div>
+          <!-- PRODUCT FAQs FOR MOBILE -->
+<div class="card">
+    <div class="card-header">
+        <h6 class="card-title mb-0">Product FAQS (Mobile)</h6>
+    </div>
+    <div class="card-body">
+        <div class="px-3">
+            <div class="form-group row">
+                <label for="faqs_for_mobile" class="col-sm-2 col-form-label">FAQs</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control d-none" id="faqs_for_mobile" name="faqs_for_mobile" rows="8"
+                        placeholder=""></textarea>
+                    <div id="faqsForMobile"></div>
+                    @if ($errors->has('faqs_for_mobile'))
+                        <span class="text-danger">{{ $errors->first('faqs_for_mobile') }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PRODUCT DESCRIPTION FOR MOBILE -->
+<div class="card">
+    <div class="card-header">
+        <h6 class="card-title mb-0">Product Description (Mobile)</h6>
+    </div>
+    <div class="card-body">
+        <div class="px-3">
+            <div class="form-group row">
+                <label for="description_for_mobile" class="col-sm-2 col-form-label">Description For Mobile</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control d-none" id="description_for_mobile" name="description_for_mobile"
+                        rows="8" placeholder="{{ trans('placeholder.description') }}"></textarea>
+                    <div id="descriptionForMobile"></div>
+                    @if ($errors->has('description_for_mobile'))
+                        <span class="text-danger">{{ $errors->first('description_for_mobile') }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
           <!-- SUBMIT BUTTON -->
           <div class="mx-auto">
             <a href="{{ route('admin.product') }}" class="btn btn-raised btn-warning mr-1">
@@ -1011,28 +1081,7 @@
       imagesPreview(this, 'div.gallery');
     });
   });
-  const productRatingInput = document.getElementById('productRating');
-  const ratingError = document.getElementById('ratingError');
-
-  productRatingInput.addEventListener('input', function () {
-    let value = parseInt(this.value);
-    if (value > 5) {
-      this.value = 5;
-      ratingError.textContent = 'Rating cannot be greater than 5.';
-      ratingError.classList.remove('d-none');
-    }
-    else if (value < 0) {
-      this.value = 0;
-      ratingError.textContent = 'Rating cannot be less than 0.';
-      ratingError.classList.remove('d-none');
-    }
-    else {
-      this.value = value;
-      ratingError.classList.add('d-none');
-    }
-  });
-
-
+  
 
   var images = [];
   function removeimg(id) {
@@ -1147,7 +1196,43 @@
       .catch(error => {
         console.error(error);
       });
-  });
+  });    
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize ClassicEditor for FAQs
+    ClassicEditor
+        .create(document.querySelector('#faqs_for_mobile'))
+        .then(editor => {
+            editor.model.document.on('change:data', () => {
+                document.querySelector('#faqs_for_mobile').value = editor.getData();
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    // Initialize ClassicEditor for Description
+    ClassicEditor
+        .create(document.querySelector('#description_for_mobile'))
+        .then(editor => {
+            editor.model.document.on('change:data', () => {
+                document.querySelector('#description_for_mobile').value = editor.getData();
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    // Remove 'required' from hidden fields before form submission
+    document.querySelector('form').addEventListener('submit', function () {
+        document.querySelector('#faqs_for_mobile').removeAttribute('required');
+        document.querySelector('#description_for_mobile').removeAttribute('required');
+    });
+});
+
+
+
+
   //SPECIFICATION CONTAINER
   document.getElementById('add-button').addEventListener('click', function () {
     const container = document.getElementById('input-container');
@@ -1191,6 +1276,10 @@
   });
 
 
+
+  
+
+
   // LOCATION
 document.getElementById('addLocation').addEventListener('click', () => {
   const container = document.getElementById('locationContainer');
@@ -1208,6 +1297,37 @@ document.getElementById('addLocation').addEventListener('click', () => {
 
   container.appendChild(newInputGroup);
 });
+
+
+document.getElementById('add-product-specification-btn').addEventListener('click', function () {
+    const container = document.getElementById('product-specifications-container');
+    const errorMessage = document.getElementById('product-specifications-error');
+    const addButton = this;
+    
+    if (container.querySelectorAll('input[name="pro_specifications[]"]').length >= 5) {
+        errorMessage.textContent = 'Maximum 5 specifications allowed.';
+        addButton.disabled = true;
+        return;
+    }
+
+    const newInput = document.createElement('div');
+    newInput.classList.add('d-flex', 'mb-2');
+    newInput.innerHTML = `
+        <input type="text" class="form-control" name="pro_specifications[]" id="product-specifications" placeholder="Enter Product Specification" required>
+        <span class="btn btn-outline-danger ml-3 remove-product-specification-btn"><i class="fa fa-minus"></i></span>
+    `;
+
+    container.appendChild(newInput);
+
+    newInput.querySelector('.remove-product-specification-btn').addEventListener('click', function () {
+        newInput.remove();
+        if (container.querySelectorAll('input[name="pro_specifications[]"]').length < 5) {
+            errorMessage.textContent = '';
+            addButton.disabled = false;
+        }
+    });
+});
+
 
 </script>
 

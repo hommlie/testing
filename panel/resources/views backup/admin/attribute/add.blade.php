@@ -84,6 +84,19 @@
                                         @endif
                                     </div>
 
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="Image title" class="col-form-label">Enable Is Recommended
+                                                </label><br>
+                                            <input type="checkbox" name="is_recommended" value="1" @if(old('is_form')) checked
+                                            @endif>
+
+                                            @if ($errors->has('is_form'))
+                                                <span class="text-danger">{{ $errors->first('is_form') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="form-actions center">

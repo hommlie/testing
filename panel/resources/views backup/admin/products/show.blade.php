@@ -120,6 +120,28 @@
                       placeholder="Enter Meta Description">{{ $data->meta_description }}</textarea>
                   </div>
                 </div>
+
+               {{-- PRODUCT SPECIFICATION --}}
+                <div class="form-group row">
+                    <label for="Specifications" class="col-sm-2 col-form-label">Specifications:</label>
+                    <div class="col-sm-10">
+                        <div id="input-container">
+                            <div class="d-flex mb-2">
+                                <input type="text" class="form-control" name="pro_specifications[]" 
+                                    id="pro_specifications" placeholder="Enter Specifications"
+                                    value="{{$data->pro_specifications}}">
+                                <span class="btn btn-outline-success ml-2" id="add-button">
+                                    <i class="fa fa-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <small id="error-message" class="text-danger"></small>
+                        @if ($errors->has('pro_specifications'))
+                            <span class="text-danger">{{ $errors->first('pro_specifications') }}</span>
+                        @endif
+                    </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -197,21 +219,33 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header">
-              <h6 class="card-title mb-0">Featured</h6>
+              <h6 class="card-title mb-0">Features</h6>
             </div>
             <div class="card-body">
-              <div class="px-3">
+            <div class="px-3">
                 <div class="form-group pb-1">
-                  <label for="is_featured" class="col-sm-4 col-form-label">Status</label>
-                  <div class="float-right">
-                    <label class="switch checkbox-wrapper-25">
-                      <input type="checkbox" name="is_featured" id="is_featured" @if ($data->is_featured == '1')
-                      checked="" @endif>
-                      <span class="slider"></span>
-                    </label>
-                  </div>
+                    <label for="is_featured" class="col-sm-6 col-form-label">Quick Book Service</label>
+                    <div class="float-right">
+                        <label class="switch checkbox-wrapper-25">
+                            <input type="checkbox" name="is_featured" id="is_featured" @if ($data->is_featured == '1') checked @endif>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-              </div>
+
+                <div class="product gravity">
+                    <div class="form-group pb-1">
+                        <label for="is_recommended" class="col-sm-7 col-form-label">Enable Is Recommended</label>
+                        <div class="float-right">
+                            <label class="switch checkbox-wrapper-25">
+                                <input type="checkbox" name="is_recommended" value="1" @if($data->is_recommended == 1) checked @endif>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             </div>
           </div>
           <div class="card d-none">
@@ -642,6 +676,49 @@
                     <div id="faqeditor"></div>
                     @if ($errors->has('faqs'))
                   <span class="text-danger">{{ $errors->first('faqs') }}</span>
+                  @endif
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{--PRODUCT DESCRIPTION FOR MOBILE--}}
+          <div class="card">
+            <div class="card-header">
+              <h6 class="card-title mb-0">Product Description (Mobile)</h6>
+            </div>
+            <div class="card-body">
+              <div class="px-3">
+                <div class="form-group row">
+                  <label for="description" class="col-sm-2 col-form-label">Description For Mobile</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control d-none" id="description_for_mobile" name="description_for_mobile" rows="8"
+                      placeholder="{{ trans('placeholder.description') }}">{!! $data->description_for_mobile !!}</textarea>
+                    <div id="descriptionForMobile">{!! $data->description_for_mobile !!}</div>
+                    @if ($errors->has('description_for_mobile'))
+                    <span class="text-danger">{{ $errors->first('description_for_mobile') }}</span>
+                   @endif
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+           <!-- PRODUCT FAQs FOR MOBILE  -->
+          <div class="card">
+            <div class="card-header">
+              <h6 class="card-title mb-0">Product FAQS (Mobile)</h6>
+            </div>
+            <div class="card-body">
+              <div class="px-3">
+                <div class="form-group row">
+                  <label for="description" class="col-sm-2 col-form-label">FAQs</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control d-none" required id="faqs_for_mobile" name="faqs_for_mobile" rows="8" placeholder=""
+                      required>{!! $data->faqs_for_mobile !!}</textarea>
+                    <div id="faqsformobile"></div>
+                    @if ($errors->has('faqs_for_mobile'))
+                  <span class="text-danger">{{ $errors->first('faqs_for_mobile') }}</span>
                   @endif
                   </div>
                 </div>
@@ -1269,9 +1346,72 @@ $('#prod_image').on('change', function () {
         });
       })
       .catch(error => {
-        console.error(error);
+        console.error(error);  
+      });
+  });  
+// PRODUCT DESCRIPTION EDITOR FOR MOBILE
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log('Document is ready.');
+    const editorElement = document.querySelector('#descriptionForMobile');
+    const textareaElement = document.querySelector('#description_for_mobile');
+
+    if (!editorElement || !textareaElement) {
+      console.error('Editor or textarea element is missing!');
+    } else {
+      console.log('Elements found.');
+    }
+
+    ClassicEditor
+      .create(editorElement)
+      .then(editor => {
+        console.log('Editor initialized successfully.');
+
+        // Load initial data into the editor
+        editor.setData(textareaElement.value);
+
+        // Sync editor content to the textarea
+        editor.model.document.on('change:data', () => {
+          textareaElement.value = editor.getData();
+        });
+      })
+      .catch(error => {
+        console.error('Error initializing editor:', error);
       });
   });
+// PRODUCT FAQS EDITOR FOR MOBILE 
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log('Document is ready.');
+    const editorElement = document.querySelector('#faqsformobile');
+    const textareaElement = document.querySelector('#faqs_for_mobile');
+
+    if (!editorElement || !textareaElement) {
+      console.error('Editor or textarea element is missing!');
+    } else {
+      console.log('Elements found.');
+    }
+
+    ClassicEditor
+      .create(editorElement)
+      .then(editor => {
+        console.log('Editor initialized successfully.');
+
+        // Load initial data into the editor
+        editor.setData(textareaElement.value);
+
+        // Sync editor content to the textarea
+        editor.model.document.on('change:data', () => {
+          textareaElement.value = editor.getData();
+        });
+      })
+      .catch(error => {
+        console.error('Error initializing editor:', error);
+      });
+  });
+  
+
+  
+
+
   document.addEventListener("DOMContentLoaded", function () {
     console.log('Document is ready.');
     const editorElement = document.querySelector('#faqeditor');
@@ -1389,47 +1529,127 @@ $('#prod_image').on('change', function () {
     });
   });
 });
-
 // LOCATION 
 const locations = `{{ $data->location }}`;
-  const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
+const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
 
-  const container = document.getElementById('locationContainer');
-  function addLocationField(value = '', isRequired = false) {
-    const inputGroup = document.createElement('div');
-    inputGroup.className = 'col-sm-12 d-flex mb-2';
+const container = document.getElementById('locationContainer');
+const viewAllButton = document.createElement('button');
+viewAllButton.textContent = 'View All';
+viewAllButton.className = 'btn btn-primary mt-2';
+viewAllButton.type = 'button'; // ✅ Prevents form submission
+viewAllButton.style.display = locationArray.length > 11 ? 'block' : 'none';
 
-    inputGroup.innerHTML = `
-      <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location" }>
-      <span class="btn btn-danger ml-3">-</span>
-    `;
-    inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
-      if (container.childElementCount > 1) {
-        container.removeChild(inputGroup);
-        document.getElementById('locationError').textContent = '';
-      } else {
-        document.getElementById('locationError').textContent = 'At least one location is required!';
-      }
-    });
+function addLocationField(value = '', isRequired = false) {
+  const inputGroup = document.createElement('div');
+  inputGroup.className = 'col-sm-12 d-flex mb-2 location-item';
 
-    container.appendChild(inputGroup);
-  }
-  if (locationArray.length > 0) {
-    locationArray.forEach((location, index) => addLocationField(location, index === 0)); 
-  } else {
-    addLocationField('', true);
-  }
-  document.getElementById('addLocation').addEventListener('click', function () {
-    addLocationField('', false);
-  });
-  document.querySelector('form').addEventListener('submit', function (e) {
-    const locationInputs = container.querySelectorAll('input[name="location[]"]');
-    const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
-    if (!hasValue) {
-      e.preventDefault();
+  inputGroup.innerHTML = `
+    <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location">
+    <span class="btn btn-danger ml-3">-</span>
+  `;
+
+  inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
+    if (container.childElementCount > 1) {
+      container.removeChild(inputGroup);
+      document.getElementById('locationError').textContent = '';
+    } else {
       document.getElementById('locationError').textContent = 'At least one location is required!';
     }
   });
+
+  container.appendChild(inputGroup);
+}
+
+// Show only the first 11 locations initially
+if (locationArray.length > 0) {
+  locationArray.slice(0, 8).forEach((location, index) => addLocationField(location, index === 0));
+} else {
+  addLocationField('', true);
+}
+
+// Append View All button after the container
+container.parentElement.appendChild(viewAllButton);
+
+viewAllButton.addEventListener('click', function (event) {
+  event.preventDefault(); // ✅ Prevents form submission
+  
+  if (viewAllButton.textContent === 'View All') {
+    locationArray.slice(11).forEach(location => addLocationField(location));
+    viewAllButton.textContent = 'Show Less';
+  } else {
+    document.querySelectorAll('.location-item').forEach((item, index) => {
+      if (index >= 11) item.remove();
+    });
+    viewAllButton.textContent = 'View All';
+  }
+});
+
+document.getElementById('addLocation').addEventListener('click', function () {
+  addLocationField('', false);
+});
+
+document.querySelector('form').addEventListener('submit', function (e) {
+  const locationInputs = container.querySelectorAll('input[name="location[]"]');
+  const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
+  if (!hasValue) {
+    e.preventDefault();
+    document.getElementById('locationError').textContent = 'At least one location is required!';
+  }
+});
+
+
+// PRODUCT SPECIFICATION
+
+function pro_specifications() {
+        let spec = document.getElementById('pro_specifications').value;
+        if (spec.includes("|")) {
+            let specArray = spec.split("|");
+            document.getElementById('input-container').innerHTML = '';
+            specArray.forEach(function (specValue) {
+                duplicateSpecField(specValue.trim());
+            });
+        }
+    }
+    pro_specifications();
+
+    document.getElementById('add-button').addEventListener('click', function () {
+        const container = document.getElementById('input-container');
+        const errorMessage = document.getElementById('error-message');
+        const addButton = this;
+        if (container.querySelectorAll('input[name="pro_specifications[]"]').length >= 5) {
+            errorMessage.textContent = 'Maximum 2 specifications allowed.';
+            addButton.disabled = true;
+            return;
+        }
+        duplicateSpecField();
+    });
+
+    function duplicateSpecField(specValue = '') {
+        const container = document.getElementById('input-container');
+        const errorMessage = document.getElementById('error-message');
+        const addButton = document.getElementById('add-button');
+
+        const newInput = document.createElement('div');
+        newInput.classList.add('d-flex', 'mb-2');
+        newInput.innerHTML = `
+    <input type="text" class="form-control" name="pro_specifications[]" value="${specValue}" placeholder="Enter Specifications">
+    <span class="btn btn-outline-danger ml-3 remove-button" id="removeBtn"><i class="fa fa-minus"></i></span>
+    <span class="btn btn-outline-success ml-3 "  id="add-button" style="display:none;" ><i class="fa fa-plus"></i></span>
+`;
+
+        container.appendChild(newInput);
+        newInput.querySelector('.remove-button').addEventListener('click', function () {
+            newInput.remove();
+            if (container.querySelectorAll('input[name="pro_specifications[]"]').length < 5) {
+                errorMessage.textContent = '';
+                document.getElementById("removeBtn").style.visibility = "hidden";
+                document.getElementById("add-button").style.display = "block";
+            }
+        });
+    }
+
+
 </script>
 
 @endsection

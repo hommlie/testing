@@ -51,9 +51,13 @@
                         <h4 class="card-title">{{ trans('labels.orders') }}</h4>
 
 
-                        <div class="d-flex " style="margin-left:70%;">
+                        <div class="d-flex " style="margin-left:50%;">
+                        {{--    <a href="{{ route('admin.orders.importOrderData') }}"
+                                class="btn btn-raised btn-primary text-light btn-min-width mb-0 me-2 ">
+                                {{ trans(' Import Order Data') }}  --}}
+                            </a>
                             <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
-                                data-bs-toggle="modal" data-bs-target="#SR_ID">
+                                data-bs-toggle="modal" data-bs-target="#SR_ID" style="margin-left:5%;">
                                 GET OTP
                             </a>
                             <a href="{{ route('admin.orders.add') }}"
@@ -90,7 +94,7 @@
                                                 <th>Email</th>
                                                 <th>Service Date</th>
                                                 <th>OTP</th>
-                                                <!-- <th>Action</th> -->
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -213,12 +217,12 @@
                                 <td>${orderData.desired_date}</td>
                                 <td class="otp-cell">${otpCell}</td>
                                 <td>
-                                <!-- <select class='form-control'>
+                                 <select class='form-control'>
                                     <option>Order placed</option>
                                     <option>Confirmed</option>
                                     <option>Order shipped</option>
                                     <option>Delivered</option>
-                                </select> -->
+                                </select> 
                                 </td>
                             `;
                             tableBody.appendChild(row);
