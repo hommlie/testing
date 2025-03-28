@@ -190,6 +190,11 @@ const ServiceSection = ({ categories }) => {
 
     setIsAddingToCart(true);
 
+    const tax_amount =
+      product.tax_type === "amount"
+        ? Number(product.tax)
+        : (Number(product.tax) / 100) * variation.discounted_variation_price;
+
     const cartItem = {
       user_id: user.id,
       product_id: product.id,
@@ -200,28 +205,25 @@ const ServiceSection = ({ categories }) => {
       price: variation.discounted_variation_price || variation.price,
       attribute: selectedAttribute,
       variation: variation.id,
-      tax: product.tax_amount || 0,
+      tax: tax_amount?.toFixed(2) || 0,
       shipping_cost: product.shipping_cost || 0,
     };
-    console.log(product);
-
-    console.log(cartItem);
 
     try {
-      // const response = await axios.post(
-      //   `${config.API_URL}/api/addtocart`,
-      //   cartItem
-      // );
-      // if (response.data.status === 1) {
-      //   successNotify("Successfully added to Cart");
-      //   // Update local storage
-      //   const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-      //   existingCart.push(cartItem);
-      //   localStorage.setItem("cart", JSON.stringify(existingCart));
-      //   // Refresh cart data
-      //   getCart();
-      //   navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-      // }
+      const response = await axios.post(
+        `${config.API_URL}/api/addtocart`,
+        cartItem
+      );
+      if (response.data.status === 1) {
+        successNotify("Successfully added to Cart");
+        // Update local storage
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        existingCart.push(cartItem);
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        // Refresh cart data
+        getCart();
+        navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+      }
     } catch (error) {
       errorNotify(error.message || "Error adding to cart");
       console.error("Error adding to cart:", error);
