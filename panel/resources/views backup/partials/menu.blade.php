@@ -1435,7 +1435,52 @@
                         
                     </li>
                 @endcan
-                
+
+                {{-- MANAGE LANDING PAGE TEMPLATE  --}}
+                @can('landing_page_management_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/landingpage*') ? 'menu-open' : '' }} {{ request()->is('admin/landingpage/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-newspaper mr-2"></i>
+                            </i>
+                            <p>
+                                <span>Manage Landing Page</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('landing_page_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.landingpage") }}"
+                                        class="nav-link {{ request()->is('admin/landingpage') ? '' : '' }}">
+                                        
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>View Landing Page</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('landing_page_add_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.landingpage.add") }}"
+                                        class="nav-link {{ request()->is('admin/landingpage/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        </i>
+                                        <p>
+                                            <span>Add Landing Page</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcan
+
+                {{-- USER MANAGEMENT ACCESS --}}
                 @can('user_management_access')
                     <li
                         class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
@@ -1491,9 +1536,7 @@
                         </ul>
                     </li>
                 @endcan
-
-
-
+                {{--PAYMENT ACCESS --}}
                 @can('payment_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.payments") }}"
@@ -1507,7 +1550,7 @@
                     </li>
                 @endcan
 
-
+                {{-- SETINGS ACCESS --}}
                 @can('settings_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.settings") }}"
@@ -1520,12 +1563,6 @@
                         </a>
                     </li>
                 @endcan
-
-
-
-
-
-
 
                 <li class="nav-item">
                     <a href="#" class="nav-link"

@@ -831,6 +831,18 @@ class OrderController extends Controller
             ->get();
         return response()->json($orderData);
     }
+
+    // UPDATE ORDER STATUS
+    public function updateStatus(Request $request)
+    {
+        $order = Order::find($request->order_id);
+        if ($order) {
+            $order->order_status = $request->order_status;
+            $order->save();
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false]);
+    }
     
     // ADD BUSINESS REGION
     public function businessStore(Request $request)

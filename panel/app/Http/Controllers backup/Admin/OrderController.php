@@ -571,9 +571,9 @@ class OrderController extends Controller
 
     
     // IMPORT ORDER DATA 
-    // public function importOrderData(){
-        
-    // }
+    public function importOrderData(){
+        return view('admin.orders.import-order-data');
+    }
 
 
     public function search(Request $request)
@@ -996,7 +996,8 @@ class OrderController extends Controller
     // GET COPUNS DETAILS
     public function getCoupons($categoryId)
     {
-        $coupons = Coupons::whereIn('cat_id', [$categoryId, 0])
+        $coupons = Coupons::whereIn('cat_id', [$categoryId, 0 , ""])
+         ->orWhereNull('cat_id')
             ->where('status', 1)
             ->get();
         return response()->json($coupons);
