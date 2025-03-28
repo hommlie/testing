@@ -808,6 +808,8 @@ exports.getHomePageData = async (req, res) => {
                 "is_recommended",
                 "slug",
                 "vendor_id",
+                "tax",
+                "tax_type",
               ],
               include: [
                 {
