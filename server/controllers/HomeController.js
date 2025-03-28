@@ -575,6 +575,8 @@ exports.getHomePageData = async (req, res) => {
       "slug",
       "rating",
       "total_reviews",
+      "tax",
+      "tax_type",
     ];
 
     const commonIncludes = [
@@ -894,6 +896,8 @@ exports.getHomePageData = async (req, res) => {
           slug: product.getDataValue("slug"),
           is_recommended: product.getDataValue("is_recommended"),
           product_price: product.product_price,
+          tax: product.tax,
+          tax_type: product.tax_type,
           discounted_price: product.discounted_price,
           vendor_id: product.vendor_id,
           productimage: product.productimage,
