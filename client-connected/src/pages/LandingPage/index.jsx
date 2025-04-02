@@ -130,9 +130,7 @@ const LandingPage = () => {
             <p className="text-hommlie font-semibold">SERVICES</p>
           </div>
           <div className="flex justify-between items-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">
-              Our Pest Control Services
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900">Our Services</h2>
           </div>
           <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {pageData?.subcategories
@@ -207,7 +205,7 @@ const LandingPage = () => {
             >
               <img
                 src={pageData?.landing_page?.why_choose_banner}
-                alt="Pest control technician"
+                alt={pageData?.landing_page?.why_choose_title}
                 className="rounded-lg shadow-xl w-full h-96 object-cover"
               />
             </motion.div>
