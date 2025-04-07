@@ -55,10 +55,10 @@ function App() {
 
       let title = document.querySelector("title");
       if (title) {
-        title.content = settings?.site_title;
+        title.content = settings?.meta_title;
       } else {
         const newTitle = document.createElement("title");
-        newTitle.content = settings?.site_title;
+        newTitle.content = settings?.meta_title;
         document.head.appendChild(newTitle);
       }
 
