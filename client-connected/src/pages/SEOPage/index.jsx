@@ -38,14 +38,14 @@ const SEOPage = () => {
           setServices(response.data?.data?.services);
 
           // Update meta tags
-          document.title = response.data.data.meta_title;
+          document.title = response.data?.data?.pageData?.meta_title;
           const metaDescription = document.querySelector(
             'meta[name="description"]'
           );
           if (metaDescription) {
             metaDescription.setAttribute(
               "content",
-              response.data.data.meta_description
+              response.data?.data?.pageData?.meta_description
             );
           }
         }

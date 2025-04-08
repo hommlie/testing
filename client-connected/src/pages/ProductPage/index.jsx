@@ -128,7 +128,7 @@ export default function ProductPage() {
       } else if (selectedCoupon.percentage) {
         const discount =
           (totalAmount * Number(selectedCoupon.percentage)) / 100;
-        setCouponDiscount(discount);
+        setCouponDiscount(Number(discount));
       }
     } else {
       setCouponDiscount(0);
@@ -174,7 +174,6 @@ export default function ProductPage() {
           product
         );
         if (response.data.status === 1) {
-          console.log(response.data);
           successNotify("Successfully added to Cart");
           getCart();
         }
@@ -204,7 +203,6 @@ export default function ProductPage() {
           { headers: { Authorization: `Bearer ${jwtToken}` } }
         );
         if (response.data.status === 1) {
-          console.log(response.data.message);
           getCart();
         }
       } catch (error) {
@@ -230,7 +228,6 @@ export default function ProductPage() {
             { headers: { Authorization: `Bearer ${jwtToken}` } }
           );
           if (response.data.status === 1) {
-            console.log(response.data.message);
             getCart();
           }
         } catch (error) {
@@ -262,7 +259,7 @@ export default function ProductPage() {
       setState((prev) => ({
         ...prev,
         sqft: squareFeet,
-        total_amount: total,
+        total_amount: parseInt(total),
       }));
     }
   }, [formData.width, formData.length, totalAmount]);
@@ -329,8 +326,7 @@ export default function ProductPage() {
       await axios
         .post(`${config.API_URL}/api/productdetails`, { product_id: id })
         .then((response) => {
-          console.log(response.data);
-
+          handleRemoveCoupon();
           setProdData(response.data.data);
           setProdVendors(response.data.vendors);
           setProdRelatedProds(response.data.related_products);
@@ -409,13 +405,13 @@ export default function ProductPage() {
         const tax =
           prodData.tax_type === "amount"
             ? Number(prodData.tax)
-            : (Number(prodData.tax) / 100) * price;
+            : (Number(prodData.tax) / 100) * parseInt(price);
 
-        setTaxAmount(tax);
-        setTotalAmount(price);
+        setTaxAmount(Number(tax?.toFixed(2)));
+        setTotalAmount(Number(price));
         setState((prev) => ({
           ...prev,
-          total_amount: price,
+          total_amount: Number(price),
         }));
 
         const discount = originalPrice - price;
@@ -1177,9 +1173,9 @@ export default function ProductPage() {
                       <div className="text-right">
                         <p className="text-base font-semibold">
                           ₹
-                          {(totalAmount + taxAmount - couponDiscount)?.toFixed(
-                            2
-                          )}
+                          {Number(
+                            totalAmount + taxAmount - couponDiscount
+                          )?.toFixed(2)}
                         </p>
                       </div>
                     </div>
