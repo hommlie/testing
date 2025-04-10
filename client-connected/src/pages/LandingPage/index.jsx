@@ -56,6 +56,18 @@ const LandingPage = () => {
         );
         if (response.data.status === 1) {
           setPageData(response.data.data);
+
+          // Update meta tags
+          document.title = response.data.data?.landing_page?.meta_title;
+          const metaDescription = document.querySelector(
+            'meta[name="description"]'
+          );
+          if (metaDescription) {
+            metaDescription.setAttribute(
+              "content",
+              response.data.data?.landing_page?.meta_description
+            );
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);

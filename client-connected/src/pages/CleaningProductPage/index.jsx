@@ -265,6 +265,18 @@ const CleaningProductPage = () => {
       );
       if (response.data.status === 1) {
         setInnerSubCategoryData(response.data.data);
+
+        // Update meta tags
+        document.title = response.data.data?.meta_title;
+        const metaDescription = document.querySelector(
+          'meta[name="description"]'
+        );
+        if (metaDescription) {
+          metaDescription.setAttribute(
+            "content",
+            response.data.data?.meta_description
+          );
+        }
         setIsLoading(false);
       }
     } catch (error) {
