@@ -129,7 +129,7 @@ const SEOPage = () => {
         transition={{ delay: 0.6 }}
         className="mx-auto px-4 py-12 md:py-16 lg:py-20"
       >
-        <div className="flex flex-col md:flex-row gap-4 mx-auto">
+        <div className="flex flex-col-reverse md:flex-row  gap-4 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
