@@ -363,6 +363,8 @@ exports.getCleaningSubcategory = async (req, res) => {
         "avg_rating",
         "faqs",
         "about",
+        "meta_title",
+        "meta_description",
       ],
       include: [
         {
@@ -652,6 +654,8 @@ exports.getCleaningSubcategory = async (req, res) => {
       total_reviews: subcategoryData.get("total_reviews"),
       faqs: subcategoryData.get("faqs"),
       about: subcategoryData.get("about"),
+      meta_title: subcategoryData.get("meta_title"),
+      meta_description: subcategoryData.get("meta_description"),
       category: subcategoryData.category,
       video: subcategoryData.video,
       thumbnail: subcategoryData.thumbnail,

@@ -189,7 +189,20 @@ const SubCategoryPage = () => {
       );
 
       setData(subCatResponse.data.data);
-      console.log("Sub categories:", subCatResponse.data.data.subcategory);
+      console.log(subCatResponse.data?.data?.categoryData?.meta_title);
+      console.log(subCatResponse.data?.data?.categoryData?.meta_description);
+
+      // Update meta tags
+      document.title = subCatResponse.data?.data?.categoryData?.meta_title;
+      const metaDescription = document.querySelector(
+        'meta[name="description"]'
+      );
+      if (metaDescription) {
+        metaDescription.setAttribute(
+          "content",
+          subCatResponse.data?.data?.categoryData?.meta_description
+        );
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
