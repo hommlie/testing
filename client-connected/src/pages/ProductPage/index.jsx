@@ -648,7 +648,7 @@ export default function ProductPage() {
             )}
           </nav>
 
-          <section className="flex flex-col lg:flex-row lg:space-x-4 scroll-smooth">
+          <section className="flex flex-col-reverse lg:flex-row lg:space-x-4 scroll-smooth">
             <div className="flex-1 space-y-6 lg:w-2/3">
               <LoginSignup
                 isOpen={isModalOpen}
@@ -912,7 +912,7 @@ export default function ProductPage() {
               )}
             </div>
 
-            <div className="sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
+            <div className="md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
               <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                 <div className="flex justify-between items-center">
                   <div className="flex flex-row items-center">
