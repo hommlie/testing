@@ -80,6 +80,7 @@
             </div>
         </div>
         <div class="card-body collapse show">
+        
             <div class="container mt-5">
 
                 <form action="{{route('admin.complaint.store')}}" method="POST">

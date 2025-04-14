@@ -14,7 +14,8 @@ class Complaint extends Model
         'subject',
         'message',
         'order_id',
-        'c_status'
+        'c_status',
+        'remark'
        
     ];
 }

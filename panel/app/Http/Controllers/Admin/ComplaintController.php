@@ -76,6 +76,7 @@ class ComplaintController extends Controller
     
     public function update(Request $request, $id)
     {
+
         // Validate the request data
         $request->validate([
             'first_name' => 'required|string|max:255',
@@ -84,6 +85,7 @@ class ComplaintController extends Controller
             'email' => 'required|email|max:255',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
+            'remark' => 'nullable|string',
             'status' => 'required|in:pending,unsolved,solved',
         ]);
 
@@ -98,6 +100,7 @@ class ComplaintController extends Controller
             'email' => $request->email,
             'subject' => $request->subject,
             'message' => $request->message,
+            'remark' => $request->remark,
             'c_status' => $request->status,
         ]);
         return redirect()->route('admin.complaint')->with('success', 'Complaint updated successfully.');

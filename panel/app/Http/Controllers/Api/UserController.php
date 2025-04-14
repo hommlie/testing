@@ -27,7 +27,7 @@ class UserController extends Controller
         $otp = rand ( 1000 , 9999 );
 
         if ($request->register_type == "mobile") {
-            
+
             // if($request->email == ""){
             //     return response()->json(["status"=>0,"message"=>trans('messages.email_required')],400);
             // }
@@ -50,7 +50,7 @@ class UserController extends Controller
 
             if(!empty($login))
             {
-                    
+
                 $title='Email Verification Code';
                 $email=$request->email;
                 $data=['title'=>$title,'email'=>$email,'otp'=>$otp];
@@ -87,11 +87,11 @@ class UserController extends Controller
                 $title='Email Verification Code';
                 $email=$request->email;
                 $emaildata=['title'=>$title,'email'=>$email,'otp'=>$otp];
-                
+
                 // Mail::send('Email.emailverification',$emaildata,function($message)use($emaildata){
                 //     $message->from(env('MAIL_USERNAME'))->subject($emaildata['title']);
                 //     $message->to($emaildata['email']);
-                // } );  
+                // } );
 
                 $request->name = "User";
                 //$userdata=array('name'=>$request->name,'mobile'=>$request->mobile,'otp'=>$otp,'email'=>$request->email,'profile_pic'=>'default.png','password'=>Hash::make($request->password),'token'=>$request->token,'login_type'=>$request->login_type,'google_id'=>$request->google_id,'facebook_id'=>$request->facebook_id,'referral_code'=>$referral_code,'type'=>'2');
@@ -124,7 +124,7 @@ class UserController extends Controller
                            $email=$checkreferral->email;
                            $toname=$checkreferral->name;
                            $name=$user->name;
-                           
+
                            $referralmessage='Your friend "'.$name.'" has used your referral code to register with Gravity e-Com. User. You have earned '. Helper::CurrencyFormatter($getdata->referral_amount).' referral amount in your wallet.';
                            $data=['referralmessage'=>$referralmessage,'email'=>$email,'toname'=>$toname,'name'=>$name];
 
@@ -135,8 +135,8 @@ class UserController extends Controller
 
                            $title = "Referral Earning";
                            $body = 'Your friend "'.$name.'" has used your referral code to register with Gravity e-Com. User. You have earned '. Helper::CurrencyFormatter($getdata->referral_amount).' referral amount in your wallet.';
-                           $google_api_key = $firebase_key->firebase_key; 
-                           
+                           $google_api_key = $firebase_key->firebase_key;
+
                            $registrationIds = $checkreferral->token;
                            #prep the bundle
                            $msg = array
@@ -188,7 +188,7 @@ class UserController extends Controller
                        $to_Wallet->save();
                    }
                 }
-                
+
 
                 if($roledata)
                 {
@@ -211,7 +211,7 @@ class UserController extends Controller
             // } else {
             //     return response()->json(['status'=>0,'message'=>trans('messages.referral_code_invalid')],200);
             // }
-            
+
         }
         if ($request->login_type == "google") {
             if($request->email == ""){
@@ -235,9 +235,9 @@ class UserController extends Controller
                     );
                     return response()->json(['status'=>2,'message'=>trans('messages.mobile_required'),'data'=>$arrayName],200);
                 } else {
-                    if($usergoogle->is_verified == '1') 
+                    if($usergoogle->is_verified == '1')
                     {
-                        if($usergoogle->is_available == '1') 
+                        if($usergoogle->is_available == '1')
                         {
                             $arrayName = array(
                                 'id' => $usergoogle->id,
@@ -271,7 +271,7 @@ class UserController extends Controller
                     }
                 }
             } else {
-                
+
                 if(!empty($checkemail))
                 {
                     return response()->json(['status'=>0,'message'=>trans('messages.email_exist')],400);
@@ -303,9 +303,9 @@ class UserController extends Controller
                     );
                     return response()->json(['status'=>2,'message'=>trans('messages.mobile_required'),'data'=>$arrayName],200);
                 } else {
-                    if($userfacebook->is_verified == '1') 
+                    if($userfacebook->is_verified == '1')
                     {
-                        if($userfacebook->is_available == '1') 
+                        if($userfacebook->is_available == '1')
                         {
                             $arrayName = array(
                                 'id' => $userfacebook->id,
@@ -320,7 +320,7 @@ class UserController extends Controller
                         } else {
                             return response()->json(['status'=>0,'message'=>trans('messages.blocked')],200);
                         }
-                        
+
                     } else {
                         $title='Email Verification Code';
                         $email=$usergoogle->email;
@@ -338,7 +338,7 @@ class UserController extends Controller
                     }
                 }
             } else {
-                
+
                 if(!empty($checkemail))
                 {
                     return response()->json(['status'=>0,'message'=>trans('messages.email_exist')],400);
@@ -354,15 +354,42 @@ class UserController extends Controller
         $request->validate([
             'mobile' => 'required',
         ]);
-    
+
         if ($request->mobile == "" ) {
             return response()->json(["status" => 0, "message" => trans('Mobile Number Required')], 400);
         }
-    
-        $user = Employees::where('emp_phone', $request->mobile)->first();
-    
-        $otp = rand(1000, 9999);
-    
+
+        $user                  = Employees::where('emp_phone', $request->mobile)->first();
+        $mobileNumber          = $request->mobile;
+        $otp                   = rand(1000, 9999);
+
+        $curl                  = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL            => 'https://control.msg91.com/api/v5/otp',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING       => '',
+        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_TIMEOUT        => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST  => 'POST',
+        CURLOPT_POSTFIELDS     => json_encode(array(
+            'template_id'      => '67d0065ad6fc055648017574',  // Template ID
+            'authkey'          => '403754ASWGpJz366b09ec2P1',   // Your MSG91 Authkey
+            'mobile'           => $mobileNumber,  // Recipient's mobile number
+            'realTimeResponse' => 'true',
+            'otp'              => $otp  // Include the generated OTP
+        )),
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/x-www-form-urlencoded',
+            'Authorization: ••••••',
+            'Cookie: HELLO_APP_HASH=Tk9lSjlEYXVwK0VKa3VOT01VMngwbCtRMzJPWTdoTGdFMzBZR2dMOE8vaz0%3D; PHPSESSID=u44h0qtvf4g9v9k0hq93nj02q1'
+        ),
+        ));
+
+        $response    = curl_exec($curl);
+        curl_close($curl);
+
         if (!$user) {
             $user = new Employees;
             $user->emp_phone = $request->mobile;
@@ -370,76 +397,76 @@ class UserController extends Controller
             $user->emp_id = 'EMP' . random_int(1000000000, 9999999999);
             $user->otp = $otp;
             $user->save();
-    
+
             return response()->json([
-                'status' => 1,
-                'message' => 'New User Registered Successfully',
-                'data' => [
-                    'id' => $user->id,
+                'status'     => 1,
+                'message'    => 'New User Registered Successfully',
+                'data'       => [
+                    'id'     => $user->id,
                     'emp_id' => $user->emp_id,
                     'mobile' => $user->emp_phone,
-                    'otp' => $otp
+                    'otp'    => $otp
                 ]
             ], 200);
         }
-    
+
         $user->otp = $otp;
         $user->save();
-    
+
         return response()->json([
             'status' => 1,
             'message' => 'Existing User!',
             'data' => [
-                'id' => $user->id,
+                'id'     => $user->id,
                 'emp_id' => $user->emp_id,
                 'mobile' => $user->emp_phone,
-                'otp' => $otp
+                'otp'    => $otp
             ]
         ], 200);
     }
-    
+
     public function emailverify_emp(Request $request)
     {
         $request->validate([
-            'otp' => 'required|numeric',
+            'otp'    => 'required|numeric',
             'mobile' => 'required|numeric'
         ]);
-    
+
         if (empty($request->mobile)) {
             return response()->json(["status" => 0, "message" => trans('messages.mobile_required')], 400);
         }
         if (empty($request->otp)) {
             return response()->json(["status" => 0, "message" => trans('messages.otp_required')], 400);
         }
-    
+
         $user = Employees::where('emp_phone', $request->mobile)
                          ->where('otp', $request->otp)
                          ->first();
-    
+
         if (!empty($user)) {
             // Clear otp and set is_verified to null
             $user->is_verified = 1;
             $user->otp = null;
             $user->save();
-    
+
             // Prepare response data
             $arrayName = [
-                'id' => $user->id,
-                'emp_id' => $user->emp_id,
-                'mobile' => $user->emp_phone,
-                'emp_name' => $user->emp_name,
-                'emp_email'  => $user->emp_email,
+                'id'           => $user->id,
+                'emp_id'       => $user->emp_id,
+                'mobile'       => $user->emp_phone,
+                'emp_name'     => $user->emp_name,
+                'emp_email'    => $user->emp_email,
                 'emp_address'  => $user->emp_address,
-                'emp_photo'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->emp_photo,
-                'pan_no'  => $user->pan_no,
-                'pan_image'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->pan_image,
-                'aadhar_no'  => $user->aadhar_no,
-                'aadhar_image' => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->aadhar_image,
+                'emp_photo'    => asset('storage/images/employee/profiles/' . $user->emp_photo),
+                'pan_no'       => $user->pan_no,
+                'pan_image'    => asset('storage/images/employee/pan_images/' . $user->pan_image),
+                'aadhar_no'    => $user->aadhar_no,
+                'aadhar_image' => asset('storage/images/employee/aadhar_images/' . $user->aadhar_image),
             ];
-    
+
             return response()->json(['status' => 1, 'message' => "OTP is verified", 'data' => $arrayName], 200);
         } else {
-            return response()->json(["status" => 0, "message" => trans('invalid Otp')], 400);
+            return response()->json(["status" => 0, "message" => trans('invalid Otp')], 200);
         }
     }
 
@@ -450,44 +477,40 @@ class UserController extends Controller
         $request->validate([
             'emp' => 'required|numeric'
         ]);
-    
+
         if ($request->emp == "") {
             return response()->json(["status" => 0, "message" => trans('Employee ID Required')], 400);
         }
-    
+
 
 
         $user = Employees::where('id', $request->emp)
                          ->first();
-    
+
         if (!empty($user)) {
             $arrayName = [
-                'id' => $user->id,
-                'emp_id' => $user->emp_id,
-                'mobile' => $user->emp_phone,
-                'emp_name' => $user->emp_name,
-                'emp_email'  => $user->emp_email,
+                'id'           => $user->id,
+                'emp_id'       => $user->emp_id,
+                'mobile'       => $user->emp_phone,
+                'emp_name'     => $user->emp_name,
+                'emp_email'    => $user->emp_email,
                 'emp_address'  => $user->emp_address,
-                'emp_photo'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->emp_photo,
-                'pan_no'  => $user->pan_no,
-                'pan_image'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->pan_image,
-                'aadhar_no'  => $user->aadhar_no,
-                'aadhar_image' => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->aadhar_image,
+                'pincode'      => $user->pincode,
+                'emp_photo'    => asset('storage/images/employee/profiles/' . $user->emp_photo),
+                'pan_no'       => $user->pan_no,
+                'pan_image'    => asset('storage/images/employee/pan_images/' . $user->pan_image),
+                'aadhar_no'    => $user->aadhar_no,
+                'aadhar_image' => asset('storage/images/employee/aadhar_images/' . $user->aadhar_image),
             ];
 
             return response()->json(['status' => 1, 'message' => "Employee Profile Successfully retrieved", 'data' => $arrayName], 200);
-        
+
         }else{
             return response()->json([
                 'status' => 0,
                 'message' => 'No records found for the given Employee ID'
             ], 404);
         }
-
-
-
-    
-        
     }
 
 
@@ -496,49 +519,72 @@ class UserController extends Controller
         $request->validate([
             'emp' => 'required|numeric'
         ]);
-    
+
         if ($request->emp == "") {
             return response()->json(["status" => 0, "message" => trans('Employee ID Required')], 400);
         }
-    
+
         $user = Employees::where('id', $request->emp)->first();
-    
+
         if (!$user) {
             return response()->json([
                 'status' => 0,
                 'message' => 'No records found for the given Employee ID'
             ], 404);
         }
-    
-        $user->emp_name = $request->input('emp_name', $user->emp_name);
-        $user->emp_phone = $request->input('emp_phone', $user->emp_phone);
-        $user->emp_email = $request->input('emp_email', $user->emp_email);
+
+        $user->emp_name    = $request->input('emp_name', $user->emp_name);
+        $user->emp_phone   = $request->input('emp_phone', $user->emp_phone);
+        $user->emp_email   = $request->input('emp_email', $user->emp_email);
         $user->emp_address = $request->input('emp_address', $user->emp_address);
-        $user->emp_photo = $request->input('emp_photo', $user->emp_photo);
-        $user->pan_no = $request->input('pan_no', $user->pan_no);
-        $user->pan_image = $request->input('pan_image', $user->pan_image);  
-        $user->aadhar_no = $request->input('aadhar_no', $user->aadhar_no);
-        $user->aadhar_image = $request->input('aadhar_image', $user->aadhar_image);
-    
+        $user->pan_no      = $request->input('pan_no', $user->pan_no);
+        $user->aadhar_no   = $request->input('aadhar_no', $user->aadhar_no);
+        $user->pincode     = $request->input('pincode', $user->pincode);
+
+        if($request->hasFile('emp_photo')){
+            // Get the uploaded file
+            $emp_photo       = $request->file('emp_photo');
+            $emp_photo_name  = 'emp_photo' . uniqid() . '.' . $emp_photo->getClientOriginalExtension();
+            $emp_photo->move('storage/images/employee/profiles', $emp_photo_name);
+            $user->emp_photo = $emp_photo_name;
+        }
+
+        if($request->hasFile('pan_image')){
+            // Get the uploaded file
+            $pan_image       = $request->file('pan_image');
+            $pan_image_name  = 'pan' . uniqid() . '.' . $pan_image->getClientOriginalExtension();
+            $pan_image->move('storage/images/employee/pan_images', $pan_image_name);
+            $user->pan_image = $pan_image_name;
+        }
+
+        if($request->hasFile('aadhar_image')){
+            // Get the uploaded file
+            $aadhar_image       = $request->file('aadhar_image');
+            $aadhar_image_name  = 'aadhar' . uniqid() . '.' . $aadhar_image->getClientOriginalExtension();
+            $aadhar_image->move('storage/images/employee/aadhar_images', $aadhar_image_name);
+            $user->aadhar_image = $aadhar_image_name;
+        }
+
         $user->save();
-    
+
 
 
         $user = Employees::where('id', $request->emp)->first();
 
         if (!empty($user)) {
         $arrayName = [
-        'id' => $user->id,
-        'emp_id' => $user->emp_id,
-        'mobile' => $user->emp_phone,
-        'emp_name' => $user->emp_name,
-        'emp_email'  => $user->emp_email,
+        'id'           => $user->id,
+        'emp_id'       => $user->emp_id,
+        'mobile'       => $user->emp_phone,
+        'emp_name'     => $user->emp_name,
+        'emp_email'    => $user->emp_email,
         'emp_address'  => $user->emp_address,
-        'emp_photo'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->emp_photo,
-        'pan_no'  => $user->pan_no,
-        'pan_image'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->pan_image,
-        'aadhar_no'  => $user->aadhar_no,
-        'aadhar_image' => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->aadhar_image,
+        'pincode'      => $user->pincode,
+        'emp_photo'    => asset('storage/images/employee/profiles/' . $user->emp_photo),
+        'pan_no'       => $user->pan_no,
+        'pan_image'    => asset('storage/images/employee/pan_images/' . $user->pan_image),
+        'aadhar_no'    => $user->aadhar_no,
+        'aadhar_image' => asset('storage/images/employee/aadhar_images/' . $user->aadhar_image),
         ];
 
          return response()->json(['status' => 1, 'message' => "Record Successfully Updated", 'data' => $arrayName], 200);
@@ -551,18 +597,48 @@ class UserController extends Controller
         }
     }
 
+    public function getprofile(Request $request){
+        $request->validate([
+            'emp' => 'required|numeric'
+        ]);
+        $user = Employees::where('id', $request->emp)->first();
 
+        if (!empty($user)) {
+        $arrayName = [
+        'id'           => $user->id,
+        'emp_id'       => $user->emp_id,
+        'mobile'       => $user->emp_phone,
+        'emp_name'     => $user->emp_name,
+        'emp_email'    => $user->emp_email,
+        'emp_address'  => $user->emp_address,
+        'pincode'      => $user->pincode,
+        'emp_photo'    => asset('storage/images/employee/profiles/' . $user->emp_photo),
+        'pan_no'       => $user->pan_no,
+        'pan_image'    => asset('storage/images/employee/pan_images/' . $user->pan_image),
+        'aadhar_no'    => $user->aadhar_no,
+        'aadhar_image' => asset('storage/images/employee/aadhar_images/' . $user->aadhar_image),
+        ];
+
+         return response()->json(['status' => 1, 'message' => "Record Successfully Fetched", 'data' => $arrayName], 200);
+
+        }else{
+            return response()->json([
+            'status' => 0,
+            'message' => 'No records found for the given Employee ID'
+            ], 404);
+        }
+    }
     public function payment_emp(Request $request)
     {
         $request->validate([
             'emp' => 'required|numeric'
         ]);
-    
+
         if ($request->emp == "") {
             return response()->json(["status" => 0, "message" => trans('Employee ID Required')], 400);
         }
-    
-        
+
+
         $user = Employees::where('id', $request->emp)->first();
 
         if (!empty($user)) {
@@ -574,8 +650,8 @@ class UserController extends Controller
         'bank_ifsc' => $user->bank_ifsc,
         'bank_acc_no'  => $user->bank_acc_no,
         'name_as_per_bank'  => $user->name_as_per_bank,
-        'bank_book_image'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->bank_book_image,
-        
+        'bank_book_image'  => asset('storage/images/employee/bank_images/' . $user->bank_book_image),
+
         ];
 
          return response()->json(['status' => 1, 'message' => "Record Successfully Retrieved", 'data' => $arrayName], 200);
@@ -587,7 +663,7 @@ class UserController extends Controller
             ], 404);
         }
 
-        
+
     }
 
 
@@ -596,13 +672,13 @@ class UserController extends Controller
         $request->validate([
             'emp' => 'required|numeric'
         ]);
-    
+
         if ($request->emp == "") {
             return response()->json(["status" => 0, "message" => trans('Employee ID Required')], 400);
         }
-    
+
         $user = Employees::where('id', $request->emp)->first();
-    
+
         if (!$user) {
             return response()->json([
                 'status' => 0,
@@ -616,11 +692,17 @@ class UserController extends Controller
         $user->bank_acc_no = $request->input('bank_acc_no', $user->bank_acc_no);
         $user->name_as_per_bank = $request->input('name_as_per_bank', $user->name_as_per_bank);
         $user->upi = $request->input('upi', $user->upi);
-        $user->bank_book_image = $request->input('bank_book_image', $user->bank_book_image);
-    
+        // Ensure file is uploaded correctly
+        if ($request->hasFile('bank_book_image') && $request->file('bank_book_image')->isValid()) {
+            $bank_book_image = $request->file('bank_book_image');
+            $imageName       = 'bank_image' . uniqid() . '.' . $bank_book_image->getClientOriginalExtension();
+            $bank_book_image->move('storage/images/employee/bank_images', $imageName);
+            $user->bank_book_image = $imageName;
+        }
+
         $user->save();
-    
-        
+
+
         $user = Employees::where('id', $request->emp)->first();
 
         if (!empty($user)) {
@@ -632,8 +714,8 @@ class UserController extends Controller
         'bank_ifsc' => $user->bank_ifsc,
         'bank_acc_no'  => $user->bank_acc_no,
         'name_as_per_bank'  => $user->name_as_per_bank,
-        'bank_book_image'  => 'https://techmonkshub.info/hommly/storage/app/public/images/employee/profiles/'.$user->bank_book_image,
-        
+        'bank_book_image'  => asset('storage/images/employee/bank_images/' . $user->bank_book_image),
+
         ];
 
          return response()->json(['status' => 1, 'message' => "Record Successfully Retrieved", 'data' => $arrayName], 200);
@@ -680,14 +762,14 @@ class UserController extends Controller
         return response()->json(['status' => 0, 'message' => 'Failed to resend OTP', 'error' => $e->getMessage()], 500);
     }
 }
-    
-
-    
-    
 
 
-    
-    
+
+
+
+
+
+
 
     public function login(Request $request )
     {
@@ -697,14 +779,14 @@ class UserController extends Controller
         if($request->password == ""){
             return response()->json(["status"=>0,"message"=>trans('messages.password_required')],400);
         }
-        
+
         $login=User::where('mobile',$request['email'])->where('type','=','2')->first();
 
         if(!empty($login))
         {
-            if($login->is_verified == '1') 
+            if($login->is_verified == '1')
             {
-                if($login->is_available == '1') 
+                if($login->is_available == '1')
                 {
                     if(Hash::check($request->get('password'),$login->password))
                     {
@@ -733,7 +815,7 @@ class UserController extends Controller
                 }
             } else {
                 $otp = rand ( 100000 , 999999 );
-                
+
                 $title='Email Verification Code';
                 $email=$request->email;
                 $data=['title'=>$title,'email'=>$email,'otp'=>$otp];
@@ -781,7 +863,7 @@ class UserController extends Controller
             return response()->json(['status'=>1,'message'=>"Email is verified",'data'=>$arrayName],200);
         } else {
             return response()->json(["status"=>0,"message"=>trans('messages.invalid')],400);
-        }  
+        }
     }
 
     public function resendemailverification(Request $request )
@@ -792,7 +874,7 @@ class UserController extends Controller
 
         $checkuser=User::where('email',$request->email)->first();
 
-        if (!empty($checkuser)) {           
+        if (!empty($checkuser)) {
 
             try{
                 $otp = rand ( 100000 , 999999 );
@@ -816,7 +898,7 @@ class UserController extends Controller
 
         } else {
             return response()->json(["status"=>0,"message"=>trans('messages.invalid')],400);
-        }  
+        }
     }
 
     public function AddMobile(Request $request)
@@ -829,7 +911,7 @@ class UserController extends Controller
         }
 
         $checkmobile=User::where('mobile',$request['mobile'])->first();
-        
+
         if(!empty($checkmobile))
         {
             return response()->json(['status'=>0,'message'=>trans('messages.mobile_exist')],400);
@@ -844,39 +926,39 @@ class UserController extends Controller
         }
     }
 
-    public function getprofile(Request $request )
-    {
-        if($request->user_id == ""){
-            return response()->json(["status"=>0,"message"=>trans('messages.user_required')],400);
-        }
+    // public function getprofile(Request $request )
+    // {
+    //     if($request->user_id == ""){
+    //         return response()->json(["status"=>0,"message"=>trans('messages.user_required')],400);
+    //     }
 
-        $users = User::where('id',$request['user_id'])->first();
+    //     $users = User::where('id',$request['user_id'])->first();
 
-        if ($users->mobile == "") {
-            $mobile = "";
-        } else {
-            $mobile = $users->mobile;
-        }
+    //     if ($users->mobile == "") {
+    //         $mobile = "";
+    //     } else {
+    //         $mobile = $users->mobile;
+    //     }
 
-        $arrayName = array(
-            'id' => $users->id,
-            'name' => $users->name,
-            'mobile' => $mobile,
-            'email' => $users->email,
-            'profile_pic' => url('/storage/app/public/images/profile/'.$users->profile_pic)
-        );
+    //     $arrayName = array(
+    //         'id' => $users->id,
+    //         'name' => $users->name,
+    //         'mobile' => $mobile,
+    //         'email' => $users->email,
+    //         'profile_pic' => url('/storage/app/public/images/profile/'.$users->profile_pic)
+    //     );
 
-        if(!empty($arrayName))
-        {
-            $contactinfo=Settings::select('address','contact','email','facebook','twitter','instagram','linkedin')
-            ->first();
-            return response()->json(['status'=>1,'message'=>'Profile data','data'=>$arrayName,'contactinfo'=>$contactinfo],200);
-        } else {
-            return response()->json(['status'=>0,'message'=>trans('messages.no_data')],422);
-        }
+    //     if(!empty($arrayName))
+    //     {
+    //         $contactinfo=Settings::select('address','contact','email','facebook','twitter','instagram','linkedin')
+    //         ->first();
+    //         return response()->json(['status'=>1,'message'=>'Profile data','data'=>$arrayName,'contactinfo'=>$contactinfo],200);
+    //     } else {
+    //         return response()->json(['status'=>0,'message'=>trans('messages.no_data')],422);
+    //     }
 
-        return response()->json(['status'=>0,'message'=>trans('messages.fail')],400);
-    }
+    //     return response()->json(['status'=>0,'message'=>trans('messages.fail')],400);
+    // }
 
     public function editprofile(Request $request )
     {
@@ -897,7 +979,7 @@ class UserController extends Controller
                 $image = 'profile-' . uniqid() . '.' . $request->image->getClientOriginalExtension();
                 $request->image->move('storage/app/public/images/profile', $image);
                 $user->profile_pic=$image;
-            }            
+            }
         }
         $user->name =$request->name;
         $user->save();
@@ -955,7 +1037,7 @@ class UserController extends Controller
         }
 
         $checklogin=User::where('email',$request['email'])->first();
-        
+
         if(empty($checklogin))
         {
             return response()->json(['status'=>0,'message'=>trans('messages.invalid')],400);
@@ -1068,11 +1150,11 @@ class UserController extends Controller
         {
             return response()->json(['status'=>0,'message'=>trans('messages.mobile_exist')],400);
         }
-        
+
         $otp = rand ( 100000 , 999999 );
-        
-        $str_result = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz'; 
-        $referral_code = substr(str_shuffle($str_result), 0, 10); 
+
+        $str_result = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz';
+        $referral_code = substr(str_shuffle($str_result), 0, 10);
 
         $userdata=array('name'=>$request->name,'mobile'=>$request->mobile,'email'=>$request->email,'profile_pic'=>'default.png','password'=>Hash::make($request->password),'referral_code'=>$referral_code,'otp'=>$otp,'type'=>'3','is_available'=>'2');
         $roledata=User::create($userdata)->assignRole(\Spatie\Permission\Models\Role::where('name','admin')->first());
@@ -1087,7 +1169,7 @@ class UserController extends Controller
                 $message->from(env('MAIL_USERNAME'))->subject($data['title']);
                 $message->to($data['email']);
             } );
-            
+
             if (env('Environment') == 'sendbox') {
                 session ( [
                     'email' => $request->email,
@@ -1103,5 +1185,5 @@ class UserController extends Controller
             return response()->json(['status'=>0,'message'=>trans('messages.fail')],400);
         }
     }
-    
+
 }
