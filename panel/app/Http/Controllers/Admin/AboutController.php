@@ -14,6 +14,7 @@ class AboutController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
         abort_unless(\Gate::allows('about_access'), 403);
