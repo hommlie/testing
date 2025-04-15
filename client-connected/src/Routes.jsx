@@ -210,6 +210,14 @@ const ProjectRoutes = () => {
       element: <ServiceProviderRegistration />,
     },
     {
+      path: `${config.VITE_BASE_URL}/konnect`,
+      element: <ServiceProviderRegistration />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/hub`,
+      element: <ServiceProviderRegistration />,
+    },
+    {
       path: `${config.VITE_BASE_URL}/community`,
       element: <CommunitySoon />,
     },
