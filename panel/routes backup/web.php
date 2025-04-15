@@ -180,7 +180,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'OrderController@index')->name('orders');
         Route::get('addorder', 'OrderController@addorder')->name('orders.add');
-        // Route::get('importOrderData', 'OrderController@importOrderData')->name('orders.importOrderData');
+        // IMPORT ORDER DATA
+        Route::get('importOrderData', 'OrderController@importOrderData')->name('orders.importOrderData');
        
         // SERVICES CENTER/ BUSINESS STORE / GET BRANCH CODE / GET CERVICES CENTER BASED ON REGION ID / ADDRESS DETAILS 
         Route::post('serviceStore', 'OrderController@serviceStore')->name('orders.serviceStore');
@@ -193,24 +194,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::get('get-customer-data/{cusID}', 'OrderController@getCustomerData')->name('orders.getCustomerData');
         // GET ORDER DATA USING ORDER ID 
         Route::get('get-Order-data/{orderID}', 'OrderController@getOrderData')->name('orders.getOrderData');
+        // UPDATE ORDER STATUS 
+        Route::post('update-Order-status/', 'OrderController@updateStatus')->name('orders.updateStatus');
         // ADD RESIDENTIAL ORDERS
         Route::get('/get-subcategories/{categoryId}', 'OrderController@getSubcategories')->name('orders.getSubcategories');
         Route::get('/get-services/{subcategoryId}', 'OrderController@getServices')->name('orders.getServices');
         Route::get('/get-coupons/{categoryId}', 'OrderController@getCoupons')->name('orders.getCoupons');
         Route::get('/get-service-variation-type/{serviceId}', 'OrderController@getServiceVariationType')->name('orders.getServiceVariationType');
         Route::get('/get-service-variation-area/{serviceId}/{productId}', 'OrderController@getServiceVariationArea')->name('orders.getServiceVariationArea');
-
-
         Route::get('/get-service-details/{id}', 'OrderController@getServiceDetails')->name('orders.getServiceDetails');
-
-
         Route::post('storeorder', 'OrderController@storeorder')->name('orders.store');
         Route::get('editorder/{id}', 'OrderController@editorder')->name('orders.editorder');
         Route::put('updateorder/{id}', 'OrderController@updateorder')->name('orders.updateorder');
-
-
         Route::get('/order-details/{id}', 'OrderController@orderdetails')->name('payments.orderdetails');
-
         Route::post('/update', 'OrderController@update')->name('orders.update');
         Route::post('/delete', 'OrderController@delete')->name('orders.delete');
         Route::get('/search', 'OrderController@search')->name('orders.search');

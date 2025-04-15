@@ -165,9 +165,9 @@
                                         @foreach($order_data as $row)
 
                                             @if ($row->discount_amount == "")
-                                                @php        $grand_total = $row->subtotal + $row->tax + $row->shipping_cost; @endphp
+                                                @php     $grand_total = $row->subtotal + $row->tax + $row->shipping_cost; @endphp
                                             @else
-                                                @php        $grand_total = $row->subtotal + $row->tax + $row->shipping_cost - $row->discount_amount; @endphp
+                                                @php     $grand_total = $row->subtotal + $row->tax + $row->shipping_cost - $row->discount_amount; @endphp
                                             @endif
                                             <tr>
 
