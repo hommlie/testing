@@ -3,7 +3,6 @@ import Routes from "./Routes";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import Header from "./components/Header";
-import OldHeader from "./components/Header/indexcopy";
 import Footer from "./components/Footer";
 import fetchSettings from "./config/settings";
 import { HelmetProvider } from "react-helmet-async";

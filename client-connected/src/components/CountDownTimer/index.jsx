@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
-    seconds: 0
+    seconds: 0,
   });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const startDate = new Date(2025, 0, 1); // January 1st, 2025
-      const endDate = new Date(startDate.getTime() + (90 * 24 * 60 * 60 * 1000)); // 90 days from start
+      const startDate = new Date(2025, 3, 15);
+      const endDate = new Date(startDate.getTime() + 90 * 24 * 60 * 60 * 1000); // 90 days from start
       const now = new Date();
       const difference = endDate - now;
 
@@ -37,7 +37,7 @@ const CountdownTimer = () => {
 
   // Function to format numbers as two digits
   const formatNumber = (num) => {
-    return num.toString().padStart(2, '0').split('');
+    return num.toString().padStart(2, "0").split("");
   };
 
   // Digit display component
@@ -61,12 +61,12 @@ const CountdownTimer = () => {
           <DigitDisplay value={timeLeft.days} />
           <p className="mt-2 text-sm text-gray-600">Days</p>
         </div>
-        
+
         <div className="text-center">
           <DigitDisplay value={timeLeft.hours} />
           <p className="mt-2 text-sm text-gray-600">Hours</p>
         </div>
-        
+
         <div className="text-center">
           <DigitDisplay value={timeLeft.minutes} />
           <p className="mt-2 text-sm text-gray-600">Minutes</p>

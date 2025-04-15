@@ -65,6 +65,7 @@ app.post("/productdetails", ProductsController.productDetails);
 app.post("/vendorproducts", ProductsController.vendorProducts);
 app.get("/searchproducts", ProductsController.searchProducts);
 app.post("/filter", ProductsController.filter);
+app.get("/search", ProductsController.search);
 
 //Wishlist
 app.post("/addtowishlist", WishlistController.addToWishlist);

@@ -26,6 +26,7 @@ import config from "../../config/config";
 import LocationModal from "../LocationModal";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
+import axios from "axios";
 
 const Header = ({
   logo,
@@ -65,12 +66,14 @@ const Header = ({
   const [currentLocation, setCurrentLocation] = useState(
     "Get Current Location"
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const headerRef = useRef(null);
   const loginDropdownRef = useRef(null);
   const cartDropdownRef = useRef(null);
+  const searchTimeoutRef = useRef(null);
 
   const isHomePage = ["/", "/home"].includes(location.pathname);
 
@@ -132,21 +135,71 @@ const Header = ({
     getCurrentLocation();
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    if (e.target.value === "") {
+  // Implement search API functionality with debounce
+  const fetchSearchResults = async (term) => {
+    if (!term || term.trim() === "") {
       setIsSearchOpen(false);
       setSearchResults([]);
-    } else {
-      setIsSearchOpen(true);
-      const results = prodData?.filter((product) =>
-        product.product_name
-          .toLowerCase()
-          .includes(e.target.value.toLowerCase())
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `${config.API_URL}/api/search?keyword=${term}`
       );
-      setSearchResults(results);
+
+      if (response.data.status === 1) {
+        setSearchResults(response.data.data);
+        setIsSearchOpen(true);
+      } else {
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // Clear any existing timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Set a new timeout for debouncing
+    searchTimeoutRef.current = setTimeout(() => {
+      fetchSearchResults(value);
+    }, 300); // 300ms debounce
+  };
+
+  // Clear timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Close search results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (headerRef.current && !headerRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [headerRef]);
 
   return (
     <header
@@ -401,36 +454,98 @@ const Header = ({
 
             {/* Search Results */}
             <AnimatePresence>
-              {isSearchOpen && searchResults.length > 0 && (
+              {isSearchOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute left-0 right-0 mt-2 bg-white shadow-xl rounded-lg z-20 max-h-96 overflow-y-auto"
+                  className="absolute left-0 right-0 mt-2 bg-white shadow-xl rounded-lg z-20 max-h-96 overflow-y-auto mx-4 md:mx-8"
                 >
-                  {searchResults?.map((result, index) => (
-                    <motion.div
-                      key={result.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <button
-                        onClick={() => {
-                          setIsSearchOpen(false);
-                          navigate(
-                            `${config.VITE_BASE_URL}/product/${result.id}/${result.slug}`
-                          );
-                        }}
-                        className="w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors flex items-center justify-between group"
+                  {isLoading ? (
+                    <div className="flex justify-center items-center py-6">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-700"></div>
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    searchResults.map((result, index) => (
+                      <motion.div
+                        key={result.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
                       >
-                        <span className="text-gray-800 group-hover:text-hommlie">
-                          {result.product_name}
-                        </span>
-                        <IoIosArrowForward className="text-gray-400 group-hover:text-hommlie transform group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </motion.div>
-                  ))}
+                        <div
+                          className="flex items-center p-3 hover:bg-gray-50 border-b border-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            setSearchTerm("");
+                            navigate(
+                              `${config.VITE_BASE_URL}/product/${result.id}/${result.slug}`
+                            );
+                          }}
+                        >
+                          {result.productimage && result.productimage[0] && (
+                            <img
+                              src={result.productimage[0].image}
+                              alt={result.product_name}
+                              className="w-14 h-14 object-cover rounded mr-3"
+                            />
+                          )}
+                          <div className="flex-1">
+                            <h4 className="text-gray-800 font-medium">
+                              {result.product_name}
+                            </h4>
+                            {result.variations &&
+                              result.variations.length > 0 && (
+                                <p className="text-sm text-gray-500">
+                                  {result.variations[0].price}{" "}
+                                  {result.variations.length > 1
+                                    ? `- ${
+                                        result.variations[
+                                          result.variations.length - 1
+                                        ].price
+                                      }`
+                                    : ""}
+                                </p>
+                              )}
+                            {result.rattings && result.rattings.length > 0 && (
+                              <div className="flex items-center mt-1">
+                                <div className="flex items-center">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <svg
+                                      key={star}
+                                      className={`w-3 h-3 ${
+                                        star <=
+                                        Math.round(
+                                          result.rattings.reduce(
+                                            (acc, curr) => acc + curr.stars,
+                                            0
+                                          ) / result.rattings.length
+                                        )
+                                          ? "text-yellow-400"
+                                          : "text-gray-300"
+                                      }`}
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                  ))}
+                                </div>
+                                <span className="text-xs text-gray-500 ml-1">
+                                  ({result.rattings.length})
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <IoIosArrowForward className="text-gray-400 text-lg" />
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="py-4 px-6 text-center text-gray-500">
+                      No products found for "{searchTerm}"
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -484,6 +599,18 @@ const Header = ({
             >
               Free Listing
             </NavLink>
+
+            {/* Mobile Search */}
+            <div className="relative mt-2">
+              <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-black" />
+              <input
+                type="text"
+                placeholder="What Service do you Need?"
+                className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </div>
           </nav>
         </div>
       )}

@@ -1038,3 +1038,44 @@ exports.allProductsList = async (req, res) => {
       .json({ status: 0, message: "Something went wrong", error });
   }
 };
+
+exports.search = async (req, res) => {
+  const { keyword } = req.query;
+
+  try {
+    const products = await Product.findAll({
+      where: {
+        product_name: {
+          [Op.like]: `%${keyword}%`,
+        },
+        status: 1,
+      },
+      attributes: ["id", "product_name", "slug"],
+      include: [
+        {
+          model: ProductImage,
+          attributes: ["id", "product_id", "image"],
+          where: { media: "Image" },
+          as: "productimage",
+        },
+        { model: Variation, as: "variations" },
+        { model: Ratting, as: "rattings" },
+      ],
+      order: [["id", "DESC"]],
+      limit: 10,
+    });
+
+    if (!products.length) {
+      return res.status(404).json({ status: 0, message: "No products found" });
+    }
+
+    return res
+      .status(200)
+      .json({ status: 1, message: "Success", data: products });
+  } catch (error) {
+    console.error("Error:", error);
+    return res
+      .status(500)
+      .json({ status: 0, message: "Something went wrong", error });
+  }
+};

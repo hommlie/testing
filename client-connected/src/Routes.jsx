@@ -32,6 +32,7 @@ import SEOPage from "./pages/SEOPage";
 import BlogPage from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import LandingPage from "./pages/LandingPage";
+import CommunitySoon from "./pages/ComingSoon";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -207,6 +208,10 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/register-free-listing`,
       element: <ServiceProviderRegistration />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/community`,
+      element: <CommunitySoon />,
     },
   ]);
 
