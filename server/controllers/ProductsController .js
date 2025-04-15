@@ -1056,6 +1056,8 @@ exports.search = async (req, res) => {
         "slug",
         "product_price",
         "discounted_price",
+        "rating",
+        "total_reviews",
       ],
       include: [
         {
@@ -1077,8 +1079,8 @@ exports.search = async (req, res) => {
           where: { media: "Image" },
           as: "productimage",
         },
-        { model: Variation, as: "variations" },
-        { model: Ratting, as: "rattings" },
+        // { model: Variation, as: "variations" },
+        // { model: Ratting, as: "rattings" },
       ],
       order: [["id", "DESC"]],
       limit: 10,

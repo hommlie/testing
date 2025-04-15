@@ -494,19 +494,15 @@ const Header = ({
                             <h4 className="text-gray-800 font-medium">
                               {result.product_name}
                             </h4>
-                            {result.variations &&
-                              result.variations.length > 0 && (
-                                <p className="text-sm text-gray-500">
-                                  {result.variations[0].price}{" "}
-                                  {result.variations.length > 1
-                                    ? `- ${
-                                        result.variations[
-                                          result.variations.length - 1
-                                        ].price
-                                      }`
-                                    : ""}
-                                </p>
-                              )}
+                            <p className="flex gap-2 text-gray-600">
+                              <span className="font-semibold">
+                                {result.discounted_price}
+                              </span>
+                              <span className="line-through ">
+                                {result.product_price}
+                              </span>
+                            </p>
+
                             {result.rattings && result.rattings.length > 0 && (
                               <div className="flex items-center mt-1">
                                 <div className="flex items-center">

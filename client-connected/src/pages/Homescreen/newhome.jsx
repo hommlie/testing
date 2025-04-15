@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
@@ -53,6 +53,8 @@ const HomePage = () => {
   const { cartLength, prodData } = useCont();
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const searchTimeoutRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Add states for all dynamic data
   const [data, setData] = useState({
@@ -112,6 +114,33 @@ const HomePage = () => {
     }
   };
 
+  const fetchSearchResults = async (term) => {
+    if (!term || term.trim() === "") {
+      setIsSearchOpen(false);
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `${config.API_URL}/api/search?keyword=${term}`
+      );
+
+      if (response.data.status === 1) {
+        setSearchResults(response.data.data);
+        setIsSearchOpen(true);
+      } else {
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       setCurrentLocation("Bannerghatta, Bangalore");
@@ -154,20 +183,34 @@ const HomePage = () => {
     getCurrentLocation();
   }, []);
 
+  // useEffect to clean up the timeout
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // Clear any existing timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (value === "") {
       setIsSearchOpen(false);
       setSearchResults([]);
-    } else {
-      setIsSearchOpen(true);
-      const results = prodData?.filter((product) =>
-        product.product_name
-          .toLowerCase()
-          .includes(e.target.value.toLowerCase())
-      );
-      setSearchResults(results);
+      return;
     }
+
+    // Set a new timeout for debouncing
+    searchTimeoutRef.current = setTimeout(() => {
+      fetchSearchResults(value);
+    }, 300); // 300ms debounce
   };
 
   const scrollToInspection = () => {
@@ -352,35 +395,88 @@ const HomePage = () => {
 
             {/* Search Results */}
             <AnimatePresence>
-              {isSearchOpen && searchResults.length > 0 && (
+              {isSearchOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute left-0 right-0 mt-2 bg-white shadow-xl rounded-lg z-20 max-h-96 overflow-y-auto"
+                  className="absolute left-0 right-0 mt-2 bg-white shadow-xl rounded-lg z-20 max-h-96 overflow-y-auto mx-4 md:mx-8"
                 >
-                  {searchResults.map((result, index) => (
-                    <motion.div
-                      key={result.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <button
-                        onClick={() =>
-                          navigate(
-                            `${config.VITE_BASE_URL}/product/${result.id}/${result.slug}`
-                          )
-                        }
-                        className="w-full text-left px-6 py-3 hover:bg-gray-50 transition-colors flex items-center justify-between group"
+                  {isLoading ? (
+                    <div className="flex justify-center items-center py-6">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-700"></div>
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    searchResults?.map((result, index) => (
+                      <motion.div
+                        key={result.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
                       >
-                        <span className="text-gray-800 group-hover:text-hommlie">
-                          {result.product_name}
-                        </span>
-                        <IoIosArrowForward className="text-gray-400 group-hover:text-hommlie transform group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </motion.div>
-                  ))}
+                        <div
+                          className="flex items-center p-3 hover:bg-gray-50 border-b border-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            setSearchTerm("");
+                            navigate(
+                              `${config.VITE_BASE_URL}/product/${result.id}/${result.slug}`
+                            );
+                          }}
+                        >
+                          {result.productimage && (
+                            <img
+                              src={result.productimage.image_url}
+                              alt={result.product_name}
+                              className="w-14 h-14 object-cover rounded mr-3"
+                            />
+                          )}
+                          <div className="flex-1">
+                            <h4 className="text-gray-800 font-medium">
+                              {result.product_name}
+                            </h4>
+                            <p className="flex gap-2 text-gray-600">
+                              <span className="font-semibold">
+                                {result.discounted_price}
+                              </span>
+                              <span className="line-through ">
+                                {result.product_price}
+                              </span>
+                            </p>
+
+                            {result.rating && (
+                              <div className="flex items-center mt-1">
+                                <div className="flex items-center">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <svg
+                                      key={star}
+                                      className={`w-3 h-3 ${
+                                        star <= Math.round(result.rating)
+                                          ? "text-yellow-400"
+                                          : "text-gray-300"
+                                      }`}
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                  ))}
+                                </div>
+                                <span className="text-xs text-gray-500 ml-1">
+                                  ({result.total_reviews})
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <IoIosArrowForward className="text-gray-400 text-lg" />
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="py-4 px-6 text-center text-gray-500">
+                      No products found for "{searchTerm}"
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
