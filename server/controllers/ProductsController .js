@@ -1054,7 +1054,20 @@ exports.search = async (req, res) => {
       include: [
         {
           model: ProductImage,
-          attributes: ["id", "product_id", "image"],
+          attributes: [
+            "id",
+            "product_id",
+            [
+              sequelize.fn(
+                "CONCAT",
+                sequelize.literal(
+                  `'${apiUrl}/storage/app/public/images/products/'`
+                ),
+                sequelize.col("productimage.image")
+              ),
+              "image_url",
+            ],
+          ],
           where: { media: "Image" },
           as: "productimage",
         },

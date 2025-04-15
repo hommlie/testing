@@ -466,7 +466,7 @@ const Header = ({
                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-700"></div>
                     </div>
                   ) : searchResults.length > 0 ? (
-                    searchResults.map((result, index) => (
+                    searchResults?.map((result, index) => (
                       <motion.div
                         key={result.id}
                         initial={{ opacity: 0, x: -20 }}
@@ -483,9 +483,9 @@ const Header = ({
                             );
                           }}
                         >
-                          {result.productimage && result.productimage[0] && (
+                          {result.productimage && result.productimage && (
                             <img
-                              src={result.productimage[0].image}
+                              src={result.productimage.image_url}
                               alt={result.product_name}
                               className="w-14 h-14 object-cover rounded mr-3"
                             />
