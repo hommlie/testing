@@ -7,7 +7,6 @@ import config from "../../config/config";
 import LoginSignup from "../LoginModal";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
-import { Listbox } from "@headlessui/react";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
@@ -262,14 +261,14 @@ const ServiceSection = ({ categories }) => {
               <div
                 className={`${
                   isRecommended ? "border border-white" : ""
-                } mb-4 text-3xl font-bold text-center rounded-lg py-2 px-4`}
+                } mb-4 text-2xl md:text-3xl font-bold text-center rounded-lg py-2 px-4`}
               >
                 <h3 className={`${isRecommended ? "text-white" : ""}`}>
                   {variation.variation}
                 </h3>
               </div>
               <div
-                className={`flex gap-4 justify-center text-3xl font-bold mb-2 ${
+                className={`flex gap-4 justify-center text-2xl md:text-3xl font-bold mb-2 ${
                   isRecommended ? "text-white" : "text-gray-900"
                 }`}
               >
@@ -349,7 +348,7 @@ const ServiceSection = ({ categories }) => {
           {[1, 2, 3, 4, 5].map((star) => (
             <Star
               key={star}
-              className={`w-2 md:w-4 h-2 md:h-4 ${
+              className={`w-4 h-4 ${
                 star <= Math.round(rating)
                   ? "text-yellow-400 fill-current"
                   : "text-gray-300"
@@ -357,7 +356,7 @@ const ServiceSection = ({ categories }) => {
             />
           ))}
         </div>
-        <div className="text-sm">
+        <div className="text-md md:text-sm">
           {rating} (
           {reviews > 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews}{" "}
           reviews)
@@ -469,7 +468,7 @@ const ServiceSection = ({ categories }) => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-5 md:py-10">
+    <section className="max-w-7xl mx-auto px-4 md:px-8 py-5 md:py-10">
       {/* Category Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-4 pb-6 p-2">
         {categories?.map((category) => (
@@ -523,7 +522,7 @@ const ServiceSection = ({ categories }) => {
       {/* Variation Cards */}
       {currentVariations.length > 0 && (
         <div className="space-y-6">
-          <div className="h-[450px] md:h-auto overflow-y-auto flex gap-4 md:overflow-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+          <div className="h-[500px] md:h-auto overflow-y-auto flex gap-4 md:overflow-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
             {getVisibleVariations().map((variation, index) => (
               <VariationCard
                 key={variation.id}

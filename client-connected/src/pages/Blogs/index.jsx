@@ -132,8 +132,6 @@ const BlogPage = () => {
 
     // Apply category filter
     if (selectedCategory !== "all") {
-      console.log(typeof selectedCategory);
-
       filtered = filtered.filter(
         (blog) => blog?.category_id === selectedCategory
       );
@@ -170,7 +168,7 @@ const BlogPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen max-w-7xl mx-auto bg-gray-50">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -221,9 +219,7 @@ const BlogPage = () => {
                 <span>
                   {selectedCategory === "all"
                     ? "All Categories"
-                    : categories?.find(
-                        (c) => c.id.toString() === selectedCategory
-                      )?.title}
+                    : categories?.find((c) => c.id === selectedCategory)?.title}
                 </span>
                 <Filter className="w-5 h-5 text-gray-400" />
               </button>

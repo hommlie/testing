@@ -116,8 +116,8 @@ export default function MyBookings() {
   };
 
   return (
-    <main className="min-h-screen bg-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen font-headerFont bg-white py-12">
+      <section className="px-4 sm:px-6 lg:px-8">
         <h3 className="text-center text-3xl font-bold text-gray-900 mb-12">
           My Bookings
         </h3>
@@ -298,7 +298,7 @@ export default function MyBookings() {
             ))
           )}
         </div>
-      </div>
+      </section>
 
       <ReviewModal
         isOpen={isReviewModalOpen}
@@ -307,6 +307,6 @@ export default function MyBookings() {
         productId={selectedOrder?.product_id}
         onReviewSubmitted={handleReviewSubmitted}
       />
-    </main>
+    </div>
   );
 }

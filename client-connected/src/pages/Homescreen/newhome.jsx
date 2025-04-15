@@ -324,7 +324,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen font-headerFont">
       {/* Hero Section */}
-      <section className="relative bg-white py-5 md:py-10">
+      <section className="max-w-7xl mx-auto md:px-4 relative bg-white py-5 md:py-10">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -671,7 +671,7 @@ const HomePage = () => {
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* Offers Section */}
-      <section className="py-5 md:py-10 bg-gray-50">
+      <section className="max-w-7xl mx-auto md:px-4 py-5 md:py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">Today's Offers</h2>
           <div
@@ -706,7 +706,7 @@ const HomePage = () => {
       </section>
 
       {/* Most Booked Services */}
-      <section className="py-5 md:py-10 bg-white">
+      <section className="max-w-7xl mx-auto md:px-4 py-5 md:py-10 bg-white">
         <ProductSlider
           title={"Most Booked Services"}
           services={data?.most_booked_services}

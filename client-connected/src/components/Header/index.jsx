@@ -503,20 +503,14 @@ const Header = ({
                               </span>
                             </p>
 
-                            {result.rattings && result.rattings.length > 0 && (
+                            {result.rating && (
                               <div className="flex items-center mt-1">
                                 <div className="flex items-center">
                                   {[1, 2, 3, 4, 5].map((star) => (
                                     <svg
                                       key={star}
                                       className={`w-3 h-3 ${
-                                        star <=
-                                        Math.round(
-                                          result.rattings.reduce(
-                                            (acc, curr) => acc + curr.stars,
-                                            0
-                                          ) / result.rattings.length
-                                        )
+                                        star <= Math.round(result.rating)
                                           ? "text-yellow-400"
                                           : "text-gray-300"
                                       }`}
@@ -528,7 +522,7 @@ const Header = ({
                                   ))}
                                 </div>
                                 <span className="text-xs text-gray-500 ml-1">
-                                  ({result.rattings.length})
+                                  ({result.total_reviews})
                                 </span>
                               </div>
                             )}

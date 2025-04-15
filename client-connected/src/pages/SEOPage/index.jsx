@@ -79,7 +79,7 @@ const SEOPage = () => {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen max-w-7xl mx-auto">
       {/* Hero Section */}
       <motion.section
         initial="initial"
@@ -104,7 +104,7 @@ const SEOPage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4"
             >
               {pageData.title}
             </motion.h1>
