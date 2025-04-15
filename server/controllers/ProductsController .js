@@ -1050,7 +1050,13 @@ exports.search = async (req, res) => {
         },
         status: 1,
       },
-      attributes: ["id", "product_name", "slug"],
+      attributes: [
+        "id",
+        "product_name",
+        "slug",
+        "product_price",
+        "discounted_price",
+      ],
       include: [
         {
           model: ProductImage,
