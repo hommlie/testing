@@ -332,8 +332,14 @@
                                                 <input type="text" name="linkedin" class="form-control" placeholder="{{ trans('labels.linkedin') }}" value="{{$data->linkedin}}">
                                             </div>
                                         </div>
+                                        <div class="form-group row last">
+                                            <label class="col-md-3 label-control" for="linkedin">locations</label>
+                                            <div class="col-md-9">
+                                                <input type="text" name="locations" class="form-control" placeholder="locations" value="{{$data->locations}}" required>
+                                            </div>
+                                        </div>
 
-                                    </div>
+                                    </div> 
                                     <div class="row mt-3">
                                         <div class="col-md-12 mt-3">
                                             <label class="form-label">Faqs</label>
