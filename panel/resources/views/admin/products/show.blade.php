@@ -327,16 +327,15 @@
           <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h6 class="card-title mb-0">Location</h6>
-            <span id="addLocation" class="btn btn-success">+</span>
           </div>
             <div class="card-body" style="height: 780px; overflow-y: scroll; scrollbar-width: thin; scrollbar-color: #888 #eee;">
               <div class="px-3">
                 <div class="form-group row" id="locationContainer">
-                  
+                  </div>
+                  <span class="text-danger" id="locationError" style="font-size:14px;"></span>
+                  <div>
                 </div>
-                <span class="text-danger" id="locationError" style="font-size:14px;"></span>
-                <div>
-                </div>
+                <span id="addLocation" class="btn btn-success">+</span>
               </div>
               
             </div>

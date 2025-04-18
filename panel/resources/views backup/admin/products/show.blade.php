@@ -325,10 +325,11 @@
           </div>
           {{-- PRODUCT LOCATION  --}}
           <div class="card">
-            <div class="card-header">
-              <h6 class="card-title mb-0">Location</h6>
-            </div>
-            <div class="card-body">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="card-title mb-0">Location</h6>
+            <span id="addLocation" class="btn btn-success">+</span>
+          </div>
+            <div class="card-body" style="height: 780px; overflow-y: scroll; scrollbar-width: thin; scrollbar-color: #888 #eee;">
               <div class="px-3">
                 <div class="form-group row" id="locationContainer">
                   
@@ -336,7 +337,6 @@
                 <span class="text-danger" id="locationError" style="font-size:14px;"></span>
                 <div>
                 </div>
-                <span id="addLocation" class="btn btn-success mt-2">+</span>
               </div>
               
             </div>
@@ -1529,78 +1529,47 @@ $('#prod_image').on('change', function () {
     });
   });
 });
+
 // LOCATION 
-const locations = `{{ $data->location }}`;
-const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
-
-const container = document.getElementById('locationContainer');
-const viewAllButton = document.createElement('button');
-viewAllButton.textContent = 'View All';
-viewAllButton.className = 'btn btn-primary mt-2';
-viewAllButton.type = 'button'; // ✅ Prevents form submission
-viewAllButton.style.display = locationArray.length > 11 ? 'block' : 'none';
-
-function addLocationField(value = '', isRequired = false) {
-  const inputGroup = document.createElement('div');
-  inputGroup.className = 'col-sm-12 d-flex mb-2 location-item';
-
-  inputGroup.innerHTML = `
-    <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location">
-    <span class="btn btn-danger ml-3">-</span>
-  `;
-
-  inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
-    if (container.childElementCount > 1) {
-      container.removeChild(inputGroup);
-      document.getElementById('locationError').textContent = '';
-    } else {
-      document.getElementById('locationError').textContent = 'At least one location is required!';
-    }
-  });
-
-  container.appendChild(inputGroup);
-}
-
-// Show only the first 11 locations initially
-if (locationArray.length > 0) {
-  locationArray.slice(0, 8).forEach((location, index) => addLocationField(location, index === 0));
-} else {
-  addLocationField('', true);
-}
-
-// Append View All button after the container
-container.parentElement.appendChild(viewAllButton);
-
-viewAllButton.addEventListener('click', function (event) {
-  event.preventDefault(); // ✅ Prevents form submission
-  
-  if (viewAllButton.textContent === 'View All') {
-    locationArray.slice(11).forEach(location => addLocationField(location));
-    viewAllButton.textContent = 'Show Less';
-  } else {
-    document.querySelectorAll('.location-item').forEach((item, index) => {
-      if (index >= 11) item.remove();
-    });
-    viewAllButton.textContent = 'View All';
-  }
-});
-
-document.getElementById('addLocation').addEventListener('click', function () {
-  addLocationField('', false);
-});
-
-document.querySelector('form').addEventListener('submit', function (e) {
-  const locationInputs = container.querySelectorAll('input[name="location[]"]');
-  const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
-  if (!hasValue) {
-    e.preventDefault();
-    document.getElementById('locationError').textContent = 'At least one location is required!';
-  }
-});
+ const locations = `{{ $data->location }}`;
+ const locationArray = locations ? locations.split('|').map(item => item.trim()) : [];
+ const container = document.getElementById('locationContainer');
+ function addLocationField(value = '', isRequired = false) {
+     const inputGroup = document.createElement('div');
+     inputGroup.className = 'col-sm-12 d-flex mb-2';
+     inputGroup.innerHTML = `
+   <input type="text" class="form-control" name="location[]" value="${value}" placeholder="Location" }>
+   <span class="btn btn-danger ml-3">-</span>
+ `;
+     inputGroup.querySelector('.btn-danger').addEventListener('click', function () {
+         if (container.childElementCount > 1) {
+             container.removeChild(inputGroup);
+             document.getElementById('locationError').textContent = '';
+         } else {
+             document.getElementById('locationError').textContent = 'At least one location is required!';
+         }
+     });
+     container.appendChild(inputGroup);
+ }
+ if (locationArray.length > 0) {
+     locationArray.forEach((location, index) => addLocationField(location, index === 0));
+ } else {
+     addLocationField('', true);
+ }
+ document.getElementById('addLocation').addEventListener('click', function () {
+     addLocationField('', false);
+ });
+ document.querySelector('form').addEventListener('submit', function (e) {
+     const locationInputs = container.querySelectorAll('input[name="location[]"]');
+     const hasValue = Array.from(locationInputs).some(input => input.value.trim() !== '');
+     if (!hasValue) {
+         e.preventDefault();
+         document.getElementById('locationError').textContent = 'At least one location is required!';
+     }
+ });
 
 
 // PRODUCT SPECIFICATION
-
 function pro_specifications() {
         let spec = document.getElementById('pro_specifications').value;
         if (spec.includes("|")) {
