@@ -172,6 +172,8 @@ class VendorController extends Controller
                 'orders.order_total',
                 'orders.landmark',
                 'orders.street_address',
+                'orders.latitude',
+                'orders.longitude',
                 'orders.emp_onsite_image',
                 'orders.pincode',
                 'orders.order_status',
@@ -228,6 +230,7 @@ class VendorController extends Controller
                 'OnSiteQuestions' => $onSiteExists,
                 'OnCompletedQuestions' => $onCompletedExists,
                 'address' => $order->landmark . ' , ' . $order->street_address . ' , ' . $order->pincode,
+                'address_lat_lng' => $order->latitude. ',' .$order->longitude,
                 'order_status' => $order->order_status,
                 'emp_onsite_image' => $order->emp_onsite_image,
                 'IsQuestionsSubmitted' => $isQuestionsSubmitted ? 1 : 0
