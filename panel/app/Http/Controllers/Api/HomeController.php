@@ -74,4 +74,28 @@ class HomeController extends Controller
             return response()->json(['status'=>0,'message'=>trans('messages.no_data')],200);
         }
     }
+    public function checkVersion(){
+        $settings = Settings::first();
+
+        if ($settings) {
+            $response = [
+                "status" => 1, 
+                "message" => "Success",
+                "version_code_user" => $settings->version_code_user ?? "", 
+                "version_code_partner" => $settings->version_code_partner ?? ""
+            ];
+
+            echo json_encode($response);
+        } else {
+            $response = [
+                "status" => 1, 
+                "message" => "Success",
+                "version_code_user" => 1, 
+                "version_code_partner" => 1
+            ];
+
+            echo json_encode($response);
+        }
+
+    }
 }

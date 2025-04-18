@@ -66,7 +66,7 @@ class OrderController extends Controller
 
         $data1 = Order::all();
         // return response()->json($data1);
-        return view('admin.orders.index', compact('data','data1'));
+        return view('admin.orders.index', compact('data', 'data1'));
 
     }
 
@@ -91,6 +91,8 @@ class OrderController extends Controller
         }
         $dataval = [
             'assigned_to' => $request->employee,
+            'order_status' => 2,
+
         ];
         $order->update($dataval);
         if ($order) {
@@ -361,7 +363,7 @@ class OrderController extends Controller
             $clatlon = $request->input('clatlon');
             list($latitude, $longitude) = explode(',', $clatlon);
         }
-        
+
         // TECHNICIAN ASSIGN 
         if (!$request->technicianAssign == '') {
             $ORST = '2'; // ORDER STATUS STORE 2 IN DATABASE 
@@ -538,6 +540,12 @@ class OrderController extends Controller
 
 
         $order = Order::find($id);
+        // TECHNICIAN ASSIGN 
+        if (!$request->technicianAssign == '') {
+            $ORST = '2'; // ORDER STATUS STORE 2 IN DATABASE 
+        } else {
+            $ORST = '1';
+        }
 
         if (!$order) {
             return redirect()->back()->with('danger', 'Order not found.');
@@ -561,17 +569,20 @@ class OrderController extends Controller
             'longitude' => $longitude,
             'street_address' => $request->address,
             'pincode' => $request->pincode,
+            'order_status' => $ORST,
             'desired_date' => $request->desired_date,
             'desired_time' => $request->desired_time,
             'house_number' => $request->houseNo,
+            'assigned_to' => $request->technicianAssign,
         ];
         $order->update($dataval);
         return redirect('admin/orders')->with('success', 'Order updated successfully.');
     }
 
-    
+
     // IMPORT ORDER DATA 
-    public function importOrderData(){
+    public function importOrderData()
+    {
         return view('admin.orders.import-order-data');
     }
 
@@ -843,7 +854,7 @@ class OrderController extends Controller
         }
         return response()->json(['success' => false]);
     }
-    
+
     // ADD BUSINESS REGION
     public function businessStore(Request $request)
     {
@@ -1008,11 +1019,311 @@ class OrderController extends Controller
     // GET COPUNS DETAILS
     public function getCoupons($categoryId)
     {
-        $coupons = Coupons::whereIn('cat_id', [$categoryId, 0 , ""])
-         ->orWhereNull('cat_id')
+        $coupons = Coupons::whereIn('cat_id', [$categoryId, 0, ""])
+            ->orWhereNull('cat_id')
             ->where('status', 1)
             ->get();
         return response()->json($coupons);
     }
 
+
+
+    // IMPORT ORDER DATA USING EXCEL FILE 
+    public function storeOrderDataExcel(Request $request)
+    {
+        $request->validate([
+            'orderData' => 'required|mimes:csv,txt|max:2048',
+        ]);
+        $file = $request->file('orderData');
+        $filePath = $file->storeAs('uploads', $file->getClientOriginalName(), 'public');
+        $absoluteFilePath = storage_path('app/public/uploads/' . $file->getClientOriginalName());
+        // Parse the CSV file into an array
+        $data = array_map('str_getcsv', file($absoluteFilePath));
+        if (empty($data)) {
+            return redirect()->back()->withErrors(['error' => 'The file is empty or invalid.']);
+        }
+        // Extract the header row
+        $header = array_map('trim', array_shift($data));
+
+        // validate all fild 
+        $requiredColumns = [
+            'product_name',
+            'service_center_type',
+            'billing',
+            'account_type',
+            'account_sub_type',
+            'business_region',
+            'business_sub_region',
+            'customer_type',
+            'business_lead',
+            'bill_to_Name',
+            'product_name',
+            'variation',
+            'select_area',
+            'no_of_services',
+            'scheduled_every',
+            'qty',
+            'price',
+            'tax',
+            'order_total',
+            'payment_type',
+            'desired_date',
+            'desired_time',
+            'full_name',
+            'email',
+            'mobile',
+            'landmark',
+            'street_address',
+            'house_number',
+            'pincode',
+        ];
+
+        $missingColumns = array_diff($requiredColumns, $header);
+        if (!empty($missingColumns)) {
+            return redirect()->back()->withErrors(['error' => 'Missing required columns: ' . implode(', ', $missingColumns)]);
+        }
+        // Check for extra columns
+        $extraColumns = array_diff($header, $requiredColumns);
+        if (!empty($extraColumns)) {
+            return redirect()->back()->withErrors(['error' => 'The CSV file contains extra columns: ' . implode(', ', $extraColumns)]);
+        }
+        $file = $request->file('orderData');
+        $filePath = $file->storeAs('uploads', $file->getClientOriginalName(), 'public');
+        $absoluteFilePath = storage_path('app/public/uploads/' . $file->getClientOriginalName());
+        // Check if file exists and is not empty
+        if (!file_exists($absoluteFilePath) || filesize($absoluteFilePath) === 0) {
+            return redirect()->back()->withErrors(['error' => 'The file is empty or invalid.']);
+        }
+        // Read the file content
+        $fileContent = file($absoluteFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (!$fileContent || count($fileContent) < 2) {
+            return redirect()->back()->withErrors(['error' => 'CSV file has no data.']);
+        }
+        // Convert CSV data to array
+        $data = array_map('str_getcsv', $fileContent);
+        // Prepare headers and remove the first row (headers)
+        $headers = array_map('trim', $data[0]);
+        unset($data[0]);
+
+        // Store error messages for invalid rows
+        $errorMessages = [];
+       
+
+        foreach ($data as $row) {
+            // Combine headers with the row data
+            $rowData = array_combine($headers, $row);
+
+            // Extract values from the row
+            $product_name = $rowData['product_name'] ?? null;
+            $variation_name = strtolower($rowData['variation'] ?? '');
+            $select_area = strtolower($rowData['select_area'] ?? '');
+            $business_region = strtolower($rowData['business_region'] ?? '');
+            $business_sub_region = strtolower($rowData['business_sub_region'] ?? '');
+            $serviceCenterType = strtolower(str_replace(' ', '', $rowData['service_center_type'] ?? ''));
+            $billing = strtolower(str_replace(' ', '', $rowData['billing'] ?? ''));
+            $accountType = strtolower(str_replace(' ', '', $rowData['account_type'] ?? ''));
+            $accountSubType = strtolower(str_replace(' ', '', $rowData['account_sub_type'] ?? ''));
+            $srTime = (int) ($rowData['no_of_services'] ?? 1);
+            $srInterval = $rowData['scheduled_every'] ?? null;
+
+            // Get product ID based on product name
+            $product_id = Products::where('product_name', 'LIKE', "%$product_name%")->value('id');
+            if (!$product_id) {
+                $errorMessages[] = "Product not found in row: " . implode(", ", $row);
+                continue; // Skip this row
+            }
+            if ($product_id) {
+                // Get variation ID based on product ID
+                $attributeIDs = Variation::where('product_id', $product_id)->pluck('attribute_id')->toArray();
+                if (empty($attributeIDs)) {
+                    $errorMessages[] = "No attributes found for product ID $product_id in row: " . implode(", ", $row);
+                    continue; // Skip this row
+                }
+                if (!empty($attributeIDs)) {
+                    $attributes = Attribute::whereIn('id', $attributeIDs)->pluck('attribute', 'id')->toArray();
+                    $lowercasedAttributes = array_change_key_case(array_flip(array_map('strtolower', $attributes)), CASE_LOWER);
+                    if (array_key_exists($variation_name, $lowercasedAttributes)) {
+                        // Match the attribute and get the variation ID
+                        $matchedAttributeID = $lowercasedAttributes[$variation_name];
+                        $varName = Variation::where('attribute_id', $matchedAttributeID)
+                            ->where('product_id', $product_id)
+                            ->pluck('variation', 'id')->toArray();
+                        $lowercaseVarName = array_change_key_case(array_flip(array_map('strtolower', $varName)), CASE_LOWER);
+                        if (array_key_exists($select_area, $lowercaseVarName)) {
+                            // Get matching variation ID
+                            $matchedVariationID = $lowercaseVarName[$select_area];
+
+                            // Get business region ID based on region name
+                            $businessRegionID = Business_region::where('state', 'LIKE', "%$business_region%")->value('id');
+                            if (!$businessRegionID) {
+                                $errorMessages[] = "Business region not found in row: " . implode(", ", $row);
+                                continue; // Skip this row
+                            }
+                            if (!$businessRegionID) {
+                                $errorMessages[] = "Business region not found in row: " . implode(", ", $row);
+                                continue; // Skip this row
+                            }
+                            if (!$businessRegionID) {
+                                $errorMessages[] = "Business region not found in row: " . implode(", ", $row);
+                                continue; // Skip this row
+                            }
+                            if (!$businessRegionID) {
+                                $errorMessages[] = "Business region not found in row: " . implode(", ", $row);
+                                continue; // Skip this row
+                            }
+
+                            if ($businessRegionID) {
+                                // Fetch service centers based on region
+                                $branches = ServicesCenter::where('region_id', $businessRegionID)->get(['id', 'branch_name', 'branch_code']);
+                                
+                                if ($branches->isEmpty()) {
+                                    $errorMessages[] = "No service centers found for the specified region in row: " . implode(", ", $row);
+                                    continue; // Skip this row
+                                }
+                                $lowerCasebranchName = [];
+                                foreach ($branches as $branch) {
+                                    $lowerCasebranchName[strtolower($branch->branch_name)] = [
+                                        'id' => $branch->id,
+                                        'branch_code' => $branch->branch_code
+                                    ];
+                                }
+
+                                // Check if sub-region matches any branch
+                                if (array_key_exists(strtolower($business_sub_region), $lowerCasebranchName)) {
+                                    $serviceCenter = $lowerCasebranchName[strtolower($business_sub_region)];
+                                    $serviceCenterID = $serviceCenter['id'];
+                                    $branchCode = $serviceCenter['branch_code'];
+
+                                    // Validate service center type, billing type, and account type
+                                    $validServiceCenterTypes = ["hommlie", "vendor", "franchisee"];
+                                    $validBillingTypes = ["headoffice", "regionaloffice", "branchoffice"];
+                                    $validAccountTypes = ["individual", "bulkbooking"];
+                                    $validAccountSubTypeIndividual = ["residentialorder"];
+                                    $validAccountSubTypeBulk = ["education&institute", "flat/housingsociety", "government", "housingsociety", "builder", "vip"];
+
+                                    if (!in_array($serviceCenterType, $validServiceCenterTypes)) {
+                                        $errorMessages[] = "Service center type is invalid in row: " . implode(", ", $row);
+                                        continue; // Skip this row
+                                    }
+                                    if (!in_array($billing, $validBillingTypes)) {
+                                        $errorMessages[] = "Billing type is invalid in row: " . implode(", ", $row);
+                                        continue; // Skip this row
+                                    }
+                                    if (!in_array($accountType, $validAccountTypes)) {
+                                        $errorMessages[] = "Account type is invalid in row: " . implode(", ", $row);
+                                        continue; // Skip this row
+                                    }
+                                    if ($accountType === "individual" && !in_array($accountSubType, $validAccountSubTypeIndividual)) {
+                                        $errorMessages[] = "Account sub-type is invalid for individual account type in row: " . implode(", ", $row);
+                                        continue; // Skip this row
+                                    }
+                                    if ($accountType === "bulkbooking" && !in_array($accountSubType, $validAccountSubTypeBulk)) {
+                                        $errorMessages[] = "Account sub-type is invalid for bulk booking account type in row: " . implode(", ", $row);
+                                        continue; // Skip this row
+                                    }
+                                } else {
+                                    $errorMessages[] = "Business sub-region not found in row: " . implode(", ", $row);
+                                    continue; 
+                                }
+                                $lastOrder = Order::orderBy('id', 'desc')->first();
+                                    $newOrderNumber = $lastOrder ? intval($lastOrder->order_number) + 1 : 10001;
+                                    if ($srTime > 1) {
+                                        $splitPrice = $rowData['price']  / $srTime;
+                                        $splitTax = $rowData['tax'] ?? null / $srTime;
+                                        // $splitcouponsprice = $request->couponsprice / $srTime;
+                                        $initialDate = Carbon::parse($rowData['desired_date'] ?? null);
+
+                                        for ($i = 0; $i < $srTime; $i++) {
+                                            $orderDate = $initialDate->copy()->addDays($i * $srInterval)->toDateString();
+                                            $dataval = [
+                                                'vendor_id' => "6",
+                                                'product_id' => $product_id,
+                                                'order_number' => $newOrderNumber,
+                                                'product_name' => $product_name,
+                                                'service_center_type' => $serviceCenterType,
+                                                'billing' => $billing,
+                                                'account_type' => $accountType,
+                                                'account_sub_type' => $accountSubType,
+                                                'business_region' => $businessRegionID,
+                                                'business_sub_region' => $serviceCenterID,
+                                                'branch_code' => $branchCode,
+                                                'customer_type' => $rowData['customer_type'] ?? null,
+                                                'business_lead' => $rowData['business_lead'] ?? null,
+                                                'bill_to_Name' => $rowData['bill_to_Name'] ?? null,
+                                                'image' => $rowData['full_name'] ?? null,
+                                                'qty' => $rowData['qty'] ?? null,
+                                                'price' => $splitPrice * (int) $rowData['qty'] ?? 0,
+                                                'tax' => $splitTax * (int) $rowData['qty'] ?? 0,
+                                                'order_total' => $rowData['order_total'] ?? null,
+                                                'attribute' => $matchedAttributeID,
+                                                'variation' => $matchedVariationID,
+                                                'payment_type' => "1",
+                                                'full_name' => $rowData['full_name'] ?? null,
+                                                'email' => $rowData['email'] ?? null,
+                                                'mobile' => $rowData['mobile'] ?? null,
+                                                'landmark' => $rowData['landmark'] ?? null,
+                                                'street_address' => $rowData['street_address'] ?? null,
+                                                'house_number' => $rowData['house_number'] ?? null,
+                                                'pincode' => $rowData['pincode'] ?? null,
+                                                'status' => "1",
+                                                'desired_date' => $orderDate,
+                                                'desired_time' => $rowData['desired_time'] ?? null,
+                                                'created_at' => date('Y-m-d'),
+                                            ];
+                                            DB::table('orders')->insert($dataval);  
+                                        }
+                                    }else{
+                                        $dataval = [
+                                            'vendor_id' => "6",
+                                            'product_id' => $product_id,
+                                            'order_number' => $newOrderNumber,
+                                            'product_name' => $product_name,
+                                            'service_center_type' => $serviceCenterType,
+                                            'billing' => $billing,
+                                            'account_type' => $accountType,
+                                            'account_sub_type' => $accountSubType,
+                                            'business_region' => $businessRegionID,
+                                            'business_sub_region' => $serviceCenterID,
+                                            'branch_code' => $branchCode,
+                                            'customer_type' => $rowData['customer_type'] ?? null,
+                                            'business_lead' => $rowData['business_lead'] ?? null,
+                                            'bill_to_Name' => $rowData['bill_to_Name'] ?? null,
+                                            'image' => $rowData['full_name'] ?? null,
+                                            'qty' => $rowData['qty'] ?? null,
+                                            'price' => ($rowData['price'] ?? 0) * ($rowData['qty'] ?? 0),
+                                            // 'coupon_name' => $request->coupons,
+                                            // 'discount_amount' => $request->couponsprice,
+                                            'attribute' => $matchedAttributeID,
+                                            'variation' => $matchedVariationID,
+                                            'tax' => ($rowData['tax'] ?? 0) * ($rowData['qty'] ?? 0),
+                                            'order_total' => $rowData['order_total'] ?? null,
+                                            'payment_type' => "1",
+                                            'full_name' => $rowData['full_name'] ?? null,
+                                            'email' => $rowData['email'] ?? null,
+                                            'mobile' => $rowData['mobile'] ?? null,
+                                            'landmark' => $rowData['landmark'] ?? null,
+                                            'street_address' => $rowData['street_address'] ?? null,
+                                            'house_number' => $rowData['house_number'] ?? null,
+                                            'pincode' => $rowData['pincode'] ?? null,
+                                            'status' => "1",
+                                            'desired_date' => $rowData['desired_date'] ?? null,
+                                            'desired_time' => $rowData['desired_time'] ?? null,
+                                            'created_at' => date('Y-m-d'),
+                                        ];
+                                        Order::create($dataval);
+                                    }    
+                            }
+                        }
+                    }
+                }
+            }
+           
+        }
+        if (!empty($errorMessages)) {
+            return redirect()->back()->withErrors($errorMessages);
+        }
+        return redirect()->back()->with('success', 'Orders have been successfully imported.');
+    }
 }
+
+

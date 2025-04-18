@@ -182,6 +182,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::get('addorder', 'OrderController@addorder')->name('orders.add');
         // IMPORT ORDER DATA
         Route::get('importOrderData', 'OrderController@importOrderData')->name('orders.importOrderData');
+        Route::post('storeOrderDataExcel', 'OrderController@storeOrderDataExcel')->name('orders.storeOrderDataExcel');
        
         // SERVICES CENTER/ BUSINESS STORE / GET BRANCH CODE / GET CERVICES CENTER BASED ON REGION ID / ADDRESS DETAILS 
         Route::post('serviceStore', 'OrderController@serviceStore')->name('orders.serviceStore');

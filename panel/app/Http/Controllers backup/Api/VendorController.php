@@ -145,14 +145,17 @@ class VendorController extends Controller
         $validator = \Validator::make($request->all(), [
             'user_id' => 'required|integer',
             'order_status' => 'required|string',
+            "date" => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
             return response()->json(["status" => 0, "message" => $validator->errors()->first()], 400);
         }
 
-        // Fetch orders with necessary joins
-        $orders = Order::where('assigned_to', $request->user_id)
+        $data = $request->date;
+
+        // Start query building
+        $ordersQuery = Order::where('assigned_to', $request->user_id)
             ->where('order_status', $request->order_status)
             ->join('products', 'orders.product_id', '=', 'products.id') // Join with products table
             ->join('subcategories', 'products.subcat_id', '=', 'subcategories.id')  // Join with subcategories using subcat_id
@@ -173,32 +176,36 @@ class VendorController extends Controller
                 'orders.pincode',
                 'orders.order_status',
                 'subcategories.question as questions' // Retrieve questions from subcategories
-            )
-            ->get();
+            );
+
+        // Apply date filter if provided
+        if (!empty($data)) {
+            $ordersQuery->whereDate('orders.completed_at', $data);
+        }
+
+        $orders = $ordersQuery->get();
 
         // Check if no orders are found
         if ($orders->isEmpty()) {
-            return response()->json(["status" => 0, "message" => trans('No Orders Found')], 400);
+            return response()->json(["status" => 0, "message" => trans('No Orders Found')], 200);
         }
-
-
-
-
 
         $orderData = $orders->map(function ($order) use ($request) {
             $questions = json_decode($order->questions, true);
             $onSiteExists = 0;
             $onCompletedExists = 0;
-            if ($questions != null ){
+
+            if ($questions) {
                 foreach ($questions as $questionSet) {
-                    if ($questionSet['title'] == 'Onsite') {
-                        $onSiteExists = 1;
-                    }
-                    if ($questionSet['title'] == 'OnCompleted') {
-                        $onCompletedExists = 1;
+                    if (!empty($questionSet['question'])) {
+                        if ($questionSet['title'] == 'Onsite') {
+                            $onSiteExists = 1;
+                        }
+                        if ($questionSet['title'] == 'OnCompleted') {
+                            $onCompletedExists = 1;
+                        }
                     }
                 }
-
             }
 
             // Check if the combination of order status and order id exists in the QuestionAnswers table
@@ -207,7 +214,6 @@ class VendorController extends Controller
                 ->where('stage', $request->order_status)
                 ->exists();
 
-            // Map order data along with question existence flags and IsQuestionsSubmitted flag
             return [
                 'id' => $order->id,
                 'order_number' => $order->order_number,
@@ -219,23 +225,22 @@ class VendorController extends Controller
                 'desired_date' => $order->desired_date,
                 'desired_time' => $order->desired_time,
                 'price' => $order->order_total,
-                'OnSiteQuestions' => $onSiteExists, // 1 if Onsite questions exist, 0 otherwise
-                'OnCompletedQuestions' => $onCompletedExists, // 1 if OnCompleted questions exist, 0 otherwise
+                'OnSiteQuestions' => $onSiteExists,
+                'OnCompletedQuestions' => $onCompletedExists,
                 'address' => $order->landmark . ' , ' . $order->street_address . ' , ' . $order->pincode,
                 'order_status' => $order->order_status,
                 'emp_onsite_image' => $order->emp_onsite_image,
-                'IsQuestionsSubmitted' => $isQuestionsSubmitted ? 1 : 0 // Add this flag in response
+                'IsQuestionsSubmitted' => $isQuestionsSubmitted ? 1 : 0
             ];
         });
 
-        // Return the order data in the response
         return response()->json([
             'status' => 1,
             'message' => "Orders Fetched Successfully",
             'data' => $orderData
         ], 200);
-       // return $orderData;
     }
+
 
 
 
@@ -251,12 +256,11 @@ class VendorController extends Controller
             ->where('orders.order_status', $request->order_status)
             ->first();
 
+
         if ($orders != null) {
 
             $question = $orders->question;
-
-
-            if ($question == "" || $question == null) {
+            if ($question == null) {
                 $object = [
                     'id' => $orders->id,
                     'order_number' => $orders->order_number,
@@ -270,14 +274,10 @@ class VendorController extends Controller
                     'order_ques_count' => 0,
                     'order_question' => null
                 ];
-
-
                 return response()->json(['status' => 1, 'message' => "Orders Fetched Successfully", 'data' => $object], 200);
             } else {
 
-
                 $questionJsonArr = json_decode($question, true);
-
 
                 $mainQuestionArr = array();
 
@@ -287,8 +287,6 @@ class VendorController extends Controller
                     $questionStr = $obj['question'];
 
                     $questionArr = explode(',', $questionStr);
-
-
                     $responseQueArr = array();
                     foreach ($questionArr as $key => $value) {
                         $question = Question::where('id', $value)->first();
@@ -313,8 +311,6 @@ class VendorController extends Controller
                 } else {
                     $orders->question = null;
                 }
-
-
 
 
                 $object = [
@@ -611,7 +607,7 @@ class VendorController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://control.msg91.com/api/v5/otp?template_id=66b09df3d6fc0561e241f922&mobile={$mobileNumber}&authkey=403754ASWGpJz366b09ec2P1&realTimeResponse=",
+            CURLOPT_URL => "https://control.msg91.com/api/v5/otp?template_id=67f4d758d6fc0510491a56a3&mobile={$mobileNumber}&authkey=403754ASWGpJz366b09ec2P1&realTimeResponse=",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
