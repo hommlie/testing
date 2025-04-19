@@ -33,4 +33,5 @@ class User extends Authenticatable
     public function rattings(){
         return $this->hasOne('App\Models\Ratting','vendor_id','id')->select('vendor_id',\DB::raw('ROUND(AVG(ratting),1) as avg_ratting'));
     }
+
 }
