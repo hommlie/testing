@@ -157,15 +157,18 @@ class VendorController extends Controller
         // Start query building
         $ordersQuery = Order::where('assigned_to', $request->user_id)
             ->where('order_status', $request->order_status)
-            ->join('products', 'orders.product_id', '=', 'products.id') // Join with products table
-            ->join('subcategories', 'products.subcat_id', '=', 'subcategories.id')  // Join with subcategories using subcat_id
+            ->join('products', 'orders.product_id', '=', 'products.id')
+            ->join('subcategories', 'products.subcat_id', '=', 'subcategories.id') 
+            ->join('attributes', 'orders.attribute', '=', 'attributes.id') 
+            ->join('variations', 'orders.variation', '=', 'variations.id') 
             ->select(
                 'orders.id',
                 'orders.order_number',
                 'orders.product_name',
                 'orders.full_name',
                 'orders.mobile',
-                'orders.variation',
+                'attributes.attribute as attribute',
+                'variations.variation as variation',
                 'orders.payment_type',
                 'orders.desired_date',
                 'orders.desired_time',
@@ -210,7 +213,6 @@ class VendorController extends Controller
                 }
             }
 
-            // Check if the combination of order status and order id exists in the QuestionAnswers table
             $isQuestionsSubmitted = \DB::table('question_answers')
                 ->where('order_id', $order->id)
                 ->where('stage', $request->order_status)
@@ -222,6 +224,7 @@ class VendorController extends Controller
                 'product_name' => $order->product_name,
                 'full_name' => $order->full_name,
                 'mobile' => $order->mobile,
+                'attribute' => $order->attribute,
                 'variation' => $order->variation,
                 'payment_type' => $order->payment_type,
                 'desired_date' => $order->desired_date,
