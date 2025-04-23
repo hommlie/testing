@@ -66,10 +66,10 @@
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
                             <h4 class="card-title">{{ trans('labels.orders') }}</h4>
                             <div class="d-flex " style="margin-left:50%;">
-                               {{--  <a href="{{ route('admin.orders.importOrderData') }}"
+                                 <a href="{{ route('admin.orders.importOrderData') }}"
                                     class="btn btn-raised btn-primary text-light btn-min-width mb-0 me-2 ">
                                     {{ trans(' Import Order Data') }} </a>
-                                </a> --}}
+                                </a> 
                                 <a href="#" class="btn btn-raised btn-primary text-light btn-min-width mb-0"
                                     data-bs-toggle="modal" data-bs-target="#SR_ID" style="margin-left:5%;">
                                     GET OTP / Close Order

@@ -10,11 +10,9 @@
         height: 400px;
         width: 100%;
     }
-
     #pac-input {
         z-index: 9999 !important;
     }
-
     .gm-style-iw {
         z-index: 9999 !important;
     }
@@ -844,7 +842,6 @@
 
     // MAP AND SEARCH BOX IN MODEL
     var map, marker, searchBox;
-
     function InitMap() {
 
         var location;
@@ -916,7 +913,6 @@
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.setFields(['place_id', 'geometry', 'name']);  
         autocomplete.addListener('place_changed', function() {
-            const place = autocomplete.getPlace();
             if (place.geometry) {
                 const lat = place.geometry.location.lat();
                 const lng = place.geometry.location.lng();

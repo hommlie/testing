@@ -46,6 +46,9 @@ class SettingsController extends Controller
             'site_title' => 'required',
             'meta_title' => 'required',
             'meta_description' => 'required',
+            'locations' => 'required',
+            'version_code_user' => 'required',
+            'version_code_partner' => 'required',
         ]);
 
         $data = new Settings;
@@ -106,6 +109,9 @@ class SettingsController extends Controller
         $data->instagram =$request->instagram;
         $data->linkedin =$request->linkedin;
         $data->faqs = $formattedFaqsContent;
+        $data->locations = $request->locations;
+        $data->version_code_user = $request->version_code_user;
+        $data->version_code_partner = $request->version_code_partner;
         $data->save();
 
         if ($data) {

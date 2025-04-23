@@ -47,6 +47,7 @@
                     <p><strong>Email:</strong> {{ $complaint->email }}</p>
                     <p><strong>Subject:</strong> {{ $complaint->subject }}</p>
                     <p><strong>Message:</strong> {{ $complaint->message }}</p>
+                    <p><strong>Remark:</strong> {{ $complaint->remark }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($complaint->c_status) }}</p>
                 </div>
             </div>

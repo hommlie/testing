@@ -274,7 +274,7 @@
                                                                             Time: <b>{{ $order->created_at }}</b><br>
                                                                             Service Type: <b>{{ $order->product_name }}</b><br>
                                                                             <hr>
-                                                                            <b>{{ $order->user->name }}</b><br>
+                                                                            <b>{{ $order->user->name ?? "" }}</b><br>
                                                                             Address : <b>{{ $order->landmark }}, {{ $order->street_address }}, {{ $order->pincode }}</b>
                                                                             <hr>
                                                                             Order Number: <b>{{ $order->order_number }}</b><br>
@@ -289,7 +289,7 @@
                                                                             </b>
                                                                             </div>
                                                                             " data-status="{{ $order->order_status }}">
-                                                                                {{ $order->user->name }}
+                                                                                {{ $order->user->name ?? "" }}
                                                                             </a>
                                                                             @php $showJob = true; @endphp
                                                                         @endif
@@ -320,7 +320,7 @@
                                                                             Time: <b>{{ $order->created_at }}</b><br>
                                                                             Service Type: <b>{{ $order->product_name }}</b><br>
                                                                             <hr>
-                                                                            <b>{{ $order->user->name }}</b><br>
+                                                                            <b>{{ $order->user->name ??"" }}</b><br>
                                                                             Address : <b>{{ $order->landmark }}, {{ $order->street_address }}, {{ $order->pincode }}</b>
                                                                             <hr>
                                                                             Order Number: <b>{{ $order->order_number }}</b><br>
@@ -335,7 +335,7 @@
                                                                             </b>
                                                                             </div>
                                                                             " data-status="{{ $order->order_status }}">
-                                                                                {{ $order->user->name }}
+                                                                                {{ $order->user->name ?? ""}}
                                                                             </a>
                                                                             @php $showJob = true; @endphp
                                                                         @endif
@@ -366,7 +366,7 @@
                                                                             Time: <b>{{ $order->created_at }}</b><br>
                                                                             Service Type: <b>{{ $order->product_name }}</b><br>
                                                                             <hr>
-                                                                            <b>{{ $order->user->name }}</b><br>
+                                                                            <b>{{ $order->user->name ?? "" }}</b><br>
                                                                             Address : <b>{{ $order->landmark }}, {{ $order->street_address }}, {{ $order->pincode }}</b>
                                                                             <hr>
                                                                             Order Number: <b>{{ $order->order_number }}</b><br>
@@ -381,7 +381,7 @@
                                                                             </b>
                                                                             </div>
                                                                             " data-status="{{ $order->order_status }}">
-                                                                                {{ $order->user->name }}
+                                                                                {{ $order->user->name ?? "" }}
                                                                             </a>
                                                                             @php $showJob = true; @endphp
                                                                         @endif

@@ -40,6 +40,7 @@ Route::group(['namespace'=>'Api'],function (){
 
 	//Homefeeds
 	Route::post('homefeeds','HomeController@homefeeds');
+	Route::get('checkVersion','HomeController@checkVersion');
 
 	//Product
 	Route::post('products','ProductsController@products');

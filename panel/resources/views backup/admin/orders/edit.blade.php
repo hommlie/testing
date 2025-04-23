@@ -6,13 +6,33 @@
         color: #fff !important;
     }
 
+    .btn-primary.text-light {
+        color: #fff !important;
+    }
+
     #map {
         height: 400px;
         width: 100%;
     }
-
     #pac-input {
         z-index: 9999 !important;
+    }
+    .gm-style-iw {
+        z-index: 9999 !important;
+    }
+
+    .modal-content {
+        position: relative;
+        z-index: 9998;
+    }
+
+    #customerModal .modal-content {
+        font-size: 8px !important;
+        z-index: 9999 !important;
+    }
+
+    .pac-container {
+        z-index: 1051;
     }
 
     .gm-style-iw {
@@ -362,25 +382,6 @@
                                         <span class="text-danger">{{ $errors->first('price') }}</span>
                                     @endif
                                     <br />
-                                    {{--NEW SECTION FOR DATE --}}
-                                    {{-- <div class="row">
-                                        <div class="col-md-6">
-                                            {{-- CONTRACT START DATE
-                                            <label for="contractStartDate">Contract Start Date</label>
-                                            <input type="text" name="contractStartDate" id="contractStartDate"
-                                                class="form-control" placeholder="Contract Start Date" readonly><br />
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{-- CONTRACT END DATE
-                                            <label for="contractEndDate">Contract End Date</label>
-                                            <input type="text" name="contractEndDate" id="contractEndDate"
-                                                class="form-control" placeholder="Contract End Date" readonly><br />
-                                        </div>
-
-                                    </div> --}}
-
-
-
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <label for="desired_date"><span class="text-success">**</span> Desired date
@@ -403,7 +404,6 @@
                                             @endif
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="fullname"><span class="text-success">**</span> Customer Name <span
@@ -485,11 +485,6 @@
                                         </div>
                                     </div>
 
-
-
-
-
-
                                     {{-- LATLONG --}}
                                     {{-- MAP MODE --}}
                                     <div class="modal fade" id="mapModal" tabindex="-1" role="dialog"
@@ -497,20 +492,25 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="mapModalLabel">Select Location</h5>
+
+                                                    <h4>Search Location</h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
-
                                                 </div>
                                                 <div class="modal-body">
-                                                    <input id="searchBox" class="form-control mb-3" type="text"
-                                                        placeholder="Search a location">
-                                                    <div id="map"></div>
+                                                    <input id="pac-input" class="controls form-control rounded-0"
+                                                        type="text" placeholder="Search Box">
+                                                    <div class="col-lg-12">
+
+                                                        <div id="map-canvas" style="height: 500px; width:100%;"></div>
+                                                        <div id="info"></div>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
+
                                                     <div id="latlong" class="mr-auto"></div>
 
-                                                    <button type="button" class="btn btn-primary"
+                                                    <button type="button" class="btn btn-primary rounded-0"
                                                         id="save-location">Save</button>
                                                 </div>
                                             </div>
@@ -595,7 +595,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqf4NpjMnz8J-LuEwgJAdVrn_1_5Zt6g&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqf4NpjMnz8J-LuEwgJAdVrn_1_5Zt6g&libraries=drawing,places"></script>
 
 <script src="https://www.google.com/recaptcha/api.js"></script>
 
@@ -649,11 +649,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-
-
-
-
     // SHOW BRANCH CODE BASED ON SELECTION 
     document.getElementById('businessSubRegion').addEventListener('change', function () {
         var selectedOption = this.options[this.selectedIndex];
@@ -674,83 +669,92 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     // MAP 
-    var map, searchBox, markers = [];
-    function initMap() {
-        var location = { lat: -34.397, lng: 150.644 };
-        map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 8,
-            center: location
-        });
-        var marker = new google.maps.Marker({
-            position: location,
-            map: map
-        });
+    var map, marker, searchBox;
+    function InitMap() {
+        var location;
+        var latLon = document.getElementById('clatlon').value;
+        if (latLon) {
+            var latLng = latLon.split(',');
+            var lat = parseFloat(latLng[0]);
+            var lng = parseFloat(latLng[1]);
 
-        var input = document.getElementById('searchBox');
-        searchBox = new google.maps.places.SearchBox(input);
-        map.addListener('bounds_changed', function () {
-            searchBox.setBounds(map.getBounds());
-        });
-        searchBox.addListener('places_changed', function () {
-            var places = searchBox.getPlaces();
-            if (places.length == 0) {
-                console.log("No places found");
-                return;
+            if (!isNaN(lat) && !isNaN(lng)) {
+
+                location = new google.maps.LatLng(lat, lng);
+            } else {
+
+                location = new google.maps.LatLng(12.9715987, 77.5945627);
             }
+        } else {
 
-            markers.forEach(function (marker) {
-                marker.setMap(null);
-            });
-            markers = [];
+            location = new google.maps.LatLng(12.9715987, 77.5945627);
+        }
+        var mapOptions = {
+            zoom: 12,
+            center: location,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        marker = new google.maps.Marker({
+            map: map,
+            position: location,
+            draggable: true
+        });
+
+        searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('pac-input'));
+
+        google.maps.event.addListener(searchBox, 'places_changed', function () {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) return;
 
             var bounds = new google.maps.LatLngBounds();
+
             places.forEach(function (place) {
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var marker = new google.maps.Marker({
-                    map: map,
-                    title: place.name,
-                    position: place.geometry.location
-                });
-                markers.push(marker);
+                if (!place.geometry || !place.geometry.location) return;
 
-                if (place.geometry.viewport) {
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
+                marker.setPosition(place.geometry.location);
+                bounds.extend(place.geometry.location);
             });
+
             map.fitBounds(bounds);
+            map.setZoom(Math.min(map.getZoom(), 12));
         });
-
-        // Geolocation to center map
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                map.setCenter(userLocation);
-                new google.maps.Marker({
-                    position: userLocation,
-                    map: map,
-                    title: "You are here!"
-                });
-            });
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
     }
 
-    window.onload = initMap;
     document.getElementById('save-location').addEventListener('click', function () {
-        var latLng = map.getCenter();
-        console.log("Latitude: " + latLng.lat() + ", Longitude: " + latLng.lng());
-        document.getElementById('clatlon').value = latLng.lat() + "," + latLng.lng()
+        var position = marker.getPosition();
+        console.log("Latitude: " + position.lat() + ", Longtude: " + position.lng());
+        document.getElementById('clatlon').value = position.lat() + "," + position.lng();
         $('#mapModal').modal('hide');
     });
+
+    $('#mapModal').on('shown.bs.modal', function () {
+    if (!map) {
+        InitMap();
+    }
+    const input = document.getElementById('pac-input');
+    console.log(input);
+    if (input) {
+        const autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.setFields(['place_id', 'geometry', 'name']);  
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            console.log(place);
+            if (place.geometry) {
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                map.setCenter(place.geometry.location);
+                map.setZoom(13); 
+                marker.setPosition(place.geometry.location);
+                document.getElementById('coordinates').value = `${lat}, ${lng}`;
+                document.getElementById('info').innerHTML = `Selected: ${place.name}`;
+            }
+        });
+    }
+});
 
     // ACCOUNT TYPE 
     const accountTypeDropdown = document.getElementById('accountType');

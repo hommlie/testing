@@ -71,6 +71,12 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-12">
+                        <label for="remark" class="form-label">Remark</label>
+                        <textarea class="form-control" placeholder="Enter Remark" name="remark" rows="4">{{ $complaint->remark }}</textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
                         <label for="status" class="form-label">Status</label>
                         <select class="form-control" name="status">
                             <option value="pending" {{ $complaint->c_status == 'pending' ? 'selected' : '' }}>Pending</option>
