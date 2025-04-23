@@ -103,6 +103,7 @@ exports.getCategory = async (req, res) => {
             ],
             "slug",
           ],
+          where: { status: 1 },
         },
       ],
       where: { status: 1 },

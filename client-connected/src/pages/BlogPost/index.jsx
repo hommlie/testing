@@ -335,7 +335,7 @@ const BlogPost = () => {
   }
 
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen max-w-7xl mx-auto">
       <div className="relative h-[500px]">
         <img
           src={blog.featured_image || "/api/placeholder/1920/500"}
@@ -350,7 +350,7 @@ const BlogPost = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="px-4 py-12">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
@@ -409,7 +409,7 @@ const BlogPost = () => {
 
         <div className="ck-content">
           <div
-            className="space-y-4 prose prose-sm sm:prose lg:prose-xl max-w-none"
+            className="space-y-4 prose prose-sm sm:prose lg:prose-2xl max-w-none"
             dangerouslySetInnerHTML={{
               __html: blog.content,
             }}
@@ -468,7 +468,7 @@ const BlogPost = () => {
       </div>
 
       <LoginSignup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-    </main>
+    </div>
   );
 };
 
