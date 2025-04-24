@@ -550,6 +550,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/delete', 'SeoPagesController@destroy')->name('seopages.delete');
     });
 
+    // LEADS SHEET 
+    Route::group(['prefix'=> 'leadssheet'], function () {
+        Route::get('/', 'LeadsSheetController@index')->name('leadssheet');
+        Route::get('/add', 'LeadsSheetController@create')->name('leadssheet.add');
+        Route::post('/store', 'LeadsSheetController@store')->name('leadssheet.store');
+        Route::get('/edit/{id}', 'LeadsSheetController@edit')->name('leadssheet.edit');
+        Route::post('/update/{id}', 'LeadsSheetController@update')->name('leadssheet.update');
+        Route::post('/change/status', 'LeadsSheetController@changeStatus')->name('leadssheet.changeStatus');
+        Route::post('/delete', 'LeadsSheetController@destroy')->name('leadssheet.delete');
+    });
+
+
     // MANAGE HOME PAGE SECTIONS
     Route::group(['prefix'=> 'homepagesections'], function () {
         Route::get('/', 'HomePageSectionsController@index')->name('homepagesections');
