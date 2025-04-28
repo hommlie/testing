@@ -1479,6 +1479,49 @@
                         </ul>
                     </li>
                 @endcan
+                {{-- LEADS SHEET--}}
+                @can('leads_sheet_access')
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/leadssheet*') ? 'menu-open' : '' }} {{ request()->is('admin/leadssheet/index*') ? 'menu-open' : '' }} ">
+                        <a class="nav-link nav-dropdown-toggle">
+                            <i class="fas fa-newspaper mr-2"></i>
+                            </i>
+                            <p>
+                                <span>Leads Sheet</span>
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-4">
+                            @can('leads_sheet_view_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.leadssheet") }}"
+                                        class="nav-link {{ request()->is('admin/leadssheet') ? '' : '' }}">
+                                        
+                                        <i class="fa fa-check-circle mr-2">
+
+                                        </i>
+                                        <p>
+                                            <span>View Leads Sheet</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('leads_sheet_add_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.leadssheet.add") }}"
+                                        class="nav-link {{ request()->is('admin/leadssheet/add') ? '' : '' }}">
+                                        <i class="fa fa-plus-circle mr-2">
+                                        </i>
+                                        <p>
+                                            <span>Add Leads Sheet</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcan
 
                 {{-- USER MANAGEMENT ACCESS --}}
                 @can('user_management_access')

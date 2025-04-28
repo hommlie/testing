@@ -35,9 +35,9 @@
                 @endif
             </div>
 
-            <div class="form-group {{ $errors->has('options') ? 'has-error' : '' }}" style="display: none;" id="options-container">
+            <div class="form-group {{ $errors->has('options') ? 'has-error' : '' }}"  id="options-container"> <!-- style="display: none;" -->
                 <label for="options">{{ trans('Enter Options (Comma Separated)') }}*</label>
-                <input type="text"  name="options" placeholder="e.g., Option1, Option2" id="options"  class="form-control" value="{{ old('options', isset($product) ? $product->options : '') }}">
+                <input type="text"  name="options" placeholder="e.g., Option1, Option2" id="options"  class="form-control">
                 @if($errors->has('options'))
                     <p class="help-block">
                         {{ $errors->first('options') }}
