@@ -574,6 +574,11 @@ exports.getCleaningSubcategory = async (req, res) => {
               qty: variation.qty,
               created_at: variation.created_at,
               updated_at: variation.updated_at,
+              product_name: product.product_name,
+              product_tax: product.tax,
+              product_tax_type: product.tax_type,
+              attribute_id: variation.attribute_id,
+              product_shipping_cost: product.shipping_cost,
             };
 
             // Check if attribute group exists
