@@ -208,11 +208,16 @@ exports.getCart = async (req, res) => {
       // Add product price info to each cart item
       const enhancedCartItems = cartItems.map((item) => {
         const cartItemData = item.toJSON();
-        cartItemData.Product = productPriceMap[item.product_id] || {
-          id: item.product_id,
-          product_price: null,
-          discounted_price: null,
-        };
+        // Add product price fields directly to the cart item
+        if (productPriceMap[item.product_id]) {
+          cartItemData.product_price =
+            productPriceMap[item.product_id].product_price;
+          cartItemData.discounted_price =
+            productPriceMap[item.product_id].discounted_price;
+        } else {
+          cartItemData.product_price = null;
+          cartItemData.discounted_price = null;
+        }
         return cartItemData;
       });
 

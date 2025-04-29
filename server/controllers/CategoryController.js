@@ -455,6 +455,9 @@ exports.getCleaningSubcategory = async (req, res) => {
         "location",
         "rating",
         "total_reviews",
+        "faqs_for_mobile",
+        "description_for_mobile",
+        "pro_specifications",
       ],
       include: [
         {
