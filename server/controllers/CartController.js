@@ -190,34 +190,54 @@ exports.getCart = async (req, res) => {
       // Get all product IDs from cart
       const productIds = cartItems.map((item) => item.product_id);
 
-      // Get product price data for these products
+      // Get all variation IDs that exist in cart items
+      const variationIds = cartItems
+        .filter((item) => item.variation)
+        .map((item) => item.variation);
+
+      // Get product price data for products without variations
       const productPrices = await Product.findAll({
-        attributes: ["id", "product_price", "discounted_price"],
+        attributes: ["id", "product_price"],
         where: { id: productIds },
       });
 
-      // Create a map for quick lookup
+      // Get variation prices for products with variations
+      const variationPrices =
+        variationIds.length > 0
+          ? await Variation.findAll({
+              attributes: ["id", "price"],
+              where: { id: variationIds },
+            })
+          : [];
+
+      // Create maps for quick lookup
       const productPriceMap = {};
       productPrices.forEach((product) => {
-        productPriceMap[product.id] = {
-          product_price: product.product_price,
-          discounted_price: product.discounted_price,
-        };
+        productPriceMap[product.id] = product.product_price;
+      });
+
+      const variationPriceMap = {};
+      variationPrices.forEach((variation) => {
+        variationPriceMap[variation.id] = variation.price;
       });
 
       // Add product price info to each cart item
       const enhancedCartItems = cartItems.map((item) => {
         const cartItemData = item.toJSON();
-        // Add product price fields directly to the cart item
-        if (productPriceMap[item.product_id]) {
-          cartItemData.product_price =
-            productPriceMap[item.product_id].product_price;
-          cartItemData.discounted_price =
-            productPriceMap[item.product_id].discounted_price;
-        } else {
-          cartItemData.product_price = null;
-          cartItemData.discounted_price = null;
+
+        // If item has variation, use variation price
+        if (item.variation && variationPriceMap[item.variation]) {
+          cartItemData.product_price = variationPriceMap[item.variation];
         }
+        // Otherwise use product price
+        else if (productPriceMap[item.product_id]) {
+          cartItemData.product_price = productPriceMap[item.product_id];
+        }
+        // Fallback if neither is available
+        else {
+          cartItemData.product_price = item.price || null;
+        }
+
         return cartItemData;
       });
 
