@@ -192,7 +192,7 @@ exports.getCart = async (req, res) => {
 
       // Get product price data for these products
       const productPrices = await Product.findAll({
-        attributes: ["id", "discounted_price"],
+        attributes: ["id", "product_price", "discounted_price"],
         where: { id: productIds },
       });
 
@@ -200,6 +200,7 @@ exports.getCart = async (req, res) => {
       const productPriceMap = {};
       productPrices.forEach((product) => {
         productPriceMap[product.id] = {
+          product_price: product.product_price,
           discounted_price: product.discounted_price,
         };
       });
@@ -209,9 +210,12 @@ exports.getCart = async (req, res) => {
         const cartItemData = item.toJSON();
         // Add product price fields directly to the cart item
         if (productPriceMap[item.product_id]) {
+          cartItemData.product_price =
+            productPriceMap[item.product_id].product_price;
           cartItemData.discounted_price =
             productPriceMap[item.product_id].discounted_price;
         } else {
+          cartItemData.product_price = null;
           cartItemData.discounted_price = null;
         }
         return cartItemData;
