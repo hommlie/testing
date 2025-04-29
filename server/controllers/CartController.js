@@ -1,4 +1,4 @@
-const { Cart, Attribute, Variation } = require("../models");
+const { Cart, Attribute, Variation, Product } = require("../models");
 const sequelize = require("../config/connection");
 const apiUrl = process.env.apiUrl;
 
@@ -93,12 +93,10 @@ exports.addToCart = async (req, res) => {
         existingCart.vendor_id !== vendor_id &&
         existingCart.user_id === user_id
       ) {
-        return res
-          .status(400)
-          .json({
-            status: 0,
-            message: "First empty your Cart, Then add new product in Cart",
-          });
+        return res.status(400).json({
+          status: 0,
+          message: "First empty your Cart, Then add new product in Cart",
+        });
       } else {
         const url = image;
         const parts = url.split("/");
@@ -144,13 +142,11 @@ exports.addToCart = async (req, res) => {
       }
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: 0,
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: 0,
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -186,6 +182,12 @@ exports.getCart = async (req, res) => {
           "image_url",
         ],
       ],
+      include: [
+        {
+          model: Product,
+          attributes: ["id", "product_price", "discounted_price"],
+        },
+      ],
       where: { user_id },
       order: [["id", "DESC"]],
     });
@@ -200,13 +202,11 @@ exports.getCart = async (req, res) => {
         .json({ status: 0, message: "No items found in the cart" });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: 0,
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: 0,
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -238,13 +238,11 @@ exports.deleteProduct = async (req, res) => {
         .json({ status: 0, message: "Something went wrong" });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: 0,
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: 0,
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -272,12 +270,10 @@ exports.qtyUpdate = async (req, res) => {
         .json({ status: 0, message: "Something went wrong" });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: 0,
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: 0,
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
