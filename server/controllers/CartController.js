@@ -182,20 +182,43 @@ exports.getCart = async (req, res) => {
           "image_url",
         ],
       ],
-      include: [
-        {
-          model: Product,
-          attributes: ["id", "product_price", "discounted_price"],
-        },
-      ],
       where: { user_id },
       order: [["id", "DESC"]],
     });
 
     if (cartItems.length > 0) {
+      // Get all product IDs from cart
+      const productIds = cartItems.map((item) => item.product_id);
+
+      // Get product price data for these products
+      const productPrices = await Product.findAll({
+        attributes: ["id", "product_price", "discounted_price"],
+        where: { id: productIds },
+      });
+
+      // Create a map for quick lookup
+      const productPriceMap = {};
+      productPrices.forEach((product) => {
+        productPriceMap[product.id] = {
+          product_price: product.product_price,
+          discounted_price: product.discounted_price,
+        };
+      });
+
+      // Add product price info to each cart item
+      const enhancedCartItems = cartItems.map((item) => {
+        const cartItemData = item.toJSON();
+        cartItemData.Product = productPriceMap[item.product_id] || {
+          id: item.product_id,
+          product_price: null,
+          discounted_price: null,
+        };
+        return cartItemData;
+      });
+
       return res
         .status(200)
-        .json({ status: 1, message: "Success", data: cartItems });
+        .json({ status: 1, message: "Success", data: enhancedCartItems });
     } else {
       return res
         .status(200)
