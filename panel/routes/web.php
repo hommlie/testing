@@ -548,6 +548,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/update/{id}', 'SeoPagesController@update')->name('seopages.update');
         Route::post('/change/status', 'SeoPagesController@changeStatus')->name('seopages.changeStatus');
         Route::post('/delete', 'SeoPagesController@destroy')->name('seopages.delete');
+         Route::get('get-seo-data/{id}', 'SeoPagesController@getSeoData')->name('seopages.getSeoData');
     });
 
     // LEADS SHEET 

@@ -29,6 +29,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>ID</th>
                         <th>Title</th>
                         <th>Subcategory</th>
                         <th>Subtitle</th>
@@ -48,6 +49,7 @@
                     @foreach($seoPages as $seo)
                         <tr>
                             <td>{{ ++$n }}</td>
+                             <td>{{ $seo->id }}</td>
                             <td>{{ Str::limit($seo->title, 20, '...') }}</td>
                             <td>
                                 @foreach ($subCategory as $subCat)

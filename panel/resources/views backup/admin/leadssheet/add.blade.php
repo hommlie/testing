@@ -2,150 +2,133 @@
 
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            console.log("Initializing surau DataTable...");
-            $('#data_table_bootstrap').DataTable({
-                responsive: true,
-                autoWidth: false,
-                dom: 'lfrtip',
-                language: {
-                    search: "Search Complaints:"
-                },
-            });
-        });
-    </script>
+    <script src="https://cdn.ckeditor.com/4.20.1/standard/ckeditor.js"></script>
 @endsection
 
 @section('content')
-    {{-- Display validation errors --}}
     @if ($errors->any())
         <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            <ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
         </div>
     @endif
 
-    {{-- Display success message --}}
     @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">Add Blog</h4>
+            <h4 class="card-title">Add Lead</h4>
         </div>
-
-        {{-- FORM START --}}
         <div class="card-body">
-            <form action="{{ route('admin.leadssheet.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.leadssheet.store') }}" method="POST">
                 @csrf
 
-                {{-- Form Name --}}
-                <div class="mb-3">
-                    <label class="form-label">Form Name</label>
-                    <input type="text" name="form_name" class="form-control" value="{{ old('form_name') }}"
-                        placeholder="Enter Form Name" required>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" name="customer_name" class="form-control" placeholder="Enter full name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" name="phone_number" class="form-control" placeholder="Enter phone number" required>
+                    </div>
                 </div>
 
-                {{-- Platform + Lead Status in one row --}}
                 <div class="row mb-3">
-                    {{-- Platform --}}
                     <div class="col-md-6">
-                        <label class="form-label">Platform</label>
-                        <select name="platform" class="form-control" required>
-                            <option value="" disabled selected>- Business Lead -</option>
-                            <option value="exhibition">Exhibition</option>
-                            <option value="webLead">Web Lead</option>
-                            <option value="serviceLead">Service Lead</option>
-                            <option value="customerReferral">Customer Referral</option>
-                            <option value="coldCall">Cold Call</option>
-                            <option value="socialMedia">Social Media</option>
-                            <option value="whatsappChatBot">What's App Chat Bot</option>
-                            <option value="vendors">Vendors</option>
-                            <option value="others">Others</option>
-                        </select>
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" placeholder="Enter email address">
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Address / Location</label>
+                        <input type="text" name="address_location" class="form-control" placeholder="Enter address or location" required>
+                    </div>
+                </div>
 
-                    {{-- Lead Status --}}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Lead Source</label>
+                        <input type="text" name="lead_source" class="form-control" placeholder="e.g. Website, Referral" required>
+                    </div>
                     <div class="col-md-6">
                         <label class="form-label">Lead Status</label>
                         <select name="lead_status" class="form-control" required>
                             <option value="">Select Status</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Contacted">Not Contacted</option>
                             <option value="Pending">Pending</option>
                             <option value="Complete">Complete</option>
                         </select>
                     </div>
                 </div>
 
-                {{-- Customer Name + Phone Number in one row --}}
                 <div class="row mb-3">
-                    {{-- Customer Name --}}
-                    <div class="col-md-6">
-                        <label class="form-label">Customer Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+                    <div class="col-md-4">
+                        <label class="form-label">First Contact Date</label>
+                        <input type="date" name="date_of_first_contact" class="form-control" required>
                     </div>
-
-                    {{-- Phone Number --}}
-                    <div class="col-md-6">
-                        <label class="form-label">Phone Number</label>
-                        <input type="text" name="phone_number" class="form-control" placeholder="Enter Phone Number"
-                            required>
+                    <div class="col-md-4">
+                        <label class="form-label">Last Contact Date</label>
+                        <input type="date" name="last_contact_date" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Next Follow-Up</label>
+                        <input type="date" name="next_follow_up_date" class="form-control" required>
                     </div>
                 </div>
 
-                {{-- Email + Address in one row --}}
+                <div class="mb-3">
+                    <label class="form-label">Interested In (Product/Service)</label>
+                    <input type="text" name="product_service_interested_in" class="form-control" placeholder="e.g. 2BHK Flat, Website Design" required>
+                </div>
+
                 <div class="row mb-3">
-                    {{-- Email --}}
-                    <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" placeholder="Enter Email (optional)">
+                    <div class="col-md-4">
+                        <label class="form-label">Lead Value (₹)</label>
+                        <input type="number" step="0.01" name="lead_value" class="form-control" placeholder="e.g. 10000.00" required>
                     </div>
-
-                    {{-- Address --}}
-                    <div class="col-md-6">
-                        <label class="form-label">Address</label>
-                        <input type="text" name="address" class="form-control" placeholder="Enter Address" required>
+                    <div class="col-md-4">
+                        <label class="form-label">BHK / Sq.ft</label>
+                        <input type="text" name="bhk_sq_ft" class="form-control" placeholder="e.g. 2BHK / 1200 Sq.ft" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">B2B / B2C</label>
+                        <select name="b2b_b2c" class="form-control" required>
+                            <option value="">Select</option>
+                            <option value="B2B">B2B</option>
+                            <option value="B2C">B2C</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="col-md-12">
-                    <label class="form-label">Remarks</label>
-                    <input type="text" name="remarks" class="form-control" placeholder="Enter Remarks (optional)">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Priority Level</label>
+                        <input type="text" name="priority_level" class="form-control" placeholder="e.g. Hot" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Disposition</label>
+                        <input type="text" name="disposition" class="form-control" placeholder="e.g. Interested, Not Interested, Follow-Up" required>
+                    </div>
                 </div>
 
-                <div class="col-md-12 mt-4">
-                    <label class="form-label">What Type Of Pest Problem Are You Currently Facing?</label>
-                    <textarea name="pest_problem" id="editor" class="form-control bootstrap-editor" rows="5"
-                        placeholder="Describe the pest problem..." required>{{ old('pest_problem') }}</textarea>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Conversion Date</label>
+                        <input type="date" name="conversion_date" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Remarks / Notes</label>
+                        <input type="text" name="remarks_notes" class="form-control" placeholder="Enter additional notes or remarks" required >
+                    </div>
                 </div>
 
-                {{-- Submit and Cancel buttons --}}
-                <div class="mt-5">
-                    <button type="submit" class="btn btn-success">Add</button>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">Submit</button>
                     <a href="{{ route('admin.leadssheet') }}" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
-
-    {{-- CKEditor Script --}}
-    <script src="https://cdn.ckeditor.com/4.20.1/standard/ckeditor.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (document.getElementById('editor')) {
-                CKEDITOR.replace('editor', {
-                    removeButtons: 'PasteFromWord'
-                });
-            }
-        });
-    </script>
 @endsection
