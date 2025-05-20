@@ -327,12 +327,12 @@ exports.getSubcategory = async (req, res) => {
 
 exports.getCleaningSubcategory = async (req, res) => {
   try {
-    const { subcat_id } = req.body;
+    const { slug } = req.body;
 
-    if (!subcat_id) {
+    if (!slug) {
       return res.status(400).json({
         status: 0,
-        message: "subcat_id is required",
+        message: "slug is required",
       });
     }
 
@@ -405,7 +405,7 @@ exports.getCleaningSubcategory = async (req, res) => {
         },
       ],
       where: {
-        id: subcat_id,
+        slug,
         status: 1,
       },
     });
@@ -428,7 +428,7 @@ exports.getCleaningSubcategory = async (req, res) => {
     // Fetch products for the specific subcategory with detailed information
     const products = await Product.findAll({
       where: {
-        subcat_id: subcat_id,
+        subcat_id: subcategoryData.id,
         status: 1,
       },
       attributes: [
