@@ -505,7 +505,7 @@ exports.productDetails = async (req, res) => {
     });
 
     const related_products = await Product.findAll({
-      where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product_id } },
+      where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
       attributes: [
         "id",
         "product_name",
