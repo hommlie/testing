@@ -643,7 +643,7 @@ export default function ProductPage() {
                 checkoutPd={checkoutPd}
               />
 
-              <section className="bg-white rounded-lg md:p-4 mb-6 glow-border mt-5 md:mt-10">
+              <section className="bg-white rounded-lg md:p-4 md:mb-6 glow-border mt-5 md:mt-10">
                 <div className="relative h-[250px] lg:h-[450px]">
                   {imageItems.length > 0 && (
                     <div className="w-full h-full">
@@ -712,6 +712,495 @@ export default function ProductPage() {
                                 {addBtn()}
                             </div> */}
                 </div>
+              </section>
+
+              <section className="block md:hidden bg-white lg:w-1/3 h-fit space-y-4">
+                <div className="bg-white rounded-lg p-4 mb-4 glow-border">
+                  <div className="flex justify-between items-center">
+                    <div className="flex flex-row items-center">
+                      <img
+                        src={cartBag}
+                        alt="Hommlie Cart"
+                        className="w-[34px] h-[34px] p-[7px] rounded-full"
+                        style={{ backgroundColor: "#EEF4FF" }}
+                      />
+                      <p className="text-lg font-medium ml-2">Cart</p>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <p
+                        className="text-xs font-semibold w-[18px] h-[18px] rounded-full flex justify-center items-center text-white"
+                        style={{
+                          backgroundColor: `${
+                            cartLength == undefined || cartLength === 0
+                              ? "#929B9B"
+                              : "#FF3269"
+                          }`,
+                        }}
+                      >
+                        {cartLength == undefined || cartLength === 0
+                          ? 0
+                          : cartLength}
+                      </p>
+                      <p className="text-base font-semibold ml-2">Item Added</p>
+                    </div>
+                  </div>
+                </div>
+
+                {variations.length > 0 && (
+                  <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
+                    <h3 className="text-xl font-semibold">Select Frequency</h3>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-2">
+                        {attributes.map((attr) => (
+                          <button
+                            key={attr}
+                            className={`w-full p-3 rounded-lg border ${
+                              selectedAttribute === attr
+                                ? "bg-[#10847E] text-white"
+                                : "border-gray-300"
+                            }`}
+                            onClick={() => handleAttributeSelect(attr)}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span>{attr}</span>
+                              <IoCheckmarkCircleSharp
+                                className={`text-xl ${
+                                  selectedAttribute === attr
+                                    ? "text-white"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+
+                      {selectedAttribute && (
+                        <div>
+                          <h3 className="text-xl font-semibold mb-2">
+                            Select BHK
+                          </h3>
+                          <div className="grid grid-cols-2 gap-2">
+                            {variations
+                              .filter(
+                                (v) => v.attribute_name === selectedAttribute
+                              )
+                              .map((variation) => (
+                                <button
+                                  key={variation.data.id}
+                                  className={`w-full p-3 rounded-lg border ${
+                                    selectedVariation?.id === variation.data.id
+                                      ? "bg-[#10847E] text-white"
+                                      : "border-gray-300"
+                                  }`}
+                                  onClick={() =>
+                                    handleVariationSelect(variation)
+                                  }
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-medium">
+                                      {variation.data.variation}
+                                    </span>
+                                    <IoCheckmarkCircleSharp
+                                      className={`text-xl ${
+                                        selectedVariation?.id ===
+                                        variation.data.id
+                                          ? "text-white"
+                                          : "text-gray-300"
+                                      }`}
+                                    />
+                                  </div>
+                                </button>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {selectedVariation && (
+                      <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <h4 className="font-semibold mb-2">
+                            {selectedAttribute} ({selectedVariation.variation})
+                          </h4>
+                        </div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-lg font-bold text-[#249370]">
+                            ₹{selectedVariation.discounted_variation_price}
+                          </span>
+                          <span className="text-sm line-through text-gray-500">
+                            ₹{selectedVariation.price}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">
+                          {selectedVariation.description}
+                        </p>
+                        {selectedVariation.variation_times &&
+                          selectedVariation.variation_interval && (
+                            <>
+                              <p className="text-sm text-gray-600">
+                                No. of Services :{" "}
+                                {selectedVariation.variation_times} Times
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Scheduled every :{" "}
+                                {selectedVariation.variation_interval} Days
+                              </p>
+                            </>
+                          )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {prodData?.is_form === 0 && (
+                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center">
+                        <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
+                        <h2 className="text-lg font-semibold">Coupons</h2>
+                      </div>
+                      <button
+                        onClick={openCouponModal}
+                        style={{
+                          border: "1px solid #249370",
+                          color: "#249370",
+                        }}
+                        className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                      >
+                        Explore Now
+                      </button>
+                    </div>
+                    <div
+                      className="mb-2"
+                      style={{ border: "1px dotted #E5E7EB" }}
+                    ></div>
+                    <div style={{ color: "rgba(0,0,0,0.4)" }}>
+                      {selectedCoupon && Object.keys(selectedCoupon).length ? (
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center">
+                            <IoCheckmarkCircle className="text-[#249370] mr-2" />
+                            <span className="font-semibold">
+                              {selectedCoupon?.coupon_name}
+                            </span>
+                          </div>
+                          <button
+                            onClick={handleRemoveCoupon}
+                            className="text-red-500"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ) : coupons?.length ? (
+                        <p className="font-semibold">
+                          You have unlocked{" "}
+                          <span className="text-[#249370]">
+                            {coupons?.length} new coupons
+                          </span>
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                )}
+
+                {prodData?.is_form === 0 && (
+                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                    <h3 className="text-xl font-semibold">Payment Summary</h3>
+                    <div className="space-y-2">
+                      <div className="flex flex-row justify-between">
+                        <p
+                          className="text-base font-normal"
+                          style={{ color: "#606571" }}
+                        >
+                          Service Price
+                        </p>
+                        <p className="text-base font-semibold">
+                          ₹
+                          {selectedVariation
+                            ? selectedVariation.price
+                            : prodData?.product_price}
+                        </p>
+                      </div>
+                      {discountPercentage ? (
+                        <div className="flex flex-row justify-between">
+                          <p
+                            className="text-base font-normal"
+                            style={{ color: "#606571" }}
+                          >
+                            Service Discount
+                          </p>
+                          <p className="text-base font-semibold">{`₹${Math.floor(
+                            ((selectedVariation
+                              ? selectedVariation.price
+                              : prodData?.product_price) *
+                              discountPercentage) /
+                              100
+                          )} (${discountPercentage}%)`}</p>
+                        </div>
+                      ) : null}
+                      <div className="flex flex-row justify-between">
+                        <p
+                          className="text-base font-normal"
+                          style={{ color: "#606571" }}
+                        >
+                          Discounted Price
+                        </p>
+                        <p className="text-base font-semibold">
+                          ₹{totalAmount}
+                        </p>
+                      </div>
+                      {couponDiscount ? (
+                        <div className="flex flex-row justify-between">
+                          <p
+                            className="text-base font-normal"
+                            style={{ color: "#606571" }}
+                          >
+                            Coupon Discount
+                          </p>
+                          <p className="text-base font-semibold">
+                            ₹{couponDiscount}
+                          </p>
+                        </div>
+                      ) : null}
+                      <div className="flex flex-row justify-between">
+                        <p
+                          className="text-base font-normal"
+                          style={{ color: "#606571" }}
+                        >
+                          Tax & Fees
+                        </p>
+                        <p className="text-base font-semibold">₹{taxAmount}</p>
+                      </div>
+                      <div
+                        className="border-t-2 border-dotted border-black"
+                        style={{ opacity: 0.22 }}
+                      ></div>
+                      <div className="flex flex-row justify-between">
+                        <p className="text-base font-normal text-xl font-semibold">
+                          Total Amount
+                        </p>
+                        <div className="text-right">
+                          <p className="text-base font-semibold">
+                            ₹
+                            {Number(
+                              totalAmount + taxAmount - couponDiscount
+                            )?.toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold"
+                        style={{ backgroundColor: "#249370" }}
+                        onClick={handleProceed}
+                        id="proceed-btn"
+                      >
+                        PROCEED TO CHECKOUT
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {prodData?.is_form === 1 && (
+                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                    <h3 className="text-xl font-semibold">
+                      Book an Inspection
+                    </h3>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div>
+                        <label
+                          htmlFor="fullName"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          id="fullName"
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleFormChange}
+                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="address"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Address
+                        </label>
+                        <LocationSuggestion
+                          value={formData.address}
+                          onChange={handleFormChange}
+                          name="address"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="mobile"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Mobile
+                        </label>
+                        <input
+                          type="tel"
+                          id="mobile"
+                          name="mobile"
+                          value={formData.mobile}
+                          onChange={handleFormChange}
+                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                          required
+                          minLength={10}
+                          maxLength={10}
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleFormChange}
+                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                          required
+                        />
+                      </div>
+
+                      <div className="flex space-x-4">
+                        <div className="w-1/2">
+                          <label
+                            htmlFor="date"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Date
+                          </label>
+                          <DatePicker
+                            selected={formData.date}
+                            onChange={handleDateChange}
+                            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required
+                          />
+                        </div>
+                        <div className="w-1/2">
+                          <label
+                            htmlFor="time"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Time
+                          </label>
+                          <select
+                            id="time"
+                            name="time"
+                            value={formData.time}
+                            onChange={handleFormChange}
+                            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required
+                          >
+                            <option value="">Select a time slot</option>
+                            {timeSlots.map((slot, index) => (
+                              <option key={index} value={slot}>
+                                {slot}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
+                      >
+                        Schedule for Inspection
+                      </button>
+                      <div className="flex gap-2">
+                        <div>
+                          <label
+                            htmlFor="width"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Width (ft)
+                          </label>
+                          <select
+                            id="width"
+                            name="width"
+                            value={formData.width}
+                            onChange={handleFormChange}
+                            className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
+                            // required
+                          >
+                            <option value="" hidden>
+                              Select Width
+                            </option>
+                            {[...Array(120 - 1)]?.map((_, index) => {
+                              const value = 1 + index;
+                              return (
+                                <option key={value} value={value}>
+                                  {value} sqft
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="lengthMm"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Length (ft)
+                          </label>
+                          <input
+                            type="number"
+                            id="length"
+                            name="length"
+                            value={formData.length}
+                            onChange={handleFormChange}
+                            min="1"
+                            // max="3000"
+                            className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                            // required
+                          />
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor="sqft"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Sqft
+                          </label>
+                          <input
+                            type="text"
+                            id="sqft"
+                            value={formData.sqft ? `${formData.sqft} sqft` : ""}
+                            className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
+                            // readOnly
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="mobile"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Approx. Amount:
+                        </label>
+                        <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">
+                          ₹{formData.total_amount}
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+                )}
               </section>
 
               <section className="bg-white rounded-lg p-4 glow-border">
@@ -899,7 +1388,7 @@ export default function ProductPage() {
               )}
             </div>
 
-            <div className="md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
+            <div className="hidden md:block md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
               <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                 <div className="flex justify-between items-center">
                   <div className="flex flex-row items-center">
