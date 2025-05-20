@@ -63,9 +63,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
 
   const handleSubCategoryClick = (category) => {
     if (category?.category?.is_page === 1) {
-      navigate(
-        `${config.VITE_BASE_URL}/subcategory/${category.slug}/${category.id}`
-      );
+      navigate(`${config.VITE_BASE_URL}/subcategory/${category.slug}`);
     } else {
       openSubCatModal([category.id, category.subcategory_name]);
     }

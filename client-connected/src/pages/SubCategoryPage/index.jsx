@@ -162,7 +162,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 const SubCategoryPage = () => {
   const locationState = useLocation().state;
   const location = locationState?.location;
-  const { categoryId, categorySlug } = useParams();
+  const { categorySlug } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({
     subcategory: [],
@@ -178,14 +178,14 @@ const SubCategoryPage = () => {
     window.scrollTo(0, 0);
 
     fetchData();
-  }, [categoryId, location]);
+  }, [categorySlug, location]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const subCatResponse = await axios.post(
         `${config.API_URL}/api/subcategory`,
-        { cat_id: categoryId }
+        { slug: categorySlug }
       );
 
       setData(subCatResponse.data.data);
@@ -277,8 +277,8 @@ const SubCategoryPage = () => {
 
     const path =
       subCategory.category.is_page === 1
-        ? `/subcategory/${subCategory.slug}/${subCategory.subcat_id}`
-        : `/products/${subCategory.slug}/${subCategory.subcat_id}`;
+        ? `/subcategory/${subCategory.slug}`
+        : `/products/${subCategory.slug}`;
     navigate(path);
   };
 
@@ -551,13 +551,11 @@ const SubCategoryPage = () => {
                       <a
                         href={`${
                           config.VITE_BASE_URL
-                        }/${location?.slug?.trim()}/${categoryId}`}
+                        }/${location?.slug?.trim()}`}
                         onClick={(e) => {
                           e.preventDefault();
                           navigate(
-                            `${
-                              config.VITE_BASE_URL
-                            }/${location?.slug?.trim()}/${categoryId}`,
+                            `${config.VITE_BASE_URL}/${location?.slug?.trim()}`,
                             {
                               state: { location: location?.title?.trim() },
                             }

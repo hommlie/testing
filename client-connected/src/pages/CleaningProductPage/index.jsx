@@ -229,7 +229,7 @@ const CartSection = ({ cart }) => {
 const CleaningProductPage = () => {
   const locationState = useLocation().state;
   const location = locationState?.location;
-  const { id, tag } = useParams();
+  const { slug, tag } = useParams();
   const navigate = useNavigate();
   const { cart, user, checkoutPd } = useCont();
 
@@ -255,13 +255,13 @@ const CleaningProductPage = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchSubCategoryData();
-  }, [id]);
+  }, [slug]);
 
   const fetchSubCategoryData = async () => {
     try {
       const response = await axios.post(
         `${config.API_URL}/api/cleaningsubcategory`,
-        { subcat_id: id }
+        { slug }
       );
       if (response.data.status === 1) {
         setInnerSubCategoryData(response.data.data);
@@ -653,17 +653,13 @@ const CleaningProductPage = () => {
                   <a
                     href={`${
                       config.VITE_BASE_URL
-                    }/subcategory/${location?.slug?.trim()}/${
-                      innerSubCategoryData?.subcategory_id
-                    }`}
+                    }/subcategory/${location?.slug?.trim()}`}
                     onClick={(e) => {
                       e.preventDefault();
                       navigate(
                         `${
                           config.VITE_BASE_URL
-                        }/subcategory/${location?.slug?.trim()}/${
-                          innerSubCategoryData?.subcategory_id
-                        }`,
+                        }/subcategory/${location?.slug?.trim()}`,
                         {
                           state: { location: location?.title?.trim() },
                         }
@@ -690,7 +686,7 @@ const CleaningProductPage = () => {
                 <React.Fragment key={service.id}>
                   {index > 0 && <span className="mx-2 text-gray-400">•</span>}
                   <a
-                    href={`/subcategory/${service.slug}/${service.id}`}
+                    href={`/subcategory/${service.slug}`}
                     className="text-blue-600 hover:underline inline-block"
                   >
                     {service.subcategory_name}

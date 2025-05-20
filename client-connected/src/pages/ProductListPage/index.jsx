@@ -7,7 +7,7 @@ import config from "../../config/config";
 import LoadingWrapper from "../../components/Loading/LoadingWrapper";
 
 const ProductListPage = () => {
-  const { subcategoryId, location } = useParams();
+  const { subcategorySlug, location } = useParams();
   const [products, setProducts] = useState([]);
   const [subcategoryData, setSubcategoryData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,13 +15,13 @@ const ProductListPage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [subcategoryId, location]);
+  }, [subcategorySlug, location]);
 
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
       const response = await axios.post(`${config.API_URL}/api/products`, {
-        subcategory_id: subcategoryId,
+        slug: subcategorySlug,
       });
       setProducts(response.data.data);
       setSubcategoryData(response.data.subcategory);

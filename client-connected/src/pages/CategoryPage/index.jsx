@@ -50,7 +50,7 @@ const CategoryPage = () => {
   };
 
   const handleSubCategoryClick = (category, subcategory) => {
-    navigate(`/subcategory/${subcategory.slug}/${subcategory.id}`);
+    navigate(`/subcategory/${subcategory.slug}`);
   };
 
   const filteredCategories = categories.filter((category) =>

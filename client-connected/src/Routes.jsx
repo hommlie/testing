@@ -68,29 +68,29 @@ const ProjectRoutes = () => {
     { path: `${config.VITE_BASE_URL}/home`, element: <HomePage /> },
     { path: `${config.VITE_BASE_URL}/:location`, element: <HomePage /> },
     {
-      path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId`,
+      path: `${config.VITE_BASE_URL}/category/:categorySlug`,
       element: <SubCategoryPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/:categorySlug/:categoryId/:location`,
+      path: `${config.VITE_BASE_URL}/category/:categorySlug/:location`,
       element: <SubCategoryPage />,
     },
 
     {
-      path: `${config.VITE_BASE_URL}/subcategory/:slug/:id`,
+      path: `${config.VITE_BASE_URL}/subcategory/:slug`,
       element: <CleaningProductPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/subcategory/:slug/:id/:location`,
+      path: `${config.VITE_BASE_URL}/subcategory/:slug/:location`,
       element: <CleaningProductPage />,
     },
 
     {
-      path: `${config.VITE_BASE_URL}/products/:subcategorySlug/:subcategoryId`,
+      path: `${config.VITE_BASE_URL}/products/:subcategorySlug`,
       element: <ProductListPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/products/:subcategorySlug/:subcategoryId/:location`,
+      path: `${config.VITE_BASE_URL}/products/:subcategorySlug/:location`,
       element: <ProductListPage />,
     },
 

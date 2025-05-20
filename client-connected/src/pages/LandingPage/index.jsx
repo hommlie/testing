@@ -93,7 +93,7 @@ const LandingPage = () => {
   };
 
   const handleServiceClick = (slug, id) => {
-    navigate(`/subcategory/${slug}/${id}`);
+    navigate(`/subcategory/${slug}`);
   };
 
   if (loading && !pageData) {

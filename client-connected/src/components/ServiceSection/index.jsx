@@ -170,7 +170,7 @@ const ServiceSection = ({ categories }) => {
   // Handle category selection with dynamic navigation
   const handleCategorySelect = (category) => {
     if (category.is_form === 1) {
-      navigate(`${config.VITE_BASE_URL}/${category.slug}/${category.id}`);
+      navigate(`${config.VITE_BASE_URL}/${category.slug}`);
       return;
     }
     setSelectedCategory(category.id);

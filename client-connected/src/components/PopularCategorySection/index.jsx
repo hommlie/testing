@@ -17,7 +17,7 @@ const PopularCategorySection = ({ data }) => {
   );
 
   const handleServiceClick = (slug, id) => {
-    navigate(`${config.VITE_BASE_URL}/subcategory/${slug}/${id}`);
+    navigate(`${config.VITE_BASE_URL}/subcategory/${slug}`);
   };
 
   return (

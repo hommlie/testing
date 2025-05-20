@@ -158,7 +158,7 @@ exports.getCategory = async (req, res) => {
 
 exports.getSubcategory = async (req, res) => {
   try {
-    const { cat_id } = req.body;
+    const { slug } = req.body;
 
     const categoryData = await Category.findOne({
       attributes: [
@@ -201,7 +201,7 @@ exports.getSubcategory = async (req, res) => {
         "faqs",
         "about",
       ],
-      where: { id: cat_id },
+      where: { slug },
     });
 
     const otherServices = await Category.findAll({
@@ -274,7 +274,7 @@ exports.getSubcategory = async (req, res) => {
           as: "category",
         },
       ],
-      where: { cat_id, status: 1 },
+      where: { cat_id: categoryData.id, status: 1 },
     });
 
     const subcategory = await Promise.all(
