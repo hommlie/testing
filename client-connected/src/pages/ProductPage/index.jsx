@@ -308,7 +308,7 @@ export default function ProductPage() {
     window.scrollTo(0, 0);
     setIsLoading(true);
     if (slug) {
-      Promise.all([getProductDetails(), getProductReview()])
+      Promise.all([getProductDetails()])
         .then(() => {
           setIsLoading(false);
         })
@@ -330,6 +330,7 @@ export default function ProductPage() {
           setProdVendors(response.data.vendors);
           setProdRelatedProds(response.data.related_products);
           setProdReturnPolicy(response.data.returnpolicy);
+          setReviewData(response.data.rattings);
 
           if (response.data.data.productimages) {
             setMediaItems(response.data.data.productimages);
@@ -344,17 +345,6 @@ export default function ProductPage() {
         .catch((error) => {
           console.log("error: " + error);
         });
-    } catch (err) {
-      console.log("error: " + err);
-    }
-  }
-
-  async function getProductReview() {
-    try {
-      const response = await axios.post(`${config.API_URL}/api/productreview`, {
-        slug,
-      });
-      setReviewData(response.data.reviews);
     } catch (err) {
       console.log("error: " + err);
     }
