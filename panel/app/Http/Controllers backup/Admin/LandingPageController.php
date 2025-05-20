@@ -45,13 +45,10 @@ class LandingPageController extends Controller
             'meta_description' => 'required|string|max:500',
         ]);
         
-
-
         // Handle Image Uploads
         $heroImageName = null;
         $bannerImageName = null;
         $whyChooseBannerName = null;
-
 
         if ($request->hasFile('hero_image')) {
             $heroImageName = time() . '_hero.' . $request->hero_image->extension();

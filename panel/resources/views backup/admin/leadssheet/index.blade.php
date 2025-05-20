@@ -49,8 +49,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Form name</th>
-                        <th>Platform</th>
+                        <th>Lead ID</th>
                         <th>Name</th>
                         <th>Phone Number</th>
                         <th>Email</th>
@@ -65,9 +64,8 @@
                     
                         <tr>
                             <td>{{ ++$n }}</td>
-                            <td>{{ Str::words($data->form_name, 5, '...') }}</td>
-                            <td>{{ Str::words($data->platform, 5, '...') }}</td>
-                            <td>{{ Str::words($data->name, 5, '...') }}</td>
+                            <td>Lead ID - {{ Str::words($data->id, 5, '...') }}</td>
+                            <td>{{ Str::words($data->customer_name, 5, '...') }}</td>
                             <td>{{ ucfirst($data->phone_number) }}</td>
                             <td>{{ Str::words($data->email, 5, '...') }}</td>
                             <td>{{ Str::words($data->lead_status, 5, '...') }}</td>

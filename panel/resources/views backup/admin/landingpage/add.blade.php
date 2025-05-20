@@ -170,11 +170,11 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="row" style="border: solid 1px white; box-shadow: 0 4px 8px rgba(178, 236, 178, 0.5); border-radius: 5px;">
                 <div class="col-md-12">
                     <label class="form-label">Title</label>
-                    <input type="text" name="why_choose_content[\${index}][title]" class="form-control" placeholder="Enter title" required>
+                    <input type="text" name="why_choose_content[${index}][title]" class="form-control" placeholder="Enter title" required>
                 </div>
                 <div class="col-md-12 mt-2">
                     <label class="form-label">Description</label>
-                    <textarea name="why_choose_content[\${index}][description]" class="form-control" rows="1" placeholder="Enter description" required></textarea>
+                    <textarea name="why_choose_content[${index}][description]" class="form-control" rows="1" placeholder="Enter description" required></textarea>
                 </div>
                 <div class="col-md-12 text-end mt-2">
                     <button type="button" class="btn btn-danger remove-card float-right">-</button>

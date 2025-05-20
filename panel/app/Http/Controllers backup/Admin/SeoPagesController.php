@@ -14,7 +14,7 @@ class SeoPagesController extends Controller
     public function index()
     {
         $subCategory = Subcategory::all();
-        $seoPages = SeoPages::all();
+         $seoPages    = SeoPages::orderBy('id', 'desc')->get();
         return view('admin.seopages.index', compact('subCategory', 'seoPages')); //
     }
 
@@ -25,6 +25,12 @@ class SeoPagesController extends Controller
         $subCategory = SubCategory::all();
 
         return view('admin.seopages.edit', compact('seoPage', 'subCategory'));
+    }
+
+    public function getSeoData($id){
+        $SeoData = SeoPages::where('id', "$id")
+            ->get();
+        return response()->json($SeoData);
     }
 
     public function create()
