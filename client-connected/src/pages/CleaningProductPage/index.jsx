@@ -308,9 +308,7 @@ const CleaningProductPage = () => {
 
   const handleProductNavigate = (product) => {
     const slug = product.product_name.toLowerCase().replace(/ /g, "-");
-    navigate(
-      `${config.VITE_BASE_URL}/product/${product.id}/${slug}/tag/${tag}`
-    );
+    navigate(`${config.VITE_BASE_URL}/product/${slug}/tag/${tag}`);
   };
 
   const handlePrevProduct = () => {

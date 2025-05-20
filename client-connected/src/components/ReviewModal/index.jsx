@@ -1,53 +1,55 @@
-import React, { useState } from 'react';
-import { FaStar } from 'react-icons/fa';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import config from '../../config/config';
-import { useToast } from '../../context/ToastProvider';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { FaStar } from "react-icons/fa";
+import axios from "axios";
+import Cookies from "js-cookie";
+import config from "../../config/config";
+import { useToast } from "../../context/ToastProvider";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
-const ReviewModal = ({ isOpen, onClose, orderId, productId, onReviewSubmitted }) => {
-
-    const navigate = useNavigate();
-    const notify = useToast();
-    const successNotify = (success) => notify(success, 'success');
-    const errorNotify = (error) => notify(error, 'error');
-    const warningNotify = (warning) => notify(warning, 'warning');
+const ReviewModal = ({
+  isOpen,
+  onClose,
+  orderId,
+  productId,
+  onReviewSubmitted,
+}) => {
+  const navigate = useNavigate();
+  const notify = useToast();
+  const successNotify = (success) => notify(success, "success");
+  const errorNotify = (error) => notify(error, "error");
+  const warningNotify = (warning) => notify(warning, "warning");
 
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const jwtToken = Cookies.get('HommlieUserjwtToken');
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
     if (jwtToken) {
       const user = jwtDecode(jwtToken);
       try {
-        const response = await axios.post(
-          `${config.API_URL}/api/addratting`,
-          {
-            user_id: user.id,
-            product_id: productId,
-            order_id: orderId,
-            ratting: rating,
-            comment: comment,
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
+        const response = await axios.post(`${config.API_URL}/api/addratting`, {
+          user_id: user.id,
+          product_id: productId,
+          order_id: orderId,
+          ratting: rating,
+          comment: comment,
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
           },
-        );
+        });
         if (response.data.status === 1) {
           onReviewSubmitted();
           onClose();
         } else if (response.data.status === 0) {
-            warningNotify(response.data.message);
-            navigate(`${config.VITE_BASE_URL}/product/${productId}`);
-            onClose();
+          warningNotify(response.data.message);
+          navigate(`${config.VITE_BASE_URL}/`);
+          onClose();
         }
       } catch (error) {
-        errorNotify(error)
-        console.error('Error submitting review:', error);
+        errorNotify(error);
+        console.error("Error submitting review:", error);
       }
     }
   };
@@ -56,7 +58,11 @@ const ReviewModal = ({ isOpen, onClose, orderId, productId, onReviewSubmitted })
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
-      <div className="fixed inset-0 opacity-60" style={{ backgroundColor: "black" }} onClick={onClose}></div>
+      <div
+        className="fixed inset-0 opacity-60"
+        style={{ backgroundColor: "black" }}
+        onClick={onClose}
+      ></div>
       <div className="relative bg-white p-6 rounded-lg w-96">
         <h2 className="text-2xl font-bold mb-4">Write a Review</h2>
         <form onSubmit={handleSubmit}>
@@ -92,14 +98,14 @@ const ReviewModal = ({ isOpen, onClose, orderId, productId, onReviewSubmitted })
               type="button"
               onClick={onClose}
               className="mr-2 px-4 py-2 bg-gray-200 rounded"
-              style={{border: "1px solid grey"}}
+              style={{ border: "1px solid grey" }}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 text-white rounded"
-              style={{backgroundColor: "#249370"}}
+              style={{ backgroundColor: "#249370" }}
             >
               Submit Review
             </button>

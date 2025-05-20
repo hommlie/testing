@@ -44,8 +44,7 @@ export default function ProductPage() {
     coupons,
     getCoupons,
   } = useCont();
-  const { id, tag, location } = useParams();
-  const prod_id = id;
+  const { slug, tag, location } = useParams();
   const navigate = useNavigate();
 
   const notify = useToast();
@@ -156,7 +155,7 @@ export default function ProductPage() {
       setIsAddingToCart(true);
       const product = {
         user_id: user.id,
-        product_id: prod_id,
+        product_id: prodData.id,
         vendor_id: prodData.vendor_id,
         product_name: prodData.product_name,
         image: imageItems[0]?.image_url,
@@ -308,8 +307,8 @@ export default function ProductPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     setIsLoading(true);
-    if (prod_id) {
-      Promise.all([getProductDetails(prod_id), getProductReview(prod_id)])
+    if (slug) {
+      Promise.all([getProductDetails(), getProductReview()])
         .then(() => {
           setIsLoading(false);
         })
@@ -318,13 +317,13 @@ export default function ProductPage() {
           setIsLoading(false);
         });
     }
-  }, [prod_id]);
+  }, [slug]);
 
-  async function getProductDetails(id) {
+  async function getProductDetails() {
     try {
       setIsLoading(true);
       await axios
-        .post(`${config.API_URL}/api/productdetails`, { product_id: id })
+        .post(`${config.API_URL}/api/productdetails`, { slug: slug })
         .then((response) => {
           handleRemoveCoupon();
           setProdData(response.data.data);
@@ -350,10 +349,10 @@ export default function ProductPage() {
     }
   }
 
-  async function getProductReview(id) {
+  async function getProductReview() {
     try {
       const response = await axios.post(`${config.API_URL}/api/productreview`, {
-        product_id: id,
+        slug,
       });
       setReviewData(response.data.reviews);
     } catch (err) {
@@ -515,9 +514,7 @@ export default function ProductPage() {
 
   const handleTagClick = (tag) => {
     const slug = prodData?.product_name?.toLowerCase().replace(/ /g, "-");
-    navigate(
-      `${config.VITE_BASE_URL}/product/${prod_id}/${slug}/tag/${tag.trim()}`
-    );
+    navigate(`${config.VITE_BASE_URL}/product/${slug}/tag/${tag.trim()}`);
     window.location.reload();
   };
 
@@ -1432,8 +1429,6 @@ export default function ProductPage() {
                             <a
                               key={index}
                               href={`${config.VITE_BASE_URL}/product/${
-                                prodData.id
-                              }/${
                                 prodData.slug
                               }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
                               className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"

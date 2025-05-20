@@ -182,9 +182,7 @@ const ProductSlider = ({ title, services = [] }) => {
                         <button
                           onClick={() =>
                             navigate(
-                              `${config.VITE_BASE_URL}/product/${service.id}/${
-                                service.slug || service.id
-                              }`
+                              `${config.VITE_BASE_URL}/product/${service.slug}`
                             )
                           }
                           className="bg-white text-hommlie border border-hommlie px-4 py-2 rounded-lg hover:bg-hommlie hover:text-white transition-colors duration-200"

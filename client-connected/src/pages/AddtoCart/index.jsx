@@ -299,7 +299,7 @@ export default function AddtoCart() {
 
   const handleProductClick = (item) => {
     const slug = item.product_name.toLowerCase().replace(/ /g, "-");
-    navigate(`${config.VITE_BASE_URL}/product/${item.product_id}/${slug}`);
+    navigate(`${config.VITE_BASE_URL}/product/${slug}`);
   };
 
   const topTracker = ["Add To Cart", "Review Booking", "Booking Confirmed"];

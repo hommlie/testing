@@ -593,7 +593,7 @@ export default function OldHeader({ logo, logoAlt }) {
                       key={product.id}
                       onClick={() =>
                         navigate(
-                          `${config.VITE_BASE_URL}/product/${product.id}/${product.slug}`
+                          `${config.VITE_BASE_URL}/product/${product.slug}`
                         )
                       }
                       className="block px-4 py-2 hover:bg-gray-100"

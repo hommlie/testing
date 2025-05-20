@@ -331,16 +331,16 @@ exports.viewAllListing = async (req, res) => {
 };
 
 exports.productDetails = async (req, res) => {
-  const { product_id } = req.body;
+  const { slug } = req.body;
   const user_id = 1;
 
-  if (!product_id) {
+  if (!slug) {
     return res.status(400).json({ status: 0, message: "Invalid product ID" });
   }
 
   try {
     const product = await Product.findOne({
-      where: { id: product_id, status: 1 },
+      where: { slug: slug, status: 1 },
       attributes: [
         "id",
         "product_name",

@@ -95,15 +95,15 @@ const ProjectRoutes = () => {
     },
 
     {
-      path: `${config.VITE_BASE_URL}/product/:id/:slug`,
+      path: `${config.VITE_BASE_URL}/product/:slug`,
       element: <ProductPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/product/:id/:slug/:location`,
+      path: `${config.VITE_BASE_URL}/product/:slug/:location`,
       element: <ProductPage />,
     },
     {
-      path: `${config.VITE_BASE_URL}/product/:id/:slug/tag/:tag`,
+      path: `${config.VITE_BASE_URL}/product/:slug/tag/:tag`,
       element: <ProductPage />,
     },
     {

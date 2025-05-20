@@ -312,7 +312,7 @@ const ServiceSection = ({ categories }) => {
             )}
 
             <a
-              href={`${config.VITE_BASE_URL}/product/${product?.id}/${product?.slug}`}
+              href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
               className={`${
                 isRecommended ? "text-white" : "text-hommlie"
               } text-left underline underline-offset-4 hover:no-underline mb-4`}

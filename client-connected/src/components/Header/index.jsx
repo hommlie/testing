@@ -479,7 +479,7 @@ const Header = ({
                             setIsSearchOpen(false);
                             setSearchTerm("");
                             navigate(
-                              `${config.VITE_BASE_URL}/product/${result.id}/${result.slug}`
+                              `${config.VITE_BASE_URL}/product/${result.slug}`
                             );
                           }}
                         >

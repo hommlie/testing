@@ -91,9 +91,7 @@ const ProductListPage = () => {
                   className="group"
                   whileHover={{ scale: 1.05 }}
                   onClick={() =>
-                    navigate(
-                      `${config.VITE_BASE_URL}/product/${product.id}/${product.slug}`
-                    )
+                    navigate(`${config.VITE_BASE_URL}/product/${product.slug}`)
                   }
                 >
                   <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform hover:shadow-2xl cursor-pointer">
