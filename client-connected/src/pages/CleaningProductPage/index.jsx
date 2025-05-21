@@ -10,6 +10,7 @@ import LoginSignup from "../../components/LoginModal";
 import ProductDetailModal from "../../components/ProductDetailsModal";
 import NoImage from "../../assets/bg/no-image.svg";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 const StarRating = ({ rating }) => {
   return (
@@ -365,8 +366,28 @@ const CleaningProductPage = () => {
     return locationObjects;
   };
 
+  // Generate canonical URL based on the current location
+  const generateCanonicalUrl = () => {
+    // Base URL from your config
+    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+
+    // Determine the path based on current parameters
+    let path = `/subcategory/${slug}`;
+
+    // Complete canonical URL
+    return `${baseUrl}${path}`;
+  };
+
   return (
     <main className="md:max-w-7xl w-full">
+      <Helmet>
+        <title>{innerSubCategoryData?.meta_title || "Category Page"}</title>
+        <meta
+          name="description"
+          content={innerSubCategoryData?.meta_description || ""}
+        />
+        <link rel="canonical" href={generateCanonicalUrl()} />
+      </Helmet>
       <div className="container px-4 mt-5">
         <div className="mt-5">
           <nav className="flex space-x-2 text-gray-500 text-sm mb-8">

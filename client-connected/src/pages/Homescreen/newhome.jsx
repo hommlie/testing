@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { BiSearchAlt } from "react-icons/bi";
 import { RxCross1 } from "react-icons/rx";
@@ -38,9 +38,11 @@ import ReferAndEarn from "../../components/ReferAndEarnModal";
 import InspectionModal from "../../components/InspectionModal";
 import MobileNavigation from "../../components/MobileNavigation";
 import LoginSignup from "../../components/LoginModal";
+import { Helmet } from "react-helmet";
 
 const HomePage = () => {
   const { user } = useCont();
+  const { location } = useParams();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(
@@ -321,8 +323,23 @@ const HomePage = () => {
     </div>
   );
 
+  // Generate canonical URL based on the current location
+  const generateCanonicalUrl = () => {
+    // Base URL from your config
+    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+
+    // Determine the path based on current parameters
+    let path = `${location}`;
+
+    // Complete canonical URL
+    return `${baseUrl}${path}`;
+  };
+
   return (
     <div className="min-h-screen font-headerFont">
+      <Helmet>
+        <link rel="canonical" href={generateCanonicalUrl()} />
+      </Helmet>
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto md:px-4 relative bg-white py-5 md:py-10">
         <motion.div

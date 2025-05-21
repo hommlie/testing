@@ -599,6 +599,18 @@ export default function ProductPage() {
   const currentLocationTitle =
     location && currentLocation ? ` in ${currentLocation}` : "";
 
+  // Generate canonical URL based on the current location
+  const generateCanonicalUrl = () => {
+    // Base URL from your config
+    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+
+    // Determine the path based on current parameters
+    let path = `/product/${slug}`;
+
+    // Complete canonical URL
+    return `${baseUrl}${path}`;
+  };
+
   return (
     <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
       {isLoading ? (
@@ -614,6 +626,7 @@ export default function ProductPage() {
               name="description"
               content={prodData.meta_description || "Hommlie services"}
             />
+            <link rel="canonical" href={generateCanonicalUrl()} />
           </Helmet>
 
           <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">

@@ -12,6 +12,7 @@ import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 const BlogCard = ({ blog, categories, index }) => {
   const navigate = useNavigate();
@@ -167,8 +168,24 @@ const BlogPage = () => {
     blogPairs.push(currentBlogs.slice(i, i + 2));
   }
 
+  // Generate canonical URL based on the current location
+  const generateCanonicalUrl = () => {
+    // Base URL from your config
+    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+
+    // Determine the path based on current parameters
+    let path = `/blogs`;
+
+    // Complete canonical URL
+    return `${baseUrl}${path}`;
+  };
+
   return (
     <main className="min-h-screen max-w-7xl mx-auto bg-gray-50">
+      <Helmet>
+        <link rel="canonical" href={generateCanonicalUrl()} />
+      </Helmet>
+
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0 }}

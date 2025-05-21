@@ -7,6 +7,7 @@ import axios from "axios";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import RelatedBlogs from "./RelatedBlogs";
+import { Helmet } from "react-helmet";
 
 const Comment = React.memo(
   ({
@@ -334,8 +335,26 @@ const BlogPost = () => {
     return null;
   }
 
+  // Generate canonical URL based on the current location
+  const generateCanonicalUrl = () => {
+    // Base URL from your config
+    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+
+    // Determine the path based on current parameters
+    let path = `/blog/${slug}`;
+
+    // Complete canonical URL
+    return `${baseUrl}${path}`;
+  };
+
   return (
     <div className="min-h-screen max-w-7xl mx-auto">
+      <Helmet>
+        <title>{blog?.meta_title || "Category Page"}</title>
+        <meta name="description" content={blog?.meta_description || ""} />
+        <link rel="canonical" href={generateCanonicalUrl()} />
+      </Helmet>
+
       <div className="relative h-[500px]">
         <img
           src={blog.featured_image || "/api/placeholder/1920/500"}

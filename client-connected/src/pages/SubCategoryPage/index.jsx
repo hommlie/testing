@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../../components/Loading";
 import axios from "axios";
 import config from "../../config/config";
+import { Helmet } from "react-helmet";
 
 const StarRating = ({ rating, reviews }) => {
   return (
@@ -174,6 +175,18 @@ const SubCategoryPage = () => {
 
   const sectionRefs = useRef({});
 
+  // Generate canonical URL based on the current location
+  const generateCanonicalUrl = () => {
+    // Base URL from your config
+    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+
+    // Determine the path based on current parameters
+    let path = `/category/${categorySlug}`;
+
+    // Complete canonical URL
+    return `${baseUrl}${path}`;
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -306,6 +319,14 @@ const SubCategoryPage = () => {
 
   return (
     <main className="md:max-w-7xl w-full">
+      <Helmet>
+        <title>{data?.categoryData?.meta_title || "Category Page"}</title>
+        <meta
+          name="description"
+          content={data?.categoryData?.meta_description || ""}
+        />
+        <link rel="canonical" href={generateCanonicalUrl()} />
+      </Helmet>
       <div className="container px-4 mt-5">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm mb-6">
