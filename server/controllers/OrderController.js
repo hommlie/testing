@@ -17,6 +17,7 @@ const {
 // const stripe = require('stripe')('your_stripe_secret_key');
 const moment = require("moment");
 const crypto = require("crypto");
+const axios = require("axios");
 const apiUrl = process.env.apiUrl;
 const { sendEmail } = require("../middleware/mailMiddleware");
 const {
@@ -1105,6 +1106,20 @@ exports.recharge = async (req, res) => {
   }
 };
 
+// Helper function to fetch image from URL
+const fetchImageFromUrl = async (url) => {
+  try {
+    const response = await axios.get(url, {
+      responseType: "arraybuffer",
+      timeout: 10000, // 10 second timeout
+    });
+    return Buffer.from(response.data);
+  } catch (error) {
+    console.error("Error fetching image from URL:", error.message);
+    throw error;
+  }
+};
+
 // Generate Invoice PDF Controller
 exports.generateInvoice = async (req, res) => {
   const { order_id } = req.params;
@@ -1147,75 +1162,118 @@ exports.generateInvoice = async (req, res) => {
     // Pipe PDF to file
     doc.pipe(fs.createWriteStream(filepath));
 
+    let logoHeight = 50; // Default starting position for content
+
     // Add logo if available
     if (settings && settings.logo) {
       try {
-        const logoPath =
-          `${apiUrl}/storage/app/public/images/settings/` + settings.logo;
-        console.log("Logo path:", logoPath);
+        const logoUrl = `${apiUrl}/storage/app/public/images/settings/${settings.logo}`;
+        console.log("Loading logo from:", logoUrl);
 
-        doc.image(logoPath, 50, 50, { width: 100 });
+        const logoBuffer = await fetchImageFromUrl(logoUrl);
+
+        // Add logo to left side of header
+        doc.image(logoBuffer, 50, 50, {
+          width: 120,
+          height: 60,
+          fit: [120, 60],
+          align: "left",
+        });
+
+        logoHeight = 120; // Adjust content start position
+        console.log("Logo loaded successfully");
       } catch (logoError) {
-        console.log("Logo loading error:", logoError);
+        console.log("Logo loading error:", logoError.message);
+        logoHeight = 50; // Keep default if logo fails
       }
     }
 
-    // Header
+    // Header - Position title next to logo
     doc
-      .fontSize(20)
+      .fontSize(24)
       .fillColor("#34495E")
-      .text("INVOICE", 250, 80, { align: "center" });
+      .text("INVOICE", 200, 70, { align: "left" });
+
+    // Company info on right side
+    doc
+      .fontSize(10)
+      .fillColor("#666666")
+      .text("Hommlie Services", 400, 55, { align: "right" })
+      .text("www.hommlie.com", 400, 70, { align: "right" })
+      .text("Customer Support Available", 400, 85, { align: "right" });
+
+    // Draw a line under header
+    doc
+      .moveTo(50, logoHeight + 10)
+      .lineTo(550, logoHeight + 10)
+      .strokeColor("#E0E0E0")
+      .stroke();
+
+    const contentStart = logoHeight + 30;
 
     // Invoice details
     doc
       .fontSize(12)
       .fillColor("#000000")
-      .text(`Invoice #: ${order.order_number}`, 50, 130)
-      .text(`Date: ${new Date(order.created_at).toLocaleDateString()}`, 50, 150)
-      .text(`Payment Method: ${order.payment_type}`, 50, 170);
+      .text(`Invoice #: ${order.order_number}`, 50, contentStart)
+      .text(
+        `Date: ${new Date(order.created_at).toLocaleDateString()}`,
+        50,
+        contentStart + 20
+      )
+      .text(`Payment Method: ${order.payment_type}`, 50, contentStart + 40);
 
     // Customer details
-    doc.fontSize(14).fillColor("#34495E").text("Customer Details:", 50, 200);
+    doc
+      .fontSize(14)
+      .fillColor("#34495E")
+      .text("Customer Details:", 50, contentStart + 70);
 
     doc
       .fontSize(12)
       .fillColor("#000000")
-      .text(`Name: ${order.full_name}`, 50, 220)
-      .text(`Email: ${order.email}`, 50, 240)
-      .text(`Phone: ${order.mobile}`, 50, 260)
+      .text(`Name: ${order.full_name}`, 50, contentStart + 90)
+      .text(`Email: ${order.email}`, 50, contentStart + 110)
+      .text(`Phone: ${order.mobile}`, 50, contentStart + 130)
       .text(
         `Service Date: ${order.desired_date} at ${order.desired_time}`,
         50,
-        280
+        contentStart + 150
       );
 
     // Address
-    doc.text("Address:", 50, 300).text(`${order.street_address}`, 50, 320);
+    doc
+      .text("Address:", 50, contentStart + 170)
+      .text(`${order.street_address}`, 50, contentStart + 190);
 
     if (order.landmark) {
-      doc.text(`Landmark: ${order.landmark}`, 50, 340);
+      doc.text(`Landmark: ${order.landmark}`, 50, contentStart + 210);
     }
 
-    doc.text(`Pincode: ${order.pincode}`, 50, 360);
+    doc.text(`Pincode: ${order.pincode}`, 50, contentStart + 230);
 
     // Service details table
-    doc.fontSize(14).fillColor("#34495E").text("Service Details:", 50, 390);
+    doc
+      .fontSize(14)
+      .fillColor("#34495E")
+      .text("Service Details:", 50, contentStart + 260);
 
     // Table header
-    const tableTop = 410;
-    doc.fontSize(10).fillColor("#000000");
+    const tableTop = contentStart + 280;
+    doc.fontSize(10).fillColor("#FFFFFF");
 
-    doc.rect(50, tableTop, 500, 20).fill("#F0F0F0");
+    doc.rect(50, tableTop, 500, 25).fill("#34495E");
 
     doc
-      .fillColor("#000000")
-      .text("Service", 60, tableTop + 5)
-      .text("Quantity", 300, tableTop + 5)
-      .text("Price", 380, tableTop + 5)
-      .text("Total", 460, tableTop + 5);
+      .fillColor("#FFFFFF")
+      .text("Service", 60, tableTop + 8)
+      .text("Quantity", 300, tableTop + 8)
+      .text("Price", 380, tableTop + 8)
+      .text("Total", 460, tableTop + 8);
 
     // Table content
-    const itemTop = tableTop + 25;
+    const itemTop = tableTop + 30;
+    doc.fillColor("#000000");
     doc.text(order.product_name, 60, itemTop);
 
     if (order.attribute) {
@@ -1230,53 +1288,57 @@ exports.generateInvoice = async (req, res) => {
 
     doc
       .text(order.qty.toString(), 300, itemTop)
-      .text(`${order.price}`, 380, itemTop)
-      .text(`${order.order_total}`, 460, itemTop);
+      .text(`₹${order.price}`, 380, itemTop)
+      .text(`₹${order.order_total}`, 460, itemTop);
 
     // Draw line
     doc
       .moveTo(50, itemTop + 40)
       .lineTo(550, itemTop + 40)
+      .strokeColor("#E0E0E0")
       .stroke();
 
     // Summary
     const summaryTop = itemTop + 60;
     doc
       .text("Subtotal:", 380, summaryTop)
-      .text(`${order.price}`, 460, summaryTop);
+      .text(`₹${order.price}`, 460, summaryTop);
 
     if (order.discount_amount && parseFloat(order.discount_amount) > 0) {
       doc
         .text("Discount:", 380, summaryTop + 20)
-        .text(`-${order.discount_amount}`, 460, summaryTop + 20);
+        .text(`-₹${order.discount_amount}`, 460, summaryTop + 20);
     }
 
     doc
       .text("Shipping:", 380, summaryTop + 40)
-      .text(`${order.shipping_cost || 0}`, 460, summaryTop + 40);
+      .text(`₹${order.shipping_cost || 0}`, 460, summaryTop + 40);
 
     if (order.tax && parseFloat(order.tax) > 0) {
       doc
         .text("Tax:", 380, summaryTop + 60)
-        .text(`${order.tax}`, 460, summaryTop + 60);
+        .text(`₹${order.tax}`, 460, summaryTop + 60);
     }
 
+    // Grand total with background
+    doc.rect(370, summaryTop + 75, 180, 25).fill("#F8F9FA");
     doc
       .fontSize(12)
-      .text("Grand Total:", 380, summaryTop + 80)
-      .text(`${order.order_total}`, 460, summaryTop + 80);
+      .fillColor("#000000")
+      .text("Grand Total:", 380, summaryTop + 85)
+      .text(`₹${order.order_total}`, 460, summaryTop + 85);
 
     // Footer
     doc
       .fontSize(10)
       .fillColor("#666666")
-      .text("Thank you for choosing Hommlie Services!", 50, 650, {
+      .text("Thank you for choosing Hommlie Services!", 50, 700, {
         align: "center",
       })
-      .text("For any queries, please contact our customer support.", 50, 665, {
+      .text("For any queries, please contact our customer support.", 50, 715, {
         align: "center",
       })
-      .text("www.hommlie.com", 50, 680, { align: "center" });
+      .text("www.hommlie.com", 50, 730, { align: "center" });
 
     // Finalize PDF
     doc.end();
@@ -1358,12 +1420,7 @@ exports.generateServiceReport = async (req, res) => {
 
     // Fetch logo from settings
     const settings = await Settings.findOne({
-      attributes: [
-        sequelize.literal(
-          `CONCAT('${apiUrl}/storage/app/public/images/settings/', logo)`
-        ),
-        "logo",
-      ],
+      attributes: ["logo"],
     });
 
     // Order statuses mapping
@@ -1391,58 +1448,102 @@ exports.generateServiceReport = async (req, res) => {
     // Pipe PDF to file
     doc.pipe(fs.createWriteStream(filepath));
 
+    let logoHeight = 50; // Default starting position for content
+
     // Add logo if available
     if (settings && settings.logo) {
       try {
-        doc.image(settings.logo, 50, 50, { width: 100 });
+        const logoUrl = `${apiUrl}/storage/app/public/images/settings/${settings.logo}`;
+        console.log("Loading logo from:", logoUrl);
+
+        const logoBuffer = await fetchImageFromUrl(logoUrl);
+
+        // Add logo to left side of header
+        doc.image(logoBuffer, 50, 50, {
+          width: 120,
+          height: 60,
+          fit: [120, 60],
+          align: "left",
+        });
+
+        logoHeight = 120; // Adjust content start position
+        console.log("Logo loaded successfully");
       } catch (logoError) {
-        console.log("Logo loading error:", logoError);
+        console.log("Logo loading error:", logoError.message);
+        logoHeight = 50; // Keep default if logo fails
       }
     }
 
-    // Header
+    // Header - Position title next to logo
     doc
-      .fontSize(20)
+      .fontSize(24)
       .fillColor("#34495E")
-      .text("SERVICE REPORT", 250, 80, { align: "center" });
+      .text("SERVICE REPORT", 200, 70, { align: "left" });
+
+    // Company info on right side
+    doc
+      .fontSize(10)
+      .fillColor("#666666")
+      .text("Hommlie Services", 400, 55, { align: "right" })
+      .text("www.hommlie.com", 400, 70, { align: "right" })
+      .text("Customer Support Available", 400, 85, { align: "right" });
+
+    // Draw a line under header
+    doc
+      .moveTo(50, logoHeight + 10)
+      .lineTo(550, logoHeight + 10)
+      .strokeColor("#E0E0E0")
+      .stroke();
+
+    const contentStart = logoHeight + 30;
 
     // Report details
     doc
-      .fontSize(10)
+      .fontSize(12)
       .fillColor("#000000")
-      .text(`Order #: ${order.order_number}`, 50, 130)
-      .text(`Service Date: ${order.desired_date}`, 50, 150)
-      .text(`Service Time: ${order.desired_time}`, 50, 170)
-      .text(`Status: ${OrderStatuses[order.order_status]}`, 50, 190);
+      .text(`Order #: ${order.order_number}`, 50, contentStart)
+      .text(`Service Date: ${order.desired_date}`, 50, contentStart + 20)
+      .text(`Service Time: ${order.desired_time}`, 50, contentStart + 40)
+      .text(
+        `Status: ${OrderStatuses[order.order_status]}`,
+        50,
+        contentStart + 60
+      );
 
     // Customer details
-    doc.fontSize(12).fillColor("#34495E").text("Customer Details:", 50, 220);
+    doc
+      .fontSize(14)
+      .fillColor("#34495E")
+      .text("Customer Details:", 50, contentStart + 90);
 
     doc
-      .fontSize(10)
+      .fontSize(12)
       .fillColor("#000000")
-      .text(`Name: ${order.full_name}`, 50, 240)
-      .text(`Email: ${order.email}`, 50, 260)
-      .text(`Phone: ${order.mobile}`, 50, 280);
+      .text(`Name: ${order.full_name}`, 50, contentStart + 110)
+      .text(`Email: ${order.email}`, 50, contentStart + 130)
+      .text(`Phone: ${order.mobile}`, 50, contentStart + 150);
 
     // Address
     doc
-      .text("Service Address:", 50, 300)
-      .text(`${order.street_address}`, 50, 320);
+      .text("Service Address:", 50, contentStart + 170)
+      .text(`${order.street_address}`, 50, contentStart + 190);
 
     if (order.landmark) {
-      doc.text(`Landmark: ${order.landmark}`, 50, 340);
+      doc.text(`Landmark: ${order.landmark}`, 50, contentStart + 210);
     }
 
-    doc.text(`Pincode: ${order.pincode}`, 50, 360);
+    doc.text(`Pincode: ${order.pincode}`, 50, contentStart + 230);
 
     // Service details
-    doc.fontSize(12).fillColor("#34495E").text("Service Details:", 50, 390);
+    doc
+      .fontSize(14)
+      .fillColor("#34495E")
+      .text("Service Details:", 50, contentStart + 260);
 
     doc
-      .fontSize(10)
+      .fontSize(12)
       .fillColor("#000000")
-      .text(`Service: ${order.product_name}`, 50, 410);
+      .text(`Service: ${order.product_name}`, 50, contentStart + 280);
 
     if (order.attribute) {
       doc.text(
@@ -1450,80 +1551,80 @@ exports.generateServiceReport = async (req, res) => {
           order.variation ? ` (Variation ID: ${order.variation})` : ""
         }`,
         50,
-        430
+        contentStart + 300
       );
     }
 
     doc
-      .text(`Quantity: ${order.qty}`, 50, 450)
-      .text(`Service Amount: ${order.price}`, 50, 470);
+      .text(`Quantity: ${order.qty}`, 50, contentStart + 320)
+      .text(`Service Amount: ₹${order.price}`, 50, contentStart + 340);
 
     // Service notes if available
+    let notesEnd = contentStart + 360;
     if (order.order_notes) {
-      doc.fontSize(12).fillColor("#34495E").text("Service Notes:", 50, 500);
+      doc
+        .fontSize(14)
+        .fillColor("#34495E")
+        .text("Service Notes:", 50, notesEnd);
 
       doc
-        .fontSize(10)
+        .fontSize(12)
         .fillColor("#000000")
-        .text(order.order_notes, 50, 520, { width: 500, align: "justify" });
+        .text(order.order_notes, 50, notesEnd + 20, {
+          width: 500,
+          align: "justify",
+        });
+
+      notesEnd += 80; // Adjust based on notes length
     }
 
     // Service summary
-    const summaryTop = order.order_notes ? 560 : 520;
     doc
-      .fontSize(12)
+      .fontSize(14)
       .fillColor("#34495E")
-      .text("Service Summary:", 50, summaryTop);
+      .text("Service Summary:", 50, notesEnd);
 
     doc
-      .fontSize(10)
+      .fontSize(12)
       .fillColor("#000000")
-      .text(
-        "• Service was completed as per scheduled time",
-        50,
-        summaryTop + 20
-      )
+      .text("• Service was completed as per scheduled time", 50, notesEnd + 20)
       .text(
         "• All safety protocols were followed during service",
         50,
-        summaryTop + 40
+        notesEnd + 40
       )
-      .text("• Service area was cleaned after completion", 50, summaryTop + 60)
+      .text("• Service area was cleaned after completion", 50, notesEnd + 60)
       .text(
         "• Quality check performed before service completion",
         50,
-        summaryTop + 80
+        notesEnd + 80
       );
 
     // Post-service instructions
     doc
-      .fontSize(12)
+      .fontSize(14)
       .fillColor("#34495E")
-      .text("Post-Service Instructions:", 50, summaryTop + 110);
+      .text("Post-Service Instructions:", 50, notesEnd + 110);
 
     doc
-      .fontSize(10)
+      .fontSize(12)
       .fillColor("#000000")
       .text(
         "• Keep the treated areas well-ventilated for 2-3 hours",
         50,
-        summaryTop + 130
+        notesEnd + 130
       )
       .text(
         "• Avoid immediate contact with treated surfaces",
         50,
-        summaryTop + 150
+        notesEnd + 150
       )
-      .text("• Schedule follow-up service if recommended", 50, summaryTop + 170)
-      .text(
-        "• Contact customer support for any concerns",
-        50,
-        summaryTop + 190
-      );
+      .text("• Schedule follow-up service if recommended", 50, notesEnd + 170)
+      .text("• Contact customer support for any concerns", 50, notesEnd + 190);
 
     // Footer
     doc
-      .fontSize(8)
+      .fontSize(10)
       .fillColor("#666666")
       .text("Thank you for choosing Hommlie Services!", 50, 715, {
         align: "center",
