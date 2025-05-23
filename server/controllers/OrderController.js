@@ -1288,8 +1288,8 @@ exports.generateInvoice = async (req, res) => {
 
     doc
       .text(order.qty.toString(), 300, itemTop)
-      .text(`₹${order.price}`, 380, itemTop)
-      .text(`₹${order.order_total}`, 460, itemTop);
+      .text(`${order.price}`, 380, itemTop)
+      .text(`${order.order_total}`, 460, itemTop);
 
     // Draw line
     doc
@@ -1302,22 +1302,22 @@ exports.generateInvoice = async (req, res) => {
     const summaryTop = itemTop + 60;
     doc
       .text("Subtotal:", 380, summaryTop)
-      .text(`₹${order.price}`, 460, summaryTop);
+      .text(`${order.price}`, 460, summaryTop);
 
     if (order.discount_amount && parseFloat(order.discount_amount) > 0) {
       doc
         .text("Discount:", 380, summaryTop + 20)
-        .text(`-₹${order.discount_amount}`, 460, summaryTop + 20);
+        .text(`-${order.discount_amount}`, 460, summaryTop + 20);
     }
 
     doc
       .text("Shipping:", 380, summaryTop + 40)
-      .text(`₹${order.shipping_cost || 0}`, 460, summaryTop + 40);
+      .text(`${order.shipping_cost || 0}`, 460, summaryTop + 40);
 
     if (order.tax && parseFloat(order.tax) > 0) {
       doc
         .text("Tax:", 380, summaryTop + 60)
-        .text(`₹${order.tax}`, 460, summaryTop + 60);
+        .text(`${order.tax}`, 460, summaryTop + 60);
     }
 
     // Grand total with background
@@ -1326,7 +1326,7 @@ exports.generateInvoice = async (req, res) => {
       .fontSize(12)
       .fillColor("#000000")
       .text("Grand Total:", 380, summaryTop + 85)
-      .text(`₹${order.order_total}`, 460, summaryTop + 85);
+      .text(`${order.order_total}`, 460, summaryTop + 85);
 
     // Footer
     doc
@@ -1557,7 +1557,7 @@ exports.generateServiceReport = async (req, res) => {
 
     doc
       .text(`Quantity: ${order.qty}`, 50, contentStart + 320)
-      .text(`Service Amount: ₹${order.price}`, 50, contentStart + 340);
+      .text(`Service Amount: ${order.price}`, 50, contentStart + 340);
 
     // Service notes if available
     let notesEnd = contentStart + 360;
@@ -1577,50 +1577,6 @@ exports.generateServiceReport = async (req, res) => {
 
       notesEnd += 80; // Adjust based on notes length
     }
-
-    // Service summary
-    doc
-      .fontSize(14)
-      .fillColor("#34495E")
-      .text("Service Summary:", 50, notesEnd);
-
-    doc
-      .fontSize(12)
-      .fillColor("#000000")
-      .text("• Service was completed as per scheduled time", 50, notesEnd + 20)
-      .text(
-        "• All safety protocols were followed during service",
-        50,
-        notesEnd + 40
-      )
-      .text("• Service area was cleaned after completion", 50, notesEnd + 60)
-      .text(
-        "• Quality check performed before service completion",
-        50,
-        notesEnd + 80
-      );
-
-    // Post-service instructions
-    doc
-      .fontSize(14)
-      .fillColor("#34495E")
-      .text("Post-Service Instructions:", 50, notesEnd + 110);
-
-    doc
-      .fontSize(12)
-      .fillColor("#000000")
-      .text(
-        "• Keep the treated areas well-ventilated for 2-3 hours",
-        50,
-        notesEnd + 130
-      )
-      .text(
-        "• Avoid immediate contact with treated surfaces",
-        50,
-        notesEnd + 150
-      )
-      .text("• Schedule follow-up service if recommended", 50, notesEnd + 170)
-      .text("• Contact customer support for any concerns", 50, notesEnd + 190);
 
     // Footer
     doc
