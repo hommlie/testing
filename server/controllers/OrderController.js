@@ -22,6 +22,9 @@ const { sendEmail } = require("../middleware/mailMiddleware");
 const {
   sendWhatsAppNotification,
 } = require("../utils/sendWhatsAppNotification");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
 
 exports.initiatePayment = async (req, res) => {
   try {
@@ -1099,5 +1102,498 @@ exports.recharge = async (req, res) => {
     return res
       .status(500)
       .json({ status: 0, message: `Error: ${error.message}` });
+  }
+};
+
+// Generate Invoice PDF Controller
+exports.generateInvoice = async (req, res) => {
+  const { order_id } = req.params;
+
+  try {
+    // Fetch order details with associations
+    const order = await Order.findByPk(order_id, {
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["name", "email", "mobile"],
+        },
+      ],
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        status: 0,
+        message: "Order not found",
+      });
+    }
+
+    // Fetch logo from settings
+    const settings = await Settings.findOne({
+      attributes: ["logo"],
+    });
+
+    // Create PDF document
+    const doc = new PDFDocument({ margin: 50 });
+    const filename = `Hommlie_Invoice_${order.order_number}.pdf`;
+    const filepath = path.join(__dirname, "../temp", filename);
+
+    // Ensure temp directory exists
+    const tempDir = path.dirname(filepath);
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+
+    // Pipe PDF to file
+    doc.pipe(fs.createWriteStream(filepath));
+
+    // Add logo if available
+    if (settings && settings.logo) {
+      try {
+        const logoPath = settings.logo;
+        if (fs.existsSync(logoPath)) {
+          doc.image(logoPath, 50, 50, { width: 100 });
+        }
+      } catch (logoError) {
+        console.log("Logo loading error:", logoError);
+      }
+    }
+
+    // Header
+    doc
+      .fontSize(24)
+      .fillColor("#2C3E50")
+      .text("HOMMLIE", 250, 50, { align: "center" });
+
+    doc
+      .fontSize(20)
+      .fillColor("#34495E")
+      .text("INVOICE", 250, 80, { align: "center" });
+
+    // Invoice details
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(`Invoice #: ${order.order_number}`, 50, 130)
+      .text(`Date: ${new Date(order.created_at).toLocaleDateString()}`, 50, 150)
+      .text(`Payment Method: ${order.payment_type}`, 50, 170);
+
+    // Customer details
+    doc.fontSize(14).fillColor("#34495E").text("Customer Details:", 50, 200);
+
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(`Name: ${order.full_name}`, 50, 220)
+      .text(`Email: ${order.email}`, 50, 240)
+      .text(`Phone: ${order.mobile}`, 50, 260)
+      .text(
+        `Service Date: ${order.desired_date} at ${order.desired_time}`,
+        50,
+        280
+      );
+
+    // Address
+    doc.text("Address:", 50, 300).text(`${order.street_address}`, 50, 320);
+
+    if (order.landmark) {
+      doc.text(`Landmark: ${order.landmark}`, 50, 340);
+    }
+
+    doc.text(`Pincode: ${order.pincode}`, 50, 360);
+
+    // Service details table
+    doc.fontSize(14).fillColor("#34495E").text("Service Details:", 50, 390);
+
+    // Table header
+    const tableTop = 410;
+    doc.fontSize(10).fillColor("#000000");
+
+    doc.rect(50, tableTop, 500, 20).fill("#F0F0F0");
+
+    doc
+      .fillColor("#000000")
+      .text("Service", 60, tableTop + 5)
+      .text("Quantity", 300, tableTop + 5)
+      .text("Price", 380, tableTop + 5)
+      .text("Total", 460, tableTop + 5);
+
+    // Table content
+    const itemTop = tableTop + 25;
+    doc.text(order.product_name, 60, itemTop);
+
+    if (order.attribute) {
+      doc.text(
+        `(Attribute ID: ${order.attribute}${
+          order.variation ? ` - Variation ID: ${order.variation}` : ""
+        })`,
+        60,
+        itemTop + 15
+      );
+    }
+
+    doc
+      .text(order.qty.toString(), 300, itemTop)
+      .text(`₹${order.price}`, 380, itemTop)
+      .text(`₹${order.order_total}`, 460, itemTop);
+
+    // Draw line
+    doc
+      .moveTo(50, itemTop + 40)
+      .lineTo(550, itemTop + 40)
+      .stroke();
+
+    // Summary
+    const summaryTop = itemTop + 60;
+    doc
+      .text("Subtotal:", 380, summaryTop)
+      .text(`₹${order.price}`, 460, summaryTop);
+
+    if (order.discount_amount && parseFloat(order.discount_amount) > 0) {
+      doc
+        .text("Discount:", 380, summaryTop + 20)
+        .text(`-₹${order.discount_amount}`, 460, summaryTop + 20);
+    }
+
+    doc
+      .text("Shipping:", 380, summaryTop + 40)
+      .text(`₹${order.shipping_cost || 0}`, 460, summaryTop + 40);
+
+    if (order.tax && parseFloat(order.tax) > 0) {
+      doc
+        .text("Tax:", 380, summaryTop + 60)
+        .text(`₹${order.tax}`, 460, summaryTop + 60);
+    }
+
+    doc
+      .fontSize(12)
+      .text("Grand Total:", 380, summaryTop + 80)
+      .text(`₹${order.order_total}`, 460, summaryTop + 80);
+
+    // Footer
+    doc
+      .fontSize(10)
+      .fillColor("#666666")
+      .text("Thank you for choosing Hommlie Services!", 50, 650, {
+        align: "center",
+      })
+      .text("For any queries, please contact our customer support.", 50, 665, {
+        align: "center",
+      })
+      .text("www.hommlie.com", 50, 680, { align: "center" });
+
+    // Finalize PDF
+    doc.end();
+
+    // Wait for PDF to be written
+    await new Promise((resolve, reject) => {
+      doc.on("end", resolve);
+      doc.on("error", reject);
+    });
+
+    // Send email if customer email exists
+    if (order.email) {
+      try {
+        const subject = `Invoice - Order #${order.order_number}`;
+        const html = `
+          <h1>Invoice for your order</h1>
+          <p>Dear ${order.full_name},</p>
+          <p>Please find attached the invoice for your order #${order.order_number}.</p>
+          <p>Order Total: ₹${order.order_total}</p>
+          <p>Service Date: ${order.desired_date} at ${order.desired_time}</p>
+          <p>Thank you for choosing Hommlie Services!</p>
+          <br>
+          <p>Best regards,<br>Hommlie Team</p>
+        `;
+
+        await sendEmail(order.email, subject, html, [
+          {
+            filename: filename,
+            path: filepath,
+          },
+        ]);
+      } catch (emailError) {
+        console.error("Error sending invoice email:", emailError);
+      }
+    }
+
+    // Send PDF as response
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+    const pdfBuffer = fs.readFileSync(filepath);
+
+    // Clean up temp file
+    fs.unlinkSync(filepath);
+
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating invoice:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Failed to generate invoice",
+      error: error.message,
+    });
+  }
+};
+
+// Generate Service Report PDF Controller
+exports.generateServiceReport = async (req, res) => {
+  const { order_id } = req.params;
+
+  try {
+    // Fetch order details
+    const order = await Order.findByPk(order_id, {
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["name", "email", "mobile"],
+        },
+      ],
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        status: 0,
+        message: "Order not found",
+      });
+    }
+
+    // Fetch logo from settings
+    const settings = await Settings.findOne({
+      attributes: ["logo"],
+    });
+
+    // Order statuses mapping
+    const OrderStatuses = [
+      "Not Scheduled",
+      "Scheduled",
+      "Dispatched",
+      "On Site",
+      "Completed",
+      "Incomplete",
+      "Cancelled",
+    ];
+
+    // Create PDF document
+    const doc = new PDFDocument({ margin: 50 });
+    const filename = `Hommlie_Service_Report_${order.order_number}.pdf`;
+    const filepath = path.join(__dirname, "../temp", filename);
+
+    // Ensure temp directory exists
+    const tempDir = path.dirname(filepath);
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+
+    // Pipe PDF to file
+    doc.pipe(fs.createWriteStream(filepath));
+
+    // Add logo if available
+    if (settings && settings.logo) {
+      try {
+        const logoPath = settings.logo;
+        if (fs.existsSync(logoPath)) {
+          doc.image(logoPath, 50, 50, { width: 100 });
+        }
+      } catch (logoError) {
+        console.log("Logo loading error:", logoError);
+      }
+    }
+
+    // Header
+    doc
+      .fontSize(24)
+      .fillColor("#2C3E50")
+      .text("HOMMLIE", 250, 50, { align: "center" });
+
+    doc
+      .fontSize(20)
+      .fillColor("#34495E")
+      .text("SERVICE REPORT", 250, 80, { align: "center" });
+
+    // Report details
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(`Order #: ${order.order_number}`, 50, 130)
+      .text(`Service Date: ${order.desired_date}`, 50, 150)
+      .text(`Service Time: ${order.desired_time}`, 50, 170)
+      .text(`Status: ${OrderStatuses[order.order_status]}`, 50, 190);
+
+    // Customer details
+    doc.fontSize(14).fillColor("#34495E").text("Customer Details:", 50, 220);
+
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(`Name: ${order.full_name}`, 50, 240)
+      .text(`Email: ${order.email}`, 50, 260)
+      .text(`Phone: ${order.mobile}`, 50, 280);
+
+    // Address
+    doc
+      .text("Service Address:", 50, 300)
+      .text(`${order.street_address}`, 50, 320);
+
+    if (order.landmark) {
+      doc.text(`Landmark: ${order.landmark}`, 50, 340);
+    }
+
+    doc.text(`Pincode: ${order.pincode}`, 50, 360);
+
+    // Service details
+    doc.fontSize(14).fillColor("#34495E").text("Service Details:", 50, 390);
+
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(`Service: ${order.product_name}`, 50, 410);
+
+    if (order.attribute) {
+      doc.text(
+        `Type: Attribute ID ${order.attribute}${
+          order.variation ? ` (Variation ID: ${order.variation})` : ""
+        }`,
+        50,
+        430
+      );
+    }
+
+    doc
+      .text(`Quantity: ${order.qty}`, 50, 450)
+      .text(`Service Amount: ₹${order.price}`, 50, 470);
+
+    // Service notes if available
+    if (order.order_notes) {
+      doc.fontSize(14).fillColor("#34495E").text("Service Notes:", 50, 500);
+
+      doc
+        .fontSize(12)
+        .fillColor("#000000")
+        .text(order.order_notes, 50, 520, { width: 500, align: "justify" });
+    }
+
+    // Service summary
+    const summaryTop = order.order_notes ? 560 : 520;
+    doc
+      .fontSize(14)
+      .fillColor("#34495E")
+      .text("Service Summary:", 50, summaryTop);
+
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(
+        "• Service was completed as per scheduled time",
+        50,
+        summaryTop + 20
+      )
+      .text(
+        "• All safety protocols were followed during service",
+        50,
+        summaryTop + 40
+      )
+      .text("• Service area was cleaned after completion", 50, summaryTop + 60)
+      .text(
+        "• Quality check performed before service completion",
+        50,
+        summaryTop + 80
+      );
+
+    // Post-service instructions
+    doc
+      .fontSize(14)
+      .fillColor("#34495E")
+      .text("Post-Service Instructions:", 50, summaryTop + 110);
+
+    doc
+      .fontSize(12)
+      .fillColor("#000000")
+      .text(
+        "• Keep the treated areas well-ventilated for 2-3 hours",
+        50,
+        summaryTop + 130
+      )
+      .text(
+        "• Avoid immediate contact with treated surfaces",
+        50,
+        summaryTop + 150
+      )
+      .text("• Schedule follow-up service if recommended", 50, summaryTop + 170)
+      .text(
+        "• Contact customer support for any concerns",
+        50,
+        summaryTop + 190
+      );
+
+    // Footer
+    doc
+      .fontSize(10)
+      .fillColor("#666666")
+      .text("This is an automatically generated service report.", 50, 700, {
+        align: "center",
+      })
+      .text("Thank you for choosing Hommlie Services!", 50, 715, {
+        align: "center",
+      })
+      .text("www.hommlie.com", 50, 730, { align: "center" });
+
+    // Finalize PDF
+    doc.end();
+
+    // Wait for PDF to be written
+    await new Promise((resolve, reject) => {
+      doc.on("end", resolve);
+      doc.on("error", reject);
+    });
+
+    // Send email if customer email exists
+    if (order.email) {
+      try {
+        const subject = `Service Report - Order #${order.order_number}`;
+        const html = `
+          <h1>Service Report for your order</h1>
+          <p>Dear ${order.full_name},</p>
+          <p>Please find attached the service report for your order #${
+            order.order_number
+          }.</p>
+          <p>Service: ${order.product_name}</p>
+          <p>Service Date: ${order.desired_date} at ${order.desired_time}</p>
+          <p>Status: ${OrderStatuses[order.order_status]}</p>
+          <p>Thank you for choosing Hommlie Services!</p>
+          <br>
+          <p>Best regards,<br>Hommlie Team</p>
+        `;
+
+        await sendEmail(order.email, subject, html, [
+          {
+            filename: filename,
+            path: filepath,
+          },
+        ]);
+      } catch (emailError) {
+        console.error("Error sending service report email:", emailError);
+      }
+    }
+
+    // Send PDF as response
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+    const pdfBuffer = fs.readFileSync(filepath);
+
+    // Clean up temp file
+    fs.unlinkSync(filepath);
+
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating service report:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Failed to generate service report",
+      error: error.message,
+    });
   }
 };

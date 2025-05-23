@@ -126,6 +126,11 @@ app.post("/rescheduleorder", OrderController.rescheduleOrder);
 app.post("/trackorder", OrderController.trackOrder);
 app.post("/wallet", OrderController.wallet);
 app.post("/recharge", OrderController.recharge);
+app.get("/downloadOrSendReport/:order_id", OrderController.generateInvoice);
+app.get(
+  "/downloadOrSendInvoice/:order_id",
+  OrderController.generateServiceReport
+);
 
 //Notification
 app.post("/notification", NotificationController.notification);

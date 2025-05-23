@@ -266,220 +266,82 @@ export default function MyBookings() {
   };
 
   const generateInvoicePDF = async (order) => {
-    setLoadingPdf(true);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (!jwtToken) {
+      errorNotify("Please login to download invoice");
+      return;
+    }
+
+    setLoadingInvoice(true);
     try {
-      // Create a new PDF document
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      // PDF Content
-      pdf.setFontSize(24);
-      pdf.setTextColor(44, 62, 80);
-      pdf.text("HOMMLIE", 105, 20, { align: "center" });
-
-      pdf.setFontSize(20);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("INVOICE", 105, 30, { align: "center" });
-
-      // Invoice Details
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Invoice #: ${order.order_number}`, 20, 45);
-      pdf.text(`Date: ${order.date}`, 20, 52);
-      pdf.text(`Payment Method: ${order.payment?.payment_name}`, 20, 59);
-
-      // Customer Details
-      pdf.setFontSize(14);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("Customer Details:", 20, 70);
-
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Name: ${order.full_name}`, 20, 77);
-      pdf.text(`Email: ${order.email}`, 20, 84);
-      pdf.text(`Phone: ${order.mobile}`, 20, 91);
-      pdf.text(
-        `Service Date: ${order.desired_date} at ${order.desired_time}`,
-        20,
-        98
+      const response = await axios.get(
+        `${config.API_URL}/api/downloadOrSendReport/${order.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+          responseType: "blob",
+        }
       );
 
-      // Service Details
-      pdf.setFontSize(14);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("Service Details:", 20, 110);
+      // Create blob and download
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Hommlie_Invoice_${order.order_number}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
-      // Table header
-      pdf.setFillColor(240, 240, 240);
-      pdf.rect(20, 115, 170, 8, "F");
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(10);
-      pdf.text("Service", 25, 120);
-      pdf.text("Quantity", 110, 120);
-      pdf.text("Price", 130, 120);
-      pdf.text("Total", 160, 120);
-
-      // Table content
-      pdf.text(order.product_name, 25, 130);
-      if (order.attribute) {
-        pdf.text(
-          `(${order.attribute}${
-            order.variation ? ` - ${order.variation}` : ""
-          })`,
-          25,
-          136
-        );
-      }
-      pdf.text(order.qty.toString(), 110, 130);
-      pdf.text(order.price.toString(), 130, 130);
-      pdf.text(order.grand_total.toString(), 160, 130);
-
-      // Draw line
-      pdf.line(20, 140, 190, 140);
-
-      // Summary
-      pdf.text("Subtotal:", 130, 150);
-      pdf.text(`${order.price}`, 160, 150);
-
-      if (order.discount_amount && parseFloat(order.discount_amount) > 0) {
-        pdf.text("Discount:", 130, 157);
-        pdf.text(`${order.discount_amount}`, 160, 157);
-      }
-
-      pdf.text("Shipping:", 130, 164);
-      pdf.text(`${order.shipping_cost || "0"}`, 160, 164);
-
-      pdf.setFontSize(12);
-      pdf.text("Grand Total:", 130, 175);
-      pdf.text(`${order.grand_total}`, 160, 175);
-
-      // Footer
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text("Thank you for choosing Hommlie Services!", 105, 230, {
-        align: "center",
-      });
-      pdf.text(
-        "For any queries, please contact our customer support.",
-        105,
-        237,
-        { align: "center" }
-      );
-      pdf.text("www.hommlie.com", 105, 244, { align: "center" });
-
-      // Save the PDF
-      pdf.save(`Hommlie_Invoice_${order.order_number}.pdf`);
-      successNotify("Invoice downloaded successfully");
+      successNotify("Invoice downloaded successfully and sent to your email");
     } catch (error) {
       console.error("Error generating invoice PDF:", error);
       errorNotify("Failed to generate invoice. Please try again.");
     } finally {
-      setLoadingPdf(false);
+      setLoadingInvoice(false);
     }
   };
 
   const generateServiceReportPDF = async (order) => {
-    setLoadingPdf(true);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (!jwtToken) {
+      errorNotify("Please login to download service report");
+      return;
+    }
+
+    setLoadingReport(true);
     try {
-      // Create a new PDF document
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
+      const response = await axios.get(
+        `${config.API_URL}/api/downloadOrSendInvoice/${order.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+          responseType: "blob",
+        }
+      );
 
-      // PDF Content
-      pdf.setFontSize(24);
-      pdf.setTextColor(44, 62, 80);
-      pdf.text("HOMMLIE", 105, 20, { align: "center" });
+      // Create blob and download
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Hommlie_Service_Report_${order.order_number}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
-      pdf.setFontSize(20);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("SERVICE REPORT", 105, 30, { align: "center" });
-
-      // Report Details
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Order #: ${order.order_number}`, 20, 45);
-      pdf.text(`Service Date: ${order.desired_date}`, 20, 52);
-      pdf.text(`Service Time: ${order.desired_time}`, 20, 59);
-      pdf.text(`Status: ${OrderStatuses[order.order_status]}`, 20, 66);
-
-      // Customer Details
-      pdf.setFontSize(14);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("Customer Details:", 20, 80);
-
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Name: ${order.full_name}`, 20, 87);
-      pdf.text(`Email: ${order.email}`, 20, 94);
-      pdf.text(`Phone: ${order.mobile}`, 20, 101);
-
-      // Service Details
-      pdf.setFontSize(14);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("Service Details:", 20, 115);
-
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Service: ${order.product_name}`, 20, 122);
-      if (order.attribute) {
-        pdf.text(
-          `Type: ${order.attribute}${
-            order.variation ? ` (${order.variation})` : ""
-          }`,
-          20,
-          129
-        );
-      }
-      pdf.text(`Quantity: ${order.qty}`, 20, 136);
-
-      // Service Summary
-      pdf.setFontSize(14);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("Service Summary:", 20, 150);
-
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text("• Service was completed successfully", 20, 157);
-      pdf.text("• All areas were treated as per standard protocol", 20, 164);
-      pdf.text("• Recommended safety precautions were followed", 20, 171);
-
-      // Follow-up Instructions
-      pdf.setFontSize(14);
-      pdf.setTextColor(52, 73, 94);
-      pdf.text("Post-Service Instructions:", 20, 185);
-
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text("• Keep the treated areas dry for 24-48 hours", 20, 192);
-      pdf.text("• Ventilate the premises for 2-3 hours after service", 20, 199);
-      pdf.text("• Schedule follow-up inspection if required", 20, 206);
-      pdf.text("• Contact customer support for any concerns", 20, 213);
-
-      // Footer
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text("This is an automatically generated report.", 105, 230, {
-        align: "center",
-      });
-      pdf.text("Thank you for choosing Hommlie Services!", 105, 237, {
-        align: "center",
-      });
-      pdf.text("www.hommlie.com", 105, 244, { align: "center" });
-
-      // Save the PDF
-      pdf.save(`Hommlie_Service_Report_${order.order_number}.pdf`);
-      successNotify("Service report downloaded successfully");
+      successNotify(
+        "Service report downloaded successfully and sent to your email"
+      );
     } catch (error) {
       console.error("Error generating service report PDF:", error);
       errorNotify("Failed to generate service report. Please try again.");
     } finally {
-      setLoadingPdf(false);
+      setLoadingReport(false);
     }
   };
 
