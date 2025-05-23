@@ -1188,11 +1188,11 @@ exports.generateInvoice = async (req, res) => {
       }
     }
 
-    // Header - Position title next to logo
+    // Header - Position title next to logo with padding
     doc
       .fontSize(24)
       .fillColor("#34495E")
-      .text("INVOICE", 200, 70, { align: "center" });
+      .text("INVOICE", 200, 60, { align: "center" });
 
     // Company info on right side
     doc
