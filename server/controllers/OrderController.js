@@ -1130,14 +1130,8 @@ exports.generateInvoice = async (req, res) => {
 
     // Fetch logo from settings
     const settings = await Settings.findOne({
-      attributes: [
-        sequelize.literal(
-          `CONCAT('${apiUrl}/storage/app/public/images/settings/', logo)`
-        ),
-        "logo",
-      ],
+      attributes: ["logo"],
     });
-    console.log("Settings:", settings);
 
     // Create PDF document
     const doc = new PDFDocument({ margin: 50 });
@@ -1155,10 +1149,12 @@ exports.generateInvoice = async (req, res) => {
 
     // Add logo if available
     if (settings && settings.logo) {
-      console.log("Logo path:", settings.logo);
-
       try {
-        doc.image(settings.logo, 50, 50, { width: 100 });
+        const logoPath =
+          `${apiUrl}/storage/app/public/images/settings/` + settings.logo;
+        console.log("Logo path:", logoPath);
+
+        doc.image(logoPath, 50, 50, { width: 100 });
       } catch (logoError) {
         console.log("Logo loading error:", logoError);
       }
