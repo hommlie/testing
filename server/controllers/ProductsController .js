@@ -674,7 +674,7 @@ exports.products = async (req, res) => {
   if (!subcategorySlug) {
     return res
       .status(400)
-      .json({ status: 0, message: "Please select one category" });
+      .json({ status: 0, message: "Please select one sub category" });
   }
 
   const subcategory = await Subcategory.findOne({

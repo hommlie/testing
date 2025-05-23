@@ -113,6 +113,12 @@ exports.verifyOtp = async (req, res) => {
         is_verified: 1,
         token: app_token,
       });
+
+      // Creating wallet and adding joining bonus 50
+      await Wallet.create({
+        user_id: user.id,
+        balance: 50,
+      });
     }
 
     await User.update({ token: app_token }, { where: { id: user.id } });
