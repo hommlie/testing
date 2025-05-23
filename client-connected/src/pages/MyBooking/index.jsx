@@ -55,10 +55,11 @@ export default function MyBookings() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [groupedBookings, setGroupedBookings] = useState({});
   const [loadingPdf, setLoadingPdf] = useState(false);
+  const [loadingInvoice, setLoadingInvoice] = useState(false);
+  const [loadingReport, setLoadingReport] = useState(false);
 
   // New states for filtering and search
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState({
     status: "all",
     dateRange: {
@@ -194,7 +195,6 @@ export default function MyBookings() {
     });
     setSearchQuery("");
     setSortOption("newest");
-    setFilterOpen(false);
   };
 
   const handleFilterChange = (field, value) => {
@@ -365,96 +365,85 @@ export default function MyBookings() {
               />
               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors duration-200"
-              >
-                <FiFilter />
-                <span>Filter</span>
-              </button>
-            </div>
           </div>
 
           {/* Filter Panel */}
-          {filterOpen && (
-            <div className="mt-4 border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Service Status
-                </label>
-                <select
-                  value={filters.status}
-                  onChange={(e) => handleFilterChange("status", e.target.value)}
-                  className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">All Statuses</option>
-                  {OrderStatuses.map((status, index) => (
-                    <option key={index} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Service Type
-                </label>
-                <select
-                  value={filters.serviceType}
-                  onChange={(e) =>
-                    handleFilterChange("serviceType", e.target.value)
-                  }
-                  className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">All Services</option>
-                  {serviceTypes.map((type, index) => (
-                    <option key={index} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Date Range
-                </label>
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-grow">
-                    <input
-                      type="date"
-                      value={filters.dateRange.start}
-                      onChange={(e) =>
-                        handleFilterChange("dateRange.start", e.target.value)
-                      }
-                      className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <FiCalendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  </div>
-                  <span className="text-gray-500">to</span>
-                  <div className="relative flex-grow">
-                    <input
-                      type="date"
-                      value={filters.dateRange.end}
-                      onChange={(e) =>
-                        handleFilterChange("dateRange.end", e.target.value)
-                      }
-                      className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <FiCalendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  </div>
+          <div className="mt-4 border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Service Status
+              </label>
+              <select
+                value={filters.status}
+                onChange={(e) => handleFilterChange("status", e.target.value)}
+                className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">All Statuses</option>
+                {OrderStatuses.map((status, index) => (
+                  <option key={index} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Service Type
+              </label>
+              <select
+                value={filters.serviceType}
+                onChange={(e) =>
+                  handleFilterChange("serviceType", e.target.value)
+                }
+                className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">All Services</option>
+                {serviceTypes.map((type, index) => (
+                  <option key={index} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Date Range
+              </label>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-grow">
+                  <input
+                    type="date"
+                    value={filters.dateRange.start}
+                    onChange={(e) =>
+                      handleFilterChange("dateRange.start", e.target.value)
+                    }
+                    className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <FiCalendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                </div>
+                <span className="text-gray-500">to</span>
+                <div className="relative flex-grow">
+                  <input
+                    type="date"
+                    value={filters.dateRange.end}
+                    onChange={(e) =>
+                      handleFilterChange("dateRange.end", e.target.value)
+                    }
+                    className="w-full border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <FiCalendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
-              <div className="md:col-span-3 flex justify-end mt-2">
-                <button
-                  onClick={resetFilters}
-                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-200"
-                >
-                  Reset Filters
-                </button>
-              </div>
             </div>
-          )}
+            <div className="md:col-span-3 flex justify-end mt-2">
+              <button
+                onClick={resetFilters}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-200"
+              >
+                Reset Filters
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Filter Badges */}
