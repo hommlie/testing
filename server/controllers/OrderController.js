@@ -1130,7 +1130,12 @@ exports.generateInvoice = async (req, res) => {
 
     // Fetch logo from settings
     const settings = await Settings.findOne({
-      attributes: ["logo"],
+      attributes: [
+        sequelize.literal(
+          `CONCAT('${apiUrl}/storage/app/public/images/settings/', logo)`
+        ),
+        "logo",
+      ],
     });
 
     // Create PDF document
@@ -1356,7 +1361,12 @@ exports.generateServiceReport = async (req, res) => {
 
     // Fetch logo from settings
     const settings = await Settings.findOne({
-      attributes: ["logo"],
+      attributes: [
+        sequelize.literal(
+          `CONCAT('${apiUrl}/storage/app/public/images/settings/', logo)`
+        ),
+        "logo",
+      ],
     });
 
     // Order statuses mapping
