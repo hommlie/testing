@@ -1149,22 +1149,16 @@ exports.generateInvoice = async (req, res) => {
 
     // Add logo if available
     if (settings && settings.logo) {
+      console.log("Logo path:", settings.logo);
+
       try {
-        const logoPath = settings.logo;
-        if (fs.existsSync(logoPath)) {
-          doc.image(logoPath, 50, 50, { width: 100 });
-        }
+        doc.image(settings.logo, 50, 50, { width: 100 });
       } catch (logoError) {
         console.log("Logo loading error:", logoError);
       }
     }
 
     // Header
-    doc
-      .fontSize(24)
-      .fillColor("#2C3E50")
-      .text("HOMMLIE", 250, 50, { align: "center" });
-
     doc
       .fontSize(20)
       .fillColor("#34495E")
@@ -1234,8 +1228,8 @@ exports.generateInvoice = async (req, res) => {
 
     doc
       .text(order.qty.toString(), 300, itemTop)
-      .text(`₹${order.price}`, 380, itemTop)
-      .text(`₹${order.order_total}`, 460, itemTop);
+      .text(`${order.price}`, 380, itemTop)
+      .text(`${order.order_total}`, 460, itemTop);
 
     // Draw line
     doc
@@ -1247,28 +1241,28 @@ exports.generateInvoice = async (req, res) => {
     const summaryTop = itemTop + 60;
     doc
       .text("Subtotal:", 380, summaryTop)
-      .text(`₹${order.price}`, 460, summaryTop);
+      .text(`${order.price}`, 460, summaryTop);
 
     if (order.discount_amount && parseFloat(order.discount_amount) > 0) {
       doc
         .text("Discount:", 380, summaryTop + 20)
-        .text(`-₹${order.discount_amount}`, 460, summaryTop + 20);
+        .text(`-${order.discount_amount}`, 460, summaryTop + 20);
     }
 
     doc
       .text("Shipping:", 380, summaryTop + 40)
-      .text(`₹${order.shipping_cost || 0}`, 460, summaryTop + 40);
+      .text(`${order.shipping_cost || 0}`, 460, summaryTop + 40);
 
     if (order.tax && parseFloat(order.tax) > 0) {
       doc
         .text("Tax:", 380, summaryTop + 60)
-        .text(`₹${order.tax}`, 460, summaryTop + 60);
+        .text(`${order.tax}`, 460, summaryTop + 60);
     }
 
     doc
       .fontSize(12)
       .text("Grand Total:", 380, summaryTop + 80)
-      .text(`₹${order.order_total}`, 460, summaryTop + 80);
+      .text(`${order.order_total}`, 460, summaryTop + 80);
 
     // Footer
     doc
@@ -1393,10 +1387,7 @@ exports.generateServiceReport = async (req, res) => {
     // Add logo if available
     if (settings && settings.logo) {
       try {
-        const logoPath = settings.logo;
-        if (fs.existsSync(logoPath)) {
-          doc.image(logoPath, 50, 50, { width: 100 });
-        }
+        doc.image(settings.logo, 50, 50, { width: 100 });
       } catch (logoError) {
         console.log("Logo loading error:", logoError);
       }
@@ -1404,18 +1395,13 @@ exports.generateServiceReport = async (req, res) => {
 
     // Header
     doc
-      .fontSize(24)
-      .fillColor("#2C3E50")
-      .text("HOMMLIE", 250, 50, { align: "center" });
-
-    doc
       .fontSize(20)
       .fillColor("#34495E")
       .text("SERVICE REPORT", 250, 80, { align: "center" });
 
     // Report details
     doc
-      .fontSize(12)
+      .fontSize(10)
       .fillColor("#000000")
       .text(`Order #: ${order.order_number}`, 50, 130)
       .text(`Service Date: ${order.desired_date}`, 50, 150)
@@ -1423,10 +1409,10 @@ exports.generateServiceReport = async (req, res) => {
       .text(`Status: ${OrderStatuses[order.order_status]}`, 50, 190);
 
     // Customer details
-    doc.fontSize(14).fillColor("#34495E").text("Customer Details:", 50, 220);
+    doc.fontSize(12).fillColor("#34495E").text("Customer Details:", 50, 220);
 
     doc
-      .fontSize(12)
+      .fontSize(10)
       .fillColor("#000000")
       .text(`Name: ${order.full_name}`, 50, 240)
       .text(`Email: ${order.email}`, 50, 260)
@@ -1444,10 +1430,10 @@ exports.generateServiceReport = async (req, res) => {
     doc.text(`Pincode: ${order.pincode}`, 50, 360);
 
     // Service details
-    doc.fontSize(14).fillColor("#34495E").text("Service Details:", 50, 390);
+    doc.fontSize(12).fillColor("#34495E").text("Service Details:", 50, 390);
 
     doc
-      .fontSize(12)
+      .fontSize(10)
       .fillColor("#000000")
       .text(`Service: ${order.product_name}`, 50, 410);
 
@@ -1463,14 +1449,14 @@ exports.generateServiceReport = async (req, res) => {
 
     doc
       .text(`Quantity: ${order.qty}`, 50, 450)
-      .text(`Service Amount: ₹${order.price}`, 50, 470);
+      .text(`Service Amount: ${order.price}`, 50, 470);
 
     // Service notes if available
     if (order.order_notes) {
-      doc.fontSize(14).fillColor("#34495E").text("Service Notes:", 50, 500);
+      doc.fontSize(12).fillColor("#34495E").text("Service Notes:", 50, 500);
 
       doc
-        .fontSize(12)
+        .fontSize(10)
         .fillColor("#000000")
         .text(order.order_notes, 50, 520, { width: 500, align: "justify" });
     }
@@ -1478,12 +1464,12 @@ exports.generateServiceReport = async (req, res) => {
     // Service summary
     const summaryTop = order.order_notes ? 560 : 520;
     doc
-      .fontSize(14)
+      .fontSize(12)
       .fillColor("#34495E")
       .text("Service Summary:", 50, summaryTop);
 
     doc
-      .fontSize(12)
+      .fontSize(10)
       .fillColor("#000000")
       .text(
         "• Service was completed as per scheduled time",
@@ -1504,12 +1490,12 @@ exports.generateServiceReport = async (req, res) => {
 
     // Post-service instructions
     doc
-      .fontSize(14)
+      .fontSize(12)
       .fillColor("#34495E")
       .text("Post-Service Instructions:", 50, summaryTop + 110);
 
     doc
-      .fontSize(12)
+      .fontSize(10)
       .fillColor("#000000")
       .text(
         "• Keep the treated areas well-ventilated for 2-3 hours",
@@ -1530,11 +1516,8 @@ exports.generateServiceReport = async (req, res) => {
 
     // Footer
     doc
-      .fontSize(10)
+      .fontSize(8)
       .fillColor("#666666")
-      .text("This is an automatically generated service report.", 50, 700, {
-        align: "center",
-      })
       .text("Thank you for choosing Hommlie Services!", 50, 715, {
         align: "center",
       })
