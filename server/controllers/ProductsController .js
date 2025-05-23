@@ -668,17 +668,17 @@ exports.vendorProducts = async (req, res) => {
 };
 
 exports.products = async (req, res) => {
-  const { subcategorySlug } = req.body;
+  const { slug } = req.body;
   const user_id = 1;
 
-  if (!subcategorySlug) {
+  if (!slug) {
     return res
       .status(400)
       .json({ status: 0, message: "Please select one sub category" });
   }
 
   const subcategory = await Subcategory.findOne({
-    where: { slug: subcategorySlug },
+    where: { slug },
     attributes: [
       "id",
       "subcategory_name",
