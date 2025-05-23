@@ -370,6 +370,7 @@ exports.productDetails = async (req, res) => {
         "faqs_for_mobile",
         "description_for_mobile",
         "pro_specifications",
+        "is_featured",
       ],
       include: [
         {

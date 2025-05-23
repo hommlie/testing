@@ -36,6 +36,8 @@ exports.homeFeeds = async (req, res) => {
       "slug",
       "rating",
       "total_reviews",
+      "is_featured",
+      "is_recommended",
     ];
 
     const commonIncludes = [
@@ -91,16 +93,16 @@ exports.homeFeeds = async (req, res) => {
       },
     ];
 
-    // const featured_products = await Product.findAll({
-    //     attributes: commonProductAttributes,
-    //     include: commonIncludes,
-    //     where: {
-    //         is_featured: 1,
-    //         status: 1
-    //     },
-    //     order: sequelize.random(),
-    //     limit: 10,
-    // });
+    const featured_products = await Product.findAll({
+      attributes: commonProductAttributes,
+      include: commonIncludes,
+      where: {
+        is_featured: 1,
+        status: 1,
+      },
+      order: sequelize.random(),
+      limit: 10,
+    });
 
     // const hot_products = await Product.findAll({
     //     attributes: commonProductAttributes,
@@ -532,7 +534,7 @@ exports.homeFeeds = async (req, res) => {
         message: "Success",
         currency: data.currency,
         currency_position: data.currency_position,
-        // featured_products: featured_products,
+        featured_products: featured_products,
         // hot_products: hot_products,
         // new_products: new_products,
         most_booked_services: most_booked_services,
@@ -577,6 +579,8 @@ exports.getHomePageData = async (req, res) => {
       "total_reviews",
       "tax",
       "tax_type",
+      "is_featured",
+      "is_recommended",
     ];
 
     const commonIncludes = [
