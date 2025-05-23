@@ -1192,7 +1192,7 @@ exports.generateInvoice = async (req, res) => {
     doc
       .fontSize(24)
       .fillColor("#34495E")
-      .text("INVOICE", 200, 60, { align: "center" });
+      .text("INVOICE", 200, 60, { align: "left" });
 
     // Company info on right side
     doc
