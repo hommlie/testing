@@ -1137,6 +1137,7 @@ exports.generateInvoice = async (req, res) => {
         "logo",
       ],
     });
+    console.log("Settings:", settings);
 
     // Create PDF document
     const doc = new PDFDocument({ margin: 50 });
