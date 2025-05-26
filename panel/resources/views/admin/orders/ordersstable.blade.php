@@ -4,6 +4,7 @@
             <th class="d-none"></th>
             <!-- <th>#</th> -->
             <th class="text-center">{{ trans('labels.order_number') }}</th>
+            <th class="text-center">Book By</th>
             <th class="text-center">{{ trans('labels.no_of_products') }}</th>
             <th class="text-center">{{ trans('labels.customer') }}</th>
             <th class="text-center">{{ trans('mobile') }}</th>
@@ -20,7 +21,29 @@
         <tr id="del-{{$row->id}}">
             <th class="d-none"></th>
             <!-- <td class="text-center">{{++$n}}</td> -->
-            <td class="text-center">{{$row->order_number}}</td>
+            <td class="text-i">{{$row->order_number}}</td>
+            <td class="text-center">
+              @php
+                $status = $row->is_booked_by == 1 ? 'D' : 'W';
+                $bgColor = $row->is_booked_by == 1 ? '#28a745' : '#dc3545';
+              @endphp
+            
+              <span style="
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: {{ $bgColor }};
+                line-height: 15px;
+                text-align: center;
+                color: #fff;
+                font-size: 10px;
+              ">
+                {{ $status }}
+              </span>
+            </td>
+
+
             <td class="text-center">{{$row->no_products}}</td>
             <td class="text-center">{{$row->full_name}}</td>
             <td class="text-center">{{$row->mobile}}</td>
