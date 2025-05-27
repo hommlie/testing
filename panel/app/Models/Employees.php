@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Order;
+use App\Models\Location;
+use App\Models\EmpVerifiedAttendance;
+
 
 class Employees extends Model
 {
@@ -25,6 +29,11 @@ public function orders()
 public function location()
 {
     return $this->belongsTo(Location::class, 'name');
+}
+
+public function verifiedAttendances()
+{
+    return $this->hasMany(EmpVerifiedAttendance::class, 'emp_id');
 }
 
 

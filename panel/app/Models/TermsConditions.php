@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class TermsConditions extends Model
 {
     protected $fillable = [
-        'termsconditions_content'
+        'terms_conditions',
+        'invoice_terms_conditions',
+        'invoice_do_dont'
     ];
 }
