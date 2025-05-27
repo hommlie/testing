@@ -39,6 +39,7 @@ import InspectionModal from "../../components/InspectionModal";
 import MobileNavigation from "../../components/MobileNavigation";
 import LoginSignup from "../../components/LoginModal";
 import { Helmet } from "react-helmet";
+import SchemaMarkup from "../../components/SchemaMarkup";
 
 const HomePage = () => {
   const { user } = useCont();
@@ -337,6 +338,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen font-headerFont">
+      <SchemaMarkup />
       <Helmet>
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>

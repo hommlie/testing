@@ -1,7 +1,7 @@
-import React from "react";
+import { Helmet } from "react-helmet";
 
-const LocalBusinessSchema = () => {
-  const schemaData = {
+const SchemaMarkup = () => {
+  const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "Hommlie",
@@ -53,8 +53,10 @@ const LocalBusinessSchema = () => {
   };
 
   return (
-    <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+    </Helmet>
   );
 };
 
-export default LocalBusinessSchema;
+export default SchemaMarkup;
