@@ -23,7 +23,6 @@ const {
 const apiUrl = process.env.apiUrl;
 
 exports.homeFeeds = async (req, res) => {
-  const { user_id } = req.body;
 
   try {
     const commonProductAttributes = [
