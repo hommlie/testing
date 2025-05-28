@@ -558,6 +558,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/store', 'LeadsSheetController@store')->name('leadssheet.store');
         Route::get('/edit/{id}', 'LeadsSheetController@edit')->name('leadssheet.edit');
         Route::post('/update/{id}', 'LeadsSheetController@update')->name('leadssheet.update');
+
+
+        Route::get('/get-subcategories/{categoryId}', 'LeadsSheetController@getSubcategories')->name('leadssheet.getSubcategories');
+        Route::get('/get-services/{subcategoryId}', 'LeadsSheetController@getServices')->name('leadssheet.getServices');
+        Route::get('/get-service-variation-type/{serviceId}', 'LeadsSheetController@getServiceVariationType')->name('leadssheet.getServiceVariationType');
+        Route::get('/get-service-variation-area/{serviceId}/{productId}', 'LeadsSheetController@getServiceVariationArea')->name('leadssheet.getServiceVariationArea');
+        Route::get('/get-service-details/{id}', 'LeadsSheetController@getServiceDetails')->name('leadssheet.getServiceDetails');
+
+
+
+
         Route::post('/change/status', 'LeadsSheetController@changeStatus')->name('leadssheet.changeStatus');
         Route::post('/delete', 'LeadsSheetController@destroy')->name('leadssheet.delete');
     });

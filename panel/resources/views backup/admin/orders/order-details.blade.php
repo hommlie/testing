@@ -455,22 +455,17 @@
                                         </div>
                                     </div>
                                 </div><br><br>
-                                <hr><br><br>
-                                <div class="col-md-12">
-                                    <h4><b>About us</b></h4><br>
-                                    {!! $aboutData->about_content !!}
-                                </div><br>
-                                <hr>
-                                <div class="col-md-12">
-                                    <h4><b>Privacy policy</b></h4> <br>
-                                    {!! $policyData->privacypolicy_content !!}
-                                </div><br>
-                                <hr>
+                                <hr><br>
                                 <div class="col-md-12">
                                     <h4><b>Terms Conditions</b></h4><br>
-                                    {!! $conditionsData->terms_conditions !!}
-
+                                    {!! $conditionsData->invoice_terms_conditions !!}
                                 </div><br>
+                                <hr>
+                                <div class="col-md-12">
+                                    <h4><b>Do’s & Don’ts</b></h4> <br>
+                                    {!! $conditionsData->invoice_do_dont !!}
+                                </div><br>
+                             
                             </div>
                         </div>
                     </div>

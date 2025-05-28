@@ -15,19 +15,23 @@
             </div>
 
             <div class="row justify-content-md-center">
+                
                 <div class="col-md-6">
+                      @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                     <div class="card">
                         <div class="card-header">
                         </div>
                         <div class="card-body">
-                            @if(Session::has('danger'))
-                            <div class="alert alert-danger">
-                                {{ Session::get('danger') }}
-                                @php
-                                    Session::forget('danger');
-                                @endphp
-                            </div>
-                            @endif
+                          
+
                             <div class="px-3">
                                 <form class="form" method="post" action="{{ route('admin.subcategory.update') }}"enctype="multipart/form-data">
                                 @csrf
@@ -100,11 +104,18 @@
                                         </div>
                                     </div>
 
+                                    <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="subcategory sub title" class="col-form-label">Slug</label>
+                                            <input type="text" class="form-control" name="slug" id="slug"
+                                                placeholder="Enter Slug" value="{{$data->slug}}" required>
+                                        </div>
+                                          @if ($errors->has('slug'))
+                                                <span class="text-danger">{{ $errors->first('slug') }}</span>
+                                            @endif
+                                    </div>
 
-
-
-
-                                        <div class="product gravity">
+                                    <div class="product gravity">
                                         <div class="form-group">
                                             <label for="all_tag" class="col-form-label">ALT tag:</label>
                                             <input type="text" class="form-control" name="alt_tag"

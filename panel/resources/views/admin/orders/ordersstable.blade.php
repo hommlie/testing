@@ -9,8 +9,9 @@
             <th class="text-center">{{ trans('labels.customer') }}</th>
             <th class="text-center">{{ trans('mobile') }}</th>
             <th class="text-center">{{ trans('labels.order_total') }}</th>
-            <th class="text-center">{{ trans('Ordered At') }}</th>
-            <th class="text-center">{{ trans('labels.date') }}</th>
+            <th class="text-center">{{ trans('Contract Start Date') }}</th>
+            <th class="text-center">{{ trans('Contract End Date') }}</th>
+            <th class="text-center">{{ trans('Order Date') }}</th>
             <th class="text-center">{{ trans('labels.action') }}</th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
 
         @php $n=0 @endphp
         @forelse($data as $row)
+        
         <tr id="del-{{$row->id}}">
             <th class="d-none"></th>
             <!-- <td class="text-center">{{++$n}}</td> -->
@@ -48,7 +50,8 @@
             <td class="text-center">{{$row->full_name}}</td>
             <td class="text-center">{{$row->mobile}}</td>
             <td class="text-center">{{ number_format($row->grand_total, 2) }}</td>
-            <td class="text-center">{{$row->date}}</td>
+            <td class="text-center">{{$row->contact_start_date}}</td>
+            <td class="text-center">{{$row->contact_end_date}}</td>
             <td class="text-center">{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
             <td class="text-center d-flex">
                 <!-- View Button -->

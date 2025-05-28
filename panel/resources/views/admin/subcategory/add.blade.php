@@ -16,6 +16,15 @@
 
         <div class="row justify-content-md-center">
             <div class="col-md-6">
+                @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                 <div class="card">
                     <div class="card-header">
                     </div>
@@ -95,6 +104,16 @@
                                                 placeholder="Enter Subcategory Sub Title" required>
 
                                         </div>
+                                    </div>
+                                     <div class="product gravity">
+                                        <div class="form-group">
+                                            <label for="subcategory sub title" class="col-form-label">Slug</label>
+                                            <input type="text" class="form-control" name="slug" id="slug"
+                                                placeholder="Enter Slug"  required>
+                                        </div>
+                                          @if ($errors->has('slug'))
+                                                <span class="text-danger">{{ $errors->first('slug') }}</span>
+                                            @endif
                                     </div>
 
 

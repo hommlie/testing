@@ -21,6 +21,12 @@ class BlogsController extends Controller{
         $blogCategory = BlogsCategory::all(); 
         return view('admin.blogs.add',compact('blogCategory'));
     }
+    // GET DATA 
+      public function getblogsData($id){
+        $SeoData = Blogs::where('id', "$id")
+            ->get();
+        return response()->json($SeoData);
+    }
 
     // EDIT FUNCTION (edit.blade.php)
     public function edit($id)

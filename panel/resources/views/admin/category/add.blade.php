@@ -21,12 +21,12 @@
                     </div>
                     <div class="card-body">
                         @if(Session::has('danger'))
-                                                <div class="alert alert-danger">
-                                                    {{ Session::get('danger') }}
-                                                    @php
-                                                        Session::forget('danger');
-                                                    @endphp
-                                                </div>
+                            <div class="alert alert-danger">
+                                {{ Session::get('danger') }}
+                                @php
+                                    Session::forget('danger');
+                                @endphp
+                            </div>
                         @endif
                         <div class="px-3">
                             <form class="form" method="post" action="{{ route('admin.category.store') }}"
@@ -41,7 +41,17 @@
                                         @if ($errors->has('category_name'))
                                             <span class="text-danger">{{ $errors->first('category_name') }}</span>
                                         @endif
-                                    </div>
+                                    </div> 
+
+                                    <div class="form-group">
+                                        <label for="slug">{{ trans('Slug') }}</label>
+                                        <input type="text" id="slug" class="form-control" name="slug"
+                                            placeholder="{{ trans('slug') }}">
+                                        @if ($errors->has('slug'))
+                                            <span class="text-danger">{{ $errors->first('slug') }}</span>
+                                        @endif
+                                    </div> 
+
 
                                     <div class="form-group">
                                         <label for="category_name">{{ trans('Category Title') }}</label>

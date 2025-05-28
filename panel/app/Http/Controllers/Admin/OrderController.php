@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 
 class OrderController extends Controller
@@ -55,7 +56,8 @@ class OrderController extends Controller
             \DB::raw('MAX(order_status) as order_status'),
             \DB::raw('MAX(is_booked_by) as is_booked_by'),
             \DB::raw('MAX(desired_time) as desired_time'),
-            \DB::raw('MAX(desired_date) as desired_date'),
+            \DB::raw('MIN(desired_date) as contact_start_date'),
+            \DB::raw('MAX(desired_date) as contact_end_date'),
             \DB::raw('MAX(order_total) AS grand_total'),
             \DB::raw('DATE_FORMAT(MAX(created_at), "%d %M %Y") as date'),
             \DB::raw('COUNT(order_number) AS no_products'),
@@ -315,79 +317,132 @@ class OrderController extends Controller
     // ADD ORDER 
     public function storeorder(Request $request)
     {
-        // VALIDATION 
-        $this->validate($request, [
-            'hidden_quantity' => 'required|integer',
-            'hidden_total_price' => 'required|numeric',
-            'hidden_tax' => 'required|numeric',
-            'hidden_image' => 'required',
-            'hidden_product_name' => 'required',
-            'serviceCenterType' => 'required',
-            'employeeName' => 'required',
-            'billing' => 'required',
-            'accountType' => 'required',
-            'accountSubType' => 'required',
-            'businessRegion' => 'required',
-            'businessSubRegion' => 'required',
-            'branchcode' => 'required',
-            'customerType' => 'required',
-            'businessLead' => 'required',
-            'category' => 'required|integer',
-            'subcategory' => 'required|integer',
-            'service' => 'required|integer',
-            'price' => 'required|numeric',
-            'desired_date' => 'required|date',
-            'desired_time' => 'required|date_format:H:i',
-            'fullname' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'mobile' => 'required|digits:10',
-            'landmark' => 'nullable|string|max:255',
-            'address' => 'required|string|max:500',
-            'bill_to_Name',
-            'houseNo' => 'required|string|max:255',
-            'pincode' => 'required|digits:6',
-            'srTime' => 'required',
-            'srInterval' => 'required',
-            'clatlon' => 'required',
-            'attribute' => 'required',
-            'variationsID' => 'required',
-            // 'serviceAreaPriceValue' => 'required',
-        ]);
+        try {
+            // VALIDATION 
+            $validator = Validator::make($request->all(), [
+                'hidden_quantity' => 'required|integer',
+                'hidden_total_price' => 'required|numeric',
+                'hidden_tax' => 'required|numeric',
+                'hidden_image' => 'required',
+                'hidden_product_name' => 'required',
+                'serviceCenterType' => 'required',
+                'employeeName' => 'required',
+                'billing' => 'required',
+                'accountType' => 'required',
+                'accountSubType' => 'required',
+                'businessRegion' => 'required',
+                'businessSubRegion' => 'required',
+                'branchcode' => 'required',
+                'customerType' => 'required',
+                'businessLead' => 'required',
+                'category' => 'required|integer',
+                'subcategory' => 'required|integer',
+                'service' => 'required|integer',
+                'price' => 'required|numeric',
+                'desired_date' => 'required|date',
+                'desired_time' => 'required|date_format:H:i',
+                'fullname' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'mobile' => 'required|digits:10',
+                'landmark' => 'nullable|string|max:255',
+                'address' => 'required|string|max:500',
+                'bill_to_Name',
+                'houseNo' => 'required|string|max:255',
+                'pincode' => 'required|digits:6',
+                'srTime' => 'required',
+                'srInterval' => 'required',
+                'clatlon' => 'required',
+                'attribute' => 'required',
+                'variationsID' => 'required',
+                // 'serviceAreaPriceValue' => 'required',
+            ]);
 
-        // ADD ATTRIBUTE
-        if ($request->has('attribute')) {
-            $attributes = $request->input('attribute');
-            list($serviceId, $productId) = explode('|', $attributes);
-        }
-        // ADD LOCATION
-        if ($request->has('clatlon')) {
-            $clatlon = $request->input('clatlon');
-            list($latitude, $longitude) = explode(',', $clatlon);
-        }
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
 
-        // TECHNICIAN ASSIGN 
-        if (!$request->technicianAssign == '') {
-            $ORST = '2'; // ORDER STATUS STORE 2 IN DATABASE 
-        } else {
-            $ORST = '1';
-        }
+            // ADD ATTRIBUTE
+            if ($request->has('attribute')) {
+                $attributes = $request->input('attribute');
+                list($serviceId, $productId) = explode('|', $attributes);
+            }
+            // ADD LOCATION
+            if ($request->has('clatlon')) {
+                $clatlon = $request->input('clatlon');
+                list($latitude, $longitude) = explode(',', $clatlon);
+            }
 
-        $attribute = $serviceId;
-        $srTime = $request->srTime;
-        $srInterval = $request->srInterval;
+            // TECHNICIAN ASSIGN 
+            if (!$request->technicianAssign == '') {
+                $ORST = '2'; // ORDER STATUS STORE 2 IN DATABASE 
+            } else {
+                $ORST = '1';
+            }
 
-        $lastOrder = Order::orderBy('id', 'desc')->first();
-        $newOrderNumber = $lastOrder ? intval($lastOrder->order_number) + 1 : 10001;
+            $attribute = $serviceId;
 
-        if ($request->srTime > 1) {
-            $splitPrice = $request->price / $request->srTime;
-            $splitTax = $request->hidden_tax / $request->srTime;
-            $splitcouponsprice = $request->couponsprice / $request->srTime;
-            $initialDate = Carbon::parse($request->desired_date);
+            $lastOrder = Order::orderBy('id', 'desc')->first();
+            $newOrderNumber = $lastOrder ? intval($lastOrder->order_number) + 1 : 10001;
 
-            for ($i = 0; $i < $request->srTime; $i++) {
-                $orderDate = $initialDate->copy()->addDays($i * $request->srInterval)->toDateString();
+            if ($request->srTime > 1) {
+                $splitPrice = $request->price / $request->srTime;
+                $splitTax = $request->hidden_tax / $request->srTime;
+                $splitcouponsprice = $request->couponsprice / $request->srTime;
+                $initialDate = Carbon::parse($request->desired_date);
 
+                for ($i = 0; $i < $request->srTime; $i++) {
+                    $orderDate = $initialDate->copy()->addDays($i * $request->srInterval)->toDateString();
+
+                    $dataval = [
+                        'vendor_id' => "6",
+                        'product_id' => $request->service,
+                        'order_number' => $newOrderNumber,
+                        'product_name' => $request->hidden_product_name,
+                        'service_center_type' => $request->serviceCenterType,
+                        'employee_name' => $request->employeeName,
+                        'billing' => $request->billing,
+                        'account_type' => $request->accountType,
+                        'account_sub_type' => $request->accountSubType,
+                        'business_region' => $request->businessRegion,
+                        'business_sub_region' => $request->businessSubRegion,
+                        'branch_code' => $request->branchcode,
+                        'customer_type' => $request->customerType,
+                        'business_lead' => $request->businessLead,
+                        'bill_to_Name' => $request->billToAccountName,
+                        'image' => $request->hidden_image,
+                        'qty' => $request->hidden_quantity,
+                        'price' => $splitPrice,
+                        'coupon_id' => $request->coupons,
+                        'discount_amount' => $splitcouponsprice,
+                        'attribute' => $attribute,
+                        'variation' => $request->variationsID,
+                        'tax' => $splitTax,
+                        'order_total' => $request->hidden_total_price,
+                        'payment_type' => "1",
+                        'full_name' => $request->fullname,
+                        'email' => $request->email,
+                        'mobile' => $request->mobile,
+                        'landmark' => $request->landmark,
+                        'latitude' => $latitude,
+                        'longitude' => $longitude,
+                        'street_address' => $request->address,
+                        'house_number' => $request->houseNo,
+                        'pincode' => $request->pincode,
+                        'status' => "1",
+                        'desired_date' => $orderDate,
+                        'desired_time' => $request->desired_time,
+                        'order_status' => $ORST,
+                        'assigned_to' => $request->technicianAssign,
+                        'is_booked_by' => 1,
+                        'created_at' => date('Y-m-d'),
+
+                    ];
+                    DB::table('orders')->insert($dataval);
+                }
+            } else {
                 $dataval = [
                     'vendor_id' => "6",
                     'product_id' => $request->service,
@@ -403,15 +458,14 @@ class OrderController extends Controller
                     'branch_code' => $request->branchcode,
                     'customer_type' => $request->customerType,
                     'business_lead' => $request->businessLead,
-                    'bill_to_Name' => $request->billToAccountName,
                     'image' => $request->hidden_image,
                     'qty' => $request->hidden_quantity,
-                    'price' => $splitPrice,
-                    'coupon_id' => $request->coupons,
-                    'discount_amount' => $splitcouponsprice,
+                    'price' => $request->price,
+                    'coupon_name' => $request->coupons,
+                    'discount_amount' => $request->couponsprice,
                     'attribute' => $attribute,
                     'variation' => $request->variationsID,
-                    'tax' => $splitTax,
+                    'tax' => $request->hidden_tax,
                     'order_total' => $request->hidden_total_price,
                     'payment_type' => "1",
                     'full_name' => $request->fullname,
@@ -424,63 +478,27 @@ class OrderController extends Controller
                     'house_number' => $request->houseNo,
                     'pincode' => $request->pincode,
                     'status' => "1",
-                    'desired_date' => $orderDate,
+                    'desired_date' => $request->desired_date,
                     'desired_time' => $request->desired_time,
                     'order_status' => $ORST,
                     'assigned_to' => $request->technicianAssign,
                     'is_booked_by' => 1,
-                    'created_at' => date('Y-m-d'),
-
                 ];
-                DB::table('orders')->insert($dataval);
+                Order::create($dataval);
             }
-        } else {
-            $dataval = [
-                'vendor_id' => "6",
-                'product_id' => $request->service,
-                'order_number' => $newOrderNumber,
-                'product_name' => $request->hidden_product_name,
-                'service_center_type' => $request->serviceCenterType,
-                'employee_name' => $request->employeeName,
-                'billing' => $request->billing,
-                'account_type' => $request->accountType,
-                'account_sub_type' => $request->accountSubType,
-                'business_region' => $request->businessRegion,
-                'business_sub_region' => $request->businessSubRegion,
-                'branch_code' => $request->branchcode,
-                'customer_type' => $request->customerType,
-                'business_lead' => $request->businessLead,
-                'image' => $request->hidden_image,
-                'qty' => $request->hidden_quantity,
-                'price' => $request->price,
-                'coupon_name' => $request->coupons,
-                'discount_amount' => $request->couponsprice,
-                'attribute' => $attribute,
-                'variation' => $request->variationsID,
-                'tax' => $request->hidden_tax,
-                'order_total' => $request->hidden_total_price,
-                'payment_type' => "1",
-                'full_name' => $request->fullname,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'landmark' => $request->landmark,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'street_address' => $request->address,
-                'house_number' => $request->houseNo,
-                'pincode' => $request->pincode,
-                'status' => "1",
-                'desired_date' => $request->desired_date,
-                'desired_time' => $request->desired_time,
-                'order_status' => $ORST,
-                'assigned_to' => $request->technicianAssign,
-                'is_booked_by' => 1,
-            ];
-
-            Order::create($dataval);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order placed successfully.',
+                    'redirect_url' => route('admin.orders')
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again later.',
+            ], 500);
         }
-
-        return redirect('admin/orders')->with('success', 'Order placed successfully.');
     }
 
 
@@ -488,9 +506,6 @@ class OrderController extends Controller
 
     public function updateorder(Request $request, $id)
     {
-        // dd($request->all());
-        // Validate the request data
-        // try {
         $this->validate($request, [
             'hidden_quantity' => 'required|integer',
             'hidden_tax' => 'required|numeric',
@@ -612,31 +627,37 @@ class OrderController extends Controller
     public function orderdetails($id)
     {
         // Fetch non-aggregated order info
-        $order_info = Order::select(
-            'vendor_id',
-            'order_number',
-            'order_notes',
-            'payment_type',
-            'payment_id',
-            'full_name',
-            'bill_to_Name',
-            'email',
-            'mobile',
-            'landmark',
-            'attribute',
-            'street_address',
-            'pincode',
-            'status',
-            'order_status',
-            'desired_time',
-            'desired_date',
-            'is_otp_verified',
-            'order_total',
-            'discount_amount',
-            'house_number',
-            \DB::raw('DATE_FORMAT(created_at, "%d-%m-%Y") as date')
-        )
-            ->where('order_number', $id)
+        $order_info = Order::where('order_number', $id)
+            ->select([
+                DB::raw('MAX(vendor_id)            AS vendor_id'),
+                'order_number',
+                DB::raw('MAX(order_notes)          AS order_notes'),
+                DB::raw('MAX(payment_type)         AS payment_type'),
+                DB::raw('MAX(payment_id)           AS payment_id'),
+                DB::raw('MAX(full_name)            AS full_name'),
+                DB::raw('MAX(bill_to_Name)         AS bill_to_Name'),
+                DB::raw('MAX(email)                AS email'),
+                DB::raw('MAX(mobile)               AS mobile'),
+                DB::raw('MAX(landmark)             AS landmark'),
+                DB::raw('MAX(attribute)            AS attribute'),
+                DB::raw('MAX(street_address)       AS street_address'),
+                DB::raw('MAX(pincode)              AS pincode'),
+                DB::raw('MAX(status)               AS status'),
+                DB::raw('MAX(order_status)         AS order_status'),
+                DB::raw('MAX(desired_time)         AS desired_time'),
+                DB::raw('MAX(is_otp_verified)      AS is_otp_verified'),
+                DB::raw('MAX(order_total)          AS order_total'),
+                DB::raw('MAX(discount_amount)      AS discount_amount'),
+                DB::raw('MAX(house_number)         AS house_number'),
+
+                // your date range:
+                DB::raw('MIN(desired_date)         AS contact_start_date'),
+                DB::raw('MAX(desired_date)         AS contact_end_date'),
+
+                // formatted created_at:
+                DB::raw('DATE_FORMAT(MAX(created_at), "%d-%m-%Y") AS date'),
+            ])
+            ->groupBy('order_number')
             ->first();
 
         // Fetch aggregated order data separately
@@ -645,7 +666,8 @@ class OrderController extends Controller
             \DB::raw('SUM(tax) AS tax'),
             \DB::raw('SUM(shipping_cost) AS shipping_cost'),
             \DB::raw('SUM(order_total) AS grand_total'),
-            \DB::raw('SUM(discount_amount) AS grand_discount_amount')
+            \DB::raw('SUM(discount_amount) AS grand_discount_amount'),
+
         )
             ->where('order_number', $id)
             ->first();
@@ -684,8 +706,7 @@ class OrderController extends Controller
             'is_otp_verified',
             'order_total',
             \DB::raw('(CASE WHEN variation IS NULL THEN "" ELSE variation END) AS variation'),
-            \DB::raw("CONCAT('" . url('/storage/app/public/images/products/') . "/', image) AS image_url"),
-            'shipping_cost'
+
         )
             ->where('order_number', $id)
             ->orderBy('id', 'DESC')
@@ -1030,7 +1051,7 @@ class OrderController extends Controller
     // IMPORT ORDER DATA USING EXCEL FILE 
     public function storeOrderDataExcel(Request $request)
     {
-       
+
         $request->validate([
             'orderData' => 'required|mimes:csv,txt|max:2048',
         ]);
@@ -1095,13 +1116,13 @@ class OrderController extends Controller
         }
 
         $data = array_map('str_getcsv', $fileContent);
-      
+
         $headers = array_map('trim', $data[0]);
         unset($data[0]);
-         
+
         $errorMessages = [];
         foreach ($data as $row) {
-    
+
             if (count(array_filter($row, fn($v) => trim($v) !== '')) === 0) {
                 continue;
             }
@@ -1119,7 +1140,7 @@ class OrderController extends Controller
             }
             $rowData = array_combine($headers, $row);
             $product_name = $rowData['product_name'] ?? null;
-            
+
             $variation_name = strtolower($rowData['variation'] ?? '');
             $select_area = strtolower($rowData['select_area'] ?? '');
             $business_region = strtolower($rowData['business_region'] ?? '');
@@ -1129,30 +1150,30 @@ class OrderController extends Controller
             $accountType = strtolower(str_replace(' ', '', $rowData['account_type'] ?? ''));
             $accountSubType = strtolower(str_replace(' ', '', $rowData['account_sub_type'] ?? ''));
             $srTime = (int) ($rowData['no_of_services'] ?? 1);
-            
+
             $srInterval = $rowData['scheduled_every'] ?? null;
 
-             $product_id = Products::where('product_name', 'LIKE', "%{$product_name}%")
-                      ->value('id');
-          
-        
+            $product_id = Products::where('product_name', 'LIKE', "%{$product_name}%")
+                ->value('id');
+
+
 
             if (!$product_id) {
                 $errorMessages[] = "Product {$product_name} not found in row: " . implode(", ", $row);
                 continue;
             }
             if ($product_id) {
-                
+
                 $attributeIDs = Variation::where('product_id', $product_id)->pluck('attribute_id')->toArray();
                 if (empty($attributeIDs)) {
                     $errorMessages[] = "No attributes found for product ID $product_id in row: " . implode(", ", $row);
                     continue;
                 }
                 if (!empty($attributeIDs)) {
-                        
+
                     $attributes = Attribute::whereIn('id', $attributeIDs)->pluck('attribute', 'id')->toArray();
                     $lowercasedAttributes = array_change_key_case(array_flip(array_map('strtolower', $attributes)), CASE_LOWER);
-                    
+
                     if (array_key_exists($variation_name, $lowercasedAttributes)) {
                         $matchedAttributeID = $lowercasedAttributes[$variation_name];
                         $varName = Variation::where('attribute_id', $matchedAttributeID)
@@ -1234,9 +1255,9 @@ class OrderController extends Controller
                                 }
                                 $lastOrder = Order::orderBy('id', 'desc')->first();
                                 $newOrderNumber = $lastOrder ? intval($lastOrder->order_number) + 1 : 10001;
-                              
+
                                 if ($srTime > 1) {
-                                   
+
                                     $splitPrice = $rowData['price'] / $srTime;
                                     $splitTax = $rowData['tax'] ?? null / $srTime;
                                     // $splitcouponsprice = $request->couponsprice / $srTime;
@@ -1271,7 +1292,7 @@ class OrderController extends Controller
                                             'email' => $rowData['email'] ?? null,
                                             'mobile' => $rowData['mobile'] ?? null,
                                             'landmark' => mb_convert_encoding($rowData['landmark'] ?? '', 'UTF-8', 'ISO-8859-1'),
-                                           'street_address' => mb_convert_encoding($rowData['street_address'] ?? '', 'UTF-8', 'ISO-8859-1'),
+                                            'street_address' => mb_convert_encoding($rowData['street_address'] ?? '', 'UTF-8', 'ISO-8859-1'),
                                             'house_number' => mb_convert_encoding($rowData['house_number'] ?? '', 'UTF-8', 'ISO-8859-1'),
                                             'pincode' => $rowData['pincode'] ?? null,
                                             'status' => "1",
@@ -1282,10 +1303,10 @@ class OrderController extends Controller
                                             'created_at' => date('Y-m-d'),
                                         ];
                                         DB::table('orders')->insert($dataval);
-                                     
+
                                     }
                                 } else {
-                                   
+
                                     $dataval = [
                                         'vendor_id' => "6",
                                         'product_id' => $product_id,
@@ -1316,7 +1337,7 @@ class OrderController extends Controller
                                         'mobile' => $rowData['mobile'] ?? null,
                                         'landmark' => mb_convert_encoding($rowData['landmark'] ?? '', 'UTF-8', 'ISO-8859-1'),
                                         'street_address' => mb_convert_encoding($rowData['street_address'] ?? '', 'UTF-8', 'ISO-8859-1'),
-                                        'house_number' =>  mb_convert_encoding($rowData['house_number'] ?? '', 'UTF-8', 'ISO-8859-1'),
+                                        'house_number' => mb_convert_encoding($rowData['house_number'] ?? '', 'UTF-8', 'ISO-8859-1'),
                                         'pincode' => $rowData['pincode'] ?? null,
                                         'status' => "1",
                                         'desired_date' => $rowData['desired_date'] ?? null,
@@ -1324,13 +1345,13 @@ class OrderController extends Controller
                                         'is_booked_by' => 1,
                                         'remark' => 1,
                                         'created_at' => date('Y-m-d'),
-                                        
+
                                     ];
                                     Order::create($dataval);
                                 }
                             }
                         }
-                    }else{
+                    } else {
                         $errorMessages[] = "Attribute “suraj gupta ” not found in row: " . implode(', ', $row);
                         break;
                     }

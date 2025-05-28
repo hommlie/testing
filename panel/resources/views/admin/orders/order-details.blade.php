@@ -139,6 +139,8 @@
                                                 @endphp </li>
                                             <li> <b> Email Id : </b>{{$order_info->email}}</li>
                                             <li> <b> Mobile Number : </b>{{$order_info->mobile}}</li>
+                                            <li><b>Contract Start Date:</b> {{$order_info->contact_start_date}}  <b>Contract End Date:</b> {{$order_info->contact_end_date}}</li>
+                                            
 
                                         </ul>
                                     </div>

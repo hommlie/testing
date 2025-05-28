@@ -86,6 +86,7 @@
                   @endif
                   </div>
                 </div>
+                {{-- PRODUCT NAME --}}
                 <div class="form-group row">
                   <label for="product_name" class="col-sm-2 col-form-label">{{ trans('Service Name') }}</label>
                   <div class="col-sm-10">
@@ -96,6 +97,17 @@
                   @endif
                   </div>
                 </div>
+                 <div class="form-group row">
+                  <label for="product_name" class="col-sm-2 col-form-label">{{ trans('Slug Name') }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="slug" name="slug" required
+                      placeholder="{{ trans('Slug Name') }}" value="{{old('slug')}}">
+                    @if ($errors->has('slug'))
+                  <span class="text-danger">{{ $errors->first('slug') }}</span>
+                  @endif
+                  </div>
+                </div>
+                {{-- SUK --}}
                 <div class="form-group row d-none">
                   <label for="brand" class="col-sm-2 col-form-label">{{ trans('labels.sku') }}</label>
                   <div class="col-sm-10">
