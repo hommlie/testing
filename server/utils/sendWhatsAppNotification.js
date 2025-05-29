@@ -17,7 +17,7 @@ const sendWhatsAppNotification = async ({
       },
       data: {
         apiKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MzQzZDNjODMwNzNiMGJlZWJkNmIzMyIsIm5hbWUiOiJIb21tbGllIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY3MzQzZDNhODMwNzNiMGJlZWJkNmFlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzMxNDc2Nzk2fQ.vpMUCLf18YJu7biNHkfpKnzBDq73FFqPJPdag4JlcpQ",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZjRkOGUxZmEwY2E3MGMwMzUyZGE4NiIsIm5hbWUiOiJIb21tbGllIFBlc3QgQ29udHJvbCIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NzM0M2QzYTgzMDczYjBiZWViZDZhZWUiLCJhY3RpdmVQbGFuIjoiRlJFRV9GT1JFVkVSIiwiaWF0IjoxNzQ0MDk5NTUzfQ.ZXeK_5N7yaFvDSfSnTyFg-fOtP6DocAtCwAddUJJhyk",
         campaignName: campaignName,
         destination: phoneNumber,
         userName: userName,

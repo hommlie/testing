@@ -396,7 +396,7 @@ const CleaningProductPage = () => {
             </a>
             <span>/</span>
             <a
-              href={`/${innerSubCategoryData?.category?.slug}/${innerSubCategoryData?.category?.id}`}
+              href={`/${innerSubCategoryData?.category?.slug}`}
               className="text-blue-500"
             >
               {innerSubCategoryData?.category?.category_name}
