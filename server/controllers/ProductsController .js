@@ -432,12 +432,12 @@ exports.productDetails = async (req, res) => {
           as: "category",
           required: false,
         },
-        {
-          model: Subcategory,
-          attributes: ["subcategory_name"],
-          as: "subcategory",
-          required: false,
-        },
+        // {
+        //   model: Subcategory,
+        //   attributes: ["subcategory_name"],
+        //   as: "subcategory",
+        //   required: false,
+        // },
         // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
     });
