@@ -368,7 +368,7 @@ exports.productDetails = async (req, res) => {
         "total_reviews",
         "faqs_for_mobile",
         "description_for_mobile",
-        // "pro_specifications",
+        "pro_specifications",
         "is_featured",
       ],
       include: [
@@ -436,12 +436,6 @@ exports.productDetails = async (req, res) => {
           model: Subcategory,
           attributes: ["subcategory_name"],
           as: "subcategory",
-          required: false,
-        },
-        {
-          model: Innersubcategory,
-          attributes: ["innersubcategory_name"],
-          as: "innersubcategory",
           required: false,
         },
         // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
