@@ -448,7 +448,7 @@ exports.productDetails = async (req, res) => {
     // Convert the Sequelize model instance to a plain JavaScript object
     let plainProduct = product.get({ plain: true });
 
-    if (plainProduct.variations && plainProduct.variations.length > 0) {
+    if (plainProduct.variations) {
       const restructuredVariations = plainProduct?.variations?.map(
         (variation) => {
           const { attribute, ...variationData } = variation;
