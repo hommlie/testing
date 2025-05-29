@@ -351,7 +351,7 @@ exports.productDetails = async (req, res) => {
         "product_qty",
         "is_variation",
         "vendor_id",
-        // "sku",
+        "sku",
         "free_shipping",
         "shipping_cost",
         "tax_type",
@@ -396,31 +396,31 @@ exports.productDetails = async (req, res) => {
           as: "productimages",
           required: false,
         },
-        // {
-        //   model: Variation,
-        //   attributes: [
-        //     "id",
-        //     "product_id",
-        //     "attribute_id",
-        //     "price",
-        //     "description",
-        //     "discounted_variation_price",
-        //     "variation",
-        //     "variation_interval",
-        //     "variation_times",
-        //     "qty",
-        //   ],
-        //   include: [
-        //     {
-        //       model: Attribute,
-        //       attributes: ["id", "attribute"],
-        //       where: { status: 1 },
-        //       as: "attribute",
-        //     },
-        //   ],
-        //   as: "variations",
-        //   required: false,
-        // },
+        {
+          model: Variation,
+          attributes: [
+            "id",
+            "product_id",
+            "attribute_id",
+            "price",
+            "description",
+            "discounted_variation_price",
+            "variation",
+            "variation_interval",
+            "variation_times",
+            "qty",
+          ],
+          include: [
+            {
+              model: Attribute,
+              attributes: ["id", "attribute"],
+              where: { status: 1 },
+              as: "attribute",
+            },
+          ],
+          as: "variations",
+          required: false,
+        },
         {
           model: Ratting,
           as: "rattings",
@@ -438,6 +438,13 @@ exports.productDetails = async (req, res) => {
           as: "subcategory",
           required: false,
         },
+        {
+          model: Innersubcategory,
+          attributes: ["innersubcategory_name"],
+          as: "innersubcategory",
+          required: false,
+        },
+        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
     });
 
@@ -446,22 +453,18 @@ exports.productDetails = async (req, res) => {
     }
 
     // Convert the Sequelize model instance to a plain JavaScript object
-    let plainProduct = product.get({ plain: true });
+    const plainProduct = product.get({ plain: true });
 
-    // if (plainProduct.variations) {
-    const restructuredVariations = plainProduct?.variations?.map(
-      (variation) => {
-        const { attribute, ...variationData } = variation;
-        return {
-          attribute_name: attribute.attribute,
-          data: variationData,
-        };
-      }
-    );
+    const restructuredVariations = plainProduct.variations.map((variation) => {
+      const { attribute, ...variationData } = variation;
+      return {
+        attribute_name: attribute.attribute,
+        data: variationData,
+      };
+    });
 
     // Replace the original variations with the restructured ones
     plainProduct.variations = restructuredVariations;
-    // }
 
     const related_products = await Product.findAll({
       where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
