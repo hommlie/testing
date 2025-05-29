@@ -53,6 +53,7 @@ class OrderController extends Controller
             \DB::raw('MAX(pincode) as pincode'),
             \DB::raw('MAX(status) as status'),
             \DB::raw('MAX(order_status) as order_status'),
+            \DB::raw('MAX(is_booked_by) as is_booked_by'),
             \DB::raw('MAX(desired_time) as desired_time'),
             \DB::raw('MAX(desired_date) as desired_date'),
             \DB::raw('MAX(order_total) AS grand_total'),
@@ -427,15 +428,13 @@ class OrderController extends Controller
                     'desired_time' => $request->desired_time,
                     'order_status' => $ORST,
                     'assigned_to' => $request->technicianAssign,
+                    'is_booked_by' => 1,
                     'created_at' => date('Y-m-d'),
 
                 ];
-
-                // Insert the record into the database
-                DB::table('orders')->insert($dataval); // Replace 'orders' with your table name
+                DB::table('orders')->insert($dataval);
             }
         } else {
-            // Create a single order if service type is not "AMC"
             $dataval = [
                 'vendor_id' => "6",
                 'product_id' => $request->service,
@@ -475,7 +474,7 @@ class OrderController extends Controller
                 'desired_time' => $request->desired_time,
                 'order_status' => $ORST,
                 'assigned_to' => $request->technicianAssign,
-
+                'is_booked_by' => 1,
             ];
 
             Order::create($dataval);
@@ -1073,6 +1072,7 @@ class OrderController extends Controller
             'street_address',
             'house_number',
             'pincode',
+            'remark',
         ];
 
         $missingColumns = array_diff($requiredColumns, $header);
@@ -1101,11 +1101,11 @@ class OrderController extends Controller
          
         $errorMessages = [];
         foreach ($data as $row) {
-        
+    
             if (count(array_filter($row, fn($v) => trim($v) !== '')) === 0) {
                 continue;
             }
-        
+
 
             $headerCount = count($headers);
             $rowCount = count($row);
@@ -1138,7 +1138,7 @@ class OrderController extends Controller
         
 
             if (!$product_id) {
-                $errorMessages[] = "Product not found in row: " . implode(", ", $row);
+                $errorMessages[] = "Product {$product_name} not found in row: " . implode(", ", $row);
                 continue;
             }
             if ($product_id) {
@@ -1151,14 +1151,9 @@ class OrderController extends Controller
                 if (!empty($attributeIDs)) {
                         
                     $attributes = Attribute::whereIn('id', $attributeIDs)->pluck('attribute', 'id')->toArray();
-                       
                     $lowercasedAttributes = array_change_key_case(array_flip(array_map('strtolower', $attributes)), CASE_LOWER);
-                  
-                    if (array_key_exists($variation_name, $lowercasedAttributes)) {
                     
-
-
-                       
+                    if (array_key_exists($variation_name, $lowercasedAttributes)) {
                         $matchedAttributeID = $lowercasedAttributes[$variation_name];
                         $varName = Variation::where('attribute_id', $matchedAttributeID)
                             ->where('product_id', $product_id)
@@ -1282,6 +1277,8 @@ class OrderController extends Controller
                                             'status' => "1",
                                             'desired_date' => $orderDate,
                                             'desired_time' => '00:00',
+                                            'is_booked_by' => 1,
+                                            'remark' => 1,
                                             'created_at' => date('Y-m-d'),
                                         ];
                                         DB::table('orders')->insert($dataval);
@@ -1324,6 +1321,8 @@ class OrderController extends Controller
                                         'status' => "1",
                                         'desired_date' => $rowData['desired_date'] ?? null,
                                         'desired_time' => '00:00',
+                                        'is_booked_by' => 1,
+                                        'remark' => 1,
                                         'created_at' => date('Y-m-d'),
                                         
                                     ];
@@ -1332,8 +1331,8 @@ class OrderController extends Controller
                             }
                         }
                     }else{
-                        $errorMessages[] = "Attribute “{$variation_name}” not found in row: " . implode(', ', $row);
-                        continue;
+                        $errorMessages[] = "Attribute “suraj gupta ” not found in row: " . implode(', ', $row);
+                        break;
                     }
                 }
             }

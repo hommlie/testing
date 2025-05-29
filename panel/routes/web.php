@@ -505,6 +505,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/update/{id}', 'BlogsController@update')->name('blogs.update');
         Route::post('/change/status', 'BlogsController@changeStatus')->name('blogs.changeStatus');
         Route::post('/delete', 'BlogsController@destroy')->name('blogs.delete');
+        Route::get('get-blogs-data/{id}', 'BlogsController@getblogsData')->name('blogs.getblogsData');
 
     // MANAGE BLOG CATEGORY
         Route::get('/blogcategoryindex', 'BlogsController@blogCategoryIndex')->name('blogs.blogcategoryindex');

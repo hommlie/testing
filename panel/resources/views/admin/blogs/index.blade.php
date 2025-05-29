@@ -49,6 +49,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>ID</th>
                         <th>Title</th>
                         <th>Content</th>
                         <th>Slug</th>
@@ -67,6 +68,7 @@
                     
                         <tr>
                             <td>{{ ++$n }}</td>
+                            <td>{{ $blog->id }}</td>
                             <td>{{ Str::words($blog->title, 5, '...') }}</td>
                             <td>{{ Str::words($blog->content, 5, '...') }}</td>
                             <td>{{ Str::words($blog->slug, 5, '...') }}</td>

@@ -11,24 +11,31 @@ class LeadsSheet extends Model
 
     protected $table = 'leads_sheet';
 
-    protected $fillable = [
-        'customer_name',
-        'phone_number',
+   protected $fillable = [
+        'category_id',
+        'subcategory_id',
+        'product_id',
+        'attribute_id',
+        'variations_id',
+        'coupons',
+        'source',
+        'name',
         'email',
-        'address_location',
-        'lead_source',
+        'lead_type',
+        'phone',
+        'address',
+        'follow_up_dt',
+        'spoken_by',
         'lead_status',
-        'date_of_first_contact',
-        'last_contact_date',
-        'next_follow_up_date',
-        'product_service_interested_in',
-        'lead_value',
-        'bhk_sq_ft',
-        'b2b_b2c',
-        'priority_level',
-        'disposition',
-        'conversion_date',
-        'remarks_notes',
+        'attempt_date_1',
+        'remark_1',
+        'attempt_date_2',
+        'remark_2',
+        'attempt_date_3',
+        'remark_3',
+        'call_recording_link_1',
+        'call_recording_link_2',
     ];
+
 
 }

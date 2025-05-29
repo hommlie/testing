@@ -103,6 +103,16 @@
                   @endif
                   </div>
                 </div>
+                 <div class="form-group row">
+                  <label for="product_name" class="col-sm-2 col-form-label">{{ trans('Slug Name') }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="slug" name="slug" required
+                      placeholder="{{ trans('Slug Name') }}" value="{{$data->slug}}">
+                    @if ($errors->has('slug'))
+                  <span class="text-danger">{{ $errors->first('slug') }}</span>
+                  @endif
+                  </div>
+                </div>
                 {{-- PRODUCT META TITLE --}}
                 <div class="form-group row">
                   <label for="Image title" class="col-sm-2 col-form-label">Meta title:</label>

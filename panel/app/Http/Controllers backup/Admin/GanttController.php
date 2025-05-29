@@ -22,25 +22,56 @@ use Carbon\Carbon;
 
 class GanttController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_unless(\Gate::allows('gantt_access'), 403);
 
         $today = Carbon::today()->toDateString();
+        $startOfMonth = Carbon::today()->startOfMonth()->toDateString();
+        $startOfYear = Carbon::today()->startOfYear()->toDateString();
 
         $data = Employees::with([
             'orders' => function ($q) use ($today) {
-                $q->with(['user', 'variationDetails', 'attributeDetails','serviceCenter','businessRegion'])
+                $q->with([
+                    'user',
+                    'variationDetails',
+                    'attributeDetails',
+                    'serviceCenter',
+                    'businessRegion',
+                ])
                     ->whereDate('desired_date', $today);
             },
             'location'
         ])
-            ->where('is_active', 1)
             ->where('status', 1)
             ->orderBy('id', 'desc')
-            ->get();
+            ->select('employees.*')
+            ->selectSub(function ($q) use ($today) {
+                $q->from('emp_verified_attendence')
+                    ->selectRaw('COALESCE(SUM(totaldistance),0)')
+                    ->whereColumn('emp_verified_attendence.emp_id', 'employees.id')
+                    ->whereDate('date', $today);
+            }, 'meters_today')
+            ->selectSub(function ($q) use ($startOfMonth, $today) {
+                $q->from('emp_verified_attendence')
+                    ->selectRaw('COALESCE(SUM(totaldistance),0)')
+                    ->whereColumn('emp_verified_attendence.emp_id', 'employees.id')
+                    ->whereBetween('date', [$startOfMonth, $today]);
+            }, 'meters_month')
+            ->selectSub(function ($q) use ($startOfYear, $today) {
+                $q->from('emp_verified_attendence')
+                    ->selectRaw('COALESCE(SUM(totaldistance),0)')
+                    ->whereColumn('emp_verified_attendence.emp_id', 'employees.id')
+                    ->whereBetween('date', [$startOfYear, $today]);
+            }, 'meters_year')
 
-
+            ->get()
+            ->map(function ($emp) {
+                $emp->km_today = round($emp->meters_today / 1000, 2);
+                $emp->km_month = round($emp->meters_month / 1000, 2);
+                $emp->km_year = round($emp->meters_year / 1000, 2);
+                return $emp;
+            });
 
         $dispatchedCount = Order::where('order_status', 2)->whereDate('desired_date', $today)->count();
         $onsiteCount = Order::where('order_status', 3)->whereDate('desired_date', $today)->count();
@@ -48,9 +79,16 @@ class GanttController extends Controller
         $incompleteCount = Order::where('order_status', 5)->whereDate('desired_date', $today)->count();
         $scheduledCount = Order::where('order_status', 1)->whereDate('desired_date', $today)->count();
 
-        return view('admin.gantt.index', compact('data', 'dispatchedCount', 'onsiteCount', 'completedCount', 'incompleteCount', 'scheduledCount', 'today'));
+        return view('admin.gantt.index', compact(
+            'data',
+            'dispatchedCount',
+            'onsiteCount',
+            'completedCount',
+            'incompleteCount',
+            'scheduledCount',
+            'today'
+        ));
     }
-
     public function autoAssignOrders()
     {
         $orders = Order::where('order_status', 0)->get();

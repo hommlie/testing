@@ -1,17 +1,18 @@
 @extends('layouts.admin')
+
 @section('content')
-     <link rel="stylesheet" href="{{ asset('storage/app/public/Adminassets/css/dataTables.bootstrap4.css') }}">
+    <link rel="stylesheet" href="{{ asset('storage/app/public/Adminassets/css/dataTables.bootstrap4.css') }}">
     <style>
-      
         .table-wrapper {
             display: flex;
         }
+        
         .fixed-column {
-            width: 200px; /* Adjust the width according to your needs */
+            width: 320px; /* Adjusted for extra columns */
         }
         .scrollable-table {
             overflow-x: auto;
-            width: calc(100% - 200px); /* Subtract the width of the fixed column */
+            width: calc(100% - 320px); /* Subtract the width of the fixed column */
         }
         .table-fixed {
             position: relative;
@@ -97,10 +98,8 @@
                                 <form class="d-flex" method="get">
                                     <label for="" class="text-dark">Date</label>
                                     <input type="date" name="from_date" class="form-control-xs" id="from_date"
-                                         
                                            value="{{ $displayDate }}" />
                                     <input type="date" name="to_date" class="form-control-xs" id="to_date"
-                                         
                                            value="{{ $displayDate }}" />
                                     <input type="submit" class="btn btn-xs btn-warning" value="view" id="view_date_btn">
                                 </form> &emsp;
@@ -139,7 +138,7 @@
 
                             <div class="table-wrapper mt-2">
                                 <div class="fixed-column">
-                                    <table class="table table-bordered table-striped">
+                                    <table class="table table-bordered table-striped width-100" id="employees_table">
                                         <thead>
                                             <tr>
                                                 <th class="p-1">
@@ -147,6 +146,9 @@
                                                     <small id="toggle-sbc" style="cursor:pointer;text-decoration:underline;">(Show SC)</small>
                                                 </th>
                                                 <th class="p-1 emp-id-column">SC</th>
+                                                <th class="p-1">T</th>
+                                                <th class="p-1">M</th>
+                                                <th class="p-1">Y</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -154,11 +156,21 @@
                                             <tr>
                                                 <td class="p-1 d-flex">
                                                     <div style="width: 10px;height:10px;" class="bg-success rounded-circle m-1"></div>
-                                                    <a data-toggle="modal" data-target="#GanttModal">{{ $employee->emp_name }}</a>
+                                                    <a data-toggle="modal"  data-target="#GanttModal">{{ $employee->emp_name }}</a>
                                                 </td>
                                                 <td class="p-1 emp-id-column">
                                                     {{ $employee->location ?? 'N/A' }}
                                                 </td>
+                                                <td class="p-1">
+                                                    {{ $employee->km_today }}
+                                                </td>
+                                                <td class="p-1">
+                                                    {{ $employee->km_month }}
+                                                </td>
+                                                <td class="p-1">
+                                                    {{ $employee->km_year }}
+                                                </td>
+                                                
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -171,7 +183,8 @@
                                             <thead>
                                                 <tr>
                                                     @for ($i = 0; $i < 24; $i++)
-                                                        <th class="p-1">{{ sprintf('%02d:00', $i) }}</th>
+                                                        <th class="p-1 text-center" style="width: 100px;">
+                                                        {{ sprintf('%02d:00', $i) }}</th>
                                                     @endfor
                                                 </tr>
                                             </thead>
@@ -225,10 +238,9 @@
                                                               case 5: $cls = 'incomplete-bg'; break;
                                                               default: $cls = 'scheduled-bg';
                                                             }
-                                                            $tooltipColor = $order->order_status == 3 ? 'color:white;' : '';
                                                           @endphp
 
-                                                         <a class="btn btn-sm {{ $cls }} p-0 m-1"
+                                                         <a class="btn btn-sm {{ $cls }} rounded-0 text-light p-0 m-1"
                                                                data-toggle="tooltip"
                                                                data-placement="top"
                                                                data-html="true"
@@ -286,10 +298,11 @@
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">Account Type</th>
                                                                            <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->account_type }}</b></td>
                                                                          </tr>
-                                                                         <tr>
-                                                                           <th style="padding:4px; border-bottom:1px solid #ddd;">Account Name</th>
-                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->employee_name }}</b></td>
+                                                                          <tr>
+                                                                           <th style="padding:4px;">Contact Name</th>
+                                                                           <td style="padding:4px;"><b>{{ $order->full_name }}</b></td>
                                                                          </tr>
+                                                                        
                                                                          <tr>
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">Address</th>
                                                                            <td style="padding:4px; border-bottom:1px solid #ddd;">
@@ -308,10 +321,11 @@
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">Email</th>
                                                                            <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->email }}</b></td>
                                                                          </tr>
-                                                                         <tr>
-                                                                           <th style="padding:4px;">Contact Name</th>
-                                                                           <td style="padding:4px;"><b>{{ $order->full_name }}</b></td>
+                                                                          <tr>
+                                                                           <th style="padding:4px; border-bottom:1px solid #ddd;">Account Name</th>
+                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->employee_name }}</b></td>
                                                                          </tr>
+                                                                        
                                                                        </table>
                                                                      </td>
                                                                      
@@ -331,8 +345,11 @@
                                                                     </tr>
                                                                  </table>
                                                                '>
-                                                              {{ Str::limit($order->user->name ?? $order->order_number, 8) }}
-                                                            </a>
+                                                              @php
+                                                                  $shortName = strtoupper(strtok($order->user->name ?? $order->full_name, ' '));
+                                                                @endphp
+                                                                <i class="fas fa-star text-info"></i> {{ $shortName }} <i class="fas fa-star text-info"></i>
+                                                             </a>
                                                         @endforeach
                                                       </td>
                                                     @endfor
@@ -362,37 +379,16 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('[data-toggle="tooltip"]').each(function(){
-                let $el = $(this),
-                    inT, outT;
-
-                $el.tooltip({
-                  html: true,
-                  container: 'body',
-                  trigger: 'manual'
-                })
-                .on('mouseenter', function(){
-                  clearTimeout(outT);
-                  inT = setTimeout(() => {
-                    $el.tooltip('show');
-                  }, 200);
-                })
-                .on('mouseleave', function(){
-                  clearTimeout(inT);
-                  outT = setTimeout(() => {
-                    $el.tooltip('hide');
-                  }, 100);
-                })
-             .on('shown.bs.tooltip', function(){
-                 let $tip = $('.tooltip').last();
-                 $tip
-                   .on('mouseenter', () => clearTimeout(outT))
-                   .on('mouseleave', () => {
-                     outT = setTimeout(() => {
-                       $el.tooltip('hide');
-                     }, 100);
+                let $el = $(this), inT, outT;
+                $el.tooltip({ html: true, container: 'body', trigger: 'manual' })
+                   .on('mouseenter', () => { clearTimeout(outT); inT = setTimeout(() => $el.tooltip('show'), 200); })
+                   .on('mouseleave', () => { clearTimeout(inT); outT = setTimeout(() => $el.tooltip('hide'), 100); })
+                   .on('shown.bs.tooltip', function(){
+                       let $tip = $('.tooltip').last();
+                       $tip.on('mouseenter', () => clearTimeout(outT))
+                           .on('mouseleave', () => { outT = setTimeout(() => $el.tooltip('hide'), 100); });
                    });
-               });
-             });
+            });
 
             $('#toggle-sbc').click(function() {
                 $('.emp-id-column').toggle();
@@ -407,9 +403,8 @@
             $('input[name="from_date"]').on('change', function() {
                 $('input[name="to_date"]').val(this.value);
             });
-        });
 
-        document.addEventListener('DOMContentLoaded', function () {
+            // mark leading empty cells as inactive
             document.querySelectorAll('#jobs_table tbody tr').forEach(row => {
                 let foundActive = false;
                 row.querySelectorAll('td').forEach(cell => {
