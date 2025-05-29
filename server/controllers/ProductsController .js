@@ -368,7 +368,7 @@ exports.productDetails = async (req, res) => {
         "total_reviews",
         "faqs_for_mobile",
         "description_for_mobile",
-        "pro_specifications",
+        // "pro_specifications",
         "is_featured",
       ],
       include: [
