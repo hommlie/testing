@@ -372,54 +372,54 @@ exports.productDetails = async (req, res) => {
         "is_featured",
       ],
       include: [
-        // {
-        //   model: ProductImage,
-        //   attributes: [
-        //     "id",
-        //     "product_id",
-        //     "media",
-        //     "thumbnail",
-        //     "alt_tag",
-        //     "image_title",
-        //     // [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
-        //     [
-        //       sequelize.literal(`
-        //         CASE
-        //           WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', productimages.image)
-        //           WHEN media = 'Video' THEN productimages.image
-        //           ELSE NULL
-        //         END
-        //       `),
-        //       "image_url",
-        //     ],
-        //   ],
-        //   as: "productimages",
-        //   required: false,
-        // },
         {
-          model: Variation,
+          model: ProductImage,
           attributes: [
             "id",
             "product_id",
-            "attribute_id",
-            "price",
-            "description",
-            "discounted_variation_price",
-            "variation",
-            "variation_interval",
-            "variation_times",
-            "qty",
+            "media",
+            "thumbnail",
+            "alt_tag",
+            "image_title",
+            // [sequelize.fn('CONCAT', sequelize.literal(`'${apiUrl}/storage/app/public/images/products/'`), sequelize.col('image')), 'image_url']
+            [
+              sequelize.literal(`
+                CASE 
+                  WHEN media = 'Image' THEN CONCAT('${apiUrl}/storage/app/public/images/products/', productimages.image)
+                  WHEN media = 'Video' THEN productimages.image
+                  ELSE NULL
+                END
+              `),
+              "image_url",
+            ],
           ],
-          include: [
-            {
-              model: Attribute,
-              attributes: ["id", "attribute"],
-              where: { status: 1 },
-              as: "attribute",
-            },
-          ],
-          as: "variations",
+          as: "productimages",
+          required: false,
         },
+        // {
+        //   model: Variation,
+        //   attributes: [
+        //     "id",
+        //     "product_id",
+        //     "attribute_id",
+        //     "price",
+        //     "description",
+        //     "discounted_variation_price",
+        //     "variation",
+        //     "variation_interval",
+        //     "variation_times",
+        //     "qty",
+        //   ],
+        //   include: [
+        //     {
+        //       model: Attribute,
+        //       attributes: ["id", "attribute"],
+        //       where: { status: 1 },
+        //       as: "attribute",
+        //     },
+        //   ],
+        //   as: "variations",
+        // },
         {
           model: Ratting,
           as: "rattings",
@@ -450,6 +450,7 @@ exports.productDetails = async (req, res) => {
     if (!product) {
       return res.status(200).json({ status: 0, message: "No data found" });
     }
+    console.log(product);
 
     // Convert the Sequelize model instance to a plain JavaScript object
     const plainProduct = product.get({ plain: true });
