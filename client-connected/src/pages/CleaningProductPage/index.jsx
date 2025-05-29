@@ -396,7 +396,7 @@ const CleaningProductPage = () => {
             </a>
             <span>/</span>
             <a
-              href={`/${innerSubCategoryData?.category?.slug}`}
+              href={`${config.VITE_BASE_URL}/category/${innerSubCategoryData?.category?.slug}`}
               className="text-blue-500"
             >
               {innerSubCategoryData?.category?.category_name}
