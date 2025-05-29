@@ -421,17 +421,17 @@ exports.productDetails = async (req, res) => {
           as: "variations",
           required: false,
         },
-        {
-          model: Ratting,
-          as: "rattings",
-          required: false,
-        },
         // {
-        //   model: Category,
-        //   attributes: ["category_name"],
-        //   as: "category",
+        //   model: Ratting,
+        //   as: "rattings",
         //   required: false,
         // },
+        {
+          model: Category,
+          attributes: ["category_name"],
+          as: "category",
+          required: false,
+        },
         {
           model: Subcategory,
           attributes: ["subcategory_name"],
