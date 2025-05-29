@@ -396,30 +396,30 @@ exports.productDetails = async (req, res) => {
           as: "productimages",
           required: false,
         },
-        // {
-        //   model: Variation,
-        //   attributes: [
-        //     "id",
-        //     "product_id",
-        //     "attribute_id",
-        //     "price",
-        //     "description",
-        //     "discounted_variation_price",
-        //     "variation",
-        //     "variation_interval",
-        //     "variation_times",
-        //     "qty",
-        //   ],
-        //   include: [
-        //     {
-        //       model: Attribute,
-        //       attributes: ["id", "attribute"],
-        //       where: { status: 1 },
-        //       as: "attribute",
-        //     },
-        //   ],
-        //   as: "variations",
-        // },
+        {
+          model: Variation,
+          attributes: [
+            "id",
+            "product_id",
+            "attribute_id",
+            "price",
+            "description",
+            "discounted_variation_price",
+            "variation",
+            "variation_interval",
+            "variation_times",
+            "qty",
+          ],
+          include: [
+            {
+              model: Attribute,
+              attributes: ["id", "attribute"],
+              where: { status: 1 },
+              as: "attribute",
+            },
+          ],
+          as: "variations",
+        },
         {
           model: Ratting,
           as: "rattings",
@@ -450,7 +450,6 @@ exports.productDetails = async (req, res) => {
     if (!product) {
       return res.status(200).json({ status: 0, message: "No data found" });
     }
-    console.log(product);
 
     // Convert the Sequelize model instance to a plain JavaScript object
     const plainProduct = product.get({ plain: true });
