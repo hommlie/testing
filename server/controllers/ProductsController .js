@@ -448,51 +448,21 @@ exports.productDetails = async (req, res) => {
     // Convert the Sequelize model instance to a plain JavaScript object
     const plainProduct = product.get({ plain: true });
 
-    // Restructure variations
-    // const restructuredVariations = [];
-    // product.variations.forEach(variation => {
-    //   const variationData = variation.toJSON();
-    //   const attributeName = variationData.attribute.attribute;
-    //   delete variationData.attribute;
+    if (plainProduct.variations.length > 0) {
 
-    //   if (!restructuredVariations[attributeName]) {
-    //     restructuredVariations[attributeName] = [];
-    //   }
-    //   restructuredVariations[attributeName].push(variationData);
-    // });
+      const restructuredVariations = plainProduct?.variations?.map((variation) => {
+        const { attribute, ...variationData } = variation;
+        return {
+          attribute_name: attribute.attribute,
+          data: variationData,
+        };
+      });
+      
 
-    const restructuredVariations = plainProduct.variations.map((variation) => {
-      const { attribute, ...variationData } = variation;
-      return {
-        attribute_name: attribute.attribute,
-        data: variationData,
-      };
-    });
-
-    // Replace the original variations with the restructured ones
-    plainProduct.variations = restructuredVariations;
-
-    // // Replace the original variations with the restructured ones
-    // product.variations = restructuredVariations;
-
-    const vendors = await User.findOne({
-      where: { id: product.vendor_id, type: 3, is_available: 1 },
-      attributes: [
-        "id",
-        "name",
-        [
-          sequelize.fn(
-            "CONCAT",
-            sequelize.literal(
-              `'${apiUrl}/storage/app/public/images/products/'`
-            ),
-            sequelize.col("profile_pic")
-          ),
-          "image_url",
-        ],
-      ],
-      include: [{ model: Ratting, as: "rattings" }],
-    });
+  
+      // Replace the original variations with the restructured ones
+      plainProduct?.variations = restructuredVariations;
+    }
 
     const related_products = await Product.findAll({
       where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
