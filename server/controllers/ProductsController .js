@@ -332,7 +332,6 @@ exports.viewAllListing = async (req, res) => {
 
 exports.productDetails = async (req, res) => {
   const { slug } = req.body;
-  const user_id = 1;
 
   if (!slug) {
     return res.status(400).json({ status: 0, message: "Invalid product ID" });
@@ -341,37 +340,6 @@ exports.productDetails = async (req, res) => {
   try {
     const product = await Product.findOne({
       where: { slug: slug, status: 1 },
-      attributes: [
-        "id",
-        "product_name",
-        "product_price",
-        "cat_id",
-        "discounted_price",
-        "description",
-        "tags",
-        "product_qty",
-        "is_variation",
-        "vendor_id",
-        "sku",
-        "free_shipping",
-        "shipping_cost",
-        "tax_type",
-        "tax",
-        "est_shipping_days",
-        "is_return",
-        "return_days",
-        "faqs",
-        "slug",
-        "meta_title",
-        "meta_description",
-        "location",
-        "rating",
-        "total_reviews",
-        "faqs_for_mobile",
-        "description_for_mobile",
-        "pro_specifications",
-        "is_featured",
-      ],
       include: [
         {
           model: ProductImage,
