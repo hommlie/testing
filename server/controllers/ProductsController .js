@@ -549,7 +549,6 @@ exports.productDetails = async (req, res) => {
       status: 1,
       message: "Success",
       data: plainProduct,
-      vendors,
       related_products,
       returnpolicy,
       isForm,
