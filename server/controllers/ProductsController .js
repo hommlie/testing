@@ -448,20 +448,20 @@ exports.productDetails = async (req, res) => {
     // Convert the Sequelize model instance to a plain JavaScript object
     let plainProduct = product.get({ plain: true });
 
-    if (plainProduct.variations) {
-      const restructuredVariations = plainProduct?.variations?.map(
-        (variation) => {
-          const { attribute, ...variationData } = variation;
-          return {
-            attribute_name: attribute.attribute,
-            data: variationData,
-          };
-        }
-      );
+    // if (plainProduct.variations) {
+    const restructuredVariations = plainProduct?.variations?.map(
+      (variation) => {
+        const { attribute, ...variationData } = variation;
+        return {
+          attribute_name: attribute.attribute,
+          data: variationData,
+        };
+      }
+    );
 
-      // Replace the original variations with the restructured ones
-      plainProduct.variations = restructuredVariations;
-    }
+    // Replace the original variations with the restructured ones
+    plainProduct.variations = restructuredVariations;
+    // }
 
     const related_products = await Product.findAll({
       where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
