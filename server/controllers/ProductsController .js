@@ -419,7 +419,6 @@ exports.productDetails = async (req, res) => {
             },
           ],
           as: "variations",
-          required: false,
         },
         {
           model: Ratting,
