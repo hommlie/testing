@@ -446,93 +446,88 @@ exports.productDetails = async (req, res) => {
     }
 
     // Convert the Sequelize model instance to a plain JavaScript object
-    const plainProduct = product.get({ plain: true });
+    let plainProduct = product.get({ plain: true });
 
-    if (plainProduct.variations.length > 0) {
-
-      const restructuredVariations = plainProduct?.variations?.map((variation) => {
-        const { attribute, ...variationData } = variation;
-        return {
-          attribute_name: attribute.attribute,
-          data: variationData,
-        };
-      });
-      
-
-  
-      // Replace the original variations with the restructured ones
-      plainProduct?.variations = restructuredVariations;
-    }
-
-    const related_products = await Product.findAll({
-      where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
-      attributes: [
-        "id",
-        "product_name",
-        "product_price",
-        "discounted_price",
-        "is_variation",
-        "sku",
-        "rating",
-      ],
-      include: [
-        {
-          model: ProductImage,
-          attributes: [
-            "id",
-            "product_id",
-            [
-              sequelize.fn(
-                "CONCAT",
-                sequelize.literal(
-                  `'${apiUrl}/storage/app/public/images/products/'`
-                ),
-                sequelize.col("productimage.image")
-              ),
-              "image_url",
-            ],
-            "alt_tag",
-            "image_title",
-          ],
-          where: { media: "Image" },
-          as: "productimage",
-        },
-        {
-          model: Variation,
-          attributes: [
-            "id",
-            "product_id",
-            "attribute_id",
-            "price",
-            "description",
-            "discounted_variation_price",
-            "variation",
-            "qty",
-          ],
-          as: "variations",
-          required: false,
-        },
-        {
-          model: Ratting,
-          as: "rattings",
-          required: false,
-        },
-        // {
-        //   model: Wishlist,
-        //   attributes: [
-        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-        //   ],
-        //   where: {
-        //     user_id: user_id
-        //   },
-        //   required: false,
-        //   as: 'wishlist'
-        // },
-        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
-      ],
-      order: [["id", "DESC"]],
-      limit: 10,
+    const restructuredVariations = plainProduct?.variations?.map((variation) => {
+      const { attribute, ...variationData } = variation;
+      return {
+        attribute_name: attribute.attribute,
+        data: variationData,
+      };
     });
+    
+    // Replace the original variations with the restructured ones
+    plainProduct?.variations = restructuredVariations;
+
+    // const related_products = await Product.findAll({
+    //   where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
+    //   attributes: [
+    //     "id",
+    //     "product_name",
+    //     "product_price",
+    //     "discounted_price",
+    //     "is_variation",
+    //     "sku",
+    //     "rating",
+    //   ],
+    //   include: [
+    //     {
+    //       model: ProductImage,
+    //       attributes: [
+    //         "id",
+    //         "product_id",
+    //         [
+    //           sequelize.fn(
+    //             "CONCAT",
+    //             sequelize.literal(
+    //               `'${apiUrl}/storage/app/public/images/products/'`
+    //             ),
+    //             sequelize.col("productimage.image")
+    //           ),
+    //           "image_url",
+    //         ],
+    //         "alt_tag",
+    //         "image_title",
+    //       ],
+    //       where: { media: "Image" },
+    //       as: "productimage",
+    //     },
+    //     {
+    //       model: Variation,
+    //       attributes: [
+    //         "id",
+    //         "product_id",
+    //         "attribute_id",
+    //         "price",
+    //         "description",
+    //         "discounted_variation_price",
+    //         "variation",
+    //         "qty",
+    //       ],
+    //       as: "variations",
+    //       required: false,
+    //     },
+    //     {
+    //       model: Ratting,
+    //       as: "rattings",
+    //       required: false,
+    //     },
+    //     // {
+    //     //   model: Wishlist,
+    //     //   attributes: [
+    //     //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
+    //     //   ],
+    //     //   where: {
+    //     //     user_id: user_id
+    //     //   },
+    //     //   required: false,
+    //     //   as: 'wishlist'
+    //     // },
+    //     // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
+    //   ],
+    //   order: [["id", "DESC"]],
+    //   limit: 10,
+    // });
 
     const returnpolicy = await User.findOne({
       where: { id: product.vendor_id },
