@@ -395,6 +395,7 @@ exports.productDetails = async (req, res) => {
             ],
           ],
           as: "productimages",
+          required: false,
         },
         {
           model: Variation,
@@ -426,27 +427,23 @@ exports.productDetails = async (req, res) => {
           as: "rattings",
           required: false,
         },
-        // {
-        //   model: Wishlist,
-        //   attributes: [
-        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-        //   ],
-        //   where: {
-        //     user_id: user_id
-        //   },
-        //   required: false,
-        //   as: 'wishlist'
-        // },
-        { model: Category, attributes: ["category_name"], as: "category" },
+        {
+          model: Category,
+          attributes: ["category_name"],
+          as: "category",
+          required: false,
+        },
         {
           model: Subcategory,
           attributes: ["subcategory_name"],
           as: "subcategory",
+          required: false,
         },
         {
           model: Innersubcategory,
           attributes: ["innersubcategory_name"],
           as: "innersubcategory",
+          required: false,
         },
         // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
