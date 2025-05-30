@@ -23,6 +23,12 @@ class LandingPageController extends Controller
         $categories = Category::all();
         return view('admin.landingpage.add', compact('categories'));
     }
+      // GET DATA 
+      public function getLandingPageData($id){
+        $SeoData = LandingPage::where('id', "$id")
+            ->get();
+        return response()->json($SeoData);
+    }
 
     // STORE 
     public function store(Request $request)

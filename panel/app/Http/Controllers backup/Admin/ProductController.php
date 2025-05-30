@@ -151,13 +151,6 @@ class ProductController extends Controller
             $product_qty = 2;
         }
 
-        // if ($request->tags == "") {
-        //     $tags = "";
-        // } else {
-        //     $tags = implode(', ', $request->tags);
-        // }
-
-        // $tags = "na";
         $loca = isset($request->location)
             ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
             : null;
@@ -178,7 +171,7 @@ class ProductController extends Controller
             'pro_specifications' => $pro_specifications,
             'product_price' => $product_price,
             'discounted_price' => $discounted_price,
-            'slug' => \Str::slug($request->product_name),
+            'slug' => \Str::slug($request->slug),
             'is_variation' => $is_variation,
             // 'attribute'=>$request->attribute,
             'product_qty' => $product_qty,
@@ -513,7 +506,7 @@ class ProductController extends Controller
             'product_price' => $product_price,
             'discounted_price' => $discounted_price,
             'product_qty' => $product_qty ? $product_qty : "NA",
-            'slug' => \Str::slug($request->product_name),
+            'slug' => \Str::slug($request->slug),
             'is_variation' => $is_variation,
             'attribute' => $request->attribute,
             'is_hot' => $is_hot,

@@ -226,6 +226,10 @@
                                                              ">
                                                             <i class="fa fa-user"></i> Present
                                                           </a>
+                                                        @else
+                                                          <span class="text-muted">
+                                                            &nbsp;
+                                                           </span>
                                                         @endif
 
                                                         @foreach ($ordersInThisHour as $order)
@@ -260,16 +264,16 @@
                                                                          </tr>
                                                                           <tr>
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">Business Region</th>
-                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->businessRegion->zone }},{{ $order->businessRegion->state }}</b></td>
+                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->businessRegion->zone ?? ""}},{{ $order->businessRegion->state ?? "" }}</b></td>
                                                                          </tr>
                                                                          <tr>
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">Service Center</th>
-                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->serviceCenter->branch_name }}</b></td>
+                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->serviceCenter->branch_name ?? "" }}</b></td>
                                                                          </tr>
                                                                         
                                                                          <tr>
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">SR Plan Date & Time</th>
-                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->desired_date }} - {{ $order->desired_time }}</b></td>
+                                                                           <td style="padding:4px; border-bottom:1px solid #ddd;"><b>{{ $order->desired_date }} - {{ $order->desired_time ?? "" }}</b></td>
                                                                          </tr>
                                                                          <tr>
                                                                            <th style="padding:4px; border-bottom:1px solid #ddd;">Service Plan</th>

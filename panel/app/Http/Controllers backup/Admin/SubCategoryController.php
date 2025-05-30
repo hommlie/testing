@@ -91,102 +91,69 @@ class SubCategoryController extends Controller
             'image_title' => 'required',
             'subcategory_sub_title' => 'required',
             'subcategory_title' => 'required',
-            'thumbnail' => 'nullable',
-            'video' => 'nullable',
+            'thumbnail' => 'nullable|mimes:png,jpg,jpeg,gif',
+            'video' => 'nullable|mimes:mp4,mov,avi',
             'faqs' => 'required',
             'about' => 'required',
             'specifications' => 'required|array',
             'total_reviews' => 'required|integer',
             'avg_rating' => 'required|numeric',
+            'slug' => 'required|string|max:255|unique:subcategories,slug',
         ]);
 
         $loca = isset($request->location)
             ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
             : null;
 
-        // Generate unique file name and move the file
         $icon = 'sub_category-' . uniqid() . '.' . $request->icon->getClientOriginalExtension();
-        $request->icon->move('storage/app/public/images/subcategory', $icon);
+        $request->icon->move(public_path('storage/app/public/images/subcategory/'), $icon);
 
         $subCatBanner = 'sub_cat_banner-' . uniqid() . '.' . $request->sub_cat_banner->getClientOriginalExtension();
-        $request->sub_cat_banner->move('storage/app/public/images/subcategory', $subCatBanner);
+        $request->sub_cat_banner->move(public_path('storage/app/public/images/subcategory/'), $subCatBanner);
 
-        // Generate unique file name and move the file
+        $thumbnail = "NA";
         if ($request->hasFile('thumbnail')) {
             $thumbnail = 'sub_category-' . uniqid() . '.' . $request->thumbnail->getClientOriginalExtension();
-            $request->thumbnail->move('storage/app/public/images/subcategory', $thumbnail);
-        } else {
-            $thumbnail = "NA";
+            $request->thumbnail->move(public_path('storage/app/public/images/subcategory/'), $thumbnail);
         }
 
-        // Generate unique file name and move the file
+        $video = "NA";
         if ($request->hasFile('video')) {
             $video = 'sub_category-' . uniqid() . '.' . $request->video->getClientOriginalExtension();
-            $request->video->move('storage/app/public/images/subcategory', $video);
-        } else {
-            $video = "NA";
+            $request->video->move(public_path('storage/app/public/images/subcategory/'), $video);
         }
 
-        // Check if a subcategory with the same slug already exists
-        $checkslug = Subcategory::where('slug', \Str::slug($request->subcategory_name))->first();
+        $dataval = [
+            'cat_id' => $request->cat_id,
+            'subcategory_name' => $request->subcategory_name,
+            'slug' => \Str::slug($request->slug),
+            'icon' => $icon,
+            'sub_cat_banner' => $subCatBanner,
+            'alt_tag' => $request->alt_tag,
+            'image_title' => $request->image_title,
+            'meta_title' => $request->meta_title ?? null,
+            'meta_description' => $request->meta_description ?? null,
+            'subcategory_sub_title' => $request->subcategory_sub_title,
+            'subcategory_title' => $request->subcategory_title,
+            'location' => $loca,
+            'specifications' => implode(" | ", $request->specifications),
+            'faqs' => $request->faqs,
+            'about' => $request->about,
+            'total_reviews' => $request->total_reviews,
+            'avg_rating' => $request->avg_rating,
+            'thumbnail' => $thumbnail,
+            'video' => $video,
+        ];
 
-        if (@$checkslug->slug) {
-            // If slug exists, create a new slug combining category slug and subcategory name
-            $cat_slug = Category::select('slug')->where('id', $request->cat_id)->first();
-            $dataval = [
-                'cat_id' => $request->cat_id,
-                'icon' => $icon, // Ensure icon is included here
-                'sub_cat_banner' => $subCatBanner, 
-                'alt_tag' => $request->alt_tag,
-                'image_title' => $request->image_title,
-                'meta_title' => $request->meta_title,
-                'meta_description' => $request->meta_description,
-                'subcategory_sub_title' => $request->subcategory_sub_title,
-                'subcategory_title' => $request->subcategory_title,
-                'thumbnail' => $thumbnail, // Ensure icon is included here
-                'video' => $video, // Ensure icon is included here
-                'subcategory_name' => $request->subcategory_name,
-                'location' => $loca,
-                'specifications' =>  implode(" | ", $request->specifications), 
-                'faqs' => $request->faqs, 
-                'about' => $request->about, 
-                'total_reviews' => $request->total_reviews,
-                'avg_rating' => $request->avg_rating,
-                'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
-            ];
-        } else {
-            // Default case where the slug does not exist
-            $dataval = [
-                'cat_id' => $request->cat_id,
-                'subcategory_name' => $request->subcategory_name,
-                'slug' => \Str::slug($request->subcategory_name),
-                'icon' => $icon, // Ensure icon is included here as well
-                'sub_cat_banner' => $subCatBanner, 
-                'alt_tag' => $request->alt_tag,
-                'image_title' => $request->image_title,
-                'meta_title' => $request->meta_title,
-                'meta_description' => $request->meta_description,
-                'subcategory_sub_title' => $request->subcategory_sub_title,
-                'subcategory_title' => $request->subcategory_title,
-                'location' => $loca,
-                'specifications' =>  implode(" | ", $request->specifications), 
-                'faqs' => $request->faqs, 
-                'about' => $request->about, 
-                'total_reviews' => $request->total_reviews,
-                'avg_rating' => $request->avg_rating,
-                'thumbnail' => $thumbnail, // Ensure icon is included here as well
-                'video' => $video, // Ensure icon is included here as well
-            ];
-        }
-
-        // Create the new subcategory record
         $data = Subcategory::create($dataval);
+
         if ($data) {
             return redirect('admin/subcategory')->with('success', trans('messages.success'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
     }
+
 
 
     /**
@@ -211,14 +178,13 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($request->all());
         $this->validate($request, [
             'subcategory_name' => 'required',
             'cat_id' => 'required',
             'subcategory_sub_title' => 'required',
             'subcategory_title' => 'required',
-            'icon' =>  'mimes:png,jpg,jpeg,gif',
-            'sub_cat_banner' => 'mimes:png,jpg,jpeg,gif',
+            'icon' => 'nullable|mimes:png,jpg,jpeg,gif',
+            'sub_cat_banner' => 'nullable|mimes:png,jpg,jpeg,gif',
             'alt_tag' => 'required',
             'image_title' => 'required',
             'faqs' => 'required',
@@ -226,88 +192,81 @@ class SubCategoryController extends Controller
             'specifications' => 'required|array',
             'total_reviews' => 'required|integer',
             'avg_rating' => 'required|numeric',
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                \Illuminate\Validation\Rule::unique('subcategories', 'slug')->ignore($request->subcat_id),
+            ],
         ]);
 
-        $icon = $request->old_img;
-        $sub_cat_banner = $request->old_banner;
+        $subcategory = Subcategory::findOrFail($request->subcat_id);
+
         $loca = isset($request->location)
-        ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
-        : null;
-        if (isset($request->icon)) {
-            File::delete('storage/app/public/images/subcategory/' . $request->old_img);
-
-            if ($request->hasFile('icon')) {
-                $iconFile = $request->file('icon');
-                $icon = 'subcategory-' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
-                $iconFile->move('storage/app/public/images/subcategory', $icon);
+            ? (is_array($request->location) ? implode(" | ", $request->location) : $request->location)
+            : null;
+        $icon = $subcategory->icon;
+        if ($request->hasFile('icon')) {
+            if ($icon && file_exists(public_path('storage/storage/app/public/images/subcategory/' . $icon))) {
+                \File::delete(public_path('storage/storage/app/public/images/subcategory/' . $icon));
             }
+            $iconFile = $request->file('icon');
+            $icon = 'subcategory-' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
+            $iconFile->move(public_path('storage/app/public/images/subcategory/'), $icon);
+        }
+        $sub_cat_banner = $subcategory->sub_cat_banner;
+        if ($request->hasFile('sub_cat_banner')) {
+            if ($sub_cat_banner && file_exists(public_path('storage/storage/app/public/images/subcategory/' . $sub_cat_banner))) {
+                \File::delete(public_path('storage/storage/app/public/images/subcategory/' . $sub_cat_banner));
+            }
+            $bannerFile = $request->file('sub_cat_banner');
+            $sub_cat_banner = 'subcategoryBanner-' . uniqid() . '.' . $bannerFile->getClientOriginalExtension();
+            $bannerFile->move(public_path('storage/app/public/images/subcategory/'), $sub_cat_banner);
         }
 
-        if (isset($request->sub_cat_banner)) {
-            File::delete('storage/app/public/images/subcategory/' . $request->old_banner);
+        $slugExists = Subcategory::where('slug', \Str::slug($request->slug))
+            ->where('id', '!=', $request->subcat_id)
+            ->exists();
 
-            if ($request->hasFile('sub_cat_banner')) {
-                $Filetbanner = $request->file('sub_cat_banner');
-                $sub_cat_banner = 'subcategoryBanner-' . uniqid() . '.' . $Filetbanner->getClientOriginalExtension();
-                $Filetbanner->move('storage/app/public/images/subcategory', $sub_cat_banner);
-            }
-        }
-
-        $checkslug = Subcategory::where('slug', \Str::slug($request->subcategory_name))->first();
-
-        if (@$checkslug->slug) {
+        if ($slugExists) {
             $cat_slug = Category::select('slug')->where('id', $request->cat_id)->first();
-            $data = [
-                'cat_id' => $request->cat_id,
-                'icon' => $icon,
-                'sub_cat_banner'  => $sub_cat_banner,
-                'alt_tag' => $request->alt_tag,
-                'image_title' => $request->image_title,
-                'meta_title' => $request->meta_title,
-                'meta_description' => $request->meta_description,
-                'subcategory_sub_title' => $request->subcategory_sub_title,
-                'subcategory_title' => $request->subcategory_title,
-                'subcategory_name' => $request->subcategory_name,
-                'location' => $loca,
-                'specifications' =>  implode(" | ", $request->specifications), 
-                'faqs' => $request->faqs, 
-                'about' => $request->about, 
-                'total_reviews' => $request->total_reviews,
-                'avg_rating' => $request->avg_rating,
-                'slug' => \Str::slug($cat_slug->slug . '-' . $request->subcategory_name),
-            ];
+            $finalSlug = \Str::slug($cat_slug->slug . '-' . $request->slug);
         } else {
-            $data = [
-                'cat_id' => $request->cat_id,
-                'subcategory_name' => $request->subcategory_name,
-                'slug' => \Str::slug($request->subcategory_name),
-                'icon' => $icon,
-                'sub_cat_banner'  => $sub_cat_banner,
-                'alt_tag' => $request->alt_tag,
-                'image_title' => $request->image_title,
-                'meta_title' => $request->meta_title,
-                'subcategory_sub_title' => $request->subcategory_sub_title,
-                'subcategory_title' => $request->subcategory_title,
-                'meta_description' => $request->meta_description,
-                'location' => $loca,
-                'specifications' =>  implode(" | ", $request->specifications), 
-                'faqs' => $request->faqs, 
-                'about' => $request->about, 
-                'total_reviews' => $request->total_reviews,
-                'avg_rating' => $request->avg_rating,
-            ];
+            $finalSlug = \Str::slug($request->slug);
         }
 
-        $subcategory = Subcategory::find($request->subcat_id)->update($data);
+        $data = [
+            'cat_id' => $request->cat_id,
+            'subcategory_name' => $request->subcategory_name,
+            'slug' => $finalSlug,
+            'icon' => $icon,
+            'sub_cat_banner' => $sub_cat_banner,
+            'alt_tag' => $request->alt_tag,
+            'image_title' => $request->image_title,
+            'meta_title' => $request->meta_title ?? null,
+            'meta_description' => $request->meta_description ?? null,
+            'subcategory_sub_title' => $request->subcategory_sub_title,
+            'subcategory_title' => $request->subcategory_title,
+            'location' => $loca,
+            'specifications' => implode(" | ", $request->specifications),
+            'faqs' => $request->faqs,
+            'about' => $request->about,
+            'total_reviews' => $request->total_reviews,
+            'avg_rating' => $request->avg_rating,
+        ];
 
-        if ($subcategory) {
+        // Update subcategory record
+        $updated = $subcategory->update($data);
+
+        if ($updated) {
             return redirect('admin/subcategory')->with('success', trans('messages.update'));
         } else {
             return redirect()->back()->with('danger', trans('messages.fail'));
         }
     }
 
-   
+
+
 
 
     /**

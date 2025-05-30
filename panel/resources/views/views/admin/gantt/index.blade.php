@@ -118,13 +118,27 @@
                                     </div>
                                 </form> &emsp;
                             </div>
-
-                            <div class="d-flex mt-2">
-                                <div style="width: 15px;height:15px;" class="scheduled-bg rounded-circle m-1"></div><span>Scheduled</span>&emsp;
-                                <div style="width: 15px;height:15px;" class="dispatched-bg rounded-circle m-1"></div><span>Dispatched</span>&emsp;
-                                <div style="width: 15px;height:15px;" class="onsite-bg rounded-circle m-1"></div><span>On-Site</span>&emsp;
-                                <div style="width: 15px;height:15px;" class="completed-bg rounded-circle m-1"></div><span>Completed</span>&emsp;
-                                <div style="width: 15px;height:15px;" class="incomplete-bg rounded-circle m-1"></div><span>Incomplete</span>
+                             <div class="mt-2 ">
+                                <span class="badge rounded-pill bg-light text-dark me-2" style="font-size: 1.1rem;">
+                                    <span class="scheduled-bg rounded-circle d-inline-block me-1" style="width:20px;height:20px;"></span>
+                                    Scheduled: {{ $scheduledCount }}
+                                </span>
+                                <span class="badge rounded-pill bg-light text-dark me-2" style="font-size: 1.1rem;">
+                                    <span class="dispatched-bg rounded-circle d-inline-block me-1" style="width:20px;height:20px;"></span>
+                                    Dispatched: {{ $dispatchedCount }}
+                                </span>
+                                <span class="badge rounded-pill bg-light text-dark me-2" style="font-size: 1.1rem;">
+                                    <span class="onsite-bg rounded-circle d-inline-block me-1" style="width:20px;height:20px;"></span>
+                                    On-Site: {{ $onsiteCount }}
+                                </span>
+                                <span class="badge rounded-pill bg-light text-dark me-2" style="font-size: 1.1rem;">
+                                    <span class="completed-bg rounded-circle d-inline-block me-1" style="width:20px;height:20px;"></span>
+                                    Completed: {{ $completedCount }}
+                                </span>
+                                <span class="badge rounded-pill bg-light text-dark me-2" style="font-size: 1.1rem;">
+                                    <span class="incomplete-bg rounded-circle d-inline-block me-1" style="width:20px;height:20px;"></span>
+                                    Incomplete: {{ $incompleteCount }}
+                                </span>
                             </div>
 
                             <div class="text-center bg-secondary p-1 mt-2">
