@@ -1,0 +1,189 @@
+/* Hero section with background image */
+.aboutus-hero {
+  position: relative;
+  height: 80vh;
+  background-image: url('/images/contact-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutus-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Adjust darkness here */
+  z-index: 1;
+}
+
+
+/* Make header transparent */
+.aboutus-hero > header {
+  background-color: transparent;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+/* Hero content */
+.aboutus-hero-content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  z-index: 2;
+  padding: 0 2rem;
+ 
+}
+
+.aboutus-hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  padding-top: 190px;
+}
+
+.aboutus-hero-content p {
+  font-size: 1.0rem;
+  max-width: 700px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Main container */
+.aboutus-container {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fc;
+  color: #333;
+  padding: 4rem 0;
+}
+
+/* Loading state */
+.loading {
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* Main content */
+.aboutus-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Cards */
+.aboutus-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.aboutus-card:hover {
+  transform: translateY(-5px);
+}
+
+.aboutus-card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  color: #1a1a1a;
+}
+
+.aboutus-card p,
+.aboutus-card ul {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.aboutus-card ul {
+  padding-left: 1.5rem;
+}
+
+.aboutus-card ul li {
+  margin-bottom: 0.6rem;
+}
+
+/* Links */
+.aboutus-link {
+  color: #e60000;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.aboutus-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .aboutus-hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .aboutus-hero-content p {
+    font-size: 1.1rem;
+  }
+
+  .aboutus-main {
+    padding: 0 1.5rem;
+  }
+
+  .aboutus-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .aboutus-hero {
+    height: 50vh;
+  }
+  
+  .aboutus-hero-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .aboutus-hero-content p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .aboutus-hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .aboutus-hero-content p {
+    font-size: 0.95rem;
+  }
+
+  .aboutus-main {
+    padding: 0 1rem;
+  }
+
+  .aboutus-card {
+    padding: 1.2rem;
+  }
+
+  .aboutus-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .aboutus-card p,
+  .aboutus-card ul {
+    font-size: 0.95rem;
+  }
+}

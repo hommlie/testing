@@ -1,0 +1,129 @@
+.industry-navbar-container {
+  background: linear-gradient(135deg, #1a3a5f, #2a5885);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: static;
+  top: 120px;
+  z-index: 50;
+  width: calc(95% - 60px);
+  margin: 0 auto;           /* center */
+  border-radius: 10px;
+}
+
+.industry-navbar-content {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.industry-category-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 15px 20px 15px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  margin-right: 20px;
+}
+
+.industry-links-container {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.industry-links-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.industry-links-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.industry-link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  margin: 0 4px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.industry-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.industry-link.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 600;
+}
+
+.industry-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f8d347;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .industry-navbar-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 15px;
+  }
+
+  .industry-category-title {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-right: 0;
+    margin-bottom: 10px;
+    padding: 12px 0;
+    width: 100%;
+  }
+
+  .industry-links-container {
+    width: 100%;
+    padding: 8px 0 12px;
+  }
+
+  .industry-link {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  .industry-link.active::after {
+    bottom: -8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .industry-navbar-container {
+    top: 100px;
+  }
+
+  .industry-category-title {
+    font-size: 1rem;
+  }
+
+  .industry-link {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
+}

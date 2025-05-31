@@ -1,0 +1,290 @@
+.smart-features-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  margin: 2rem auto;
+  max-width: 1230px;
+  position: relative;
+  overflow: hidden;
+}
+
+.smart-features-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: #2d3748;
+  position: relative;
+  display: inline-block;
+  line-height: 1.3;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+}
+
+.smart-features-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}
+
+.smart-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+
+.smart-feature-card {
+  background: white;
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.smart-feature-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.smart-feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.smart-feature-card:hover::before {
+  height: 5px;
+}
+
+.smart-feature-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.smart-feature-card:hover img {
+  transform: scale(1.1);
+}
+
+.smart-feature-card p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin: 0;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: color 0.2s ease;
+}
+
+.smart-feature-card:hover p {
+  color: #2d3748;
+}
+
+/* Modal Styles */
+.smart-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.smart-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.smart-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.smart-modal-close:hover {
+  color: #2d3748;
+}
+
+.smart-modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.smart-modal-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.smart-modal-header h3 {
+  font-size: 1.8rem;
+  color: #2d3748;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.smart-modal-body {
+  text-align: left;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.smart-modal-body p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.smart-feature-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.smart-feature-list li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.smart-feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+}
+
+/* Tablet view (768px and below) */
+@media (max-width: 768px) {
+  .smart-features-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .smart-features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .smart-feature-card {
+    padding: 1.2rem 0.8rem;
+  }
+
+  .smart-feature-card img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .smart-modal-content {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .smart-modal-header h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile view (480px and below) */
+@media (max-width: 480px) {
+  .smart-features-section {
+    padding: 2.5rem 1rem;
+    border-radius: 12px;
+  }
+
+  .smart-features-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .smart-features-section h2::after {
+    width: 50px;
+    bottom: -8px;
+  }
+
+  .smart-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .smart-feature-card {
+    padding: 1rem 0.5rem;
+  }
+
+  .smart-feature-card img {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 0.75rem;
+  }
+
+  .smart-feature-card p {
+    font-size: 0.9rem;
+  }
+
+  .smart-modal-content {
+    padding: 1.25rem;
+  }
+
+  .smart-modal-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .smart-modal-body p {
+    font-size: 1rem;
+  }
+}

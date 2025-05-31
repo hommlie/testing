@@ -1,0 +1,215 @@
+/* Hero Section with Background Image */
+.contactus-hero {
+  position: relative;
+  height: 80vh;
+  background-image: url('/images/contactus.png') ;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+}
+
+.contactus-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* Adjust darkness here */
+  z-index: 1;
+}
+
+
+/* Make header transparent */
+.contactus-hero > header {
+  background-color: transparent;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+/* Hero Content */
+.contactus-hero-content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  z-index: 2;
+  padding: 0 2rem;
+ 
+}
+
+.contactus-hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  padding-top: 170px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.contactus-hero-content p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Container */
+.contactus-container {
+  font-family: 'Segoe UI', sans-serif;
+  padding: 4rem 2rem;
+  background-color: #f7f9fc;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Main Content */
+.contactus-content {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Form Section */
+.contactus-form-section {
+  flex: 1;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.contactus-form-section h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.contactus-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.contactus-form-group input,
+.contactus-form-group textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #fefefe;
+  transition: border-color 0.3s ease;
+}
+
+.contactus-form-group input:focus,
+.contactus-form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  background: #ffffff;
+}
+
+.contactus-submit-btn {
+  padding: 0.9rem;
+  background-color: #e60000;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.contactus-submit-btn:hover {
+  background-color: #c40000;
+}
+
+/* Info Section */
+.contactus-info-section {
+  flex: 1;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.contactus-info-section h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.contactus-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contactus-info-list li {
+  margin-bottom: 1rem;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+/* Links */
+.contactus-link {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contactus-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Map Section */
+.contactus-map {
+  margin-top: 30px;
+}
+
+.map-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+}
+
+.map-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contactus-hero {
+    height: 50vh;
+  }
+  
+  .contactus-hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .contactus-content {
+    flex-direction: column;
+  padding: 2rem 1rem;
+  }
+
+  .contactus-form-section,
+  .contactus-info-section {
+    width: 100%;
+  }
+}

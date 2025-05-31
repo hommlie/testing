@@ -1,0 +1,69 @@
+.pestfaq-container {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-family: "Helvetica", Arial, sans-serif;
+}
+
+.pestfaq-heading {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.pestfaq-subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.pestfaq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pestfaq-item {
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #d1dce3;
+  transition: all 0.3s ease-in-out;
+}
+
+.pestfaq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pestfaq-icon {
+  font-size: 1.5rem;
+}
+
+.pestfaq-answer {
+  max-height: 0;
+  overflow: hidden;
+  background: #f7f9fa;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+.pestfaq-item.active .pestfaq-answer {
+  max-height: 500px;
+  padding: 1rem;
+}
+
+.pestfaq-answer p {
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}

@@ -1,0 +1,298 @@
+/* Navbar.css */
+:root {
+  --primary-color: #00a57d;
+  --primary-hover: #008c6a;
+  --text-color: #333;
+  --light-text: #666;
+  --border-color: #eee;
+  --bg-color: #fff;
+  --light-bg: #f5f5f5;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Mobile Navbar */
+.mobile-navbar {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--bg-color);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+}
+
+.navbar-logo img {
+  height: 2.5rem;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-icon-container {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--light-bg);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.user-icon-container:hover {
+  background: #e0e0e0;
+}
+
+.user-icon {
+  font-size: 1.125rem;
+  color: var(--text-color);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 3.125rem;
+  right: 0;
+  background: var(--bg-color);
+  border-radius: 0.75rem;
+  width: 11.25rem;
+  box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+  padding: 0.625rem 0;
+  z-index: 1001;
+  border: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f8f8f8;
+  color: var(--primary-color);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.3125rem 0;
+}
+
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.5rem 0.9375rem;
+  border-radius: 1.875rem;
+}
+
+.nav-icon, .menu-toggle {
+  font-size: 1.125rem;
+  color: var(--text-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 4.375rem;
+  left: 0;
+  right: 0;
+  background: var(--bg-color);
+  padding: 0.625rem 0;
+  box-shadow: 0 0.3125rem 0.625rem rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.menu-item {
+  display: block;
+  padding: 0.9375rem 1.5625rem;
+  color: var(--text-color);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+}
+
+.submenu {
+  padding: 1rem;
+  background: #f9f9f9;
+}
+
+.submenu-header {
+  margin-bottom: 1rem;
+}
+
+.submenu-header h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.submenu-header p {
+  font-size: 0.875rem;
+  color: var(--light-text);
+  margin-bottom: 0.75rem;
+}
+
+.submenu-link {
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.submenu-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.submenu-item {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: var(--transition);
+}
+
+.submenu-item:hover {
+  background: var(--border-color);
+}
+
+/* Auth Modals */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-backdrop {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.auth-modal {
+  position: relative;
+  width: 90%;
+  max-width: 22rem;
+  background: var(--bg-color);
+  border-radius: 1rem;
+  padding: 1.875rem 1.5625rem;
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.2);
+  z-index: 10001;
+}
+
+.auth-modal h2 {
+  font-size: 1.375rem;
+  margin-bottom: 1.5625rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--light-text);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 0.9375rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  transition: var(--transition);
+}
+
+.form-group input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 0.625rem;
+}
+
+.auth-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--light-text);
+}
+
+.auth-toggle span {
+  color: var(--primary-color);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: var(--light-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--text-color);
+  transform: scale(1.1);
+}
+
+/* Show only on mobile */
+@media (max-width: 786px) {
+  .mobile-navbar {
+    display: flex;
+  }
+}

@@ -1,0 +1,131 @@
+.slider-wrapper {
+  background: linear-gradient(135deg, #1a3a5f, #2a5885);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 130px);
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.slider-inner {
+  display: flex;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.slider-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 15px 20px 15px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  margin-right: 20px;
+}
+
+.slider-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.slider-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.slider-track {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-link {
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  margin: 0 6px;
+  border-radius: 22px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.slider-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.slider-link.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 600;
+}
+
+.slider-link.active::after {
+  display: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .slider-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 15px;
+  }
+
+  .slider-btn {
+    display: none;
+  }
+
+  .slider-title {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-right: 0;
+    margin-bottom: 10px;
+    padding: 12px 0;
+    width: 100%;
+  }
+
+  .slider-track {
+    width: 100%;
+    padding: 8px 0 12px;
+  }
+
+  .slider-link {
+    font-size: 1rem;
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-title {
+    font-size: 1rem;
+  }
+
+  .slider-link {
+    font-size: 0.95rem;
+    padding: 6px 12px;
+  }
+}

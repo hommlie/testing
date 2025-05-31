@@ -1,0 +1,123 @@
+.faq-container {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-family: "Helvetica", Arial, sans-serif;
+}
+
+.headc{
+  background-color: #2b2b2b;
+}
+
+.faq-container h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.faq-subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #d1dce3;
+  transition: all 0.3s ease-in-out;
+}
+
+.faq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  background: #f7f9fa;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 500px;
+  padding: 1rem;
+}
+
+.faq-answer p {
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+.termite-faq-contact {
+  background: #e0f2f1;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.termite-faq-contact h2 {
+  font-size: 2rem;
+  color: #00695c;
+  margin-bottom: 10px;
+}
+
+.termite-faq-contact p {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.termite-faq-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.termite-faq-btn {
+  padding: 12px 22px;
+  font-size: 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: background 0.3s ease;
+}
+
+.termite-faq-btn.call {
+  background-color: #00796b;
+}
+
+.termite-faq-btn.call:hover {
+  background-color: #004d40;
+}
+
+.termite-faq-btn.email {
+  background-color: #009688;
+}
+
+.termite-faq-btn.email:hover {
+  background-color: #00796b;
+}

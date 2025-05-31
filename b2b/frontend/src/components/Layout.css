@@ -1,0 +1,7 @@
+/* src/components/Layout.css */
+.global-container {
+  max-width: 1440px; /* or 1440px based on your design */
+  margin: 0 auto;
+  padding: 0 0px; /* horizontal spacing */
+  box-sizing: border-box;
+}

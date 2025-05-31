@@ -1,0 +1,275 @@
+/* Termite Barriers Page CSS */
+
+.termite-container {
+  max-width: 1170px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.6;
+}
+
+.termite-section-title {
+  color: #E65100;
+  font-weight: 600;
+  font-size: 28px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.termite-section-title.center {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+
+.termite-section-title .icon {
+  margin-right: 15px;
+  font-size: 24px;
+}
+
+.termite-section-description {
+  margin-bottom: 30px;
+  font-size: 18px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+
+.termite-hero-section {
+  background: url('/images/termitebarrier.png') no-repeat center center;
+  background-size: cover;
+  padding: 100px 20px;
+  text-align: center;
+  position: relative;
+  color: white;
+  margin-top: -80px;
+  padding-top: 100px;
+}
+
+.termite-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+.termite-hero-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.termite-hero-text h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.termite-hero-description {
+  font-size: 18px;
+  color: white;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.termite-contact-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.termite-contact-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.termite-contact-button svg {
+  margin-right: 8px;
+}
+
+.termite-contact-button.phone {
+  background-color: #244b73;
+  color: white;
+}
+
+.termite-contact-button.whatsapp {
+  background-color: #25D366;
+  color: white;
+}
+
+.termite-contact-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.termite-warning-section {
+  background-color: #F8F5F0;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-left: 5px solid #E65100;
+}
+
+.termite-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.termite-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.termite-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.termite-card-title {
+  color: #D84315;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.termite-card-title .icon {
+  margin-right: 10px;
+}
+
+.termite-checklist {
+  list-style: none;
+  padding: 0;
+}
+
+.termite-checklist li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.termite-check-icon {
+  color: #2E7D32;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.termite-cta-section {
+  text-align: center;
+  background-color: #F8F5F0;
+  padding: 40px;
+  border-radius: 8px;
+  margin: 60px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid white;
+}
+
+.termite-cta-title {
+  color: #E65100;
+  font-weight: 700;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.termite-cta-description {
+  font-size: 18px;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.termite-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.termite-cta-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 15px 30px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.termite-cta-button svg {
+  margin-right: 10px;
+}
+
+.termite-cta-button.primary {
+  background-color: #2E7D32;
+  color: white;
+}
+
+.termite-cta-button.primary:hover {
+  background-color: #1B5E20;
+}
+
+.termite-cta-button.secondary {
+  border: 2px solid #E65100;
+  color: #E65100;
+  background: transparent;
+}
+
+.termite-cta-button.secondary:hover {
+  border-color: #BF360C;
+}
+
+.termite-cta-footer {
+  margin-top: 30px;
+  color: #616161;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .termite-section-title {
+    font-size: 24px;
+  }
+
+  .termite-hero-section {
+    padding: 80px 20px;
+  }
+
+  .termite-hero-text h1 {
+    font-size: 28px;
+  }
+
+  .termite-contact-buttons,
+  .termite-cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .termite-cta-button,
+  .termite-contact-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

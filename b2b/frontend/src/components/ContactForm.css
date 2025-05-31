@@ -1,0 +1,147 @@
+.hommlie-contact-section {
+    background: #f7fafc;
+    padding: 30px 0px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hommlie-contact-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.hommlie-contact-heading {
+    color: black;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 0.9px;
+}
+
+.hommlie-contact-subheading {
+    color: black;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.hommlie-contact-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hommlie-form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.hommlie-contact-form input,
+.hommlie-contact-form select {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.hommlie-contact-form input:focus,
+.hommlie-contact-form select:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    background-color: white;
+}
+
+.hommlie-contact-form select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-right: 50px;
+}
+
+.hommlie-submit-btn {
+    background-color: #ffffff;
+    color: #1a2a6c;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    padding: 16px 30px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+}
+
+.hommlie-submit-btn:hover {
+    background-color: #cc0000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+.hommlie-submit-btn:active {
+    transform: translateY(0);
+}
+
+.hommlie-loading {
+    color: white;
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .hommlie-contact-section {
+        padding: 60px 15px;
+    }
+
+    .hommlie-contact-heading {
+        font-size: 1.8rem;
+    }
+
+    .hommlie-contact-subheading {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
+    .hommlie-contact-form {
+        flex-direction: column;
+        gap: 15px;
+        padding: 25px;
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .hommlie-form-group {
+        width: 100%;
+    }
+
+    .hommlie-contact-form input,
+    .hommlie-contact-form select {
+        padding: 14px 16px;
+        font-size: 0.95rem;
+    }
+
+    .hommlie-submit-btn {
+        width: 100%;
+        padding: 14px 20px;
+    }
+}

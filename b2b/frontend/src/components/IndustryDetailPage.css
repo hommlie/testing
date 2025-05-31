@@ -1,0 +1,446 @@
+/* IndustryDetailPage.css */
+.industry-detail-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Loading and Error States */
+.industry-detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #2989d8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.industry-detail-not-found {
+  padding: 2rem;
+  text-align: center;
+}
+
+.industry-detail-not-found h2 {
+  color: #d9534f;
+  margin-bottom: 0.5rem;
+}
+
+/* Hero Section */
+.industry-detail-hero {
+  height: auto;
+  min-height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -80px;
+  padding: 100px 0 60px;
+  position: relative;
+  z-index: 0;
+}
+
+.industry-detail-hero-content {
+  max-width: 1200px;
+  width: 90%;
+  padding: 1.5rem;
+  text-align: center;
+  color: white;
+}
+
+.industry-detail-header {
+  margin-bottom: 2rem;
+}
+
+.industry-detail-main-title {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.industry-detail-sub-title {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  margin-bottom: 1rem;
+  font-weight: 300;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.industry-detail-description {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 0 1rem;
+}
+
+/* Slider Container */
+.industry-detail-slider-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto 2rem;
+  width: 100%;
+  touch-action: pan-y;
+}
+
+.industry-detail-slider-wrapper {
+  overflow: hidden;
+  margin: 0 40px;
+}
+
+.industry-detail-slider-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.industry-detail-slider-slide {
+  flex: 0 0 auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* Quick Link Cards */
+.industry-detail-quick-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 0.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  height: 100%;
+  min-height: 120px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+  width: 100%;
+  outline: none;
+}
+
+.industry-detail-quick-link:active {
+  transform: scale(0.98);
+}
+
+.industry-detail-quick-link:focus-visible {
+  outline: 2px solid #2989d8;
+  outline-offset: 2px;
+}
+
+.industry-detail-link-icon {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  margin-bottom: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.industry-detail-link-text {
+  font-size: clamp(0.8rem, 3vw, 1rem);
+  transition: color 0.3s ease;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Navigation Arrows */
+.industry-detail-slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  outline: none;
+}
+
+.industry-detail-slider-arrow:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.industry-detail-slider-arrow:focus-visible {
+  outline: 2px solid white;
+}
+
+.industry-detail-slider-arrow:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.industry-detail-slider-prev { left: 0; }
+.industry-detail-slider-next { right: 0; }
+
+/* Dots Navigation */
+.industry-detail-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.industry-detail-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.industry-detail-dot:focus-visible {
+  outline: 2px solid white;
+}
+
+.industry-detail-dot-active {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Content Section */
+.industry-detail-content-section {
+  padding: 2rem 1rem;
+  background: #f9f9f9;
+}
+
+.industry-detail-container {
+  max-width: 1135px;
+  margin: 0 auto;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.industry-detail-title {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: #1e5799;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.industry-detail-full-description {
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+/* Features Grid */
+.industry-detail-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.industry-detail-feature-box {
+  background: #f0f7ff;
+  padding: 1.2rem;
+  border-radius: 8px;
+  border-left: 4px solid #2989d8;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.industry-detail-feature-box:active {
+  transform: translateY(2px);
+}
+
+.industry-detail-feature-title {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: #1e5799;
+  margin-bottom: 0.5rem;
+}
+
+.industry-detail-feature-text {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  color: #555;
+}
+
+/* Link Content */
+.industry-detail-link-content {
+  animation: fadeIn 0.5s ease;
+}
+
+.industry-detail-back-button {
+  background: none;
+  border: none;
+  color: #2989d8;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+  outline: none;
+}
+
+.industry-detail-back-button:focus-visible {
+  text-decoration: underline;
+}
+
+.industry-detail-additional-info {
+  background: #f8f8f8;
+  padding: 1.2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  border-left: 4px solid #ccc;
+  font-style: italic;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Breakpoints */
+@media (max-width: 768px) {
+  .industry-detail-hero {
+    min-height: 450px;
+    padding: 90px 0 50px;
+  }
+
+  .industry-detail-slider-wrapper {
+    margin: 0 30px;
+  }
+
+  .industry-detail-quick-link {
+    min-height: 110px;
+    padding: 1rem 0.5rem;
+  }
+
+  .industry-detail-slider-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .industry-detail-hero {
+    padding: 80px 0 40px;
+  }
+
+  .industry-detail-slider-wrapper {
+    margin: 0 25px;
+  }
+
+  .industry-detail-quick-link {
+    min-height: 100px;
+  }
+
+  .industry-detail-slider-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .industry-detail-hero {
+    padding: 70px 0 30px;
+    min-height: 400px;
+  }
+
+  .industry-detail-main-title {
+    margin-bottom: 0.8rem;
+  }
+
+  .industry-detail-sub-title {
+    margin-bottom: 0.8rem;
+  }
+
+  .industry-detail-description {
+    margin-bottom: 1.5rem;
+  }
+
+  .industry-detail-slider-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .industry-detail-slider-wrapper {
+    margin: 0 20px;
+  }
+
+  .industry-detail-slider-slide {
+    padding: 0 5px;
+  }
+
+  .industry-detail-quick-link {
+    min-height: 90px;
+    padding: 0.8rem 0.3rem;
+    border-radius: 10px;
+  }
+
+  .industry-detail-slider-arrow {
+    width: 28px;
+    height: 28px;
+  }
+
+  .industry-detail-slider-dots {
+    margin-top: 0.8rem;
+  }
+
+  .industry-detail-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .industry-detail-container {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .industry-detail-hero {
+    padding: 60px 0 25px;
+  }
+
+  .industry-detail-quick-link {
+    min-height: 80px;
+  }
+
+  .industry-detail-slider-arrow {
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+  }
+}
+

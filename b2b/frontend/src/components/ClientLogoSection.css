@@ -1,0 +1,113 @@
+.client-logo-section {
+  padding: 3rem 1rem;
+  background-color: #f9f9f9;
+  font-family: "Helvetica", Arial, sans-serif;
+}
+
+.section-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  font-family: "Helvetica", Arial, sans-serif;
+}
+
+.join-text {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  font-weight: 600;
+  color: #333;
+  font-family: "Helvetica", Arial, sans-serif;
+}
+
+.fixed-logo-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.logo-card {
+  width: 200px;
+  height: 120px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.logo-card img {
+  max-height: 70px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.logo-card:hover {
+  transform: scale(1.05);
+}
+
+/* Scrolling Row */
+.scrolling-logo-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.scrolling-logo-track {
+  display: flex;
+  gap: 2rem;
+  animation: scroll-horizontal 30s linear infinite;
+  width: max-content;
+}
+
+.logo-card.small {
+  width: 140px;
+  height: 100px;
+}
+
+.logo-card.small img {
+  max-height: 60px;
+}
+
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-card {
+    width: 140px;
+    height: 90px;
+  }
+
+  .logo-card img {
+    max-height: 50px;
+  }
+
+  .logo-card.small {
+    width: 100px;
+    height: 80px;
+  }
+
+  .logo-card.small img {
+    max-height: 40px;
+  }
+
+  .fixed-logo-row {
+    gap: 1.5rem;
+  }
+
+  .scrolling-logo-track {
+    gap: 1.5rem;
+  }
+}
