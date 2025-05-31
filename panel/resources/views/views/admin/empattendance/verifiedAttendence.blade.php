@@ -54,7 +54,6 @@
                                 </div>
                             </form>
 
-                            
                         </div>
                         
                         <div class="card-body collapse show">
@@ -65,7 +64,7 @@
                                     <button class="btn btn-sm btn-outline-success round-pill mx-2" id="filter_week">This Week</button>
                                     <button class="btn btn-sm btn-outline-success round-pill mx-2" id="filter_month">This Month</button>
                                     <button class="btn btn-sm btn-outline-success round-pill mx-2" id="filter_custom">Custom Date</button>
-                                    <a href="empattendance" class="btn btn-sm btn-outline-success round-pill mx-2" id="filter_reset">Reset Filter</a>
+                                    <a href="verifiedAttendence" class="btn btn-sm btn-outline-success round-pill mx-2" id="filter_reset">Reset Filter</a>
                                 </div>
 
                                 <div id="custom_date_filter" style="display:none;">
@@ -76,17 +75,16 @@
                                     <button class="btn btn-raised btn-outline-success round btn-min-width" id="apply_custom_date">Apply</button>
                                 </div>
                                 <br>
-                                <table id="data_table_bootstrap" class="table table-striped table-bordered zero-configuration datatable">
 
+                                <table id="data_table_bootstrap" class="table table-striped table-bordered zero-configuration datatable">
                                     <thead>
                                         <tr>
                                             <th class="d-none"></th>
                                             <th>#</th>
                                             <th>{{ trans('Employee') }}</th>
-                                            <th>{{ trans('Login At') }}</th>
-                                            <th>{{ trans('Logout At') }}</th>
-                                            <th>{{ trans('Distance Travelled') }}</th>
                                             <th>{{ trans('Date') }}</th>
+                                            <th>{{ trans('Total Time') }}</th>
+                                            <th>{{ trans('Total Distance') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody> 
@@ -96,12 +94,9 @@
                                             <th class="d-none"></th>
                                             <td>{{ ++$n }}</td>
                                             <td> {{$row->emp_name}}</td>
-                                            <td> {{$row->login_at}}</td>
-                                            <td> {{$row->logout_at ? $row->logout_at : 'NULL'}}</td>
-                                            <td> {{$row->distance_travelled ? $row->distance_travelled : 'NULL'}}</td>
-                                            <td>{{ \Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
-
-
+                                            <td> {{$row->date}}</td>
+                                            <td> {{$row->totaltime}}</td>
+                                            <td> {{ $row->totaldistance ? number_format($row->totaldistance / 1000, 2) . ' km' : 'NULL' }}</td>
                                         </tr>
                                         @endforeach
                                 </tbody>

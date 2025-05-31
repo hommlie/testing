@@ -48,6 +48,7 @@
     #toast-container>.toast-info {
         background-color: #2563eb;
     }
+   
 </style>
 @section('title')
 @endsection
@@ -90,11 +91,10 @@
                             <h4 class="card-title mb-0 mr-3">{{ trans('Add Order') }}</h4>
 
                             <!-- ADD RESIDENTIAL ORDER SELECT MENU -->
-                            <div class="col-md-7">
-                                <select id="addResidentialOrder" class="form-select col-md-3 mb-0 border-0 mr-3"
+                            <div class="col-md-5">
+                                <select style="display: none" id="addResidentialOrder" class="form-select col-md-3 mb-0 border-0 mr-3"
                                     aria-label="Select Order">
                                     <option value="" disabled selected>- Select an Order -</option>
-
                                 </select>
                             </div>
 
@@ -134,8 +134,13 @@
                                 {{-- By default, this section is hidden. If you Select the "Add Residential Order" button,
                                 the section will be displayed. --}}
                                 {{-- ADD Residential ORDER SECTION --}}
-                                <div id="addresorder">
-                                    <div class="row mb-3">
+                                <div class="card " id="addresorder">
+                                    <div  class="ml-3 mt-4">
+                                        <h5>Company Details</h2>
+                                    </div>
+
+                                    <div class="row mb-3 mt-3 ml-3 mr-3">
+                                        
                                         <div class="col-lg-4">
                                             {{-- SERVICE CENTER TYPE --}}
                                             <label for="serviceCenterType">Service Center Type</label>
@@ -246,321 +251,273 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{--NEW SECTION FOR CUSTOMER INFO --}}
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {{-- CUSTOMER TYPE --}}
-                                        <label for="customerType">Customer Type</label>
-                                        <select name="customerType" id="customerType" class="form-control">
-                                            <option value="" disabled selected>- Customer Type -</option>
-                                            <option value="newCustomer">New Customer</option>
-                                            <option value="existingCustomer">Existing Customer</option>
-                                        </select>
-                                        @error('customerType')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                        <br />
-                                    </div>
-                                    <div class="col-md-6">
-                                        {{-- BUSINESS LEAD --}}
-                                        <div id="businessLead">
-                                            <label for="businessLead">Business Lead</label>
-                                            <select name="businessLead" id="businessLeadDropdown" class="form-control">
-                                                <option value="" disabled selected>- Business Lead -</option>
-                                            </select>
-                                            @error('businessLead')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                            <br />
-                                            {{-- CUSTOMER ID --}}
-                                            <div id="customerInput" style="display:none;">
-                                                <div class="d-flex">
-                                                    <!-- <label for="customerInput">Customer ID</label> -->
-                                                    <input type="text" id="customerID" class="form-control"
-                                                        placeholder="Customer Mobile Number">
-                                                    <span id="costomerData"
-                                                        class="btn btn-outline-secondary ms-2">Search</span>
-                                                </div>
-                                                <span id="error-message"
-                                                    style="color: red; display: none; font-size:13px;">Mobile number must be
-                                                    exactly 10 digits.</span>
-                                                <br>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- <label for=""><u>Basic Details</u></label> -->
-                                <div class="row ">
-                                    <div class="col-lg-6">
-                                        <!-- CAREGORY -->
-
-                                        <label for="category">Category</label>
-                                        <select name="category" id="order_category" class="form-control">
-                                            <option value="">-Select Category-</option>
-                                            @foreach ($category as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('category'))
-                                            <span class="text-danger">{{ $errors->first('category') }}</span>
-                                        @endif
-                                        <br>
-
-                                        {{-- SUB-CATEGORY --}}
-
-                                        <label for="subcategory">Sub-Category</label>
-                                        <select name="subcategory" id="order_subcategory" class="form-control">
-                                            <option value="">-Select Sub-Category-</option>
-                                        </select>
-                                        @if ($errors->has('subcategory'))
-                                            <span class="text-danger">{{ $errors->first('subcategory') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- SERVICE --}}
-
-                                        <label for="service">Service</label>
-                                        <select name="service" id="order_service" class="form-control">
-                                            <option value="">-Select Service-</option>
-                                        </select>
-                                        @if ($errors->has('service'))
-                                            <span class="text-danger">{{ $errors->first('service') }}</span>
-                                        @endif
-
-                                        <br>
-                                        {{-- SERVICE TYPE --}}
-                                        <label for="variation">Variation</label>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <select name="attribute" id="attribute" class="form-control">
-                                                    <option value="">-Select Type-</option>
+                                <div class="card" id="customer-details">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Customer Details</h5>
+                                        <div class="row g-3">
+                                            <!-- Customer Type -->
+                                            <div class="col-lg-4">
+                                                <label for="customerType" class="form-label">Customer Type</label>
+                                                <select name="customerType" id="customerType" class="form-select">
+                                                    <option value="" disabled selected>- Customer Type -</option>
+                                                    <option value="newCustomer">New Customer</option>
+                                                    <option value="existingCustomer">Existing Customer</option>
                                                 </select>
-                                                @if ($errors->has('attribute'))
-                                                    <span class="text-danger">The Variation field is .</span>
-                                                @endif
                                             </div>
-                                            {{-- AREA --}}
-                                            <div class="col-lg-6">
-                                                <select name="order_service_area" id="order_service_area"
-                                                    class="form-control">
-                                                    <option value="">-Select Area-</option>
-                                                </select>
-                                                @if ($errors->has('variationsID'))
-                                                    <span class="text-danger">The field is .</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            {{-- VARIATION ID --}}
-                                            <input type="hidden" name="variationsID" id="variationsID" value="">
-                                            <div class="col-md-6">
-                                                <label for="">No. of Services </label>
-                                                <input type="text" name="srTime" placeholder="SR-No. of Services"
-                                                    id="srTime" readonly class="form-control" readonly="" />
-                                                @if ($errors->has('srTime'))
-                                                    <span class="text-danger">The No. of Services field is .</span>
-                                                @endif
-                                            </div>
-                                            {{-- SHEDULED EVERY DAY --}}
-                                            <div class="col-md-6">
-                                                <label for="">Scheduled every </label>
-                                                <input type="text" name="srInterval" placeholder="SR-Scheduled every"
-                                                    id="srInterval" readonly class="form-control" readonly="" />
-                                                @if ($errors->has('srInterval'))
-                                                    <span class="text-danger">The Scheduled every field is .</span>
-                                                @endif
-                                            </div>
-                                        </div><br>
-                                        <div class="row">
-                                            {{-- SELECT QUANTITY --}}
+                                        
                                             <div class="col-md-4">
-                                                <label for="">Select Quantity </label>
-                                                <span class="border rounded  form-control">
-                                                    <span class="px-2 ms-4 bg-light decrement"
-                                                        style="cursor: pointer;">-</span>
-                                                    <span class="p-2 ms-3 quantity-value">1</span>
-                                                    <span class="px-2 ms-3 bg-light increment"
-                                                        style="cursor: pointer;">+</span>
-                                                </span>
-                                            </div>
-                                            <div class="col-md-8">
-                                                {{-- COUPONS --}}
-                                                <label for="coupons">Coupons</label>
-                                                <select name="coupons" id="coupons" class="form-control">
-                                                    <option value="">- Coupons -</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        {{-- PRICE --}}
-                                        <label for="price">Price (Without GST)</label>
-                                        <input type="text" name="price" placeholder="Price" id="order_price" readonly
-                                            class="form-control" />
-                                        @if ($errors->has('price'))
-                                            <span class="text-danger">{{ $errors->first('price') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- CONTRACT START DATE --}}
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <label for="desired_date">Contract Start Date</label>
-                                                <input type="date" name="desired_date" placeholder="desired_date"
-                                                    id="desired_date" class="form-control" />
-                                                @if ($errors->has('desired_date'))
-                                                    <span class="text-danger">{{ $errors->first('desired_date') }}</span>
-                                                @endif
-                                            </div>
-                                            {{-- TIME --}}
-                                            <div class="col-lg-6">
-                                                <label for="desired_time"> Time</label>
-                                                <input type="time" name="desired_time" placeholder="desired_time"
-                                                    id="desired_time" class="form-control" />
-                                                @if ($errors->has('desired_time'))
-                                                    <span class="text-danger">{{ $errors->first('desired_time') }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        {{-- COSTOMER NAME --}}
-                                        <label for="fullname">Customer Name</label>
-                                        <input type="text" name="fullname" placeholder="Enter Customer name" id="fullname"
-                                            class="form-control" />
-                                        @if ($errors->has('fullname'))
-                                            <span class="text-danger">{{ $errors->first('fullname') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- EMAIL --}}
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" placeholder="Enter Customer email" id="email"
-                                            class="form-control" />
-                                        @if ($errors->has('email'))
-                                            <span class="text-danger">{{ $errors->first('email') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- MOBILE NUMBER--}}
-                                        <label for="mobile">Mobile Number</label>
-                                        <input type="text" name="mobile" placeholder="Enter Customer mobile Number"
-                                            id="mobile" class="form-control" />
-                                        @if ($errors->has('mobile'))
-                                            <span class="text-danger">{{ $errors->first('mobile') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- LANDMARK --}}
-                                        <label for="landmark">Landmark</label>
-                                        <input type="text" name="landmark" placeholder="Enter Customer landmark"
-                                            id="landmark" class="form-control" />
-                                        @if ($errors->has('landmark'))
-                                            <span class="text-danger">{{ $errors->first('landmark') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- ADDRESS --}}
-                                        <label for="address">Address</label>
-                                        <input type="text" name="address" placeholder="Enter Customer address" id="address"
-                                            class="form-control" />
-                                        @if ($errors->has('address'))
-                                            <span class="text-danger">{{ $errors->first('address') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- PINCODE --}}
-                                        <label for="pincode">Pincode</label>
-                                        <input type="number" name="pincode" placeholder="Enter Customer pincode"
-                                            id="pincode" class="form-control" />
-                                        @if ($errors->has('pincode'))
-                                            <span class="text-danger">{{ $errors->first('pincode') }}</span>
-                                        @endif
-                                        <br>
-                                        {{-- LATLONG --}}
-                                        {{-- MAP MODE --}}
-                                        <div class="modal fade" id="mapModal" tabindex="-1" role="dialog"
-                                            aria-labelledby="mapModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-
-                                                        <h4>Search Location</h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                                <div id="businessLead">
+                                                    <label for="businessLead">Business Lead</label>
+                                                    <select name="businessLead" id="businessLeadDropdown" class="form-control">
+                                                        <option value="" disabled selected>- Business Lead -</option>
+                                                    </select>
+                                                    {{-- CUSTOMER ID --}}
+                                                    <div id="customerInput" style="display:none;">
+                                                        <div class="d-flex">
+                                                            <input type="text" id="customerID" class="form-control"
+                                                                placeholder="Customer Mobile Number">
+                                                            <span id="costomerData"
+                                                                class="btn btn-outline-secondary ms-2">Search</span>
+                                                        </div>
+                                                        <span id="error-message"
+                                                            style="color: red; display: none; font-size:13px;">Mobile number must be
+                                                            exactly 10 digits.</span>
+                                                        <br>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <input id="pac-input" class="controls form-control rounded-0"
-                                                            type="text" placeholder="Search Box">
-                                                        <div class="col-lg-12">
-
-                                                            <div id="map-canvas" style="height: 500px; width:100%;"></div>
-                                                            <div id="info"></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Customer Name -->
+                                            <div class="col-lg-4">
+                                                <label for="fullname" class="form-label">Customer Name</label>
+                                                <input type="text" name="fullname" id="fullname" class="form-control" placeholder="Enter Customer Name">
+                                                @error('fullname') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Email -->
+                                            <div class="col-lg-4">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email">
+                                                @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Mobile -->
+                                            <div class="col-lg-4">
+                                                <label for="mobile" class="form-label">Mobile Number</label>
+                                                <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Mobile Number">
+                                                @error('mobile') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Landmark -->
+                                            <div class="col-lg-4">
+                                                <label for="landmark" class="form-label">Landmark</label>
+                                                <input type="text" name="landmark" id="landmark" class="form-control" placeholder="Enter Landmark">
+                                                @error('landmark') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Address -->
+                                            <div class="col-lg-4">
+                                                <label for="address" class="form-label">Address</label>
+                                                <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address">
+                                                @error('address') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Pincode -->
+                                            <div class="col-lg-4">
+                                                <label for="pincode" class="form-label">Pincode</label>
+                                                <input type="number" name="pincode" id="pincode" class="form-control" placeholder="Enter Pincode">
+                                                @error('pincode') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- House / Flat Number -->
+                                            <div class="col-lg-4">
+                                                <label for="houseNo" class="form-label">House / Flat Number</label>
+                                                <input type="text" name="houseNo" id="houseNo" class="form-control" placeholder="Enter Flat Number">
+                                                @error('houseNo') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                                {{-- MAP MODE --}}
+                                            <div class="modal fade" id="mapModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="mapModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4>Search Location</h4>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <input id="pac-input" class="controls form-control rounded-0"
+                                                                type="text" placeholder="Search Box">
+                                                            <div class="col-lg-12">
+                                                                <div id="map-canvas" style="height: 500px; width:100%;"></div>
+                                                                <div id="info"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div id="latlong" class="mr-auto"></div>
+                                                            <button type="button" class="btn btn-primary rounded-0"
+                                                                id="save-location">Save</button>
                                                         </div>
                                                     </div>
-                                                    <div class="modal-footer">
-
-                                                        <div id="latlong" class="mr-auto"></div>
-
-                                                        <button type="button" class="btn btn-primary rounded-0"
-                                                            id="save-location">Save</button>
-                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        {{--NEW SECTION --}}
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="">House / Flat Number</label>
-                                                <input type="text" name="houseNo" id="houseNo" class="form-control"
-                                                    placeholder="Customer House / Flat Number">
-
-                                                @if ($errors->has('houseNo'))
-                                                    <span class="text-danger">{{ $errors->first('houseNo') }}</span>
-                                                @endif
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="latlong">Latlong</label>
-                                                <div class="d-flex">
-                                                <div class="col-md-3">
-                                                      <span id="latlong" class="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal" data-bs-target="#mapModal">Latlong</span>
+                                        
+                                            <!-- Latlong Button -->
+                                            <div class="col-lg-12">
+                                                <label class="form-label">Latlong</label>
+                                                <div class="d-flex align-items-center">
+                                                    <button type="button" class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#mapModal">Select Location</button>
+                                                    <input type="text" id="clatlon" name="clatlon" class="form-control" readonly>
                                                 </div>
-                                                <div class="col-md-9">
-                                                       <input type="text" id="clatlon" name="clatlon" class="form-control  ms-2"
-                                                        readonly><br />
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {{-- NEW SECTION --}}
-                                        <div class="row">
-                                            <div class="col-md-12 mt-4">
-                                                {{-- TECHNICIAN ASSIGN --}}
-                                                <label for="technicianAssign">Technician Assign</label>
-                                                <select name="technicianAssign" id="technicianAssign" class="form-control">
-                                                    <option value="" disabled selected>- Technician Assign -</option>
-                                                    @foreach ($employees as $employee)
-                                                        @if(!empty($employee->emp_name))
-                                                            <option value="{{ $employee->id }}">
-                                                                {{ $employee->emp_name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                </select><br />
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                                <br>
-                                <h4>Total Price : <b>0 /-</b> <small style="font-size:13px">(Inclusive of All Taxes)</small>
-                                </h4>
-                                <br>
-                                <input type="submit" value="Place Order" class="btn btn-success">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Services Details</h5>
+                                        <div class="row g-3">
+                                            <!-- Category -->
+                                            <div class="col-lg-4">
+                                                <label for="order_category" class="form-label">Category</label>
+                                                <select name="category" id="order_category" class="form-select">
+                                                    <option value="">-Select Category-</option>
+                                                    @foreach ($category as $cat)
+                                                        <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Sub-Category -->
+                                            <div class="col-lg-4">
+                                                <label for="order_subcategory" class="form-label">Sub-Category</label>
+                                                <select name="subcategory" id="order_subcategory" class="form-select">
+                                                    <option value="">-Select Sub-Category-</option>
+                                                </select>
+                                                @error('subcategory') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Service -->
+                                            <div class="col-lg-4">
+                                                <label for="order_service" class="form-label">Service</label>
+                                                <select name="service" id="order_service" class="form-select">
+                                                    <option value="">-Select Service-</option>
+                                                </select>
+                                                @error('service') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Variation -->
+                                            <div class="col-lg-4">
+                                                <label for="attribute" class="form-label">Variation</label>
+                                                <select name="attribute" id="attribute" class="form-select">
+                                                    <option value="">-Select Type-</option>
+                                                </select>
+                                                @error('attribute') <span class="text-danger">The Variation field is required.</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Area -->
+                                            <div class="col-lg-4">
+                                                <label for="order_service_area" class="form-label">Area</label>
+                                                <select name="order_service_area" id="order_service_area" class="form-select">
+                                                    <option value="">-Select Area-</option>
+                                                </select>
+                                                @error('variationsID') <span class="text-danger">The Area field is required.</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Hidden Variation ID -->
+                                            <input type="hidden" name="variationsID" id="variationsID" value="">
+                                        
+                                            <!-- No. of Services -->
+                                            <div class="col-lg-4">
+                                                <label for="srTime" class="form-label">No. of Services</label>
+                                                <input type="text" name="srTime" id="srTime" class="form-control" placeholder="SR-No. of Services" readonly>
+                                                @error('srTime') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Scheduled Every -->
+                                            <div class="col-lg-4">
+                                                <label for="srInterval" class="form-label">Scheduled Every</label>
+                                                <input type="text" name="srInterval" id="srInterval" class="form-control" placeholder="SR-Scheduled every" readonly>
+                                                @error('srInterval') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Quantity -->
+                                            <div class="col-lg-4">
+                                                <label class="form-label">Select Quantity</label>
+                                                <div class="d-flex align-items-center border rounded px-2 py-1">
+                                                    <span class="decrement px-3" style="cursor:pointer;">-</span>
+                                                    <span class="quantity-value px-3">1</span>
+                                                    <span class="increment px-3" style="cursor:pointer;">+</span>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Coupons -->
+                                            <div class="col-lg-4">
+                                                <label for="coupons" class="form-label">Coupons</label>
+                                                <select name="coupons" id="coupons" class="form-select">
+                                                    <option value="0">- Coupons -</option>
+                                                </select>
+                                            </div>
+                                        
+                                            <!-- Price -->
+                                            <div class="col-lg-4">
+                                                <label for="order_price" class="form-label">Price (Without GST)</label>
+                                                <input type="text" name="price" id="order_price" class="form-control" placeholder="Price" readonly>
+                                                @error('price') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Contract Start Date -->
+                                            <div class="col-lg-4">
+                                                <label for="desired_date" class="form-label">Contract Start Date</label>
+                                                <input type="date" name="desired_date" id="desired_date" class="form-control">
+                                                @error('desired_date') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Time -->
+                                            <div class="col-lg-4">
+                                                <label for="desired_time" class="form-label">Time</label>
+                                                <input type="time" name="desired_time" id="desired_time" class="form-control">
+                                                @error('desired_time') <span class="text-danger">{{ $message }}</span> @enderror
+                                            </div>
+                                        
+                                            <!-- Technician Assign -->
+                                            <div class="col-lg-12">
+                                                <label for="technicianAssign" class="form-label">Technician Assign</label>
+                                                <select name="technicianAssign" id="technicianAssign" class="form-select">
+                                                    <option value="" disabled selected>- Technician Assign -</option>
+                                                    @foreach ($employees as $employee)
+                                                        @if (!empty($employee->emp_name))
+                                                            <option value="{{ $employee->id }}">{{ $employee->emp_name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              <div class="card mt-3">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                                <h4 class="mb-0">
+                                                    Total Price: <b>0 /-</b>
+                                                    <small class="text-muted" style="font-size: 13px;">(Inclusive of All Taxes)</small>
+                                                </h4>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <input type="submit" value="Place Order" class="btn btn-success px-4 py-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                     </form>
                 </div>
             </div>
     </div>
-    </div>
+</div>
     </section>
     {{-- ADD BUSINESS SUB REGION MODEL--}}
     <div class="modal fade" id="addBusinesSub" tabindex="-1" aria-labelledby="addBusinessRegionModalLabel"
@@ -952,22 +909,22 @@
         accountTypeDropdown.addEventListener('change', function () {
             if (this.value === 'bulkBooking') {
                 accountSubTypeDropdown.innerHTML = `
-                                    <option value="" disabled selected>- Account Sub Type -</option>
-                                    <option value="Education & Institute">Education & Institute</option>
-                                    <option value="Flat / Housing Society">Flat / Housing Society</option>
-                                    <option value="Government">Government</option>
-                                    <option value="Housing Society">Housing Society</option>
-                                    <option value="Builder">Others</option>
-                                    <option value="VIP">VIP</option>
-                                    `;
+                    <option value="" disabled selected>- Account Sub Type -</option>
+                    <option value="Education & Institute">Education & Institute</option>
+                    <option value="Flat / Housing Society">Flat / Housing Society</option>
+                    <option value="Government">Government</option>
+                    <option value="Housing Society">Housing Society</option>
+                    <option value="Builder">Others</option>
+                    <option value="VIP">VIP</option>
+                    `;
             } else if (this.value === 'individual') {
                 accountSubTypeDropdown.innerHTML = `
-                                        <option value="Residential Order" selected>Residential Order</option>
-                                        `;
+                    <option value="Residential Order" selected>Residential Order</option>
+                    `;
             } else {
                 accountSubTypeDropdown.innerHTML = `
-                                        <option value="" disabled selected>- Account Sub Type -</option>
-                                        `;
+                    <option value="" disabled selected>- Account Sub Type -</option>
+                    `;
             }
         });
 
@@ -977,21 +934,21 @@
 
 
         const newCustomerOptions = `
-                                <option value="" disabled selected>- Business Lead -</option>
-                                <option value="exhibition">Exhibition</option>
-                                <option value="webLead">Web Lead</option>
-                                <option value="serviceLead">Service Lead</option>
-                                <option value="customerReferral">Customer Referral</option>
-                                <option value="coldCall">Cold Call</option>
-                                <option value="socialMedia">Social Media</option>
-                                <option value="whatsappChatBot">What's App Chat Bot</option>
-                                <option value="vendors">Vendors</option>
-                                <option value="others">Others</option>
-                                `;
+            <option value="" disabled selected>- Business Lead -</option>
+            <option value="exhibition">Exhibition</option>
+            <option value="webLead">Web Lead</option>
+            <option value="serviceLead">Service Lead</option>
+            <option value="customerReferral">Customer Referral</option>
+            <option value="coldCall">Cold Call</option>
+            <option value="socialMedia">Social Media</option>
+            <option value="whatsappChatBot">What's App Chat Bot</option>
+            <option value="vendors">Vendors</option>
+            <option value="others">Others</option>
+            `;
 
         const existingCustomerOption = `
-                                <option value="na" selected>N/A</option>
-                                `;
+                <option value="na" selected>N/A</option>
+                `;
 
         customerTypeDropdown.addEventListener('change', function () {
             if (this.value === 'newCustomer') {
@@ -1003,12 +960,6 @@
                 businessLeadDropdown.innerHTML = existingCustomerOption;
                 businessLeadDropdown.style.display = 'none';
                 customerInput.style.display = 'block'
-                customerInput.addEventListener('input', function () {
-                    console.log(customerInput.value);
-                });
-
-
-
             } else {
                 businessLeadDropdown.innerHTML = '';
                 businessLeadDropdown.style.display = 'none';

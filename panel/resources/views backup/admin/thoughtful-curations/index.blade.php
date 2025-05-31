@@ -42,13 +42,21 @@
  
                     <label class="m-3">Thumbnail</label><br>
                     <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-                        <img src="{{ asset('/storage/app/public/thoughtfull-thumbnails/' . $curation->thumbnail) }}"
-                            alt="Current Thumbnail" style="width:400px; height:250px;">
+                       <img src="{{ $curation->thumbnail ? asset('storage/app/public/thoughtfull-thumbnails/' . $curation->thumbnail) : ($curation->media_type == 'image' && $curation->video ? asset('storage/app/public/thoughtfull-thumbnails/' . $curation->video) : '') }}" alt="Current Thumbnail" style="width:400px; height:250px;">
                     </div>
-
-                    <span class="ml-4">Video URL :- <a href="{{$curation->video}}">Play Video</a></span>
-
-
+                    <span class="ml-4">Media Type :- {{ ucfirst($curation->media_type) }}</span>
+                    <span class="ml-4">
+                        Video URL :-
+                        @if($curation->media_type === 'url')
+                            <a href="{{ $curation->video }}" target="_blank">Play Video</a>
+                        @elseif($curation->media_type === 'video' )
+                            <a href="{{ asset('storage/app/public/thoughtfull-videos/' . $curation->video) }}" target="_blank">Play Video</a>
+                        @elseif($curation->media_type === 'image')
+                            <a href="{{ asset('storage/app/public/thoughtfull-thumbnails/' . $curation->video) }}" target="_blank">See Image</a>
+                        @else
+                            <span>N/A</span>
+                        @endif
+                    </span>
 
                     <div class="card-body">
                         <a href="{{Route('admin.thoughtful-curations.edit', $curation->id)}}"
