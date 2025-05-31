@@ -537,6 +537,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::post('/update/{id}', 'LandingPageController@update')->name('landingpage.update');
         Route::post('/change/status', 'LandingPageController@changeStatus')->name('landingpage.changeStatus');
         Route::post('/delete', 'LandingPageController@destroy')->name('landingpage.delete');
+        Route::get('get-landingpage-data/{id}', 'LandingPageController@getLandingPageData')->name('landingpage.getLandingPageData');
     });
 
 
