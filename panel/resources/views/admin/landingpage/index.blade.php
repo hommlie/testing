@@ -49,6 +49,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>ID</th>
                         <th>Title</th>
                         <th>Sub Title</th>
                         <th>Hero Image</th>
@@ -65,6 +66,7 @@
                     
                         <tr>
                             <td>{{ ++$n }}</td>
+                            <td>{{$data->id}}</td>
                             <td>{{ Str::words($data->title, 5, '...') }}</td>
                             <td>{{ Str::words($data->sub_title, 5, '...') }}</td>
                             <td class="text-center">
