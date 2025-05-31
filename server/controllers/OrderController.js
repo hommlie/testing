@@ -242,7 +242,7 @@ exports.order = async (req, res) => {
               currentDate.toLocaleDateString(),
               currentTime?.toString(),
               product_name,
-              order.price?.toString(),
+              order.order_total?.toString(),
             ],
           });
         }
