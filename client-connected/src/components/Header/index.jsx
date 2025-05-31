@@ -317,7 +317,7 @@ const Header = ({
               to="/register-free-listing"
               className="hidden md:block px-4 py-2 text-green-700 border border-green-700 rounded hover:bg-green-50 transition-colors font-medium"
             >
-              Free Listing
+              Join ONDC
             </NavLink>
 
             {user?.length !== 0 ? (
@@ -594,7 +594,7 @@ const Header = ({
               className="block py-2 text-green-700"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Free Listing
+              Join ONDC
             </NavLink>
 
             {/* Mobile Search */}
