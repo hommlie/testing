@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import './AboutUs.css';
-import BranchHeader from '../components/BranchHeader';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
-import Footer from './Footer';
-import CopyRight from './CopyRight';
+import React, { useEffect, useState } from "react";
+import "./AboutUs.css";
+import BranchHeader from "../components/BranchHeader";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import Footer from "./Footer";
+import CopyRight from "./CopyRight";
 
 const AboutUs = () => {
   const [aboutData, setAboutData] = useState(null);
 
   useEffect(() => {
-    fetch('/api/aboutus')
-      .then(res => res.json())
-      .then(data => setAboutData(data))
-      .catch(err => console.error("Failed to fetch AboutUs data", err));
+    fetch("/api/aboutus")
+      .then((res) => res.json())
+      .then((data) => setAboutData(data))
+      .catch((err) => console.error("Failed to fetch AboutUs data", err));
   }, []);
 
   if (!aboutData) return <div className="loading">Loading...</div>;
