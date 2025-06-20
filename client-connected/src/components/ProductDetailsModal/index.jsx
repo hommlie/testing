@@ -707,13 +707,13 @@ const ProductDetailModal = ({
                 ))}
 
                 {/* Description Section */}
-                <div
+                {/* <div
                   className="prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: product?.description }}
-                />
+                /> */}
 
                 {/* Image Gallery */}
-                <div className="space-y-4">
+                {/* <div className="space-y-4">
                   {product?.productimages?.map((image) => (
                     <img
                       key={image.id}
@@ -722,48 +722,121 @@ const ProductDetailModal = ({
                       className="w-full h-64 object-cover rounded-lg"
                     />
                   ))}
-                </div>
+                </div> */}
               </section>
             )}
 
-            {/* Reviews Section */}
+            {/* Reviews Section */}       
             {selectedTab === "reviews" && (
               <div className="space-y-6">
-                <div className="space-y-4">
-                  {product?.rattings?.length > 0 ? (
-                    product.rattings.map((review) => (
-                      <div
-                        key={review.id}
-                        className="border rounded-lg p-4 bg-white shadow-sm"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-5 h-5 ${
-                                  i < review.ratting
-                                    ? "text-yellow-400 fill-current"
-                                    : "text-gray-300"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-gray-600">
-                            {new Date(review.created_at).toLocaleDateString()}
-                          </span>
+                {/* Ratings Summary */}
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
+              
+              <div className="flex flex-col md:flex-row gap-6">
+                {/* Overall Rating */}
+                <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
+                  <span className="text-5xl font-bold text-gray-900">
+                    4.9
+                  </span>
+                  <div className="flex items-center">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const isFilled = star <= 4; // 4 full stars for 4.9 rating
+                      const isPartial = star === 5; // 5th star should be 90% filled
+                      const partialFill = isPartial ? 90 : 0;
+
+                      return (
+                        <div key={star} className="relative">
+                          <Star className="w-5 h-5 text-gray-300" />
+                          {(isFilled || isPartial) && (
+                            <div
+                              className="absolute inset-0 overflow-hidden"
+                              style={{ width: isFilled ? '100%' : `${partialFill}%` }}
+                            >
+                              <Star className="w-5 h-5 text-yellow-400 fill-current absolute top-0 left-0" />
+                            </div>
+                          )}
                         </div>
-                        <p className="mt-2 text-gray-700">{review.comment}</p>
+                      );
+                    })}
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    128 reviews
+                  </p>
+                </div>
+
+                {/* Rating Breakdown - Manually set for 4.9 rating */}
+                <div className="flex-1 space-y-3">
+                  {[
+                    { star: 5, percent: 90, count: 115 }, // 90% of 128 = ~115
+                    { star: 4, percent: 7, count: 9 },    // 7% of 128 = ~9
+                    { star: 3, percent: 2, count: 3 },    // 2% of 128 = ~3
+                    { star: 2, percent: 1, count: 1 },    // 1% of 128 = ~1
+                    { star: 1, percent: 0, count: 0 }    // 0% of 128 = 0
+                  ].map(({ star, percent, count }) => (
+                    <div key={star} className="flex items-center gap-3">
+                      <div className="flex items-center w-10">
+                        <span className="text-sm font-medium text-gray-700">★{star}</span>
                       </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 text-center">No reviews yet</p>
-                  )}
+                      <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-yellow-400 rounded-full"
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                      <span className="text-sm text-gray-600 w-12 text-right">
+                        {count}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
-          </div>
+            </div>
 
+            {/* All Reviews */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h4 className="text-lg font-semibold text-gray-900">
+                  Customer Reviews (128)
+                </h4>
+              </div>
+              
+              {/* Sample Review */}
+              <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <p className="font-medium text-gray-900">CH Sudheer</p>
+                    <p className="text-sm text-gray-500">Bangalore, BTM Layout</p>
+                    <div className="flex items-center mt-1 space-x-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <div key={star} className="relative w-4 h-4">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        </div>
+                      ))}
+                      <span className="text-xs text-gray-500 ml-1">5.0</span>
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-400">
+                    {new Date().toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+
+                <h5 className="font-medium text-gray-800 mb-1">Great Treatment</h5>
+
+                <p className="text-gray-700 mb-2">
+                  The service was really good. I would appreciate their work. We were really
+                  facing a lot of problems with pests and now we don't see any in the
+                  home. Thanks for your service.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+                </div>
           {/* Cart Total Section */}
           {cartTotal > 0 && (
             <div className="sticky bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg">

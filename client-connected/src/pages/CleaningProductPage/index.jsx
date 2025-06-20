@@ -667,32 +667,26 @@ const CleaningProductPage = () => {
               setOpenSection(openSection === "locations" ? "" : "locations")
             }
           >
-            <div className="text-sm md:text-base leading-relaxed">
-              {getLocations()?.map((location, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <span className="mx-2 text-gray-400">•</span>}
-                  <a
-                    href={`${
-                      config.VITE_BASE_URL
-                    }/subcategory/${location?.slug?.trim()}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(
-                        `${
-                          config.VITE_BASE_URL
-                        }/subcategory/${location?.slug?.trim()}`,
-                        {
-                          state: { location: location?.title?.trim() },
-                        }
-                      );
-                    }}
-                    className="text-blue-600 hover:underline inline-block"
-                  >
-                    {location?.title?.trim()}
-                  </a>
-                </React.Fragment>
-              ))}
-            </div>
+            <div className="flex flex-col space-y-2 text-sm md:text-base leading-relaxed">
+  {getLocations()?.map((location, index) => (
+    <div key={index} className="flex items-center">
+      {index > 0 && <span className="text-gray-400 mr-2">•</span>}
+      <a
+        href={`${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`}
+        onClick={(e) => {
+          e.preventDefault();
+          navigate(
+            `${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`,
+            { state: { location: location?.title?.trim() } }
+          );
+        }}
+        className="text-grey hover:text-blue-400 transition-colors duration-200"
+      >
+        {location?.title?.trim()}
+      </a>
+    </div>
+  ))}
+</div>
           </QuickLinkSection>
 
           <QuickLinkSection
@@ -708,7 +702,7 @@ const CleaningProductPage = () => {
                   {index > 0 && <span className="mx-2 text-gray-400">•</span>}
                   <a
                     href={`/subcategory/${service.slug}`}
-                    className="text-blue-600 hover:underline inline-block"
+                    className="text-gray-500 hover:text-blue-600 hover:underline inline-block transition-colors duration-200"
                   >
                     {service.subcategory_name}
                   </a>

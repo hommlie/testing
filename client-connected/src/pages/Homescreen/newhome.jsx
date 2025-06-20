@@ -22,9 +22,9 @@ import DownloadAppImg from "/assets/bg/download-app.png";
 import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
 import ReferEarnImg from "/assets/bg/refer-earn.svg";
-import discoverImg1 from "../../assets/images/discover-1.png";
-import discoverImg3 from "../../assets/images/discover-3.png";
-import discoverImg4 from "../../assets/images/discover-4.png";
+// import discoverImg1 from "../../assets/images/discover-1.png";
+// import discoverImg3 from "../../assets/images/discover-3.png";
+// import discoverImg4 from "../../assets/images/discover-4.png";
 
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
@@ -40,6 +40,7 @@ import MobileNavigation from "../../components/MobileNavigation";
 import LoginSignup from "../../components/LoginModal";
 import { Helmet } from "react-helmet";
 import SchemaMarkup from "../../components/SchemaMarkup";
+// import FormSection from "../FormSection/index"
 
 const HomePage = () => {
   const { user } = useCont();
@@ -231,47 +232,46 @@ const HomePage = () => {
 
   // FAQ Section
   const FaqSection = () => (
-    <div className="w-full mx-auto">
-      <h2 className="text-2xl font-bold mb-8 text-center">
-        Frequently Asked Questions
-      </h2>
-      <div className="space-y-4">
-        {data?.faqs?.map((faq, index) => (
-          <motion.div
-            key={index}
-            className="border rounded-lg overflow-hidden"
-            initial={false}
+  <div className="w-full mx-auto">
+    <h2 className="text-2xl font-bold mb-8 text-center">
+      Frequently Asked Questions
+    </h2>
+    <div className="space-y-4">
+      {data?.faqs?.map((faq, index) => (
+        <motion.div
+          key={index}
+          className="border rounded-lg overflow-hidden"
+          initial={false}
+        >
+          <button
+            className="w-full flex justify-between items-center p-4 text-left"
+            onClick={() =>
+              setOpenFaqIndex(openFaqIndex === index ? null : index)
+            }
           >
-            <button
-              className="w-full flex justify-between items-center p-4 text-left"
-              onClick={() =>
-                setOpenFaqIndex(openFaqIndex === index ? null : index)
-              }
-            >
-              <span className="font-medium">{faq.question}</span>
-              <ChevronRight
-                className={`w-5 h-5 transform transition-transform ${
-                  openFaqIndex === index ? "rotate-90" : ""
-                }`}
-              />
-            </button>
-            <AnimatePresence>
-              {openFaqIndex === index && (
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: "auto" }}
-                  exit={{ height: 0 }}
-                  className="overflow-hidden"
-                >
-                  <p className="p-4 bg-gray-50">{faq.answer}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        ))}
-      </div>
+            <span className="font-medium">{faq.question}</span>
+            <span className="text-xl font-bold">
+              {openFaqIndex === index ? "−" : "+"}
+            </span>
+          </button>
+          <AnimatePresence>
+            {openFaqIndex === index && (
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: "auto" }}
+                exit={{ height: 0 }}
+                className="overflow-hidden"
+              >
+                <p className="p-4 bg-gray-50">{faq.answer}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      ))}
     </div>
-  );
+  </div>
+);
+
 
   // App Download Section
   const AppDownloadSection = () => (
@@ -349,9 +349,10 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           className="container mx-auto px-4 md:pt-8"
         >
-          <div className="w-full hidden md:block flex justify-center py-2 text-center">
-            <h1 className="max-w-2xl mx-auto text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8">
-              Explore Top Rated Certified Experts Nearby
+         <div className="w-full flex justify-center py-2 pb-4 text-center">
+            <h1 className="max-w-x2 mx-auto text-1xl md:text-4xl lg:text-5xl font-bold text-center leading-tight">
+              Trusted Pest Control & Hygiene<br />
+              <span className="">Experts Near You</span>
             </h1>
           </div>
 
@@ -627,7 +628,7 @@ const HomePage = () => {
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* Discover Section */}
-      <section className="px-4 md:px-10 py-5 md:py-10">
+      {/* <section className="px-4 md:px-10 py-5 md:py-10">
         <h2 className="text-2xl font-bold mb-4 md:mb-8">Discover</h2>
         <div className="w-full flex flex-wrap justify-around rounded-2xl border border-hommlie py-3">
           <NavLink
@@ -676,7 +677,11 @@ const HomePage = () => {
             </span>
           </button>
         </div>
-      </section>
+      </section> */}
+
+      {/* form section */}
+      
+          {/* <FormSection /> */}
 
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
@@ -690,7 +695,7 @@ const HomePage = () => {
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* Offers Section */}
-      <section className="max-w-7xl mx-auto md:px-4 py-5 md:py-10 bg-gray-50">
+      {/* <section className="max-w-7xl mx-auto md:px-4 py-5 md:py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">Today's Offers</h2>
           <div
@@ -722,10 +727,10 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Most Booked Services */}
-      <section className="max-w-7xl mx-auto md:px-4 py-5 md:py-10 bg-white">
+      <section className="max-w-7x1 mx-auto md:px-4 py-5 md:py-10 bg-white ml-2">
         <ProductSlider
           title={"Most Booked Services"}
           services={data?.most_booked_services}
@@ -733,7 +738,7 @@ const HomePage = () => {
       </section>
 
       {/* Thoughtful Curations */}
-      <section className="px-10 py-5 md:py-10 bg-[#F5F5F5]">
+      <section className="px-7 py-5 md:py-10 bg-[#F5F5F5]">
         <div className="container mx-auto px-4">
           <ThoughtfulSlider
             videos={thoughtfulContent}
@@ -759,7 +764,7 @@ const HomePage = () => {
             <div>
               <h3 className="font-bold">Refer & Get Free Services</h3>
               <p className="text-gray-600">
-                Invite Your Friends and Family and get instant 45% off on your
+                Invite Your Friends and Family and get instant 15% off on your
                 next Booking
               </p>
             </div>
@@ -768,7 +773,7 @@ const HomePage = () => {
       </section>
 
       {/* Testimonial Section */}
-      <section className="px-10 py-5 md:py-10">
+      <section className="px-7 py-5 md:py-10">
         <TestimonialCarousel testimonials={data.testimonials} />
       </section>
 
@@ -788,7 +793,7 @@ const HomePage = () => {
       </section>
 
       {/* inspection form section */}
-      <section id="inspection-section" className="px-10 py-5 md:py-10">
+      <section id="inspection-section" className="px-4 py-5 md:py-10">
         <InspectionFormSection />
       </section>
 

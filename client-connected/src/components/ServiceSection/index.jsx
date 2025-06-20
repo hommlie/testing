@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, Star } from "lucide-react";
+import { ChevronDown, Star, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/config";
 import LoginSignup from "../LoginModal";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
-
+import FormSection from "../../pages/FormSection"
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
   const { user, getCart } = useCont();
@@ -15,6 +15,7 @@ const ServiceSection = ({ categories }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const [selectedBhk, setSelectedBhk] = useState("1 BHK");
   const [currentVariations, setCurrentVariations] = useState([]);
   const [showAllVariations, setShowAllVariations] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -23,6 +24,9 @@ const ServiceSection = ({ categories }) => {
   const notify = useToast();
   const successNotify = (success) => notify(success, "success");
   const errorNotify = (error) => notify(error, "error");
+
+  // BHK options
+  const bhkOptions = ["1 BHK", "2 BHK", "3 BHK", "4 BHK", "5 BHK", "6 BHK"];
 
   // Initialize selections when component mounts
   useEffect(() => {
@@ -98,7 +102,7 @@ const ServiceSection = ({ categories }) => {
         (p) => p.id === selectedProduct
       );
 
-      if (product?.attributes?.length > 0) {
+      if (product?.attributes?.length > 0 && !selectedAttribute) {
         setSelectedAttribute(product.attributes[0].id);
       }
       setShowAllVariations(false);
@@ -206,6 +210,7 @@ const ServiceSection = ({ categories }) => {
       variation: variation.id,
       tax: tax_amount?.toFixed(2) || 0,
       shipping_cost: product.shipping_cost || 0,
+      bhk: selectedBhk,
     };
 
     try {
@@ -251,7 +256,7 @@ const ServiceSection = ({ categories }) => {
           <div className="p-4 md:p-6 flex flex-col h-full">
             {isRecommended && (
               <div className="flex justify-center mb-4">
-                <span className="bg-white rounded-full py-1 px-4 text-hommlie text-sm font-medium">
+                <span className="bg-white rounded-full py-1 px-4 text-emerald-800 text-sm font-medium">
                   RECOMMENDED
                 </span>
               </div>
@@ -311,14 +316,37 @@ const ServiceSection = ({ categories }) => {
               </div>
             )}
 
-            <a
-              href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
-              className={`${
-                isRecommended ? "text-white" : "text-hommlie"
-              } text-left underline underline-offset-4 hover:no-underline mb-4`}
-            >
-              View Details
-            </a>
+            <div className="flex justify-between items-center mb-4">
+              <a
+                href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
+                className={`${
+                  isRecommended ? "text-white" : "text-emerald-800"
+                } text-left underline underline-offset-4 hover:no-underline flex items-center`}
+              >
+                View Details <ChevronRight className="ml-1 w-4 h-4" />
+              </a>
+              
+              <div className="text-sm font-medium">
+                <span className={isRecommended ? "text-white" : "text-gray-600"}>
+                  For:{" "}
+                </span>
+                <select
+                  value={selectedBhk}
+                  onChange={(e) => setSelectedBhk(e.target.value)}
+                  className={`ml-1 p-1 rounded ${
+                    isRecommended
+                      ? "bg-emerald-700 text-white border-white"
+                      : "bg-white text-gray-800 border-gray-300"
+                  } border focus:outline-none focus:ring-1 focus:ring-emerald-500`}
+                >
+                  {bhkOptions.map((bhk) => (
+                    <option key={bhk} value={bhk}>
+                      {bhk}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
             <div className="mt-auto">
               <motion.button
@@ -332,7 +360,7 @@ const ServiceSection = ({ categories }) => {
                     : "bg-emerald-800 text-white hover:bg-emerald-900"
                 } ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
               >
-                {isAddingToCart ? "Adding..." : "Book Now"}
+                {isAddingToCart ? "Adding..." : "Order Now"}
               </motion.button>
             </div>
           </div>
@@ -365,99 +393,93 @@ const ServiceSection = ({ categories }) => {
     );
   };
 
-  // Dropdown Component
+  // Dropdown
   const Dropdown = ({
-    label,
-    value,
-    options,
-    onChange,
-    disabled,
-    showRecommended,
-  }) => {
-    // Add state to track if the dropdown is open
-    const [isOpen, setIsOpen] = useState(false);
+  label,
+  value,
+  options,
+  onChange,
+  disabled,
+  showRecommended,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-    // Add a ref to detect clicks outside the dropdown
-    const dropdownRef = useRef(null);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (
-          dropdownRef.current &&
-          !dropdownRef.current.contains(event.target)
-        ) {
-          setIsOpen(false);
-        }
-      };
-
-      // Only add the listener when the dropdown is open
-      if (isOpen) {
-        document.addEventListener("mousedown", handleClickOutside);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
       }
-
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [isOpen]);
-
-    // Handle option selection
-    const handleSelect = (optionId) => {
-      onChange(optionId);
-      setIsOpen(false);
     };
 
-    return (
-      <div className="relative" ref={dropdownRef}>
-        <button
-          type="button"
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-left truncate
-          ${disabled ? "cursor-not-allowed bg-gray-50" : "cursor-pointer"}
-          focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-        >
-          {value
-            ? options.find((option) => option.id === value)?.subcategory_name ||
-              options.find((option) => option.id === value)?.product_name ||
-              options.find((option) => option.id === value)?.attribute
-            : label}
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
-        </button>
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
 
-        {isOpen && (
-          <div className="absolute mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
-            {options.map((option) => (
-              <div
-                key={option.id}
-                onClick={() => handleSelect(option.id)}
-                className={`cursor-pointer select-none p-3 hover:bg-emerald-50 hover:text-emerald-800 text-gray-900`}
-              >
-                {showRecommended && option?.is_recommended === 1 ? (
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-emerald-600">
-                      ✓ Recommended
-                    </span>
-                    <span className="text-base font-semibold">
-                      {option.subcategory_name ||
-                        option.product_name ||
-                        option.attribute}
-                    </span>
-                  </div>
-                ) : (
-                  <span>
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const handleSelect = (optionId) => {
+    onChange(optionId);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        className={`w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-left truncate
+        ${disabled ? "cursor-not-allowed bg-gray-50" : "cursor-pointer"}
+        focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+          !value ? "text-gray-400" : "text-gray-900"
+        }`}
+      >
+        {value
+          ? options.find((option) => option.id === value)?.subcategory_name ||
+            options.find((option) => option.id === value)?.product_name ||
+            options.find((option) => option.id === value)?.attribute
+          : label}
+        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+      </button>
+
+      {isOpen && (
+        <div className="absolute mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+          {options.map((option) => (
+            <div
+              key={option.id}
+              onClick={() => handleSelect(option.id)}
+              className={`cursor-pointer select-none p-3 hover:bg-emerald-50 hover:text-emerald-800 ${
+                value === option.id ? "bg-emerald-100 text-emerald-800" : "text-gray-900"
+              }`}
+            >
+              {showRecommended && option?.is_recommended === 1 ? (
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium text-emerald-600">
+                    ✓ Recommended
+                  </span>
+                  <span className="text-base font-semibold">
                     {option.subcategory_name ||
                       option.product_name ||
                       option.attribute}
                   </span>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
+                </div>
+              ) : (
+                <span>
+                  {option.subcategory_name ||
+                    option.product_name ||
+                    option.attribute}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
   // Get current product for navigation
   const getCurrentProduct = () => {
     const category = categories?.find((c) => c.id === selectedCategory);
@@ -468,32 +490,35 @@ const ServiceSection = ({ categories }) => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 md:px-8 py-5 md:py-10">
+    <>
+    <FormSection />
+    <section className="max-w-8xl mx-auto px-4 md:px-9 py-5 md:py-10">
       {/* Category Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-4 pb-6 p-2">
-        {categories?.map((category) => (
-          <motion.button
-            key={category.id}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => handleCategorySelect(category)}
-            className={`flex flex-col md:flex-row items-center gap-3 px-3 md:px-6 py-2 md:py-4 rounded-lg whitespace-nowrap md:min-w-[200px]
-              ${
-                selectedCategory === category.id
-                  ? "bg-emerald-800 text-white"
-                  : "bg-white text-gray-800 border border-hommlie"
-              }`}
-          >
-            {category.icon_url && (
-              <img src={category.icon_url} alt="" className="w-6 h-6" />
-            )}
-            {category.category_name}
-          </motion.button>
-        ))}
+      <div className="flex justify-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 p-2">
+          {categories?.map((category) => (
+            <motion.button
+              key={category.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleCategorySelect(category)}
+              className={`flex flex-col md:flex-row items-center gap-3 px-3 md:px-6 py-2 md:py-4 rounded-lg whitespace-nowrap md:min-w-[200px]
+                ${
+                  selectedCategory === category.id
+                    ? "bg-emerald-800 text-white"
+                    : "bg-white text-gray-800 border border-emerald-600"
+                }`}
+            >
+              {category.icon_url && (
+                <img src={category.icon_url} alt="" className="w-6 h-6" />
+              )}
+              {category.category_name}
+            </motion.button>
+          ))}
+        </div>
       </div>
-
       {/* Dropdowns */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Dropdown
           label="Select Subcategory"
           value={selectedSubCategory}
@@ -502,15 +527,17 @@ const ServiceSection = ({ categories }) => {
           disabled={!selectedCategory}
         />
         <Dropdown
-          label="Select Product"
-          value={selectedProduct}
-          options={getCurrentProducts()}
-          onChange={setSelectedProduct}
-          disabled={!selectedSubCategory}
-          showRecommended
+          label="Select the Room Type"
+          value={selectedBhk}
+          options={bhkOptions.map(bhk => ({
+            id: bhk,
+            attribute: bhk
+          }))}
+          onChange={setSelectedBhk}
+          disabled={!selectedProduct}
         />
         <Dropdown
-          label="Select Attribute"
+          label="Select Room Type"
           value={selectedAttribute}
           options={getCurrentAttributes()}
           onChange={setSelectedAttribute}
@@ -519,42 +546,180 @@ const ServiceSection = ({ categories }) => {
         />
       </div>
 
-      {/* Variation Cards */}
-      {currentVariations.length > 0 && (
-        <div className="space-y-6">
-          <div className="h-[500px] md:h-auto overflow-y-auto flex gap-4 md:overflow-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
-            {getVisibleVariations().map((variation, index) => (
-              <VariationCard
-                key={variation.id}
-                variation={variation}
-                // isRecommended={index === 0}
-                product={getCurrentProduct()}
-              />
-            ))}
+      {/* Product Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {getCurrentProducts()?.map((product) => {
+             const selectedAttr = selectedAttribute
+            ? product.attributes?.find(attr => attr.id === selectedAttribute)
+            : product.attributes?.[0];
+            const matchedVariation = selectedAttr?.variations?.find(v => v.variation === selectedBhk)
+              || selectedAttr?.variations?.[0];
+
+              const isRecommended = product.is_recommended === 1;
+
+              const basePrice = matchedVariation?.price || product.price || 0;
+              const discountedPrice = matchedVariation?.discounted_variation_price || product.discounted_price || basePrice;
+
+              const discountPercentage = basePrice > 0
+                ? Math.round(((basePrice - discountedPrice) / basePrice) * 100)
+                : 0;
+
+              const getBhkMultiplier = () => {
+                if (!selectedBhk) return 1;
+                const bhkNumber = parseInt(selectedBhk);
+                return isNaN(bhkNumber) ? 1 : bhkNumber;
+              };
+
+              const multiplier = getBhkMultiplier();
+              const finalPrice = Math.round(discountedPrice * multiplier);
+              const originalPrice = Math.round(basePrice * multiplier);
+
+              const rating = product.avg_rating || 4.9;
+              const reviews = product.total_reviews || 11540;
+
+              return (
+                <motion.button
+                  key={product.id}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setSelectedProduct(product.id)}
+                  className={`flex flex-col text-left p-5 rounded-xl border-2 transition-all duration-200 gap-3
+                    ${
+                      selectedProduct === product.id
+                        ? "bg-emerald-800 text-white border-emerald-800"
+                        : isRecommended
+                          ? "border-emerald-800 text-gray-900"
+                          : "bg-white border-gray-200 text-gray-900"
+                    }`}
+                >
+                  {isRecommended && (
+                    <div className="relative -mt-6">
+                      <div className=" h-10 w-full">
+                        {/* Green background base absolute */}
+                      <div className="top-0 left-0 -ml-5 w-[112%] h-[2.6rem] bg-emerald-800 rounded-t-xl z-0" />
+                        {/* White clipped "RECOMMENDED" banner */}
+                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-0">
+                          <div
+                            className="h-10 px-6 flex items-center justify-center font-bold text-base text-emerald-800 bg-white shadow-md"
+                            style={{
+                              clipPath: "polygon(0 0, 100% 0, calc(100% - 20px) 100%, 20px 100%)"
+                            }}
+                          >
+                            RECOMMENDED
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {/* Product Name */}
+                  <span className={`pt-3 text-xl font-bold text-center ${
+                    selectedProduct === product.id ? "text-white" : "text-gray-900"
+                  }`}>
+                    {product.product_name}
+                  </span>
+                  {/* Description as bullet points */}
+                  {matchedVariation?.description && (
+                    <ul className="space-y-2 pl-5 mt-2">
+                      {matchedVariation.description.split("|").map((point, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="mr-2">✓</span>
+                          <span className={selectedProduct === product.id ? "text-white" : "text-gray-700"}>
+                            {point.trim()}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                    {selectedAttr?.attribute && (
+                      <div className="w-full text-center">
+                        <p
+                          className={`inline-block px-3 py-1 rounded-full text-sm font-medium 
+                            ${selectedProduct === product.id 
+                              ? "bg-white text-emerald-800" 
+                              : "bg-emerald-100 text-emerald-800"
+                            }`}
+                        >
+                          {selectedAttr.attribute}
+                        </p>
+                      </div>
+                    )}
+                  {/* Price Section */}
+                  <div className="text-center mt-2">
+                    <div className="flex justify-center items-baseline gap-2 mt-1">
+                      <span className={`text-2xl font-bold ${
+                        selectedProduct === product.id ? "text-white" : "text-emerald-800"
+                      }`}>
+                        ₹{finalPrice.toLocaleString('en-IN')}/-
+                      </span>
+                      {finalPrice !== originalPrice && (
+                        <span className={`text-sm line-through ${
+                          selectedProduct === product.id ? "text-gray-300" : "text-gray-500"
+                        }`}>
+                          ₹{originalPrice.toLocaleString('en-IN')}/-
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                    
+                  {/* Read More Link */}
+                  <div className="text-center">
+                    <a 
+                      href={`${config.VITE_BASE_URL}/product/${product.slug}`}
+                      className={`text-sm underline ${
+                        selectedProduct === product.id ? "text-white" : "text-emerald-800"
+                      }`}
+                    >
+                      Click Here To Read More
+                    </a>
+                  </div>
+
+                  {/* Book Now Button */}
+                  <motion.div 
+                    whileTap={{ scale: 0.98 }}
+                    className="mt-2"
+                  >
+                    <button
+                      onClick={() => {
+                        const attribute = product.attributes?.find(attr => attr.id === selectedAttribute);
+                        const variation = attribute?.variations?.find(v => v.variation === selectedBhk);
+                        if (variation) handleAddToCart(variation, product);
+                      }}
+                      className={`w-full py-2 rounded-lg font-bold ${
+                        selectedProduct === product.id
+                          ? "bg-white text-emerald-800"
+                          : isRecommended
+                            ? "bg-emerald-800 text-white"
+                            : "bg-white text-emerald-800 border-2 border-emerald-800"
+                      }`}
+                    >
+                      Book Now
+                    </button>
+                  </motion.div>
+                  {/* Rating Section */}
+                  <div className="flex justify-center items-center gap-1 text-sm mt-2">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className={`font-medium ${selectedProduct === product.id ? "text-white" : "text-gray-800"}`}>
+                      {rating.toFixed(1)} (
+                      {reviews > 1000 ? `${(reviews / 1000).toFixed(1)}k+` : `${reviews}+`}
+                      )
+                    </span>
+                  </div>
+                  {/* Selected Marker - Hidden in this design but keeping functionality */}
+                  {selectedProduct === product.id && (
+                    <span className="hidden text-xs mt-2 font-semibold bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-600">
+                      Selected
+                    </span>
+                  )}
+                </motion.button>
+              );
+            })}
           </div>
-
-          {/* View All Button */}
-          {currentVariations.length > 3 && (
-            <div className="flex justify-center">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setShowAllVariations(!showAllVariations)}
-                className="px-6 py-3 bg-emerald-800 text-white rounded-lg font-medium hover:bg-emerald-900 transition-colors"
-              >
-                {showAllVariations ? "Show Less" : "View All"}
-              </motion.button>
-            </div>
-          )}
-        </div>
-      )}
-
       <LoginSignup
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        // checkoutPd={checkoutPd}
       />
     </section>
+    </>
   );
 };
 

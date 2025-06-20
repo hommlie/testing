@@ -85,7 +85,7 @@ const TestimonialCarousel = ({ testimonials = [] }) => {
   const totalGroups = Math.ceil(testimonials.length / slidesToShow);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4">
+    <div className="w-full max-w-7xl mx-auto" >
       <div className="text-center mb-12">
         <h2 className="text-sm uppercase tracking-wider text-teal-800 mb-2">
           REVIEWS
@@ -94,7 +94,7 @@ const TestimonialCarousel = ({ testimonials = [] }) => {
       </div>
 
       <div className="relative pb-14">
-        <div className="mx-2">
+        <div className="mx-0">
           <Slider ref={sliderRef} {...settings}>
             {testimonials.map((testimonial, index) => (
               <div key={testimonial?.id || index} className="px-3">

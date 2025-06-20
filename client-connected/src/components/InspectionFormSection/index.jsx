@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { IoBusiness, IoCallOutline, IoLocationOutline } from "react-icons/io5";
+import React, { useState } from "react";
+import { IoBusiness, IoCallOutline } from "react-icons/io5";
 import axios from "axios";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
-import LocationSuggestion from "../../components/LocationSuggestion";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const InspectionFormSection = () => {
   const [formData, setFormData] = useState({
@@ -13,15 +13,19 @@ const InspectionFormSection = () => {
     email: "",
     phone: "",
     address: "",
-    message: "",
-    latitude: "",
-    longitude: "",
+    service: "",
     date: new Date(),
     time: "",
   });
+
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+
+  const notify = useToast();
+  const successNotify = (msg) => notify(msg, "success");
+  const errorNotify = (msg) => notify(msg, "error");
 
   const timeSlots = [
     "9 to 11 AM",
@@ -31,352 +35,248 @@ const InspectionFormSection = () => {
     "5 to 7 PM",
   ];
 
-  const notify = useToast();
-  const successNotify = (success) => notify(success, "success");
-  const errorNotify = (error) => notify(error, "error");
+  const services = [
+    { id: 1, name: "Pest Control" },
+    { id: 2, name: "Cleaning" },
+    { id: 3, name: "Bird Control" },
+    { id: 4, name: "Disinfection" },
+  ];
 
-  const validateForm = () => {
+  const validateStepOne = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone is required";
+    if (!formData.service) newErrors.service = "Service is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateStepTwo = () => {
+    const newErrors = {};
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.time) newErrors.time = "Time slot is required";
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
+    if (!validateStepTwo()) return;
     setLoading(true);
+
     try {
-      const dataToSend = {
+      const response = await axios.post(`${config.API_URL}/api/createInspection`, {
         fullName: formData.name,
         address: formData.address,
-        latitude: formData.latitude,
-        longitude: formData.longitude,
         mobile: formData.phone,
         email: formData.email,
         date: formData.date.toISOString(),
         time: formData.time,
-        message: formData.message,
-      };
-
-      const response = await axios.post(
-        `${config.API_URL}/api/createInspection`,
-        dataToSend,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        service: formData.service,
+      });
 
       if (response.data.status === 1) {
-        successNotify("Inspection request submitted successfully!");
+        successNotify("Service request submitted successfully!");
         setSubmitted(true);
         setFormData({
           name: "",
           email: "",
           phone: "",
           address: "",
-          message: "",
-          latitude: "",
-          longitude: "",
+          service: "",
           date: new Date(),
           time: "",
         });
+        setStep(1);
+        setTimeout(() => setSubmitted(false), 5000);
       } else {
-        errorNotify("Failed to submit inspection request. Please try again.");
-        setErrors({
-          submit: "Failed to submit inspection request. Please try again.",
-        });
+        errorNotify("Failed to submit service request. Try again.");
       }
-    } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
-      errorNotify("An error occurred. Please try again later.");
-      setErrors({ submit: "An error occurred. Please try again later." });
+    } catch (err) {
+      console.error(err);
+      errorNotify("Something went wrong. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle coordinates from LocationSuggestion
-  const handleCoordinatesChange = (coordinates) => {
-    if (coordinates) {
-      setFormData({
-        ...formData,
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-      });
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-green-600"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
-          <p className="text-gray-600 mb-8">We're here to help you!</p>
-          <div className="space-y-10">
-            <div className="flex items-start">
-              <div className="w-12 h-12 text-2xl rounded-full text-hommlie flex items-center justify-center mr-4">
-                <MdOutlineLocalPostOffice />
-              </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Contact Info */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Schedule Your Inspection</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-6">Get professional help for your home or business</p>
+          <div className="space-y-6 text-sm">
+            <div className="flex items-start gap-3">
+              <MdOutlineLocalPostOffice className="text-xl text-green-600 bg-green-100 rounded-full p-2 w-8 h-8" />
               <div>
-                <p className="text-sm text-gray-600">Email</p>
-                <p className="font-medium">reach@hommlie.com</p>
+                <h3 className="text-gray-500">Email</h3>
+                <p className="text-gray-800 font-medium">reach@hommlie.com</p>
               </div>
             </div>
-            <div className="flex items-start">
-              <div className="w-12 h-12 text-2xl rounded-full text-hommlie flex items-center justify-center mr-4">
-                <IoCallOutline />
-              </div>
+            <div className="flex items-start gap-3">
+              <IoCallOutline className="text-xl text-green-600 bg-green-100 rounded-full p-2 w-8 h-8" />
               <div>
-                <p className="text-sm text-gray-600">Customer Care</p>
-                <p className="font-medium">+91-6363865658</p>
+                <h3 className="text-gray-500">Phone</h3>
+                <p className="text-gray-800 font-medium">+91-6363865658</p>
               </div>
             </div>
-            <div className="flex items-start">
-              <div className="w-12 h-12 text-2xl rounded-full text-hommlie flex items-center justify-center mr-4">
-                <IoBusiness />
-              </div>
-              <div className="max-w-sm">
-                <p className="text-sm text-gray-600">Offices</p>
-                <p className="font-medium">Bangalore</p>
-                <p className="font-medium">Hyderabad</p>
-                <p className="font-medium">Chennai</p>
-                <p className="font-medium">Delhi</p>
-                <p className="font-medium">Kolkata</p>
+            <div className="flex items-start gap-3">
+              <IoBusiness className="text-xl text-green-600 bg-green-100 rounded-full p-2 w-8 h-8" />
+              <div>
+                <h3 className="text-gray-500">Our Offices</h3>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city) => (
+                    <span key={city} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm">{city}</span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="border glow-border rounded-lg shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-4">Book an Inspection</h2>
-          <p className="text-gray-600 mb-8">
-            Our friendly team would love to hear from you.
-          </p>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-              )}
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Address
-              </label>
-              <LocationSuggestion
-                value={formData.address}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    address: e.target.value,
-                  })
-                }
-                onCoordinatesChange={handleCoordinatesChange}
-                name="address"
-              />
-              {errors.address && (
-                <p className="mt-1 text-sm text-red-500">{errors.address}</p>
-              )}
-            </div>
+        {/* Booking Form */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
+            {[1, 2].map((s, i) => (
+              <React.Fragment key={s}>
+                <div className={`w-8 h-8 flex items-center justify-center rounded-full ${step === s ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'}`}>{s}</div>
+                {i < 1 && <div className={`h-1 w-8 ${step > s ? 'bg-green-600' : 'bg-gray-300'}`} />}
+              </React.Fragment>
+            ))}
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone
-              </label>
-              <div className="relative">
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  minLength={10}
-                  maxLength={10}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  className={`w-full px-4 pl-10 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                    errors.phone ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                <label className="absolute top-1/2 transform -translate-y-1/2 left-2 block text-sm font-medium text-gray-700 mb-1">
-                  +91
-                </label>
-              </div>
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email (Optional)
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="flex space-x-4">
-              <div className="w-1/2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date
-                </label>
-                <DatePicker
-                  selected={formData.date}
-                  onChange={(date) => setFormData({ ...formData, date: date })}
-                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  minDate={new Date()}
-                />
-              </div>
-
-              <div className="w-1/2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Time
-                </label>
-                <select
-                  value={formData.time}
-                  onChange={(e) =>
-                    setFormData({ ...formData, time: e.target.value })
-                  }
-                  className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                    errors.time ? "border-red-500" : "border-gray-300"
-                  }`}
+          <form onSubmit={handleSubmit} className="space-y-6 text-sm">
+            {step === 1 && (
+              <>
+                <div>
+                  <label className="block mb-1">Full Name *</label>
+                  <input 
+                    type="text" 
+                    value={formData.name} 
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    className={`w-full px-3 py-2 border rounded-lg ${errors.name ? 'border-red-500' : 'border-gray-300'}`} 
+                    placeholder="Enter Your Name" 
+                  />
+                  {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+                </div>
+                <div>
+                  <label className="block mb-1">Phone Number *</label>
+                  <div className="flex">
+                    <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-100 text-gray-600">+91</span>
+                    <input 
+                      type="tel" 
+                      value={formData.phone} 
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+                      className={`flex-1 px-3 py-2 border rounded-r-lg ${errors.phone ? 'border-red-500' : 'border-gray-300'}`} 
+                      placeholder="9876543210" 
+                    />
+                  </div>
+                  {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
+                </div>
+                <div>
+                  <label className="block mb-1">Select Service *</label>
+                  <select
+                    value={formData.service}
+                    onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                    className={`w-full px-3 py-2 border rounded-lg ${errors.service ? 'border-red-500' : 'border-gray-300'}`}
+                  >
+                    <option value="">Choose a service</option>
+                    {services.map((s) => (
+                      <option key={s.id} value={s.name}>{s.name}</option>
+                    ))}
+                  </select>
+                  {errors.service && <p className="text-xs text-red-500 mt-1">{errors.service}</p>}
+                </div>
+                <button 
+                  type="button" 
+                  onClick={() => validateStepOne() && setStep(2)} 
+                  className="w-full bg-green-600 text-white py-2 rounded-lg"
                 >
-                  <option value="">Select a time slot</option>
-                  {timeSlots.map((slot, index) => (
-                    <option key={index} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
-                {errors.time && (
-                  <p className="mt-1 text-sm text-red-500">{errors.time}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Message (Optional)
-              </label>
-              <textarea
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
-                }
-                rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
-
-            {errors.submit && (
-              <div className="p-4 bg-red-50 border border-red-400 text-red-700 rounded-md">
-                {errors.submit}
-              </div>
+                  Continue to Schedule
+                </button>
+              </>
             )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full bg-hommlie text-white py-3 rounded-md hover:bg-green-700 transition-colors duration-300 ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            >
-              {loading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+            {step === 2 && (
+              <>
+                <div>
+                  <label className="block mb-1">Address *</label>
+                  <textarea
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className={`w-full px-3 py-2 border rounded-lg ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
+                    placeholder="Enter your full address with landmark"
+                    rows={3}
+                  />
+                  {errors.address && <p className="text-xs text-red-500 mt-1">{errors.address}</p>}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1">Date *</label>
+                    <DatePicker 
+                      selected={formData.date} 
+                      onChange={(date) => setFormData({ ...formData, date })} 
+                      minDate={new Date()} 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1">Time Slot *</label>
+                    <select 
+                      value={formData.time} 
+                      onChange={(e) => setFormData({ ...formData, time: e.target.value })} 
+                      className={`w-full px-3 py-2 border rounded-lg ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
+                    >
+                      <option value="">Select preferred time</option>
+                      {timeSlots.map((slot, idx) => (
+                        <option key={idx} value={slot}>{slot}</option>
+                      ))}
+                    </select>
+                    {errors.time && <p className="text-xs text-red-500 mt-1">{errors.time}</p>}
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button 
+                    type="button" 
+                    onClick={() => setStep(1)} 
+                    className="w-full border border-gray-300 py-2 rounded-lg"
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Submitting...
-                </span>
-              ) : (
-                "Submit Inspection Request"
-              )}
-            </button>
+                    Back
+                  </button>
+                  <button 
+                    type="submit" 
+                    disabled={loading} 
+                    className="w-full bg-green-600 text-white py-2 rounded-lg disabled:opacity-70"
+                  >
+                    {loading ? "Processing..." : "Confirm Inspection"}
+                  </button>
+                </div>
+              </>
+            )}
           </form>
 
           {submitted && (
-            <div className="mt-6 p-4 bg-green-50 border border-green-400 text-green-700 rounded-md">
-              <div className="flex items-center">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md mx-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Booking Inspection Confirmed!</h3>
+                <p className="text-sm text-gray-600 mb-4">We've received your request and will contact you shortly to confirm the details.</p>
+                <button 
+                  onClick={() => setSubmitted(false)} 
+                  className="w-full bg-green-600 text-white py-2 rounded-lg"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p>
-                  Thank you for your inspection request! We'll get back to you
-                  soon.
-                </p>
+                  Close
+                </button>
               </div>
             </div>
           )}
-
-          {/* Debug info - remove in production */}
-          {/* <div className="mt-4 p-2 bg-gray-100 text-xs">
-            <p>Latitude: {formData.latitude}</p>
-            <p>Longitude: {formData.longitude}</p>
-          </div> */}
         </div>
       </div>
     </div>

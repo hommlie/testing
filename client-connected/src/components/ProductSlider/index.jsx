@@ -108,7 +108,7 @@ const ProductSlider = ({ title, services = [] }) => {
     return (
       <div className="w-full px-4 py-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold mb-8 text-gray-900">
+          <h2 className="text-3xl font-bold mb-8 text-gray-900 pl-6">
             {title || "Most Booked Services"}
           </h2>
           <div className="bg-gray-100 rounded-xl p-8 text-center">

@@ -149,7 +149,7 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
                           />
                         </div>
                         <h5 className="lg:h-14 line-clamp-2 text-sm md:text-lg font-bold text-gray-900 text-center mb-2">
-                          {item.product_name}
+                          {item.product_naume}
                         </h5>
                         <div className="flex items-center justify-center mb-4">
                           <span className="text-base md:text-xl font-semibold text-[#10847E]">

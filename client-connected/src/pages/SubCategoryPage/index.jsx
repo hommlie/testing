@@ -563,30 +563,26 @@ const SubCategoryPage = () => {
                   setOpenSection(openSection === "locations" ? "" : "locations")
                 }
               >
-                <div className="text-sm md:text-base leading-relaxed">
+                <div className="flex flex-col space-y-2 text-sm md:text-base">
                   {getLocations()?.map((location, index) => (
-                    <React.Fragment key={index}>
+                    <div key={location.slug} className="flex items-center">
                       {index > 0 && (
-                        <span className="mx-2 text-gray-400">•</span>
+                        <span className="text-gray-300 mr-2">•</span>
                       )}
                       <a
-                        href={`${
-                          config.VITE_BASE_URL
-                        }/${location?.slug?.trim()}`}
+                        href={`${config.VITE_BASE_URL}/${location.slug.trim()}`}
                         onClick={(e) => {
                           e.preventDefault();
                           navigate(
-                            `${config.VITE_BASE_URL}/${location?.slug?.trim()}`,
-                            {
-                              state: { location: location?.title?.trim() },
-                            }
+                            `${config.VITE_BASE_URL}/${location.slug.trim()}`,
+                            { state: { location: location.title.trim() } }
                           );
                         }}
-                        className="text-blue-600 hover:underline inline-block"
+                        className="text-gray-500 hover:text-blue-600 hover:underline transition-colors duration-200 whitespace-nowrap"
                       >
-                        {location?.title?.trim()}
+                        {location.title.trim()}
                       </a>
-                    </React.Fragment>
+                    </div>
                   ))}
                 </div>
               </QuickLinkSection>
@@ -606,7 +602,7 @@ const SubCategoryPage = () => {
                       )}
                       <a
                         href={`/${service.slug}/${service.id}`}
-                        className="text-blue-600 hover:underline inline-block"
+                        className="text-gray-500 hover:text-blue-600 hover:underline inline-block transition-colors duration-200"
                       >
                         {service.category_name}
                       </a>

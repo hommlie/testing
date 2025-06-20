@@ -143,6 +143,7 @@ const CategoryPage = () => {
               {/* Category Header */}
               <div
                 className="cursor-pointer"
+        
                 onClick={() => handleCategoryClick(category.id)}
               >
                 <div className="relative h-[150px] md:h-[300px] overflow-hidden">

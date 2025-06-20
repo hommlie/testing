@@ -27,6 +27,7 @@ import LocationModal from "../LocationModal";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
 import axios from "axios";
+import ServicesNavDropdown from "../ServicesNavDropdown";
 
 const Header = ({
   logo,
@@ -282,12 +283,8 @@ const Header = ({
 
           <div className="flex items-center space-x-4">
             <nav className="text-lg hidden md:flex items-center space-x-6">
-              <NavLink
-                to="/services"
-                className="text-gray-700 hover:text-green-700 font-medium"
-              >
-                Services
-              </NavLink>
+              <ServicesNavDropdown />
+
               <NavLink
                 to="https://b2b.hommlie.com/"
                 className="text-gray-700 hover:text-green-700 font-medium"

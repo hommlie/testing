@@ -10,7 +10,7 @@ import {
 import config from "../../config/config";
 import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
-
+import LocationDropdown from "../LocationDropdown";
 export default function Footer({
   logo,
   logoAlt,
@@ -26,7 +26,7 @@ export default function Footer({
   const locationArray = locations ? locations.split("|") : [];
 
   return (
-    <footer className="footer mt-10 z-10 px-2 md:px-10 pb-4">
+    <footer className="footer mt-5 z-10 px-2 md:px-10 pb-4">
       <div className="container-sm max-w-7xl mx-auto px-5 md:px-10 space-y-8">
         <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
         <div className="flex flex-col lg:flex-row justify-between gap-8">
@@ -135,7 +135,7 @@ export default function Footer({
         </div>
 
         {/* Dynamic location links with pipe separators */}
-        <div className="flex flex-wrap items-center">
+        {/* <div className="flex flex-wrap items-center">
           <span className="text-sm mr-2">We are available in:</span>
           {locationArray.map((location, index) => (
             <React.Fragment key={location}>
@@ -147,18 +147,25 @@ export default function Footer({
               >
                 {location.trim()}
               </a>
-              {/* Add pipe separator between locations but not after the last one */}
+              
               {index < locationArray.length - 1 && (
                 <span className="mx-2 text-gray-400">|</span>
               )}
             </React.Fragment>
           ))}
-        </div>
+        </div> */}
+        {/* <div className="w-full flex justify-end px-4 py-2 bg-gray-50">
+          <LocationDropdown locationArray={locationArray} />
+        </div> */}
 
         <div className="border border-gray-400"></div>
-        <div className="flex gap-4 items-center pt-2 text-sm text-gray-400">
-          <p className="">{copyright}</p>
-          <p className="flex gap-3">
+
+        <div className="flex flex-wrap items-center justify-between pt-2 text-sm text-gray-400">
+          {/* Left Side: Copyright */}
+          <p className="mr-4">{copyright}</p>
+
+          {/* Center: Links */}
+          <div className="flex gap-4 items-center flex-wrap">
             <a
               href={`${config.VITE_BASE_URL}/privacy-policy`}
               className="underline"
@@ -171,12 +178,19 @@ export default function Footer({
             >
               Terms & Conditions
             </a>
-          </p>
+          </div>
+
+          {/* Right Side: Location Dropdown */}
+          <div className="ml-auto">
+            <LocationDropdown locationArray={locationArray} />
+          </div>
         </div>
-      </div>
+        </div>
     </footer>
   );
 }
+
+
 
 const FooterSection = ({ title, links, hideinMobile }) => (
   <div className={`${hideinMobile ? "hidden md:block" : ""}`}>
