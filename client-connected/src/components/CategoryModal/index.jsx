@@ -178,7 +178,7 @@ const CategoryModal = ({ isOpen, onClose, category = [], ClickedSubId }) => {
                           }
                           className="w-full py-2 text-center text-white bg-[#10847E] hover:shadow-lg rounded-md transition-colors"
                         >
-                          View Details.
+                          View Details
                         </button>
                       </div>
                     ))}
