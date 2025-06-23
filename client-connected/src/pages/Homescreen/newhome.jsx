@@ -17,7 +17,7 @@ import {
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { Star, Users } from "lucide-react";
 import DownloadAppImg from "/assets/bg/download-app.png";
 import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
@@ -25,7 +25,21 @@ import ReferEarnImg from "/assets/bg/refer-earn.svg";
 // import discoverImg1 from "../../assets/images/discover-1.png";
 // import discoverImg3 from "../../assets/images/discover-3.png";
 // import discoverImg4 from "../../assets/images/discover-4.png";
-
+import { 
+  FaBug, 
+  FaBroom, 
+  FaSprayCan, 
+  FaShieldAlt, 
+  FaFan, 
+  FaTools, 
+  FaPaintRoller, 
+  FaEllipsisH 
+} from 'react-icons/fa';
+import { FaHammer } from 'react-icons/fa';
+import photo1 from '../../assets/images/photo1.png';
+import photo2 from '../../assets/images/photo2.jpg';
+import photo3 from '../../assets/images/photo3.jpg';
+import photo4 from '../../assets/images/photo4.jpg';
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
@@ -39,6 +53,7 @@ import InspectionModal from "../../components/InspectionModal";
 import MobileNavigation from "../../components/MobileNavigation";
 import LoginSignup from "../../components/LoginModal";
 import { Helmet } from "react-helmet";
+import { Typewriter } from 'react-simple-typewriter';
 import SchemaMarkup from "../../components/SchemaMarkup";
 // import FormSection from "../FormSection/index"
 
@@ -343,285 +358,168 @@ const HomePage = () => {
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto md:px-4 relative bg-white py-5 md:py-10">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="container mx-auto px-4 md:pt-8"
-        >
-         <div className="w-full flex justify-center py-2 pb-4 text-center">
-            <h1 className="max-w-x2 mx-auto text-1xl md:text-4xl lg:text-5xl font-bold text-center leading-tight">
-              Trusted Pest Control & Hygiene<br />
-              <span className="">Experts Near You</span>
-            </h1>
-          </div>
-
-          {/* Search Bar */}
-          <div className="max-w-3xl mx-auto mb-4 md:mb-8 py-2">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Mobile Cart Button */}
-              <div className="flex md:hidden justify-between items-center md:mb-4">
-                <div className="flex-1">
-                  <div className="relative">
-                    <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="What Service do you Need?"
-                      className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                    />
-                  </div>
-                </div>
-                {/* <div
-                  onClick={() =>
-                    navigate(`${config.VITE_BASE_URL}/add-to-cart`)
-                  }
-                  className="ml-4 relative cursor-pointer"
-                >
-                  <img src={cartIcon} alt="cart icon" className="h-8 w-8" />
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartLength || 0}
-                  </span>
-                </div> */}
+      <section className="max-w-7xl mx-auto px-5 py-10 bg-white">
+  <div className="w-full flex flex-col md:flex-row gap-8">
+    {/* Left Container - Services */}
+    <div className="w-full md:w-1/2">
+      <div className="text-center mb-8">
+        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 pr-14">
+          On-Demand Home Services {' '}
+          <span className="text-green-600">
+            <Typewriter
+              words={['in Bangalore']}
+              loop={false}
+              cursor
+              cursorStyle="|"
+              typeSpeed={100}
+              deleteSpeed={50}
+              delaySpeed={1000}
+            />
+          </span>
+        </h1>
+      </div>
+      <div className="max-w-4xl mx-auto p-5 pr-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div className="mb-5">
+          <h3 className="text-lg font-semibold text-gray-800">What are you looking for?</h3>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {/* Pest Control */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center mb-2">
+                <FaBug className="text-red-500 text-lg" />
               </div>
-
-              {/* Location Input - Hidden on Mobile */}
-              <div className="hidden md:block relative flex-1">
-                <button
-                  onClick={() => setIsLocationModalOpen(true)}
-                  className="w-full flex items-center space-x-2 px-4 py-3 rounded-lg border hover:border-blue-500 transition-colors"
-                >
-                  <MdLocationOn className="text-xl text-green-600" />
-                  <span className="flex-1 text-left truncate">
-                    {currentLocation}
-                  </span>
-                  <IoIosArrowDown />
-                </button>
-              </div>
-
-              {/* Search Input */}
-              <div className="hidden md:block relative flex-1">
-                <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="What Service do you Need?"
-                  className="w-full pl-10 pr-4 py-3 border hover:border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-              </div>
-            </div>
-
-            {/* Search Results */}
-            <AnimatePresence>
-              {isSearchOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute left-0 right-0 mt-2 bg-white shadow-xl rounded-lg z-20 max-h-96 overflow-y-auto mx-4 md:mx-8"
-                >
-                  {isLoading ? (
-                    <div className="flex justify-center items-center py-6">
-                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-700"></div>
-                    </div>
-                  ) : searchResults.length > 0 ? (
-                    searchResults?.map((result, index) => (
-                      <motion.div
-                        key={result.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                      >
-                        <div
-                          className="flex items-center p-3 hover:bg-gray-50 border-b border-gray-100 cursor-pointer"
-                          onClick={() => {
-                            setIsSearchOpen(false);
-                            setSearchTerm("");
-                            navigate(
-                              `${config.VITE_BASE_URL}/product/${result.slug}`
-                            );
-                          }}
-                        >
-                          {result.productimage && (
-                            <img
-                              src={result.productimage.image_url}
-                              alt={result.product_name}
-                              className="w-14 h-14 object-cover rounded mr-3"
-                            />
-                          )}
-                          <div className="flex-1">
-                            <h4 className="text-gray-800 font-medium">
-                              {result.product_name}
-                            </h4>
-                            <p className="flex gap-2 text-gray-600">
-                              <span className="font-semibold">
-                                {result.discounted_price}
-                              </span>
-                              <span className="line-through ">
-                                {result.product_price}
-                              </span>
-                            </p>
-
-                            {result.rating && (
-                              <div className="flex items-center mt-1">
-                                <div className="flex items-center">
-                                  {[1, 2, 3, 4, 5].map((star) => (
-                                    <svg
-                                      key={star}
-                                      className={`w-3 h-3 ${
-                                        star <= Math.round(result.rating)
-                                          ? "text-yellow-400"
-                                          : "text-gray-300"
-                                      }`}
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                  ))}
-                                </div>
-                                <span className="text-xs text-gray-500 ml-1">
-                                  ({result.total_reviews})
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                          <IoIosArrowForward className="text-gray-400 text-lg" />
-                        </div>
-                      </motion.div>
-                    ))
-                  ) : (
-                    <div className="py-4 px-6 text-center text-gray-500">
-                      No products found for "{searchTerm}"
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Hero Slider and Features */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Main Slider */}
-            <div className="relative h-48 md:h-80 rounded-xl overflow-hidden">
-              <motion.div
-                animate={{ x: `-${currentSlide * 100}%` }}
-                transition={{ duration: 0.7, ease: "easeInOut" }}
-                className="flex h-full"
-              >
-                {heroSlides?.map((slide, index) => (
-                  <a
-                    key={index}
-                    href={slide.link}
-                    className="min-w-full h-full relative"
-                  >
-                    <img
-                      src={slide.image_url}
-                      alt={slide.alt_tag}
-                      className="w-full h-full object-cover"
-                    />
-                  </a>
-                ))}
-              </motion.div>
-
-              {/* Slider Controls */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                {heroSlides?.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      currentSlide === index ? "w-4 bg-white" : "bg-white/50"
-                    }`}
-                  />
-                ))}
-              </div>
-
-              {/* Navigation Buttons */}
-              <button
-                onClick={() =>
-                  setCurrentSlide((prev) =>
-                    prev === 0 ? heroSlides.length - 1 : prev - 1
-                  )
-                }
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-colors"
-              >
-                <IoIosArrowBack className="text-gray-800 text-xl" />
-              </button>
-              <button
-                onClick={() =>
-                  setCurrentSlide((prev) =>
-                    prev === heroSlides.length - 1 ? 0 : prev + 1
-                  )
-                }
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-colors"
-              >
-                <IoIosArrowForward className="text-gray-800 text-xl" />
-              </button>
-            </div>
-
-            {/* Feature Cards */}
-            <div className="grid grid-cols-3 gap-4">
-              {heroSections?.map((feature, index) => (
-                <div
-                  key={index}
-                  className="relative bg-white md:rounded-xl shadow-sm overflow-hidden"
-                >
-                  <img
-                    src={feature.image}
-                    alt={feature.alt_tag}
-                    className="w-full h-full object-cover md:rounded-xl"
-                  />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-black/60 flex flex-col justify-around">
-                    <div className="p-2 md:p-4">
-                      <h3 className="text-white text-sm md:text-2xl font-bold mb-2">
-                        {feature.title}
-                      </h3>
-                      <p className="text-xs text-white mb-4">
-                        {feature.sub_title}
-                      </p>
-                    </div>
-                    <div className="relative overflow-hidden">
-                      {isMobile ? (
-                        <a
-                          href={feature.btn_link}
-                          className="w-fit flex items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
-                        >
-                          <span className="text-sm px-2 whitespace-nowrap">
-                            {feature.btn_text}
-                          </span>
-                          <div className="w-5 flex justify-center">
-                            <IoIosArrowForward />
-                          </div>
-                        </a>
-                      ) : (
-                        <motion.div
-                          whileHover={{ x: 0 }}
-                          initial={{ x: "calc(100% - 220px)" }}
-                          transition={{ duration: 0.3, ease: "easeOut" }}
-                          className="w-fit flex items-center bg-white text-[#107CD7] py-2 rounded-r-lg"
-                        >
-                          <a href={feature.btn_link}>
-                            <span className="px-4 whitespace-nowrap">
-                              {feature.btn_text}
-                            </span>
-                          </a>
-                          <div className="w-10 flex justify-center">
-                            <IoIosArrowForward />
-                          </div>
-                        </motion.div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <span className="text-xs font-medium text-gray-700 text-center">Pest Control</span>
             </div>
           </div>
-        </motion.div>
-      </section>
 
+          {/* Cleaning */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mb-2">
+                <FaBroom className="text-blue-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">Cleaning</span>
+            </div>
+          </div>
+
+          {/* Disinfection */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center mb-2">
+                <FaSprayCan className="text-green-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">Disinfection</span>
+            </div>
+          </div>
+
+          {/* Mosquito Nets */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center mb-2">
+                <FaShieldAlt className="text-purple-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">Mosquito Nets</span>
+            </div>
+          </div>
+
+          {/* AC Services */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-cyan-50 rounded-full flex items-center justify-center mb-2">
+                <FaFan className="text-cyan-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">AC Services</span>
+            </div>
+          </div>
+
+          {/* Plumbing */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center mb-2">
+                <FaTools className="text-yellow-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">Plumbing</span>
+            </div>
+          </div>
+
+          {/* Painting */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mb-2">
+                <FaPaintRoller className="text-orange-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">Painting</span>
+            </div>
+          </div>
+
+          {/* Carpentry */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center mb-2">
+                <FaHammer className="text-amber-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">Carpentry</span>
+            </div>
+          </div>
+
+          {/* See All */}
+          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center mb-2">
+                <FaEllipsisH className="text-gray-500 text-lg" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">See All</span>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    
+        <StatsSection />
+    
+    </div>
+
+    {/* Right Container - Images */}
+    
+    <div className="w-full md:w-1/2">
+      <div className="grid grid-cols-2 gap-4 h-full">
+        {/* First Column */}
+        <div className="flex flex-col space-y-4">
+          <div className="bg-gray-200 rounded-lg h-[340px] flex items-center justify-center overflow-hidden">
+            <img src={photo3} alt="Home Service Example" className="object-cover h-full w-full" />
+          </div>
+          <div className="bg-gray-200 rounded-lg h-[215px] flex items-center justify-center overflow-hidden">
+            <img src={photo1} alt="Home Service Example" className="object-cover h-full w-full" />
+          </div>
+        </div>
+
+        {/* Second Column */}
+        <div className="flex flex-col space-y-4">
+      {/* First Image - Shorter */}
+      <div className="relative bg-gray-200 rounded-lg h-[235px] overflow-hidden">
+        <img 
+          src={photo2} 
+          alt="Home Service Example" 
+          className="absolute h-full w-full object-cover object-center"
+          style={{ objectPosition: "50% 30%" }} // Adjust this value as needed
+        />
+      </div>
+
+      {/* Second Image - Taller */}
+      <div className="relative bg-gray-200 rounded-lg h-[320px] overflow-hidden">
+        <img 
+          src={photo4} 
+          alt="Home Service Example" 
+          className="absolute h-full w-full object-cover object-center"
+          style={{ objectPosition: "50% 25%" }} // Adjust this value as needed
+        />
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
       {/* Services Section */}
       <ServiceSection categories={data.all_categories} />
 
@@ -730,12 +628,13 @@ const HomePage = () => {
       </section> */}
 
       {/* Most Booked Services */}
-      <section className="max-w-7x1 mx-auto md:px-4 py-5 md:py-10 bg-white ml-2">
+      <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-10 bg-white">
         <ProductSlider
-          title={"Most Booked Services"}
+          title="Most Booked Services"
           services={data?.most_booked_services}
         />
       </section>
+
 
       {/* Thoughtful Curations */}
       <section className="px-7 py-5 md:py-10 bg-[#F5F5F5]">
@@ -788,9 +687,9 @@ const HomePage = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="px-10 py-5 md:py-10">
+      {/* <section className="px-10 py-5 md:py-10">
         <StatsSection />
-      </section>
+      </section> */}
 
       {/* inspection form section */}
       <section id="inspection-section" className="px-4 py-5 md:py-10">

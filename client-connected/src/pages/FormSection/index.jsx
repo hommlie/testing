@@ -55,7 +55,7 @@ const ContactForm = ({ user }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-sm relative">
+    <div className="">
       {/* Request Callback Button */}
       <form onSubmit={handleSubmit} className="flex justify-center">
         <button

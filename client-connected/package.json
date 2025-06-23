@@ -44,6 +44,7 @@
     "react-router-dom": "^6.29.0",
     "react-select": "^5.8.0",
     "react-select-country-list": "^2.2.3",
+    "react-simple-typewriter": "^5.0.1",
     "react-slick": "^0.30.3",
     "react-toastify": "^10.0.5",
     "sitemap": "^8.0.0",

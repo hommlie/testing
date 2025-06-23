@@ -92,7 +92,7 @@ const ServicesNavDropdown = () => {
     >
       <div className="flex items-center cursor-pointer">
         <span className="text-gray-700 hover:text-green-700 font-medium font-semibold tracking-wide text-[16px] transition-colors duration-150">
-          Services
+          Home Demand Services
         </span>
       </div>
 
