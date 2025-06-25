@@ -57,6 +57,9 @@ import { Typewriter } from 'react-simple-typewriter';
 import SchemaMarkup from "../../components/SchemaMarkup";
 // import FormSection from "../FormSection/index"
 import SnabbitTasksUI from '../../components/SnabbitTasksUI';
+import HowItWorks from "../../components/HowItWorks";
+import Testimonials from "../../components/Testimonials";
+import QuickHero from "../../components/QuickHero";
 
 
 const HomePage = () => {
@@ -681,18 +684,29 @@ const HomePage = () => {
       {/* <section className="px-10 py-5 md:py-10 bg-[#F8F8F8]">
         <AppDownloadSection />
       </section> */}
+      {/* <QuickHero /> */}
 
+      
       <section className="bg-[#5c0b38] px-10 py-5 md:py-10">
         <SnabbitTasksUI />
       </section>
+
       {/* FAQ Section */}
-      <section className="px-10 py-5 md:py-10">
+      {/* <section className="px-10 py-5 md:py-10">
         <FaqSection />
-      </section>
+      </section> */}
 
       {/* Stats Section */}
       {/* <section className="px-10 py-5 md:py-10">
         <StatsSection />
+      </section> */}
+
+      <section className="px-10 py-10">
+        <HowItWorks />
+      </section>
+
+      {/* <section className="px-10 py-10">
+        <Testimonials />
       </section> */}
 
       {/* inspection form section */}

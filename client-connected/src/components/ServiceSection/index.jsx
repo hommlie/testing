@@ -568,41 +568,38 @@ const ServiceSection = ({ categories }) => {
             </div>
           </div>
         </div>
-
-        {/* Product cards */}
       {/* Product cards */}
-<div className="mb-8">
-  <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-    Available Service Packages
-  </h3>
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Available Service Packages
+            </h3>
 
-  {/* All products in a single grid */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 justify-items-center">
-    {/* Recommended products first */}
-    {recommended.map((product) => (
-      <ProductCard
-        key={product.id}
-        product={product}
-        isSelected={selectedProduct === product.id}
-        onClick={() => setSelectedProduct(product.id)}
-        className="w-full max-w-[350px]"
-      />
-    ))}
-    
-    {/* Regular products next */}
-    {regular.map((product) => (
-      <ProductCard
-        key={product.id}
-        product={product}
-        isSelected={selectedProduct === product.id}
-        onClick={() => setSelectedProduct(product.id)}
-        className="w-full max-w-[350px]"
-      />
-    ))}
-  </div>
-</div>
+            {/* All products in a single grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 justify-items-center">
+              {/* Recommended products first */}
+              {recommended.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isSelected={selectedProduct === product.id}
+                  onClick={() => setSelectedProduct(product.id)}
+                  className="w-full max-w-[350px]"
+                />
+              ))}
+              
+              {/* Regular products next */}
+              {regular.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isSelected={selectedProduct === product.id}
+                  onClick={() => setSelectedProduct(product.id)}
+                  className="w-full max-w-[350px]"
+                />
+              ))}
+            </div>
+          </div>
       </section>
-
       <LoginSignup
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
