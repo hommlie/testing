@@ -198,6 +198,21 @@ const ServiceSection = ({ categories }) => {
     return product?.attributes || [];
   };
 
+  // Get current variations for selected attribute
+  const getCurrentVariations = () => {
+    const category = categories?.find((c) => c.id === selectedCategory);
+    const subcategory = category?.subcategories?.find(
+      (s) => s.id === selectedSubCategory
+    );
+    const product = subcategory?.products?.find(
+      (p) => p.id === selectedProduct
+    );
+    const attribute = product?.attributes?.find(
+      (a) => a.id === selectedAttribute
+    );
+    return attribute?.variations || [];
+  };
+
   // Dropdown component
   const Dropdown = ({
     label,
@@ -256,18 +271,19 @@ const ServiceSection = ({ categories }) => {
         </button>
 
         {isOpen && (
-          <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-            {options.map((option) => {
-              const isSelected = value === option.id;
-              return (
-                <div
-                  key={option.id}
-                  onClick={() => handleSelect(option.id)}
-                  className={`cursor-pointer p-3 flex items-center justify-between hover:bg-emerald-50 transition-colors ${
-                    isSelected ? "bg-emerald-100 text-emerald-800" : "text-gray-900"
-                  } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
-                >
-                  <div className="flex items-center gap-3">
+        <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          {options.map((option) => {
+            const isSelected = value === option.id;
+            return (
+              <div
+                key={option.id}
+                onClick={() => handleSelect(option.id)}
+                className={`cursor-pointer p-3 flex items-start justify-between hover:bg-emerald-50 transition-colors ${
+                  isSelected ? "bg-emerald-100 text-emerald-800" : "text-gray-900"
+                } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
+              >
+                <div className="flex items-start gap-3 w-full">
+                  <div className="flex-shrink-0 mt-1">
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         isSelected
@@ -277,20 +293,24 @@ const ServiceSection = ({ categories }) => {
                     >
                       {isSelected && <Check className="w-3 h-3 text-white" />}
                     </div>
+                  </div>
+                  
+                  <div className="flex flex-col w-full">
+                    {showRecommended && option?.is_recommended === 1 && (
+                      <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full self-start mb-1">
+                        Recommended
+                      </span>
+                    )}
                     <span className="truncate">
                       {option.subcategory_name || option.product_name || option.attribute}
                     </span>
                   </div>
-                  {showRecommended && option?.is_recommended === 1 && (
-                    <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
-                      Recommended
-                    </span>
-                  )}
                 </div>
-              );
-            })}
-          </div>
-        )}
+              </div>
+            );
+          })}
+        </div>
+      )}
       </div>
     );
   };
@@ -300,33 +320,15 @@ const ServiceSection = ({ categories }) => {
     const selectedAttr = selectedAttribute
       ? product.attributes?.find((attr) => attr.id === selectedAttribute)
       : product.attributes?.[0];
+      
+    // Find variation that matches selected BHK or use first variation
     const matchedVariation = selectedAttr?.variations?.find(
       (v) => v.variation === selectedBhk
     ) || selectedAttr?.variations?.[0];
 
-    // Calculate prices
-    const basePrice = matchedVariation?.price || product.price || 0;
-    const discountedPrice =
-      matchedVariation?.discounted_variation_price || product.discounted_price || basePrice;
-    const discountPercentage =
-      basePrice > 0
-        ? Math.round(((basePrice - discountedPrice) / basePrice) * 100)
-        : 0;
-
-    // Calculate BHK multiplier
-    const getBhkMultiplier = () => {
-      if (!selectedBhk) return 1;
-      const bhkNumber = parseInt(selectedBhk);
-      return isNaN(bhkNumber) ? 1 : bhkNumber;
-    };
-
-    const multiplier = getBhkMultiplier();
-    const finalPrice = Math.round(discountedPrice * multiplier);
-    const originalPrice = Math.round(basePrice * multiplier);
-
     // Rating and reviews
-    const rating = product.avg_rating || 4.9;
-    const reviews = product.total_reviews || 11540;
+    const rating = matchedVariation?.avg_rating || product.avg_rating || 4.9;
+    const reviews = matchedVariation?.total_reviews || product.total_reviews || 11540;
 
     return (
       <motion.div
@@ -335,17 +337,21 @@ const ServiceSection = ({ categories }) => {
           isSelected
             ? "border-emerald-500 bg-emerald-50 shadow-lg"
             : "border-gray-200 bg-white hover:shadow-md"
-        } ${product.is_recommended ? "ring-2 ring-emerald-300" : ""}`}
+        }`}
       >
-        {/* Recommended badge */}
+        {/* Recommended badge - Improved UI */}
         {product.is_recommended == 1 && (
-          <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
-            Recommended
-          </span>
+          <div className="absolute top-2 right-2 z-10">
+            <div className="relative bg-yellow-400 text-black text-[11px] font-bold py-1 pl-3 pr-6 rounded-r-full shadow-md flex items-center">
+              <Star className="w-3 h-3 mr-1 fill-current text-black" />
+              RECOMMENDED
+              <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
+            </div>
+          </div>
         )}
-        <div className="p-6 cursor-pointer" onClick={onClick}>
+          <div className="p-6 pt-10 cursor-pointer" onClick={onClick}>
           {/* Product name and attribute */}
-          <div className="flex flex-col items-center text-center mb-4">
+          <div className="flex flex-col items-center text-center mb-4 pt-2">
             <h3 className="text-xl font-bold text-gray-900 mb-2">
               {product.product_name}
             </h3>
@@ -368,7 +374,7 @@ const ServiceSection = ({ categories }) => {
               {formatDescription(matchedVariation.description).map(
                 (point, index) => (
                   <li key={index} className="flex items-start">
-                    <Check className="w-4 h-4 mt-1 mr-2 text-emerald-500 flex-shrink-0" />
+                    <span className="mr-2 text-emerald-500">✓</span>
                     <span className={isSelected ? "text-gray-800" : "text-gray-700"}>
                       {point.trim()}
                     </span>
@@ -380,44 +386,45 @@ const ServiceSection = ({ categories }) => {
 
           {/* Price section */}
           <div className="flex flex-col items-center mb-4">
-            <div className="flex items-baseline gap-2">
-              <span
-                className={`text-3xl font-bold ${
-                  isSelected ? "text-emerald-700" : "text-emerald-600"
-                }`}
-              >
-                ₹{finalPrice.toLocaleString("en-IN")}
-              </span>
-              {finalPrice !== originalPrice && (
-                <span
-                  className={`text-lg line-through ${
-                    isSelected ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  ₹{originalPrice.toLocaleString("en-IN")}
+            <div className="flex flex-col items-center">
+              <div className="flex gap-4 justify-center text-2xl md:text-3xl font-bold mb-1">
+                <span className="text-emerald-600">
+                  ₹{matchedVariation?.discounted_variation_price || matchedVariation?.price}/-
+                </span>
+                {matchedVariation?.discounted_variation_price && matchedVariation?.price && (
+                  <span className="line-through text-gray-500">
+                    ₹{matchedVariation?.price}/-
+                  </span>
+                )}
+              </div>
+              {matchedVariation?.discounted_variation_price && matchedVariation?.price && (
+                <span className="text-sm bg-red-100 text-red-800 px-2 py-0.5 rounded-full">
+                  {Math.round(((matchedVariation.price - matchedVariation.discounted_variation_price) / matchedVariation.price) * 100)}% OFF
                 </span>
               )}
             </div>
-            {discountPercentage > 0 && (
-              <span className="text-sm bg-red-100 text-red-800 px-2 py-0.5 rounded-full mt-1">
-                {discountPercentage}% OFF
-              </span>
-            )}
           </div>
 
           {/* Rating and BHK selector */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
-              <Star className="w-4 h-4 text-yellow-400 fill-current" />
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className={`w-4 h-4 ${
+                    star <= Math.round(rating)
+                      ? "text-yellow-400 fill-current"
+                      : "text-gray-300"
+                  }`}
+                />
+              ))}
               <span
                 className={`ml-1 text-sm font-medium ${
                   isSelected ? "text-gray-700" : "text-gray-600"
                 }`}
               >
                 {rating.toFixed(1)} (
-                {reviews > 1000
-                  ? `${(reviews / 1000).toFixed(1)}k`
-                  : reviews}
+                {reviews > 1000 ? `${(reviews / 1000).toFixed(1)}k+` : `${reviews}+`}
                 )
               </span>
             </div>
@@ -449,10 +456,7 @@ const ServiceSection = ({ categories }) => {
               whileTap={{ scale: 0.98 }}
               onClick={(e) => {
                 e.stopPropagation();
-                const variation = selectedAttr?.variations?.find(
-                  (v) => v.variation === selectedBhk
-                );
-                if (variation) handleAddToCart(variation, product);
+                if (matchedVariation) handleAddToCart(matchedVariation, product);
               }}
               className={`w-full py-3 rounded-lg font-bold transition-colors ${
                 isSelected
@@ -508,10 +512,10 @@ const ServiceSection = ({ categories }) => {
         </div>
 
         {/* Filter controls */}
-        <div className="bg-white rounded-xl text-center font-medium shadow-sm p-6 mb-8 max-w-4xl mx-auto">
-          <div className="grid grid-cols-1  md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-l font-bold text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Service Type
               </label>
               <Dropdown
@@ -523,7 +527,7 @@ const ServiceSection = ({ categories }) => {
               />
             </div>
             <div>
-              <label className="block text-l font-bold justify-text-center text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Property Size
               </label>
               <Dropdown
@@ -539,7 +543,7 @@ const ServiceSection = ({ categories }) => {
               />
             </div>
             <div>
-              <label className="block text-l font-bold text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Service Variant
               </label>
               <Dropdown
@@ -556,23 +560,22 @@ const ServiceSection = ({ categories }) => {
 
         {/* Product cards */}
         <div className="mb-8 text-center">
-  <h3 className="text-2xl font-bold text-gray-900 mb-6">
-    Available Service Packages
-  </h3>
-  <div className="flex justify-center">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {getCurrentProducts()?.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          isSelected={selectedProduct === product.id}
-          onClick={() => setSelectedProduct(product.id)}
-        />
-      ))}
-    </div>
-  </div>
-</div>
-
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+            Available Service Packages
+          </h3>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+              {getCurrentProducts()?.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isSelected={selectedProduct === product.id}
+                  onClick={() => setSelectedProduct(product.id)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
       <LoginSignup

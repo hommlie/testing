@@ -225,6 +225,22 @@ const Header = ({
     return () => clearInterval(interval);
   }, []);
 
+  const [displayedText, setDisplayedText] = useState("");
+const fullText = "Premium Home Services at Your Doorstep";
+
+useEffect(() => {
+  let index = 0;
+  const interval = setInterval(() => {
+    setDisplayedText(fullText.slice(0, index));
+    index++;
+    if (index > fullText.length) {
+      clearInterval(interval);
+    }
+  }, 80); // typing speed
+
+  return () => clearInterval(interval);
+}, []);
+
   return (
     <header
       ref={headerRef}
