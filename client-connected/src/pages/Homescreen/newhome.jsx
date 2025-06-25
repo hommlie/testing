@@ -56,6 +56,8 @@ import { Helmet } from "react-helmet";
 import { Typewriter } from 'react-simple-typewriter';
 import SchemaMarkup from "../../components/SchemaMarkup";
 // import FormSection from "../FormSection/index"
+import SnabbitTasksUI from '../../components/SnabbitTasksUI';
+
 
 const HomePage = () => {
   const { user } = useCont();
@@ -589,7 +591,6 @@ const HomePage = () => {
           <BannerDatalider bannerData={data?.banners} />
         ) : null}
       </section>
-
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* Offers Section */}
@@ -628,26 +629,26 @@ const HomePage = () => {
       </section> */}
 
       {/* Most Booked Services */}
-      <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-10 bg-white">
+      {/* <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-10 bg-white">
         <ProductSlider
           title="Most Booked Services"
           services={data?.most_booked_services}
         />
-      </section>
+      </section> */}
 
 
       {/* Thoughtful Curations */}
-      <section className="px-7 py-5 md:py-10 bg-[#F5F5F5]">
+      {/* <section className="px-7 py-5 md:py-10 bg-[#F5F5F5]">
         <div className="container mx-auto px-4">
           <ThoughtfulSlider
             videos={thoughtfulContent}
             // onVideoClick={setCurrentVideoIndex}
           />
         </div>
-      </section>
+      </section> */}
 
       {/* Refer & Earn */}
-      <section className="px-10 py-5 md:py-10">
+      {/* <section className="px-10 py-5 md:py-10">
         <div
           onClick={() => {
             if (!user || user.length === 0) {
@@ -669,18 +670,21 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonial Section */}
-      <section className="px-7 py-5 md:py-10">
+      {/* <section className="px-7 py-5 md:py-10">
         <TestimonialCarousel testimonials={data.testimonials} />
-      </section>
+      </section> */}
 
       {/* App Download Section */}
-      <section className="px-10 py-5 md:py-10 bg-[#F8F8F8]">
+      {/* <section className="px-10 py-5 md:py-10 bg-[#F8F8F8]">
         <AppDownloadSection />
-      </section>
+      </section> */}
 
+      <section className="bg-[#5c0b38] px-10 py-5 md:py-10">
+        <SnabbitTasksUI />
+      </section>
       {/* FAQ Section */}
       <section className="px-10 py-5 md:py-10">
         <FaqSection />
