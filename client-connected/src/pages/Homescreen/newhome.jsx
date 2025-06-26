@@ -687,7 +687,7 @@ const HomePage = () => {
       {/* <QuickHero /> */}
 
       
-      <section className="bg-[#5c0b38] px-10 py-5 md:py-10">
+      <section className=" px-10 py-5 md:py-10">
         <SnabbitTasksUI />
       </section>
 
