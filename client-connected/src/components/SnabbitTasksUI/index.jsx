@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import DownloadHommlieApp from '../DownloadHommlieApp';
 
 const tasks = [
   { title: 'General Cleaning', image: '/images/general-cleaning.png' },
@@ -19,7 +20,7 @@ export default function QuickHeroSection() {
     offset: ['start start', 'end end']
   });
 
-  const duplicatedTasks = [...tasks, ...tasks, ...tasks];
+  const duplicatedTasks = [...tasks, ...tasks]; // Only duplicate once for loop
 
   const [phoneRef, phoneInView] = useInView({ threshold: 0.3 });
   const [cardsRef, cardsInView] = useInView({ threshold: 0.2 });
@@ -94,54 +95,42 @@ export default function QuickHeroSection() {
             <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#5c0b38] to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#5c0b38] to-transparent z-10 pointer-events-none" />
             
-            {/* Slower, smoother scrolling animation */}
+            {/* Continuous scroll wrapper */}
             <motion.div
               className="flex absolute left-0 top-0 h-full items-center"
-              animate={{ 
-                x: ['0%', '-100%'],
+              animate={{
+                x: ['0%', '-50%'],
               }}
               transition={{
-                duration: 40, // Slower duration for better readability
+                duration: 30,
                 repeat: Infinity,
                 ease: 'linear',
               }}
             >
-              {[...duplicatedTasks, ...duplicatedTasks].map((task, index) => (
-                <motion.div
+              {[...duplicatedTasks].map((task, index) => (
+                <div
                   key={`${task.title}-${index}`}
                   className="w-48 h-64 flex-shrink-0 mx-6 group"
-                  whileHover={{ 
-                    scale: 1.05,
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)'
-                  }}
-                  animate={{ 
-                    y: [0, -10, 0], // Smoother floating animation
-                  }}
-                  transition={{ 
-                    duration: 8, // Slower floating animation
-                    repeat: Infinity, 
-                    ease: 'easeInOut', 
-                    delay: index * 0.3 
-                  }}
                 >
                   <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#ff4c7b] transition-all duration-300 h-full">
                     <div className="h-40 bg-gray-100 overflow-hidden relative">
-                      <img 
-                        src={task.image} 
-                        alt={task.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      <img
+                        src={task.image}
+                        alt={task.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                     <div className="p-4 text-center font-medium bg-white group-hover:bg-[#ff4c7b] group-hover:text-white flex-1 flex items-center justify-center transition-all duration-300">
                       {task.title}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </motion.div>
           </div>
         </div>
       </section>
+      <DownloadHommlieApp />
     </div>
   );
 }

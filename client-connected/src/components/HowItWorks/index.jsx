@@ -1,351 +1,208 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import DownloadHommlieApp from '../DownloadHommlieApp';
+
+const cardData = [
+  {
+    id: 1,
+    content: (
+      <>
+        <div className="text-[#ff4c7b] text-5xl font-extrabold leading-none mb-1">6000+</div>
+        <p className="text-sm text-gray-700 font-semibold">Trusted By 6000+ Families</p>
+      </>
+    ),
+  },
+  {
+    id: 2,
+    content: (
+      <>
+        <div className="text-[#ff4c7b] text-4xl font-bold mb-2">4.5</div>
+        <p className="text-[#5c0b38] font-semibold text-sm">Average Service Rating</p>
+      </>
+    ),
+  },
+  {
+    id: 3,
+    content: (
+      <>
+        <div className="w-12 h-12 bg-[#5c0b38] text-white flex items-center justify-center text-sm font-bold rounded-full mb-2">W</div>
+        <p className="text-sm text-gray-700 font-semibold">Powered By Strong Women</p>
+      </>
+    ),
+  },
+  {
+    id: 4,
+    content: (
+      <>
+        <div className="text-[#ff4c7b] text-4xl font-bold mb-2">30+</div>
+        <p className="text-sm text-gray-700 font-semibold">Services Offered</p>
+      </>
+    ),
+  },
+  {
+    id: 5,
+    content: (
+      <>
+        <div className="text-[#ff4c7b] text-4xl font-bold mb-2">24/7</div>
+        <p className="text-sm text-gray-700 font-semibold">Support Available</p>
+      </>
+    ),
+  },
+  {
+    id: 6,
+    content: (
+      <>
+        <div className="text-[#ff4c7b] text-4xl font-bold mb-2">100%</div>
+        <p className="text-sm text-gray-700 font-semibold">Satisfaction Guarantee</p>
+      </>
+    ),
+  },
+];
 
 const HowItWorks = () => {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"]
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const { scrollYProgress: cardScroll } = useScroll({ target: containerRef, offset: ['start start', 'end end'] });
+
+  const cardWidth = 240;
+  const cardHeight = 160;
+  const gapX = 280;
+  const gapY = 200;
+
+  const transforms = cardData.map((_, i) => {
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const x = (col - 1) * gapX;
+    const y = (row - 0.5) * gapY;
+    const rotate = (col - 1) * 5 + (row === 0 ? -5 : 5);
+
+    return {
+      x: useTransform(cardScroll, [0, 0.4], [0, x]),
+      y: useTransform(cardScroll, [0, 0.4], [0, y]),
+      rotate: useTransform(cardScroll, [0, 0.4], ['0deg', `${rotate}deg`]),
+    };
   });
 
-  // Enhanced animation values with smoother transitions
-  const step1Opacity = useTransform(scrollYProgress, 
-    [0, 0.2, 0.3], 
-    [1, 1, 0]
-  );
-  const step1Scale = useTransform(scrollYProgress, 
-    [0, 0.3], 
-    [1, 0.95]
-  );
-  const step1Width = useTransform(scrollYProgress,
-    [0, 0.3],
-    ['100%', '95%']
-  );
-
-  const step2Opacity = useTransform(scrollYProgress, 
-    [0.2, 0.3, 0.6, 0.7], 
-    [0, 1, 1, 0]
-  );
-  const step2Y = useTransform(scrollYProgress, 
-    [0.3, 0.45, 0.6], 
-    [30, 0, 0]
-  );
-  const step2Scale = useTransform(scrollYProgress, 
-    [0.3, 0.45, 0.6], 
-    [0.95, 1, 0.95]
-  );
-  const step2Width = useTransform(scrollYProgress,
-    [0.3, 0.45, 0.6],
-    ['95%', '100%', '95%']
-  );
-
-  const step3Opacity = useTransform(scrollYProgress, 
-    [0.6, 0.7, 1], 
-    [0, 1, 1]
-  );
-  const step3Y = useTransform(scrollYProgress, 
-    [0.7, 0.8], 
-    [30, 0]
-  );
-  const step3Scale = useTransform(scrollYProgress, 
-    [0.7, 0.8], 
-    [0.95, 1]
-  );
-  const step3Width = useTransform(scrollYProgress,
-    [0.7, 0.8],
-    ['95%', '100%']
-  );
-
   return (
-    <div className="h-[300vh] relative" ref={ref}>
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        <div className="relative w-full max-w-2xl mx-auto px-4 h-full flex items-center justify-center">
+    <section className="bg-[#f9f9f9] py-20">
+      {/* Scroll-Controlled Cards (Now moved below) */}
+      <div className="text-center px-4 mb-16">
+        <h2 className="text-4xl md:text-6xl font-extrabold">
+          HOW <span className="text-[#5c0b38]">HOMMLIE</span> <span className="text-[#ff4c7b] italic">WORKS?</span>
+        </h2>
+      </div>
 
-          {/* STEP 1 */}
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center px-4"
-            style={{
-              opacity: step1Opacity,
-              scale: step1Scale,
-              width: step1Width,
-              transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
-            }}
-          >
-            <motion.div 
-              className="w-full bg-white rounded-2xl shadow-xl p-8"
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-              }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <div className="text-center mb-8">
-                <motion.span 
-                  className="inline-block bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold tracking-wide mb-4 shadow-md"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    repeatType: "reverse", 
-                    duration: 1.8,
-                    ease: "easeInOut"
-                  }}
-                >
-                  STEP 1
-                </motion.span>
-                <motion.h2 
-                  className="text-3xl font-bold text-gray-800 mb-4"
-                  initial={{ y: 10 }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  SNABBIT YOUR WAY
-                </motion.h2>
-                <p className="text-gray-600 mb-8 text-base leading-relaxed">
-                  Need help now? Get a Snabbit expert at your doorstep in just 10 minutes. 
-                  Prefer a later time? Schedule what works best for you.
-                </p>
-              </div>
-              <motion.div 
-                className="bg-gray-50 p-6 rounded-xl mb-6 border border-gray-100"
-                whileHover={{ 
-                  backgroundColor: 'rgba(249, 250, 251, 1)',
-                  borderColor: 'rgba(229, 231, 235, 1)'
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                <h3 className="font-semibold text-lg text-gray-800 mb-3">House Help Service</h3>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-pink-600 font-bold text-xl">$169</span>
-                    <span className="text-gray-400 line-through ml-2 text-sm">$199</span>
-                    <span className="text-gray-500 ml-2 text-sm">60 mins</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <motion.button 
-                      className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-md"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Snabbit Now
-                    </motion.button>
-                    <motion.button 
-                      className="border-2 border-gray-800 hover:bg-gray-800 hover:text-white text-gray-800 px-4 py-2 rounded-full font-semibold text-sm"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Prebook
-                    </motion.button>
-                  </div>
+      <div ref={ref} className="relative h-[250vh]">
+        <div className="sticky top-28 h-[calc(100vh-7rem)] flex items-center justify-center">
+          <div className="relative w-full max-w-2xl mx-auto px-4 h-full flex items-center justify-center">
+            {/* STEP 1 */}
+            <motion.div className="absolute inset-0 flex items-center justify-center px-4"
+              style={{
+                opacity: useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1, 0]),
+                scale: useTransform(scrollYProgress, [0, 0.3], [1, 0.95]),
+                width: useTransform(scrollYProgress, [0, 0.3], ['100%', '95%'])
+              }}>
+              <motion.div className="w-full bg-white rounded-2xl shadow-xl p-8"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300 }}>
+                <div className="text-center mb-8">
+                  <motion.span className="inline-block bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold tracking-wide mb-4 shadow-md"
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{ repeat: Infinity, repeatType: 'reverse', duration: 1.8, ease: 'easeInOut' }}>
+                    STEP 1
+                  </motion.span>
+                  <motion.h2 className="text-2xl font-bold text-gray-800 mb-4">Book Instantly or Schedule</motion.h2>
+                  <p className="text-gray-600 text-base leading-relaxed">
+                    Need pest control or cleaning? Book instantly or choose a convenient time.
+                  </p>
                 </div>
               </motion.div>
             </motion.div>
-          </motion.div>
 
-          {/* STEP 2 */}
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center px-4"
-            style={{
-              opacity: step2Opacity,
-              y: step2Y,
-              scale: step2Scale,
-              width: step2Width,
-              transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
-            }}
-          >
-            <motion.div 
-              className="w-full bg-white rounded-2xl shadow-xl p-8"
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-              }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <div className="text-center mb-8">
-                <motion.span 
-                  className="inline-block bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold tracking-wide mb-4 shadow-md"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    repeatType: "reverse", 
-                    duration: 1.8,
-                    delay: 0.3,
-                    ease: "easeInOut"
-                  }}
-                >
-                  STEP 2
-                </motion.span>
-                <motion.h2 
-                  className="text-3xl font-bold text-gray-800 mb-4"
-                  initial={{ y: 10 }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  SET TIME & DURATION
-                </motion.h2>
-                <p className="text-gray-600 mb-8 text-base leading-relaxed">
-                  Choose a time, set the duration, and get multiple tasks done in one booking.
-                </p>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3 text-base">Select Date Of Service</h3>
-                  <div className="flex gap-3 mb-3">
-                    <motion.button 
-                      className="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      TODAY
-                    </motion.button>
-                    {['SUN', 'MON'].map(day => (
-                      <motion.button 
-                        key={day}
-                        className="border border-gray-200 hover:border-gray-300 px-4 py-2 rounded-lg text-sm transition-colors bg-white"
-                        whileHover={{ 
-                          scale: 1.03,
-                          backgroundColor: 'rgba(249, 250, 251, 1)'
-                        }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        {day}
-                      </motion.button>
-                    ))}
-                  </div>
-                  <div className="flex gap-3">
-                    {[18, 19, 20].map(day => (
-                      <motion.button 
-                        key={day}
-                        className="border border-gray-200 hover:border-gray-300 w-12 h-12 rounded-lg text-sm transition-colors bg-white flex items-center justify-center"
-                        whileHover={{ 
-                          scale: 1.05,
-                          backgroundColor: 'rgba(249, 250, 251, 1)'
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        {day}
-                      </motion.button>
-                    ))}
-                  </div>
+            {/* STEP 2 */}
+            <motion.div className="absolute inset-0 flex items-center justify-center px-4"
+              style={{
+                opacity: useTransform(scrollYProgress, [0.2, 0.3, 0.6, 0.7], [0, 1, 1, 0]),
+                y: useTransform(scrollYProgress, [0.3, 0.45, 0.6], [30, 0, 0]),
+                scale: useTransform(scrollYProgress, [0.3, 0.45, 0.6], [0.95, 1, 0.95]),
+                width: useTransform(scrollYProgress, [0.3, 0.45, 0.6], ['95%', '100%', '95%'])
+              }}>
+              <motion.div className="w-full bg-white rounded-2xl shadow-xl p-8"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300 }}>
+                <div className="text-center mb-8">
+                  <motion.span className="inline-block bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold tracking-wide mb-4 shadow-md"
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{ repeat: Infinity, repeatType: 'reverse', duration: 1.8, delay: 0.3, ease: 'easeInOut' }}>
+                    STEP 2
+                  </motion.span>
+                  <motion.h2 className="text-2xl font-bold text-gray-800 mb-4">Pick Services & Time</motion.h2>
+                  <p className="text-gray-600 text-base leading-relaxed">
+                    Choose services like mosquito netting, sofa cleaning, or pest control. Set your timing and duration.
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3 text-base">Select Time Of Service</h3>
-                  <div className="flex gap-3 flex-wrap">
-                    {[1, 2, 3, 4].map(hour => (
-                      <motion.button 
-                        key={hour}
-                        className="border border-gray-200 hover:border-gray-300 px-4 py-2 rounded-lg text-sm transition-colors bg-white"
-                        whileHover={{ 
-                          scale: 1.05,
-                          backgroundColor: 'rgba(249, 250, 251, 1)'
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        {hour} PM
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* STEP 3 */}
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center px-4"
-            style={{
-              opacity: step3Opacity,
-              y: step3Y,
-              scale: step3Scale,
-              width: step3Width,
-              transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
-            }}
-          >
-            <motion.div 
-              className="w-full bg-white rounded-2xl shadow-xl p-8"
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-              }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <div className="text-center mb-8">
-                <motion.span 
-                  className="inline-block bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold tracking-wide mb-4 shadow-md"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    repeatType: "reverse", 
-                    duration: 1.8,
-                    delay: 0.6,
-                    ease: "easeInOut"
-                  }}
-                >
-                  STEP 3
-                </motion.span>
-                <motion.h2 
-                  className="text-3xl font-bold text-gray-800 mb-4"
-                  initial={{ y: 10 }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  EXPERTS ARRIVE ON-TIME
-                </motion.h2>
-                <p className="text-gray-600 mb-8 text-base leading-relaxed">
-                  Our experts reach your doorstep at the scheduled time. Share the OTP to start the service.
-                </p>
-              </div>
-              <motion.div 
-                className="bg-gray-50 p-6 rounded-xl text-center border border-gray-100"
-                initial={{ scale: 0.98 }}
-                animate={{ scale: 1 }}
-                transition={{ 
-                  repeat: Infinity, 
-                  repeatType: "reverse", 
-                  duration: 2,
-                  ease: "easeInOut"
-                }}
-                whileHover={{ 
-                  backgroundColor: 'rgba(249, 250, 251, 1)',
-                  borderColor: 'rgba(229, 231, 235, 1)'
-                }}
-              >
-                <p className="font-semibold text-gray-700 mb-5 text-base">KINDLY SHARE THE OTP TO START THE WORK</p>
-                <div className="flex justify-center gap-4 mb-6">
-                  {[1, 3, 5].map(num => (
-                    <motion.div 
-                      key={num}
-                      className="w-12 h-14 border-2 border-gray-200 rounded-lg flex items-center justify-center text-xl font-bold bg-white shadow-sm"
-                      whileHover={{ 
-                        scale: 1.1,
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                      }}
-                      transition={{ type: 'spring', stiffness: 400 }}
-                    >
-                      {num}
-                    </motion.div>
-                  ))}
-                </div>
-                <motion.button 
-                  className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg w-full max-w-xs mx-auto"
-                  whileHover={{ 
-                    scale: 1.03,
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-                  }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ type: 'spring', stiffness: 400 }}
-                >
-                  GET STARTED
-                </motion.button>
               </motion.div>
             </motion.div>
-          </motion.div>
 
+            {/* STEP 3 */}
+            <motion.div className="absolute inset-0 flex items-center justify-center px-4"
+              style={{
+                opacity: useTransform(scrollYProgress, [0.6, 0.7, 1], [0, 1, 1]),
+                y: useTransform(scrollYProgress, [0.7, 0.8], [30, 0]),
+                scale: useTransform(scrollYProgress, [0.7, 0.8], [0.95, 1]),
+                width: useTransform(scrollYProgress, [0.7, 0.8], ['95%', '100%'])
+              }}>
+              <motion.div className="w-full bg-white rounded-2xl shadow-xl p-8"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300 }}>
+                <div className="text-center mb-8">
+                  <motion.span className="inline-block bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold tracking-wide mb-4 shadow-md"
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{ repeat: Infinity, repeatType: 'reverse', duration: 1.8, delay: 0.6, ease: 'easeInOut' }}>
+                    STEP 3
+                  </motion.span>
+                  <motion.h2 className="text-2xl font-bold text-gray-800 mb-4">Experts Arrive On Time</motion.h2>
+                  <p className="text-gray-600 text-base leading-relaxed">
+                    Hommlie professionals reach your doorstep as scheduled. Share OTP and get started worry-free.
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* WHY CHOOSE HOMMLIE Cards Section - moved below */}
+      <div className="text-center px-4 mt-32 mb-12">
+        <h2 className="text-3xl md:text-5xl font-extrabold">
+          WHY CHOOSE <span className="text-[#ff4c7b]">HOMMLIE</span>
+        </h2>
+      </div>
+      <div ref={containerRef} className="relative h-[300vh] max-w-[1200px] mx-auto">
+        <div className="sticky top-24 h-[calc(100vh-6rem)] flex items-center justify-center">
+          <div className="relative w-full max-w-[900px] h-[500px]">
+            {cardData.map((card, i) => (
+              <motion.div
+                key={card.id}
+                className="absolute w-[240px] h-[160px] bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center px-4 text-center"
+                style={{
+                  x: transforms[i].x,
+                  y: transforms[i].y,
+                  rotate: transforms[i].rotate,
+                  zIndex: 10 - i,
+                }}
+              >
+                {card.content}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

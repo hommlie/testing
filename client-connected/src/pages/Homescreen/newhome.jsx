@@ -60,6 +60,8 @@ import SnabbitTasksUI from '../../components/SnabbitTasksUI';
 import HowItWorks from "../../components/HowItWorks";
 import Testimonials from "../../components/Testimonials";
 import QuickHero from "../../components/QuickHero";
+import DownloadHommlieApp from "../../components/DownloadHommlieApp";
+import WhyChooseHommlie from "../../components/WhyChooseHommlie";
 
 
 const HomePage = () => {
@@ -589,11 +591,11 @@ const HomePage = () => {
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* Banner Section */}
-      <section className="py-5 md:py-10">
+      {/* <section className="py-5 md:py-10">
         {data?.banners?.length ? (
           <BannerDatalider bannerData={data?.banners} />
         ) : null}
-      </section>
+      </section> */}
       <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* Offers Section */}
@@ -686,24 +688,23 @@ const HomePage = () => {
       </section> */}
       {/* <QuickHero /> */}
 
-      
-      <section className=" px-10 py-5 md:py-10">
-        <SnabbitTasksUI />
-      </section>
-
-      {/* FAQ Section */}
-      {/* <section className="px-10 py-5 md:py-10">
-        <FaqSection />
-      </section> */}
 
       {/* Stats Section */}
       {/* <section className="px-10 py-5 md:py-10">
         <StatsSection />
       </section> */}
 
-      <section className="px-10 py-10">
-        <HowItWorks />
-      </section>
+        <section className=" px-10 py-5 md:py-10">
+          <SnabbitTasksUI />
+        </section>
+
+        <section className="px-10 py-20">
+          <HowItWorks />
+        </section>
+        
+        {/* <section className="px-10">
+          <WhyChooseHommlie />
+        </section> */}
 
       {/* <section className="px-10 py-10">
         <Testimonials />
@@ -712,6 +713,10 @@ const HomePage = () => {
       {/* inspection form section */}
       <section id="inspection-section" className="px-4 py-5 md:py-10">
         <InspectionFormSection />
+      </section>
+
+      <section className="px-10 py-5 md:py-10">
+        <FaqSection />
       </section>
 
       {/* Popular Categories Section with Tabs */}
