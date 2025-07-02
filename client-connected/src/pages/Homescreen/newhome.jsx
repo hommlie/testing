@@ -369,12 +369,12 @@ const HomePage = () => {
   <div className="w-full flex flex-col md:flex-row gap-8">
     {/* Left Container - Services */}
     <div className="w-full md:w-1/2">
-      <div className="text-center mb-8">
-        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 pr-14">
-          On-Demand Home Services {' '}
-          <span className="text-green-600">
+      <div className="text-center mb-8 px-4 md:px-0">
+        <h1 className="text-lg sm:text-xl md:text-2xl text-gray-800 mb-2 leading-snug">
+          On-Demand Home Services{' '}
+          <span className="block sm:inline text-[#f5c000]">
             <Typewriter
-              words={['in Bangalore']}
+              words={[' in Bangalore']}
               loop={false}
               cursor
               cursorStyle="|"
@@ -391,84 +391,92 @@ const HomePage = () => {
         </div>
         <div className="grid grid-cols-3 gap-3">
           {/* Pest Control */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
             <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center mb-2">
-                <FaBug className="text-red-500 text-lg" />
-              </div>
+                <img
+                  src="/images/pestcontrol.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
               <span className="text-xs font-medium text-gray-700 text-center">Pest Control</span>
             </div>
-          </div>
-
           {/* Cleaning */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mb-2">
-                <FaBroom className="text-blue-500 text-lg" />
-              </div>
-              <span className="text-xs font-medium text-gray-700 text-center">Cleaning</span>
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/deepcleaning.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
+              <span className="text-xs font-medium text-gray-700 text-center">Deep Cleaning</span>
             </div>
+
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/scrap.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
+              <span className="text-xs font-medium text-gray-700 text-center">Scrap</span>
           </div>
 
           {/* Disinfection */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center mb-2">
-                <FaSprayCan className="text-green-500 text-lg" />
-              </div>
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/disinfection.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
               <span className="text-xs font-medium text-gray-700 text-center">Disinfection</span>
             </div>
-          </div>
 
           {/* Mosquito Nets */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center mb-2">
-                <FaShieldAlt className="text-purple-500 text-lg" />
-              </div>
-              <span className="text-xs font-medium text-gray-700 text-center">Mosquito Nets</span>
-            </div>
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/pestcontrol.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
+              <span className="text-xs font-medium text-gray-700 text-center">Mosquito net</span>
           </div>
 
           {/* AC Services */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-cyan-50 rounded-full flex items-center justify-center mb-2">
-                <FaFan className="text-cyan-500 text-lg" />
-              </div>
-              <span className="text-xs font-medium text-gray-700 text-center">AC Services</span>
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/ac.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
+              <span className="text-xs font-medium text-gray-700 text-center">Ac Services</span>
             </div>
-          </div>
 
           {/* Plumbing */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center mb-2">
-                <FaTools className="text-yellow-500 text-lg" />
-              </div>
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/plumbing.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
               <span className="text-xs font-medium text-gray-700 text-center">Plumbing</span>
             </div>
-          </div>
 
           {/* Painting */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mb-2">
-                <FaPaintRoller className="text-orange-500 text-lg" />
-              </div>
+          <div className="flex flex-col items-center">
+                <img
+                  src="/images/painting.jpg"
+                  alt="Pest Control"
+                  className="w-20 h-20 object-contain"
+                />
               <span className="text-xs font-medium text-gray-700 text-center">Painting</span>
             </div>
-          </div>
 
           {/* Carpentry */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
+          {/* <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
             <div className="flex flex-col items-center">
               <div className="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center mb-2">
                 <FaHammer className="text-amber-500 text-lg" />
               </div>
               <span className="text-xs font-medium text-gray-700 text-center">Carpentry</span>
             </div>
-          </div>
+          </div> */}
 
           {/* See All */}
           <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">

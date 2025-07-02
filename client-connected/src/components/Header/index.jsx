@@ -33,7 +33,7 @@ import { IoCartOutline } from "react-icons/io5";
 import axios from "axios";
 import ServicesNavDropdown from "../ServicesNavDropdown";
 import { FaMobileAlt, FaSignInAlt, FaShoppingCart, FaQuestionCircle } from 'react-icons/fa';
-import bannerBg from '../../assets/images/navbarbgimage2.png';
+import bannerBg from '../../assets/images/navbarimage4.png';
 import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
 
@@ -266,10 +266,10 @@ useEffect(() => {
       )}
       
       {/* Top Header with contact and social info */}
-      <div className="bg-gradient-to-r from-teal-800 via-emerald-700 to-green-900 border-b border-emerald-700">
+      <div className="">
         <div className="hidden sm:block max-w-7xl mx-auto w-full">
           <div
-            className="text-white text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0"
+            className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0"
             style={{
               backgroundImage: `url(${bannerBg})`,
               backgroundSize: 'cover',
@@ -287,13 +287,13 @@ useEffect(() => {
                 ease: "easeInOut"
               }}
             >
-              <span className="ml-2 font-normal text-amber-100">
+              <span className="mr-4 font-normal text-black">
                 Premium Home Services at Your Doorstep
               </span>
             </motion.div>
 
             {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-sm text-amber-50">
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-sm text-black">
               <a
                 href="#"
                 className="flex items-center gap-1 hover:text-amber-200 transition-colors"
@@ -374,8 +374,8 @@ useEffect(() => {
                   className="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors w-full group"
                 >
                   <div className="flex flex-col">
-                    <div className="text-sm font-semibold text-emerald-800 flex items-center">
-                      <MdLocationOn className="text-emerald-600 mr-1 text-lg" />
+                    <div className="text-sm font-semibold text-black flex items-center">
+                      <MdLocationOn className="text-black mr-1 text-lg" />
                       Delivery in 40 minutes
                     </div>
                     <div className="flex items-center text-sm text-gray-700">
@@ -394,11 +394,11 @@ useEffect(() => {
                   <input
                     type="text"
                     placeholder={`Search ${services[placeholderIndex]}...`}
-                    className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-emerald-700 text-xl">
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-black text-xl">
                     <BiSearchAlt className="cursor-pointer hover:text-emerald-900 transition-colors" />
                     <BsMicFill className="cursor-pointer hover:text-emerald-900 transition-colors" />
                   </div>
@@ -410,7 +410,7 @@ useEffect(() => {
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-700 to-emerald-800 text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
+              className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#f5c000] text-black rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg font-[Arial]"
             >
                <span className="font-medium">Join ONDC</span>
                <img src={ondc} alt="ONDC Logo" className="h-9 w-9 object-contain" />
