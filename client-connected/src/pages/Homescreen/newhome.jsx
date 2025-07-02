@@ -370,21 +370,21 @@ const HomePage = () => {
     {/* Left Container - Services */}
     <div className="w-full md:w-1/2">
       <div className="text-center mb-8 px-4 md:px-0">
-        <h1 className="text-lg sm:text-xl md:text-2xl text-gray-800 mb-2 leading-snug">
-          On-Demand Home Services{' '}
-          <span className="block sm:inline text-[#f5c000]">
-            <Typewriter
-              words={[' in Bangalore']}
-              loop={false}
-              cursor
-              cursorStyle="|"
-              typeSpeed={100}
-              deleteSpeed={50}
-              delaySpeed={1000}
-            />
-          </span>
-        </h1>
-      </div>
+  <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 mb-2 leading-snug whitespace-nowrap overflow-x-auto">
+    On-Demand Home Services {" "}
+    <span className="text-[#f5c000] inline-block">
+      <Typewriter
+        words={[' in Bangalore']}
+        loop={false}
+        cursor
+        cursorStyle="|"
+        typeSpeed={100}
+        deleteSpeed={50}
+        delaySpeed={1000}
+      />
+    </span>
+  </h1>
+</div>
       <div className="max-w-4xl mx-auto p-5 pr-4 bg-white rounded-xl border border-gray-200 shadow-sm">
         <div className="mb-5">
           <h3 className="text-lg font-semibold text-gray-800">What are you looking for?</h3>
