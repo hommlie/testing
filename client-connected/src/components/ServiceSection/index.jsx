@@ -335,7 +335,7 @@ const ServiceSection = ({ categories }) => {
         whileHover={{ y: -5 }}
         className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden ${
           isSelected
-            ? "border-[#fcd421] bg-[#fcd421] shadow-lg"
+            ? "border-[#fcd421] bg-[#FFFEE9] shadow-lg"
             : "border-gray-200 bg-white hover:shadow-md"
         }`}
       >

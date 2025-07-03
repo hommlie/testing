@@ -3,6 +3,29 @@ import { FaEllipsisH, FaTimes } from 'react-icons/fa';
 
 const ServiceGrid = () => {
   const [selectedService, setSelectedService] = useState(null);
+  const [showPestModal, setShowPestModal] = useState(false);
+  const [showDeepCleanModal, setShowDeepCleanModal] = useState(false);
+
+  const pestSubServices = [
+    { name: "Cockroach Control", image: "/images/cockicon.png" },
+    { name: "Rodent Control", image: "/images/cockicon.png" },
+    { name: "Mosquito Control", image: "/images/cockicon.png" },
+    { name: "Flies Management", image: "/images/cockicon.png" },
+    { name: "Weed Management", image: "/images/cockicon.png" },
+    { name: "Wood Borer", image: "/images/cockicon.png" },
+    { name: "Bedbugs Control", image: "/images/cockicon.png" },
+    { name: "Honey Bee Removal", image: "/images/cockicon.png" },
+    { name: "Termite Treatment", image: "/images/cockicon.png" },
+    
+  ];
+
+  const deepCleanSubServices = [
+    { name: "Sofa Cleaning", image: "/images/sofa.png" },
+    { name: "Bathroom Cleaning", image: "/images/bathroom.png" },
+    { name: "Kitchen Cleaning", image: "/images/kitchen.png" },
+    { name: "Full Home Cleaning – Apartment", image: "/images/apartment.png" },
+    { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bungalow.png" },
+  ];
 
   const services = [
     {
@@ -107,17 +130,27 @@ const ServiceGrid = () => {
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
         {services.map((service) => (
-          <div 
-            key={service.id} 
+          <div
+            key={service.id}
             className="flex flex-col items-center p-3 rounded-lg border border-gray-200 hover:border-black hover:shadow-sm transition-all cursor-pointer"
-            onClick={() => setSelectedService(service)}
+            onClick={() => {
+              if (service.name === "Pest Control") {
+                setShowPestModal(true);
+              } else if (service.name === "Deep Cleaning") {
+                setShowDeepCleanModal(true);
+              } else {
+                setSelectedService(service);
+              }
+            }}
           >
             <img
               src={service.image}
               alt={service.name}
               className="w-20 h-20 object-cover rounded-full"
             />
-            <span className="text-xs font-medium text-gray-700 text-center mt-2">{service.name}</span>
+            <span className="text-xs font-medium text-gray-700 text-center mt-2">
+              {service.name}
+            </span>
           </div>
         ))}
 
@@ -126,25 +159,29 @@ const ServiceGrid = () => {
           <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
             <FaEllipsisH className="text-gray-500 text-xl" />
           </div>
-          <span className="text-xs font-medium text-gray-700 text-center mt-2">See All</span>
+          <span className="text-xs font-medium text-gray-700 text-center mt-2">
+            See All
+          </span>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Main Service Modal */}
       {selectedService && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-bold text-gray-800">{selectedService.name}</h3>
-                <button 
+                <h3 className="text-xl font-bold text-gray-800">
+                  {selectedService.name}
+                </h3>
+                <button
                   onClick={() => setSelectedService(null)}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <FaTimes />
                 </button>
               </div>
-              
+
               <div className="flex justify-center mb-4">
                 <img
                   src={selectedService.image}
@@ -152,21 +189,89 @@ const ServiceGrid = () => {
                   className="w-40 h-40 object-cover rounded-lg"
                 />
               </div>
-              
+
               <p className="text-gray-600 mb-4">{selectedService.description}</p>
-              
+
               <h4 className="font-semibold text-gray-800 mb-2">Services Include:</h4>
               <ul className="list-disc pl-5 text-gray-600 space-y-1">
                 {selectedService.details.map((detail, index) => (
                   <li key={index}>{detail}</li>
                 ))}
               </ul>
-              
+
               <div className="mt-6 flex justify-center">
                 <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-lg transition-colors">
                   Book Now
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pest Control Modal */}
+      {showPestModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+    <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold">Pest Control Services</h2>
+        <button
+          onClick={() => setShowPestModal(false)}
+          className="text-gray-500 hover:text-black"
+        >
+          <FaTimes />
+        </button>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {pestSubServices.map((sub, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center text-center p-3"
+          >
+            <div className="w-32 h-20 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+              <img
+                src={sub.image}
+                alt={sub.name}
+                className="w-12 h-12 object-contain"
+              />
+            </div>
+            <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+      {/* Deep Cleaning Modal */}
+      {showDeepCleanModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+          <div className="bg-white w-full max-w-4xl rounded-lg p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">Deep Cleaning Services</h2>
+              <button
+                onClick={() => setShowDeepCleanModal(false)}
+                className="text-gray-500 hover:text-black"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {deepCleanSubServices.map((sub, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3 border p-3 rounded-lg shadow-sm"
+                >
+                  <img
+                    src={sub.image}
+                    alt={sub.name}
+                    className="w-14 h-14 object-contain"
+                  />
+                  <div>
+                    <h3 className="text-sm font-semibold">{sub.name}</h3>
+                    
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
