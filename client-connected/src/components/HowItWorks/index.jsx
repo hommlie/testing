@@ -88,8 +88,9 @@ const HowItWorks = () => {
       x: useTransform(scrollYProgress, [0, 0.8, 1], [0, x, gridPositions[i].x]),
       y: useTransform(scrollYProgress, [0, 0.8, 1], [0, y, gridPositions[i].y]),
       rotate: useTransform(scrollYProgress, [0, 0.8, 1], ['0deg', `${rotate}deg`, '0deg']),
-      opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 1]),
-      scale: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.5, 1, 1, 1]),
+      opacity: useTransform(scrollYProgress, [0, 0.1, 0.8, 1], [1, 1, 1, 1]),
+scale: useTransform(scrollYProgress, [0, 0.1, 0.8, 1], [1, 1, 1, 1]),
+
     };
   });
 
