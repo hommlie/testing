@@ -253,7 +253,7 @@ const ServiceSection = ({ categories }) => {
           onClick={() => !disabled && setIsOpen(!isOpen)}
           className={`w-full flex items-center justify-between p-3 pr-10 bg-white border rounded-lg text-left truncate transition-all
             ${disabled ? "cursor-not-allowed bg-gray-50 text-gray-400" : "cursor-pointer text-gray-900"}
-            ${isOpen ? "border-emerald-500 ring-2 ring-emerald-100" : "border-gray-300 hover:border-emerald-400"}`}
+            ${isOpen ? "border-black ring-2 ring-black" : "border-black hover:border-black"}`}
           disabled={disabled}
         >
           <span className="truncate">
@@ -265,21 +265,21 @@ const ServiceSection = ({ categories }) => {
           </span>
           <ChevronDown
             className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform ${
-              isOpen ? "rotate-180 text-emerald-600" : "text-gray-500"
+              isOpen ? "rotate-180 text-black" : "text-black"
             }`}
           />
         </button>
 
         {isOpen && (
-        <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-20 mt-1 w-full bg-white border border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {options.map((option) => {
             const isSelected = value === option.id;
             return (
               <div
                 key={option.id}
                 onClick={() => handleSelect(option.id)}
-                className={`cursor-pointer p-3 flex items-start justify-between hover:bg-emerald-50 transition-colors ${
-                  isSelected ? "bg-emerald-100 text-emerald-800" : "text-gray-900"
+                className={`cursor-pointer p-3 flex items-start justify-between hover:bg-[#fcd93a] transition-colors ${
+                  isSelected ? "bg-white text-black" : "text-gray-900"
                 } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
               >
                 <div className="flex items-start gap-3 w-full">
@@ -287,7 +287,7 @@ const ServiceSection = ({ categories }) => {
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         isSelected
-                          ? "border-emerald-600 bg-emerald-600"
+                          ? "border-[#493f9e] bg-[#493f9e]"
                           : "border-gray-300"
                       }`}
                     >
@@ -335,15 +335,15 @@ const ServiceSection = ({ categories }) => {
         whileHover={{ y: -5 }}
         className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden ${
           isSelected
-            ? "border-emerald-500 bg-emerald-50 shadow-lg"
+            ? "border-[#fcd421] bg-[#fcd421] shadow-lg"
             : "border-gray-200 bg-white hover:shadow-md"
         }`}
       >
         {/* Recommended badge - Improved UI */}
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="relative bg-yellow-400 text-black text-[11px] font-bold py-1 pl-3 pr-6 rounded-r-full shadow-md flex items-center">
-              <Star className="w-3 h-3 mr-1 fill-current text-black" />
+            <div className="relative bg-[#443a9e] text-white text-[11px] font-bold py-1 pl-3 pr-6 rounded-r-full shadow-md flex items-center">
+              <Star className="w-3 h-3 mr-1 fill-current text-white" />
               RECOMMENDED
               <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
             </div>
@@ -359,8 +359,8 @@ const ServiceSection = ({ categories }) => {
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
                   isSelected
-                    ? "bg-white text-emerald-800"
-                    : "bg-emerald-100 text-emerald-800"
+                    ? "bg-white text-black"
+                    : "bg-[#fcd421] text-black"
                 }`}
               >
                 {selectedAttr.attribute}
@@ -374,8 +374,8 @@ const ServiceSection = ({ categories }) => {
               {formatDescription(matchedVariation.description).map(
                 (point, index) => (
                   <li key={index} className="flex items-start">
-                    <span className="mr-2 text-emerald-500">✓</span>
-                    <span className={isSelected ? "text-gray-800" : "text-gray-700"}>
+                    <span className="mr-2 text-black">✓</span>
+                    <span className={isSelected ? "text-black" : "text-black"}>
                       {point.trim()}
                     </span>
                   </li>
@@ -388,7 +388,7 @@ const ServiceSection = ({ categories }) => {
           <div className="flex flex-col items-center mb-4">
             <div className="flex flex-col items-center">
               <div className="flex gap-4 justify-center text-2xl md:text-3xl font-bold mb-1">
-                <span className="text-emerald-600">
+                <span className="text-black">
                   ₹{matchedVariation?.discounted_variation_price || matchedVariation?.price}/-
                 </span>
                 {matchedVariation?.discounted_variation_price && matchedVariation?.price && (
@@ -398,7 +398,7 @@ const ServiceSection = ({ categories }) => {
                 )}
               </div>
               {matchedVariation?.discounted_variation_price && matchedVariation?.price && (
-                <span className="text-sm bg-red-100 text-red-800 px-2 py-0.5 rounded-full">
+                <span className="text-sm bg-white text-black px-2 py-0.5 rounded-full">
                   {Math.round(((matchedVariation.price - matchedVariation.discounted_variation_price) / matchedVariation.price) * 100)}% OFF
                 </span>
               )}
@@ -413,14 +413,14 @@ const ServiceSection = ({ categories }) => {
                   key={star}
                   className={`w-4 h-4 ${
                     star <= Math.round(rating)
-                      ? "text-yellow-400 fill-current"
-                      : "text-gray-300"
+                      ? "text-black fill-current"
+                      : "text-black"
                   }`}
                 />
               ))}
               <span
                 className={`ml-1 text-sm font-medium ${
-                  isSelected ? "text-gray-700" : "text-gray-600"
+                  isSelected ? "text-black" : "text-gray-600"
                 }`}
               >
                 {rating.toFixed(1)} (
@@ -429,7 +429,7 @@ const ServiceSection = ({ categories }) => {
               </span>
             </div>
             <div className="text-sm font-medium">
-              <span className={isSelected ? "text-gray-700" : "text-gray-600"}>
+              <span className={isSelected ? "text-black" : "text-black"}>
                 For:{" "}
               </span>
               <select
@@ -437,8 +437,8 @@ const ServiceSection = ({ categories }) => {
                 onChange={(e) => setSelectedBhk(e.target.value)}
                 className={`ml-1 p-1 rounded text-sm ${
                   isSelected
-                    ? "bg-emerald-100 text-emerald-800 border-emerald-200"
-                    : "bg-white text-gray-800 border-gray-300"
+                    ? "bg-white text-black border-black"
+                    : "bg-white text-black border-black"
                 } border focus:outline-none focus:ring-1 focus:ring-emerald-500`}
               >
                 {bhkOptions.map((bhk) => (
@@ -460,8 +460,8 @@ const ServiceSection = ({ categories }) => {
               }}
               className={`w-full py-3 rounded-lg font-bold transition-colors ${
                 isSelected
-                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "bg-emerald-600 text-white hover:bg-emerald-700"
+                  ? "bg-white text-black hover:bg-[#443a9e] hover:text-white"
+                  : "bg-white text-black hover:bg-[#443a9e] hover:text-white"
               } ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}
@@ -502,8 +502,8 @@ const ServiceSection = ({ categories }) => {
                   onClick={() => handleCategorySelect(category)}
                   className={`flex items-center px-4 py-3 rounded-lg transition-all whitespace-nowrap ${
                     selectedCategory === category.id
-                      ? "bg-emerald-600 text-white shadow-md"
-                      : "bg-white text-gray-800 border border-gray-200 hover:border-emerald-300"
+                      ? "bg-[#fcd93a] text-black shadow-md"
+                      : "bg-white text-gray-800 border border-gray-200 hover:border-black"
                   }`}
                 >
                   {category.icon_url && (

@@ -109,21 +109,21 @@ const InspectionFormSection = () => {
           <p className="text-sm sm:text-base text-gray-600 mb-6">Get professional help for your home or business</p>
           <div className="space-y-6 text-sm">
             <div className="flex items-start gap-3">
-              <MdOutlineLocalPostOffice className="text-xl text-green-600 bg-green-100 rounded-full p-2 w-8 h-8" />
+              <MdOutlineLocalPostOffice className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
               <div>
                 <h3 className="text-gray-500">Email</h3>
                 <p className="text-gray-800 font-medium">reach@hommlie.com</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <IoCallOutline className="text-xl text-green-600 bg-green-100 rounded-full p-2 w-8 h-8" />
+              <IoCallOutline className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
               <div>
                 <h3 className="text-gray-500">Phone</h3>
                 <p className="text-gray-800 font-medium">+91-6363865658</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <IoBusiness className="text-xl text-green-600 bg-green-100 rounded-full p-2 w-8 h-8" />
+              <IoBusiness className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
               <div>
                 <h3 className="text-gray-500">Our Offices</h3>
                 <div className="flex flex-wrap gap-2 mt-1">
@@ -137,12 +137,12 @@ const InspectionFormSection = () => {
         </div>
 
         {/* Booking Form */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-black">
           <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
             {[1, 2].map((s, i) => (
               <React.Fragment key={s}>
-                <div className={`w-8 h-8 flex items-center justify-center rounded-full ${step === s ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'}`}>{s}</div>
-                {i < 1 && <div className={`h-1 w-8 ${step > s ? 'bg-green-600' : 'bg-gray-300'}`} />}
+                <div className={`w-8 h-8 flex items-center justify-center rounded-full ${step === s ? 'bg-[#fdd420] text-black' : 'bg-gray-200 text-gray-600'}`}>{s}</div>
+                {i < 1 && <div className={`h-1 w-8 ${step > s ? 'bg-black' : 'bg-gray-300'}`} />}
               </React.Fragment>
             ))}
           </div>
@@ -192,7 +192,7 @@ const InspectionFormSection = () => {
                 <button 
                   type="button" 
                   onClick={() => validateStepOne() && setStep(2)} 
-                  className="w-full bg-green-600 text-white py-2 rounded-lg"
+                  className="w-full bg-[#fdd420] text-black py-2 rounded-lg"
                 >
                   Continue to Schedule
                 </button>
@@ -249,7 +249,7 @@ const InspectionFormSection = () => {
                   <button 
                     type="submit" 
                     disabled={loading} 
-                    className="w-full bg-green-600 text-white py-2 rounded-lg disabled:opacity-70"
+                    className="w-full bg-[#fdd420] text-black py-2 rounded-lg disabled:opacity-70"
                   >
                     {loading ? "Processing..." : "Confirm Inspection"}
                   </button>
@@ -270,7 +270,7 @@ const InspectionFormSection = () => {
                 <p className="text-sm text-gray-600 mb-4">We've received your request and will contact you shortly to confirm the details.</p>
                 <button 
                   onClick={() => setSubmitted(false)} 
-                  className="w-full bg-green-600 text-white py-2 rounded-lg"
+                  className="w-full bg-[#fdd420] text-black py-2 rounded-lg"
                 >
                   Close
                 </button>

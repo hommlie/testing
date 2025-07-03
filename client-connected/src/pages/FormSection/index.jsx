@@ -60,7 +60,7 @@ const ContactForm = ({ user }) => {
       <form onSubmit={handleSubmit} className="flex justify-center">
         <button
           type="submit"
-          className="bg-white text-emerald-800 border border-emerald-800 hover:bg-emerald-800 hover:text-white font-medium py-3 px-8 rounded-md transition duration-200"
+          className="bg-white text-black border border-black hover:bg-[#fcd93a] hover:text-black font-medium py-3 px-8 rounded-md transition duration-200"
         >
           Request a call back
         </button>
@@ -72,7 +72,7 @@ const ContactForm = ({ user }) => {
           <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full text-center">
             {!isSubmitted ? (
               <>
-                <h2 className="text-xl font-semibold mb-4 text-emerald-800">Enter Your Details</h2>
+                <h2 className="text-xl font-semibold mb-4 text-black">Enter Your Details</h2>
                 <form onSubmit={handlePhoneSubmit} className="space-y-4 text-left">
                   <div>
                     <input
@@ -108,7 +108,7 @@ const ContactForm = ({ user }) => {
 
                   <button
                     type="submit"
-                    className="w-full bg-emerald-800 text-white py-2 rounded-md hover:bg-emerald-700 transition"
+                    className="w-full bg-black text-white py-2 rounded-md hover:bg-[#fcd93a] hover:text-black transition"
                   >
                     Submit
                   </button>

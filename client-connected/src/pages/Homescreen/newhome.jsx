@@ -62,6 +62,7 @@ import Testimonials from "../../components/Testimonials";
 import QuickHero from "../../components/QuickHero";
 import DownloadHommlieApp from "../../components/DownloadHommlieApp";
 import WhyChooseHommlie from "../../components/WhyChooseHommlie";
+import ServiceGrid from "../ServiceGrid";
 
 
 const HomePage = () => {
@@ -370,7 +371,7 @@ const HomePage = () => {
     {/* Left Container - Services */}
     <div className="w-full md:w-1/2">
       <div className="text-center mb-8 px-4 md:px-0">
-  <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 mb-2 leading-snug whitespace-nowrap overflow-x-auto">
+  <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 font-bold mb-2 whitespace-nowrap overflow-x-auto">
     On-Demand Home Services {" "}
     <span className="text-[#f5c000] inline-block">
       <Typewriter
@@ -385,112 +386,7 @@ const HomePage = () => {
     </span>
   </h1>
 </div>
-      <div className="max-w-4xl mx-auto p-5 pr-4 bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="mb-5">
-          <h3 className="text-lg font-semibold text-gray-800">What are you looking for?</h3>
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {/* Pest Control */}
-            <div className="flex flex-col items-center">
-                <img
-                  src="/images/pestcontrol.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Pest Control</span>
-            </div>
-          {/* Cleaning */}
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/deepcleaning.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Deep Cleaning</span>
-            </div>
-
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/scrap.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Scrap</span>
-          </div>
-
-          {/* Disinfection */}
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/disinfection.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Disinfection</span>
-            </div>
-
-          {/* Mosquito Nets */}
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/pestcontrol.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Mosquito net</span>
-          </div>
-
-          {/* AC Services */}
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/ac.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Ac Services</span>
-            </div>
-
-          {/* Plumbing */}
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/plumbing.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Plumbing</span>
-            </div>
-
-          {/* Painting */}
-          <div className="flex flex-col items-center">
-                <img
-                  src="/images/painting.jpg"
-                  alt="Pest Control"
-                  className="w-20 h-20 object-contain"
-                />
-              <span className="text-xs font-medium text-gray-700 text-center">Painting</span>
-            </div>
-
-          {/* Carpentry */}
-          {/* <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center mb-2">
-                <FaHammer className="text-amber-500 text-lg" />
-              </div>
-              <span className="text-xs font-medium text-gray-700 text-center">Carpentry</span>
-            </div>
-          </div> */}
-
-          {/* See All */}
-          <div className="bg-white p-3 rounded-lg border border-gray-200 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center mb-2">
-                <FaEllipsisH className="text-gray-500 text-lg" />
-              </div>
-              <span className="text-xs font-medium text-gray-700 text-center">See All</span>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-    
+        <ServiceGrid />
         <StatsSection />
     
     </div>
@@ -706,9 +602,9 @@ const HomePage = () => {
           <SnabbitTasksUI />
         </section>
 
-        <section className="px-10 py-20">
+        {/* <section className="px-10 py-20">
           <HowItWorks />
-        </section>
+        </section> */}
         
         {/* <section className="px-10">
           <WhyChooseHommlie />

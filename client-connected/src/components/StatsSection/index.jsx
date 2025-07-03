@@ -56,7 +56,7 @@ const StatsSection = () => {
                     className="h-10 w-10" 
                   />
                 </div>
-                <h3 className="text-2xl font-bold text-emerald-600 mb-0">
+                <h3 className="text-2xl font-bold text-black mb-0">
                   {stat.count}
                 </h3>
                 <p className="text-sm font-medium text-gray-800 mb-0">

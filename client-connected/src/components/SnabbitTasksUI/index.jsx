@@ -32,20 +32,42 @@ export default function QuickHeroSection() {
     <div ref={containerRef} className="relative overflow-hidden">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-white to-[#fef4f6] pb-12 text-center overflow-hidden">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-4">
+        {/* <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-4">
           INDIA'S FIRST <br />
           <span className="inline-block relative text-[#fcce00] font-extrabold italic">
-            QUICK
-            <span className="absolute left-0 bottom-0 w-full h-[5px] bg-pink-400 rounded-full -z-10 translate-y-[6px]" />
+            HOME
+
           </span>{' '}
-          <span className="text-[#2a0014] font-extrabold">SERVICE APP</span>
+          <span className="text-[#2a0014] font-extrabold">SERVICE'S APP</span>
+        </h1> */}
+        <div className="text-center relative py-2">
+        {/* Sparkles */}
+        <div className="absolute top-4 left-4 text-[#483fa1] text-5xl animate-pulse">✦</div>
+        <div className="absolute top-4 right-4 text-[#483fa1] text-5xl animate-pulse">✦</div>
+        <div className="absolute bottom-4 left-1/3 text-[#483fa1] text-3xl animate-pulse">✦</div>
+        <div className="absolute bottom-4 right-1/3 text-[#483fa1] text-3xl animate-pulse">✦</div>
+
+        {/* Heading */}
+        <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
+          INDIA'S FIRST <br />
+        </h2>
+
+
+        <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
+          <span className="text-3xl md:text-5xl italic font-extrabold text-[#fcce00] leading-tight mb-4 uppercase">
+            HOME
+          </span>{' '}
+          SERVICE APP
         </h1>
 
-        <p className="text-[#5c0b38] text-lg md:text-xl font-medium mt-4 mb-8">
-          On-demand home services to empower urban households
-        </p>
 
-        <div className="flex justify-center gap-6 mb-6">
+        {/* Subtext */}
+        <p className="text-sm md:text-base text-[#5c0b38] font-medium mt-2 mb-3">
+          On-demand home services to empower <br /> urban households
+        </p>
+      </div>
+
+        <div className="flex justify-center gap-6 mb-16">
           <a href="#"><img src="/images/playstore.svg" alt="Google Play" className="h-10 md:h-12" /></a>
           <a href="#"><img src="/images/appstore.svg" alt="App Store" className="h-10 md:h-12" /></a>
         </div>
@@ -59,7 +81,7 @@ export default function QuickHeroSection() {
       {/* Phone Mockup */}
       <motion.div
         ref={phoneRef}
-        className="absolute top-[18%] left-[39%] transform -translate-x-1/2 z-20 w-[260px] h-[500px]"
+        className="absolute top-[22%] left-[39%] transform -translate-x-1/2 z-20 w-[260px] h-[500px]"
         style={{ scale: phoneScale, y: phoneY }}
       >
         <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#fcce00] relative overflow-hidden">
@@ -68,7 +90,7 @@ export default function QuickHeroSection() {
             <img
               src="/assets/logo/hommlielogo4.png"
               alt="Hommlie Logo"
-              className="absolute top-4 w-28 h-auto"
+              className="absolute top-4 w-40 h-auto"
             />
           </div>
         </div>
@@ -77,16 +99,18 @@ export default function QuickHeroSection() {
       {/* Scrolling Cards Section */}
       <section ref={cardsRef} className="bg-[#f5c000] text-black min-h-[650px] pt-[15px] pb-[120px] relative z-10">
         <div className="flex flex-col items-center px-4">
-          <motion.h1
-            className="text-3xl md:text-6xl font-bold text-center mb-6 font-[Arial]"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: cardsInView ? 1 : 0, y: cardsInView ? 0 : 20 }}
-            transition={{ duration: 0.6 }}
-          >
-            Home services at your doorstep<span className="text-black Arial"></span>
-          </motion.h1>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
+         Instant Home Services, <br />
+        </h2>
+
+
+        <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
+          <span className="text-3xl md:text-5xl italic font-extrabold text-white leading-tight mb-4">
+           Right at Your Doorstep
+          </span>{' '}
+        </h1>
           <motion.p
-            className="text-xl text-pink-200 mt-4 mb-32"
+            className="text-xl text-[#483fa1] mt-4 mb-32"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: cardsInView ? 1 : 0, y: cardsInView ? 0 : 20 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -119,7 +143,7 @@ export default function QuickHeroSection() {
                       ease: 'easeInOut',
                     }}
                   >
-                    <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#ff4c7b] transition-all duration-300 h-full">
+                    <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#483fa1] transition-all duration-300 h-full">
                       <div className="h-40 bg-gray-100 overflow-hidden relative">
                         <img
                           src={task.image}
@@ -127,7 +151,7 @@ export default function QuickHeroSection() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
-                      <div className="p-4 text-center font-medium bg-white group-hover:bg-[#ff4c7b] group-hover:text-white flex-1 flex items-center justify-center transition-all duration-300">
+                      <div className="p-4 text-center font-medium bg-white group-hover:bg-[#483fa1] group-hover:text-white flex-1 flex items-center justify-center transition-all duration-300">
                         {task.title}
                       </div>
                     </div>
