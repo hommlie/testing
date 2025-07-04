@@ -245,43 +245,46 @@ const ServiceGrid = () => {
   return (
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
-        {services.map((service) => (
-          <div
-            key={service.id}
-            className="flex flex-col items-center p-3 rounded-lg border border-gray-200 hover:border-black hover:shadow-sm transition-all cursor-pointer"
-            onClick={() => {
-              if (service.name === "Pest Control") {
-                setShowPestModal(true);
-              } else if (service.name === "Deep Cleaning") {
-                setShowDeepCleanModal(true);
-              } else if (service.name === "Scrap") {
-                setShowScrapModal(true);
-              } else if (service.name === "Mosquito & Safety Net") {
-                setShowMosquitoNetModal(true);
-              } else {
-                setSelectedService(service);
-              }
-            }}
-          >
-            <img
-              src={service.image}
-              alt={service.name}
-              className="w-20 h-20 object-cover rounded-full"
-            />
-            <span className="text-xs font-medium text-gray-700 text-center mt-2">
-              {service.name}
-            </span>
-          </div>
-        ))}
-        <div className="flex flex-col items-center p-3 rounded-lg border border-gray-200 hover:border-black hover:shadow-sm transition-all cursor-pointer">
-          <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-            <FaEllipsisH className="text-gray-500 text-xl" />
-          </div>
-          <span className="text-xs font-medium text-gray-700 text-center mt-2">
-            See All
-          </span>
-        </div>
-      </div>
+  {services.map((service) => (
+    <div
+      key={service.id}
+      className="flex flex-col items-center p-3 rounded-xl bg-[#f9f9f9] shadow-sm transition-all cursor-pointer"
+      onClick={() => {
+        if (service.name === "Pest Control") {
+          setShowPestModal(true);
+        } else if (service.name === "Deep Cleaning") {
+          setShowDeepCleanModal(true);
+        } else if (service.name === "Scrap") {
+          setShowScrapModal(true);
+        } else if (service.name === "Mosquito & Safety Net") {
+          setShowMosquitoNetModal(true);
+        } else {
+          setSelectedService(service);
+        }
+      }}
+    >
+      <img
+        src={service.image}
+        alt={service.name}
+        className="w-14 h-14 object-contain"
+      />
+      <span className="text-xs font-medium text-gray-800 text-center mt-2">
+        {service.name}
+      </span>
+    </div>
+  ))}
+
+  {/* See All Card */}
+  <div className="flex flex-col items-center p-3 rounded-xl bg-[#f9f9f9] hover:bg-[#f0f0f0] shadow-sm transition-all cursor-pointer">
+    <div className="w-12 h-12 flex items-center justify-center">
+      <FaEllipsisH className="text-gray-500 text-lg" />
+    </div>
+    <span className="text-xs font-medium text-gray-800 text-center mt-2">
+      See All
+    </span>
+  </div>
+</div>
+
 
       {/* Main Modal */}
       {selectedService && (
