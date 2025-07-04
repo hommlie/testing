@@ -334,8 +334,8 @@ const ServiceGrid = () => {
 
       {/* Pest Control Modal */}
       {showPestModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-6 h-[60vh] sm:h-auto overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Pest Control Services</h2>
               <button
@@ -365,8 +365,8 @@ const ServiceGrid = () => {
 
       {/* Deep Cleaning Modal */}
       {showDeepCleanModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
+       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-6 h-[60vh] sm:h-auto overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Deep Cleaning Services</h2>
               <button

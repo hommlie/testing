@@ -2,9 +2,6 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    fontFamily: {
-      Orbitron: ["Orbitron", "serif"],
-    },
     extend: {
       fontFamily: {
         poppins: ["Poppin", "sans-serif"],
@@ -32,9 +29,14 @@ export default {
           "0%": { width: "0%" },
           "100%": { width: "100%" },
         },
+        "slide-up": {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
         "loading-full-width": "loading-full-width 1.5s ease-in-out infinite",
+        "slide-up": "slide-up 0.3s ease-out",
       },
       backgroundImage: {
         "hommlie-gradient":
