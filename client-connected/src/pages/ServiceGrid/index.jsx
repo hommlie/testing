@@ -334,8 +334,8 @@ const ServiceGrid = () => {
 
       {/* Pest Control Modal */}
       {showPestModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-6 h-[60vh] sm:h-auto overflow-y-auto transform animate-slide-up">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Pest Control Services</h2>
               <button onClick={() => setShowPestModal(false)} className="text-gray-500 hover:text-black">
@@ -383,7 +383,7 @@ const ServiceGrid = () => {
       {/* Scrap Modal */}
       {showScrapModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
+          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Scrap Collection Services</h2>
               <button onClick={() => setShowScrapModal(false)} className="text-gray-500 hover:text-black">
