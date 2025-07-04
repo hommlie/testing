@@ -373,7 +373,7 @@ const HomePage = () => {
       <div className="text-center mb-8 px-4 md:px-0">
   <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 font-bold mb-2 whitespace-nowrap overflow-x-auto">
     On-Demand Home Services {" "}
-    <span className="text-[#f5c000] inline-block">
+    <span className="text-[#f70000] inline-block">
       <Typewriter
         words={[' in Bangalore']}
         loop={false}

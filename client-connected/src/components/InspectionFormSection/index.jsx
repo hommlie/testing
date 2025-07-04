@@ -110,6 +110,7 @@ const InspectionFormSection = () => {
           <div className="space-y-6 text-sm">
             <div className="flex items-start gap-3">
               <MdOutlineLocalPostOffice className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
+              
               <div>
                 <h3 className="text-gray-500">Email</h3>
                 <p className="text-gray-800 font-medium">reach@hommlie.com</p>

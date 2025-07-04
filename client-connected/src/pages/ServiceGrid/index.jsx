@@ -10,14 +10,14 @@ const ServiceGrid = () => {
 
   const pestSubServices = [
     { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
-    { name: "Rodent Control", image: "/images/cockicon.png", url: "/subcategory/rodent-control-in-bangalore" },
-    { name: "Mosquito Control", image: "/images/cockicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
+    { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
+    { name: "Mosquito Control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
     { name: "Flies Management", image: "/images/cockicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
-    { name: "Weed Management", image: "/images/cockicon.png", url: "/subcategory/pest-control-weed-management" },
-    { name: "Wood Borer", image: "/images/cockicon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
-    { name: "Bedbugs Control", image: "/images/cockicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
-    { name: "Honey Bee Removal", image: "/images/cockicon.png", url: "/subcategory/honey-bee-removal-services-in-bangalore" },
-    { name: "Termite Treatment", image: "/images/cockicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
+    { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
+    { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
+    { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
+    { name: "Honey Bee Removal", image: "/images/beeicon.png", url: "/subcategory/honey-bee-removal-services-in-bangalore" },
+    { name: "Termite Treatment", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
   ];
 
   const deepCleanSubServices = [
@@ -170,7 +170,7 @@ const ServiceGrid = () => {
     {
       id: 3,
       name: "Scrap",
-      image: "/images/scrap.jpg",
+      image: "/images/scrap.png",
       description: "Efficient scrap removal service to help you declutter your space. We responsibly dispose of unwanted items, including electronics, furniture, and construction debris.",
       details: [
         "Household scrap removal",
@@ -207,7 +207,7 @@ const ServiceGrid = () => {
     {
       id: 6,
       name: "AC Services",
-      image: "/images/ac.jpg",
+      image: "/images/ac.png",
       description: "Comprehensive air conditioning services including installation, maintenance, and repair of all AC types to keep your space cool and comfortable.",
       details: [
         "AC installation",
@@ -264,13 +264,11 @@ const ServiceGrid = () => {
                 }
               }}
             >
-              <div className="">
-                <img
-                  src={service.image}
-                  alt={service.name}
-                  className="w-18 h-16 object-contain"
-                />
-              </div>
+              <img
+                src={service.image}
+                alt={service.name}
+                className="w-24 h-24 object-contain"
+              />
               <span className="text-xs font-medium text-gray-800 text-center mt-2">
                 {service.name}
               </span>
@@ -279,10 +277,10 @@ const ServiceGrid = () => {
 
           {/* See All Card */}
           <div className="flex flex-col items-center p-3 rounded-xl bg-[#f9f9f9] hover:bg-[#f0f0f0] shadow-sm transition-all cursor-pointer">
-            <div className="w-12 h-12 flex items-center justify-center">
+            <div className="w-12 h-12 flex items-center justify-center mt-6">
               <FaEllipsisH className="text-gray-500 text-lg" />
             </div>
-            <span className="text-xs font-medium text-gray-800 text-center mt-2">
+            <span className="text-xs font-medium text-gray-800 text-center mt-0">
               See All
             </span>
           </div>
@@ -309,7 +307,7 @@ const ServiceGrid = () => {
                 <img
                   src={selectedService.image}
                   alt={selectedService.name}
-                  className="w-40 h-40 object-cover rounded-lg"
+                  className="w-48 h-48 object-contain rounded-lg"
                 />
               </div>
               <p className="text-gray-600 mb-4">{selectedService.description}</p>
@@ -323,8 +321,7 @@ const ServiceGrid = () => {
                 {selectedService.bookingUrl && (
                   <a
                     href={selectedService.bookingUrl}
-                    className="inline-block w-full sm:w-auto text-center bg-[#fdd420] hover:bg-[#453b9e] hover:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 text-black font-semibold text-sm sm:text-base px-6 py-3 rounded-lg shadow-sm transition-all duration-200"
-                    aria-label={`Book ${selectedService.name} now`}
+                    className="inline-block w-full sm:w-auto text-center bg-[#fdd420] hover:bg-[#453b9e] hover:text-white text-black font-semibold text-sm sm:text-base px-6 py-3 rounded-lg shadow-sm transition-all duration-200"
                   >
                     Book {selectedService.name}
                   </a>
@@ -341,22 +338,15 @@ const ServiceGrid = () => {
           <div className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-6 h-[60vh] sm:h-auto overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Pest Control Services</h2>
-              <button
-                onClick={() => setShowPestModal(false)}
-                className="text-gray-500 hover:text-black"
-              >
+              <button onClick={() => setShowPestModal(false)} className="text-gray-500 hover:text-black">
                 <FaTimes />
               </button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {pestSubServices.map((sub, index) => (
-                <a
-                  href={sub.url}
-                  key={index}
-                  className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg"
-                >
-                  <div className="w-32 h-20 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                    <img src={sub.image} alt={sub.name} className="w-12 h-12 object-contain" />
+                <a key={index} href={sub.url} className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg">
+                  <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+                    <img src={sub.image} alt={sub.name} className="w-16 h-16 object-contain" />
                   </div>
                   <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
                 </a>
@@ -368,26 +358,19 @@ const ServiceGrid = () => {
 
       {/* Deep Cleaning Modal */}
       {showDeepCleanModal && (
-       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
           <div className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-6 h-[60vh] sm:h-auto overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Deep Cleaning Services</h2>
-              <button
-                onClick={() => setShowDeepCleanModal(false)}
-                className="text-gray-500 hover:text-black"
-              >
+              <button onClick={() => setShowDeepCleanModal(false)} className="text-gray-500 hover:text-black">
                 <FaTimes />
               </button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {deepCleanSubServices.map((sub, index) => (
-                <a
-                  href={sub.url}
-                  key={index}
-                  className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg"
-                >
-                  <div className="w-32 h-20 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                    <img src={sub.image} alt={sub.name} className="w-12 h-12 object-contain" />
+                <a key={index} href={sub.url} className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg">
+                  <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+                    <img src={sub.image} alt={sub.name} className="w-16 h-16 object-contain" />
                   </div>
                   <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
                 </a>
@@ -403,46 +386,22 @@ const ServiceGrid = () => {
           <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Scrap Collection Services</h2>
-              <button
-                onClick={() => setShowScrapModal(false)}
-                className="text-gray-500 hover:text-black"
-              >
+              <button onClick={() => setShowScrapModal(false)} className="text-gray-500 hover:text-black">
                 <FaTimes />
               </button>
             </div>
-            <div className="mb-4">
-              <p className="text-sm text-gray-600">
-                We offer competitive rates for various types of scrap materials. 
-                Prices are subject to change based on market rates.
-              </p>
-            </div>
+            <p className="text-sm text-gray-600 mb-4">We offer competitive rates for various types of scrap materials.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {scrapSubServices.map((sub, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg border border-gray-100"
-                >
-                  <div className="w-32 h-20 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                    <img src={sub.image} alt={sub.name} className="w-12 h-12 object-contain" />
+                <div key={index} className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg border border-gray-100">
+                  <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+                    <img src={sub.image} alt={sub.name} className="w-16 h-16 object-contain" />
                   </div>
                   <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
                   <p className="text-sm font-bold text-green-600 mt-1">{sub.price}</p>
-                  {sub.note && (
-                    <p className="text-xs text-gray-500 mt-1">{sub.note}</p>
-                  )}
+                  {sub.note && <p className="text-xs text-gray-500 mt-1">{sub.note}</p>}
                 </div>
               ))}
-            </div>
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 mb-2">
-                For bulk quantities or special items, please call:
-              </p>
-              <a 
-                href="tel:+918595358613" 
-                className="inline-block bg-[#fdd420] text-black font-semibold px-6 py-2 rounded-lg shadow-sm"
-              >
-                +91-6363865658
-              </a>
             </div>
           </div>
         </div>
@@ -454,31 +413,19 @@ const ServiceGrid = () => {
           <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Mosquito & Safety Net Services</h2>
-              <button
-                onClick={() => setShowMosquitoNetModal(false)}
-                className="text-gray-500 hover:text-black"
-              >
+              <button onClick={() => setShowMosquitoNetModal(false)} className="text-gray-500 hover:text-black">
                 <FaTimes />
               </button>
             </div>
-            <div className="mb-4">
-              <p className="text-sm text-gray-600">
-                Professional installation of mosquito nets and safety nets to protect your home from insects, birds, and other pests.
-              </p>
-            </div>
-            
+            <p className="text-sm text-gray-600 mb-4">Professional installation of mosquito nets and safety nets.</p>
             {mosquitoNetSubServices.map((category, index) => (
               <div key={index} className="mb-6">
                 <h3 className="font-semibold text-gray-800 mb-3">{category.category}</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {category.services.map((sub, subIndex) => (
-                    <a
-                      href={sub.url}
-                      key={subIndex}
-                      className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg"
-                    >
-                      <div className="w-32 h-20 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                        <img src={sub.image} alt={sub.name} className="w-12 h-12 object-contain" />
+                    <a key={subIndex} href={sub.url} className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg">
+                      <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+                        <img src={sub.image} alt={sub.name} className="w-16 h-16 object-contain" />
                       </div>
                       <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
                     </a>

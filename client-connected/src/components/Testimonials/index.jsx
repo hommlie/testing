@@ -54,7 +54,6 @@ const Testimonials = () => {
               {testimonials.map((testimonial, index) => {
                 const isFull = index % 2 === 0;
                 const heightClass = isFull ? 'h-[480px]' : 'h-[340px]';
-                
 
                 return (
                   <motion.div
@@ -73,21 +72,21 @@ const Testimonials = () => {
                     />
 
                     {/* Overlay Card */}
-                    <div className="relative z-10 w-full px-4 pb-4">
-                      <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
-                        <p className="text-sm text-[#3f0018] font-medium mb-3 leading-snug">
-                          {testimonial.content}
-                        </p>
-                        <div className="flex justify-between items-center">
-                          <p className="font-bold text-[#3f0018]">
-                            {testimonial.author}
+                    {index % 2 === 0 && (
+                      <div className="relative z-10 w-full px-4 pb-4">
+                        <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
+                          <p className="text-sm text-[#3f0018] font-medium mb-3 leading-snug">
+                            {testimonial.content}
                           </p>
-                          <span className="bg-[#f5f5f5] px-3 py-1 rounded-full text-xs font-semibold text-gray-700">
-                            {testimonial.location}
-                          </span>
+                          <div className="flex justify-between items-center">
+                            <p className="font-bold text-[#3f0018]">{testimonial.author}</p>
+                            <span className="bg-[#f5f5f5] px-3 py-1 rounded-full text-xs font-semibold text-gray-700">
+                              {testimonial.location}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </motion.div>
                 );
               })}
