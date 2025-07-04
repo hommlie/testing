@@ -5,78 +5,92 @@ const Testimonials = () => {
   const testimonials = [
     {
       id: 1,
-      content: "As a working professional, I struggle big time whenever my paid help is on leave. Snabbit's services have been a game changer. From dusting to bathroom cleaning, they take care of everything.",
+      content:
+        "As a working professional, I struggle big time whenever my paid help is on leave. Snabbit's services have been a game changer. From dusting to bathroom cleaning, they take care of everything.",
       author: "Sunny Gala",
       location: "Powai",
-      rating: 5
+      rating: 5,
+      image: "/images/testi1.jpg",
     },
     {
       id: 2,
-      content: "My regular house help doesn't clean fans or bathrooms, so I tried Snabbit. It's super convenient, and they pay attention to details my maid overlooks. I couldn't be happier!",
+      content:
+        "My regular house help doesn't clean fans or bathrooms, so I tried Snabbit. It's super convenient, and they pay attention to details my maid overlooks. I couldn't be happier!",
       author: "Priya Sharma",
       location: "Andheri",
-      rating: 5
-    },
-    // Add more testimonials as needed
-    {
-      id: 1,
-      content: "As a working professional, I struggle big time whenever my paid help is on leave. Snabbit's services have been a game changer. From dusting to bathroom cleaning, they take care of everything.",
-      author: "Sunny Gala",
-      location: "Powai",
-      rating: 5
+      rating: 5,
+      image: "/images/testi1.jpg",
     },
     {
-      id: 2,
-      content: "My regular house help doesn't clean fans or bathrooms, so I tried Snabbit. It's super convenient, and they pay attention to details my maid overlooks. I couldn't be happier!",
-      author: "Priya Sharma",
-      location: "Andheri",
-      rating: 5
+      id: 3,
+      content:
+        "Snabbit's weekly deep cleans have become a part of our routine now. They are professional, punctual, and do a thorough job every single time.",
+      author: "Ravi Menon",
+      location: "Koramangala",
+      rating: 5,
+      image: "/images/testi1.jpg",
     },
-    
+    {
+      id: 4,
+      content:
+        "Being a pet parent, cleanliness is everything. Snabbit understood our needs and delivered more than we expected. Highly recommended!",
+      author: "Neha Kapoor",
+      location: "Indiranagar",
+      rating: 5,
+      image: "/images/testi1.jpg",
+    },
   ];
 
   return (
     <section className="py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">What Our Customers Say</h2>
-        
+        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+          What Our Customers Say
+        </h2>
+
         <div className="relative">
-          {/* Scrollable container */}
           <div className="overflow-x-auto pb-8 scrollbar-hide">
-            <div className="flex space-x-6 w-max px-4">
-              {testimonials.map((testimonial, index) => (
-                <motion.div 
-                  key={testimonial.id}
-                  className="w-80 flex-shrink-0 bg-white rounded-xl shadow-md overflow-hidden p-6"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
-                >
-                  <div className="flex mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-6">"{testimonial.content}"</p>
-                  <div className="flex items-center">
-                    <div className="bg-pink-500 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold">
-                      {testimonial.author.charAt(0)}
+            <div className="flex space-x-6 w-max px-4 min-h-[500px] items-center">
+              {testimonials.map((testimonial, index) => {
+                const isFull = index % 2 === 0;
+                const heightClass = isFull ? 'h-[480px]' : 'h-[340px]';
+                
+
+                return (
+                  <motion.div
+                    key={testimonial.id + index}
+                    className={`relative w-80 ${heightClass} flex-shrink-0 rounded-3xl overflow-hidden shadow-lg flex ${isFull ? 'items-end' : 'items-center'}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    whileHover={{ y: -5 }}
+                  >
+                    {/* Background Image */}
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.author}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+
+                    {/* Overlay Card */}
+                    <div className="relative z-10 w-full px-4 pb-4">
+                      <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
+                        <p className="text-sm text-[#3f0018] font-medium mb-3 leading-snug">
+                          {testimonial.content}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <p className="font-bold text-[#3f0018]">
+                            {testimonial.author}
+                          </p>
+                          <span className="bg-[#f5f5f5] px-3 py-1 rounded-full text-xs font-semibold text-gray-700">
+                            {testimonial.location}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="ml-3">
-                      <p className="font-semibold text-gray-800">{testimonial.author}</p>
-                      <p className="text-sm text-gray-500">{testimonial.location}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>

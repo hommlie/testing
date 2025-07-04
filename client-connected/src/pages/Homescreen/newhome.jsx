@@ -610,9 +610,9 @@ const HomePage = () => {
           <WhyChooseHommlie />
         </section> */}
 
-      {/* <section className="px-10 py-10">
+      <section className="px-10 py-10">
         <Testimonials />
-      </section> */}
+      </section>
 
       {/* inspection form section */}
       <section id="inspection-section" className="px-4 py-5 md:py-10">
