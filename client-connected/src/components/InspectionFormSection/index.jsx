@@ -104,38 +104,59 @@ const InspectionFormSection = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Contact Info */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Schedule Your Inspection</h2>
-          <p className="text-sm sm:text-base text-gray-600 mb-6">Get professional help for your home or business</p>
-          <div className="space-y-6 text-sm">
-            <div className="flex items-start gap-3">
-              <MdOutlineLocalPostOffice className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
-              
-              <div>
-                <h3 className="text-gray-500">Email</h3>
-                <p className="text-gray-800 font-medium">reach@hommlie.com</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <IoCallOutline className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
-              <div>
-                <h3 className="text-gray-500">Phone</h3>
-                <p className="text-gray-800 font-medium">+91-6363865658</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <IoBusiness className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
-              <div>
-                <h3 className="text-gray-500">Our Offices</h3>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city) => (
-                    <span key={city} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm">{city}</span>
-                  ))}
-                </div>
-              </div>
+        <div className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+  <div className="flex flex-col md:flex-row items-center gap-6">
+    {/* Left - Contact Info */}
+    <div className="w-full md:w-1/2">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Schedule Your Inspection</h2>
+      <p className="text-sm sm:text-base text-gray-600 mb-6">Get professional help for your home or business</p>
+      <div className="space-y-6 text-sm">
+        <div className="flex items-start gap-3">
+          <MdOutlineLocalPostOffice className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
+          <div>
+            <h3 className="text-gray-500">Email</h3>
+            <p className="text-gray-800 font-medium">reach@hommlie.com</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <IoCallOutline className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
+          <div>
+            <h3 className="text-gray-500">Phone</h3>
+            <p className="text-gray-800 font-medium">+91-6363865658</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <IoBusiness className="text-xl text-black bg-[#fdd420] rounded-full p-2 w-8 h-8" />
+          <div>
+            <h3 className="text-gray-500">Our Offices</h3>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city) => (
+                <span
+                  key={city}
+                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm"
+                >
+                  {city}
+                </span>
+              ))}
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div className="w-full md:w-1/2 flex justify-center items-center">
+  <div className="w-full sm:w-96 md:w-[450px] lg:w-[600px]">
+    <img
+      src="/images/jeani.png"
+      alt="Jeani"
+      className="w-full h-auto object-cover rounded-2xl"
+    />
+  </div>
+</div>
+
+  </div>
+</div>
+
 
         {/* Booking Form */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-black">

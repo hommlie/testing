@@ -393,27 +393,27 @@ const HomePage = () => {
 
     {/* Right Container - Images */}
     
-    <div className="w-full md:w-1/2">
-      <div className="grid grid-cols-2 gap-4 h-full">
-        {/* First Column */}
-        <div className="flex flex-col space-y-4">
-          <div className="bg-gray-200 rounded-lg h-[340px] flex items-center justify-center overflow-hidden">
-            <img src={photo3} alt="Home Service Example" className="object-cover h-full w-full" />
-          </div>
-          <div className="bg-gray-200 rounded-lg h-[215px] flex items-center justify-center overflow-hidden">
-            <img src={photo1} alt="Home Service Example" className="object-cover h-full w-full" />
-          </div>
-        </div>
+    <div className="w-full md:w-1/2 hidden md:block">
+  <div className="grid grid-cols-2 gap-4 h-full">
+    {/* First Column */}
+    <div className="flex flex-col space-y-4">
+      <div className="bg-gray-200 rounded-lg h-[340px] flex items-center justify-center overflow-hidden">
+        <img src={photo3} alt="Home Service Example" className="object-cover h-full w-full" />
+      </div>
+      <div className="bg-gray-200 rounded-lg h-[215px] flex items-center justify-center overflow-hidden">
+        <img src={photo1} alt="Home Service Example" className="object-cover h-full w-full" />
+      </div>
+    </div>
 
-        {/* Second Column */}
-        <div className="flex flex-col space-y-4">
+    {/* Second Column */}
+    <div className="flex flex-col space-y-4">
       {/* First Image - Shorter */}
       <div className="relative bg-gray-200 rounded-lg h-[235px] overflow-hidden">
         <img 
           src={photo2} 
           alt="Home Service Example" 
           className="absolute h-full w-full object-cover object-center"
-          style={{ objectPosition: "50% 30%" }} // Adjust this value as needed
+          style={{ objectPosition: "50% 30%" }}
         />
       </div>
 
@@ -423,12 +423,13 @@ const HomePage = () => {
           src={photo4} 
           alt="Home Service Example" 
           className="absolute h-full w-full object-cover object-center"
-          style={{ objectPosition: "50% 25%" }} // Adjust this value as needed
+          style={{ objectPosition: "50% 25%" }}
         />
       </div>
     </div>
   </div>
 </div>
+
   </div>
 </section>
       {/* Services Section */}

@@ -296,7 +296,7 @@ useEffect(() => {
             <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-sm text-black">
               <a
                 href="#"
-                className="flex items-center gap-1 hover:text-amber-200 transition-colors"
+                className="flex items-center gap-1 hover:text-[#453b9e] transition-colors"
               >
                 <FaMobileAlt className="text-inherit" />
                 Get App
@@ -306,7 +306,7 @@ useEffect(() => {
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-1 hover:text-amber-200 transition-colors"
+                  className="flex items-center gap-1 hover:text-[#453b9e] transition-colors"
                 >
                   <FaSignInAlt className="text-inherit" />
                   Login
@@ -314,7 +314,7 @@ useEffect(() => {
               ) : (
                 <button
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
-                  className="flex items-center gap-2 hover:text-amber-200 transition-colors"
+                  className="flex items-center gap-2 hover:text-[#453b9e] transition-colors"
                 >
                   <FaUser className="text-white text-base" />
                   <span className="text-white font-medium">My Account</span>
@@ -324,7 +324,7 @@ useEffect(() => {
 
               <button
                 onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="flex items-center gap-1 hover:text-amber-200 transition-colors"
+                className="flex items-center gap-1 hover:text-[#453b9e] transition-colors"
               >
                 <FaShoppingCart className="text-inherit" />
                 Cart
@@ -338,7 +338,7 @@ useEffect(() => {
 
               <a
                 href="#"
-                className="flex items-center gap-1 hover:text-amber-200 transition-colors"
+                className="flex items-center gap-1 hover:text-[#453b9e] transition-colors"
               >
                 <FaQuestionCircle className="text-inherit" />
                 Help

@@ -245,45 +245,49 @@ const ServiceGrid = () => {
   return (
     <div className="p-4">
       <div className="border border-gray-300 rounded-xl p-4 bg-white shadow-md">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
+          
+          
           {services.map((service) => (
             <div
               key={service.id}
-              className="flex flex-col items-center p-3 rounded-xl bg-[#f9f9f9] shadow-sm transition-all cursor-pointer"
+              className="flex flex-col items-center group transition-all cursor-pointer"
               onClick={() => {
-                if (service.name === "Pest Control") {
-                  setShowPestModal(true);
-                } else if (service.name === "Deep Cleaning") {
-                  setShowDeepCleanModal(true);
-                } else if (service.name === "Scrap") {
-                  setShowScrapModal(true);
-                } else if (service.name === "Mosquito & Safety Net") {
-                  setShowMosquitoNetModal(true);
-                } else {
-                  setSelectedService(service);
-                }
+                if (service.name === "Pest Control") setShowPestModal(true);
+                else if (service.name === "Deep Cleaning") setShowDeepCleanModal(true);
+                else if (service.name === "Scrap") setShowScrapModal(true);
+                else if (service.name === "Mosquito & Safety Net") setShowMosquitoNetModal(true);
+                else setSelectedService(service);
               }}
             >
-              <img
-                src={service.image}
-                alt={service.name}
-                className="w-24 h-24 object-contain"
-              />
-              <span className="text-xs font-medium text-gray-800 text-center mt-2">
+              {/* Boxed Icon */}
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white border border-gray-200 rounded-2xl shadow-md flex items-center justify-center group-hover:shadow-lg transition">
+                <img
+                  src={service.image}
+                  alt={service.name}
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain" 
+                />
+              </div>
+
+              {/* Service Name with hover underline */}
+              <span className="mt-2 text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 after:bg-[#fdd420]">
                 {service.name}
               </span>
             </div>
           ))}
 
           {/* See All Card */}
-          <div className="flex flex-col items-center p-3 rounded-xl bg-[#f9f9f9] hover:bg-[#f0f0f0] shadow-sm transition-all cursor-pointer">
-            <div className="w-12 h-12 flex items-center justify-center mt-6">
-              <FaEllipsisH className="text-gray-500 text-lg" />
+          <div className="flex flex-col items-center group transition-all cursor-pointer">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white border border-gray-200 rounded-2xl shadow-md flex items-center justify-center group-hover:shadow-lg transition">
+              <FaEllipsisH className="text-gray-500 text-2xl sm:text-3xl" />
             </div>
-            <span className="text-xs font-medium text-gray-800 text-center mt-0">
+            <span className="mt-2 text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 after:bg-[#fdd420]">
               See All
             </span>
           </div>
+
+
+
         </div>
       </div>
 
@@ -334,7 +338,7 @@ const ServiceGrid = () => {
 
       {/* Pest Control Modal */}
       {showPestModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
           <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Pest Control Services</h2>
@@ -346,7 +350,7 @@ const ServiceGrid = () => {
               {pestSubServices.map((sub, index) => (
                 <a key={index} href={sub.url} className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg">
                   <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                    <img src={sub.image} alt={sub.name} className="w-16 h-16 object-contain" />
+                    <img src={sub.image} alt={sub.name} className="w-20 h-20 object-contain" />
                   </div>
                   <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
                 </a>
@@ -410,7 +414,7 @@ const ServiceGrid = () => {
       {/* Mosquito & Safety Net Modal */}
       {showMosquitoNetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto">
+          <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto transform animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Mosquito & Safety Net Services</h2>
               <button onClick={() => setShowMosquitoNetModal(false)} className="text-gray-500 hover:text-black">
