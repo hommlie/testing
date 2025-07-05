@@ -278,7 +278,7 @@ const ServiceSection = ({ categories }) => {
               <div
                 key={option.id}
                 onClick={() => handleSelect(option.id)}
-                className={`cursor-pointer p-3 flex items-start justify-between hover:bg-[#fcd93a] transition-colors ${
+                className={`cursor-pointer p-3 flex items-start justify-between hover:bg-[#92B775] transition-colors ${
                   isSelected ? "bg-white text-black" : "text-gray-900"
                 } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
               >
@@ -287,7 +287,7 @@ const ServiceSection = ({ categories }) => {
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         isSelected
-                          ? "border-[#493f9e] bg-[#493f9e]"
+                          ? "border-[#493f9e] bg-[#92B775]"
                           : "border-gray-300"
                       }`}
                     >
@@ -335,14 +335,14 @@ const ServiceSection = ({ categories }) => {
         whileHover={{ y: -5 }}
         className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden ${
           isSelected
-            ? "border-[#fcd421] bg-[#FFFEE9] shadow-lg"
+            ? "border-[#133215] bg-[#92B775] shadow-lg"
             : "border-gray-200 bg-white hover:shadow-md"
         }`}
       >
         {/* Recommended badge - Improved UI */}
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="relative bg-[#443a9e] text-white text-[11px] font-bold py-1 pl-3 pr-6 rounded-r-full shadow-md flex items-center">
+            <div className="relative bg-[#133215] text-white text-[11px] font-bold py-1 pl-3 pr-6 rounded-r-full shadow-md flex items-center">
               <Star className="w-3 h-3 mr-1 fill-current text-white" />
               RECOMMENDED
               <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
@@ -360,7 +360,7 @@ const ServiceSection = ({ categories }) => {
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
                   isSelected
                     ? "bg-white text-black"
-                    : "bg-[#fcd421] text-black"
+                    : "bg-[#92B775] text-black"
                 }`}
               >
                 {selectedAttr.attribute}
@@ -460,8 +460,8 @@ const ServiceSection = ({ categories }) => {
               }}
               className={`w-full py-3 rounded-lg font-bold transition-colors ${
                 isSelected
-                  ? "bg-white text-black hover:bg-[#443a9e] hover:text-white"
-                  : "bg-white text-black hover:bg-[#443a9e] hover:text-white"
+                  ? "bg-white text-black hover:bg-[#133215] hover:text-white"
+                  : "bg-white text-black hover:bg-[#92B775] hover:text-white"
               } ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}
@@ -502,7 +502,7 @@ const ServiceSection = ({ categories }) => {
                   onClick={() => handleCategorySelect(category)}
                   className={`flex items-center px-4 py-3 rounded-lg transition-all whitespace-nowrap ${
                     selectedCategory === category.id
-                      ? "bg-[#fcd93a] text-black shadow-md"
+                      ? "bg-[#92B775] text-black shadow-md"
                       : "bg-white text-gray-800 border border-gray-200 hover:border-black"
                   }`}
                 >

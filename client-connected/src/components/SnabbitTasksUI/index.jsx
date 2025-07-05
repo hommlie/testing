@@ -42,10 +42,10 @@ export default function QuickHeroSection() {
         </h1> */}
         <div className="text-center relative py-2">
         {/* Sparkles */}
-        <div className="absolute top-4 left-4 text-[#483fa1] text-5xl animate-pulse">✦</div>
-        <div className="absolute top-4 right-4 text-[#483fa1] text-5xl animate-pulse">✦</div>
-        <div className="absolute bottom-4 left-1/3 text-[#483fa1] text-3xl animate-pulse">✦</div>
-        <div className="absolute bottom-4 right-1/3 text-[#483fa1] text-3xl animate-pulse">✦</div>
+        <div className="absolute top-4 left-4 text-[#133215] text-5xl animate-pulse">✦</div>
+        <div className="absolute top-4 right-4 text-[#133215] text-5xl animate-pulse">✦</div>
+        <div className="absolute bottom-4 left-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
+        <div className="absolute bottom-4 right-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
 
         {/* Heading */}
         <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
@@ -54,7 +54,7 @@ export default function QuickHeroSection() {
 
 
         <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
-          <span className="text-3xl md:text-5xl italic font-extrabold text-[#fcce00] leading-tight mb-4 uppercase">
+          <span className="text-3xl md:text-5xl italic font-extrabold text-[#92B775] leading-tight mb-4 uppercase">
             HOME
           </span>{' '}
           SERVICE APP
@@ -62,7 +62,7 @@ export default function QuickHeroSection() {
 
 
         {/* Subtext */}
-        <p className="text-sm md:text-base text-[#5c0b38] font-medium mt-2 mb-3">
+        <p className="text-sm md:text-base text-[#133215] font-medium mt-2 mb-3">
           On-demand home services to empower <br /> urban households
         </p>
       </div>
@@ -72,23 +72,23 @@ export default function QuickHeroSection() {
           <a href="#"><img src="/images/appstore.svg" alt="App Store" className="h-10 md:h-12" /></a>
         </div>
 
-        <div className="flex justify-center items-end gap-8 md:gap-44 z-10 relative">
-          <img src="/images/image3.png" alt="Left" className="h-[240px] md:h-[340px] object-contain mr-20" />
-          <img src="/images/image1.png" alt="Right" className="h-[240px] md:h-[340px] object-contain ml-20" />
+        <div className="flex justify-center items-end gap-8 md:gap-36 z-10 relative">
+          <img src="/images/image3.png" alt="Left" className="h-[240px] md:h-[320px] object-contain mr-20" />
+          <img src="/images/image1.png" alt="Right" className="h-[240px] md:h-[320px] object-contain ml-20" />
         </div>
       </section>
 
       {/* Phone Mockup */}
       <motion.div
         ref={phoneRef}
-        className="absolute top-[22%] left-[39%] transform -translate-x-1/2 z-20 w-[260px] h-[500px]"
+        className="absolute top-[24%] left-[39%] transform -translate-x-1/2 z-20 w-[260px] h-[500px]"
         style={{ scale: phoneScale, y: phoneY }}
       >
         <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#F3E8D3] relative overflow-hidden">
           <div className="w-20 h-4 rounded-full bg-black mt-2 mb-2 mx-auto"></div>
           <div className="h-[440px] flex items-center justify-center relative">
             <img
-              src="/assets/logo/hommlielogo4.png"
+              src="/assets/logo/homlogo.png"
               alt="Hommlie Logo"
               className="absolute top-4 w-40 h-auto"
             />
@@ -143,7 +143,7 @@ export default function QuickHeroSection() {
                       ease: 'easeInOut',
                     }}
                   >
-                    <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#483fa1] transition-all duration-300 h-full">
+                    <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#F3E8D3] transition-all duration-300 h-full">
                       <div className="h-40 bg-gray-100 overflow-hidden relative">
                         <img
                           src={task.image}
@@ -151,7 +151,7 @@ export default function QuickHeroSection() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
-                      <div className="p-4 text-center font-medium bg-white group-hover:bg-[#483fa1] group-hover:text-white flex-1 flex items-center justify-center transition-all duration-300">
+                      <div className="p-4 text-center font-medium bg-white group-hover:bg-[#F3E8D3] group-hover:text-black flex-1 flex items-center justify-center transition-all duration-300">
                         {task.title}
                       </div>
                     </div>

@@ -274,7 +274,7 @@ const ServiceGrid = () => {
               </div>
 
               {/* Label - mobile optimized but same on desktop */}
-              <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#fdd420]">
+              <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775]">
                 {service.name}
               </span>
             </div>
@@ -285,7 +285,7 @@ const ServiceGrid = () => {
             <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
               <FaEllipsisH className="text-gray-500 text-xl sm:text-2xl" />
             </div>
-            <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#fdd420]">
+            <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775]">
               See All
             </span>
           </div>
