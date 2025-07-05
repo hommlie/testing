@@ -249,6 +249,7 @@ const ServiceGrid = () => {
           
           
          
+
   {services.map((service) => (
     <div
       key={service.id}
@@ -261,31 +262,32 @@ const ServiceGrid = () => {
         else setSelectedService(service);
       }}
     >
-      {/* Styled Box from Modal */}
-      <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
+      {/* Box - mobile optimized but same on desktop */}
+      <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
         <img
           src={service.image}
           alt={service.name}
-          className="w-20 h-20 object-contain"
+          className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
         />
       </div>
 
-      {/* Label Below */}
-      <span className="mt-2 text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 after:bg-[#fdd420]">
+      {/* Label - mobile optimized but same on desktop */}
+      <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#fdd420]">
         {service.name}
       </span>
     </div>
   ))}
 
-  {/* See All Card with Same Modal Box Style */}
+  {/* See All Card - mobile optimized but same on desktop */}
   <div className="flex flex-col items-center group transition-all cursor-pointer">
-    <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
-      <FaEllipsisH className="text-gray-500 text-2xl sm:text-3xl" />
+    <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
+      <FaEllipsisH className="text-gray-500 text-xl sm:text-2xl" />
     </div>
-    <span className="mt-2 text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 after:bg-[#fdd420]">
+    <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#fdd420]">
       See All
     </span>
   </div>
+
 
 
 
