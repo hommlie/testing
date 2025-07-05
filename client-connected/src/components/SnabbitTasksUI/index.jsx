@@ -73,8 +73,8 @@ export default function QuickHeroSection() {
         </div>
 
         <div className="flex justify-center items-end gap-8 md:gap-44 z-10 relative">
-          <img src="/images/image3.png" alt="Left" className="h-[220px] md:h-[300px] object-contain mr-20" />
-          <img src="/images/image1.png" alt="Right" className="h-[220px] md:h-[300px] object-contain ml-20" />
+          <img src="/images/image3.png" alt="Left" className="h-[240px] md:h-[340px] object-contain mr-20" />
+          <img src="/images/image1.png" alt="Right" className="h-[240px] md:h-[340px] object-contain ml-20" />
         </div>
       </section>
 
@@ -84,7 +84,7 @@ export default function QuickHeroSection() {
         className="absolute top-[22%] left-[39%] transform -translate-x-1/2 z-20 w-[260px] h-[500px]"
         style={{ scale: phoneScale, y: phoneY }}
       >
-        <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#fcce00] relative overflow-hidden">
+        <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#F3E8D3] relative overflow-hidden">
           <div className="w-20 h-4 rounded-full bg-black mt-2 mb-2 mx-auto"></div>
           <div className="h-[440px] flex items-center justify-center relative">
             <img
@@ -97,7 +97,7 @@ export default function QuickHeroSection() {
       </motion.div>
 
       {/* Scrolling Cards Section */}
-      <section ref={cardsRef} className="bg-[#f5c000] text-black min-h-[650px] pt-[15px] pb-[120px] relative z-10">
+      <section ref={cardsRef} className="bg-[#92B775] text-black min-h-[650px] pt-[15px] pb-[120px] relative z-10">
         <div className="flex flex-col items-center px-4">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
          Instant Home Services, <br />

@@ -27,7 +27,7 @@ export default function Footer({
 
   return (
     <footer className="footer mt-5 z-10 px-2 md:px-10 pb-4">
-      <div className="container-sm max-w-7xl mx-auto px-5 md:px-10 space-y-8">
+      <div className="container-sm max-w-7xl bg-[#f5f5f5]  mx-auto px-5 md:px-10 space-y-8">
         <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4">
@@ -200,7 +200,7 @@ const FooterSection = ({ title, links, hideinMobile }) => (
     <ul className="flex flex-col gap-1 lg:gap-2">
       {links.map((link, index) => (
         <li key={index}>
-          <a href={link.link} className="text-xs lg:text-sm text-[#035240]">
+          <a href={link.link} className="text-xs lg:text-sm text-gray-500">
             {link.title}
           </a>
         </li>

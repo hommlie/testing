@@ -410,7 +410,7 @@ useEffect(() => {
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#f5c000] text-black rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
+              className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#92B775] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
             >
                <span className="font-medium">Join ONDC</span>
                <img src={ondc} alt="ONDC Logo" className="h-9 w-9 object-contain" />
