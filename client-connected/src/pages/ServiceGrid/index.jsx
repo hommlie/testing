@@ -243,11 +243,12 @@ const ServiceGrid = () => {
       ]
     }
   ];
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   return (
     <div className="p-4">
-      <div className="border border-gray-300 rounded-xl p-4 bg-white shadow-md">
-        <div className="grid grid-cols-3 gap-3">
+      <div className="border border-gray-300 rounded-xl p-4 bg-white shadow-md ml-1">
+        <div className="grid grid-cols-3 mt-4 mb-4 gap-3">
           {services.map((service) => (
             <div
               key={service.id}
@@ -281,7 +282,10 @@ const ServiceGrid = () => {
           ))}
 
           {/* See All Card - mobile optimized but same on desktop */}
-          <div className="flex flex-col items-center group transition-all cursor-pointer">
+          <div
+            className="flex flex-col items-center group transition-all cursor-pointer"
+            onClick={() => setShowComingSoon(true)}
+          >
             <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
               <FaEllipsisH className="text-gray-500 text-xl sm:text-2xl" />
             </div>
@@ -291,7 +295,22 @@ const ServiceGrid = () => {
           </div>
         </div>
       </div>
-
+      {showComingSoon && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-xl shadow-lg p-6 text-center relative">
+            <button
+              onClick={() => setShowComingSoon(false)}
+              className="absolute top-2 right-3 text-gray-500 hover:text-black text-xl"
+            >
+              <FaTimes />
+            </button>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Coming Soon!</h3>
+            <p className="text-sm text-gray-600">
+              We will be available soon in all services across Bangalore.
+            </p>
+          </div>
+        </div>
+      )}
       {/* Main Modal */}
       {selectedService && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -375,7 +394,7 @@ const ServiceGrid = () => {
               {deepCleanSubServices.map((sub, index) => (
                 <a key={index} href={sub.url} className="flex flex-col items-center text-center p-3 hover:shadow-md transition rounded-lg">
                   <div className="w-32 h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                    <img src={sub.image} alt={sub.name} className="w-36 h-36 scale-110 object-contain" />
+                    <img src={sub.image} alt={sub.name} className="w-44 h-44 scale-110 object-contain" />
                   </div>
                   <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
                 </a>
@@ -403,7 +422,7 @@ const ServiceGrid = () => {
                     <img src={sub.image} alt={sub.name} className="w-20 h-20 object-contain" />
                   </div>
                   <h3 className="text-sm font-semibold mt-2">{sub.name}</h3>
-                  <p className="text-sm font-bold text-green-600 mt-1">{sub.price}</p>
+                  <p className="text-sm font-bold text-[#52852d] mt-1">{sub.price}</p>
                   {sub.note && <p className="text-xs text-gray-500 mt-1">{sub.note}</p>}
                 </div>
               ))}
@@ -463,7 +482,7 @@ const ServiceGrid = () => {
             <div className="mt-6 flex justify-center">
               <a
                 href="/subcategory/disinfection-services-near-you-in-bangalore"
-                className="inline-block w-full sm:w-auto text-center bg-[#fdd420] hover:bg-[#453b9e] hover:text-white text-black font-semibold text-sm sm:text-base px-6 py-3 rounded-lg shadow-sm transition-all duration-200"
+                className="inline-block w-full sm:w-auto text-center bg-[#92b876] hover:bg-[#453b9e] hover:text-white text-black font-semibold text-sm sm:text-base px-6 py-3 rounded-lg shadow-sm transition-all duration-200"
               >
                 Book Disinfection
               </a>
@@ -471,7 +490,6 @@ const ServiceGrid = () => {
           </div>
         </div>
       )}
-
       {showACModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
           <div className="bg-white w-full max-w-lg rounded-lg p-6 max-h-[91vh] overflow-y-auto transform animate-slide-up">

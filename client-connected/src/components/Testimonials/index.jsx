@@ -49,7 +49,7 @@ const Testimonials = () => {
         </h2>
 
         <div className="relative">
-          <div className="overflow-x-auto pb-8 scrollbar-hide">
+          <div className="overflow-x-auto mr-3 scrollbar-hide">
             <div className="flex space-x-6 w-max px-4 min-h-[500px] items-center">
               {testimonials.map((testimonial, index) => {
                 const isFull = index % 2 === 0;

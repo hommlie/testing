@@ -29,7 +29,7 @@ export default function QuickHeroSection() {
   const phoneY = useTransform(scrollYProgress, [0, 0.4], ['20%', '104%']);
 
   return (
-    <div ref={containerRef} className="hidden sm:block relative overflow-hidden">
+    <div ref={containerRef} className="hidden sm:block relative overflow-hidden mr-2">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-white to-[#fef4f6] pb-12 text-center overflow-hidden">
         {/* <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-4">

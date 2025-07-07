@@ -38,6 +38,7 @@ const PopularCategorySection = ({ data }) => {
               <button
                 key={category.id}
                 onClick={() => handleCategoryClick(category.id)}
+                onMouseEnter={() => setActiveCategory(category.id)}
                 className={`flex items-center gap-2 px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 border-b-2 ${
                   activeCategory === category.id
                     ? "border-hommlie text-hommlie"

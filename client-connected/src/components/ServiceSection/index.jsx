@@ -333,7 +333,7 @@ const ServiceSection = ({ categories }) => {
     return (
       <motion.div
         whileHover={{ y: -5 }}
-        className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden ${
+        className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col justify-between h-[440px] ${
           isSelected
             ? "border-[#133215] bg-[#92B775] shadow-lg"
             : "border-gray-200 bg-white hover:shadow-md"
@@ -494,35 +494,31 @@ const ServiceSection = ({ categories }) => {
           </h2>
 
             <div className="w-full flex flex-col items-center sm:flex-row sm:justify-center sm:overflow-x-auto gap-3 pb-2 sm:scrollbar-hide">
-  {categories?.map((category) => (
-    <motion.button
-      key={category.id}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      onClick={() => handleCategorySelect(category)}
-      className={`w-[200px] sm:w-auto sm:min-w-[180px] text-center flex items-center justify-center px-4 py-3 rounded-md transition-all whitespace-nowrap
-        ${
-          selectedCategory === category.id
-            ? "bg-[#92B775] text-black shadow-md"
-            : "bg-white text-gray-800 border border-gray-200 hover:border-black"
-        }`}
-    >
-      {category.icon_url && (
-        <img
-          src={category.icon_url}
-          alt=""
-          className="w-5 h-5 mr-2 flex-shrink-0"
-        />
-      )}
-      <span className="text-sm font-medium sm:truncate">{category.category_name}</span>
-    </motion.button>
-  ))}
-</div>
-
-
+              {categories?.map((category) => (
+                <motion.button
+                  key={category.id}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => handleCategorySelect(category)}
+                  className={`w-[200px] sm:w-auto sm:min-w-[180px] text-center flex items-center justify-center px-4 py-3 rounded-md transition-all whitespace-nowrap
+                    ${
+                      selectedCategory === category.id
+                        ? "bg-[#92B775] text-black shadow-md"
+                        : "bg-white text-gray-800 border border-gray-200 hover:border-black"
+                    }`}
+                >
+                  {category.icon_url && (
+                    <img
+                      src={category.icon_url}
+                      alt=""
+                      className="w-5 h-5 mr-2 flex-shrink-0"
+                    />
+                  )}
+                <span className="text-sm font-medium sm:truncate">{category.category_name}</span>
+              </motion.button>
+            ))}
+          </div>
         </div>
-
-
         {/* Filter controls */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -569,13 +565,12 @@ const ServiceSection = ({ categories }) => {
             </div>
           </div>
         </div>
-      {/* Product cards */}
         {/* Product cards section */}
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Available Service Packages
             </h3>
-           <div className="px-4">
+           <div className="px-4 mr-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center place-items-center">
               {[...recommended, ...regular].map((product) => (
                 <ProductCard

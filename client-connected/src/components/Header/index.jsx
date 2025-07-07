@@ -47,6 +47,7 @@ const Header = ({
   twitter,
   youtube,
 }) => {
+  const [isGetAppModalOpen, setIsGetAppModalOpen] = useState(false);
   const [showMobileBanner, setShowMobileBanner] = useState(true);
   const {
     user,
@@ -308,14 +309,14 @@ useEffect(() => {
             </motion.div>
 
             {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-sm text-black">
-              <a
-                href="#"
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-sm text-black mr-3">
+              <button
+                onClick={() => setIsGetAppModalOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
               >
                 <FaMobileAlt className="text-inherit" />
                 Get App
-              </a>
+              </button>
               <span className="hidden md:inline-block text-black">|</span>
 
               {user?.length === 0 ? (
@@ -602,12 +603,27 @@ useEffect(() => {
               )}
             </div>
 
-            <button
-              className="md:hidden text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <RxCross1 /> : <AiOutlineMenu />}
-            </button>
+            <div className="md:hidden flex items-center gap-4">
+              <button
+                onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
+                className="relative text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
+              >
+                <FaShoppingCart />
+                {cart?.length > 0 && (
+                  <span className="absolute -top-1 -right-2 bg-amber-300 text-emerald-900 text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                    {cart?.length}
+                  </span>
+                )}
+              </button>
+
+              <button
+                className="text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <RxCross1 /> : <AiOutlineMenu />}
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
@@ -700,6 +716,38 @@ useEffect(() => {
         )}
       </AnimatePresence>
 
+        {isGetAppModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg">
+              <button
+                onClick={() => setIsGetAppModalOpen(false)}
+                className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-lg"
+              >
+                &times;
+              </button>
+              <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
+              <p className="text-gray-700 text-sm text-center mb-5">
+                Book services faster, track orders, and earn rewards – all from your phone.
+              </p>
+              <div className="flex justify-center gap-4">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.hommlie.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
+                </a>
+                <a
+                  href="https://apps.apple.com/" // replace with actual App Store link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">

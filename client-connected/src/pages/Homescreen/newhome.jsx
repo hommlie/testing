@@ -64,6 +64,7 @@ import DownloadHommlieApp from "../../components/DownloadHommlieApp";
 import WhyChooseHommlie from "../../components/WhyChooseHommlie";
 import ServiceGrid from "../ServiceGrid";
 import BannerImage from "../BannerImage";
+import { BsMicFill } from "react-icons/bs";
 
 
 const HomePage = () => {
@@ -260,7 +261,7 @@ const HomePage = () => {
     <h2 className="text-2xl font-bold mb-8 text-center">
       Frequently Asked Questions
     </h2>
-    <div className="space-y-4">
+    <div className="space-y-4 mr-3">
       {data?.faqs?.map((faq, index) => (
         <motion.div
           key={index}
@@ -360,6 +361,42 @@ const HomePage = () => {
     return `${baseUrl}${path}`;
   };
 
+  const services = [
+  "Pest Control",
+  "Home Cleaning",
+  "Sofa Shampooing",
+  "Kitchen Deep Cleaning",
+  "Mosquito Net Installation",
+  "Sanitization Services",
+];
+
+const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setPlaceholderIndex((prev) => (prev + 1) % services.length);
+  }, 4000); // rotates every 4 seconds
+
+  return () => clearInterval(interval);
+}, []);
+
+
+const trendingSearches = [
+  "Cockroach control service",
+  "Bed bug control",
+  "Termite treatment",
+  "Pest control services",
+  "Disinfection service",
+  "Rodent control",
+  "Home Deep Cleaning",
+  "6D Prime Services",
+  "Pest Control Near Me",
+  "Cockroach & Ant Control",
+];
+
+const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+
   return (
     <div className="min-h-screen font-headerFont">
       <SchemaMarkup />
@@ -368,69 +405,120 @@ const HomePage = () => {
       </Helmet>
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-5 py-10 bg-white">
-  <div className="w-full flex flex-col md:flex-row gap-8">
-    {/* Left Container - Services */}
-    <div className="w-full md:w-1/2">
-      <div className="text-center mb-8 px-4 md:px-0">
-  <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 font-bold mb-2 whitespace-nowrap overflow-x-auto">
-    On-Demand Home Services {" "}
-    <span className="text-[#f70000] inline-block">
-      <Typewriter
-        words={[' in Bangalore']}
-        loop={false}
-        cursor
-        cursorStyle="|"
-        typeSpeed={100}
-        deleteSpeed={50}
-        delaySpeed={1000}
-      />
-    </span>
-  </h1>
-</div>
-        <ServiceGrid />
-        <StatsSection />
-    
-    </div>
+        <div className="w-full flex flex-col md:flex-row gap-8">
+          {/* Left Container - Services */}
+        {/* Desktop View: Headline + StatsSection */}
+          <div className="w-full md:w-1/2">
+            {/* Headline - Desktop only */}
+            <div className="hidden md:block text-center mb-8 px-4 md:px-0">
+              <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 font-bold mb-2 whitespace-nowrap overflow-x-auto mr-20">
+                On-Demand Home Services{" "}
+                <span className="text-[#f70000] inline-block">
+                  <Typewriter
+                    words={[" in Bangalore"]}
+                    loop={false}
+                    cursor
+                    cursorStyle="|"
+                    typeSpeed={100}
+                    deleteSpeed={50}
+                    delaySpeed={1000}
+                  />
+                </span>
+              </h1>
+            </div>
+
+            {/* Search Bar - Mobile only */}
+            <div className="sm:block md:hidden px-4 py-2">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={`Search ${services[placeholderIndex]}...`}
+                  className="w-full pl-4 pr-16 py-3 text-base border border-gray-300 bg-[#f9f9f9] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                />
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-gray-700 text-xl">
+                  <BiSearchAlt className="cursor-pointer hover:text-emerald-900" />
+                  <BsMicFill className="cursor-pointer hover:text-emerald-900" />
+                </div>
+              </div>
+
+              {/* Trending Search Dropdown */}
+              {isSearchFocused && searchTerm.length === 0 && (
+                <div className="mt-3 bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-50">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M13 7H7v6h6V7z" />
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
+                    </svg>
+                    Trending Searches
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    {trendingSearches.map((item, idx) => (
+                      <button
+                        key={idx}
+                        onMouseDown={() => setSearchTerm(item)}
+                        className="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-emerald-100 transition-all"
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Always show on both desktop and mobile */}
+            <ServiceGrid />
+
+            {/* Stats Section - Desktop only */}
+            <div className="hidden md:block">
+              <StatsSection />
+            </div>
+          </div>
+
+
 
     {/* Right Container - Images */}
     
-    <div className="w-full md:w-1/2 hidden md:block">
-  <div className="grid grid-cols-2 gap-4 h-full">
-    {/* First Column */}
-    <div className="flex flex-col space-y-4">
-      <div className="bg-gray-200 rounded-lg h-[340px] flex items-center justify-center overflow-hidden">
-        <img src={photo3} alt="Home Service Example" className="object-cover h-full w-full" />
-      </div>
-      <div className="bg-gray-200 rounded-lg h-[215px] flex items-center justify-center overflow-hidden">
-        <img src={photo1} alt="Home Service Example" className="object-cover h-full w-full" />
+    <div className="w-full md:w-1/2 hidden mt-20 md:block">
+      <div className="grid grid-cols-2 mr-8 gap-4 h-full">
+        {/* First Column */}
+        <div className="flex flex-col space-y-4">
+          <div className="bg-gray-200 rounded-lg h-[340px] flex items-center justify-center overflow-hidden">
+            <img src={photo3} alt="Home Service Example" className="object-cover h-full w-full" />
+          </div>
+          <div className="bg-gray-200 rounded-lg h-[215px] flex items-center justify-center overflow-hidden">
+            <img src={photo1} alt="Home Service Example" className="object-cover h-full w-full" />
+          </div>
+        </div>
+
+        {/* Second Column */}
+        <div className="flex flex-col space-y-4">
+          {/* First Image - Shorter */}
+          <div className="relative bg-gray-200 rounded-lg h-[235px] overflow-hidden">
+            <img 
+              src={photo2} 
+              alt="Home Service Example" 
+              className="absolute h-full w-full object-cover object-center"
+              style={{ objectPosition: "50% 30%" }}
+            />
+          </div>
+
+          {/* Second Image - Taller */}
+          <div className="relative bg-gray-200 rounded-lg h-[320px] overflow-hidden">
+            <img 
+              src={photo4} 
+              alt="Home Service Example" 
+              className="absolute h-full w-full object-cover object-center"
+              style={{ objectPosition: "50% 25%" }}
+            />
+          </div>
+        </div>
       </div>
     </div>
-
-    {/* Second Column */}
-    <div className="flex flex-col space-y-4">
-      {/* First Image - Shorter */}
-      <div className="relative bg-gray-200 rounded-lg h-[235px] overflow-hidden">
-        <img 
-          src={photo2} 
-          alt="Home Service Example" 
-          className="absolute h-full w-full object-cover object-center"
-          style={{ objectPosition: "50% 30%" }}
-        />
-      </div>
-
-      {/* Second Image - Taller */}
-      <div className="relative bg-gray-200 rounded-lg h-[320px] overflow-hidden">
-        <img 
-          src={photo4} 
-          alt="Home Service Example" 
-          className="absolute h-full w-full object-cover object-center"
-          style={{ objectPosition: "50% 25%" }}
-        />
-      </div>
-    </div>
-  </div>
-</div>
-
   </div>
 </section>
       {/* Services Section */}
@@ -599,7 +687,7 @@ const HomePage = () => {
       {/* <section className="px-10 py-5 md:py-10">
         <StatsSection />
       </section> */}
-        <section className="px-10 py-10">
+        <section className="px-12">
         <BannerImage />
       </section>
         <section className=" px-10 py-5 md:py-10">
@@ -625,12 +713,12 @@ const HomePage = () => {
         <InspectionFormSection />
       </section>
 
-      <section className="px-10 py-5 md:py-10">
+      <section className="hidden sm:hidden px-10 py-5 md:py-10">
         <FaqSection />
       </section>
 
       {/* Popular Categories Section with Tabs */}
-      <section className="px-10 py-5 md:py-10">
+      <section className="hidden sm:hidden px-10 py-5 md:py-10">
         <PopularCategorySection data={data?.all_categories} />
       </section>
 
