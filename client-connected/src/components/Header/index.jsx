@@ -230,16 +230,16 @@ const Header = ({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const trendingSearches = [
-  "Professional bathroom cleaning",
-  "Salon",
-  "Bathroom subscription service",
-  "Insta help",
-  "Professional kitchen cleaning",
-  "Washing machine repair",
-  "Full home cleaning",
-  "Massage for men",
-  "Ro repair",
-  "Spa luxe",
+  "Cockroach control service",
+  "Bed bug control",
+  "Termite treatment",
+  "Pest control services",
+  "Disinfection service",
+  "Rodent control",
+  "Home Deep Cleaning",
+  "6D Prime Services",
+  "Pest Control Near Me",
+  "Cockroach & Ant Control",
 ];
 
 
