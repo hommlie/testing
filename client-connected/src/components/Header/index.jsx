@@ -226,7 +226,22 @@ const Header = ({
   }, []);
 
   const [displayedText, setDisplayedText] = useState("");
-const fullText = "Premium Home Services at Your Doorstep";
+  const fullText = "Premium Home Services at Your Doorstep";
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const trendingSearches = [
+  "Professional bathroom cleaning",
+  "Salon",
+  "Bathroom subscription service",
+  "Insta help",
+  "Professional kitchen cleaning",
+  "Washing machine repair",
+  "Full home cleaning",
+  "Massage for men",
+  "Ro repair",
+  "Spa luxe",
+];
+
 
 useEffect(() => {
   let index = 0;
@@ -397,11 +412,81 @@ useEffect(() => {
                     className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                     value={searchTerm}
                     onChange={handleSearchChange}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} // delay to allow click
                   />
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-black text-xl">
                     <BiSearchAlt className="cursor-pointer hover:text-emerald-900 transition-colors" />
                     <BsMicFill className="cursor-pointer hover:text-emerald-900 transition-colors" />
                   </div>
+                  {isSearchFocused && searchTerm.length === 0 && (
+                    <div className="absolute top-full left-0 mt-3 w-full bg-white rounded-2xl shadow-xl border border-gray-200 z-50 p-5 max-h-96 overflow-y-auto transition-all duration-200">
+                      <h3 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M13 7H7v6h6V7z" />
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
+                        </svg>
+                        Trending Searches
+                      </h3>
+                      <div className="flex flex-wrap gap-3">
+                        {trendingSearches.map((item, idx) => (
+                          <button
+                            key={idx}
+                            onMouseDown={() => setSearchTerm(item)}
+                            className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {/* {isSearchFocused && searchTerm.length === 0 && (
+                    <div className="absolute top-full left-0 mt-3 w-full bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 px-5 py-4 max-h-96 overflow-y-auto transition-all duration-300 ease-in-out">
+                      
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-[15px] font-semibold text-gray-800 tracking-wide flex items-center gap-2">
+                          <svg
+                            className="w-5 h-5 text-emerald-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M13 7H7v6h6V7z" />
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          Trending Searches
+                        </h3>
+                      </div>
+
+                      <ul className="space-y-2">
+                        {trendingSearches.map((item, idx) => (
+                          <li key={idx}>
+                            <button
+                              onMouseDown={() => setSearchTerm(item)}
+                              className="w-full flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-emerald-50 text-sm text-gray-700 rounded-lg border border-transparent hover:border-emerald-200 transition-all duration-200 group"
+                            >
+                              <span className="group-hover:text-emerald-700 transition">{item}</span>
+                              <svg
+                                className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )} */}
                 </div>
               </div>
             </div>

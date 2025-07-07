@@ -489,38 +489,38 @@ const ServiceSection = ({ categories }) => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Category tabs */}
         <div className="mb-0 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Choose Your Service Category
-          </h2>
-          <div className="flex justify-center overflow-x-auto pb-2 scrollbar-hide">
-            <div className="flex space-x-2">
-              {categories?.map((category) => (
-                <motion.button
-                  key={category.id}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleCategorySelect(category)}
-                  className={`flex items-center px-4 py-3 rounded-lg transition-all whitespace-nowrap ${
-                    selectedCategory === category.id
-                      ? "bg-[#92B775] text-black shadow-md"
-                      : "bg-white text-gray-800 border border-gray-200 hover:border-black"
-                  }`}
-                >
-                  {category.icon_url && (
-                    <img
-                      src={category.icon_url}
-                      alt=""
-                      className="w-5 h-5 mr-2"
-                    />
-                  )}
-                  <span className="text-sm font-medium">
-                    {category.category_name}
-                  </span>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        </div>
+  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+    Choose Your Service Category
+  </h2>
+
+  <div className="w-full flex flex-col items-center sm:flex-row sm:justify-center sm:overflow-x-auto gap-3 pb-2 sm:scrollbar-hide">
+  {categories?.map((category) => (
+    <motion.button
+      key={category.id}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      onClick={() => handleCategorySelect(category)}
+      className={`w-[200px] sm:w-[180px] text-center flex items-center justify-center px-4 py-3 rounded-md transition-all
+        ${
+          selectedCategory === category.id
+            ? "bg-[#92B775] text-black shadow-md"
+            : "bg-white text-gray-800 border border-gray-200 hover:border-black"
+        }`}
+    >
+      {category.icon_url && (
+        <img
+          src={category.icon_url}
+          alt=""
+          className="w-5 h-5 mr-2"
+        />
+      )}
+      <span className="text-sm font-medium">{category.category_name}</span>
+    </motion.button>
+  ))}
+</div>
+
+</div>
+
 
         {/* Filter controls */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8 max-w-4xl mx-auto">

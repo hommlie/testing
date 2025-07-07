@@ -108,7 +108,9 @@ const InspectionFormSection = () => {
           <div className="flex flex-col md:flex-row items-center gap-6">
             {/* Left - Contact Info */}
             <div className="w-full md:w-1/2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Schedule Your Inspection</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 whitespace-nowrap">
+                Schedule Your Inspection
+              </h2>
               <p className="text-sm sm:text-base text-gray-600 mb-6">Get professional help for your home or business</p>
               <div className="space-y-6 text-sm">
                 <div className="flex items-start gap-3">
