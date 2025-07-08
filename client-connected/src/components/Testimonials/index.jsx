@@ -19,7 +19,7 @@ const Testimonials = () => {
       author: "Priya Sharma",
       location: "Andheri",
       rating: 5,
-      image: "/images/testi1.jpg",
+      image: "/images/testi3.jpg",
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ const Testimonials = () => {
       author: "Ravi Menon",
       location: "Koramangala",
       rating: 5,
-      image: "/images/testi1.jpg",
+      image: "/images/testi2.jpg",
     },
     {
       id: 4,

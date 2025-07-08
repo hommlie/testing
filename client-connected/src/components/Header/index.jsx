@@ -36,7 +36,7 @@ import { FaMobileAlt, FaSignInAlt, FaShoppingCart, FaQuestionCircle } from 'reac
 import bannerBg from '../../assets/images/navbarimage4.png';
 import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
-
+import HelpModal from "../HelpModal";
 
 const Header = ({
   logo,
@@ -49,6 +49,8 @@ const Header = ({
 }) => {
   const [isGetAppModalOpen, setIsGetAppModalOpen] = useState(false);
   const [showMobileBanner, setShowMobileBanner] = useState(true);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+
   const {
     user,
     getSearchProdData,
@@ -283,9 +285,9 @@ useEffect(() => {
       
       {/* Top Header with contact and social info */}
       <div className="">
-        <div className="hidden sm:block max-w-7xl mx-auto w-full">
+        <div className="hidden sm:block  max-w-7xl mx-auto w-full">
           <div
-            className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0"
+            className=" text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0"
             style={{
               backgroundImage: `url(${bannerBg})`,
               backgroundSize: 'cover',
@@ -294,22 +296,25 @@ useEffect(() => {
             }}
           >
             {/* Left: Brand + Message */}
-            <motion.div
-              className="flex items-center font-semibold text-center md:text-left"
-              animate={{ y: [0, -4, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
               <span className="mr-4 font-normal text-black">
-                Premium Home Services at Your Doorstep
+                <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
+                  <button
+                    className="px-3 py-0 pb-1 bg-[#92b775] text-white"
+                  >
+                    Residential
+                  </button>
+                  <a
+                    href="https://b2b.hommlie.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
+                  >
+                    Commercial
+                  </a>
+                </div>
               </span>
-            </motion.div>
-
             {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-sm text-black mr-3">
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3">
               <button
                 onClick={() => setIsGetAppModalOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
@@ -332,8 +337,8 @@ useEffect(() => {
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
                   className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
                 >
-                  <FaUser className="text-white text-base" />
-                  <span className="text-white font-medium">My Account</span>
+                  <FaUser className="text-black text-base" />
+                  <span className="text-black font-medium">My Account</span>
                 </button>
               )}
              <span className="hidden md:inline-block text-black">|</span>
@@ -352,33 +357,49 @@ useEffect(() => {
               </button>
               <span className="hidden md:inline-block text-black">|</span>
 
-              <a
-                href="#"
+              <button
+                onClick={() => setIsHelpModalOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
               >
                 <FaQuestionCircle className="text-inherit" />
                 Help
-              </a>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        {/* Main Header */}
-        <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-6">
-            {/* Logo Section */}
-            <div className="flex-shrink-0">
-              <NavLink to="/">
-                <img
-                  src={logo}
-                  alt={logoAlt}
-                  className="h-10 w-auto object-contain"
-                />
-              </NavLink>
+          <div className="max-w-7xl mx-auto px-2 lg:px-8">
+            {/* Main Header */}
+            <div className="flex items-center justify-between h-20">
+              <div className="flex items-center space-x-6">
+                {/* Logo Section */}
+                <div className="hidden sm:flex flex-shrink-0">
+                <NavLink to="/">
+                  <img
+                    src={logo}
+                    alt={logoAlt}
+                    className="h-10 w-auto object-contain"
+                  />
+                </NavLink>
+              </div>
+              <div className="flex sm:hidden">
+          <button
+            onClick={() => setIsLocationModalOpen(true)}
+            className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex flex-col text-left">
+              <div className="text-sm font-medium text-black flex items-center">
+                <MdLocationOn className="text-black mr-1 text-lg" />
+                Delivery in 40 min
+              </div>
+              <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
+                <span className="truncate">{currentLocation}</span>
+                <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
+              </div>
             </div>
-
+          </button>
+        </div>
             <div className="hidden sm:block h-10 w-px bg-gray-200 mx-3"></div>
 
             {/* Location and Search Section */}
@@ -842,6 +863,7 @@ useEffect(() => {
           setCurrentLocation={setCurrentLocation}
         />
       )}
+      <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
     </header>
   );
 };

@@ -428,7 +428,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
             </div>
 
             {/* Search Bar - Mobile only */}
-            <div className="sm:block md:hidden px-4 py-2">
+            <div className="sm:block md:hidden">
               <div className="relative">
                 <input
                   type="text"

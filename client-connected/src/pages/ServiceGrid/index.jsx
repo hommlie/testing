@@ -247,8 +247,8 @@ const ServiceGrid = () => {
 
   return (
     <div className="p-4">
-      <div className="border border-gray-300 rounded-xl p-4 bg-white shadow-md ml-1">
-        <div className="grid grid-cols-3 mt-4 mb-4 gap-3">
+      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:bg-white sm:shadow-md ml-1">
+        <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3">
           {services.map((service) => (
             <div
               key={service.id}
@@ -265,25 +265,21 @@ const ServiceGrid = () => {
                 else setSelectedService(service);
               }}
             >
-              {/* Box - mobile optimized but same on desktop */}
-              <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
+              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
                 <img
                   src={service.image}
                   alt={service.name}
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                  className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
                 />
               </div>
-
-              {/* Label - mobile optimized but same on desktop */}
               <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775]">
                 {service.name}
               </span>
             </div>
           ))}
 
-          {/* See All Card - mobile optimized but same on desktop */}
           <div
-            className="flex flex-col items-center group transition-all cursor-pointer"
+            className="hidden sm:flex flex-col items-center group transition-all cursor-pointer"
             onClick={() => setShowComingSoon(true)}
           >
             <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
@@ -295,6 +291,7 @@ const ServiceGrid = () => {
           </div>
         </div>
       </div>
+
       {showComingSoon && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
           <div className="bg-white w-full max-w-sm rounded-xl shadow-lg p-6 text-center relative">

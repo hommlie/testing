@@ -460,8 +460,8 @@ const ServiceSection = ({ categories }) => {
               }}
               className={`w-full py-3 rounded-lg font-bold transition-colors ${
                 isSelected
-                  ? "bg-white text-black hover:bg-[#133215] hover:text-white"
-                  : "bg-white text-black hover:bg-[#92B775] hover:text-white"
+                  ? "bg-[#133215] text-white hover:bg-[#f3e8d3] hover:text-black"
+                  : "bg-[#133215] text-white hover:bg-[#f3e8d3] hover:text-black"
               } ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}

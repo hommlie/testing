@@ -37,7 +37,7 @@ const statsData = [
 
 const StatsSection = () => {
   return (
-    <section className="-mt-3 py-4">
+    <section className="-mt-4 py-4">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {statsData.map((stat, index) => (
