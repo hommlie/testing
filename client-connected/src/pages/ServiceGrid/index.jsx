@@ -265,30 +265,51 @@ const ServiceGrid = () => {
                 else setSelectedService(service);
               }}
             >
-              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
-                <img
-                  src={service.image}
-                  alt={service.name}
-                  className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
-                />
-              </div>
-              <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775]">
-                {service.name}
-              </span>
+              {/* CONDITIONAL CUSTOM UI FOR PLUMBING */}
+              {service.name === "Plumbing" ? (
+                <>
+                  <div className="mt-4 w-[160px] h-[80px] sm:w-[218px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition sm:ml-20 ml-12">
+                    <img
+                      src={service.image}
+                      alt={service.name}
+                      className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
+                    />
+                  </div>
+                  <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775] sm:ml-16 ml-8">
+                    {service.name}
+                  </span>
+                </>
+              ) : service.name === "Painting" ? (
+                <>
+                  <div className="mt-4 w-[160px] h-[80px] sm:w-[218px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition sm:ml-64 ml-40">
+                    <img
+                      src={service.image}
+                      alt={service.name}
+                      className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
+                    />
+                  </div>
+                  <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775] sm:ml-64 ml-40">
+                    {service.name}
+                  </span>
+                </>
+              ) : (
+                // Default UI for all other services
+                <>
+                  <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
+                    <img
+                      src={service.image}
+                      alt={service.name}
+                      className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
+                    />
+                  </div>
+                  <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775]">
+                    {service.name}
+                  </span>
+                </>
+              )}
             </div>
           ))}
 
-          <div
-            className="hidden sm:flex flex-col items-center group transition-all cursor-pointer"
-            onClick={() => setShowComingSoon(true)}
-          >
-            <div className="w-20 h-20 sm:w-32 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
-              <FaEllipsisH className="text-gray-500 text-xl sm:text-2xl" />
-            </div>
-            <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775]">
-              See All
-            </span>
-          </div>
         </div>
       </div>
 
