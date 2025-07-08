@@ -524,7 +524,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       {/* Services Section */}
       <ServiceSection categories={data.all_categories} />
 
-      <div className="block md:hidden h-2 bg-gray-200"></div>
+      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
 
       {/* Discover Section */}
       {/* <section className="px-4 md:px-10 py-5 md:py-10">
@@ -582,7 +582,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       
           {/* <FormSection /> */}
 
-      <div className="block md:hidden h-2 bg-gray-200"></div>
+      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
 
       {/* Banner Section */}
       {/* <section className="py-5 md:py-10">

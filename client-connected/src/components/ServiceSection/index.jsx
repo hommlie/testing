@@ -334,7 +334,7 @@ const ServiceSection = ({ categories }) => {
       <motion.div
         whileHover={{ y: -5 }}
        className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col justify-between 
-        h-[450px] sm:h-[420px] md:h-[460px] lg:h-[400px] 
+        h-[460px] sm:h-[420px] md:h-[460px] lg:h-[420px] 
         ${
           isSelected
             ? "border-[#133215] bg-[#92B775] shadow-lg"
@@ -495,7 +495,6 @@ const ServiceSection = ({ categories }) => {
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
             Choose Your Service Category
           </h2>
-
             <div className="w-full flex flex-row overflow-x-auto scrollbar-hide pb-2 sm:flex-row sm:justify-center sm:overflow-x-auto sm:scrollbar-hide">
             {categories?.map((category) => (
               <motion.button
@@ -503,7 +502,7 @@ const ServiceSection = ({ categories }) => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleCategorySelect(category)}
-                className={`min-w-[120px] mx-1 sm:min-w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-nowrap
+                className={`min-w-[108px] mx-1 sm:min-w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-nowrap
                   ${
                     selectedCategory === category.id
                       ? "bg-[#92B775] text-black shadow-md"
@@ -523,11 +522,11 @@ const ServiceSection = ({ categories }) => {
           </div>
         </div>
         {/* Filter controls */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8 max-w-4xl mx-auto">
+        <div className="pt-2 mb-8 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Service Type (always full width per column) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="pl-2 block text-sm font-medium text-gray-700 mb-1">
                 Service Type
               </label>
               <Dropdown
@@ -540,37 +539,39 @@ const ServiceSection = ({ categories }) => {
             </div>
 
             {/* Mobile: Property Size + Service Variant side-by-side | Desktop: each in its column */}
-            <div className="flex flex-row gap-3 md:hidden">
-              <div className="w-1/2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Property Size
-                </label>
-                <Dropdown
-                  label="Select BHK"
-                  value={selectedBhk}
-                  options={bhkOptions.map((bhk) => ({
-                    id: bhk,
-                    attribute: bhk,
-                    subcategory_name: bhk,
-                  }))}
-                  onChange={setSelectedBhk}
-                  disabled={!selectedProduct}
-                />
-              </div>
-              <div className="w-1/2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Service Variant
-                </label>
-                <Dropdown
-                  label="Select Variant"
-                  value={selectedAttribute}
-                  options={getCurrentAttributes()}
-                  onChange={setSelectedAttribute}
-                  disabled={!selectedProduct}
-                  showRecommended
-                />
-              </div>
-            </div>
+           <div className="flex gap-3 md:hidden w-full ">
+  <div className="flex-1 min-w-0">
+    <label className="block text-sm font-medium text-gray-700 mb-1 truncate">
+      Property Size
+    </label>
+    <Dropdown
+      label="Select BHK"
+      value={selectedBhk}
+      options={bhkOptions.map((bhk) => ({
+        id: bhk,
+        attribute: bhk,
+        subcategory_name: bhk,
+      }))}
+      onChange={setSelectedBhk}
+      disabled={!selectedProduct}
+    />
+  </div>
+
+  <div className="flex-1 min-w-0">
+    <label className="block text-sm font-medium text-gray-700 mb-1 truncate">
+      Service Variant
+    </label>
+    <Dropdown
+      label="Select Variant"
+      value={selectedAttribute}
+      options={getCurrentAttributes()}
+      onChange={setSelectedAttribute}
+      disabled={!selectedProduct}
+      showRecommended
+    />
+  </div>
+</div>
+
 
           {/* Desktop view only: each in its own column */}
           <div className="hidden md:block">
@@ -605,12 +606,12 @@ const ServiceSection = ({ categories }) => {
         </div>
       </div>
         {/* Product cards section */}
-          <div className="mb-8">
+          <div className="mb-0">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Available Service Packages
             </h3>
-           <div className="px-4 mr-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center place-items-center">
+           <div className="w-full flex justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center max-w-7xl w-full px-4">
               {[...recommended, ...regular].map((product) => (
                 <ProductCard
                   key={product.id}
