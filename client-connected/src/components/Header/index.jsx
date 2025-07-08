@@ -265,7 +265,7 @@ useEffect(() => {
       className="w-full sticky top-0 z-20 bg-white shadow-sm font-sans"
     >
       {showMobileBanner && (
-        <div className="block sm:hidden bg-gradient-to-r from-emerald-700 to-emerald-900 text-white text-sm px-4 py-2 flex justify-between items-center">
+        <div className="block sm:hidden bg-[#92b775] text-white text-sm px-4 py-2 flex justify-between items-center">
           <a
             href="https://play.google.com/store/apps/details?id=com.hommlie.app"
             target="_blank"
@@ -314,7 +314,7 @@ useEffect(() => {
                 </div>
               </span>
             {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3">
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-3 text-sm text-black mr-3">
               <button
                 onClick={() => setIsGetAppModalOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
