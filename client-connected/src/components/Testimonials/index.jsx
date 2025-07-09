@@ -42,59 +42,60 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="py-0 px-0">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
-          What Our Customers Say
-        </h2>
+    <section className="py-6 px-2 sm:py-0 sm:px-0"> {/* Mobile spacing only */}
+  <div className="max-w-7xl mx-auto">
+    <h2 className="text-2xl font-bold text-center mb-6 sm:mb-8 text-gray-800">
+      What Our Customers Say
+    </h2>
 
-        <div className="relative">
-          <div className="overflow-x-auto mr-3 scrollbar-hide">
-            <div className="flex space-x-6 w-max px-4 min-h-[500px] items-center">
-              {testimonials.map((testimonial, index) => {
-                const isFull = index % 2 === 0;
-                const heightClass = isFull ? 'h-[480px]' : 'h-[340px]';
+    <div className="relative">
+      <div className="overflow-x-auto px-2 sm:mr-3 sm:px-0 scrollbar-hide"> {/* Mobile horizontal padding */}
+        <div className="flex gap-4 sm:space-x-6 w-max min-h-[500px] items-center pb-4 sm:pb-0"> {/* gap for mobile, space-x only on desktop */}
+          {testimonials.map((testimonial, index) => {
+            const isFull = index % 2 === 0;
+            const heightClass = isFull ? 'h-[460px] sm:h-[480px]' : 'h-[320px] sm:h-[340px]'; // slight height tweak for tighter mobile view
 
-                return (
-                  <motion.div
-                    key={testimonial.id + index}
-                    className={`relative w-80 ${heightClass} flex-shrink-0 rounded-3xl overflow-hidden shadow-lg flex ${isFull ? 'items-end' : 'items-center'}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
-                    whileHover={{ y: -5 }}
-                  >
-                    {/* Background Image */}
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.author}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
+            return (
+              <motion.div
+                key={testimonial.id + index}
+                className={`relative w-72 sm:w-80 ${heightClass} flex-shrink-0 rounded-3xl overflow-hidden shadow-lg flex ${isFull ? 'items-end' : 'items-center'}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -5 }}
+              >
+                {/* Background Image */}
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.author}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
 
-                    {/* Overlay Card */}
-                    {isFull && (
-                      <div className="relative z-10 w-full px-4 pb-4">
-                        <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
-                          <p className="text-sm text-[#3f0018] font-medium mb-3 leading-snug">
-                            {testimonial.content}
-                          </p>
-                          <div className="flex justify-between items-center">
-                            <p className="font-bold text-[#3f0018]">{testimonial.author}</p>
-                            <span className="bg-[#f5f5f5] px-3 py-1 rounded-full text-xs font-semibold text-gray-700">
-                              {testimonial.location}
-                            </span>
-                          </div>
-                        </div>
+                {/* Overlay Card */}
+                {isFull && (
+                  <div className="relative z-10 w-full px-4 pb-4">
+                    <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
+                      <p className="text-sm text-[#3f0018] font-medium mb-3 leading-snug">
+                        {testimonial.content}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <p className="font-bold text-[#3f0018]">{testimonial.author}</p>
+                        <span className="bg-[#f5f5f5] px-3 py-1 rounded-full text-xs font-semibold text-gray-700">
+                          {testimonial.location}
+                        </span>
                       </div>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
   );
 };
 

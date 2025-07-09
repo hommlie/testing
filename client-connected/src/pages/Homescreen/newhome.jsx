@@ -36,10 +36,7 @@ import {
   FaEllipsisH 
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
-import photo1 from '../../assets/images/photo1.png';
-import photo2 from '../../assets/images/photo2.jpg';
-import photo3 from '../../assets/images/photo3.jpg';
-import photo4 from '../../assets/images/photo4.jpg';
+import photo1 from '../../assets/images/services.jpg';
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
@@ -484,42 +481,17 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     {/* Right Container - Images */}
     
-    <div className="w-full md:w-1/2 hidden mt-20 md:block">
-      <div className="grid grid-cols-2 mr-8 gap-4 h-full">
-        {/* First Column */}
-        <div className="flex flex-col space-y-4">
-          <div className="bg-gray-200 rounded-lg h-[340px] flex items-center justify-center overflow-hidden">
-            <img src={photo3} alt="Home Service Example" className="object-cover h-full w-full" />
-          </div>
-          <div className="bg-gray-200 rounded-lg h-[215px] flex items-center justify-center overflow-hidden">
-            <img src={photo1} alt="Home Service Example" className="object-cover h-full w-full" />
-          </div>
-        </div>
-
-        {/* Second Column */}
-        <div className="flex flex-col space-y-4">
-          {/* First Image - Shorter */}
-          <div className="relative bg-gray-200 rounded-lg h-[235px] overflow-hidden">
-            <img 
-              src={photo2} 
-              alt="Home Service Example" 
-              className="absolute h-full w-full object-cover object-center"
-              style={{ objectPosition: "50% 30%" }}
-            />
-          </div>
-
-          {/* Second Image - Taller */}
-          <div className="relative bg-gray-200 rounded-lg h-[320px] overflow-hidden">
-            <img 
-              src={photo4} 
-              alt="Home Service Example" 
-              className="absolute h-full w-full object-cover object-center"
-              style={{ objectPosition: "50% 25%" }}
-            />
-          </div>
-        </div>
+    <div className="hidden md:block mt-5 w-[554px]">
+      <div className="h-[630px] rounded-lg overflow-hidden bg-gray-200">
+        <img 
+          src={photo1} // Replace with your single image
+          alt="Home Service Full View" 
+          className="h-full w-full object-cover object-center"
+        />
       </div>
     </div>
+
+
   </div>
 </section>
       {/* Services Section */}

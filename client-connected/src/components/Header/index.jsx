@@ -314,10 +314,10 @@ useEffect(() => {
                 </div>
               </span>
             {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-3 text-sm text-black mr-3">
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold">
               <button
                 onClick={() => setIsGetAppModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors "
               >
                 <FaMobileAlt className="text-inherit" />
                 Get App
