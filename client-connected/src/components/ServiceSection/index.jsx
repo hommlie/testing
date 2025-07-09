@@ -609,8 +609,10 @@ const ServiceSection = ({ categories }) => {
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Available Service Packages
             </h3>
-           <div className="w-full flex justify-center">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-stretch max-w-7xl w-full px-4">
+          <div className="w-full flex justify-center">
+  <div className={`grid gap-6 px-4 max-w-7xl w-full 
+    ${recommended.length + regular.length === 1 ? "grid-cols-1 place-items-center" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch"}`}>
+
               {[...recommended, ...regular].map((product) => (
                 <ProductCard
                   key={product.id}
