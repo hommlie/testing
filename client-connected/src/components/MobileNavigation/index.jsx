@@ -27,12 +27,13 @@ const MobileNavigation = () => {
       IconOutline: RiBuilding2Line,
       IconFill: RiBuilding2Fill,
     },
-    {
-      path: "/hub",
-      label: "HUB",
-      IconOutline: FaHubspot,
-      IconFill: FaHubspot,
-    },
+    // {
+    //   path: "/hub",
+    //   label: "HUB",
+    //   IconOutline: FaHubspot,
+    //   IconFill: FaHubspot,
+    // },
+
     {
       path: "/konnect",
       label: "Konnect",

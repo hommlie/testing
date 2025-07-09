@@ -501,7 +501,7 @@ const ServiceSection = ({ categories }) => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleCategorySelect(category)}
-                className={`min-w-[108px] mx-1 sm:min-w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-nowrap
+                className={`w-[108px] sm:w-[180px] mx-1 text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                   ${
                     selectedCategory === category.id
                       ? "bg-[#92B775] text-black shadow-md"
@@ -512,10 +512,12 @@ const ServiceSection = ({ categories }) => {
                   <img
                     src={category.icon_url}
                     alt=""
-                    className="w-6 h-6 mb-1 flex-shrink-0 sm:w-5 sm:h-5 sm:mb-0 sm:mr-2"
+                    className="w-6 h-6 mb-1 flex-shrink-0"
                   />
                 )}
-                <span className="text-xs font-medium sm:text-sm sm:truncate">{category.category_name}</span>
+                <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
+                  {category.category_name}
+                </span>
               </motion.button>
             ))}
           </div>
@@ -525,7 +527,7 @@ const ServiceSection = ({ categories }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Service Type (always full width per column) */}
             <div>
-              <label className="pl-2 block text-sm font-medium text-gray-700 mb-1">
+              <label className="hidden sm:block pl-2 block text-sm font-medium text-gray-700 mb-1">
                 Service Type
               </label>
               <Dropdown
@@ -539,37 +541,37 @@ const ServiceSection = ({ categories }) => {
 
             {/* Mobile: Property Size + Service Variant side-by-side | Desktop: each in its column */}
            <div className="flex gap-3 md:hidden w-full ">
-  <div className="flex-1 min-w-0">
-    <label className="block text-sm font-medium text-gray-700 mb-1 truncate">
-      Property Size
-    </label>
-    <Dropdown
-      label="Select BHK"
-      value={selectedBhk}
-      options={bhkOptions.map((bhk) => ({
-        id: bhk,
-        attribute: bhk,
-        subcategory_name: bhk,
-      }))}
-      onChange={setSelectedBhk}
-      disabled={!selectedProduct}
-    />
-  </div>
+            <div className="flex-1 min-w-0">
+              <label className="hidden sm:block block text-sm font-medium text-gray-700 mb-1 truncate">
+                Property Size
+              </label>
+              <Dropdown
+                label="Select BHK"
+                value={selectedBhk}
+                options={bhkOptions.map((bhk) => ({
+                  id: bhk,
+                  attribute: bhk,
+                  subcategory_name: bhk,
+                }))}
+                onChange={setSelectedBhk}
+                disabled={!selectedProduct}
+              />
+            </div>
 
-  <div className="flex-1 min-w-0">
-    <label className="block text-sm font-medium text-gray-700 mb-1 truncate">
-      Service Variant
-    </label>
-    <Dropdown
-      label="Select Variant"
-      value={selectedAttribute}
-      options={getCurrentAttributes()}
-      onChange={setSelectedAttribute}
-      disabled={!selectedProduct}
-      showRecommended
-    />
-  </div>
-</div>
+            <div className="flex-1 min-w-0">
+              <label className="hidden sm:block block text-sm font-medium text-gray-700 mb-1 truncate">
+                Service Variant
+              </label>
+              <Dropdown
+                label="Select Variant"
+                value={selectedAttribute}
+                options={getCurrentAttributes()}
+                onChange={setSelectedAttribute}
+                disabled={!selectedProduct}
+                showRecommended
+              />
+            </div>
+          </div>
 
 
           {/* Desktop view only: each in its own column */}

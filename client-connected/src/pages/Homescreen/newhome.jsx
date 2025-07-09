@@ -692,7 +692,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <BannerImageMobile />
           <BannerImage />
         </section>
-
+<div className="block md:hidden h-2 bg-gray-200"></div>
         <section className=" px-10 py-5 md:py-10">
           <SnabbitTasksUI />
         </section>
@@ -709,7 +709,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <Testimonials />
       </section>
 
-      
+      <div className="block md:hidden h-2 bg-gray-200"></div>
 
       {/* inspection form section */}
       <section id="inspection-section" className="px-4 py-5 md:py-10">
