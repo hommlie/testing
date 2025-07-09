@@ -6,7 +6,7 @@ const Testimonials = () => {
     {
       id: 1,
       content:
-        "As a working professional, I struggle big time whenever my paid help is on leave. Snabbit's services have been a game changer. From dusting to bathroom cleaning, they take care of everything.",
+        "As a working professional, I struggle big time whenever my paid help is on leave. Hommlie's services have been a game changer. From dusting to bathroom cleaning, they take care of everything.",
       author: "Sunny Gala",
       location: "Powai",
       rating: 5,
@@ -15,7 +15,7 @@ const Testimonials = () => {
     {
       id: 2,
       content:
-        "My regular house help doesn't clean fans or bathrooms, so I tried Snabbit. It's super convenient, and they pay attention to details my maid overlooks. I couldn't be happier!",
+        "My regular house help doesn't clean fans or bathrooms, so I tried Hommlie. It's super convenient, and they pay attention to details my maid overlooks. I couldn't be happier!",
       author: "Priya Sharma",
       location: "Andheri",
       rating: 5,
@@ -24,7 +24,7 @@ const Testimonials = () => {
     {
       id: 3,
       content:
-        "Snabbit's weekly deep cleans have become a part of our routine now. They are professional, punctual, and do a thorough job every single time.",
+        "Hommlie's weekly deep cleans have become a part of our routine now. They are professional, punctual, and do a thorough job every single time.",
       author: "Ravi Menon",
       location: "Koramangala",
       rating: 5,
@@ -33,7 +33,7 @@ const Testimonials = () => {
     {
       id: 4,
       content:
-        "Being a pet parent, cleanliness is everything. Snabbit understood our needs and delivered more than we expected. Highly recommended!",
+        "Being a pet parent, cleanliness is everything. Hommlie understood our needs and delivered more than we expected. Highly recommended!",
       author: "Neha Kapoor",
       location: "Indiranagar",
       rating: 5,
