@@ -333,26 +333,25 @@ const ServiceSection = ({ categories }) => {
     return (
       <motion.div
         whileHover={{ y: -5 }}
-       className={`relative rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col justify-between 
-        h-[460px] sm:h-[420px] md:h-[460px] lg:h-[420px] 
-        ${
-          isSelected
-            ? "border-[#133215] bg-[#92B775] shadow-lg"
-            : "border-gray-200 bg-white hover:shadow-md"
-        }`}
-
+        className={`relative w-full max-w-[360px] rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col justify-between 
+          h-[460px] sm:h-[460px] md:h-[460px] lg:h-[460px]
+          ${
+            isSelected
+              ? "border-[#133215] bg-[#92B775] shadow-lg"
+              : "border-gray-200 bg-white hover:shadow-md"
+          }`}
       >
         {/* Recommended badge - Improved UI */}
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="relative bg-[#133215] text-white text-[11px] font-bold py-1 pl-3 pr-6 rounded-r-full shadow-md flex items-center">
+            <div className="relative bg-[#133215] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
               <Star className="w-3 h-3 mr-1 fill-current text-white" />
               RECOMMENDED
               <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
             </div>
           </div>
         )}
-          <div className="p-6 pt-10 cursor-pointer" onClick={onClick}>
+        <div className="p-4 sm:p-5 flex flex-col justify-between h-full cursor-pointer" onClick={onClick}>
           {/* Product name and attribute */}
           <div className="flex flex-col items-center text-center mb-4 pt-2">
             <h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -611,7 +610,7 @@ const ServiceSection = ({ categories }) => {
               Available Service Packages
             </h3>
            <div className="w-full flex justify-center">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center max-w-7xl w-full px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-stretch max-w-7xl w-full px-4">
               {[...recommended, ...regular].map((product) => (
                 <ProductCard
                   key={product.id}
