@@ -66,7 +66,7 @@ import BannerImageMobile from "../BannerImageMobile";
 import Offermobile from '../Offermobile'
 import Scrapbanner from '../Scrapbanner'
 import Scrapmobile from '../Scrapmobile'
-
+import Refermobile  from '../Refermobile'
 
 const HomePage = () => {
   const { user } = useCont();
@@ -698,6 +698,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
       <section className="px-2 sm:px-12">
           <Offermobile />
+          <Refermobile />
         </section>
       {/* <section className="hidden sm:hidden px-10 py-5 md:py-10">
         <FaqSection />
