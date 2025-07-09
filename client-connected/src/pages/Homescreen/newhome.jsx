@@ -64,6 +64,7 @@ import BannerImage from "../BannerImage";
 import { BsMicFill } from "react-icons/bs";
 import BannerImageMobile from "../BannerImageMobile";
 import Offermobile from '../Offermobile'
+import Scrapbanner from '../Scrapbanner'
 
 const HomePage = () => {
   const { user } = useCont();
@@ -682,6 +683,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       </section>
 
       <div className="block md:hidden h-2 bg-gray-200"></div>
+        
+        <section className="px-2 sm:px-12">
+          <Scrapbanner />
+        </section>
 
       {/* inspection form section */}
       <section id="inspection-section" className="px-4 py-5 md:py-10">
