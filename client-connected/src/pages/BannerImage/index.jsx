@@ -5,16 +5,14 @@ const BannerImage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="hidden sm:flex w-full justify-center">
       <div className="relative rounded-lg overflow-hidden">
         <img
           src="/images/banner.png"
-          alt="Banner"
+          alt="Banner Desktop"
           className="w-[1250px] h-auto object-cover"
         />
-
-        {/* Button: hidden on mobile, visible on sm+ */}
-        <div className="absolute bottom-20 left-20 hidden sm:block">
+        <div className="absolute bottom-20 left-20">
           <button
             onClick={() =>
               navigate('/product/cockroach-control-services-in-bangalore')

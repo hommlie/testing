@@ -44,7 +44,7 @@ const Testimonials = () => {
   return (
     <section className="py-0 px-0">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+        <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
           What Our Customers Say
         </h2>
 

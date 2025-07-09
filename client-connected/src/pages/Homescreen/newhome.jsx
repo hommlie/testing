@@ -65,6 +65,7 @@ import WhyChooseHommlie from "../../components/WhyChooseHommlie";
 import ServiceGrid from "../ServiceGrid";
 import BannerImage from "../BannerImage";
 import { BsMicFill } from "react-icons/bs";
+import BannerImageMobile from "../BannerImageMobile";
 
 
 const HomePage = () => {
@@ -687,9 +688,11 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       {/* <section className="px-10 py-5 md:py-10">
         <StatsSection />
       </section> */}
-        <section className="px-12">
-        <BannerImage />
-      </section>
+        <section className="px-2 sm:px-12">
+          <BannerImageMobile />
+          <BannerImage />
+        </section>
+
         <section className=" px-10 py-5 md:py-10">
           <SnabbitTasksUI />
         </section>

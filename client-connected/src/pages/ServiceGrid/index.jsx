@@ -281,14 +281,14 @@ const ServiceGrid = () => {
                 </>
               ) : service.name === "Painting" ? (
                 <>
-                  <div className="mt-4 w-[160px] h-[80px] sm:w-[218px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition sm:ml-64 ml-40">
+                  <div className="mt-4 w-[160px] h-[80px] sm:w-[218px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition sm:ml-64 ml-48">
                     <img
                       src={service.image}
                       alt={service.name}
                       className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
                     />
                   </div>
-                  <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775] sm:ml-64 ml-40">
+                  <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight relative group-hover:after:w-full after:transition-all after:duration-200 after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] sm:after:h-[2px] after:w-0 after:bg-[#92B775] sm:ml-64 ml-48">
                     {service.name}
                   </span>
                 </>
