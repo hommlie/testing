@@ -63,7 +63,7 @@ import ServiceGrid from "../ServiceGrid";
 import BannerImage from "../BannerImage";
 import { BsMicFill } from "react-icons/bs";
 import BannerImageMobile from "../BannerImageMobile";
-
+import Offermobile from '../Offermobile'
 
 const HomePage = () => {
   const { user } = useCont();
@@ -664,7 +664,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <BannerImageMobile />
           <BannerImage />
         </section>
-<div className="block md:hidden h-2 bg-gray-200"></div>
+          <div className="block md:hidden h-2 bg-gray-200"></div>
         <section className=" px-10 py-5 md:py-10">
           <SnabbitTasksUI />
         </section>
@@ -688,9 +688,12 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <InspectionFormSection />
       </section>
 
-      <section className="hidden sm:hidden px-10 py-5 md:py-10">
+      <section className="px-2 sm:px-12">
+          <Offermobile />
+        </section>
+      {/* <section className="hidden sm:hidden px-10 py-5 md:py-10">
         <FaqSection />
-      </section>
+      </section> */}
 
       {/* Popular Categories Section with Tabs */}
       <section className="hidden sm:hidden px-10 py-5 md:py-10">

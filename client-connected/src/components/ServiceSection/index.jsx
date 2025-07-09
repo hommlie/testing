@@ -494,15 +494,14 @@ const ServiceSection = ({ categories }) => {
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
             Choose Your Service Category
           </h2>
-          <div className="w-full flex justify-center">
-          <div className="flex flex-row gap-2 mb-2 overflow-x-auto scrollbar-hide px-2 sm:justify-center sm:overflow-x-auto sm:scrollbar-hide">
+            <div className="w-full flex flex-row overflow-x-auto scrollbar-hide pb-2 sm:flex-row sm:justify-center sm:overflow-x-auto sm:scrollbar-hide">
             {categories?.map((category) => (
               <motion.button
                 key={category.id}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleCategorySelect(category)}
-                className={`min-w-[108px] sm:min-w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
+                className={`w-[108px] sm:w-[180px] mx-1 text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                   ${
                     selectedCategory === category.id
                       ? "bg-[#92B775] text-black shadow-md"
@@ -522,8 +521,6 @@ const ServiceSection = ({ categories }) => {
               </motion.button>
             ))}
           </div>
-        </div>
-
         </div>
         {/* Filter controls */}
         <div className="pt-2 mb-8 max-w-4xl mx-auto">
