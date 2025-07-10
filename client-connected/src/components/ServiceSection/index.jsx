@@ -493,33 +493,36 @@ const ServiceSection = ({ categories }) => {
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
             Choose Your Service Category
           </h2>
-            <div className="w-full flex flex-row overflow-x-auto scrollbar-hide pb-2 sm:flex-row sm:justify-center sm:overflow-x-auto sm:scrollbar-hide">
-            {categories?.map((category) => (
-              <motion.button
-                key={category.id}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => handleCategorySelect(category)}
-                className={`w-[108px] sm:w-[180px] mx-1 text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
-                  ${
-                    selectedCategory === category.id
-                      ? "bg-[#92B775] text-black shadow-md"
-                      : "bg-white text-gray-800 border border-gray-200 hover:border-black"
-                  }`}
-              >
-                {category.icon_url && (
-                  <img
-                    src={category.icon_url}
-                    alt=""
-                    className="w-6 h-6 mb-1 flex-shrink-0"
-                  />
-                )}
-                <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
-                  {category.category_name}
-                </span>
-              </motion.button>
-            ))}
-          </div>
+          <div className="w-full flex justify-center sm:justify-center">
+  <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2 px-2 sm:overflow-visible">
+    {categories?.map((category) => (
+      <motion.button
+        key={category.id}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        onClick={() => handleCategorySelect(category)}
+        className={`w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
+          ${
+            selectedCategory === category.id
+              ? "bg-[#92B775] text-black shadow-md"
+              : "bg-white text-gray-800 border border-gray-200 hover:border-black"
+          }`}
+      >
+        {category.icon_url && (
+          <img
+            src={category.icon_url}
+            alt=""
+            className="w-6 h-6 mb-1 flex-shrink-0"
+          />
+        )}
+        <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
+          {category.category_name}
+        </span>
+      </motion.button>
+    ))}
+  </div>
+</div>
+
         </div>
         {/* Filter controls */}
         <div className="pt-2 mb-8 max-w-4xl mx-auto">
@@ -540,37 +543,37 @@ const ServiceSection = ({ categories }) => {
 
             {/* Mobile: Property Size + Service Variant side-by-side | Desktop: each in its column */}
            <div className="flex gap-2 md:hidden w-full">
-              <div className="flex-1">
-                <Dropdown
-                  label=""
-                  value={selectedBhk}
-                  options={bhkOptions.map((bhk) => ({
-                    id: bhk,
-                    attribute: bhk,
-                    subcategory_name: bhk,
-                  }))}
-                  onChange={setSelectedBhk}
-                  disabled={!selectedProduct}
-                  className="w-full border border-green-400 text-[14px] h-10 px-2 rounded"
-                  dropdownClassName="text-sm"
-                  menuClassName="text-sm"
-                />
-              </div>
-
-              <div className="flex-1">
-                <Dropdown
-                  label=""
-                  value={selectedAttribute}
-                  options={getCurrentAttributes()}
-                  onChange={setSelectedAttribute}
-                  disabled={!selectedProduct}
-                  showRecommended
-                  className="w-full border border-green-400 text-[14px] h-10 px-2 rounded"
-                  dropdownClassName="text-sm"
-                  menuClassName="text-sm"
-                />
-              </div>
+            <div className="flex-1">
+              <Dropdown
+                label=""
+                value={selectedBhk}
+                options={bhkOptions.map((bhk) => ({
+                  id: bhk,
+                  attribute: bhk,
+                  subcategory_name: bhk,
+                }))}
+                onChange={setSelectedBhk}
+                disabled={!selectedProduct}
+                className="w-full border border-green-400 text-[14px] h-10 px-2 rounded"
+                dropdownClassName="text-sm"
+                menuClassName="text-sm"
+              />
             </div>
+
+            <div className="flex-1">
+              <Dropdown
+                label=""
+                value={selectedAttribute}
+                options={getCurrentAttributes()}
+                onChange={setSelectedAttribute}
+                disabled={!selectedProduct}
+                showRecommended
+                className="w-full border border-green-400 text-[14px] h-10 px-2 rounded"
+                dropdownClassName="text-sm"
+                menuClassName="text-sm"
+              />
+            </div>
+          </div>
 
           {/* Desktop view only: each in its own column */}
           <div className="hidden md:block">
