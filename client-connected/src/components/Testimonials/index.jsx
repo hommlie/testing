@@ -42,11 +42,11 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="py-6 px-2 sm:py-0 sm:px-0"> {/* Mobile spacing only */}
-  <div className="max-w-7xl mx-auto">
-    <h2 className="text-2xl font-bold text-center mb-6 sm:mb-8 text-gray-800">
-      What Our Customers Say
-    </h2>
+    <section className="py-0 px-0 sm:py-0 sm:px-0"> 
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold text-center mb-6 sm:mb-8 text-gray-800">
+          What Our Customers Say
+        </h2>
 
     <div className="relative">
       <div className="overflow-x-auto px-2 sm:mr-3 sm:px-0 scrollbar-hide"> {/* Mobile horizontal padding */}

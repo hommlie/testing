@@ -121,55 +121,54 @@ const ServiceSection = ({ categories }) => {
 
   // Handle adding product to cart
   const handleAddToCart = async (variation, product) => {
-    if (!user) {
-      setIsModalOpen(true);
-      return;
-    }
+  if (!user || user.length === 0) {
+    setIsModalOpen(true);
+    return;
+  }
 
-    setIsAddingToCart(true);
+  setIsAddingToCart(true);
 
-    const tax_amount =
-      product.tax_type === "amount"
-        ? Number(product.tax)
-        : (Number(product.tax) / 100) * variation.discounted_variation_price;
+  const tax_amount =
+    product.tax_type === "amount"
+      ? Number(product.tax)
+      : (Number(product.tax) / 100) * variation.discounted_variation_price;
 
-    const cartItem = {
-      user_id: user.id,
-      product_id: product.id,
-      vendor_id: product.vendor_id,
-      product_name: product.product_name,
-      image: product?.productimage?.image_url,
-      qty: 1,
-      price: variation.discounted_variation_price || variation.price,
-      attribute: selectedAttribute,
-      variation: variation.id,
-      tax: tax_amount?.toFixed(2) || 0,
-      shipping_cost: product.shipping_cost || 0,
-      bhk: selectedBhk,
+      const cartItem = {
+        user_id: user.id,
+        product_id: product.id,
+        vendor_id: product.vendor_id,
+        product_name: product.product_name,
+        image: product?.productimage?.image_url,
+        qty: 1,
+        price: variation.discounted_variation_price || variation.price,
+        attribute: selectedAttribute,
+        variation: variation.id,
+        tax: tax_amount?.toFixed(2) || 0,
+        shipping_cost: product.shipping_cost || 0,
+        bhk: selectedBhk,
+      };
+
+      try {
+        const response = await axios.post(
+          `${config.API_URL}/api/addtocart`,
+          cartItem
+        );
+        if (response.data.status === 1) {
+          successNotify("Successfully added to Cart");
+          const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+          existingCart.push(cartItem);
+          localStorage.setItem("cart", JSON.stringify(existingCart));
+          getCart();
+          navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+        }
+      } catch (error) {
+        errorNotify(error.message || "Error adding to cart");
+        console.error("Error adding to cart:", error);
+      } finally {
+        setIsAddingToCart(false);
+      }
     };
 
-    try {
-      const response = await axios.post(
-        `${config.API_URL}/api/addtocart`,
-        cartItem
-      );
-      if (response.data.status === 1) {
-        successNotify("Successfully added to Cart");
-        // Update local storage
-        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-        existingCart.push(cartItem);
-        localStorage.setItem("cart", JSON.stringify(existingCart));
-        // Refresh cart data
-        getCart();
-        navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-      }
-    } catch (error) {
-      errorNotify(error.message || "Error adding to cart");
-      console.error("Error adding to cart:", error);
-    } finally {
-      setIsAddingToCart(false);
-    }
-  };
 
   // Get current subcategories
   const getCurrentSubcategories = () => {
@@ -540,39 +539,38 @@ const ServiceSection = ({ categories }) => {
             </div>
 
             {/* Mobile: Property Size + Service Variant side-by-side | Desktop: each in its column */}
-           <div className="flex gap-3 md:hidden w-full ">
-            <div className="flex-1 min-w-0">
-              <label className="hidden sm:block block text-sm font-medium text-gray-700 mb-1 truncate">
-                Property Size
-              </label>
-              <Dropdown
-                label="Select BHK"
-                value={selectedBhk}
-                options={bhkOptions.map((bhk) => ({
-                  id: bhk,
-                  attribute: bhk,
-                  subcategory_name: bhk,
-                }))}
-                onChange={setSelectedBhk}
-                disabled={!selectedProduct}
-              />
-            </div>
+           <div className="flex gap-2 md:hidden w-full">
+              <div className="flex-1">
+                <Dropdown
+                  label=""
+                  value={selectedBhk}
+                  options={bhkOptions.map((bhk) => ({
+                    id: bhk,
+                    attribute: bhk,
+                    subcategory_name: bhk,
+                  }))}
+                  onChange={setSelectedBhk}
+                  disabled={!selectedProduct}
+                  className="w-full border border-green-400 text-[14px] h-10 px-2 rounded"
+                  dropdownClassName="text-sm"
+                  menuClassName="text-sm"
+                />
+              </div>
 
-            <div className="flex-1 min-w-0">
-              <label className="hidden sm:block block text-sm font-medium text-gray-700 mb-1 truncate">
-                Service Variant
-              </label>
-              <Dropdown
-                label="Select Variant"
-                value={selectedAttribute}
-                options={getCurrentAttributes()}
-                onChange={setSelectedAttribute}
-                disabled={!selectedProduct}
-                showRecommended
-              />
+              <div className="flex-1">
+                <Dropdown
+                  label=""
+                  value={selectedAttribute}
+                  options={getCurrentAttributes()}
+                  onChange={setSelectedAttribute}
+                  disabled={!selectedProduct}
+                  showRecommended
+                  className="w-full border border-green-400 text-[14px] h-10 px-2 rounded"
+                  dropdownClassName="text-sm"
+                  menuClassName="text-sm"
+                />
+              </div>
             </div>
-          </div>
-
 
           {/* Desktop view only: each in its own column */}
           <div className="hidden md:block">

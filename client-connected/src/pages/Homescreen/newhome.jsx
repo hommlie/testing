@@ -36,7 +36,7 @@ import {
   FaEllipsisH 
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
-import photo1 from '../../assets/images/services.jpg';
+import photo1 from '../../assets/images/photo1.jpg';
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
@@ -680,9 +680,9 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <WhyChooseHommlie />
         </section> */}
 
-      <section className="px-10 py-10">
-        <Testimonials />
-      </section>
+      <section className="px-11 sm:px-12">
+          <Testimonials />
+        </section>
 
       <div className="block md:hidden h-2 bg-gray-200"></div>
         
