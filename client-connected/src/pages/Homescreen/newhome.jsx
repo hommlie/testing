@@ -405,27 +405,27 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-5 py-10 bg-white">
+      {/* Typewriter Hero Headline - Desktop Only */}
+      <section className="hidden md:block ml-10 pt-12 pb-0">
+        <h1 className="text-2xl font-bold text-gray-800 mb-0 text-left">
+          On-Demand Home Services
+          <span className="text-[#f70000] inline-block ml-2">
+            <Typewriter
+              words={["in Bangalore"]}
+              loop={false}
+              cursor
+              cursorStyle="|"
+              typeSpeed={100}
+              deleteSpeed={50}
+              delaySpeed={1000}
+            />
+          </span>
+        </h1>
+      </section>
+      <section className="max-w-7xl mx-auto px-5 py-5 bg-white">
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">
-            {/* Headline - Desktop only */}
-            <div className="hidden md:block text-center mb-8 px-4 md:px-0">
-              <h1 className="text-sm sm:text-lg md:text-2xl text-gray-800 font-bold mb-2 whitespace-nowrap overflow-x-auto mr-20">
-                On-Demand Home Services{" "}
-                <span className="text-[#f70000] inline-block">
-                  <Typewriter
-                    words={[" in Bangalore"]}
-                    loop={false}
-                    cursor
-                    cursorStyle="|"
-                    typeSpeed={100}
-                    deleteSpeed={50}
-                    delaySpeed={1000}
-                  />
-                </span>
-              </h1>
-            </div>
             {/* Search Bar - Mobile only */}
             <div className="sm:block md:hidden">
               <div className="relative">
@@ -482,7 +482,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     {/* Right Container - Images */}
     
-    <div className="hidden md:block mt-5 w-[554px]">
+    <div className="hidden md:block w-[554px] -mt-10">
       <div className="h-[630px] rounded-lg overflow-hidden bg-gray-200">
         <img 
           src={photo1} // Replace with your single image
