@@ -8,7 +8,7 @@ const Testimonials = () => {
       content:
         "As a working professional, I struggle big time whenever my paid help is on leave. Hommlie's services have been a game changer. From dusting to bathroom cleaning, they take care of everything.",
       author: "Sunny Gala",
-      location: "Powai",
+      location: "Electronic City",
       rating: 5,
       image: "/images/testi1.jpg",
     },
@@ -17,7 +17,7 @@ const Testimonials = () => {
       content:
         "My regular house help doesn't clean fans or bathrooms, so I tried Hommlie. It's super convenient, and they pay attention to details my maid overlooks. I couldn't be happier!",
       author: "Priya Sharma",
-      location: "Andheri",
+      location: "Sarjapura",
       rating: 5,
       image: "/images/testi3.jpg",
     },
@@ -26,7 +26,7 @@ const Testimonials = () => {
       content:
         "Hommlie's weekly deep cleans have become a part of our routine now. They are professional, punctual, and do a thorough job every single time.",
       author: "Ravi Menon",
-      location: "Koramangala",
+      location: "Jayanagar",
       rating: 5,
       image: "/images/testi2.jpg",
     },
@@ -35,7 +35,7 @@ const Testimonials = () => {
       content:
         "Being a pet parent, cleanliness is everything. Hommlie understood our needs and delivered more than we expected. Highly recommended!",
       author: "Neha Kapoor",
-      location: "Indiranagar",
+      location: "Nagarbhavi",
       rating: 5,
       image: "/images/testi1.jpg",
     },
