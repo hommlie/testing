@@ -494,34 +494,34 @@ const ServiceSection = ({ categories }) => {
             Choose Your Service Category
           </h2>
           <div className="w-full flex justify-center sm:justify-center">
-  <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2 px-2 sm:overflow-visible">
-    {categories?.map((category) => (
-      <motion.button
-        key={category.id}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        onClick={() => handleCategorySelect(category)}
-        className={`w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
-          ${
-            selectedCategory === category.id
-              ? "bg-[#92B775] text-black shadow-md"
-              : "bg-white text-gray-800 border border-gray-200 hover:border-black"
-          }`}
-      >
-        {category.icon_url && (
-          <img
-            src={category.icon_url}
-            alt=""
-            className="w-6 h-6 mb-1 flex-shrink-0"
-          />
-        )}
-        <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
-          {category.category_name}
-        </span>
-      </motion.button>
-    ))}
-  </div>
-</div>
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2 px-2 sm:overflow-visible">
+              {categories?.map((category) => (
+                <motion.button
+                  key={category.id}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => handleCategorySelect(category)}
+                  className={`w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
+                    ${
+                      selectedCategory === category.id
+                        ? "bg-[#92B775] text-black shadow-md"
+                        : "bg-white text-gray-800 border border-gray-200 hover:border-black"
+                    }`}
+                >
+                  {category.icon_url && (
+                    <img
+                      src={category.icon_url}
+                      alt=""
+                      className="w-6 h-6 mb-1 flex-shrink-0"
+                    />
+                  )}
+                  <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
+                    {category.category_name}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+          </div>
 
         </div>
         {/* Filter controls */}

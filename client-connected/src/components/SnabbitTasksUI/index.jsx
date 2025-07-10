@@ -81,7 +81,7 @@ export default function QuickHeroSection() {
       {/* Phone Mockup */}
       <motion.div
         ref={phoneRef}
-        className="absolute top-[24%] left-[39%] transform -translate-x-1/2 z-20 w-[260px] h-[500px]"
+        className="absolute top-[24%] left-[39%] transform -translate-x-1/2 z-10 w-[260px] h-[500px]"
         style={{ scale: phoneScale, y: phoneY }}
       >
         <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#F3E8D3] relative overflow-hidden">
@@ -97,13 +97,11 @@ export default function QuickHeroSection() {
       </motion.div>
 
       {/* Scrolling Cards Section */}
-      <section ref={cardsRef} className="bg-[#92B775] text-black min-h-[650px] pt-[15px] pb-[120px] relative z-10">
+      <section ref={cardsRef} className="bg-[#92B775] text-black min-h-[650px] pt-[15px] pb-[120px] relative z-0">
         <div className="flex flex-col items-center px-4">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
          Instant Home Services, <br />
         </h2>
-
-
         <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
           <span className="text-3xl md:text-5xl italic font-extrabold text-white leading-tight mb-4">
            Right at Your Doorstep
