@@ -696,10 +696,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <InspectionFormSection />
       </section>
 
-      <section className="px-2 sm:px-12">
+      {/* <section className="px-2 sm:px-12">
           <Offermobile />
           <Refermobile />
-        </section>
+        </section> */}
       {/* <section className="hidden sm:hidden px-10 py-5 md:py-10">
         <FaqSection />
       </section> */}
