@@ -336,8 +336,8 @@ const ServiceSection = ({ categories }) => {
           h-[460px] sm:h-[460px] md:h-[460px] lg:h-[460px]
           ${
             isSelected
-              ? "border-[#133215] bg-[#92B775] shadow-lg"
-              : "border-gray-200 bg-white hover:shadow-md"
+              ? " bg-[#92B775] shadow-lg"
+              : " bg-white hover:shadow-md"
           }`}
       >
         {/* Recommended badge - Improved UI */}
