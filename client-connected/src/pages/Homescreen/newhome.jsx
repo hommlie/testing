@@ -408,7 +408,6 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       <section className="max-w-7xl mx-auto px-5 py-10 bg-white">
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
-        {/* Desktop View: Headline + StatsSection */}
           <div className="w-full md:w-1/2">
             {/* Headline - Desktop only */}
             <div className="hidden md:block text-center mb-8 px-4 md:px-0">
@@ -427,7 +426,6 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                 </span>
               </h1>
             </div>
-
             {/* Search Bar - Mobile only */}
             <div className="sm:block md:hidden">
               <div className="relative">
