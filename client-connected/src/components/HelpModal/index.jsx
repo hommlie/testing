@@ -34,14 +34,14 @@ const HelpModal = ({ isOpen, onClose }) => {
     {
       icon: <FaWhatsapp className="text-green-500 text-xl" />,
       title: "WhatsApp",
-      detail: "+91 9876543210",
-      action: "https://wa.me/919876543210"
+      detail: "+91 63638-65658",
+      action: "https://wa.me/916363865658"
     },
     {
       icon: <FaPhoneAlt className="text-blue-500 text-xl" />,
       title: "Call Us",
-      detail: "1800 123 4567",
-      action: "tel:18001234567"
+      detail: "63638 65658",
+      action: "tel:6363865658"
     },
     {
       icon: <MdEmail className="text-red-500 text-xl" />,
@@ -189,7 +189,7 @@ const HelpModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <h3 className="text-lg font-semibold mb-4">Frequently Asked Questions</h3>
               <div className="space-y-3">
                 {[
@@ -212,7 +212,7 @@ const HelpModal = ({ isOpen, onClose }) => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Footer with padding to match header */}

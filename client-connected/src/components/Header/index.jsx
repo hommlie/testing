@@ -267,7 +267,7 @@ useEffect(() => {
       {showMobileBanner && (
         <div className="block sm:hidden bg-[#92b775] text-white text-sm px-4 py-2 flex justify-between items-center">
           <a
-            href="https://play.google.com/store/apps/details?id=com.hommlie.app"
+            href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2"
@@ -338,7 +338,7 @@ useEffect(() => {
                   className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
                 >
                   <FaUser className="text-black text-base" />
-                  <span className="text-black font-medium">My Account</span>
+                  <span className="text-black font-medium">Account</span>
                 </button>
               )}
              <span className="hidden md:inline-block text-black">|</span>
@@ -752,14 +752,14 @@ useEffect(() => {
               </p>
               <div className="flex justify-center gap-4">
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.hommlie.app"
+                  href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
                 </a>
                 <a
-                  href="https://apps.apple.com/" // replace with actual App Store link
+                  href="https://apps.apple.com/" 
                   target="_blank"
                   rel="noopener noreferrer"
                 >

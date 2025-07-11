@@ -4,14 +4,15 @@ import { useInView } from 'react-intersection-observer';
 import DownloadHommlieApp from '../DownloadHommlieApp';
 
 const tasks = [
-  { title: 'General Cleaning', image: '/images/general-cleaning.png' },
-  { title: 'Dishwashing', image: '/images/dishwashing.png' },
-  { title: 'Laundry', image: '/images/laundry.png' },
-  { title: 'Fan Cleaning', image: '/images/fan-cleaning.png' },
-  { title: 'Kitchen Prep', image: '/images/kitchen-prep.png' },
-  { title: 'Window Cleaning', image: '/images/window-cleaning.png' },
-  { title: 'Bathroom Cleaning', image: '/images/bathroom-cleaning.png' },
+  { title: 'General Cleaning', image: '/images/general-cleaning.png', link: '/services/general-cleaning' },
+  { title: 'Dishwashing', image: '/images/dishwashing.png', link: '/services/dishwashing' },
+  { title: 'Laundry', image: '/images/laundry.png', link: '/services/laundry' },
+  { title: 'Fan Cleaning', image: '/images/fan-cleaning.png', link: '/services/fan-cleaning' },
+  { title: 'Kitchen Prep', image: '/images/kitchen-prep.png', link: '/services/kitchen-prep' },
+  { title: 'Window Cleaning', image: '/images/window-cleaning.png', link: '/services/window-cleaning' },
+  { title: 'Bathroom Cleaning', image: '/images/bathroom-cleaning.png', link: '/services/bathroom-cleaning' },
 ];
+
 
 export default function QuickHeroSection() {
   const containerRef = useRef(null);
@@ -127,33 +128,40 @@ export default function QuickHeroSection() {
               {duplicatedTasks.map((task, index) => {
                 const delay = (index % tasks.length) * 0.2;
                 return (
-                  <motion.div
+                  <a
                     key={`${task.title}-${index}`}
+                    href={task.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-48 h-64 flex-shrink-0 mx-6 group"
-                    initial={{ opacity: 0.2 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      duration: 0.6,
-                      repeat: Infinity,
-                      repeatType: 'mirror',
-                      delay,
-                      ease: 'easeInOut',
-                    }}
                   >
-                    <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#F3E8D3] transition-all duration-300 h-full">
-                      <div className="h-40 bg-gray-100 overflow-hidden relative">
-                        <img
-                          src={task.image}
-                          alt={task.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                    <motion.div
+                      initial={{ opacity: 0.2 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: 0.6,
+                        repeat: Infinity,
+                        repeatType: 'mirror',
+                        delay,
+                        ease: 'easeInOut',
+                      }}
+                      className="h-full"
+                    >
+                      <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#F3E8D3] transition-all duration-300 h-full">
+                        <div className="h-40 bg-gray-100 overflow-hidden relative">
+                          <img
+                            src={task.image}
+                            alt={task.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="p-4 text-center font-medium bg-white group-hover:bg-[#F3E8D3] group-hover:text-black flex-1 flex items-center justify-center transition-all duration-300">
+                          {task.title}
+                        </div>
                       </div>
-                      <div className="p-4 text-center font-medium bg-white group-hover:bg-[#F3E8D3] group-hover:text-black flex-1 flex items-center justify-center transition-all duration-300">
-                        {task.title}
-                      </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </a>
                 );
               })}
             </motion.div>
