@@ -502,15 +502,15 @@ const CleaningProductPage = () => {
                     <div className="divide-y">
                       {[...(product?.attributes || [])]
                         .sort((a, b) => {
-                        const aName = a.attribute_name?.toLowerCase() || "";
-                        const bName = b.attribute_name?.toLowerCase() || "";
+                          const aName = a.attribute_name?.toLowerCase() || "";
+                          const bName = b.attribute_name?.toLowerCase() || "";
 
-                        // Move "one time" services to the top
-                        if (aName.includes("one time")) return -1;
-                        if (bName.includes("one time")) return 1;
-                        return 0;
-                      })
-                      .map((attribute, attrIndex) => (
+                          // Move "one time" services to the top
+                          if (aName.includes("one time")) return -1;
+                          if (bName.includes("one time")) return 1;
+                          return 0;
+                        })
+                        .map((attribute, attrIndex) => (
                         <div
                           key={attrIndex}
                           className={`py-4 md:py-6 ${
@@ -598,32 +598,34 @@ const CleaningProductPage = () => {
                             </div>
 
                             {/* Image with overlapped Add button */}
-                            <div className="relative w-24 md:w-32 flex-shrink-0">
-                              <div className="relative w-24 md:w-32 h-24 md:h-32">
-                                <img
-                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
-                                  alt=""
-                                  className="w-full h-full rounded-lg object-cover"
-                                />
-                                <button
-                                  className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
-                                            bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
-                                            hover:bg-emerald-50 transition-colors"
-                                  onClick={() =>
-                                    handleViewDetails(product, attribute.attribute_id)
-                                  }
-                                >
-                                  Add
-                                </button>
-                              </div>
+                            {/* Image with overlapped Add button */}
+<div className="relative w-24 md:w-32 flex-shrink-0">
+  <div className="relative w-24 md:w-32 h-24 md:h-32">
+    <img
+      src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
+      alt=""
+      className="w-full h-full rounded-lg object-cover"
+    />
+    <button
+      className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
+                bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
+                hover:bg-emerald-50 transition-colors"
+      onClick={() =>
+        handleViewDetails(product, attribute.attribute_id)
+      }
+    >
+      Add
+    </button>
+  </div>
 
-                             
-                              {attribute?.variations?.length > 0 && (
-                                <p className="text-center text-xs text-gray-600 mt-5">
-                                  {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                                </p>
-                              )}
-                            </div>
+  {/* Dynamic variation count below the image */}
+  {attribute?.variations?.length > 0 && (
+    <p className="text-center text-xs text-gray-600 mt-6">
+      {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+    </p>
+  )}
+</div>
+
                           </div>
                         </div>
                       ))}
@@ -678,25 +680,25 @@ const CleaningProductPage = () => {
             }
           >
             <div className="flex flex-col space-y-2 text-sm md:text-base leading-relaxed">
-  {getLocations()?.map((location, index) => (
-    <div key={index} className="flex items-center">
-      {index > 0 && <span className="text-gray-400 mr-2">•</span>}
-      <a
-        href={`${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`}
-        onClick={(e) => {
-          e.preventDefault();
-          navigate(
-            `${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`,
-            { state: { location: location?.title?.trim() } }
-          );
-        }}
-        className="text-grey hover:text-blue-400 transition-colors duration-200"
-      >
-        {location?.title?.trim()}
-      </a>
-    </div>
-  ))}
-</div>
+              {getLocations()?.map((location, index) => (
+                <div key={index} className="flex items-center">
+                  {index > 0 && <span className="text-gray-400 mr-2">•</span>}
+                  <a
+                    href={`${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(
+                        `${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`,
+                        { state: { location: location?.title?.trim() } }
+                      );
+                    }}
+                    className="text-grey hover:text-blue-400 transition-colors duration-200"
+                  >
+                    {location?.title?.trim()}
+                  </a>
+                </div>
+              ))}
+            </div>
           </QuickLinkSection>
 
           <QuickLinkSection
