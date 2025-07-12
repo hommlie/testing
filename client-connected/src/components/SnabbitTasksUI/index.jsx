@@ -4,13 +4,13 @@ import { useInView } from 'react-intersection-observer';
 import DownloadHommlieApp from '../DownloadHommlieApp';
 
 const tasks = [
-  { title: 'Pest Control', image: '/images/general-cleaning.png', link: '/services/general-cleaning' },
-  { title: 'Deep Cleaning', image: '/images/dishwashing.png', link: '/services/dishwashing' },
-  { title: 'Mosquito & Safety Net', image: '/images/laundry.png', link: '/services/laundry' },
-  { title: 'Disinfection', image: '/images/fan-cleaning.png', link: '/services/fan-cleaning' },
-  { title: 'Scrap', image: '/images/kitchen-prep.png', link: '/services/kitchen-prep' },
-  { title: 'AC Services', image: '/images/window-cleaning.png', link: '/services/window-cleaning' },
-  { title: 'Plumbing', image: '/images/bathroom-cleaning.png', link: '/services/bathroom-cleaning' },
+  { title: 'Pest Control', image: '/images/pest-control.png', link: '/services/general-cleaning' },
+  { title: 'Deep Cleaning', image: '/images/deep-cleaning.png', link: '/services/dishwashing' },
+  { title: 'Mosquito & Safety Net', image: '/images/mosquito-mesh.png', link: '/services/laundry' },
+  { title: 'Disinfection', image: '/images/deep-cleaning.png', link: '/services/fan-cleaning' },
+  { title: 'Scrap', image: '/images/scrapsnap.png', link: '/services/kitchen-prep' },
+  { title: 'AC Services', image: '/images/ac-services.png', link: '/services/window-cleaning' },
+  { title: 'Plumbing', image: '/images/bird-netting.png', link: '/services/bathroom-cleaning' },
 ];
 
 

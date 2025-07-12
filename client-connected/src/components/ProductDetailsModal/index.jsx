@@ -711,7 +711,77 @@ const ProductDetailModal = ({
                   className="prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: product?.description }}
                 /> */}
+                {/* Included Section */}
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Included</h3>
+                  <ol className="relative border-l border-gray-300 space-y-6 ml-4">
+                    <li className="ml-4">
+                      <div className="absolute -left-5 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        1
+                      </div>
+                      <h4 className="font-semibold">Detailed inspection</h4>
+                      <p className="text-gray-600 text-sm">
+                        Professionals identify all kinds of pests in hidden and tricky areas
+                      </p>
+                    </li>
+                    <li className="ml-4">
+                      <div className="absolute -left-5 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        2
+                      </div>
+                      <h4 className="font-semibold">First visit</h4>
+                      <p className="text-gray-600 text-sm">
+                        Spray treatment to target adult pests
+                      </p>
+                    </li>
+                    <li className="ml-4">
+                      <div className="absolute -left-5 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        3
+                      </div>
+                      <h4 className="font-semibold">Second visit</h4>
+                      <p className="text-gray-600 text-sm">
+                        Gel treatment after two weeks to target nymphs and newly-hatched eggs
+                      </p>
+                    </li>
+                  </ol>
+                </div>
 
+                {/* Excluded Section */}
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Excluded</h3>
+                  <div className="flex items-start space-x-2 text-sm text-red-600">
+                    <span className="font-bold text-xl">×</span>
+                    <span>Please provide a stool/ladder if required</span>
+                  </div>
+                </div>
+
+                {/* FAQ Section */}
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Frequently Asked Questions</h3>
+                  <ul className="divide-y divide-gray-200">
+                    {[
+                      "What will the first visit include?",
+                      "Will I have to empty the kitchen for the first visit?",
+                      "Will the professional restock the utensils in my kitchen?",
+                      "What will the second visit include?",
+                      "What safety precautions should be followed?",
+                      "Is the service safe for children and pets?"
+                    ].map((question, idx) => (
+                      <li key={idx} className="py-3">
+                        <details className="group">
+                          <summary className="flex justify-between items-center cursor-pointer font-medium text-gray-700 hover:text-emerald-600">
+                            {question}
+                            <span className="ml-2 w-5 h-5 relative text-lg font-bold">
+                              <span className="absolute inset-0 group-open:hidden">+</span>
+                              <span className="absolute inset-0 hidden group-open:inline">−</span>
+                            </span>
+                          </summary>
+                          {/* You can add real answers here dynamically if needed */}
+                          <p className="mt-2 text-sm text-gray-600">Answer coming soon...</p>
+                        </details>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
                 {/* Image Gallery */}
                 {/* <div className="space-y-4">
                   {product?.productimages?.map((image) => (

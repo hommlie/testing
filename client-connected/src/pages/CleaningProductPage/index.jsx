@@ -617,9 +617,9 @@ const CleaningProductPage = () => {
                                 </button>
                               </div>
 
-                              {/* Dynamic variation count below the image */}
+                             
                               {attribute?.variations?.length > 0 && (
-                                <p className="text-center text-xs text-gray-600 mt-4">
+                                <p className="text-center text-xs text-gray-600 mt-5">
                                   {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
                                 </p>
                               )}
