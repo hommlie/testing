@@ -7,7 +7,7 @@ const tasks = [
   { title: 'Pest Control', image: '/images/pest-control.png', link: '/services/general-cleaning' },
   { title: 'Deep Cleaning', image: '/images/deep-cleaning.png', link: '/services/dishwashing' },
   { title: 'Mosquito & Safety Net', image: '/images/mosquito-mesh.png', link: '/services/laundry' },
-  { title: 'Disinfection', image: '/images/deep-cleaning.png', link: '/services/fan-cleaning' },
+  { title: 'Disinfection', image: '/images/disinfectionsnap.png', link: '/services/fan-cleaning' },
   { title: 'Scrap', image: '/images/scrapsnap.png', link: '/services/kitchen-prep' },
   { title: 'AC Services', image: '/images/ac-services.png', link: '/services/window-cleaning' },
   { title: 'Plumbing', image: '/images/bird-netting.png', link: '/services/bathroom-cleaning' },
