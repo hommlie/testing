@@ -406,21 +406,23 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       </Helmet>
       {/* Hero Section */}
       {/* Typewriter Hero Headline - Desktop Only */}
-      <section className="hidden md:block ml-10 pt-12 pb-0">
-        <h1 className="text-2xl font-bold text-gray-800 mb-0 text-left">
-          On-Demand Home Services
-          <span className="text-[#f70000] inline-block ml-2">
-            <Typewriter
-              words={["in Bangalore"]}
-              loop={false}
-              cursor
-              cursorStyle="|"
-              typeSpeed={100}
-              deleteSpeed={50}
-              delaySpeed={1000}
-            />
-          </span>
-        </h1>
+      <section className="hidden md:block w-full px-5 md:px-10 pt-6 pb-0 text-center md:text-left">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-2xl font-bold text-gray-800">
+            On-Demand Home Services
+            <span className="text-[#f70000] inline-block ml-2">
+              <Typewriter
+                words={["in Bangalore"]}
+                loop={false}
+                cursor
+                cursorStyle="|"
+                typeSpeed={100}
+                deleteSpeed={50}
+                delaySpeed={1000}
+              />
+            </span>
+          </h1>
+        </div>
       </section>
       <section className="max-w-7xl mx-auto px-5 py-5 bg-white">
         <div className="w-full flex flex-col md:flex-row gap-8">

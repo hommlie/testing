@@ -285,7 +285,7 @@ useEffect(() => {
       
       {/* Top Header with contact and social info */}
       <div className="">
-        <div className="hidden sm:block  max-w-7xl mx-auto w-full">
+        <div className="hidden lg:block max-w-7xl mx-auto w-full">
           <div
             className=" text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0"
             style={{
@@ -426,7 +426,7 @@ useEffect(() => {
               </div>
 
               {/* Search Bar */}
-              <div className="w-[550px]">
+              <div className="w-[550px] hidden lg:block">
                 <div className="relative">
                   <input
                     type="text"
