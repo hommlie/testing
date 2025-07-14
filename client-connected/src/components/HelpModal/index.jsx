@@ -34,13 +34,13 @@ const HelpModal = ({ isOpen, onClose }) => {
     {
       icon: <FaWhatsapp className="text-green-500 text-xl" />,
       title: "WhatsApp",
-      detail: "+91 63638-65658",
-      action: "https://wa.me/916363865658"
+      detail: "+91 88846-88892",
+      action: "https://wa.me/918884688892"
     },
     {
       icon: <FaPhoneAlt className="text-blue-500 text-xl" />,
       title: "Call Us",
-      detail: "63638 65658",
+      detail: "63638-65658",
       action: "tel:6363865658"
     },
     {

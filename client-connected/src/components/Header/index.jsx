@@ -413,7 +413,7 @@ useEffect(() => {
                   <div className="flex flex-col">
                     <div className="text-sm font-semibold text-black flex items-center">
                       <MdLocationOn className="text-black mr-1 text-lg" />
-                      Delivery in 40 minutes
+                      Delivery in 60 minutes
                     </div>
                     <div className="flex items-center text-sm text-gray-700">
                       <span className="truncate max-w-[200px]">

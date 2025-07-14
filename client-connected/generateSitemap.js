@@ -91,17 +91,17 @@ async function generateSitemap() {
 
     // Generate XML format with last modified date and change frequency
     const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allUrls
-  .map(
-    (url) => `  <url>
-    <loc>${BASE_URL}${url}</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>`
-  )
-  .join("\n")}
-</urlset>`;
+      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${allUrls
+        .map(
+          (url) => `  <url>
+          <loc>${BASE_URL}${url}</loc>
+          <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
+          <changefreq>weekly</changefreq>
+        </url>`
+        )
+        .join("\n")}
+      </urlset>`;
 
     // Ensure the directory exists
     const publicDir = path.join(__dirname, "public");

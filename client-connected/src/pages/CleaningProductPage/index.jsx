@@ -598,33 +598,32 @@ const CleaningProductPage = () => {
                             </div>
 
                             {/* Image with overlapped Add button */}
-                            {/* Image with overlapped Add button */}
-<div className="relative w-24 md:w-32 flex-shrink-0">
-  <div className="relative w-24 md:w-32 h-24 md:h-32">
-    <img
-      src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
-      alt=""
-      className="w-full h-full rounded-lg object-cover"
-    />
-    <button
-      className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
-                bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
-                hover:bg-emerald-50 transition-colors"
-      onClick={() =>
-        handleViewDetails(product, attribute.attribute_id)
-      }
-    >
-      Add
-    </button>
-  </div>
+                            <div className="relative w-24 md:w-32 flex-shrink-0">
+                              <div className="relative w-24 md:w-32 h-24 md:h-32">
+                                <img
+                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
+                                  alt=""
+                                  className="w-full h-full rounded-lg object-cover"
+                                />
+                                <button
+                                  className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
+                                            bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
+                                            hover:bg-emerald-50 transition-colors"
+                                  onClick={() =>
+                                    handleViewDetails(product, attribute.attribute_id)
+                                  }
+                                >
+                                  Add
+                                </button>
+                              </div>
 
-  {/* Dynamic variation count below the image */}
-  {attribute?.variations?.length > 0 && (
-    <p className="text-center text-xs text-gray-600 mt-6">
-      {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-    </p>
-  )}
-</div>
+                              {/* Dynamic variation count below the image */}
+                              {attribute?.variations?.length > 0 && (
+                                <p className="text-center text-xs text-gray-600 mt-6">
+                                  {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                </p>
+                              )}
+                            </div>
 
                           </div>
                         </div>
