@@ -527,16 +527,16 @@ useEffect(() => {
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
                   className="flex items-center space-x-2"
                 >
-                  {/* <div className="relative">
+                  <div className="block md:hidden relative">
                     <img
                       src={user?.profileImage || userIcon}
                       alt="Profile"
-                      className="h-9 w-9 rounded-full object-cover border-2 border-emerald-600"
+                      className="h-9 w-9"
                     />
                     {isLoginOpen && (
                       <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
                     )}
-                  </div> */}
+                  </div>
                 </button>
               ) : null}
 
@@ -757,7 +757,7 @@ useEffect(() => {
                   <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
                 </a>
                 <a
-                  href="https://apps.apple.com/" 
+                  href="https://apps.apple.com/in/app/hommile/id6744694127 " 
                   target="_blank"
                   rel="noopener noreferrer"
                 >

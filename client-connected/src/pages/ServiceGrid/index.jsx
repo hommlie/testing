@@ -402,7 +402,7 @@ const ServiceGrid = () => {
       {showDeepCleanModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
           <div className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-6 h-[60vh] sm:h-auto overflow-y-auto transform animate-slide-up">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-bold">Deep Cleaning Services</h2>
               <button onClick={() => setShowDeepCleanModal(false)} className="text-gray-500 hover:text-black">
                 <FaTimes />

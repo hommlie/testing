@@ -4,6 +4,7 @@ import { MdEmail, MdLocationOn } from "react-icons/md";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../LoginModal";
 import config from "../../config/config";
+import { NavLink } from "react-router-dom";
 
 const HelpModal = ({ isOpen, onClose }) => {
   const { user, setUser } = useCont();
@@ -22,7 +23,7 @@ const HelpModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const topics = [
-    { title: "Order Related", icon: "🛒" },
+    { title: "Order Related", icon: "🛒", route: "/my-bookings" },
     { title: "Raise a Complaint", icon: "📢" },
     { title: "Shopping", icon: "🛍️" },
     { title: "Hommlie Account", icon: "👤" },
@@ -77,7 +78,7 @@ const HelpModal = ({ isOpen, onClose }) => {
             </div>
 
             {/* User Status Section */}
-            {!user?.length ? (
+            {!user?.name ? (
               <div className="flex items-center justify-between border rounded-lg px-4 py-3 mt-4 bg-gray-50">
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -132,7 +133,7 @@ const HelpModal = ({ isOpen, onClose }) => {
                     </span>
                   </div>
                   <div>
-                    <h2 className="text-sm font-semibold text-emerald-800">Hello, {user[0]?.name}</h2>
+                    <h2 className="text-sm font-semibold text-emerald-800">Hello, {user?.name}</h2>
                     <p className="text-sm text-emerald-600">How can we help you today?</p>
                   </div>
                 </div>
@@ -152,16 +153,28 @@ const HelpModal = ({ isOpen, onClose }) => {
               <h3 className="text-lg font-semibold mb-4">Browse Topics</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {topics.map((topic, idx) => (
-                  <div
-                    key={idx}
-                    className="border rounded-lg p-4 flex flex-col items-center hover:shadow transition cursor-pointer hover:border-emerald-200"
-                    onClick={() => {
-                      console.log(`Selected topic: ${topic.title}`);
-                    }}
-                  >
-                    <div className="text-3xl mb-2">{topic.icon}</div>
-                    <p className="text-sm font-medium text-center">{topic.title}</p>
-                  </div>
+                  topic.route ? (
+                    <NavLink
+                      key={idx}
+                      to={topic.route}
+                      onClick={onClose}
+                      className="border rounded-lg p-4 flex flex-col items-center hover:shadow transition cursor-pointer hover:border-emerald-200"
+                    >
+                      <div className="text-3xl mb-2">{topic.icon}</div>
+                      <p className="text-sm font-medium text-center">{topic.title}</p>
+                    </NavLink>
+                  ) : (
+                    <div
+                      key={idx}
+                      className="border rounded-lg p-4 flex flex-col items-center hover:shadow transition cursor-pointer hover:border-emerald-200"
+                      onClick={() => {
+                        console.log(`Selected topic: ${topic.title}`);
+                      }}
+                    >
+                      <div className="text-3xl mb-2">{topic.icon}</div>
+                      <p className="text-sm font-medium text-center">{topic.title}</p>
+                    </div>
+                  )
                 ))}
               </div>
             </div>
@@ -188,31 +201,6 @@ const HelpModal = ({ isOpen, onClose }) => {
                 ))}
               </div>
             </div>
-
-            {/* <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4">Frequently Asked Questions</h3>
-              <div className="space-y-3">
-                {[
-                  "How do I track my order?",
-                  "What is your cancellation policy?",
-                  "How can I make changes to my booking?",
-                  "What payment methods do you accept?",
-                  "How do I become a service provider?"
-                ].map((question, idx) => (
-                  <div 
-                    key={idx}
-                    className="border-b pb-3 last:border-b-0"
-                  >
-                    <button className="w-full text-left flex justify-between items-center">
-                      <span className="font-medium text-gray-800 hover:text-emerald-700">
-                        {question}
-                      </span>
-                      <span className="text-gray-500">+</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div> */}
           </div>
 
           {/* Footer with padding to match header */}
