@@ -23,10 +23,10 @@ const HelpModal = ({ isOpen, onClose }) => {
 
   const topics = [
     { title: "Order Related", icon: "🛒" },
+    { title: "Raise a Complaint", icon: "📢" },
     { title: "Shopping", icon: "🛍️" },
     { title: "Hommlie Account", icon: "👤" },
     { title: "Payments", icon: "💳" },
-    { title: "Sell On Hommlie", icon: "🏪" },
     { title: "Others", icon: "📄" },
   ];
 

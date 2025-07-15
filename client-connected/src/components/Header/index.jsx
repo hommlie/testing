@@ -305,8 +305,6 @@ useEffect(() => {
                   </button>
                   <a
                     href="https://b2b.hommlie.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
                   >
                     Commercial

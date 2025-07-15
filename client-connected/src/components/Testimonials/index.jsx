@@ -42,7 +42,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="py-0 px-0 sm:py-0 sm:px-0"> 
+    <section className="py-0 px-0 sm:py-0 mb-10 sm:px-0"> 
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl font-bold text-center mb-6 sm:mb-8 text-gray-800">
           What Our Customers Say

@@ -294,7 +294,7 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="text-gray-700 text-sm font-medium block mb-2">
               Full Name
             </label>
@@ -311,7 +311,7 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
             {errors.userName && (
               <p className="mt-1 text-sm text-red-500">{errors.userName}</p>
             )}
-          </div>
+          </div> */}
           
           <div>
             <label className="text-gray-700 text-sm font-medium block mb-2">
@@ -352,7 +352,7 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <label className="text-gray-700 text-sm font-medium block mb-2">
               Enter Full Address
             </label>
@@ -370,7 +370,7 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
             {errors.address && (
               <p className="mt-1 text-sm text-red-500">{errors.address}</p>
             )}
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
