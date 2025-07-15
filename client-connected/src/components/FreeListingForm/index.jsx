@@ -43,54 +43,39 @@ const loadGoogleMapsApi = (() => {
 })();
 
 const SuccessModal = ({ isOpen }) => {
-    const navigate = useNavigate();
-    console.log(isOpen);
-    
-
-    if (!isOpen) return null;
-    
-    return (
-      <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300`}>
-        <div className={`bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
-          <div className="text-center">
-            {/* Success Icon with Animation */}
-            <div className="relative mx-auto">
-              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-2 mx-auto animate-bounce">
-                <PartyPopper className="h-8 w-8 text-green-600" />
-              </div>
-              <div className="absolute -top-1 -right-1">
-                <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </div>
-              </div>
-            </div>
+  const navigate = useNavigate();
   
-            {/* Success Message */}
-            <h3 className="mt-4 text-2xl font-bold text-gray-900 mb-2">
-              Thank you for registration!
-            </h3>
-            <div className="mt-3">
-              <p className="text-gray-600">
-                Our team will contact you soon.
-              </p>
-            </div>
+  if (!isOpen) return null;
   
-            {/* Action Button */}
-            <div className="mt-8">
-              <button
-                onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
-                className="w-full bg-green-600 text-white py-3 px-6 rounded-xl font-semibold
-                         hover:bg-green-700 transform transition-all duration-200
-                         hover:shadow-lg hover:-translate-y-0.5
-                         focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-              >
-                Explore Our Services
-              </button>
-            </div>
+  return (
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+        <div className="text-center space-y-4">
+          <div className="mx-auto w-16 h-16 bg-green-50 rounded-full flex items-center justify-center">
+            <PartyPopper className="h-8 w-8 text-green-600" />
+            <Check className="absolute h-5 w-5 text-white bg-green-500 rounded-full p-0.5" />
           </div>
+          
+          <h3 className="text-xl font-semibold text-gray-900">
+            Thank you for registration!
+          </h3>
+          
+          <p className="text-gray-600">
+            Our team will contact you soon.
+          </p>
+          
+          <button
+            onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
+            className="w-full mt-4 bg-green-600 text-white py-2 px-4 rounded-lg font-medium
+                      hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 
+                      focus:ring-green-500 focus:ring-offset-2"
+          >
+            Explore Our Services
+          </button>
         </div>
       </div>
-    );
+    </div>
+  );
 };
 
 const BusinessRegistrationForm = ({ phoneNumber }) => {
@@ -205,8 +190,8 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
       newErrors.businessName = 'Business name is required';
     }
     if (!formData.userName.trim()) {
-        newErrors.userName = 'Business name is required';
-      }
+      newErrors.userName = 'Name is required';
+    }
     if (!formData.pincode.trim()) {
       newErrors.pincode = 'Pin code is required';
     } else if (!/^\d{6}$/.test(formData.pincode)) {
@@ -246,7 +231,6 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(`${config.API_URL}/api/freelisting/create`, formData);
-      console.log(response.data);
       
       if (response.data.status === 1) {        
         setShowSuccess(true);
@@ -277,167 +261,128 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
   };
 
   return (
-    <div className="">
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg glow-border p-8">
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="max-w-md mx-auto p-4">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6">Business Registration</h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-gray-700 text-sm font-medium block mb-2">
-              Mobile
-              <span className='text-xs'>(verified)</span>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Mobile Number
             </label>
             <input
               type="text"
-              name="userName"
               value={formData.phoneNumber}
               readOnly
-              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 border-gray-300 focus:ring-green-500`}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-700 bg-gray-50"
             />
           </div>
 
-          {/* <div>
-            <label className="text-gray-700 text-sm font-medium block mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="userName"
-              value={formData.userName}
-              onChange={handleChange}
-              placeholder="Enter Your Full Name"
-              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
-                errors.userName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
-              }`}
-            />
-            {errors.userName && (
-              <p className="mt-1 text-sm text-red-500">{errors.userName}</p>
-            )}
-          </div> */}
-          
           <div>
-            <label className="text-gray-700 text-sm font-medium block mb-2">
-              Business Name
-            </label>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-1">
+              Business Name <span className="text-red-500">*</span>
+            </label> */}
             <input
               type="text"
               name="businessName"
               value={formData.businessName}
               onChange={handleChange}
-              placeholder="Enter Business Name"
-              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
-                errors.businessName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
+              placeholder="Enter business name"
+              className={`w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:ring-1 ${
+                errors.businessName ? 'border-red-300 focus:ring-red-300' : 'border-gray-200 focus:ring-blue-300'
               }`}
             />
             {errors.businessName && (
-              <p className="mt-1 text-sm text-red-500">{errors.businessName}</p>
+              <p className="mt-1 text-xs text-red-500">{errors.businessName}</p>
             )}
           </div>
 
           <div>
-            <label className="text-gray-700 text-sm font-medium block mb-2">
-              Pin Code
-            </label>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-1">
+              Pin Code <span className="text-red-500">*</span>
+            </label> */}
             <input
               type="text"
               name="pincode"
               value={formData.pincode}
               onChange={handleChange}
-              placeholder="Enter Pincode"
+              placeholder="6-digit pincode"
               maxLength={6}
-              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
-                errors.pincode ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
+              className={`w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:ring-1 ${
+                errors.pincode ? 'border-red-300 focus:ring-red-300' : 'border-gray-200 focus:ring-blue-300'
               }`}
             />
             {errors.pincode && (
-              <p className="mt-1 text-sm text-red-500">{errors.pincode}</p>
+              <p className="mt-1 text-xs text-red-500">{errors.pincode}</p>
             )}
           </div>
 
-          {/* <div>
-            <label className="text-gray-700 text-sm font-medium block mb-2">
-              Enter Full Address
-            </label>
-            <input
-              ref={addressInputRef}
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Enter business address"
-              className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
-                errors.address ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
-              }`}
-            />
-            {errors.address && (
-              <p className="mt-1 text-sm text-red-500">{errors.address}</p>
-            )}
-          </div> */}
-
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-gray-700 text-sm font-medium block mb-2">
+              {/* <label className="block text-sm font-medium text-gray-700 mb-1">
                 Area
-              </label>
+              </label> */}
               <input
                 type="text"
                 name="area"
                 value={formData.area}
                 onChange={handleChange}
-                placeholder="Area Name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-1 focus:ring-green-500"
+                placeholder="Area name"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-300"
               />
             </div>
 
             <div>
-              <label className="text-gray-700 text-sm font-medium block mb-2">
+              {/* <label className="block text-sm font-medium text-gray-700 mb-1">
                 Landmark
-              </label>
+              </label> */}
               <input
                 type="text"
                 name="landmark"
                 value={formData.landmark}
                 onChange={handleChange}
-                placeholder="Landmark Name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-1 focus:ring-green-500"
+                placeholder="Nearby landmark"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-300"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-gray-700 text-sm font-medium block mb-2">
-                City
-              </label>
+              {/* <label className="block text-sm font-medium text-gray-700 mb-1">
+                City <span className="text-red-500">*</span>
+              </label> */}
               <input
                 type="text"
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                placeholder="City Name"
-                className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
-                  errors.city ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
+                placeholder="City name"
+                className={`w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:ring-1 ${
+                  errors.city ? 'border-red-300 focus:ring-red-300' : 'border-gray-200 focus:ring-blue-300'
                 }`}
               />
               {errors.city && (
-                <p className="mt-1 text-sm text-red-500">{errors.city}</p>
+                <p className="mt-1 text-xs text-red-500">{errors.city}</p>
               )}
             </div>
 
             <div>
-              <label className="text-gray-700 text-sm font-medium block mb-2">
-                State
-              </label>
+              {/* <label className="block text-sm font-medium text-gray-700 mb-1">
+                State <span className="text-red-500">*</span>
+              </label> */}
               <input
                 type="text"
                 name="state"
                 value={formData.state}
                 onChange={handleChange}
-                placeholder="State Name"
-                className={`w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-1 ${
-                  errors.state ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
+                placeholder="State name"
+                className={`w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:ring-1 ${
+                  errors.state ? 'border-red-300 focus:ring-red-300' : 'border-gray-200 focus:ring-blue-300'
                 }`}
               />
               {errors.state && (
-                <p className="mt-1 text-sm text-red-500">{errors.state}</p>
+                <p className="mt-1 text-xs text-red-500">{errors.state}</p>
               )}
             </div>
           </div>
@@ -449,15 +394,14 @@ const BusinessRegistrationForm = ({ phoneNumber }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#27595C] text-white py-3 rounded-lg hover:bg-[#1e464a] transition-colors duration-200 disabled:opacity-50"
+            className="w-full mt-6 bg-[#92b876] text-white py-2 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Submitting...' : 'Submit'}
+            {isLoading ? 'Submitting...' : 'Register Business'}
           </button>
         </form>
       </div>
 
       <SuccessModal isOpen={showSuccess} />
-
     </div>
   );
 };

@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
-import hommlieLogo from "/assets/logo/logo.svg";
+import hommlieLogo from "/assets/logo/loogo.png";
 import { useNavigate } from "react-router-dom";
 
 const LoginSignup = ({ isOpen, onClose }) => {
