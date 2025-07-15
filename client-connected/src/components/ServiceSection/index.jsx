@@ -414,8 +414,8 @@ const ServiceSection = ({ categories }) => {
                   key={star}
                   className={`w-4 h-4 ${
                     star <= Math.round(rating)
-                      ? "text-black fill-current"
-                      : "text-black"
+                      ? "text-[#facc14] fill-current"
+                      : "text-[#facc14]"
                   }`}
                 />
               ))}
