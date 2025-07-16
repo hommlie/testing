@@ -521,7 +521,7 @@ useEffect(() => {
                <img src={ondc} alt="ONDC Logo" className="h-9 w-9 object-contain" />
             </NavLink>
            
-            <div className="relative">
+            {/* <div className="relative">
               {user?.length !== 0 ? (
                 <button
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
@@ -620,7 +620,7 @@ useEffect(() => {
                   </button>
                 </div>
               )}
-            </div>
+            </div> */}
 
             <div className="md:hidden flex items-center gap-4">
               <button
@@ -757,7 +757,7 @@ useEffect(() => {
                   <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
                 </a>
                 <a
-                  href="https://apps.apple.com/in/app/hommile/id6744694127" 
+                  href="https://apps.apple.com/in/app/hommile/id6744694127 " 
                   target="_blank"
                   rel="noopener noreferrer"
                 >
