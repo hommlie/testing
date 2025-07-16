@@ -85,6 +85,44 @@ const HomePage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const searchTimeoutRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const [isListening, setIsListening] = useState(false);
+  const [isSupported, setIsSupported] = useState(true);
+  const handleMicClick = () => {
+  if (!SpeechRecognition) {
+    setIsSupported(false);
+    alert("Voice recognition is not supported in this browser.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false; // stop after one phrase
+  recognition.interimResults = false;
+  recognition.lang = "en-IN";
+
+  recognition.onstart = () => {
+    setIsListening(true);
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    setSearchTerm(transcript);
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    alert("Error occurred during speech recognition.");
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
+
+  recognition.start();
+};
+  
+  const searchInputRef = useRef(null);
 
   // Add states for all dynamic data
   const [data, setData] = useState({
@@ -221,6 +259,13 @@ const HomePage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+  if (!SpeechRecognition) {
+    setIsSupported(false);
+  }
+}, []);
+
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -432,20 +477,36 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
             <div className="sm:block md:hidden">
               <div className="relative">
                 <input
+                  ref={searchInputRef}
                   type="text"
                   placeholder={`Search ${services[placeholderIndex]}...`}
-                  className="w-full pl-4 pr-16 py-3 text-base border border-gray-300 bg-[#f9f9f9] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                  className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                   value={searchTerm}
                   onChange={handleSearchChange}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                 />
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-gray-700 text-xl">
-                  <BiSearchAlt className="cursor-pointer hover:text-emerald-900" />
-                  <BsMicFill className="cursor-pointer hover:text-emerald-900" />
+                  <BiSearchAlt
+                    className="cursor-pointer hover:text-emerald-900 transition-colors"
+                    onClick={() => {
+                      setIsSearchFocused(true);
+                      searchInputRef.current?.focus();
+                    }}
+                  />
+                  <BsMicFill
+                    className={`cursor-pointer hover:text-emerald-900 transition-colors ${
+                      isListening ? 'text-red-500 animate-pulse' : ''
+                    }`}
+                    onClick={handleMicClick}
+                  />
                 </div>
               </div>
-
+              {!isSupported && (
+                <p className="text-red-600 mt-2 text-sm">
+                  Your browser does not support voice search. Please try using Chrome on desktop or Android.
+                </p>
+              )}
               {/* Trending Search Dropdown */}
               {isSearchFocused && searchTerm.length === 0 && (
                 <div className="mt-3 bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-50">

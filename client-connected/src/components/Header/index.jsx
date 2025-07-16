@@ -38,6 +38,8 @@ import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
 import HelpModal from "../HelpModal";
 
+
+
 const Header = ({
   logo,
   logoAlt,
@@ -50,6 +52,8 @@ const Header = ({
   const [isGetAppModalOpen, setIsGetAppModalOpen] = useState(false);
   const [showMobileBanner, setShowMobileBanner] = useState(true);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const searchInputRef = useRef(null);
 
   const {
     user,
@@ -66,7 +70,9 @@ const Header = ({
     bookings,
     prodData,
   } = useCont();
-
+  
+  const [isListening, setIsListening] = useState(false);
+  const [isSupported, setIsSupported] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -106,6 +112,39 @@ const Header = ({
     notify("Successfully logged out", "success");
     navigate("/");
   };
+
+  const handleMicClick = () => {
+  if (!SpeechRecognition) {
+    setIsSupported(false);
+    alert("Voice recognition is not supported in this browser.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false; // stop after one phrase
+  recognition.interimResults = false;
+  recognition.lang = "en-IN";
+
+  recognition.onstart = () => {
+    setIsListening(true);
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    setSearchTerm(transcript);
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    alert("Error occurred during speech recognition.");
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
+
+  recognition.start();
+};
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -196,6 +235,13 @@ const Header = ({
       }
     };
   }, []);
+
+  useEffect(() => {
+  if (!SpeechRecognition) {
+    setIsSupported(false);
+  }
+}, []);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -427,18 +473,35 @@ useEffect(() => {
               <div className="w-[550px] hidden lg:block">
                 <div className="relative">
                   <input
+                    ref={searchInputRef}
                     type="text"
                     placeholder={`Search ${services[placeholderIndex]}...`}
                     className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} // delay to allow click
+                    onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                   />
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-black text-xl">
-                    <BiSearchAlt className="cursor-pointer hover:text-emerald-900 transition-colors" />
-                    <BsMicFill className="cursor-pointer hover:text-emerald-900 transition-colors" />
+                    <BiSearchAlt
+                      className="cursor-pointer hover:text-emerald-900 transition-colors"
+                      onClick={() => {
+                        setIsSearchFocused(true);
+                        searchInputRef.current?.focus();
+                      }}
+                    />
+                    <BsMicFill
+                      className={`cursor-pointer transition-colors ${
+                        isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-emerald-900'
+                      }`}
+                      onClick={isSupported ? handleMicClick : () => alert("Voice search is not supported in this browser.")}
+                    />
                   </div>
+                  {!isSupported && (
+                    <p className="text-sm text-red-600 mt-2">
+                      Your browser does not support voice search. Please try using Chrome on desktop or Android.
+                    </p>
+                  )}
                   {isSearchFocused && searchTerm.length === 0 && (
                     <div className="absolute top-full left-0 mt-3 w-full bg-white rounded-2xl shadow-xl border border-gray-200 z-50 p-5 max-h-96 overflow-y-auto transition-all duration-200">
                       <h3 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
