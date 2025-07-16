@@ -757,7 +757,7 @@ useEffect(() => {
                   <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
                 </a>
                 <a
-                  href="https://apps.apple.com/in/app/hommile/id6744694127 " 
+                  href="https://apps.apple.com/in/app/hommile/id6744694127" 
                   target="_blank"
                   rel="noopener noreferrer"
                 >
