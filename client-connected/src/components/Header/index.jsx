@@ -584,13 +584,13 @@ useEffect(() => {
                <img src={ondc} alt="ONDC Logo" className="h-9 w-9 object-contain" />
             </NavLink>
            
-            {/* <div className="relative">
+            <div className="relative">
               {user?.length !== 0 ? (
                 <button
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
                   className="flex items-center space-x-2"
                 >
-                  <div className="block md:hidden relative">
+                  {/* <div className="block md:hidden relative">
                     <img
                       src={user?.profileImage || userIcon}
                       alt="Profile"
@@ -599,7 +599,7 @@ useEffect(() => {
                     {isLoginOpen && (
                       <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
                     )}
-                  </div>
+                  </div> */}
                 </button>
               ) : null}
 
@@ -683,7 +683,7 @@ useEffect(() => {
                   </button>
                 </div>
               )}
-            </div> */}
+            </div>
 
             <div className="md:hidden flex items-center gap-4">
               <button
