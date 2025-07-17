@@ -116,7 +116,12 @@ export default function Footer({
             </div>
 
             <div className="block">
-              <div className="flex flex-col gap-4 text-white">
+              <div className="flex flex-col gap-4 -mt-4 text-white">
+                <img
+                  src="/assets/logo/qr.png"
+                  alt="Download QR"
+                  className="w-40 h-auto ml-1"
+                />
                 <a
                   href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
                   className="rounded-xl flex flex-row justify-center items-center gap-2"
@@ -189,7 +194,6 @@ export default function Footer({
     </footer>
   );
 }
-
 
 
 const FooterSection = ({ title, links, hideinMobile }) => (
