@@ -146,43 +146,43 @@ const Header = ({
   recognition.start();
 };
 
-  const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      setCurrentLocation("Bannerghatta, Bangalore");
-      return;
-    }
+ const getCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    setCurrentLocation("Bannerghatta, Bangalore");
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
-          );
-          const data = await response.json();
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
+        );
+        const data = await response.json();
 
-          if (data.results && data.results[0]) {
-            const locationStings =
-              data.results[0]?.formatted_address.split(",");
-            if (locationStings.length > 2) {
-              setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
-            } else {
-              setCurrentLocation(data.results[0]?.formatted_address);
-            }
+        if (data.results && data.results[0]) {
+          const locationStings = data.results[0]?.formatted_address.split(",");
+          if (locationStings.length > 2) {
+            setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
           } else {
-            setCurrentLocation("Location could not be fetched");
+            setCurrentLocation(data.results[0]?.formatted_address);
           }
-        } catch (error) {
-          console.error("Error fetching location details:", error);
-          setCurrentLocation("Bannerghatta, Bangalore");
+        } else {
+          setCurrentLocation("Location could not be fetched");
         }
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
+      } catch (error) {
+        console.error("Error fetching location details:", error);
         setCurrentLocation("Bannerghatta, Bangalore");
       }
-    );
-  };
+    },
+    (error) => {
+      console.error("Geolocation error:", error);
+      setCurrentLocation("Bannerghatta, Bangalore");
+    }
+  );
+};
+
 
   useEffect(() => {
     getCurrentLocation();
@@ -428,42 +428,57 @@ useEffect(() => {
                 </NavLink>
               </div>
               <div className="flex sm:hidden">
-          <button
-            onClick={() => setIsLocationModalOpen(true)}
-            className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
-          >
-            <div className="flex flex-col text-left">
-              <div className="text-sm font-medium text-black flex items-center">
-                <MdLocationOn className="text-black mr-1 text-lg" />
-                Delivery in 40 min
+                <button
+                  onClick={() => setIsLocationModalOpen(true)}
+                  className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex flex-col text-left">
+                    <div className="text-sm font-medium text-black flex items-center">
+                      <MdLocationOn className="text-black mr-1 text-lg" />
+                      Delivery in 40 min
+                    </div>
+                    <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
+                      <span className="truncate">{currentLocation}</span>
+                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
+                    </div>
+                  </div>
+                </button>
               </div>
-              <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                <span className="truncate">{currentLocation}</span>
-                <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
-              </div>
-            </div>
-          </button>
-        </div>
             <div className="hidden sm:block h-10 w-px bg-gray-200 mx-3"></div>
 
             {/* Location and Search Section */}
             <div className="hidden sm:flex pl-2 items-center gap-6 w-full justify-between">
               {/* Location Button */}
-              <div className="flex-1 max-w-md">
+              {/* <div className="flex-1 max-w-md">
                 <button
                   onClick={() => setIsLocationModalOpen(true)}
                   className="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors w-full group"
                 >
-                  <div className="flex flex-col">
-                    <div className="text-sm font-semibold text-black flex items-center">
+                  <div className="flex flex-col text-left">
+                    <div className="text-sm font-medium text-black flex items-center">
                       <MdLocationOn className="text-black mr-1 text-lg" />
-                      Delivery in 60 minutes
+                      Delivery in 60 min
                     </div>
-                    <div className="flex items-center text-sm text-gray-700">
-                      <span className="truncate max-w-[200px]">
-                        No 347, 6th Main Rd, Nagendra Block, Bangalore
-                      </span>
-                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg group-hover:text-emerald-600 transition-colors" />
+                    <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
+                      <span className="truncate">{currentLocation}</span>
+                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
+                    </div>
+                  </div>
+                </button>
+              </div> */}
+              <div className="flex-1 max-w-md">
+                <button
+                  onClick={() => setIsLocationModalOpen(true)}
+                  className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex flex-col text-left">
+                    <div className="text-sm font-medium text-black flex items-center">
+                      <MdLocationOn className="text-black mr-1 text-lg" />
+                      Delivery in 40 min
+                    </div>
+                    <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
+                      <span className="truncate">{currentLocation}</span>
+                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
                     </div>
                   </div>
                 </button>
