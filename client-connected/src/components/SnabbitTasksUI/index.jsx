@@ -87,11 +87,19 @@ export default function QuickHeroSection() {
       >
         <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#F3E8D3] relative overflow-hidden">
           <div className="w-20 h-4 rounded-full bg-black mt-2 mb-2 mx-auto"></div>
-          <div className="h-[440px] flex items-center justify-center relative">
+          <div className="flex flex-col items-center justify-center  space-y-0 h-[420px]">
+            {/* Hommlie Logo */}
             <img
               src="/assets/logo/homlogo.png"
               alt="Hommlie Logo"
-              className="absolute top-4 w-40 h-auto"
+              className="w-40 -mt-20 h-auto"
+            />
+
+            {/* QR Code */}
+            <img
+              src="/assets/logo/qr.png"
+              alt="Download QR"
+              className="w-40 h-auto"
             />
           </div>
         </div>
