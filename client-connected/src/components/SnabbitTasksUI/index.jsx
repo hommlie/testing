@@ -99,7 +99,7 @@ export default function QuickHeroSection() {
             <img
               src="/assets/logo/qr.png"
               alt="Download QR"
-              className="w-40 h-auto"
+              className="w-40 h-auto ml-1"
             />
           </div>
         </div>
