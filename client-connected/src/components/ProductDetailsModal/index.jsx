@@ -493,64 +493,64 @@ const ProductDetailModal = ({
   };
 
   const AddButton = ({ variation }) => {
-    if (product?.category?.is_form === 1) {
-      return (
-        <button
-          className="absolute bottom-4 right-5 text-white bg-emerald-600 rounded-lg px-4 py-2 hover:bg-emerald-700 transition-colors shadow-lg flex items-center space-x-2"
-          onClick={() => setIsInspectionModalOpen(true)}
-        >
-          {/* <Calendar className="w-4 h-4" /> */}
-          <span>Book Inspection</span>
-        </button>
-      );
-    }
-
-    const totalCart = cart.filter((ct) => ct.product_id === product.id);
-    const specificCart = totalCart?.filter(
-      (ct) => ct?.variation == variation.id
+  if (product?.category?.is_form === 1) {
+    return (
+      <button
+        className="text-white bg-emerald-600 rounded-lg px-4 py-2 hover:bg-emerald-700 transition-colors shadow-lg"
+        onClick={() => setIsInspectionModalOpen(true)}
+      >
+        Book Inspection
+      </button>
     );
+  }
 
-    if (isAddingToCart) {
-      return (
-        <div className="absolute bottom-0 right-12 w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
-          <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      );
-    }
+  const totalCart = cart.filter((ct) => ct.product_id === product.id);
+  const specificCart = totalCart?.filter((ct) => ct?.variation == variation.id);
 
-    if (specificCart.length !== 0) {
-      return (
-        <div className="absolute bottom-0 right-6 w-28 h-9 flex justify-around items-center text-2xl font-semibold rounded-lg bg-white shadow-lg">
+  if (isAddingToCart) {
+    return (
+      <div className="w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
+        <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 w-max">
+      {specificCart.length !== 0 ? (
+        <div className="flex items-center gap-3 bg-white shadow rounded-lg px-3 py-1">
           <button
             onClick={() =>
               handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty - 1)
             }
-            className="text-emerald-600"
+            className="text-emerald-600 text-lg font-bold"
           >
-            -
+            −
           </button>
-          <span className="text-emerald-600">{specificCart[0]?.qty}</span>
+          <span className="text-emerald-600 font-medium text-base">
+            {specificCart[0]?.qty}
+          </span>
           <button
             onClick={() =>
               handleQtyUpdate(specificCart[0]?.id, specificCart[0]?.qty + 1)
             }
-            className="text-emerald-600"
+            className="text-emerald-600 text-lg font-bold"
           >
             +
           </button>
         </div>
-      );
-    }
+      ) : (
+        <button
+          className="text-emerald-600 rounded-lg px-4 py-2 bg-white shadow hover:bg-emerald-50"
+          onClick={() => handleAddToCart(variation)}
+        >
+          Add
+        </button>
+      )}
+    </div>
+  );
+};
 
-    return (
-      <button
-        className="absolute bottom-0 right-12 text-emerald-600 rounded-lg px-4 py-2 bg-white shadow-lg hover:bg-emerald-50"
-        onClick={() => handleAddToCart(variation)}
-      >
-        Add
-      </button>
-    );
-  };
 
   if (!isOpen) return null;
 
@@ -590,6 +590,34 @@ const ProductDetailModal = ({
                 )}
               </div>
             )}
+              {displayedAttributes?.length === 1 && (
+                <>
+                  <h3 className="text-lg font-semibold text-gray-800 mt-3">
+                    {displayedAttributes[0].attribute_name}
+                  </h3>
+
+                  {/* Description for single attribute, using first variation */}
+                  {displayedAttributes[0]?.variations?.[0]?.description && (
+                    <div className="mt-2">
+                      <ul className="space-y-1">
+                        {displayedAttributes[0].variations[0].description
+                          .split("|")
+                          .map((desc) => desc.trim())
+                          .filter((desc) => desc)
+                          .map((desc, index) => (
+                            <li
+                              key={index}
+                              className="flex items-start space-x-2 text-sm text-gray-600"
+                            >
+                              <span className="text-black">•</span>
+                              <span>{desc}</span>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
+              )}
             <div className="w-full flex space-x-4 mt-4">
               {tabs.map((tab) => (
                 <button
@@ -614,38 +642,31 @@ const ProductDetailModal = ({
                 {/* Carousel Section */}
                 {displayedAttributes?.map((attribute) => (
                   <div key={attribute.attribute_id} className="space-y-4">
-                    <h3 className="text-lg font-semibold">
+                    {/* <h3 className="text-lg font-semibold">
                       {attribute.attribute_name}
-                    </h3>
-                    <div className="space-y-4">
-                      {attribute?.variations?.map((variation) => (
-                        <div
-                          key={variation.id}
-                          className="flex flex-col md:flex-row border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
-                        >
-                          {/* Content Section */}
-                          <div className="flex-1 p-4">
-                            <div className="space-y-3">
-                              <h4 className="font-medium">
-                                {variation.variation}
-                              </h4>
+                    </h3> */}
+                    <div
+                      className="relative overflow-x-auto"
+                      ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
+                    >
+                      <div className="flex gap-4 min-w-max py-2 px-1">
+                        {attribute?.variations?.map((variation) => (
+                          <div
+                            key={variation.id}
+                            className="w-[230px] -mt-2 flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                          >
+                            <div className="p-4 space-y-3">
+                              <h4 className="font-medium">{variation.variation}</h4>
 
-                              {/* Rating and Reviews */}
-                              {(variation.avg_rating ||
-                                variation.total_reviews) && (
+                              {/* Ratings */}
+                              {(variation.avg_rating || variation.total_reviews) && (
                                 <div className="flex items-center space-x-2">
-                                  {variation.avg_rating && (
-                                    <StarRating rating={variation.avg_rating} />
-                                  )}
+                                  {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
                                   {variation.total_reviews && (
                                     <span className="text-sm text-gray-500">
-                                      (
-                                      {variation.total_reviews >= 1000
-                                        ? `${(
-                                            variation.total_reviews / 1000
-                                          ).toFixed(1)}K`
-                                        : variation.total_reviews}{" "}
-                                      reviews)
+                                      ({variation.total_reviews >= 1000
+                                        ? `${(variation.total_reviews / 1000).toFixed(1)}K`
+                                        : variation.total_reviews} reviews)
                                     </span>
                                   )}
                                 </div>
@@ -656,41 +677,24 @@ const ProductDetailModal = ({
                                 <span className="text-emerald-600 font-medium">
                                   ₹{variation.discounted_variation_price}
                                 </span>
-                                {variation.price !==
-                                  variation.discounted_variation_price && (
+                                {variation.price !== variation.discounted_variation_price && (
                                   <span className="text-gray-500 line-through">
                                     ₹{variation.price}
                                   </span>
                                 )}
                               </div>
 
-                              {/* Description */}
-                              {variation.description && (
-                                <div className="space-y-2">
-                                  <ul className="space-y-1">
-                                    {variation.description
-                                      .split("|")
-                                      .map((desc) => desc.trim())
-                                      .filter((desc) => desc)
-                                      .map((desc, index) => (
-                                        <li
-                                          key={index}
-                                          className="flex items-start space-x-2"
-                                        >
-                                          <span className="text-black">•</span>
-                                          <span className="text-gray-600 text-sm">
-                                            {desc}
-                                          </span>
-                                        </li>
-                                      ))}
-                                  </ul>
-                                </div>
-                              )}
+                              {/* Add Button or Qty Control */}
+                              <AddButton variation={variation} />
                             </div>
                           </div>
-
-                          {/* Image Section with Overlapped Add Button */}
-                          <div className="relative w-40 h-40 flex items-center p-4">
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {/* Image Section with Overlapped Add Button */}
+                          {/* <div className="relative w-0 h-0 flex items-center p-4">
                             {variation.image && (
                               <img
                                 src={variation.image}
@@ -699,12 +703,7 @@ const ProductDetailModal = ({
                               />
                             )}
                             <AddButton variation={variation} />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                          </div> */}
 
                 {/* Description Section */}
                 {/* <div
