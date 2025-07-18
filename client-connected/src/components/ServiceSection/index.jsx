@@ -7,7 +7,7 @@ import config from "../../config/config";
 import LoginSignup from "../LoginModal";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
-import FormSection from "../../pages/FormSection";
+import Requestacallback from "../../pages/Requestacallback";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
@@ -486,7 +486,7 @@ const ServiceSection = ({ categories }) => {
 
   return (
     <>
-      <FormSection />
+      <Requestacallback />
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Category tabs */}
         <div className="mb-0 text-center">

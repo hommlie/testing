@@ -218,36 +218,39 @@ const ServiceGrid = () => {
         "Repair services"
       ]
     },
-    {
-      id: 7,
-      name: "Plumbing",
-      image: "/images/plumbing1.png",
-      description: "Expert plumbing solutions for residential and commercial properties. From leak repairs to complete plumbing system overhauls.",
-      details: [
-        "Pipe repairs",
-        "Drain cleaning",
-        "Fixture installation",
-        "Water heater services"
-      ]
-    },
-    {
-      id: 8,
-      name: "Painting",
-      image: "/images/painting1.png",
-      description: "Professional painting services for interiors and exteriors. We use high-quality paints and provide flawless finishes.",
-      details: [
-        "Wall painting",
-        "Woodwork painting",
-        "Texture finishes",
-        "Waterproofing"
-      ]
-    }
+    // {
+    //   id: 7,
+    //   name: "Plumbing",
+    //   image: "/images/plumbing1.png",
+    //   description: "Expert plumbing solutions for residential and commercial properties. From leak repairs to complete plumbing system overhauls.",
+    //   details: [
+    //     "Pipe repairs",
+    //     "Drain cleaning",
+    //     "Fixture installation",
+    //     "Water heater services"
+    //   ]
+    // },
+    // {
+    //   id: 8,
+    //   name: "Painting",
+    //   image: "/images/painting1.png",
+    //   description: "Professional painting services for interiors and exteriors. We use high-quality paints and provide flawless finishes.",
+    //   details: [
+    //     "Wall painting",
+    //     "Woodwork painting",
+    //     "Texture finishes",
+    //     "Waterproofing"
+    //   ]
+    // }
   ];
   const [showComingSoon, setShowComingSoon] = useState(false);
 
   return (
     <div className="p-4">
       <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:bg-white sm:shadow-md ml-1">
+        <h2 className=" sm:text-xl font-bold text-gray-500 sm:ml-7 ml-4 mb-2 sm:mb-4">
+          On-demand Services In Bnaglore
+        </h2>
         <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3">
           {services.map((service) => (
             <div

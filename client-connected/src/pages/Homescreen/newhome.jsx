@@ -449,26 +449,34 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       <Helmet>
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
-      {/* Hero Section */}
       {/* Typewriter Hero Headline - Desktop Only */}
       <section className="hidden md:block w-full px-5 md:px-10 pt-6 pb-0 text-center md:text-left">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800">
-            On-Demand Home Services
-            <span className="text-[#f70000] inline-block ml-2">
+          <h1 className="text-2xl ml-1 font-bold text-gray-800">
+            <span className="text-black inline-block">
               <Typewriter
-                words={["in Bangalore"]}
-                loop={false}
+                words={[
+                  "Trained & Verified Professionals",
+                  "Available All 365 Days",
+                  "Warranty-Backed Services",
+                  "Easy to Book, Easy to Use",
+                  "Friendly Customer Support",
+                  "Rated by People Like You",
+                  "India’s Most Trusted Home Service App",
+                  "Transparent Prices. No Surprises."
+                ]}
+                loop={true}
                 cursor
                 cursorStyle="|"
-                typeSpeed={100}
-                deleteSpeed={50}
-                delaySpeed={1000}
+                typeSpeed={50}
+                deleteSpeed={40}
+                delaySpeed={1500}
               />
             </span>
           </h1>
         </div>
       </section>
+
       <section className="max-w-7xl mx-auto px-5 py-5 bg-white">
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
@@ -536,9 +544,9 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
             <ServiceGrid />
 
             {/* Stats Section - Desktop only */}
-            <div className="hidden md:block">
+            {/* <div className="hidden md:block">
               <StatsSection />
-            </div>
+            </div> */}
           </div>
 
 
