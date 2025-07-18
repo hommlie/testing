@@ -336,7 +336,7 @@ const ServiceSection = ({ categories }) => {
           h-[460px] sm:h-[460px] md:h-[460px] lg:h-[460px]
           ${
             isSelected
-              ? " bg-[#92B775] shadow-lg"
+              ? "shadow-lg"
               : "bg-white hover:shadow-md"
           }`}
       >
@@ -358,10 +358,8 @@ const ServiceSection = ({ categories }) => {
             </h3>
             {selectedAttr?.attribute && (
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  isSelected
-                    ? "bg-white text-black"
-                    : "bg-[#92B775] text-black"
+                className={`px-3 py-1 rounded-md text-sm font-medium border shadow ${
+                  isSelected ? "bg-white text-black" : "bg-white text-black"
                 }`}
               >
                 {selectedAttr.attribute}
@@ -461,8 +459,8 @@ const ServiceSection = ({ categories }) => {
               }}
               className={`w-full py-3 rounded-lg font-bold transition-colors ${
                 isSelected
-                  ? "bg-[#133215] text-white hover:bg-[#f3e8d3] hover:text-black"
-                  : "bg-[#133215] text-white hover:bg-[#f3e8d3] hover:text-black"
+                  ? "bg-[#92b876] text-white hover:bg-[#133215] hover:text-white"
+                  : "bg-[#92b876] text-white hover:bg-[#133215] hover:text-white"
               } ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}
@@ -504,7 +502,7 @@ const ServiceSection = ({ categories }) => {
                   className={`w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                     ${
                       selectedCategory === category.id
-                        ? "bg-[#92B775] text-black shadow-md"
+                        ? "bg-[#92B775] text-white shadow-md"
                         : "bg-white text-gray-800 border border-gray-200 hover:border-black"
                     }`}
                 >

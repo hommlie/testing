@@ -248,10 +248,10 @@ const ServiceGrid = () => {
   return (
     <div className="p-4">
       <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:bg-white sm:shadow-md ml-1">
-        <h2 className=" sm:text-xl font-bold text-gray-500 sm:ml-7 ml-4 mb-2 sm:mb-4">
+        <h2 className=" sm:text-xl font-bold text-gray-500 sm:ml-7 ml-4 sm:mb-2">
           On-demand Services In Bnaglore
         </h2>
-        <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3">
+        <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
           {services.map((service) => (
             <div
               key={service.id}
