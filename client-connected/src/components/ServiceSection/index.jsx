@@ -246,7 +246,7 @@ const ServiceSection = ({ categories }) => {
     };
 
     return (
-      <div className="relative w-full" ref={dropdownRef}>
+      <div className="relative w-full " ref={dropdownRef}>
         <button
           type="button"
           onClick={() => !disabled && setIsOpen(!isOpen)}
@@ -334,12 +334,8 @@ const ServiceSection = ({ categories }) => {
         whileHover={{ y: -5 }}
         className={`relative w-full max-w-[360px] rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col justify-between 
           h-[460px] sm:h-[460px] md:h-[460px] lg:h-[460px]
-          ${
-            isSelected
-              ? "shadow-lg"
-              : "bg-white hover:shadow-md"
-          }`}
-      >
+          bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
+        >
         {/* Recommended badge - Improved UI */}
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2 z-10">
@@ -484,9 +480,10 @@ const ServiceSection = ({ categories }) => {
 
   return (
     <>
-      <Requestacallback />
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Category tabs */}
+        <div className="mb-5 -mt-12"><Requestacallback/> </div>
+        
         <div className="mb-0 text-center">
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
             Choose Your Service Category

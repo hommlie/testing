@@ -160,7 +160,7 @@ const InspectionFormSection = () => {
 
 
         {/* Booking Form */}
-        <div className="bg-white mr-3 p-6 sm:p-8 rounded-2xl shadow-sm border border-black">
+        <div className="bg-white mr-3 p-6 sm:p-8 rounded-2xl shadow-sm border ">
           <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
             {[1, 2].map((s, i) => (
               <React.Fragment key={s}>

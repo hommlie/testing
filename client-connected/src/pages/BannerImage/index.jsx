@@ -5,7 +5,7 @@ const BannerImage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="hidden sm:flex w-full justify-center">
+    <div className="hidden sm:flex w-full justify-center -mb-3 mt-6" >
       <div className="relative rounded-lg overflow-hidden">
         <img
           src="/images/banner.png"

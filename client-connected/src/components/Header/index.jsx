@@ -37,6 +37,7 @@ import bannerBg from '../../assets/images/navbarimage4.png';
 import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
 import HelpModal from "../HelpModal";
+import { FaTag } from 'react-icons/fa';
 
 
 
@@ -305,10 +306,30 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, []);
 
+const offers = [
+  "RoachX Gel Treatment – ₹399",
+  "General Pest Control – ₹899",
+  "Standard Cockroach Control – ₹999 + GST",
+  "6D Prime Cockroach – ₹1199",
+  "Bedbugs Standard – ₹2499",
+];
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % offers.length);
+    }, 4000); // show each offer for 4 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-20 bg-white shadow-sm font-sans"
+      className="w-full sticky top-0 z-20 shadow-sm font-sans"
+      style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
     >
       {showMobileBanner && (
         <div className="block sm:hidden bg-[#92b775] text-white text-sm px-4 py-2 flex justify-between items-center">
@@ -331,87 +352,116 @@ useEffect(() => {
       
       {/* Top Header with contact and social info */}
       <div className="">
-        <div className="hidden lg:block max-w-7xl mx-auto w-full">
-          <div
-            className=" text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0"
-            style={{
-              backgroundImage: `url(${bannerBg})`,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-            }}
-          >
-            {/* Left: Brand + Message */}
-              <span className="mr-4 font-normal text-black">
-                <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
-                  <button
-                    className="px-3 py-0 pb-1 bg-[#92b775] text-white"
-                  >
-                    Residential
-                  </button>
-                  <a
-                    href="https://b2b.hommlie.com"
-                    className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
-                  >
-                    Commercial
-                  </a>
-                </div>
-              </span>
-            {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold">
-              <button
-                onClick={() => setIsGetAppModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors "
-              >
-                <FaMobileAlt className="text-inherit" />
-                Get App
-              </button>
-              <span className="hidden md:inline-block text-black">|</span>
+  <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
+    <div
+      className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
+      // style={{
+      //   backgroundImage: `url(${bannerBg})`,
+      //   backgroundSize: 'cover',
+      //   backgroundRepeat: 'no-repeat',
+      //   backgroundPosition: 'center',
+      // }}
+    >
+      {/* Centered Offer Line */}
 
-              {user?.length === 0 ? (
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-                >
-                  <FaSignInAlt className="text-inherit" />
-                  Login
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsLoginOpen(!isLoginOpen)}
-                  className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
-                >
-                  <FaUser className="text-black text-base" />
-                  <span className="text-black font-medium">Account</span>
-                </button>
-              )}
-             <span className="hidden md:inline-block text-black">|</span>
-
-              <button
-                onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-              >
-                <FaShoppingCart className="text-inherit" />
-                Cart
-                {cart?.length > 0 && (
-                  <span className="ml-1 bg-amber-200 text-emerald-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-                    {cart?.length}
-                  </span>
-                )}
-              </button>
-              <span className="hidden md:inline-block text-black">|</span>
-
-              <button
-                onClick={() => setIsHelpModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-              >
-                <FaQuestionCircle className="text-inherit" />
-                Help
-              </button>
-            </div>
-          </div>
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={offers[current]}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+              className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
+            >
+              🛡️ {offers[current]}
+            </motion.p>
+          </AnimatePresence>
         </div>
+
+      {/* Left: Brand + Message */}
+      <span className=" font-normal text-black z-20">
+        <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
+          <button className="px-3 py-0 pb-1 bg-[#92b775] text-white">Residential</button>
+          <a
+            href="https://b2b.hommlie.com"
+            className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
+          >
+            Commercial
+          </a>
+        </div>
+      </span>
+
+      {/* Right: Action Links */}
+      <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold z-20">
+        <button
+          onClick={() => setIsGetAppModalOpen(true)}
+          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+        >
+          <FaMobileAlt className="text-inherit" />
+          Get App
+        </button>
+        <span className="hidden md:inline-block text-black">|</span>
+        
+        <button
+          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+        >
+          <FaTag className="text-inherit" />
+          Offer
+        </button>
+         <span className="hidden md:inline-block text-black">|</span>
+         <button
+            className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+          >
+            <FaShoppingCart className="text-inherit" />
+            Product
+          </button>
+         <span className="hidden md:inline-block text-black">|</span>
+        {user?.length === 0 ? (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+          >
+            <FaSignInAlt className="text-inherit" />
+            Login
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsLoginOpen(!isLoginOpen)}
+            className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
+          >
+            <FaUser className="text-black text-base" />
+            <span className="text-black font-medium">Account</span>
+          </button>
+        )}
+        <span className="hidden md:inline-block text-black">|</span>
+
+        <button
+          onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
+          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+        >
+          <FaShoppingCart className="text-inherit" />
+          Cart
+          {cart?.length > 0 && (
+            <span className="ml-1 bg-amber-200 text-emerald-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+              {cart?.length}
+            </span>
+          )}
+        </button>
+        <span className="hidden md:inline-block text-black">|</span>
+
+        <button
+          onClick={() => setIsHelpModalOpen(true)}
+          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+        >
+          <FaQuestionCircle className="text-inherit" />
+          Help
+        </button>
       </div>
+    </div>
+  </div>
+</div>
+
 
           <div className="max-w-7xl mx-auto px-2 lg:px-8">
             {/* Main Header */}
@@ -485,7 +535,7 @@ useEffect(() => {
               </div>
 
               {/* Search Bar */}
-              <div className="w-[550px] hidden lg:block">
+              <div className="w-[630px] hidden lg:block">
                 <div className="relative">
                   <input
                     ref={searchInputRef}
@@ -596,7 +646,7 @@ useEffect(() => {
               className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#92B775] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
             >
                <span className="font-medium">Join ONDC</span>
-               <img src={ondc} alt="ONDC Logo" className="h-9 w-9 object-contain" />
+               <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" />
             </NavLink>
            
             <div className="relative">

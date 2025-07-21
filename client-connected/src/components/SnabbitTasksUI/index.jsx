@@ -30,9 +30,9 @@ export default function QuickHeroSection() {
   const phoneY = useTransform(scrollYProgress, [0, 0.4], ['20%', '104%']);
 
   return (
-    <div ref={containerRef} className="hidden sm:block relative overflow-hidden mr-2">
+    <div ref={containerRef} className="hidden sm:block relative overflow-hidden mr-2" >
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-white to-[#fef4f6] pb-12 text-center overflow-hidden">
+      <section className="relative  pb-12 text-center overflow-hidden" >
         {/* <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-4">
           INDIA'S FIRST <br />
           <span className="inline-block relative text-[#fcce00] font-extrabold italic">
@@ -106,15 +106,21 @@ export default function QuickHeroSection() {
       </motion.div>
 
       {/* Scrolling Cards Section */}
-      <section ref={cardsRef} className="bg-[#92B775] text-black min-h-[650px] pt-[15px] pb-[120px] relative z-0">
+      <section
+        ref={cardsRef}
+        className="text-black min-h-[650px] pt-[15px] pb-[120px] relative z-0"
+        style={{
+          background: "linear-gradient(180deg, #F5D8CC 0%, #E0E5F7 100%)"
+        }}
+      >
         <div className="flex flex-col items-center px-4">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
-         Instant Home Services, <br />
-        </h2>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
-          <span className="text-3xl md:text-5xl italic font-extrabold text-white leading-tight mb-4">
-           Right at Your Doorstep
-          </span>{' '}
+            Instant Home Services, <br />
+          </h2>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
+            <span className="text-3xl md:text-5xl italic font-extrabold text-[#92b876] leading-tight mb-4">
+            Right at Your Doorstep
+            </span>{' '}
         </h1>
           <motion.p
             className="text-xl text-[#483fa1] mt-4 mb-32"

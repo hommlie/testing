@@ -36,7 +36,7 @@ import {
   FaEllipsisH 
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
-import photo1 from '../../assets/images/photo1.jpg';
+import photo1 from '../../assets/images/photo1.png';
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
@@ -67,6 +67,7 @@ import Offermobile from '../Offermobile'
 import Scrapbanner from '../Scrapbanner'
 import Scrapmobile from '../Scrapmobile'
 import Refermobile  from '../Refermobile'
+import Roadmap from "../../components/Roadmap";
 
 const HomePage = () => {
   const { user } = useCont();
@@ -444,26 +445,38 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 
   return (
-    <div className="min-h-screen font-headerFont">
+    <div
+      className="bg-cover bg-center bg-no-repeat font-headerFont"
+    >
       <SchemaMarkup />
       <Helmet>
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
       {/* Typewriter Hero Headline - Desktop Only */}
-      <section className="hidden md:block w-full px-5 md:px-10 pt-6 pb-0 text-center md:text-left">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl ml-1 font-bold text-gray-800">
-            <span className="text-black inline-block">
+      
+      <section
+          className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-center bg-no-repeat "
+          style={{background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",}}>
+          <div className="hidden md:flex max-w-7xl ml-14 mt-4 mx-auto">
+            <h1 className="text-2xl font-bold text-gray-800 ml-10">
+              <span
+              style={{
+                background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                display: "inline-block"
+              }}
+            >
               <Typewriter
                 words={[
-                  "Trained & Verified Professionals",
-                  "Available All 365 Days",
-                  "Warranty-Backed Services",
-                  "Easy to Book, Easy to Use",
-                  "Friendly Customer Support",
-                  "Rated by People Like You",
-                  "India’s Most Trusted Home Service App",
-                  "Transparent Prices. No Surprises."
+                  "Trained & Verified Professionals..",
+                  "Available All 365 Days..",
+                  "Warranty-Backed Services..",
+                  "Easy to Book, Easy to Use..",
+                  "Friendly Customer Support..",
+                  "Rated by People Like You (4.9 +)..",
+                  "India’s Most Trusted Home Service App..",
+                  "Transparent Prices. No Surprises.."
                 ]}
                 loop={true}
                 cursor
@@ -473,11 +486,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                 delaySpeed={1500}
               />
             </span>
-          </h1>
-        </div>
-      </section>
-
-      <section className="max-w-7xl mx-auto px-5 py-5 bg-white">
+            </h1>
+          </div>
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">
@@ -542,32 +552,44 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
             {/* Always show on both desktop and mobile */}
             <ServiceGrid />
-
-            {/* Stats Section - Desktop only */}
-            {/* <div className="hidden md:block">
-              <StatsSection />
-            </div> */}
+             
+            
           </div>
-
-
-
-    {/* Right Container - Images */}
     
-    <div className="hidden md:block w-[554px] -mt-10">
-      <div className="h-[630px] rounded-lg overflow-hidden bg-gray-200">
-        <img 
-          src={photo1} // Replace with your single image
-          alt="Home Service Full View" 
-          className="h-full w-full object-cover object-center"
-        />
-      </div>
-    </div>
-
-
-  </div>
-</section>
+          <div className="hidden md:block w-[552px] -mt-10">
+            <div className="h-[595px] rounded-lg overflow-hidden">
+              <img 
+                src={photo1} // Replace with your single image
+                alt="Home Service Full View" 
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+          </div>
+        </div>
+        
+        <ServiceSection categories={data.all_categories} />
+        <Roadmap />   
+        <section className="px-2 sm:px-7">
+          <BannerImageMobile />
+          <BannerImage />
+        </section>
+        
+        <section className=" px-6 py-5 md:py-10">
+          <SnabbitTasksUI />
+        </section> 
+        <section className="px-6 sm:px-7">
+          <Testimonials />
+        </section>
+        <section className="px-2 sm:px-7">
+          <Scrapbanner />
+          <Scrapmobile />
+        </section>
+        <section id="inspection-section" className="px-0 py-0 md:py-10">
+        <InspectionFormSection />
+      </section>
+    </section>
       {/* Services Section */}
-      <ServiceSection categories={data.all_categories} />
+      {/* <ServiceSection categories={data.all_categories} /> */}
 
       {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
 
@@ -635,7 +657,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <BannerDatalider bannerData={data?.banners} />
         ) : null}
       </section> */}
-      <div className="block md:hidden h-2 bg-gray-200"></div>
+      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
 
       {/* Offers Section */}
       {/* <section className="max-w-7xl mx-auto md:px-4 py-5 md:py-10 bg-gray-50">
@@ -732,14 +754,14 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       {/* <section className="px-10 py-5 md:py-10">
         <StatsSection />
       </section> */}
-        <section className="px-2 sm:px-12">
+        {/* <section className="px-2 sm:px-12">
           <BannerImageMobile />
           <BannerImage />
-        </section>
-          <div className="block md:hidden h-2 bg-gray-200"></div>
-        <section className=" px-10 py-5 md:py-10">
+        </section> */}
+          {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
+        {/* <section className=" px-10 py-5 md:py-10">
           <SnabbitTasksUI />
-        </section>
+        </section> */}
 
         {/* <section className="px-10 py-20">
           <HowItWorks />
@@ -749,21 +771,21 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <WhyChooseHommlie />
         </section> */}
 
-      <section className="px-11 sm:px-12">
+      {/* <section className="px-11 sm:px-12">
           <Testimonials />
-        </section>
+        </section> */}
 
-      <div className="block md:hidden h-2 bg-gray-200"></div>
+      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
         
-        <section className="px-2 sm:px-12">
+        {/* <section className="px-2 sm:px-12">
           <Scrapbanner />
           <Scrapmobile />
-        </section>
+        </section> */}
 
       {/* inspection form section */}
-      <section id="inspection-section" className="px-4 py-5 md:py-10">
+      {/* <section id="inspection-section" className="px-4 py-5 md:py-10">
         <InspectionFormSection />
-      </section>
+      </section> */}
 
       {/* <section className="px-2 sm:px-12">
           <Offermobile />
