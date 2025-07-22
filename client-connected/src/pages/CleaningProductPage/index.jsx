@@ -211,7 +211,7 @@ const CartSection = ({ cart }) => {
           )}
         </section>
 
-        <section className="bg-white rounded-lg p-4 space-y-4 shadow">
+        <section className="bg-white rounded-lg p-4 space-y-4">
           <h2 className="text-base md:text-xl font-semibold">
             Hommlie Features
           </h2>
