@@ -160,7 +160,7 @@ export default function BookingSuccess() {
     // Total
     const finalY = doc.lastAutoTable.finalY || 150;
     doc.text(`Subtotal: ₹${orderInfo.subtotal}`, 150, finalY + 20);
-    doc.text(`Tax: ₹${orderInfo.tax}`, 150, finalY + 30);
+    doc.text(`Platform Fee: ₹${orderInfo.tax}`, 150, finalY + 30);
     doc.text(`Shipping: ₹${orderInfo.shipping_cost}`, 150, finalY + 40);
     doc.text(`Discount: ₹${orderInfo.discount_amount}`, 150, finalY + 50);
     doc.text(`Grand Total: ₹${orderInfo.grand_total}`, 150, finalY + 60);

@@ -980,7 +980,7 @@ export default function ProductPage() {
                           className="text-base font-normal"
                           style={{ color: "#606571" }}
                         >
-                          Tax & Fees
+                         Platform Fee
                         </p>
                         <p className="text-base font-semibold">₹{taxAmount}</p>
                       </div>
@@ -1647,7 +1647,7 @@ export default function ProductPage() {
                         className="text-base font-normal"
                         style={{ color: "#606571" }}
                       >
-                        Tax & Fees
+                        Platform Fee
                       </p>
                       <p className="text-base font-semibold">₹{taxAmount}</p>
                     </div>

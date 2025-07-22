@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
+import axios from 'axios';
+import config from '../../config/config';
 
 const ContactForm = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,34 +31,42 @@ const ContactForm = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!user) {
-      setIsModalOpen(true);
-    } else {
-      setIsModalOpen(true);
-    }
+    setIsModalOpen(true); // Allowing modal to open for all users
   };
 
-  const handlePhoneSubmit = (e) => {
+  const handlePhoneSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     const fullPhone = `${countryCode}${callbackPhone.trim()}`;
-    console.log("Callback submitted:", { name: callbackName, phone: fullPhone });
 
-    setIsSubmitted(true);
+    try {
+      await axios.post(`${config.API_URL}/api/createInspection`, {
+        fullName: callbackName,
+        address: "Callback request from homepage",
+        mobile: fullPhone,
+        email: "", // No email for callback
+        date: new Date().toISOString(),
+        time: "N/A",
+        service: "Request Callback",
+      });
 
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setIsSubmitted(false);
-      setCallbackName('');
-      setCallbackPhone('');
-      setErrors({});
-    }, 2500);
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsSubmitted(false);
+        setCallbackName('');
+        setCallbackPhone('');
+        setErrors({});
+      }, 2500);
+    } catch (err) {
+      console.error("Callback submission failed:", err);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <div className="">
-      {/* Request Callback Button */}
       <form onSubmit={handleSubmit} className="flex justify-center">
         <button
           type="submit"
@@ -66,7 +76,6 @@ const ContactForm = ({ user }) => {
         </button>
       </form>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full text-center">

@@ -164,7 +164,7 @@ const CartSection = ({ cart }) => {
                   <span>₹{calculateCartTotal()}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Tax</span>
+                  <span>Platform Fee</span>
                   <span>₹{calculateTaxTotal()}</span>
                 </div>
                 <div className="flex justify-between font-medium pt-2 border-t">

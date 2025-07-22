@@ -329,7 +329,7 @@ const ProductDetailModal = ({
 }) => {
   const { cart, getCart } = useCont();
   const [selectedTab, setSelectedTab] = useState("details");
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [addingVariationId, setAddingVariationId] = useState(null);
   const [cartTotal, setCartTotal] = useState(0);
   const [displayedAttributes, setDisplayedAttributes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -390,60 +390,57 @@ const ProductDetailModal = ({
   };
 
   const handleAddToCart = async (variation) => {
-    setIsAddingToCart(true);
-    const jwtToken = Cookies.get("HommlieUserjwtToken");
+  setAddingVariationId(variation.id);
+  const jwtToken = Cookies.get("HommlieUserjwtToken");
 
-    if (!jwtToken) {
-      setIsModalOpen(true);
-      setIsAddingToCart(false);
-      return;
-    }
+  if (!jwtToken) {
+    setIsModalOpen(true);
+    setAddingVariationId(null);
+    return;
+  }
 
-    const user = jwtDecode(jwtToken);
+  const user = jwtDecode(jwtToken);
 
-    const productImagesArray = product?.productimages?.filter((item) => {
-      if (item.media == "Image") {
-        return item;
-      }
-    });
+  const productImagesArray = product?.productimages?.filter((item) => item.media === "Image");
 
-    const taxAmount =
-      product.tax_type === "amount"
-        ? Number(product.tax)
-        : (Number(product.tax) / 100) * variation.discounted_variation_price;
+  const taxAmount =
+    product.tax_type === "amount"
+      ? Number(product.tax)
+      : (Number(product.tax) / 100) * variation.discounted_variation_price;
 
-    const cartItem = {
-      user_id: user.id,
-      product_id: product.id,
-      vendor_id: product.vendor_id,
-      product_name: product.product_name,
-      image: productImagesArray[0]?.image_url,
-      qty: 1,
-      price: variation.discounted_variation_price,
-      attribute: displayedAttributes[0].attribute_id,
-      variation: variation.id,
-      tax: taxAmount,
-      shipping_cost: product.shipping_cost || 0,
-    };
-
-    try {
-      const response = await axios.post(
-        `${config.API_URL}/api/addtocart`,
-        cartItem,
-        { headers: { Authorization: `Bearer ${jwtToken}` } }
-      );
-
-      if (response.data.status === 1) {
-        successNotify("Successfully added to Cart");
-        await getCart();
-        calculateCartTotal();
-      }
-    } catch (error) {
-      errorNotify(error.message);
-    } finally {
-      setIsAddingToCart(false);
-    }
+  const cartItem = {
+    user_id: user.id,
+    product_id: product.id,
+    vendor_id: product.vendor_id,
+    product_name: product.product_name,
+    image: productImagesArray[0]?.image_url,
+    qty: 1,
+    price: variation.discounted_variation_price,
+    attribute: displayedAttributes[0].attribute_id,
+    variation: variation.id,
+    tax: taxAmount,
+    shipping_cost: product.shipping_cost || 0,
   };
+
+  try {
+    const response = await axios.post(
+      `${config.API_URL}/api/addtocart`,
+      cartItem,
+      { headers: { Authorization: `Bearer ${jwtToken}` } }
+    );
+
+    if (response.data.status === 1) {
+      successNotify("Successfully added to Cart");
+      await getCart();
+      calculateCartTotal();
+    }
+  } catch (error) {
+    errorNotify(error.message);
+  } finally {
+    setAddingVariationId(null);
+  }
+};
+
 
   const handleQtyUpdate = async (cartId, qty) => {
     const jwtToken = Cookies.get("HommlieUserjwtToken");
@@ -507,17 +504,15 @@ const ProductDetailModal = ({
   const totalCart = cart.filter((ct) => ct.product_id === product.id);
   const specificCart = totalCart?.filter((ct) => ct?.variation == variation.id);
 
-  if (isAddingToCart) {
-    return (
-      <div className="w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
-        <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  const isLoading = addingVariationId === variation.id;
 
   return (
     <div className="mt-3 w-max">
-      {specificCart.length !== 0 ? (
+      {isLoading ? (
+        <div className="w-28 h-9 flex items-center justify-center rounded-lg bg-white shadow-lg">
+          <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : specificCart.length !== 0 ? (
         <div className="flex items-center gap-3 bg-white shadow rounded-lg px-3 py-1">
           <button
             onClick={() =>
@@ -550,7 +545,6 @@ const ProductDetailModal = ({
     </div>
   );
 };
-
 
   if (!isOpen) return null;
 
@@ -643,7 +637,7 @@ const ProductDetailModal = ({
                 {displayedAttributes?.map((attribute) => (
                   <div key={attribute.attribute_id} className="space-y-4">
                     <div
-                      className="relative overflow-x-auto"
+                      className="relative overflow-x-auto hide-scrollbar"
                       ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
                     >
                       <div className="flex gap-3 min-w-max py-0 px-1">

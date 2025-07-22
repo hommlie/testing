@@ -465,7 +465,7 @@ export default function AddtoCart() {
               <span>₹{totalItemPrice}</span>
             </div>
             <div className="flex justify-between text-gray-600">
-              <span>Tax & Fees</span>
+              <span>Platform Fee</span>
               <span>₹{tax}</span>
             </div>
             {couponDiscount > 0 && (
