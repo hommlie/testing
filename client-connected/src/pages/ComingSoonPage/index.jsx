@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom"; // Required for routing
 
 const ComingSoonModal = ({ isOpen, onClose, source }) => {
   if (!isOpen) return null;
@@ -34,29 +35,32 @@ const ComingSoonModal = ({ isOpen, onClose, source }) => {
         <p className="text-sm text-gray-600 mt-2 leading-relaxed">
           {isSeeMore ? (
             <>
-              We're preparing to launch more services across every category.<br />
+              We're preparing to launch more services across every category.
+              <br />
               From tech-driven automation to next-gen home care, the next big upgrade is on the way.
               <br />
               <br />
-              <span className="font-semibold text-[#035240]">Stay tuned. You're going to love it.</span>
+              <span className="font-semibold text-[#035240]">
+                Stay tuned. You're going to love it.
+              </span>
             </>
           ) : (
             <>
               Our <strong>{source}</strong> service is currently under development.
               <br />
-              We’ll be live soon with a better, faster experience.
+              Want to be a pioneer? <strong>Join the ONDC revolution now!</strong>
               <br />
-              <span className="text-[#035240] font-medium">Thanks for your patience!</span>
+              <span className="text-[#035240] font-medium">We'll notify you when it's live.</span>
             </>
           )}
         </p>
 
-        <button
-          onClick={onClose}
-          className="mt-6 bg-[#92b876] text-white px-6 py-2 rounded-lg hover:bg-[#044d3f] transition-all text-sm font-medium"
+        <Link
+          to="/register-free-listing"
+          className="mt-6 inline-block bg-[#92b876] text-white px-6 py-2 rounded-lg hover:bg-[#044d3f] transition-all text-sm font-medium"
         >
-          Back to Services
-        </button>
+          Join ONDC
+        </Link>
       </motion.div>
     </motion.div>
   );
