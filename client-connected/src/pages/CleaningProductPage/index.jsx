@@ -131,7 +131,7 @@ const CartSection = ({ cart }) => {
   return (
     <div className="overflow-y-auto">
       <div className="space-y-4">
-        <section className="bg-white rounded-lg p-4 space-y-4 shadow">
+        <section className="bg-white rounded-lg p-4 space-y-4">
           <h2 className="text-base md:text-xl font-semibold">Cart Summary</h2>
 
           {cart?.length > 0 ? (
@@ -211,7 +211,7 @@ const CartSection = ({ cart }) => {
           )}
         </section>
 
-        <section className="bg-white rounded-lg p-4 space-y-4">
+        <section className="bg-white rounded-lg p-4 space-y-4 shadow">
           <h2 className="text-base md:text-xl font-semibold">
             Hommlie Features
           </h2>
