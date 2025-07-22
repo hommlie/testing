@@ -379,7 +379,9 @@ const CleaningProductPage = () => {
   };
 
   return (
-    <main className="md:max-w-7xl w-full">
+    <main className="md:max-w-7xl w-full" style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
       <Helmet>
         <title>{innerSubCategoryData?.meta_title || "Category Page"}</title>
         <meta
@@ -409,35 +411,36 @@ const CleaningProductPage = () => {
             {/* Left Sidebar */}
             <div className="lg:w-1/4">
               <div className="sticky top-44 transition-all duration-300 ease-in-out">
-                <section className="bg-white rounded-lg p-4 space-y-4 glow-border">
-                  <h2 className="text-lg font-semibold">
-                    {location
-                      ? location
-                      : innerSubCategoryData?.subcategory_name}
+                {/* Title and Reviews - OUTSIDE the section box */}
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-semibold">
+                    {location ? location : innerSubCategoryData?.subcategory_name}
                   </h2>
-                  {(innerSubCategoryData.avg_rating ||
-                    innerSubCategoryData.total_reviews) && (
+                  {(innerSubCategoryData.avg_rating || innerSubCategoryData.total_reviews) && (
                     <div className="flex items-center space-x-2">
                       <StarRating rating={innerSubCategoryData.avg_rating} />
                       {innerSubCategoryData.total_reviews && (
                         <span className="text-sm text-gray-500">
                           (
                           {innerSubCategoryData.total_reviews >= 1000
-                            ? `${(
-                                innerSubCategoryData.total_reviews / 1000
-                              ).toFixed(1)}K`
+                            ? `${(innerSubCategoryData.total_reviews / 1000).toFixed(1)}K`
                             : innerSubCategoryData.total_reviews}{" "}
                           reviews)
                         </span>
                       )}
                     </div>
                   )}
-                  <div className="text-sm flex items-center">
-                    <span className="w-1/3 text-gray-500">
-                      Select a service
-                    </span>
-                    <div className="bg-gray-300 h-0.5 w-2/3"></div>
+                </div>
+
+                {/* Main Box Section */}
+                <section className="bg-white rounded-lg p-4 space-y-4 glow-border mt-2">
+                  
+                  {/* Select a service heading - Centered */}
+                  <div className="flex justify-center items-center">
+                    <span className="text-sm font-medium text-gray-600">Select a service</span>
                   </div>
+
+                  {/* Product Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-2 gap-2 max-h-[calc(100vh-16rem)] overflow-y-auto">
                     {innerSubCategoryData?.products?.map((product, index) => (
                       <div
@@ -449,8 +452,7 @@ const CleaningProductPage = () => {
                         }`}
                         onClick={() => handleProductClick(index)}
                       >
-                        {product.productimages &&
-                        product.productimages?.length > 0 ? (
+                        {product.productimages && product.productimages.length > 0 ? (
                           <img
                             src={product.productimages[0]?.image_url}
                             alt={product.product_name}

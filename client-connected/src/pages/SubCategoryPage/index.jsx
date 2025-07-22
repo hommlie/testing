@@ -318,7 +318,9 @@ const SubCategoryPage = () => {
   };
 
   return (
-    <main className="md:max-w-7xl w-full">
+    <main className="md:max-w-7xl w-full" style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
       <Helmet>
         <title>{data?.categoryData?.meta_title || "Category Page"}</title>
         <meta

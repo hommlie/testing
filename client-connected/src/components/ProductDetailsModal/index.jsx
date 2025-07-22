@@ -642,43 +642,42 @@ const ProductDetailModal = ({
                 {/* Carousel Section */}
                 {displayedAttributes?.map((attribute) => (
                   <div key={attribute.attribute_id} className="space-y-4">
-                    {/* <h3 className="text-lg font-semibold">
-                      {attribute.attribute_name}
-                    </h3> */}
                     <div
                       className="relative overflow-x-auto"
                       ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
                     >
-                      <div className="flex gap-4 min-w-max py-2 px-1">
+                      <div className="flex gap-3 min-w-max py-0 px-1">
                         {attribute?.variations?.map((variation) => (
                           <div
                             key={variation.id}
-                            className="w-[230px] -mt-2 flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                            className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
                           >
-                            <div className="p-4 space-y-3">
-                              <h4 className="font-medium">{variation.variation}</h4>
+                            <div className="p-3 space-y-2">
+                              <h4 className="font-medium text-sm">{variation.variation}</h4>
 
                               {/* Ratings */}
                               {(variation.avg_rating || variation.total_reviews) && (
-                                <div className="flex items-center space-x-2">
-                                  {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
+                                <div className="flex items-center space-x-1">
+                                  {variation.avg_rating && (
+                                    <StarRating rating={variation.avg_rating} size={14} />
+                                  )}
                                   {variation.total_reviews && (
-                                    <span className="text-sm text-gray-500">
+                                    <span className="text-xs text-gray-500">
                                       ({variation.total_reviews >= 1000
                                         ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                                        : variation.total_reviews} reviews)
+                                        : variation.total_reviews})
                                     </span>
                                   )}
                                 </div>
                               )}
 
                               {/* Price */}
-                              <div className="space-x-2">
-                                <span className="text-emerald-600 font-medium">
+                              <div className="space-x-1 text-sm">
+                                <span className="text-emerald-600 font-semibold">
                                   ₹{variation.discounted_variation_price}
                                 </span>
                                 {variation.price !== variation.discounted_variation_price && (
-                                  <span className="text-gray-500 line-through">
+                                  <span className="text-gray-500 line-through text-xs">
                                     ₹{variation.price}
                                   </span>
                                 )}
@@ -693,6 +692,7 @@ const ProductDetailModal = ({
                     </div>
                   </div>
                 ))}
+
                 {/* Image Section with Overlapped Add Button */}
                           {/* <div className="relative w-0 h-0 flex items-center p-4">
                             {variation.image && (
