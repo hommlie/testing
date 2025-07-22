@@ -305,7 +305,9 @@ export default function AddtoCart() {
   const topTracker = ["Add To Cart", "Review Booking", "Booking Confirmed"];
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50"  style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
         {/* Progress Tracker */}
         <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow-sm mb-4">
