@@ -38,6 +38,7 @@ import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
 import HelpModal from "../HelpModal";
 import { FaTag } from 'react-icons/fa';
+import ComingSoonModal from "../../pages/ComingSoonPage";
 
 
 
@@ -55,6 +56,7 @@ const Header = ({
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const searchInputRef = useRef(null);
+  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
 
   const {
     user,
@@ -292,6 +294,7 @@ const Header = ({
   "Cockroach & Ant Control",
 ];
 
+const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
 
 useEffect(() => {
   let index = 0;
@@ -307,12 +310,28 @@ useEffect(() => {
 }, []);
 
 const offers = [
-  "RoachX Gel Treatment – ₹399",
-  "General Pest Control – ₹899",
-  "Standard Cockroach Control – ₹999 + GST",
-  "6D Prime Cockroach – ₹1199",
-  "Bedbugs Standard – ₹2499",
+  {
+    label: "RoachX Gel Treatment – ₹399",
+    link: "/product/roachx-gel-treatment"
+  },
+  {
+    label: "General Pest Control – ₹899",
+    link: "/subcategory/general-pest-control"
+  },
+  {
+    label: "Standard Cockroach Control – ₹999 + GST",
+    link: "/subcategory/cockroach-control-services-in-bangalore"
+  },
+  {
+    label: "6D Prime Cockroach – ₹1199",
+    link: "/subcategory/6d-prime-cockroach-treatment"
+  },
+  {
+    label: "Bedbugs Standard – ₹2499",
+    link: "/subcategory/bed-bug-control-services-in-bangalore"
+  }
 ];
+
 
   const [current, setCurrent] = useState(0);
 
@@ -352,117 +371,116 @@ const offers = [
       
       {/* Top Header with contact and social info */}
       <div className="">
-  <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
-    <div
-      className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
-      // style={{
-      //   backgroundImage: `url(${bannerBg})`,
-      //   backgroundSize: 'cover',
-      //   backgroundRepeat: 'no-repeat',
-      //   backgroundPosition: 'center',
-      // }}
-    >
-      {/* Centered Offer Line */}
-
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={offers[current]}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
-            >
-              🛡️ {offers[current]}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-
-      {/* Left: Brand + Message */}
-      <span className=" font-normal text-black z-20">
-        <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
-          <button className="px-3 py-0 pb-1 bg-[#92b775] text-white">Residential</button>
-          <a
-            href="https://b2b.hommlie.com"
-            className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
+        <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
+          <div
+            className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
+            // style={{
+            //   backgroundImage: `url(${bannerBg})`,
+            //   backgroundSize: 'cover',
+            //   backgroundRepeat: 'no-repeat',
+            //   backgroundPosition: 'center',
+            // }}
           >
-            Commercial
-          </a>
-        </div>
-      </span>
+            {/* Centered Offer Line */}
 
-      {/* Right: Action Links */}
-      <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold z-20">
-        <button
-          onClick={() => setIsGetAppModalOpen(true)}
-          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-        >
-          <FaMobileAlt className="text-inherit" />
-          Get App
-        </button>
-        <span className="hidden md:inline-block text-black">|</span>
-        
-        <button
-          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-        >
-          <FaTag className="text-inherit" />
-          Offer
-        </button>
-         <span className="hidden md:inline-block text-black">|</span>
-         <button
-            className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-          >
-            <FaShoppingCart className="text-inherit" />
-            Product
-          </button>
-         <span className="hidden md:inline-block text-black">|</span>
-        {user?.length === 0 ? (
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-          >
-            <FaSignInAlt className="text-inherit" />
-            Login
-          </button>
-        ) : (
-          <button
-            onClick={() => setIsLoginOpen(!isLoginOpen)}
-            className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
-          >
-            <FaUser className="text-black text-base" />
-            <span className="text-black font-medium">Account</span>
-          </button>
-        )}
-        <span className="hidden md:inline-block text-black">|</span>
-
-        <button
-          onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-        >
-          <FaShoppingCart className="text-inherit" />
-          Cart
-          {cart?.length > 0 && (
-            <span className="ml-1 bg-amber-200 text-emerald-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-              {cart?.length}
+              <div className="absolute left-[45%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={offers[current].label}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
+                  >
+                    🛡️ {offers[current].label}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            {/* Left: Brand + Message */}
+            <span className=" font-normal text-black z-20">
+              <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
+                <button className="px-3 py-0 pb-1 bg-[#92b775] text-white">Residential</button>
+                <a
+                  href="https://b2b.hommlie.com"
+                  className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
+                >
+                  Commercial
+                </a>
+              </div>
             </span>
-          )}
-        </button>
-        <span className="hidden md:inline-block text-black">|</span>
 
-        <button
-          onClick={() => setIsHelpModalOpen(true)}
-          className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-        >
-          <FaQuestionCircle className="text-inherit" />
-          Help
-        </button>
+            {/* Right: Action Links */}
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold z-20">
+              <button
+                onClick={() => setIsGetAppModalOpen(true)}
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+              >
+                <FaMobileAlt className="text-inherit" />
+                Get App
+              </button>
+              <span className="hidden md:inline-block text-black">|</span>
+              
+              <button
+                onClick={() => setIsOfferModalOpen(true)}
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+              >
+                <FaTag className="text-inherit" />
+                Offer
+              </button>
+              <span className="hidden md:inline-block text-black">|</span>
+              <button
+                onClick={() => setIsComingSoonOpen(true)}
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+              >
+                <FaShoppingCart className="text-inherit" />
+                Product
+              </button>
+              <span className="hidden md:inline-block text-black">|</span>
+              {user?.length === 0 ? (
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                >
+                  <FaSignInAlt className="text-inherit" />
+                  Login
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsLoginOpen(!isLoginOpen)}
+                  className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
+                >
+                  <FaUser className="text-black text-base" />
+                  <span className="text-black font-medium">Account</span>
+                </button>
+              )}
+              <span className="hidden md:inline-block text-black">|</span>
+
+              <button
+                onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+              >
+                <FaShoppingCart className="text-inherit" />
+                Cart
+                {cart?.length > 0 && (
+                  <span className="ml-1 bg-amber-200 text-emerald-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+                    {cart?.length}
+                  </span>
+                )}
+              </button>
+              <span className="hidden md:inline-block text-black">|</span>
+
+              <button
+                onClick={() => setIsHelpModalOpen(true)}
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+              >
+                <FaQuestionCircle className="text-inherit" />
+                Help
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
-
           <div className="max-w-7xl mx-auto px-2 lg:px-8">
             {/* Main Header */}
             <div className="flex items-center justify-between h-20">
@@ -971,6 +989,66 @@ const offers = [
         </div>
       )}
 
+      {isOfferModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+            className="relative bg-white w-full max-w-xl rounded-xl shadow-xl border border-gray-200 overflow-hidden"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsOfferModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
+              aria-label="Close offer modal"
+            >
+              &times;
+            </button>
+
+            {/* Header */}
+            <div className="px-6 pt-6 pb-2 border-b border-gray-100">
+              <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 text-center">
+                🎉 Limited-Time Offers Just for You!
+              </h2>
+              <p className="text-center text-sm text-gray-500 mt-1">
+                Book now before they expire!
+              </p>
+            </div>
+
+            {/* Offer List */}
+            <ul className="px-6 py-4 max-h-[60vh] overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
+              {offers.map((offer, index) => (
+                <li key={index} className="py-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">LIMITED</span>
+                      <p className="text-sm text-gray-800 font-medium">🛡️ {offer.label}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsOfferModalOpen(false);
+                        navigate(offer.link); // now it redirects to specific offer link
+                      }}
+                      className="mt-1 sm:mt-0 text-sm font-semibold text-white bg-[#52852d] hover:bg-[#406a23] px-4 py-1.5 rounded transition-all"
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+      )}
+      <ComingSoonModal
+        isOpen={isComingSoonOpen}
+        onClose={() => setIsComingSoonOpen(false)}
+        source="Product"
+      />
+
+
       {/* Modals */}
       <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <AddressModal
@@ -990,6 +1068,7 @@ const offers = [
         />
       )}
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
+      
     </header>
   );
 };

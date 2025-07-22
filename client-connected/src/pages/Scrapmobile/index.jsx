@@ -5,7 +5,7 @@ const BannerImageMobile = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="sm:hidden pt-6 mb-6">
+    <div className="sm:hidden">
       <div className="relative w-full rounded-lg overflow-hidden">
         <img
           src="/images/scrapmob.png"
