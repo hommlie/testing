@@ -752,29 +752,48 @@ const ProductDetailModal = ({
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Frequently Asked Questions</h3>
                   <ul className="divide-y divide-gray-200">
                     {[
-                      "What will the first visit include?",
-                      "Will I have to empty the kitchen for the first visit?",
-                      "Will the professional restock the utensils in my kitchen?",
-                      "What will the second visit include?",
-                      "What safety precautions should be followed?",
-                      "Is the service safe for children and pets?"
-                    ].map((question, idx) => (
+                      {
+                        question: "What will the first visit include?",
+                        answer: "The first visit includes a thorough inspection of your kitchen, identification of areas that need cleaning, and an overview of the cleaning process."
+                      },
+                      {
+                        question: "Will I have to empty the kitchen for the first visit?",
+                        answer: "Yes, we recommend emptying the kitchen to allow our professionals to clean all surfaces and areas properly without any obstructions."
+                      },
+                      {
+                        question: "Will the professional restock the utensils in my kitchen?",
+                        answer: "Yes, after the cleaning, the professional will restock all kitchen utensils and ensure everything is in place."
+                      },
+                      {
+                        question: "What will the second visit include?",
+                        answer: "The second visit includes a final inspection and follow-up cleaning, focusing on any remaining areas that need attention."
+                      },
+                      {
+                        question: "What safety precautions should be followed?",
+                        answer: "Our professionals follow strict safety protocols, including the use of eco-friendly cleaning products and wearing necessary protective gear."
+                      },
+                      {
+                        question: "Is the service safe for children and pets?",
+                        answer: "Yes, all cleaning products used are safe for children and pets, ensuring a healthy and clean environment."
+                      }
+                    ].map((faq, idx) => (
                       <li key={idx} className="py-3">
                         <details className="group">
                           <summary className="flex justify-between items-center cursor-pointer font-medium text-gray-700 hover:text-emerald-600">
-                            {question}
+                            {faq.question}
                             <span className="ml-2 w-5 h-5 relative text-lg font-bold">
                               <span className="absolute inset-0 group-open:hidden">+</span>
                               <span className="absolute inset-0 hidden group-open:inline">−</span>
                             </span>
                           </summary>
-                          {/* You can add real answers here dynamically if needed */}
-                          <p className="mt-2 text-sm text-gray-600">Answer coming soon...</p>
+                          {/* Answer section */}
+                          <p className="mt-2 text-sm text-gray-600">{faq.answer}</p>
                         </details>
                       </li>
                     ))}
                   </ul>
                 </div>
+
                 {/* Image Gallery */}
                 {/* <div className="space-y-4">
                   {product?.productimages?.map((image) => (
@@ -858,14 +877,14 @@ const ProductDetailModal = ({
 
             {/* All Reviews */}
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <h4 className="text-lg font-semibold text-gray-900">
                   Customer Reviews (128)
                 </h4>
-              </div>
+              </div> */}
               
               {/* Sample Review */}
-              <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              {/* <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <p className="font-medium text-gray-900">CH Sudheer</p>
@@ -895,7 +914,7 @@ const ProductDetailModal = ({
                   facing a lot of problems with pests and now we don't see any in the
                   home. Thanks for your service.
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         )}

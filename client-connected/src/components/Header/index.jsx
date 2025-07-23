@@ -689,7 +689,7 @@ const offers = [
               {isLoginOpen && (
                 <div
                   ref={loginDropdownRef}
-                  className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-30 border border-gray-100 overflow-hidden"
+                  className="absolute right-0 -mt-10 w-56 bg-white rounded-lg shadow-xl py-1 z-30 border border-gray-100 overflow-hidden"
                 >
                   <NavLink
                     to="/add-to-cart"

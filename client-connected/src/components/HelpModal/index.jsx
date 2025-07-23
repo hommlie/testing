@@ -1,11 +1,22 @@
 import React, { useContext } from "react";
-import { FaTimes, FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
+import {
+  FaTimes,
+  FaWhatsapp,
+  FaPhoneAlt,
+  FaUser,
+  FaWallet,
+  FaGift,
+  FaSignOutAlt,
+} from "react-icons/fa";
+
 import { MdEmail, MdLocationOn } from "react-icons/md";
 import Cookies from "js-cookie";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../LoginModal";
 import config from "../../config/config";
 import { NavLink } from "react-router-dom";
+import ReferAndEarn from "../ReferAndEarnModal";
+import AddressModal from "../AddressModal";
 
 const HelpModal = ({ isOpen, onClose }) => {
   const { user, setUser } = useCont();
@@ -24,19 +35,19 @@ const HelpModal = ({ isOpen, onClose }) => {
 
   const topics = [
     { title: "Order Related", icon: "🛒", route: "/my-bookings" },
-    { title: "Raise a Complaint", icon: "📢" },
-    { title: "Shopping", icon: "🛍️" },
+    { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
+    { title: "Shopping", icon: "🛍️", route: "/add-to-cart" },
     { title: "Hommlie Account", icon: "👤" },
-    { title: "Payments", icon: "💳" },
-    { title: "Others", icon: "📄" },
+    { title: "Payments", icon: "💳", route: "/my-wallet" },
+    { title: "Others", icon: "📄", route: "/privacy-policy" },
   ];
 
   const contactMethods = [
     {
       icon: <FaWhatsapp className="text-green-500 text-xl" />,
       title: "WhatsApp",
-      detail: "+91 88846-88892",
-      action: "https://wa.me/918884688892"
+      detail: "+91 74838-60408",
+      action: "https://wa.me/917483860408"
     },
     {
       icon: <FaPhoneAlt className="text-blue-500 text-xl" />,
@@ -47,7 +58,7 @@ const HelpModal = ({ isOpen, onClose }) => {
     {
       icon: <MdEmail className="text-red-500 text-xl" />,
       title: "Email",
-      detail: "help@hommlie.com",
+      detail: "reach@hommlie.com",
       action: "mailto:help@hommlie.com"
     },
     {
@@ -58,20 +69,93 @@ const HelpModal = ({ isOpen, onClose }) => {
     }
   ];
 
+  const [isReferAndEarnOpen, setIsReferAndEarnOpen] = React.useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = React.useState(false);
+
+
   const renderAccountContent = () => (
-    <div className="p-4">
-      <button onClick={() => setSelectedTopic(null)} className="mb-4 text-sm text-blue-600 hover:underline">
-        ← Back to Help Topics
-      </button>
-      <h3 className="text-2xl font-bold text-gray-800 mb-6">Account</h3>
-      <div className="space-y-4">
-        <div className="border-b pb-2 text-gray-800">I want to change my phone number</div>
-        <div className="border-b pb-2 text-gray-800">Where can I check my saved addresses?</div>
-        <div className="border-b pb-2 text-gray-800">I want to change my email address</div>
-        <div className="border-b pb-2 text-gray-800">Where can I see my saved payment details?</div>
-      </div>
+  <div className="p-4">
+    <button
+      onClick={() => setSelectedTopic(null)}
+      className="mb-4 text-sm text-blue-600 hover:underline"
+    >
+      ← Back to Help Topics
+    </button>
+    <h3 className="text-2xl font-bold text-gray-800 mb-6">
+      Manage Your Account
+    </h3>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <NavLink
+        to="/add-to-cart"
+        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+        onClick={onClose}
+      >
+        <svg
+          className="w-6 h-6 text-emerald-600"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M16 6H4V4h12v2zM3 8h14v8H3V8zm2 2v4h10v-4H5z" />
+        </svg>
+        <span className="text-sm font-medium text-gray-800">My Cart</span>
+      </NavLink>
+
+      <NavLink
+        to="/my-bookings"
+        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+        onClick={onClose}
+      >
+        <MdEmail className="text-emerald-600 w-6 h-6" />
+        <span className="text-sm font-medium text-gray-800">My Bookings</span>
+      </NavLink>
+
+      <NavLink
+        to="/edit-profile"
+        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+        onClick={onClose}
+      >
+        <FaUser className="text-emerald-600 w-6 h-6" />
+        <span className="text-sm font-medium text-gray-800">Edit Profile</span>
+      </NavLink>
+
+      <NavLink
+        to="/my-wallet"
+        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+        onClick={onClose}
+      >
+        <FaWallet className="text-emerald-600 w-6 h-6" />
+        <span className="text-sm font-medium text-gray-800">My Wallet</span>
+      </NavLink>
+
+      <button
+  onClick={() => {
+    setSelectedTopic(null);
+    setIsAddressModalOpen(true);
+  }}
+  className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
+>
+  <MdLocationOn className="text-emerald-600 w-6 h-6" />
+  <span className="text-sm font-medium text-gray-800">
+    Your Addresses
+  </span>
+</button>
+
+<button
+  onClick={() => {
+    setSelectedTopic(null);
+    setIsReferAndEarnOpen(true);
+  }}
+  className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
+>
+  <FaGift className="text-emerald-600 w-6 h-6" />
+  <span className="text-sm font-medium text-gray-800">Refer & Earn</span>
+</button>
+
     </div>
-  );
+  </div>
+);
+
 
   if (!isOpen) return null;
 
@@ -220,14 +304,27 @@ const HelpModal = ({ isOpen, onClose }) => {
       </div>
 
       {/* Login Modal */}
-      <LoginSignup
+            <LoginSignup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onLoginSuccess={() => {
           setIsLoginOpen(false);
         }}
       />
+
+      {/* Refer & Earn Modal */}
+      <ReferAndEarn
+        isOpen={isReferAndEarnOpen}
+        onClose={() => setIsReferAndEarnOpen(false)}
+      />
+
+      {/* Address Modal */}
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+      />
     </>
+
   );
 };
 

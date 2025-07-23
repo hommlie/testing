@@ -116,16 +116,15 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 
 const CartSection = ({ cart }) => {
   const calculateCartTotal = () => {
-    return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
+  return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0).toFixed(2);
   };
 
   const calculateTaxTotal = () => {
-    return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0);
+    return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0).toFixed(2);
   };
 
   const calculateSavings = () => {
-    // Assuming original price is stored or calculate savings based on your logic
-    return cart.reduce((sum, item) => sum + 78, 0); // Replace with actual savings calculation
+    return cart.reduce((sum, item) => sum + 78, 0).toFixed(2); // Replace with actual savings calculation
   };
 
   return (
@@ -161,22 +160,22 @@ const CartSection = ({ cart }) => {
               <div className="pt-2 space-y-2">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>₹{calculateCartTotal()}</span>
+                  <span>₹{parseFloat(calculateCartTotal()).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Platform Fee</span>
-                  <span>₹{calculateTaxTotal()}</span>
+                  <span>₹{parseFloat(calculateTaxTotal()).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-medium pt-2 border-t">
                   <span>Total</span>
-                  <span>₹{calculateCartTotal() + calculateTaxTotal()}</span>
+                  <span>₹{parseFloat(calculateCartTotal() + calculateTaxTotal()).toFixed(2)}</span>
                 </div>
               </div>
 
               {calculateSavings() > 0 && (
                 <div className="flex items-center justify-between text-green-600 pt-2">
                   <span>Congratulations!</span>
-                  <span>₹{calculateSavings()} saved</span>
+                  <span>₹{parseFloat(calculateSavings()).toFixed(2)}</span>
                 </div>
               )}
 

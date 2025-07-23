@@ -303,46 +303,50 @@ const HomePage = () => {
   };
 
   // FAQ Section
-  const FaqSection = () => (
-  <div className="w-full mx-auto">
-    <h2 className="text-2xl font-bold mb-8 text-center">
-      Frequently Asked Questions
-    </h2>
-    <div className="space-y-4 mr-3">
-      {data?.faqs?.map((faq, index) => (
-        <motion.div
-          key={index}
-          className="border rounded-lg overflow-hidden"
-          initial={false}
-        >
-          <button
-            className="w-full flex justify-between items-center p-4 text-left"
-            onClick={() =>
-              setOpenFaqIndex(openFaqIndex === index ? null : index)
-            }
+  const FaqSection = () => {
+  const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
+
+  return (
+    <div className="w-full mx-auto">
+      <h2 className="text-2xl font-bold mb-8 text-center">
+        Frequently Asked Questions
+      </h2>
+      <div className="space-y-4 mr-3">
+        {data?.faqs?.map((faq, index) => (
+          <motion.div
+            key={index}
+            className="border rounded-lg overflow-hidden"
+            initial={false}
           >
-            <span className="font-medium">{faq.question}</span>
-            <span className="text-xl font-bold">
-              {openFaqIndex === index ? "−" : "+"}
-            </span>
-          </button>
-          <AnimatePresence>
-            {openFaqIndex === index && (
-              <motion.div
-                initial={{ height: 0 }}
-                animate={{ height: "auto" }}
-                exit={{ height: 0 }}
-                className="overflow-hidden"
-              >
-                <p className="p-4 bg-gray-50">{faq.answer}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      ))}
+            <button
+              className="w-full flex justify-between items-center p-4 text-left bg-white"
+              onClick={() =>
+                setOpenFaqIndex(openFaqIndex === index ? null : index)
+              }
+            >
+              <span className="font-medium">{faq.question}</span>
+              <span className="text-xl font-bold">
+                {openFaqIndex === index ? "−" : "+"}
+              </span>
+            </button>
+            <AnimatePresence>
+              {openFaqIndex === index && (
+                <motion.div
+                  initial={{ height: 0 }}
+                  animate={{ height: "auto" }}
+                  exit={{ height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <p className="p-4 bg-gray-50">{faq.answer}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 
   // App Download Section
@@ -788,9 +792,11 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 
       {/* Stats Section */}
-      {/* <section className="px-10 py-5 md:py-10">
+      <section className="px-10 py-5 md:py-10"  style={{
+    background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+  }}>
         <StatsSection />
-      </section> */}
+      </section>
         {/* <section className="px-2 sm:px-12">
           <BannerImageMobile />
           <BannerImage />
@@ -828,9 +834,11 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <Offermobile />
           <Refermobile />
         </section> */}
-      {/* <section className="hidden sm:hidden px-10 py-5 md:py-10">
+      <section className="px-10 py-5 md:py-10" style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
         <FaqSection />
-      </section> */}
+      </section>
 
       {/* Popular Categories Section with Tabs */}
       <section className="hidden sm:hidden px-10 py-5 md:py-10">
