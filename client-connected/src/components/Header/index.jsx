@@ -553,7 +553,7 @@ const offers = [
               </div>
 
               {/* Search Bar */}
-              <div className="w-full max-w-[630px] mx-auto lg:w-[630px]">
+              <div className="w-full max-w-[630px] mx-auto md:w-[480px] lg:w-[630px]">
                 <div className="relative">
                   <input
                     ref={searchInputRef}
