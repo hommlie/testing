@@ -346,7 +346,9 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="min-h-screen font-headerFont bg-white py-12">
+    <div className="min-h-screen font-headerFont bg-white py-12" style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
       <section className="px-4 sm:px-6 lg:px-8">
         <h3 className="text-center text-3xl font-bold text-gray-900 mb-8">
           My Bookings
