@@ -55,12 +55,12 @@ const ServiceGrid = () => {
       { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "#" },
       { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "#" },
       { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "#" },
-      { name: "Anti Bird Spikes", image: "/images/bird-spike-icon.png", url: "#" },
+      { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "#" },
       { name: "Bird Netting", image: "/images/nettingicon.png", url: "#" },
       { name: "Balcony Safety Net", image: "/images/balconyneticon.png", url: "#" },
     ],
     "Disinfection": [
-      { name: "Surface Disinfection", image: "/images/surface.png", url: "/subcategory/disinfection-services-near-you-in-bangalore" },
+      { name: "Disinfection", image: "/images/disinfection.png", url: "/subcategory/disinfection-services-near-you-in-bangalore" },
     ],
     "AC Services": [
       { name: "AC Installation", image: "/images/ac-install.png", url: "#" },
@@ -109,14 +109,14 @@ const ServiceGrid = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
+        transition={{ duration: 0.9, ease: "easeInOut" }}
       >
         <motion.div
           className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 h-[80vh] overflow-y-auto"
-          initial={{ y: '100%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '100%' }}
-          transition={{ duration: 0.35, ease: 'easeInOut' }}
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
         >
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 className="text-lg font-bold">{showModal} Services</h2>
@@ -132,11 +132,11 @@ const ServiceGrid = () => {
                 href={sub.url || '#'}
                 className="flex flex-col items-center text-center p-2 hover:shadow transition rounded-lg"
               >
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
                   <img
                     src={sub.image}
                     alt={sub.name}
-                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
                   />
                 </div>
                 <h3 className="text-xs sm:text-sm font-semibold mt-2">{sub.name}</h3>

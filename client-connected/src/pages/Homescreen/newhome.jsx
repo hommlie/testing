@@ -618,16 +618,16 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <Scrapmobile />
         </section>
         <section
-  id="inspection-section"
-  className="px-4 sm:px-10 py-0s sm:py-10"
-  style={{
-    background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-  }}
->
-  <div className="max-w-7xl mx-auto">
-    <InspectionFormSection />
-  </div>
-</section>
+          id="inspection-section"
+          className="px-4 sm:px-10 py-0s sm:py-10"
+          style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
+        >
+          <div className="max-w-7xl mx-auto">
+            <InspectionFormSection />
+          </div>
+        </section>
 
       {/* Services Section */}
       {/* <ServiceSection categories={data.all_categories} /> */}
@@ -793,8 +793,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
       {/* Stats Section */}
       <section className="px-10 py-5 md:py-10"  style={{
-    background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-  }}>
+        background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      }}>
         <StatsSection />
       </section>
         {/* <section className="px-2 sm:px-12">
