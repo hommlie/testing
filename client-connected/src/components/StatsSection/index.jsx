@@ -3,7 +3,7 @@ import Customers from "../../assets/icons/customer.svg";
 import Reviews from "../../assets/icons/reviews.svg";
 import Cities from "../../assets/icons/cities.svg";
 import Warranty from "../../assets/icons/warranty.svg";
-import Iso from "../../assets/icons/Iso.png";
+import Iso from "../../assets/icons/iso.png";
 import { motion } from "framer-motion";
 
 const statsData = [
