@@ -33,8 +33,8 @@ const statsData = [
   },
   {
     id: 5,
-    count: null,
-    title: "ISO Certified Company",
+    count: "ISO",
+    title: "Certified Company",
     icon: Iso,
   },
 ];
