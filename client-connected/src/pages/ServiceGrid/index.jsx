@@ -34,22 +34,11 @@ const ServiceGrid = () => {
       { name: "Termite Treatment", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
     ],
     "Deep Cleaning": [
-      { name: "Sofa Cleaning", image: "/images/sofaicon.png", url: "#" },
-      { name: "Bathroom Cleaning", image: "/images/bathroomicon.png", url: "#" },
-      { name: "Kitchen Cleaning", image: "/images/kitchenicon.png", url: "#" },
-      { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "#" },
-      { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "#" },
-    ],
-    "Scrap": [
-      { name: "Newspaper", image: "/images/newspaper-icon.png", price: "₹14/KG", note: "Market rates dropped recently", isComingSoon: true },
-      { name: "Cardboard", image: "/images/cardboard-icon.png", price: "₹8/KG", note: "Call for bulk quantity quote" },
-      { name: "Office Paper (A3/A4)", image: "/images/paper-icon.png", price: "₹8/KG" },
-      { name: "Copies/Books", image: "/images/book-icon.png", price: "₹24/KG" },
-      { name: "Clothes", image: "/images/clothes-icon.png", price: "₹40/KG", note: "Accepted only with other scrap items (No undergarments)" },
-      { name: "Glass Bottles", image: "/images/glass-icon.png", price: "₹105/KG", note: "Accepted only with other scrap items" },
-      { name: "PET Bottles/Other Plastic", image: "/images/plastic-icon.png", price: "₹14/KG" },
-      { name: "Iron", image: "/images/iron-icon.png", price: "₹12/KG", note: "Call for bulk quantity quote" },
-      { name: "Steel Utensils", image: "/images/utensils-icon.png", price: "₹2/KG" },
+      { name: "Sofa Cleaning", image: "/images/sofaicon.png", url: "/subcategory/top-sofa-cleaning-services-in-bangalore" },
+      { name: "Bathroom Cleaning", image: "/images/bathroomicon.png", url: "/subcategory/professional-bathroom-cleaning-services-in-bangalore" },
+      { name: "Kitchen Cleaning", image: "/images/kitchenicon.png", url: "/subcategory/top-kitchen-cleaning-services-in-bangalore" },
+      { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
+      { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
     ],
     "Mosquito & Safety Net": [
       { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "#" },
@@ -61,6 +50,17 @@ const ServiceGrid = () => {
     ],
     "Disinfection": [
       { name: "Disinfection", image: "/images/disinfection.png", url: "/subcategory/disinfection-services-near-you-in-bangalore" },
+    ],
+    "Scrap": [
+      { name: "Newspaper", image: "/images/newspaper-icon.png", price: "₹14/KG", note: "Market rates dropped recently", isComingSoon: true },
+      { name: "Cardboard", image: "/images/cardboard-icon.png", price: "₹8/KG", note: "Call for bulk quantity quote" },
+      { name: "Office Paper (A3/A4)", image: "/images/paper-icon.png", price: "₹8/KG" },
+      { name: "Copies/Books", image: "/images/book-icon.png", price: "₹24/KG" },
+      { name: "Clothes", image: "/images/clothes-icon.png", price: "₹40/KG", note: "Accepted only with other scrap items (No undergarments)" },
+      { name: "Glass Bottles", image: "/images/glass-icon.png", price: "₹105/KG", note: "Accepted only with other scrap items" },
+      { name: "PET Bottles/Other Plastic", image: "/images/plastic-icon.png", price: "₹14/KG" },
+      { name: "Iron", image: "/images/iron-icon.png", price: "₹12/KG", note: "Call for bulk quantity quote" },
+      { name: "Steel Utensils", image: "/images/utensils-icon.png", price: "₹2/KG" },
     ],
     "AC Services": [
       { name: "AC Installation", image: "/images/ac-install.png", url: "#" },
@@ -112,7 +112,7 @@ const ServiceGrid = () => {
         transition={{ duration: 1.0, ease: "easeInOut" }}
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 h-[80vh] overflow-y-auto"
+          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 h-[60vh] sm:h-[80vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
