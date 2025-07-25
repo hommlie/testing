@@ -109,14 +109,14 @@ const ServiceGrid = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.9, ease: "easeInOut" }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
       >
         <motion.div
           className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 h-[80vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeInOut" }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
         >
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 className="text-lg font-bold">{showModal} Services</h2>
