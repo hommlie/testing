@@ -82,7 +82,7 @@ const Testimonials = () => {
                     )}
 
                     {isFull && (
-                      <div className="relative z-30 w-full px-4 pb-4">
+                      <div className="relative z-10 w-full px-4 pb-4">
                         <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
                           <p className="text-sm text-[#3f0018] font-medium mb-3 leading-snug">
                             {testimonial.content}
