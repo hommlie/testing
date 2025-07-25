@@ -32,7 +32,7 @@ const SEOPageController = require("../controllers/SEOPageController");
 const blogController = require("../controllers/BlogController");
 const commentController = require("../controllers/CommentController");
 const LandingPageController = require("../controllers/LandingPageController");
-
+// const RequestacallbackController = require("../controllers/RequestacallbackController")
 const app = express();
 
 app.use(bodyparser.json());
@@ -164,6 +164,9 @@ app.post("/addCareer", upload.single("resume"), CareerContoller.addCareer);
 
 //Partner
 app.post("/createpartnerform", PartnerContoller.createPartnerForm);
+
+//Request a call back
+// app.post("/requestcallback", RequestacallbackController.createRequestcallback);
 
 //Inspection
 app.post("/createInspection", InspectionController.createInspection);
