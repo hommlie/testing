@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BsArrowLeftCircle } from "react-icons/bs";
+import { BsArrowLeftCircle, BsCheckCircle } from "react-icons/bs";
 import { useCont } from "../../context/MyContext";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -8,6 +8,7 @@ import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import hommlieLogo from "/assets/logo/loogo.png";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const LoginSignup = ({ isOpen, onClose }) => {
   const [phone, setPhone] = useState("");
@@ -17,13 +18,14 @@ const LoginSignup = ({ isOpen, onClose }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [counter, setCounter] = useState(60);
   const [referralCode, setReferralCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const otpRefs = useRef([]);
   const navigate = useNavigate();
 
   const notify = useToast();
-  const successNotify = (success) => notify(success, "success");
-  const errorNotify = (error) => notify(error, "error");
-  const warningNotify = (warning) => notify(warning, "warning");
+  const successNotify = (msg) => notify(msg, "success");
+  const errorNotify = (msg) => notify(msg, "error");
+  const warningNotify = (msg) => notify(msg, "warning");
 
   const {
     token,
@@ -39,13 +41,9 @@ const LoginSignup = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (user?.length !== 0) onClose();
-
     let timer;
     if (isOtpSent && counter > 0) {
-      timer = setInterval(
-        () => setCounter((prevCounter) => prevCounter - 1),
-        1000
-      );
+      timer = setInterval(() => setCounter((prev) => prev - 1), 1000);
     } else if (counter === 0) {
       clearInterval(timer);
     }
@@ -54,7 +52,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOtpSent) {
-      otpRefs.current[0].focus();
+      otpRefs.current[0]?.focus();
     }
   }, [isOtpSent]);
 
@@ -75,9 +73,8 @@ const LoginSignup = ({ isOpen, onClose }) => {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-
       if (value && index < otp.length - 1) {
-        otpRefs.current[index + 1].focus();
+        otpRefs.current[index + 1]?.focus();
       }
     }
   };
@@ -87,17 +84,17 @@ const LoginSignup = ({ isOpen, onClose }) => {
     if (/^\d+$/.test(pastedData)) {
       const newOtp = pastedData.split("");
       setOtp(newOtp);
-      otpRefs.current[newOtp.length - 1].focus();
+      otpRefs.current[newOtp.length - 1]?.focus();
     }
     e.preventDefault();
   };
 
   const handleSendOtp = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post(`${config.API_URL}/api/register`, {
         mobile: `+91${phone}`,
       });
-
       if (response.data.status === 1) {
         if (response.data?.user_name) {
           setName(response.data?.user_name);
@@ -109,12 +106,14 @@ const LoginSignup = ({ isOpen, onClose }) => {
         errorNotify(response.data.message);
       }
     } catch (error) {
-      console.log(error);
       errorNotify(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleResendOtp = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post(`${config.API_URL}/api/resendotp`, {
         mobile: `+91${phone}`,
@@ -128,11 +127,14 @@ const LoginSignup = ({ isOpen, onClose }) => {
       }
     } catch (error) {
       errorNotify(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleProceed = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const newOtp = Number(otp.join(""));
       const response = await axios.post(`${config.API_URL}/api/verifyotp`, {
@@ -152,7 +154,6 @@ const LoginSignup = ({ isOpen, onClose }) => {
         setToken(jwtToken);
         const decodedToken = jwtDecode(jwtToken);
         setUser(decodedToken);
-
         localStorage.setItem("HommlieUser", JSON.stringify(decodedToken));
         successNotify("Welcome to Hommlie");
         getUser();
@@ -165,217 +166,406 @@ const LoginSignup = ({ isOpen, onClose }) => {
         errorNotify(response.data.message);
       }
     } catch (error) {
-      console.log(error);
       errorNotify(error.response?.data?.message || "An error occurred");
       setOtp(["", "", "", ""]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative bg-white w-[90%] max-w-96 p-8 rounded-3xl shadow-2xl">
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
-          </button>
-        </div>
-
-        <div className="mb-8 text-center">
-          <img
-            src={hommlieLogo}
-            alt="Hommlie Logo"
-            className="h-10 md:h-12 mx-auto"
-          />
-          <h2 className="text-3xl font-semibold text-gray-800 my-10">
-            Welcome to Hommlie
-          </h2>
-        </div>
-
-        {isOtpSent ? (
-          <>
-            <button
-              className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
-              onClick={() => {
-                setOtp(["", "", "", ""]);
-                setName("");
-                setIsOtpSent(false);
-              }}
-            >
-              <BsArrowLeftCircle className="w-6 h-6" />
-            </button>
-            <h3 className="text-xl font-semibold mb-4 text-gray-700">
-              Enter OTP
-            </h3>
-            <p className="text-sm text-gray-600 mb-6">
-              Please enter the 4 digit code sent to{" "}
-              <span className="font-medium text-[#035240]">+91 {phone}</span>
-            </p>
-            <div
-              className="w-full flex justify-between mb-6"
-              onPaste={handlePaste}
-            >
-              {otp.map((digit, index) => (
+      <div className="relative bg-white w-[90%] max-w-96 p-8 rounded-3xl shadow-2xl md:hidden">
+        {/* Mobile view logic here (can be filled in as needed) */}
+          <div className="text-center mb-6">
+            <img src={hommlieLogo} alt="Hommlie Logo" className="h-12 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-800">Welcome to Hommlie</h2>
+            <p className="text-gray-600 mt-2">Sign up to get started</p>
+          </div>
+  
+          <form className="space-y-6">
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                Mobile Number
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <span className="flex items-center text-gray-500">
+                    <img src="https://flagcdn.com/w20/in.png" alt="India" className="h-4 mr-2" />+91
+                  </span>
+                </div>
                 <input
-                  key={index}
-                  ref={(el) => (otpRefs.current[index] = el)}
-                  type="text"
-                  value={digit}
-                  onChange={(e) => handleOtpChange(e.target.value, index)}
-                  className="w-12 h-12 text-center text-xl font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
-                  maxLength="1"
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={handlePhoneChange}
+                  className="w-full pl-20 p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
+                  placeholder="Enter 10-digit number"
+                  maxLength="10"
+                  minLength="10"
+                  disabled={isOtpSent}
                 />
-              ))}
+              </div>
             </div>
-            {!name && (
-              <div className="mb-6">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Full Name <span className="text-red-500">*</span>
+  
+            {isOtpSent && (
+              <>
+                <div className="mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+                  <div className="flex justify-between space-x-3" onPaste={handlePaste}>
+                    {otp.map((digit, index) => (
+                      <input
+                        key={index}
+                        ref={(el) => (otpRefs.current[index] = el)}
+                        type="text"
+                        value={digit}
+                        onChange={(e) => handleOtpChange(e.target.value, index)}
+                        className="w-full h-12 text-center text-xl font-semibold border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
+                        maxLength="1"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={counter > 0 || isLoading}
+                    className={`${counter > 0 ? "text-gray-400" : "text-[#035240]"} font-medium`}
+                  >
+                    Resend OTP
+                  </button>
+                  <span className="text-gray-500">
+                    {counter > 0 ? `Resend in ${Math.floor(counter / 60)}:${String(counter % 60).padStart(2, "0")}` : "OTP expired"}
+                  </span>
+                </div>
+              </>
+            )}
+  
+            {isOtpSent && !name && (
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name
                 </label>
                 <input
                   type="text"
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter your full name"
+                  className="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
+                  placeholder="Enter your name"
                   required
                 />
               </div>
             )}
-            <div className="mb-6">
+  
+            <div className="flex items-start pt-2">
+              <div className="flex items-center h-5">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={() => setTermsAccepted(!termsAccepted)}
+                  className="h-4 w-4 text-[#035240] focus:ring-[#035240] border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label htmlFor="terms" className="text-gray-600">
+                  I agree to the {" "}
+                  <button
+                    onClick={() => navigate(`${config.VITE_BASE_URL}/terms-conditions`)}
+                    className="text-[#035240] hover:underline font-medium"
+                  >
+                    Terms of Service
+                  </button>{" "}
+                  and {" "}
+                  <button
+                    onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)}
+                    className="text-[#035240] hover:underline font-medium"
+                  >
+                    Privacy Policy
+                  </button>
+                </label>
+              </div>
+            </div>
+  
+            <div>
+              <button
+                type="button"
+                onClick={isOtpSent ? handleProceed : handleSendOtp}
+                disabled={
+                  isLoading ||
+                  !termsAccepted ||
+                  (isOtpSent ? !isOtpButtonEnabled : !isLoginButtonEnabled)
+                }
+                className={`w-full py-3.5 px-4 rounded-lg font-semibold text-white transition-all ${
+                  isLoading
+                    ? "bg-[#02876A] cursor-wait"
+                    : isOtpSent
+                    ? isOtpButtonEnabled && termsAccepted
+                      ? "bg-[#035240] hover:bg-[#024235]"
+                      : "bg-gray-300 cursor-not-allowed"
+                    : isLoginButtonEnabled
+                    ? "bg-[#035240] hover:bg-[#024235]"
+                    : "bg-gray-300 cursor-not-allowed"
+                }`}
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Processing...
+                  </span>
+                ) : isOtpSent ? (
+                  "Verify & Continue"
+                ) : (
+                  "Send OTP"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+
+      <div className="hidden md:flex w-[90%] max-w-4xl">
+        <div className="w-1/2 bg-gradient-to-br from-[#035240] to-[#02876A] flex items-center justify-center p-12 rounded-l-2xl overflow-hidden">
+          <div className="text-white text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-3xl font-bold mb-4"
+            >
+              Join Hommlie Today
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="text-sm opacity-90"
+            >
+              Experience seamless services at your fingertips
+            </motion.p>
+            <motion.img
+              initial={{ opacity: 0, y: 80 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.0, ease: "easeOut" }}
+              src="/images/auth-side-image.webp"
+              alt="Welcome"
+              className="w-64 h-64 mx-auto mt-4 rounded-xl object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="w-1/2 p-10 bg-gray-50 rounded-r-2xl border border-gray-200 shadow-xl flex flex-col justify-center">
+          <div className="relative">
+            <div className="absolute top-0 right-0">
+              <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="text-center mb-8">
+              <img src={hommlieLogo} alt="Hommlie Logo" className="h-12 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-800">
+                {isOtpSent ? "Verify Your Account" : "Welcome Back"}
+              </h2>
+              <p className="text-gray-600 mt-2">
+                {isOtpSent ? "Enter the OTP sent to your mobile" : "Sign in or create an account"}
+              </p>
+            </div>
+
+            {/* Continue your form JSX from here as already included in earlier code */}
+            <form className="space-y-6">
+            {/* Phone Number Field (always visible) */}
+            <div>
               <label
-                htmlFor="referralCode"
+                htmlFor="phone"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Referral Code (Optional)
+                Mobile Number
               </label>
-              <input
-                type="text"
-                id="referralCode"
-                value={referralCode}
-                onChange={(e) => setReferralCode(e.target.value)}
-                className="w-full p-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="Enter referral code"
-              />
-            </div>
-            <div className="flex justify-between items-center mb-6">
-              <button
-                onClick={handleResendOtp}
-                className={`text-sm ${
-                  counter === 0
-                    ? "text-[#035240] hover:underline"
-                    : "text-gray-400"
-                }`}
-                disabled={counter > 0}
-              >
-                Resend OTP
-              </button>
-              <p className="text-sm text-gray-600">{`${Math.floor(
-                counter / 60
-              )}:${counter % 60 < 10 ? "0" : ""}${counter % 60}`}</p>
-            </div>
-            <button
-              className={`w-full py-3 rounded-lg text-white font-semibold transition-colors ${
-                isOtpButtonEnabled
-                  ? "bg-[#035240] hover:bg-green-700"
-                  : "bg-gray-300"
-              }`}
-              disabled={!isOtpButtonEnabled}
-              onClick={handleProceed}
-            >
-              Verify & Proceed
-            </button>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-gray-600 mb-6">
-              Enter your phone number to get started
-            </p>
-            <div className="mb-6">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <span className="flex items-center">
+                  <span className="flex items-center text-gray-500">
                     <img
                       src="https://flagcdn.com/w20/in.png"
                       alt="India"
-                      className="h-4 mr-1"
+                      className="h-4 mr-2"
                     />
-                    <span className="text-gray-700">+91</span>
+                    +91
                   </span>
                 </div>
                 <input
                   type="tel"
+                  id="phone"
                   value={phone}
                   onChange={handlePhoneChange}
-                  className="w-full pl-24 p-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter mobile number"
+                  className="w-full pl-20 p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent transition-all"
+                  placeholder="Enter 10-digit number"
                   maxLength="10"
                   minLength="10"
+                  disabled={isOtpSent}
                 />
               </div>
             </div>
-            <button
-              className={`w-full py-3 rounded-lg text-white font-semibold mb-4 transition-colors ${
-                isLoginButtonEnabled
-                  ? "bg-[#035240] hover:bg-green-700"
-                  : "bg-gray-300"
-              }`}
-              disabled={!isLoginButtonEnabled}
-              onClick={handleSendOtp}
-            >
-              Send OTP
-            </button>
-            <div className="flex items-center mb-4">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={termsAccepted}
-                onChange={() => setTermsAccepted(!termsAccepted)}
-                className="mr-2 form-checkbox h-4 w-4 text-[#035240] transition duration-150 ease-in-out"
-              />
-              <label htmlFor="terms" className="text-sm text-gray-600">
-                I accept the{" "}
-                <button
-                  onClick={() =>
-                    navigate(`${config.VITE_BASE_URL}/terms-conditions`)
-                  }
-                  className="text-[#035240] hover:underline"
+
+            {/* OTP Fields (visible when OTP sent) */}
+            {isOtpSent && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Verification Code
+                </label>
+                <input
+                  type="text"
+                  value={otp.join("")}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "").slice(0, 4);
+                    setOtp(value.split(""));
+                  }}
+                  onPaste={(e) => {
+                    const pastedData = e.clipboardData.getData("Text").replace(/\D/g, "").slice(0, 4);
+                    setOtp(pastedData.split(""));
+                    e.preventDefault();
+                  }}
+                  maxLength={4}
+                  className="w-full tracking-[1em] text-center text-2xl font-bold p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
+                  placeholder="- - - -"
+                />
+              </div>
+            )}
+
+            {/* Name Field (visible when OTP sent and name not pre-filled) */}
+            {isOtpSent && !name && (
+              <div className="animate-fadeIn">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  {" "}
-                  Terms of Use
-                </button>{" "}
-                &{" "}
-                <button
-                  onClick={() =>
-                    navigate(`${config.VITE_BASE_URL}/privacy-policy`)
-                  }
-                  className="text-[#035240] hover:underline"
-                >
-                  Privacy Policy
-                </button>
-              </label>
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+            )}
+
+            {/* Terms Checkbox */}
+            <div className="flex items-start pt-2">
+              <div className="flex items-center h-5">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={() => setTermsAccepted(!termsAccepted)}
+                  className="h-4 w-4 text-[#035240] focus:ring-[#035240] border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label htmlFor="terms" className="text-gray-600">
+                  I agree to the{" "}
+                  <button
+                    onClick={() =>
+                      navigate(`${config.VITE_BASE_URL}/terms-conditions`)
+                    }
+                    className="text-[#035240] hover:underline font-medium"
+                  >
+                    Terms of Service
+                  </button>{" "}
+                  and{" "}
+                  <button
+                    onClick={() =>
+                      navigate(`${config.VITE_BASE_URL}/privacy-policy`)
+                    }
+                    className="text-[#035240] hover:underline font-medium"
+                  >
+                    Privacy Policy
+                  </button>
+                </label>
+              </div>
             </div>
-          </>
-        )}
+
+            {/* Submit Button */}
+            <div>
+              <button
+                type="button"
+                onClick={isOtpSent ? handleProceed : handleSendOtp}
+                disabled={
+                  isLoading ||
+                  !termsAccepted ||
+                  (isOtpSent ? !isOtpButtonEnabled : !isLoginButtonEnabled)
+                }
+                className={`w-full py-3.5 px-4 rounded-lg font-semibold text-white transition-all ${
+                  isLoading
+                    ? "bg-[#02876A] cursor-wait"
+                    : isOtpSent
+                    ? isOtpButtonEnabled && termsAccepted
+                      ? "bg-[#035240] hover:bg-[#024235]"
+                      : "bg-gray-300 cursor-not-allowed"
+                    : isLoginButtonEnabled
+                    ? "bg-[#035240] hover:bg-[#024235]"
+                    : "bg-gray-300 cursor-not-allowed"
+                }`}
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Processing...
+                  </span>
+                ) : isOtpSent ? (
+                  "Verify & Continue"
+                ) : (
+                  "Send OTP"
+                )}
+              </button>
+            </div>
+          </form>
+          </div>
+        </div>
       </div>
     </div>
   );

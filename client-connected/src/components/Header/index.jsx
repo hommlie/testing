@@ -311,23 +311,23 @@ useEffect(() => {
 
 const offers = [
   {
-    label: "RoachX Gel Treatment – ₹399",
+    label: "RoachX Gel Treatment – ₹399*",
     link: "/product/roachx-gel-treatment"
   },
   {
-    label: "General Pest Control – ₹899",
+    label: "General Pest Control – ₹899*",
     link: "/subcategory/general-pest-control"
   },
   {
-    label: "Standard Cockroach Control – ₹999 + GST",
+    label: "Standard Cockroach Control – ₹999*",
     link: "/subcategory/cockroach-control-services-in-bangalore"
   },
   {
-    label: "6D Prime Cockroach – ₹1199",
-    link: "/subcategory/6d-prime-cockroach-treatment"
+    label: "6D Prime Cockroach – ₹1199*",
+    link: "/product/cockroach-control-services-in-bangalore"
   },
   {
-    label: "Bedbugs Standard – ₹2499",
+    label: "Bedbugs Standard – ₹2499*",
     link: "/subcategory/bed-bug-control-services-in-bangalore"
   }
 ];
@@ -393,7 +393,9 @@ const offers = [
                     transition={{ duration: 0.6, ease: "easeInOut" }}
                     className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
                   >
-                    🛡️ {offers[current].label}
+                    <NavLink to={offers[current].link} className=" pointer-events-auto">
+                      🛡️ {offers[current].label}
+                    </NavLink>
                   </motion.p>
                 </AnimatePresence>
               </div>

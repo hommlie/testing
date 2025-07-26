@@ -41,12 +41,12 @@ const ServiceGrid = () => {
       { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
     ],
     "Mosquito & Safety Net": [
-      { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "#" },
-      { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "#" },
-      { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "#" },
-      { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "#" },
-      { name: "Bird Netting", image: "/images/nettingicon.png", url: "#" },
-      { name: "Balcony Safety Net", image: "/images/balconyneticon.png", url: "#" },
+      { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "/subcategory/mosquito-mesh-services-in-bangalore" },
+      { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "/subcategory/mosquito-mesh-door-services-in-bangalore" },
+      { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "/subcategory/mosquito-net-for-windows-in-bangalore" },
+      { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "/subcategory/anti-bird-spikes" },
+      { name: "Bird Netting", image: "/images/nettingicon.png", url: "/subcategory/bird-netting-for-balcony-in-bangalore" },
+      // { name: "Balcony Safety Net", image: "/images/balconyneticon.png", url: "#" },
     ],
     "Disinfection": [
       { name: "Disinfection", image: "/images/disinfection.png", url: "/subcategory/disinfection-services-near-you-in-bangalore" },
@@ -109,14 +109,14 @@ const ServiceGrid = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 1.0, ease: "easeInOut" }}
+        transition={{ duration: 0.9, ease: "easeInOut" }}
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 h-[60vh] sm:h-[80vh] overflow-y-auto"
+          className="bg-white w-full max-w-lg rounded-t-2xl  sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-14 h-[60vh] sm:h-[80vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
         >
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 className="text-lg font-bold">{showModal} Services</h2>
