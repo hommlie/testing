@@ -69,6 +69,8 @@ import Scrapmobile from '../Scrapmobile'
 import Refermobile  from '../Refermobile'
 import Roadmap from "../../components/Roadmap";
 
+
+
 const HomePage = () => {
   const { user } = useCont();
   const { location } = useParams();
@@ -305,14 +307,19 @@ const HomePage = () => {
   // FAQ Section
   const FaqSection = () => {
   const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
+  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
-  return (
-    <div className="w-full mx-auto">
-      <h2 className="text-2xl font-bold mb-8 text-center">
+  const displayedFaqs = isMobile
+    ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
+    : data?.faqs;
+
+   return (
+    <div className="w-full mx-auto px-4" style={{ maxWidth: "1320px" }}>
+      <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
         Frequently Asked Questions
       </h2>
-      <div className="space-y-4 mr-3">
-        {data?.faqs?.map((faq, index) => (
+      <div className="space-y-4">
+        {displayedFaqs?.map((faq, index) => (
           <motion.div
             key={index}
             className="border rounded-lg overflow-hidden"
@@ -324,7 +331,7 @@ const HomePage = () => {
                 setOpenFaqIndex(openFaqIndex === index ? null : index)
               }
             >
-              <span className="font-medium">{faq.question}</span>
+              <span className="font-medium text-sm sm:text-base">{faq.question}</span>
               <span className="text-xl font-bold">
                 {openFaqIndex === index ? "−" : "+"}
               </span>
@@ -337,7 +344,7 @@ const HomePage = () => {
                   exit={{ height: 0 }}
                   className="overflow-hidden"
                 >
-                  <p className="p-4 bg-gray-50">{faq.answer}</p>
+                  <p className="p-4 bg-gray-50 text-sm sm:text-base">{faq.answer}</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -553,6 +560,88 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                 </div>
               )}
             </div>
+            <AnimatePresence>
+              {isSearchOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute left-0 right-0 mt-1 bg-white shadow-lg rounded-lg z-20 max-h-96 overflow-y-auto mx-4 border border-gray-200"
+                >
+                  {isLoading ? (
+                    <div className="flex justify-center items-center py-6">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-emerald-600"></div>
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    searchResults.map((result, index) => (
+                      <motion.div
+                        key={result.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <div
+                          className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            setSearchTerm("");
+                            navigate(`${config.VITE_BASE_URL}/product/${result.slug}`);
+                          }}
+                        >
+                          {result.productimage && (
+                            <img
+                              src={result.productimage.image_url}
+                              alt={result.product_name}
+                              className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
+                            />
+                          )}
+                          <div className="flex-1">
+                            <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
+                            <p className="flex gap-2 text-gray-600">
+                              <span className="font-semibold text-emerald-700">
+                                ₹{result.discounted_price}
+                              </span>
+                              <span className="line-through text-gray-400">
+                                ₹{result.product_price}
+                              </span>
+                            </p>
+                            {result.rating && (
+                              <div className="flex items-center mt-1">
+                                <div className="flex items-center">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <svg
+                                      key={star}
+                                      className={`w-3 h-3 ${
+                                        star <= Math.round(result.rating)
+                                          ? "text-amber-400"
+                                          : "text-gray-300"
+                                      }`}
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                  ))}
+                                </div>
+                                <span className="text-xs text-gray-500 ml-1">
+                                  ({result.total_reviews})
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <IoIosArrowForward className="text-gray-400 text-lg" />
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="py-4 px-6 text-center text-gray-500">
+                      No products found for "{searchTerm}"
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
 
             {/* Always show on both desktop and mobile */}
             <ServiceGrid />

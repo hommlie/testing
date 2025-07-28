@@ -173,6 +173,9 @@ const LoginSignup = ({ isOpen, onClose }) => {
     }
   };
 
+  
+
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative bg-white w-[90%] max-w-96 p-8 rounded-3xl shadow-2xl md:hidden">
@@ -210,22 +213,27 @@ const LoginSignup = ({ isOpen, onClose }) => {
   
             {isOtpSent && (
               <>
-                <div className="mb-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
-                  <div className="flex justify-between space-x-3" onPaste={handlePaste}>
-                    {otp.map((digit, index) => (
-                      <input
-                        key={index}
-                        ref={(el) => (otpRefs.current[index] = el)}
-                        type="text"
-                        value={digit}
-                        onChange={(e) => handleOtpChange(e.target.value, index)}
-                        className="w-full h-12 text-center text-xl font-semibold border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
-                        maxLength="1"
-                      />
-                    ))}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Verification Code
+                    </label>
+                    <input
+                      type="text"
+                      value={otp.join("")}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "").slice(0, 4);
+                        setOtp(value.split(""));
+                      }}
+                      onPaste={(e) => {
+                        const pastedData = e.clipboardData.getData("Text").replace(/\D/g, "").slice(0, 4);
+                        setOtp(pastedData.split(""));
+                        e.preventDefault();
+                      }}
+                      maxLength={4}
+                      className="w-full tracking-[1em] text-center text-2xl font-bold p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
+                      placeholder="- - - -"
+                    />
                   </div>
-                </div>
                 <div className="flex justify-between items-center text-sm">
                   <button
                     type="button"

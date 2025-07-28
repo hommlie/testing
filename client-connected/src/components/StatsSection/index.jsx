@@ -42,8 +42,9 @@ const statsData = [
 const StatsSection = () => {
   return (
     <section className="py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
+      <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-0">
+        {/* Mobile: horizontal scroll | Desktop: grid */}
+        <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-8 overflow-x-auto scrollbar-hide sm:overflow-visible">
           {statsData.map((stat, index) => (
             <motion.div
               key={stat.id || index}
@@ -51,7 +52,7 @@ const StatsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex flex-col items-center text-center bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              className="flex-shrink-0 sm:flex-shrink bg-gray-50 p-2 rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[160px] sm:min-w-0 flex flex-col items-center text-center"
             >
               <img
                 src={stat.icon}
