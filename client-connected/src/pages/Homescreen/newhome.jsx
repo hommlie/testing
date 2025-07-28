@@ -440,16 +440,13 @@ useEffect(() => {
 
 
 const trendingSearches = [
-  "Cockroach control service",
-  "Bed bug control",
-  "Termite treatment",
-  "Pest control services",
-  "Disinfection service",
-  "Rodent control",
-  "Home Deep Cleaning",
-  "6D Prime Services",
-  "Pest Control Near Me",
-  "Cockroach & Ant Control",
+  "Standard Cockroach Control",
+  "Bedbugs",
+  "Termite Control",
+  "Car disinfection",
+  "Rodent Management Service",
+  "Home Disinfection",
+  "6D Prime -Cockroach Control And Ant Control",
 ];
 
 const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -548,14 +545,19 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                   </h3>
                   <div className="flex flex-wrap gap-3">
                     {trendingSearches.map((item, idx) => (
-                      <button
-                        key={idx}
-                        onMouseDown={() => setSearchTerm(item)}
-                        className="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-emerald-100 transition-all"
-                      >
-                        {item}
-                      </button>
-                    ))}
+                          <button
+                            key={idx}
+                            onMouseDown={() => {
+                              setSearchTerm(item); // Show in search bar
+                              fetchSearchResults(item); // Optional: Show matching products
+                              setIsSearchOpen(true); // Show dropdown
+                              searchInputRef.current?.focus(); // Refocus input
+                            }}
+                            className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
+                          >
+                            {item}
+                          </button>
+                        ))}
                   </div>
                 </div>
               )}
