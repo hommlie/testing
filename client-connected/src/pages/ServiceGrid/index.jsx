@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import ComingSoonModal from "../ComingSoonPage";
@@ -7,6 +7,21 @@ import { FaEllipsisH } from "react-icons/fa";
 const ServiceGrid = () => {
   const [showModal, setShowModal] = useState(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
+
+  useEffect(() => {
+  const isMobile = window.innerWidth < 640;
+  if ((showModal || showComingSoon) && isMobile) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [showModal, showComingSoon]);
+
+
 
   // ✅ List of services to show "Coming Soon"
   const comingSoonServices = ["Scrap", "AC Services", "Plumbing", "Painting"];
@@ -102,21 +117,23 @@ const ServiceGrid = () => {
   const renderModal = () => {
     const items = serviceData[showModal] || [];
 
+    
+
     return (
       <motion.div
         key="modal"
-        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center"
+        className="fixed inset-0 bg-black bg-opacity-50 z-[999] sm:z-50 flex items-end sm:items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.9, ease: "easeInOut" }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl  sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-14 h-[60vh] sm:h-[80vh] overflow-y-auto"
+          className="bg-white w-full max-w-lg rounded-t-2xl  sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[80vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 className="text-lg font-bold">{showModal} Services</h2>
