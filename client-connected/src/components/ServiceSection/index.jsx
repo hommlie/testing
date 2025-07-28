@@ -350,6 +350,13 @@ const ServiceSection = ({ categories }) => {
             )}
           </div>
 
+            <a
+            href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
+            className="text-left  hover:underline mb-2 text-sm text-black"
+          >
+            View Details
+          </a>
+
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
               {[1, 2, 3, 4, 5].map((star) => (
