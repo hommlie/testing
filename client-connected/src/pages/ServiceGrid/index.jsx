@@ -103,9 +103,9 @@ const ServiceGrid = () => {
     { id: 3, name: "Scrap", image: "/images/scrap1.png" },
     { id: 4, name: "Mosquito & Safety Net", image: "/images/mosquito1.png" },
     { id: 5, name: "Disinfection", image: "/images/disinfection1.png" },
-    { id: 6, name: "AC Services", image: "/images/ac1.png" },
-    { id: 7, name: "Plumbing", image: "/images/plumbing1.png" },
-    { id: 8, name: "Painting", image: "/images/painting1.png" },
+    // { id: 6, name: "AC Services", image: "/images/ac1.png" },
+    // { id: 7, name: "Plumbing", image: "/images/plumbing1.png" },
+    // { id: 8, name: "Painting", image: "/images/painting1.png" },
     {
     id: 9,
     name: "See More",
@@ -169,10 +169,10 @@ const ServiceGrid = () => {
 
   return (
     <div className="p-4 mb-0 bg-cover bg-center bg-no-repeat mt-4">
-      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-1">
-        <h2 className="sm:text-xl font-bold text-gray-500 sm:ml-7 ml-4 sm:mb-2">
-          On-demand Services In Bangalore
+      <h2 className="sm:text-xl font-bold text-gray-500 sm:ml-7 ml-4 sm:mb-6 -mt-6">
+          On-demand Home Services In Bangalore
         </h2>
+      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-1">
         <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
           {services.map((service) => (
             <div

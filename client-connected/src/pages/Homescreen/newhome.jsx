@@ -462,40 +462,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       </Helmet>
       {/* Typewriter Hero Headline - Desktop Only */}
       
-      <section
+        <section
           className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-center bg-no-repeat "
           style={{background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",}}>
-          <div className="hidden md:flex max-w-7xl ml-14 mt-4 mx-auto">
-            <h1 className="text-2xl font-bold text-gray-800 ml-10">
-              <span
-              style={{
-                background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                display: "inline-block"
-              }}
-            >
-              <Typewriter
-                words={[
-                  "Trained & Verified Professionals..",
-                  "Available All 365 Days..",
-                  "Warranty-Backed Services..",
-                  "Easy to Book, Easy to Use..",
-                  "Friendly Customer Support..",
-                  "Rated by People Like You (4.9 +)..",
-                  "India’s Most Trusted Home Service App..",
-                  "Transparent Prices. No Surprises.."
-                ]}
-                loop={true}
-                cursor
-                cursorStyle="|"
-                typeSpeed={50}
-                deleteSpeed={40}
-                delaySpeed={1500}
-              />
-            </span>
-            </h1>
-          </div>
+          
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">
@@ -647,12 +617,43 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
             {/* Always show on both desktop and mobile */}
             <ServiceGrid />
+            <div className="hidden md:flex max-w-7xl ml-14 mt-10 mx-auto">
+            <h1 className="text-2xl font-bold text-gray-800 ml-10">
+              <span
+              style={{
+                background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                display: "inline-block"
+              }}
+            >
+              <Typewriter
+                words={[
+                  "Trained & Verified Professionals..",
+                  "Available All 365 Days..",
+                  "Warranty-Backed Services..",
+                  "Easy to Book, Easy to Use..",
+                  "Friendly Customer Support..",
+                  "Rated by People Like You (4.9 +)..",
+                  "India’s Most Trusted Home Service App..",
+                  "Transparent Prices. No Surprises.."
+                ]}
+                loop={true}
+                cursor
+                cursorStyle="|"
+                typeSpeed={50}
+                deleteSpeed={40}
+                delaySpeed={1500}
+              />
+            </span>
+            </h1>
+          </div>
              
             
           </div>
     
-          <div className="hidden md:block w-[552px] -mt-10">
-            <div className="h-[595px] rounded-lg overflow-hidden">
+          <div className="hidden md:block w-[552px]">
+            <div className="h-[525px] rounded-lg overflow-hidden">
               <img 
                 src={photo1} // Replace with your single image
                 alt="Home Service Full View" 

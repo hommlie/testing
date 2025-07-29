@@ -380,7 +380,7 @@ const offers = [
           >
             {/* Centered Offer Line */}
 
-              <div className="absolute left-[45%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
+              <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
                 <AnimatePresence mode="wait">
                   <motion.p
                     key={offers[current].label}
@@ -428,14 +428,14 @@ const offers = [
                 Offer
               </button>
               <span className="hidden md:inline-block text-black">|</span>
-              <button
+              {/* <button
                 onClick={() => setIsComingSoonOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
               >
                 <FaShoppingCart className="text-inherit" />
                 Product
-              </button>
-              <span className="hidden md:inline-block text-black">|</span>
+              </button> */}
+              {/* <span className="hidden md:inline-block text-black">|</span> */}
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}
