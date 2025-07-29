@@ -68,7 +68,7 @@ import Scrapbanner from '../Scrapbanner'
 import Scrapmobile from '../Scrapmobile'
 import Refermobile  from '../Refermobile'
 import Roadmap from "../../components/Roadmap";
-
+import CityServiceLinks from "../CityServiceLinks";
 
 
 const HomePage = () => {
@@ -930,6 +930,12 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
         <FaqSection />
+      </section>
+
+      <section className="px-10 py-5 md:py-10" style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
+        <CityServiceLinks />
       </section>
 
       {/* Popular Categories Section with Tabs */}

@@ -52,7 +52,7 @@ const HelpModal = ({ isOpen, onClose }) => {
     {
       icon: <FaPhoneAlt className="text-blue-500 text-xl" />,
       title: "Call Us",
-      detail: "63638-65658",
+      detail: "+91 63638-65658",
       action: "tel:6363865658"
     },
     {
