@@ -425,9 +425,9 @@ const CleaningProductPage = () => {
               <div className="sticky top-44 transition-all duration-300 ease-in-out">
                 {/* Title and Reviews - OUTSIDE the section box */}
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-semibold">
+                  <h1 className="text-2xl font-semibold">
                     {location ? location : innerSubCategoryData?.subcategory_name}
-                  </h2>
+                  </h1>
                   {(innerSubCategoryData.avg_rating || innerSubCategoryData.total_reviews) && (
                     <div className="flex items-center space-x-2">
                       <StarRating rating={innerSubCategoryData.avg_rating} />
