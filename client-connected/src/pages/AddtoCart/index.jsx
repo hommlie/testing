@@ -444,18 +444,20 @@ export default function AddtoCart() {
                         </button>
                       ) : (
                         // Show Edit button on right
-                        <div className="w-full flex items-center justify-between sm:w-[580px]">
-                          <div className="flex-1">
+                        <div className="w-full flex flex-col sm:flex-row sm:items-center sm:w-[560px] gap-2 sm:gap-0 relative mb-4">
+                          <div className="w-full sm:w-auto">
                             <p className="text-gray-600 text-sm">
                               {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
                             </p>
                           </div>
-                          <div className="ml-4">
+
+                          {/* Mobile: normal flow | Desktop: absolute positioned button */}
+                          <div className="w-full sm:w-[70px] sm:absolute sm:right-[-130px] sm:top-1.5 sm:-mt-10">
                             <button
                               onClick={() => {
                                 if (selectedAddrs) openDateTimeModal();
                               }}
-                              className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                              className="w-full px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
                             >
                               Edit
                             </button>
