@@ -202,41 +202,133 @@ export default function AddtoCart() {
     notify("Your cart is empty. Add items to proceed.", "warning");
   };
 
-  const handleProceed = () => {
-    if (user) {
-      if (!selectedAddrs) {
-        addressNotify();
-        openAddressModal();
-      } else if (!selectedDayTime) {
-        dateTimeNotify();
-        openDateTimeModal();
-      } else if (!paymentType) {
-        paymentNotify();
-      } else {
-        if (selectedAddrs)
-          localStorage.setItem(
-            "HommlieselectedAddrs",
-            JSON.stringify(selectedAddrs)
-          );
-        if (selectedDayTime)
-          localStorage.setItem(
-            "HommlieselectedDayTime",
-            JSON.stringify(selectedDayTime)
-          );
-        if (selectedCoupon)
-          localStorage.setItem(
-            "HommlieselectedCoupon",
-            JSON.stringify(selectedCoupon)
-          );
-        if (paymentType)
-          localStorage.setItem(
-            "HommliepaymentType",
-            JSON.stringify(paymentType)
-          );
-        navigate(`${config.VITE_BASE_URL}/review-booking`);
-      }
-    }
-  };
+  const handleProceed = async () => {
+        setIsLoading(true);
+        const jwtToken = Cookies.get("HommlieUserjwtToken");
+        if (jwtToken) {
+            const user = jwtDecode(jwtToken);
+            const payment_id = Math.random().toString(36).substring(2, 12);
+
+            if (paymentType?.payment_name === "Online") {
+                try {
+                    const orderResponse = await axios.post(`${config.API_URL}/api/initiatePayment`, {
+                        amount: totalAmount - couponDiscount,
+                        currency: "INR",
+                        user_id: user.id,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${jwtToken}`,
+                        },
+                    });                    
+
+                    const options = {
+                        key: config.RAZORPAY_KEY_ID,
+                        amount: orderResponse.data.data.amount,
+                        currency: orderResponse.data.data.currency,
+                        name: "Hommlie",
+                        description: "Order Payment",
+                        order_id: orderResponse.data.data.id,
+                        handler: async function (response) {
+                            console.log("Payment Response:", response);
+                            try {
+                                const verifyResponse = await axios.post(`${config.API_URL}/api/verifyPayment`, {
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                }, {
+                                    headers: {
+                                        Authorization: `Bearer ${jwtToken}`,
+                                    },
+                                });
+                                
+                                if (verifyResponse.data.status === 1) {
+                                    await placeOrder(user, payment_id, response.razorpay_payment_id);
+                                } else {
+                                    errorNotify("Payment verification failed. Please try again.");
+                                }
+                            } catch (error) {
+                                console.error("Error verifying payment:", error);
+                                errorNotify("Error verifying payment. Please contact support.");
+                            }
+                        },
+                        prefill: {
+                            name: selectedAddrs?.name,
+                            email: selectedAddrs?.email,
+                            contact: selectedAddrs?.mobile,
+                        },
+                        theme: {
+                            color: "#249370",
+                        },
+                    };
+
+                    const razorpay = new window.Razorpay(options);
+                    razorpay.open();
+                } catch (error) {
+                    console.error("Error creating Razorpay order:", error);
+                    errorNotify("Error processing payment. Please try again.");
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                await placeOrder(user, payment_id);
+            }
+        }
+    };
+
+    const placeOrder = async (user, payment_id, razorpay_payment_id = null) => {
+        try {
+
+            const response = await axios.post(`${config.API_URL}/api/order`, 
+                {
+                    user_id: user.id, 
+                    payment_type: paymentType?.id, 
+                    payment_id: razorpay_payment_id || payment_id, 
+                    grand_total: totalAmount - couponDiscount,
+                    discount_amount: couponDiscount,
+                    coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
+                    coupon_id: selectedCoupon ? selectedCoupon.id : null, 
+                    order_notes: null, 
+                    full_name: selectedAddrs?.name, 
+                    email: selectedAddrs?.email, 
+                    mobile: selectedAddrs?.mobile, 
+                    landmark: selectedAddrs?.landmark, 
+                    street_address: selectedAddrs?.address, 
+                    pincode: selectedAddrs.pincode,
+                    latitude: selectedAddrs.latitude,
+                    longitude: selectedAddrs.longitude,
+                    desired_date: selectedDayTime?.date?.formattedDate,
+                    desired_time: selectedDayTime?.time,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}`,
+                    },
+                }
+            );            
+
+            if (response.data.status === 1) {
+                console.log(response.data.message);
+                successNotify("Successfully placed your order");
+                localStorage.removeItem("cart");
+                setCart([]);
+                localStorage.removeItem("HommlieselectedAddrs");
+                localStorage.removeItem("HommlieselectedDayTime");
+                localStorage.removeItem("HommlieselectedCoupon");
+                localStorage.removeItem("HommliepaymentType");
+                getBookings();
+                getCart();
+                navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
+            } else {
+                errorNotify(response.data.message);
+                console.log("error placing order:",response.data);
+            }
+        } catch (error) {
+            console.log("error placing order:", error);
+            errorNotify(error.response?.data?.message || "Error placing order. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
   // const handleCallbackRequest = async () => {
   //     try {
@@ -477,9 +569,21 @@ export default function AddtoCart() {
                 </div>
                 
                   {/* Payment Options */}
-                  <h3 className="font-semibold mb-4 mt-8">Payment Method</h3>
+                  <h3 className="font-semibold">Payment Method</h3>
+                  {/* <button
+                        onClick={
+                          cart.length === 0 ? handleEmptyCartClick : handleProceed
+                        }
+                        className={`w-full py-4 rounded-lg font-medium mt-6 transition-colors ${
+                          cart.length === 0
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-[#035240] text-white hover:bg-[#024535]"
+                        }`}
+                      >
+                        {cart.length === 0 ? "Cart is Empty" : "Proceed to Payment"}
+                    </button> */}
                   <div className={`space-y-3 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''}`}>
-                    {/* {paymentList?.map((payment) => (
+                    {paymentList?.map((payment) => (
                       <label
                         key={payment.id}
                         className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${
@@ -501,19 +605,24 @@ export default function AddtoCart() {
                           {payment.payment_name}
                         </span>
                       </label>
-                    ))} */}
-                    <button
-                    onClick={
-                      cart.length === 0 ? handleEmptyCartClick : handleProceed
-                    }
-                    className={`w-full py-4 rounded-lg font-medium mt-6 transition-colors ${
-                      cart.length === 0
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-[#035240] text-white hover:bg-[#024535]"
-                    }`}
-                  >
-                    {cart.length === 0 ? "Cart is Empty" : "Proceed to Payment"}
-                  </button>
+                    ))}
+                      <button 
+                           className="w-full py-4 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition-colors mt-6"
+                           disabled={isLoading}
+                           onClick={handleProceed}
+                       >
+                           {isLoading ? (
+                               <div className="flex items-center justify-center gap-2">
+                                   <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                   </svg>
+                                   <span>PLACING ORDER...</span>
+                               </div>
+                           ) : (
+                               'PLACE ORDER'
+                           )}
+                      </button>
                   </div>
                   {/* Proceed Button */}
                   {/* <button
