@@ -244,7 +244,7 @@ export default function AddtoCart() {
                                 if (verifyResponse.data.status === 1) {
                                     await placeOrder(user, payment_id, response.razorpay_payment_id);
                                 } else {
-                                    errorNotify("Payment verification failed. Please try again.");
+                                    notify("Payment verification failed. Please try again.", "error");
                                 }
                             } catch (error) {
                                 console.error("Error verifying payment:", error);
@@ -308,7 +308,7 @@ export default function AddtoCart() {
 
             if (response.data.status === 1) {
                 console.log(response.data.message);
-                successNotify("Successfully placed your order");
+                notify("Successfully placed your order", "success");
                 localStorage.removeItem("cart");
                 setCart([]);
                 localStorage.removeItem("HommlieselectedAddrs");
@@ -316,8 +316,13 @@ export default function AddtoCart() {
                 localStorage.removeItem("HommlieselectedCoupon");
                 localStorage.removeItem("HommliepaymentType");
                 getBookings();
+                placeOrder();
                 getCart();
-                navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
+                if (paymentType?.payment_name !== "Online") {
+                  setIsOrderConfirmed(true);
+                } else {
+                  navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
+                }
             } else {
                 errorNotify(response.data.message);
                 console.log("error placing order:",response.data);
@@ -396,6 +401,9 @@ export default function AddtoCart() {
   };
 
   const topTracker = ["Add To Cart", "Review Booking", "Booking Confirmed"];
+
+  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
+
 
   return (
     <div className=""  style={{
@@ -805,6 +813,24 @@ export default function AddtoCart() {
           </div>
         </div>
 
+        {isOrderConfirmed && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+            <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-lg text-center space-y-4">
+              <h2 className="text-xl font-semibold text-[#249370]">Order Confirmed!</h2>
+              <p className="text-gray-700">Thank you for booking with Hommlie. Your order has been successfully placed.</p>
+              <button
+                onClick={() => {
+                  setIsOrderConfirmed(false);
+                  navigate(`${config.VITE_BASE_URL}/booking-success`);
+                }}
+                className="px-6 py-2 bg-[#035240] text-white rounded-lg hover:bg-[#024535]"
+              >
+                Okay
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Similar Products Section */}
         {prodRelatedProds?.length > 0 && (
           <section className="mt-12 p-4">
@@ -830,5 +856,6 @@ export default function AddtoCart() {
         totalAmount={totalItemPrice + tax}
       />
     </div>
+
   );
 }
