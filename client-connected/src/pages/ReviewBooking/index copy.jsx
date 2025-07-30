@@ -222,7 +222,6 @@ export default function ReviewBooking() {
     return (
         <main className="flex justify-center">
             <div className="w-[90%] md:w-[75%] my-6 md:my-16 space-y-4">
-                
                 <div className="flex flex-col justify-center items-center">
                     <div className="w-full lg:w-[80%] p-4 relative">
                         <div className="flex flex-row justify-between my-8">

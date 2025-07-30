@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import config from "../../config/config";
 import ProdSection from "../../components/ProdSection";
+import { MdOutlineSendToMobile } from "react-icons/md";
 
 export default function AddtoCart() {
   const navigate = useNavigate();
@@ -305,12 +306,12 @@ export default function AddtoCart() {
   const topTracker = ["Add To Cart", "Review Booking", "Booking Confirmed"];
 
   return (
-    <main className="min-h-screen bg-gray-50"  style={{
+    <div className=""  style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
         {/* Progress Tracker */}
-        <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow-sm mb-4">
+        {/* <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow-sm mb-4">
           <div className="w-full lg:w-[80%] p-4 relative">
             <div className="flex flex-row justify-between my-8">
               {topTracker.map((tracker, index) => {
@@ -351,12 +352,119 @@ export default function AddtoCart() {
               ></div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Cart Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Cart Items */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-sm p-6 space-y-10">
+              {/* Account Section */}
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-l font-semibold flex items-center gap-2">
+                    <MdOutlineSendToMobile className="text-xl text-[#249370]" />
+                    Send Your Booking Details To
+                  </h2>
+
+                  {/* 
+                  <NavLink
+                    to={`${config.VITE_BASE_URL}/edit-profile`}
+                    className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                  >
+                    Edit
+                  </NavLink> 
+                  */}
+                </div>
+
+                <div className="-mt-3">
+                  <div className="space-y-2 text-gray-600">
+                    <p className="text-gray-500 mb-3">
+                      {user?.name}{" ( "}{user?.mobile}{" ) "}, {user?.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="border-t border-gray-100"></div>
+              </div>
+              {/* Address Section */}
+              <div>
+                <div className="flex justify-between items-center mb-4 -mt-8">
+                  <div className="flex items-center gap-3">
+                    <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
+                    <h2 className="text-xl font-semibold">Delivery Address</h2>
+                  </div>
+                  <button
+                    onClick={openAddressModal}
+                    className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                  >
+                    {selectedAddrs ? "Edit" : "Add"}
+                  </button>
+                </div>
+                <div className="">
+                  {selectedAddrs ? (
+                    <div className="space-y-2 text-gray-600 mb-4">
+                      <p className="font-medium text-black">{selectedAddrs.name}</p>
+                      <p>{selectedAddrs.address}</p>
+                      <p>{selectedAddrs.landmark}</p>
+                      <p>{selectedAddrs.pincode}</p>
+                      <p>Mobile: {selectedAddrs.mobile}</p>
+                    </div>
+                  ) : (
+                    <p className=" text-gray-500 -mt-5">Please select a delivery address</p>
+                  )}
+                </div>
+                <div className="border-t border-gray-100"></div>
+              </div>
+
+              {/* Delivery Time Section */}
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <div className="-mt-6">
+                    <div className="flex items-center gap-3">
+                      <RiTimerLine className="text-2xl text-[#249370]" />
+                      <h2 className="text-xl font-semibold">Select Your Slot</h2>
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={openDateTimeModal}
+                        className="w-full sm:w-[580px] px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                      >
+                        {selectedDayTime ? "Select time & Date" : "Select Time"}
+                      </button>
+                    </div>
+                    <div className="border-t border-gray-100 pt-4">
+                  {selectedDayTime ? (
+                    <p className="text-gray-600">
+                      {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
+                    </p>
+                  ) : (
+                    <p className="text-gray-500">Please select delivery date and time</p>
+                  )}
+                </div>
+                  </div>
+                </div>
+              </div>
+              {/* Need Help Section */}
+              {/* <section className="mt-12 bg-white rounded-xl shadow-sm p-8">
+                <div className="max-w-3xl mx-auto text-center">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Need help finding the right plan?
+                  </h2>
+                  <p className="text-gray-600 mb-6">
+                    Our team will get in touch to answer your questions and help you
+                    get started
+                  </p>
+                  <button
+                    onClick={() => navigate(`${config.VITE_BASE_URL}/contact-us`)}
+                    className="inline-block px-8 py-3 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                  >
+                    Contact Us Now
+                  </button>
+                </div>
+              </section> */}
+            </div>
+          </div>
+          {/* Order Summary */}
+          <div className="lg:col-span-1 space-y-6">
             {isLoading && cart.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-6 flex justify-center items-center min-h-[200px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#249370] border-t-transparent"></div>
@@ -380,87 +488,48 @@ export default function AddtoCart() {
             ) : (
               cart?.map((pd, index) => (
                 <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 transform transition duration-300 hover:shadow-md">
-                  <div className="flex gap-3 md:gap-6">
-                    <div>
-                      <img
-                        src={pd.image_url}
-                        alt={pd?.alt_tag}
-                        className="w-20 h-20 xs:w-24 xs:h-24 md:w-32 md:h-32 object-cover rounded-lg"
-                      />
-                    </div>
+                  <div className="flex gap-4 md:gap-6 items-start">
+                    {/* Image */}
+                    <img
+                      src={pd.image_url}
+                      alt={pd?.alt_tag}
+                      className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg"
+                    />
 
-                    <div className="flex-1 min-w-0">
-                      {" "}
-                      {/* min-w-0 prevents flex child from overflowing */}
-                      <div className="flex justify-between">
-                        {/* Product Details */}
-                        <div className="min-w-0 pr-2">
-                          {" "}
-                          {/* pr-2 prevents text from touching price */}
-                          <h3 className="text-base xs:text-lg md:text-xl font-semibold mb-0.5 md:mb-2 line-clamp-2">
-                            {pd.product_name}
-                          </h3>
-                          {pd?.attribute_name && (
-                            <p className="text-xs xs:text-sm md:text-base text-gray-600 mb-0.5 md:mb-1">
-                              {pd?.attribute_name}
-                            </p>
-                          )}
-                          {pd?.variation_name && (
-                            <p className="text-xs xs:text-sm md:text-base text-gray-600 mb-1 md:mb-2">
-                              {pd?.variation_name}
-                            </p>
-                          )}
-                        </div>
+                    {/* Content beside image */}
+                    <div className="flex-1 flex flex-col justify-between">
+                      {/* Product details */}
+                      <div>
+                        <h3 className="text-base md:text-lg font-semibold">{pd.product_name}</h3>
+                        {pd?.attribute_name && (
+                          <p className="text-sm text-gray-600">{pd.attribute_name}</p>
+                        )}
+                        {pd?.variation_name && (
+                          <p className="text-sm text-gray-600">{pd.variation_name}</p>
+                        )}
+                      </div>
 
-                        {/* Price and Controls */}
-                        <div className="flex flex-col items-end">
-                          <span className="text-lg xs:text-xl md:text-2xl font-bold text-[#249370] whitespace-nowrap">
-                            ₹{pd.price * pd.qty}
-                          </span>
+                      {/* Price & Qty control */}
+                      <div className="flex items-center justify-between mt-4">
+                        <span className="text-xl font-bold text-[#249370]">₹{pd.price * pd.qty}</span>
 
-                          <div className="mt-4">
-                            {" "}
-                            {/* pushes controls to bottom */}
-                            <div className="flex items-center gap-2 md:gap-4">
-                              {/* Quantity Controls */}
-                              <div className="flex items-center border-2 border-[#249370] rounded-lg">
-                                <button
-                                  onClick={() =>
-                                    handleQtyUpdate(pd?.id, pd?.qty - 1)
-                                  }
-                                  className="w-6 h-6 xs:w-7 xs:h-7 md:w-8 md:h-8 flex items-center justify-center text-[#249370] hover:bg-[#249370] hover:text-white transition-colors"
-                                  disabled={
-                                    isLoading && loadingItemId === pd?.id
-                                  }
-                                >
-                                  -
-                                </button>
-                                <span className="w-6 xs:w-8 md:w-10 text-center text-xs xs:text-sm md:text-base font-medium">
-                                  {pd?.qty}
-                                </span>
-                                <button
-                                  onClick={() =>
-                                    handleQtyUpdate(pd?.id, pd?.qty + 1)
-                                  }
-                                  className="w-6 h-6 xs:w-7 xs:h-7 md:w-8 md:h-8 flex items-center justify-center text-[#249370] hover:bg-[#249370] hover:text-white transition-colors"
-                                  disabled={
-                                    isLoading && loadingItemId === pd?.id
-                                  }
-                                >
-                                  +
-                                </button>
-                              </div>
-
-                              {/* Delete Button */}
-                              <button
-                                onClick={() => handleRemoveFromCart(pd?.id)}
-                                className="text-gray-400 hover:text-red-500 transition-colors"
-                                aria-label="Remove item"
-                              >
-                                <RiDeleteBin5Line className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6" />
-                              </button>
-                            </div>
-                          </div>
+                        {/* Qty controller */}
+                        <div className="flex items-center border border-[#249370] rounded-lg">
+                          <button
+                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
+                            className="px-2 py-1 text-[#249370] hover:bg-[#249370] hover:text-white"
+                            disabled={isLoading && loadingItemId === pd?.id}
+                          >
+                            -
+                          </button>
+                          <span className="px-3">{pd?.qty}</span>
+                          <button
+                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
+                            className="px-2 py-1 text-[#249370] hover:bg-[#249370] hover:text-white"
+                            disabled={isLoading && loadingItemId === pd?.id}
+                          >
+                            +
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -468,91 +537,6 @@ export default function AddtoCart() {
                 </div>
               ))
             )}
-
-            {/* Account Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Account Details</h2>
-                <NavLink
-                  to={`${config.VITE_BASE_URL}/edit-profile`}
-                  className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-                >
-                  Edit
-                </NavLink>
-              </div>
-              <div className="border-t border-gray-100 pt-4">
-                <div className="space-y-2 text-gray-600">
-                  <p className="font-medium text-black">{user?.name}</p>
-                  <p>Mobile: {user?.mobile}</p>
-                  <p>Email: {user?.email}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Address Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-3">
-                  <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
-                  <h2 className="text-xl font-semibold">Delivery Address</h2>
-                </div>
-                <button
-                  onClick={openAddressModal}
-                  className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-                >
-                  {selectedAddrs ? "Change" : "Add Address"}
-                </button>
-              </div>
-              <div className="border-t border-gray-100 pt-4">
-                {selectedAddrs ? (
-                  <div className="space-y-2 text-gray-600">
-                    <p className="font-medium text-black">
-                      {selectedAddrs.name}
-                    </p>
-                    <p>{selectedAddrs.address}</p>
-                    <p>{selectedAddrs.landmark}</p>
-                    <p>{selectedAddrs.pincode}</p>
-                    <p>Mobile: {selectedAddrs.mobile}</p>
-                  </div>
-                ) : (
-                  <p className="text-gray-500">
-                    Please select a delivery address
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Delivery Time Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-3">
-                  <RiTimerLine className="text-2xl text-[#249370]" />
-                  <h2 className="text-xl font-semibold">Delivery Time</h2>
-                </div>
-                <button
-                  onClick={openDateTimeModal}
-                  className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-                >
-                  {selectedDayTime ? "Change" : "Select Time"}
-                </button>
-              </div>
-              <div className="border-t border-gray-100 pt-4">
-                {selectedDayTime ? (
-                  <p className="text-gray-600">
-                    {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date}{" "}
-                    @ {selectedDayTime?.time}
-                  </p>
-                ) : (
-                  <p className="text-gray-500">
-                    Please select delivery date and time
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Order Summary */}
-          <div className="lg:col-span-1 space-y-6">
             <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
               <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
               <div className="space-y-4">
@@ -680,25 +664,6 @@ export default function AddtoCart() {
             />
           </section>
         )}
-
-        {/* Need Help Section */}
-        <section className="mt-12 bg-white rounded-xl shadow-sm p-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-semibold mb-4">
-              Need help finding the right plan?
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Our team will get in touch to answer your questions and help you
-              get started
-            </p>
-            <button
-              onClick={() => navigate(`${config.VITE_BASE_URL}/contact-us`)}
-              className="inline-block px-8 py-3 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-            >
-              Contact Us Now
-            </button>
-          </div>
-        </section>
       </div>
 
       {/* Modals */}
@@ -713,6 +678,6 @@ export default function AddtoCart() {
         onClose={closeCouponModal}
         totalAmount={totalItemPrice + tax}
       />
-    </main>
+    </div>
   );
 }

@@ -241,31 +241,43 @@ export function ContProvider({ children }) {
   }
 
   async function getAddresses() {
-    setAddresses([]);
-    const jwtToken = Cookies.get("HommlieUserjwtToken");
-    if (jwtToken) {
-      const id = jwtDecode(jwtToken);
-      await axios
-        .post(`${config.API_URL}/api/getaddress`, {
-          user_id: id.id,
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        })
-        .then((response) => {
-          if (response.data.status === 1) {
-            setAddresses(response.data.data);
-          } else if (response.data.status === 0) {
-            console.log(response.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log("error: " + err);
-        });
-    } else {
-      console.log("User hasn't logged in");
+  setAddresses([]);
+  const jwtToken = Cookies.get("HommlieUserjwtToken");
+  if (jwtToken) {
+    const id = jwtDecode(jwtToken);
+    try {
+      const response = await axios.post(`${config.API_URL}/api/getaddress`, {
+        user_id: id.id,
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+
+      if (response.data.status === 1) {
+        const allAddresses = response.data.data;
+        setAddresses(allAddresses);
+
+        // ✅ Reset selectedAddrs if the address was deleted
+        const storedSelectedAddrs = JSON.parse(localStorage.getItem("HommlieselectedAddrs"));
+        const stillExists = allAddresses.find(addr => addr.id === storedSelectedAddrs?.id);
+
+        if (!stillExists) {
+          localStorage.removeItem("HommlieselectedAddrs");
+          setSelectedAddrs(null);
+        }
+      } else {
+        console.log(response.data.message);
+        setSelectedAddrs(null);
+        localStorage.removeItem("HommlieselectedAddrs");
+      }
+    } catch (err) {
+      console.log("error: " + err);
     }
+  } else {
+    console.log("User hasn't logged in");
   }
+}
+
 
   // async function getCoupons() {
   //   await axios.get(`${config.API_URL}/api/coupons`)

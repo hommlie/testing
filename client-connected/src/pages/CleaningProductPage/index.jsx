@@ -391,7 +391,7 @@ const CleaningProductPage = () => {
       </Helmet>
       <div className="container px-4 mt-5">
         <div className="mt-5">
-          <nav className="flex space-x-2 text-gray-500 text-sm mb-8">
+          <nav className="hidden sm:block flex space-x-2 text-gray-500 text-sm mb-8">
             <a href="/" className="text-blue-500">
               Home
             </a>
@@ -405,7 +405,20 @@ const CleaningProductPage = () => {
             <span>/</span>
             <span>{innerSubCategoryData?.subcategory_name}</span>
           </nav>
-
+          {/* //mobile view image  */}
+          {innerSubCategoryData?.subcategory_banner ? (
+              <img
+                src={innerSubCategoryData?.subcategory_banner}
+                alt={innerSubCategoryData?.innersubcategory_name}
+                className="block sm:hidden w-full h-[200px] rounded-lg mb-5"
+              />
+            ) : (
+              <img
+                src={NoImage}
+                alt=""
+                className="block sm:hidden w-full h-[150px] rounded-lg opacity-40"
+              />
+          )}
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Left Sidebar */}
             <div className="lg:w-1/4">
@@ -475,13 +488,13 @@ const CleaningProductPage = () => {
             </div>
 
             {/* Main Content */}
-            <div className="lg:w-1/2">
+            <div className="lg:w-1/2 -mt-4">
               <div className="space-y-6">
                 {innerSubCategoryData?.subcategory_banner ? (
                   <img
                     src={innerSubCategoryData?.subcategory_banner}
                     alt={innerSubCategoryData?.innersubcategory_name}
-                    className="w-full h-[150px] md:h-[300px] rounded-lg"
+                    className="hidden sm:block w-full h-[150px] md:h-[300px] rounded-lg mt-4"
                   />
                 ) : (
                   <img
