@@ -85,7 +85,7 @@ const MobileNavigation = () => {
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
+      className="-mb-3 md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
     >
       <nav className="flex justify-between px-4 py-2 relative">
         {navItems.map(({ path, label, IconOutline, IconFill, iconImage }) => (
