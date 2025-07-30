@@ -357,7 +357,7 @@ export default function AddtoCart() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Cart Content */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm p-6 space-y-10">
+            <div className="bg-white rounded-xl shadow-sm p-6 space-y-10 w-100px">
               {/* Account Section */}
               <div>
                 <div className="flex justify-between items-center mb-4">
@@ -452,7 +452,7 @@ export default function AddtoCart() {
                           </div>
 
                           {/* Mobile: normal flow | Desktop: absolute positioned button */}
-                          <div className="w-full sm:w-[70px] sm:absolute sm:right-[-130px] sm:top-1.5 sm:-mt-10">
+                          <div className="w-full sm:w-[70px] sm:absolute l:right:[-50px] sm:right-[-130px] sm:top-1.5 sm:-mt-10">
                             <button
                               onClick={() => {
                                 if (selectedAddrs) openDateTimeModal();
@@ -475,6 +475,72 @@ export default function AddtoCart() {
                     </div>
                   </div>
                 </div>
+                
+                  {/* Payment Options */}
+                  <h3 className="font-semibold mb-4 mt-8">Payment Method</h3>
+                  <div className={`space-y-3 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''}`}>
+                    {/* {paymentList?.map((payment) => (
+                      <label
+                        key={payment.id}
+                        className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${
+                          paymentType?.id === payment.id
+                            ? "border-[#249370] bg-green-50"
+                            : "border-gray-200 hover:border-[#249370]"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value={payment.id}
+                          checked={paymentType?.id === payment.id}
+                          onChange={handlePaymentChange}
+                          disabled={!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time}
+                          className="mr-3 text-[#249370] focus:ring-[#249370]"
+                        />
+                        <span className="font-medium">
+                          {payment.payment_name}
+                        </span>
+                      </label>
+                    ))} */}
+                    <button
+                    onClick={
+                      cart.length === 0 ? handleEmptyCartClick : handleProceed
+                    }
+                    className={`w-full py-4 rounded-lg font-medium mt-6 transition-colors ${
+                      cart.length === 0
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-[#035240] text-white hover:bg-[#024535]"
+                    }`}
+                  >
+                    {cart.length === 0 ? "Cart is Empty" : "Proceed to Payment"}
+                  </button>
+                  </div>
+                  {/* Proceed Button */}
+                  {/* <button
+                    onClick={
+                      cart.length === 0 ? handleEmptyCartClick : handleProceed
+                    }
+                    className={`w-full py-4 rounded-lg font-medium mt-6 transition-colors ${
+                      cart.length === 0
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-[#035240] text-white hover:bg-[#024535]"
+                    }`}
+                  >
+                    {cart.length === 0 ? "Cart is Empty" : "Proceed to Payment"}
+                  </button> */}
+
+                  {/* Security Badge */}
+                  {/* <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
+                    <img
+                      src={secureIcon}
+                      alt="Secure Payment"
+                      className="w-8 h-8"
+                    />
+                    <p className="text-sm text-gray-500">
+                      Safe and Secure Payments
+                    </p>
+                  </div> */}
+                
               </div>
               {/* Need Help Section */}
               {/* <section className="mt-12 bg-white rounded-xl shadow-sm p-8">
@@ -519,21 +585,20 @@ export default function AddtoCart() {
                 </button>
               </div>
             ) : (
-              cart?.map((pd, index) => (
-                <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 transform transition duration-300 hover:shadow-md">
-                  <div className="flex gap-4 md:gap-6 items-start">
+              <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 space-y-6">
+                {cart?.map((pd, index) => (
+                  <div key={pd.id} className="flex gap-4 md:gap-6 items-start border-b pb-4 last:border-b-0">
                     {/* Image */}
-                    <img
+                    {/* <img
                       src={pd.image_url}
                       alt={pd?.alt_tag}
                       className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg"
-                    />
-
+                    /> */}
                     {/* Content beside image */}
                     <div className="flex-1 flex flex-col justify-between">
                       {/* Product details */}
-                      <div>
-                        <h3 className="text-base md:text-lg font-semibold">{pd.product_name}</h3>
+                      <div className="flex flex-col-3 justify-between">
+                        <h3 className="text-base md:text-sm font-semibold">{pd.product_name}</h3>
                         {pd?.attribute_name && (
                           <p className="text-sm text-gray-600">{pd.attribute_name}</p>
                         )}
@@ -567,39 +632,12 @@ export default function AddtoCart() {
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
-              <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-              <div className="space-y-4">
-                <div className="flex justify-between text-gray-600">
-                  <span>Items ({itemCount})</span>
-                  <span>₹{totalItemPrice?.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>Platform Fee</span>
-                  <span>₹{tax?.toFixed(2)}</span>
-                </div>
-                {couponDiscount > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Coupon Discount</span>
-                    <span>-₹{couponDiscount.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="border-t border-gray-200 pt-4">
-                  <div className="flex justify-between text-lg font-semibold">
-                    <span>Total Amount</span>
-                    <span className="text-[#249370]">
-                      ₹{totalAmount?.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
+                ))}
               </div>
-
-              {/* Coupon Section */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex justify-between items-center mb-4">
+            )}
+            {/* Coupon Section */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all">
+                <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <BiSolidOffer className="text-xl text-[#249370]" />
                     <span className="font-medium">Apply Coupon</span>
@@ -627,61 +665,32 @@ export default function AddtoCart() {
                     </button>
                   </div>
                 )}
-              </div>
-
-              {/* Payment Options */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h3 className="font-semibold mb-4">Payment Method</h3>
-                <div className="space-y-3">
-                  {paymentList?.map((payment) => (
-                    <label
-                      key={payment.id}
-                      className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${
-                        paymentType?.id === payment.id
-                          ? "border-[#249370] bg-green-50"
-                          : "border-gray-200 hover:border-[#249370]"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={payment.id}
-                        checked={paymentType?.id === payment.id}
-                        onChange={handlePaymentChange}
-                        className="mr-3 text-[#249370] focus:ring-[#249370]"
-                      />
-                      <span className="font-medium">
-                        {payment.payment_name}
-                      </span>
-                    </label>
-                  ))}
+            </div>
+            <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
+              <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+              <div className="space-y-4">
+                <div className="flex justify-between text-gray-600">
+                  <span>Items ({itemCount})</span>
+                  <span>₹{totalItemPrice?.toFixed(2)}</span>
                 </div>
-              </div>
-
-              {/* Proceed Button */}
-              <button
-                onClick={
-                  cart.length === 0 ? handleEmptyCartClick : handleProceed
-                }
-                className={`w-full py-4 rounded-lg font-medium mt-6 transition-colors ${
-                  cart.length === 0
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-[#035240] text-white hover:bg-[#024535]"
-                }`}
-              >
-                {cart.length === 0 ? "Cart is Empty" : "Proceed to Payment"}
-              </button>
-
-              {/* Security Badge */}
-              <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
-                <img
-                  src={secureIcon}
-                  alt="Secure Payment"
-                  className="w-8 h-8"
-                />
-                <p className="text-sm text-gray-500">
-                  Safe and Secure Payments
-                </p>
+                <div className="flex justify-between text-gray-600">
+                  <span>Platform Fee</span>
+                  <span>₹{tax?.toFixed(2)}</span>
+                </div>
+                {couponDiscount > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Coupon Discount</span>
+                    <span>-₹{couponDiscount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="flex justify-between text-lg font-semibold">
+                    <span>Total Amount</span>
+                    <span className="text-[#249370]">
+                      ₹{totalAmount?.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
