@@ -54,12 +54,12 @@ export default function QuickHeroSection() {
         </h2>
 
 
-        <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
           <span className="text-3xl md:text-5xl italic font-extrabold text-[#92B775] leading-tight mb-4 uppercase">
             HOME
           </span>{' '}
           SERVICE APP
-        </h1>
+        </h2>
 
 
         {/* Subtext */}
@@ -117,11 +117,11 @@ export default function QuickHeroSection() {
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
             Instant Home Services, <br />
           </h2>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
             <span className="text-3xl md:text-5xl italic font-extrabold text-[#92b876] leading-tight mb-4">
             Right at Your Doorstep
             </span>{' '}
-        </h1>
+          </h2>
           <motion.p
             className="text-xl text-[#483fa1] mt-4 mb-32"
             initial={{ opacity: 0, y: 20 }}
