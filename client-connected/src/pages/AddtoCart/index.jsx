@@ -90,7 +90,7 @@ export default function AddtoCart() {
     );
     setSelectedDayTime(
       localStorage.getItem("HommlieselectedDayTime") == "undefined"
-        ? []
+        ? null
         : JSON.parse(localStorage.getItem("HommlieselectedDayTime"))
     );
     setSelectedCoupon(
@@ -415,31 +415,62 @@ export default function AddtoCart() {
                 <div className="border-t border-gray-100"></div>
               </div>
 
-              {/* Delivery Time Section */}
+              {/* Delivery Time Section - only visible after address is selected */}
               <div>
                 <div className="flex justify-between items-center mb-4">
-                  <div className="-mt-6">
+                  <div className="-mt-6 w-full">
                     <div className="flex items-center gap-3">
                       <RiTimerLine className="text-2xl text-[#249370]" />
                       <h2 className="text-xl font-semibold">Select Your Slot</h2>
                     </div>
-                    <div className="mt-3">
-                      <button
-                        onClick={openDateTimeModal}
-                        className="w-full sm:w-[580px] px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-                      >
-                        {selectedDayTime ? "Select time & Date" : "Select Time"}
-                      </button>
+
+                    <div className="mt-3 flex justify-between items-center gap-3 sm:w-[580px] w-full">
+                      {!selectedDayTime?.date?.day || !selectedDayTime?.time ? (
+                        // Show full-width button if not selected
+                        <button
+                          onClick={() => {
+                            if (selectedAddrs) openDateTimeModal();
+                          }}
+                          disabled={!selectedAddrs}
+                          className={`w-full px-4 py-2 border-2 rounded-lg transition-colors
+                            ${
+                              selectedAddrs
+                                ? "text-[#249370] border-[#249370] hover:bg-[#249370] hover:text-white"
+                                : "text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
+                            }
+                          `}
+                        >
+                          Select Time
+                        </button>
+                      ) : (
+                        // Show Edit button on right
+                        <div className="w-full flex items-center justify-between sm:w-[580px]">
+                          <div className="flex-1">
+                            <p className="text-gray-600 text-sm">
+                              {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
+                            </p>
+                          </div>
+                          <div className="ml-4">
+                            <button
+                              onClick={() => {
+                                if (selectedAddrs) openDateTimeModal();
+                              }}
+                              className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
+
                     <div className="border-t border-gray-100 pt-4">
-                  {selectedDayTime ? (
-                    <p className="text-gray-600">
-                      {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
-                    </p>
-                  ) : (
-                    <p className="text-gray-500">Please select delivery date and time</p>
-                  )}
-                </div>
+                      {!selectedAddrs ? (
+                        <p className="text-red-400">Please select a delivery address first</p>
+                      ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
+                        <p className="text-gray-500">Please select delivery date and time</p>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -15,9 +15,8 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
     const { setSelectedDayTime, setRescheduleDayTime } = useCont();
 
     const notify = useToast();
-    const successNotify = (success) => notify(success, 'success');
-    const errorNotify = (error) => notify(error, 'error');
-    const warningNotify = (warning) => notify(warning, 'warning');
+    const successNotify = (msg) => notify(msg, 'success');
+    const errorNotify = (msg) => notify(msg, 'error');
 
     const generateTimesForDate = (selectedDate) => {
         const timesArray = [];
@@ -29,12 +28,8 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
             let [hours, minutes] = time.split(':');
             hours = parseInt(hours, 10);
             minutes = parseInt(minutes, 10);
-            if (modifier === 'PM' && hours < 12) {
-                hours += 12;
-            }
-            if (modifier === 'AM' && hours === 12) {
-                hours = 0;
-            }
+            if (modifier === 'PM' && hours < 12) hours += 12;
+            if (modifier === 'AM' && hours === 12) hours = 0;
             currentHour = hours;
             currentMinutes = minutes;
         } else {
@@ -54,30 +49,19 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
         const todayDate = today.getDate();
         if (selectedDate.date === todayDate) {
             if (currentTime < 9 * 60) {
-                for (let hour = 9; hour < 20; hour += 1) {
-                    addTimeSlot(hour, 0);
-                }
+                for (let hour = 9; hour < 20; hour++) addTimeSlot(hour, 0);
             } else if (currentTime >= 9 * 60 && currentTime < 20 * 60) {
                 let nextHour = currentHour + 1;
-                while (nextHour < 18) {
+                while (nextHour < 20) {
                     addTimeSlot(nextHour, 0);
-                    nextHour += 1;
-                }
-            } else {
-                for (let hour = 9; hour < 20; hour += 1) {
-                    addTimeSlot(hour, 0);
+                    nextHour++;
                 }
             }
         } else {
-            for (let hour = 9; hour < 20; hour += 1) {
-                addTimeSlot(hour, 0);
-            }
+            for (let hour = 9; hour < 20; hour++) addTimeSlot(hour, 0);
         }
 
         setTimes(timesArray);
-        if (timesArray.length > 0) {
-            setSelectedTime(startTime ? startTime : timesArray[0]);
-        }
     };
 
     const formatDate = (date) => {
@@ -91,9 +75,7 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
         const generateDates = () => {
             const datesArray = [];
             const today = new Date();
-            let startDay = startDate ? 
-                new Date(startDate) : 
-                new Date(today.setDate(order_type === "AMC" ? today.getDate() + 1 : today.getDate()));
+            let startDay = startDate ? new Date(startDate) : new Date(today.setDate(order_type === "AMC" ? today.getDate() + 1 : today.getDate()));
 
             for (let i = 0; i < 5; i++) {
                 const nextDate = new Date(startDay);
@@ -103,32 +85,14 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
                 const formattedDate = formatDate(nextDate);
                 datesArray.push({ day, date, formattedDate });
             }
+
             setDates(datesArray);
-            if (datesArray.length > 0) {
-                const initialDate = datesArray[0];
-                setSelectedDate(initialDate);
-                generateTimesForDate(initialDate);
-            }
+
+            // ❌ Removed auto-selection of first date/time
         };
 
         generateDates();
     }, [startDate, startTime]);
-
-    function formatDateString(dateString) {
-        const date = new Date(dateString);
-        const options = {
-          weekday: 'short', 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric', 
-          hour: '2-digit', 
-          minute: '2-digit', 
-          second: '2-digit', 
-          timeZoneName: 'short'
-        };
-      
-        return date.toLocaleString('en-US', options);
-      }
 
     useEffect(() => {
         if (selectedDate) {
@@ -136,108 +100,127 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
         }
     }, [selectedDate]);
 
-    if (!isOpen) return null;
-
-    const handleProceed = async() => {
-        if (slotFull) {
-            alert("All slots are full for the next few days, we will be adding more slots soon! Please check back in few days");
-            onClose();
-            return null;
+    const handleProceed = async () => {
+        if (!selectedDate || !selectedTime) {
+            errorNotify("Please select both date and time before proceeding.");
+            return;
         }
+
+        if (slotFull) {
+            alert("All slots are full for the next few days. We will add more slots soon. Please check back later.");
+            onClose();
+            return;
+        }
+
         setIsLoading(true);
-        const dayTime = {
-            date: selectedDate,
-            time: selectedTime,
-        };
+        const dayTime = { date: selectedDate, time: selectedTime };
+
         if (reSchedule && order_id) {
-            await rescheduleOrder()
+            await rescheduleOrder(dayTime);
         } else {
             setSelectedDayTime(dayTime);
+            localStorage.setItem("HommlieselectedDayTime", JSON.stringify(dayTime)); // ✅ persist
             onClose();
         }
-        setIsLoading(false);
-    };
 
-    async function rescheduleOrder() {
-        setIsLoading(true);
-        const dayTime = {
-            date: selectedDate,
-            time: selectedTime,
+        setIsLoading(false);
         };
+
+
+    const rescheduleOrder = async (dayTime) => {
         const jwtToken = Cookies.get("HommlieUserjwtToken");
-        if (jwtToken) {
-            await axios.post(`${config.API_URL}/api/rescheduleorder`, 
-            {
+        if (!jwtToken) return console.log("User not logged in");
+
+        try {
+            const response = await axios.post(`${config.API_URL}/api/rescheduleorder`, {
                 id: order_id,
-                desired_time: selectedTime,
-                desired_date: selectedDate.formattedDate,
+                desired_time: dayTime.time,
+                desired_date: dayTime.date.formattedDate,
+            }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`,
                 },
-            })
-            .then((response) => {
-                if (response.data.status === 1) {
-                    setRescheduleDayTime(dayTime);
-                    console.log(response.data.message);
-                    successNotify(response.data.message);
-                    onClose();
-                } else if (response.data.status === 0) {
-                    errorNotify(response.data.message);
-                }
-            })
-            .catch((err) => {
-                errorNotify(err);
-                console.log("error: " + err);
-            })
-        } else {
-            console.log("User hasn't logged in");
+            });
+
+            if (response.data.status === 1) {
+                setRescheduleDayTime(dayTime);
+                successNotify(response.data.message);
+                onClose();
+            } else {
+                errorNotify(response.data.message);
+            }
+        } catch (err) {
+            errorNotify("Something went wrong. Please try again.");
+            console.error(err);
         }
-        setIsLoading(false);
-    }
+    };
+
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="fixed inset-0 opacity-60" style={{ backgroundColor: "black" }} onClick={onClose}></div>
-            <div className="relative bg-white w-[80%] md:w-full max-w-[24rem] max-h-[40rem] overflow-y-scroll p-4 md:p-8 md:px-12 rounded-2xl shadow-lg overflow-hidden z-30 space-y-4 scrollbar-hide">
+            <div className="fixed inset-0 opacity-60 bg-black" onClick={onClose}></div>
+            <div className="relative bg-white w-[80%] md:w-full max-w-[24rem] max-h-[40rem] overflow-y-scroll p-4 md:p-8 md:px-12 rounded-2xl shadow-lg z-30 space-y-4 scrollbar-hide">
                 <h2 className='text-lg font-bold'>Select Date & Time for the appointment</h2>
+
                 <div className='flex flex-col gap-3'>
                     <h3 className='font-bold'>When would you like your service?</h3>
                     <div className='flex flex-row justify-around gap-2 w-72'>
-                        {
-                            dates.map((dt, index) => (
-                                <div 
-                                    key={index} 
-                                    className={`w-12 h-12 flex flex-col justify-center items-center p-2 rounded border cursor-pointer`}
-                                    style={{color: `${selectedDate && selectedDate.date === dt.date ? '#249370' : ''}`, border: `1px solid ${selectedDate && selectedDate.date === dt.date ? '#249370' : '#C7C9D9'}`}}
-                                    onClick={() => setSelectedDate(dt)}
-                                >
-                                    <span className='text-sm'>{dt.day}</span>
-                                    <span className='font-bold'>{dt.date}</span>
-                                </div>
-                            ))
-                        }
+                        {dates.map((dt, index) => (
+                            <div
+                                key={index}
+                                className={`w-12 h-12 flex flex-col justify-center items-center p-2 rounded border cursor-pointer`}
+                                style={{
+                                    color: selectedDate?.date === dt.date ? '#249370' : '',
+                                    border: `1px solid ${selectedDate?.date === dt.date ? '#249370' : '#C7C9D9'}`
+                                }}
+                                onClick={() => {
+                                    setSelectedDate(dt);
+                                    setSelectedTime(null); // reset time on date change
+                                }}
+                            >
+                                <span className='text-sm'>{dt.day}</span>
+                                <span className='font-bold'>{dt.date}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
+
                 <div className='flex flex-col gap-3'>
                     <h3 className='font-bold'>At what time?</h3>
                     <div className='flex flex-wrap justify-around gap-2 w-72'>
-                        {
-                            times.map((time, index) => (
-                                <div 
-                                    key={index} 
-                                    className={`w-[135px] h-[39px] flex flex-row justify-center items-center p-2 rounded border cursor-pointer`}
-                                    style={{color: `${selectedTime === time ? '#249370' : ''}`, border: `1px solid ${selectedTime === time ? '#249370' : '#C7C9D9'}`}}
-                                    onClick={() => setSelectedTime(time)}
-                                >
-                                    <span className='text-sm'>{time}</span>
-                                </div>
-                            ))
-                        }
+                        {times.map((time, index) => (
+                            <div
+                                key={index}
+                                className={`w-[135px] h-[39px] flex justify-center items-center p-2 rounded border cursor-pointer`}
+                                style={{
+                                    color: selectedTime === time ? '#249370' : '',
+                                    border: `1px solid ${selectedTime === time ? '#249370' : '#C7C9D9'}`
+                                }}
+                                onClick={() => setSelectedTime(time)}
+                            >
+                                <span className='text-sm'>{time}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
+                {(selectedDate || selectedTime) && (
+                    <button
+                        onClick={() => {
+                        setSelectedDate(null);
+                        setSelectedTime(null);
+                        setSelectedDayTime(null);
+                        localStorage.removeItem("HommlieselectedDayTime"); // 🧹 This is the key fix!
+                        }}
+                        className="text-sm text-red-500 underline"
+                    >
+                        Clear Selection
+                    </button>
+                )}
+
                 <div className='flex justify-center'>
-                    <button 
-                        style={{ backgroundColor: "#249370" }} 
+                    <button
+                        style={{ backgroundColor: "#249370" }}
                         className={`block mt-4 px-8 py-2 text-xs text-center text-white tracking-widest disabled:opacity-60 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                         onClick={handleProceed}
                         disabled={isLoading}
