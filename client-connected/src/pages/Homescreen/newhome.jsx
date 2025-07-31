@@ -479,7 +479,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                   ref={searchInputRef}
                   type="text"
                   placeholder={`Search ${services[placeholderIndex]}...`}
-                  className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-4 pr-20 py-3 text-base border border-black bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                   value={searchTerm}
                   onChange={handleSearchChange}
                   onFocus={() => setIsSearchFocused(true)}
@@ -935,11 +935,11 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <FaqSection />
       </section>
 
-      <section className="px-10 py-5 md:py-10" style={{
+      {/* <section className="px-10 py-5 md:py-10" style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
         <CityServiceLinks />
-      </section>
+      </section> */}
 
       {/* Popular Categories Section with Tabs */}
       <section className="hidden sm:hidden px-10 py-5 md:py-10">

@@ -180,7 +180,7 @@ const ServiceGrid = () => {
               onClick={() => handleServiceClick(service.name)}
               className="flex flex-col items-center group transition-all cursor-pointer"
             >
-              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition">
+              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition border border-black">
                 {service.isIconOnly ? (
                   service.icon
                 ) : (
