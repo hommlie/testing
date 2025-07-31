@@ -20,6 +20,9 @@ import ProdSection from "../../components/ProdSection";
 import { MdOutlineSendToMobile } from "react-icons/md";
 import { BsFillCartXFill } from "react-icons/bs";
 import { FaWallet } from "react-icons/fa";
+import { FaCreditCard } from "react-icons/fa";
+import { CiDeliveryTruck } from "react-icons/ci";
+
 
 
 export default function AddtoCart() {
@@ -76,6 +79,7 @@ export default function AddtoCart() {
   };
 
   const [tempOrderNumber, setTempOrderNumber] = useState(null);
+  const [showFullAddress, setShowFullAddress] = useState(false);
 
 
   useEffect(() => {
@@ -247,7 +251,7 @@ export default function AddtoCart() {
         const orderResponse = await axios.post(
           `${config.API_URL}/api/initiatePayment`,
           {
-            amount: totalAmount - couponDiscount,
+            amount: totalAmount,
             currency: "INR",
             user_id: user.id,
           },
@@ -342,6 +346,7 @@ export default function AddtoCart() {
                     longitude: selectedAddrs.longitude,
                     desired_date: selectedDayTime?.date?.formattedDate,
                     desired_time: selectedDayTime?.time,
+                    tip_amount: tipAmount,
                 },
                 {
                     headers: {
@@ -360,7 +365,7 @@ export default function AddtoCart() {
                 localStorage.removeItem("HommlieselectedCoupon");
                 localStorage.removeItem("HommliepaymentType");
                 getBookings();
-                // placeOrder();
+                placeOrder();
                 getCart();
                 setIsOrderConfirmed(true); // ✅ Always show confirmation
                 setTempOrderNumber(response.data.order_number);
@@ -434,7 +439,11 @@ export default function AddtoCart() {
       accumulator + Number(currentValue.tax) * Number(currentValue.qty),
     0
   );
-  const totalAmount = totalItemPrice + tax - couponDiscount;
+
+  const [customTipActive, setCustomTipActive] = useState(false);
+  const [customInput, setCustomInput] = useState("");
+  const [tipAmount, setTipAmount] = useState(0);
+  const totalAmount = totalItemPrice + tax - couponDiscount + tipAmount;
 
   const handleProductClick = (item) => {
     const slug = item.product_name.toLowerCase().replace(/ /g, "-");
@@ -468,9 +477,9 @@ export default function AddtoCart() {
             </div>
           ) : (
           <>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Cart Content */}
-          <div className="lg:col-span-2">
+          <div   className="w-full lg:w-[750px]">
             <div className="bg-white rounded-xl shadow-sm p-6 space-y-10 w-100px">
               {/* Account Section */}
               <div>
@@ -481,7 +490,7 @@ export default function AddtoCart() {
                   </h2>
                 </div>
 
-                <div className="-mt-3">
+                <div className="-mt-3 ml-7">
                   <div className="space-y-2 text-gray-600">
                     <p className="text-gray-500 mb-3">
                       {user?.name}{" ( "}{user?.mobile}{" ) "}, {user?.email}
@@ -495,7 +504,7 @@ export default function AddtoCart() {
                 <div className="flex justify-between items-center mb-4 -mt-8">
                   <div className="flex items-center gap-3">
                     <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
-                    <h2 className="text-xl font-semibold">Delivery Address</h2>
+                    <h2 className="text-xl font-semibold -ml-2">Delivery Address</h2>
                   </div>
                   <button
                     onClick={openAddressModal}
@@ -504,17 +513,29 @@ export default function AddtoCart() {
                     {selectedAddrs ? "Edit" : "Add"}
                   </button>
                 </div>
-                <div className="">
+                <div className="ml-7">
+                  {/* One-line address with "View More" toggle */}
                   {selectedAddrs ? (
                     <div className="space-y-2 text-gray-600 mb-4">
                       <p className="font-medium text-black">{selectedAddrs.name}</p>
-                      <p>{selectedAddrs.address}</p>
-                      <p>{selectedAddrs.landmark}</p>
-                      <p>{selectedAddrs.pincode}</p>
-                      <p>Mobile: {selectedAddrs.mobile}</p>
+                      
+                      <p className="text-gray-700">
+                        {showFullAddress
+                          ? `${selectedAddrs.address}, ${selectedAddrs.landmark}, ${selectedAddrs.pincode}`
+                          : `${selectedAddrs.address}, ${selectedAddrs.landmark}, ${selectedAddrs.pincode}`.slice(0, 60) + '...'}
+                        {`${selectedAddrs.address}, ${selectedAddrs.landmark}, ${selectedAddrs.pincode}`.length > 60 && (
+                          <button
+                            onClick={() => setShowFullAddress(!showFullAddress)}
+                            className="text-[#249370] font-medium ml-2 underline"
+                          >
+                            {showFullAddress ? "View Less" : "View More"}
+                          </button>
+                        )}
+                      </p>
+                      {/* <p>Mobile: {selectedAddrs.mobile}</p> */}
                     </div>
                   ) : (
-                    <p className=" text-gray-500 -mt-5">Please select a delivery address</p>
+                    <p className="text-gray-500 -mt-5">Please select a delivery address</p>
                   )}
                 </div>
                 <div className="border-t border-gray-100"></div>
@@ -522,67 +543,63 @@ export default function AddtoCart() {
 
               {/* Delivery Time Section - only visible after address is selected */}
               <div>
-                <div className="flex justify-between items-center mb-4">
-                  <div className="-mt-6 w-full">
-                    <div className="flex items-center gap-3">
-                      <RiTimerLine className="text-2xl text-[#249370]" />
-                      <h2 className="text-xl font-semibold">Select Your Slot</h2>
-                    </div>
+                <div>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="w-full">
+                      <div className="flex items-center gap-3 -mt-5">
+                        <RiTimerLine className="text-2xl text-[#249370]" />
+                        <h2 className="text-xl font-semibold">Select Your Slot</h2>
+                      </div>
 
-                    <div className="mt-3 flex justify-between items-center gap-3 sm:w-[580px] w-full">
-                      {!selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                        // Show full-width button if not selected
-                        <button
-                          onClick={() => {
-                            if (selectedAddrs) openDateTimeModal();
-                          }}
-                          disabled={!selectedAddrs}
-                          className={`w-full px-4 py-2 border-2 rounded-lg transition-colors
-                            ${
-                              selectedAddrs
-                                ? "text-[#249370] border-[#249370] hover:bg-[#249370] hover:text-white"
-                                : "text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
-                            }
-                          `}
-                        >
-                          Select Date and Time
-                        </button>
-                      ) : (
-                        // Show Edit button on right
-                        <div className="w-full flex flex-col sm:flex-row sm:items-center sm:w-[560px] gap-2 sm:gap-0 relative mb-4">
-                          <div className="w-full sm:w-auto">
-                            <p className="text-gray-600 text-sm">
-                              {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} @ {selectedDayTime?.time}
+                      <div className="mt-4 ml-7">
+                        {!selectedDayTime?.date?.day || !selectedDayTime?.time ? (
+                          <button
+                            onClick={() => {
+                              if (selectedAddrs) openDateTimeModal();
+                            }}
+                            disabled={!selectedAddrs}
+                            className={`w-full px-4 py-2 border-2 rounded-lg transition-colors
+                              ${
+                                selectedAddrs
+                                  ? "text-[#249370] border-[#249370] hover:bg-[#249370] hover:text-white"
+                                  : "text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
+                              }
+                            `}
+                          >
+                            Select Date and Time
+                          </button>
+                        ) : (
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 px-4 py-3 rounded-lg mt-2 mb-4">
+                            <p className="text-gray-700">
+                              {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} {selectedDayTime?.date?.month} @ {selectedDayTime?.time}
                             </p>
-                          </div>
-
-                          {/* Mobile: normal flow | Desktop: absolute positioned button */}
-                          <div className="w-full sm:w-[70px] sm:absolute l:right:[-50px] sm:right-[-130px] sm:top-1.5 sm:-mt-10">
                             <button
                               onClick={() => {
                                 if (selectedAddrs) openDateTimeModal();
                               }}
-                              className="w-full px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                              className="mt-2 sm:mt-0 px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
                             >
                               Edit
                             </button>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
 
-                    <div className="border-t border-gray-100 pt-4">
-                      {!selectedAddrs ? (
-                        <p className="text-red-400">Please select a delivery address first</p>
-                      ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                        <p className="text-red-500">Please select delivery date and time</p>
-                      ) : null}
+                      <div className="border-t border-gray-100 pt-4">
+                        {!selectedAddrs ? (
+                          <p className="text-red-400">Please select a delivery address first</p>
+                        ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
+                          <p className="text-red-500">Please select delivery date and time</p>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </div>
-                
                   {/* Payment Options */}
-                  <h3 className="-mt-4 mb-3 font-semibold">Payment Method</h3>
+                  <h3 className="text-xl -mt-3 mb-3 font-semibold flex items-center gap-2">
+                    <FaCreditCard className="text-[#249370]" />
+                    Payment Method
+                  </h3>
                   {/* <button
                         onClick={
                           cart.length === 0 ? handleEmptyCartClick : handleProceed
@@ -595,15 +612,14 @@ export default function AddtoCart() {
                       >
                         {cart.length === 0 ? "Cart is Empty" : "Proceed to Payment"}
                     </button> */}
-                  <div className={`space-y-3 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <div className={`flex flex-col sm:grid sm:grid-cols-2 gap-3 px-4 sm:ml-7 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''}`}>
                     {paymentList?.map((payment) => (
                       <label
                         key={payment.id}
-                        className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-colors ${
-                          paymentType?.id === payment.id
-                            ? "border-[#249370] bg-green-50"
-                            : "border-gray-200 hover:border-[#249370]"
-                        }`}
+                        // style={{ width: "256px" }}
+                        className={`w-full flex items-center px-3 py-2 rounded-lg border-2 cursor-pointer text-sm transition-colors
+                          ${paymentType?.id === payment.id ? "border-[#249370] bg-green-50" : "border-gray-200 hover:border-[#249370]"}
+                        `}
                       >
                         <input
                           type="radio"
@@ -612,30 +628,31 @@ export default function AddtoCart() {
                           checked={paymentType?.id === payment.id}
                           onChange={handlePaymentChange}
                           disabled={!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time}
-                          className="mr-3 text-[#249370] focus:ring-[#249370]"
+                          className="mr-2 text-[#249370] focus:ring-[#249370]"
                         />
-                        <span className="font-medium flex items-center gap-2">
-                          <FaWallet className="text-lg text-[#249370]" />
-                          {payment.payment_name}
-                        </span>
+                        {payment.payment_name}
                       </label>
                     ))}
-                      <button 
-                           className="w-full py-4 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition-colors mt-6"
-                           disabled={isLoading}
-                           onClick={handleProceed}
-                       >
-                           {isLoading ? (
-                               <div className="flex items-center justify-center gap-2">
-                                   <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                   </svg>
-                                   <span>PLACING ORDER...</span>
-                               </div>
-                           ) : (
-                               'PLACE ORDER'
-                           )}
+                      <button
+                        className="w-[280px] sm:w-[360px] md:w-[480px] lg:w-[520px] py-4 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition-colors mx-auto sm:col-span-2"
+                        disabled={isLoading}
+                        onClick={handleProceed}
+                      >
+                        {isLoading ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            <span>PLACING ORDER...</span>
+                          </div>
+                        ) : (
+                          'PLACE ORDER'
+                        )}
                       </button>
                   </div>
                   {/* Proceed Button */}
@@ -653,7 +670,7 @@ export default function AddtoCart() {
                   </button> */}
 
                   {/* Security Badge */}
-                  {/* <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
+                  <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
                     <img
                       src={secureIcon}
                       alt="Secure Payment"
@@ -662,7 +679,7 @@ export default function AddtoCart() {
                     <p className="text-sm text-gray-500">
                       Safe and Secure Payments
                     </p>
-                  </div> */}
+                  </div>
                 
               </div>
               {/* Need Help Section */}
@@ -686,7 +703,7 @@ export default function AddtoCart() {
             </div>
           </div>
           {/* Order Summary */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="w-full lg:w-[550px] space-y-6">
             {isLoading && cart.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-6 flex justify-center items-center min-h-[200px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#249370] border-t-transparent"></div>
@@ -773,7 +790,7 @@ export default function AddtoCart() {
                   </button>
                 </div>
                 {selectedCoupon && (
-                  <div className="flex justify-between items-center bg-green-50 p-3 rounded-lg">
+                  <div className="flex justify-between items-center bg-green-50 p-3 rounded-lg mt-4">
                     <div className="flex items-center gap-2">
                       <IoCheckmarkCircle className="text-[#249370]" />
                       <span className="font-medium">
@@ -782,61 +799,203 @@ export default function AddtoCart() {
                     </div>
                     <button
                       onClick={handleRemoveCoupon}
-                      className="text-red-500 text-sm hover:underline"
+                      className="text-red-500 text-sm hover:underline" 
                     >
                       Remove
                     </button>
                   </div>
                 )}
             </div>
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
-              <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-              <div className="space-y-4">
-                <div className="flex justify-between text-gray-600">
-                  <span>Items ({itemCount})</span>
-                  <span>₹{totalItemPrice?.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>Platform Fee</span>
-                  <span>₹{tax?.toFixed(2)}</span>
-                </div>
-                {couponDiscount > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Coupon Discount</span>
-                    <span>-₹{couponDiscount.toFixed(2)}</span>
+            <div className="lg:col-span-1">
+              <div className="sticky top-[100px] space-y-6">
+                {/* Order Summary */}
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all">
+                  <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                  <div className="space-y-4">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Items ({itemCount})</span>
+                      <span>₹{totalItemPrice?.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Platform Fee</span>
+                      <span>₹{tax?.toFixed(2)}</span>
+                    </div>
+                    {couponDiscount > 0 && (
+                      <div className="flex justify-between text-green-600">
+                        <span>Coupon Discount</span>
+                        <span>-₹{couponDiscount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {tipAmount > 0 && (
+                      <div className="flex justify-between text-gray-600">
+                        <span>Tip</span>
+                        <span>+₹{tipAmount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="border-t border-gray-200 pt-4">
+                      <div className="flex justify-between text-lg font-semibold">
+                        <span>Total Amount</span>
+                        <span className="text-[#249370]">₹{totalAmount?.toFixed(2)}</span>
+                      </div>
+                    </div>
                   </div>
-                )}
-                <div className="border-t border-gray-200 pt-4">
-                  <div className="flex justify-between text-lg font-semibold">
-                    <span>Total Amount</span>
-                    <span className="text-[#249370]">
-                      ₹{totalAmount?.toFixed(2)}
-                    </span>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h3 className="text-base font-semibold mb-3">Add a tip to thank the Professional</h3>
+
+                  <div className="flex items-center gap-3 flex-wrap">
+                    {[50, 75, 100].map((amount) => (
+                      <div key={amount} className="relative">
+                        <button
+                          onClick={() => {
+                            setTipAmount(amount);
+                            setCustomTipActive(false);
+                            setCustomInput("");
+                          }}
+                          className={`border px-4 py-2 rounded-lg font-medium text-sm min-w-[60px] ${
+                            tipAmount === amount
+                              ? "bg-[#249370] text-white border-[#249370]"
+                              : "border-gray-300 text-black"
+                          }`}
+                        >
+                          ₹{amount}
+                        </button>
+
+                        {amount === 75 && (
+                          <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-md">
+                            POPULAR
+                          </span>
+                        )}
+                      </div>
+                    ))}
+
+                    {/* ✅ Custom Tip Button with Inline Input */}
+                    <div
+                      className={`flex items-center border rounded-lg px-3 py-2 min-w-[70px] ${
+                        tipAmount !== 50 && tipAmount !== 75 && tipAmount !== 100 && tipAmount > 0
+                          ? "border-[#249370] bg-[#2493701a]"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      <span className="text-sm mr-1">₹</span>
+                      {customTipActive ? (
+                        <input
+                          type="number"
+                          className="w-12 text-sm outline-none bg-transparent"
+                          value={customInput}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setCustomInput(e.target.value);
+                            if (!isNaN(val) && val >= 0) {
+                              setTipAmount(val);
+                            }
+                          }}
+                          onBlur={() => {
+                            if (!customInput || parseInt(customInput) === 0) {
+                              setTipAmount(0);
+                              setCustomTipActive(false);
+                              setCustomInput("");
+                            }
+                          }}
+                          autoFocus
+                        />
+                      ) : (
+                        <button
+                          className="text-sm text-gray-600"
+                          onClick={() => {
+                            setCustomTipActive(true);
+                            setTipAmount(0);
+                            setCustomInput("");
+                          }}
+                        >
+                          Custom
+                        </button>
+                      )}
+                    </div>
+                    {tipAmount > 0 && (
+                      <button
+                        onClick={() => {
+                          setTipAmount(0);
+                          setCustomTipActive(false);
+                          setCustomInput("");
+                        }}
+                        className="border border-red-400 text-red-500 px-3 py-2 rounded-lg font-medium text-sm hover:bg-red-50"
+                      >
+                        Clear Tip
+                      </button>
+                    )}
                   </div>
+                  {/* ✅ Tip Footer */}
+                  <p className="text-xs text-gray-500 mt-6">
+                    100% of the tip goes to the professional.
+                  </p>
+                </div>
+                {/* Return Policy */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <CiDeliveryTruck className="text-2xl text-[#249370]" />
+                    <h3 className="font-semibold">Return Policy</h3>
+                  </div>
+                  <a
+                    href={`${config.VITE_BASE_URL}/privacy-policy`}
+                    className="text-gray-600 hover:underline"
+                  >
+                    Learn More
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
         {isOrderConfirmed && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
-            <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-lg text-center space-y-4">
-              <h2 className="text-xl font-semibold text-[#249370]">Order Confirmed!</h2>
-              <p className="text-gray-700">Thank you for booking with Hommlie. Your order has been successfully placed.</p>
-              <button
-                onClick={() => {
-                  setIsOrderConfirmed(false);
-                  if (tempOrderNumber) {
-                    navigate(`${config.VITE_BASE_URL}/booking-success/${tempOrderNumber}`);
-                  } else {
-                    navigate(`${config.VITE_BASE_URL}/booking-success`);
-                  }
-                }}
-                className="px-6 py-2 bg-[#035240] text-white rounded-lg hover:bg-[#024535]"
-              >
-                Okay
-              </button>
+          <div className="bg-white min-h-screen py-10 px-4 md:px-0">
+            <div className="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-md">
+              <div className="text-center">
+                <IoCheckmarkCircle className="text-green-500 text-5xl mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-[#035240] mb-2">Booking Confirmed!</h2>
+                <p className="text-gray-700 mb-4">
+                  Thank you for booking with Hommlie. Your order has been placed successfully.
+                </p>
+
+                {tempOrderNumber && (
+                  <div className="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200 text-left">
+                    <p className="font-semibold text-gray-600 mb-1">Order ID:</p>
+                    <p className="text-lg text-[#035240] font-bold">{tempOrderNumber}</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => {
+                    setIsOrderConfirmed(false);
+                    navigate(`${config.VITE_BASE_URL}/`);
+                  }}
+                  className="inline-block px-6 py-2 bg-[#035240] text-white rounded-lg hover:bg-[#024535] mb-6"
+                >
+                  Go to Homepage
+                </button>
+              </div>
+
+              {/* Recently Booked Items */}
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Recently Booked Services</h3>
+                <div className="space-y-4">
+                  {cart?.map((pd) => (
+                    <div key={pd.id} className="border p-4 rounded-lg flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold">{pd.product_name}</p>
+                        {pd.attribute_name && (
+                          <p className="text-sm text-gray-600">{pd.attribute_name}</p>
+                        )}
+                        {pd.variation_name && (
+                          <p className="text-sm text-gray-600">{pd.variation_name}</p>
+                        )}
+                      </div>
+                      <div className="text-[#249370] font-bold">₹{pd.price * pd.qty}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}

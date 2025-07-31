@@ -80,10 +80,11 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
             for (let i = 0; i < 5; i++) {
                 const nextDate = new Date(startDay);
                 nextDate.setDate(startDay.getDate() + i);
-                const day = nextDate.toLocaleString('en-US', { weekday: 'short' });
-                const date = nextDate.getDate();
-                const formattedDate = formatDate(nextDate);
-                datesArray.push({ day, date, formattedDate });
+                const day = nextDate.toLocaleString('en-US', { weekday: 'short' }); // e.g., "Mon"
+                const date = nextDate.getDate(); // e.g., 5
+                const month = nextDate.toLocaleString('en-US', { month: 'long' }); // e.g., "August"
+                const formattedDate = formatDate(nextDate); // e.g., "2025-08-05"
+                datesArray.push({ day, date, month, formattedDate });
             }
 
             setDates(datesArray);
