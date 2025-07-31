@@ -18,9 +18,6 @@ import { jwtDecode } from "jwt-decode";
 import config from "../../config/config";
 import ProdSection from "../../components/ProdSection";
 import { MdOutlineSendToMobile } from "react-icons/md";
-import { BsFillCartXFill } from "react-icons/bs";
-import { FaWallet } from "react-icons/fa";
-
 
 export default function AddtoCart() {
   const navigate = useNavigate();
@@ -75,18 +72,15 @@ export default function AddtoCart() {
     setIsCouponModalOpen(false);
   };
 
-  const [tempOrderNumber, setTempOrderNumber] = useState(null);
-
-
   useEffect(() => {
-  async function init() {
-    await getCart();
-    await getAddresses();
-    await getPaymentList();
-    await getProductDetails();
-  }
-  init();
-}, [cartLength]);
+    window.scrollTo(0, 0);
+    getCart();
+    getAddresses();
+    // getCoupons();
+    getPaymentList();
+
+    getProductDetails();
+  }, [cartLength]);
 
   useEffect(() => {
     setSelectedAddrs(
@@ -108,23 +102,17 @@ export default function AddtoCart() {
   }, []);
 
   async function getProductDetails() {
-  if (!cart || cart.length === 0 || !cart[0]?.product_id) {
-    console.warn("No valid product_id found in cart");
-    return;
+    const id = cart[0]?.product_id;
+    try {
+      const response = await axios.post(
+        `${config.API_URL}/api/productdetails`,
+        { product_id: id }
+      );
+      setProdRelatedProds(response.data.related_products);
+    } catch (err) {
+      console.log("error: " + err);
+    }
   }
-
-  const id = cart[0].product_id;
-  try {
-    const response = await axios.post(
-      `${config.API_URL}/api/productdetails`,
-      { product_id: id }
-    );
-    setProdRelatedProds(response.data.related_products);
-  } catch (err) {
-    console.error("error: " + err);
-  }
-}
-
 
   useEffect(() => {
     const updateVisibleItemsCount = () => {
@@ -360,10 +348,13 @@ export default function AddtoCart() {
                 localStorage.removeItem("HommlieselectedCoupon");
                 localStorage.removeItem("HommliepaymentType");
                 getBookings();
-                // placeOrder();
+                placeOrder();
                 getCart();
-                setIsOrderConfirmed(true); // ✅ Always show confirmation
-                setTempOrderNumber(response.data.order_number);
+                if (paymentType?.payment_name !== "Online") {
+                  setIsOrderConfirmed(true);
+                } else {
+                  navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
+                }
             } else {
                 errorNotify(response.data.message);
                 console.log("error placing order:",response.data);
@@ -450,24 +441,51 @@ export default function AddtoCart() {
     <div className=""  style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
-          <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
-            {cart.length === 0 ? (
-            // 🛒 Show ONLY empty cart message centered
-            <div className="flex justify-center items-center min-h-[50vh] -mt-5">
-              <div className="p-8 flex flex-col items-center">
-                <BsFillCartXFill className="text-6xl text-[#035240] mb-4" />
-                <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
-                <p className="text-gray-600 mb-4">Add items to start a purchase</p>
-                <button
-                  onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
-                  className="px-8 py-3 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition duration-300"
-                >
-                  Browse Services
-                </button>
-              </div>
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        {/* Progress Tracker */}
+        {/* <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow-sm mb-4">
+          <div className="w-full lg:w-[80%] p-4 relative">
+            <div className="flex flex-row justify-between my-8">
+              {topTracker.map((tracker, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="w-full flex flex-col justify-center items-center gap-4"
+                    style={{
+                      color: `${
+                        tracker === "Booking Confirmed" ? "#E5E7EB" : ""
+                      }`,
+                    }}
+                  >
+                    <span
+                      className={`text-[9px] md:text-xs md:text-base font-semibold`}
+                    >
+                      {tracker}
+                    </span>
+                    <div
+                      className={`${
+                        tracker === "Booking Confirmed"
+                          ? "border-[#E5E7EB]"
+                          : "border-[#249370]"
+                      } w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}
+                    ></div>
+                  </div>
+                );
+              })}
             </div>
-          ) : (
-          <>
+            <div className="flex absolute inset-0 top-[35px] md:top-[40px] justify-center items-center px-24 md:px-32 lg:px-32 gap-9">
+              <div
+                className="w-[255px]"
+                style={{ border: "1px solid #249370" }}
+              ></div>
+              <div
+                className="w-[255px]"
+                style={{ border: "1px solid #E5E7EB" }}
+              ></div>
+            </div>
+          </div>
+        </div> */}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Cart Content */}
           <div className="lg:col-span-2">
@@ -479,6 +497,15 @@ export default function AddtoCart() {
                     <MdOutlineSendToMobile className="text-xl text-[#249370]" />
                     Send Your Booking Details To
                   </h2>
+
+                  {/* 
+                  <NavLink
+                    to={`${config.VITE_BASE_URL}/edit-profile`}
+                    className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
+                  >
+                    Edit
+                  </NavLink> 
+                  */}
                 </div>
 
                 <div className="-mt-3">
@@ -545,7 +572,7 @@ export default function AddtoCart() {
                             }
                           `}
                         >
-                          Select Date and Time
+                          Select Time
                         </button>
                       ) : (
                         // Show Edit button on right
@@ -575,14 +602,14 @@ export default function AddtoCart() {
                       {!selectedAddrs ? (
                         <p className="text-red-400">Please select a delivery address first</p>
                       ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                        <p className="text-red-500">Please select delivery date and time</p>
+                        <p className="text-gray-500">Please select delivery date and time</p>
                       ) : null}
                     </div>
                   </div>
                 </div>
                 
                   {/* Payment Options */}
-                  <h3 className="-mt-4 mb-3 font-semibold">Payment Method</h3>
+                  <h3 className="font-semibold">Payment Method</h3>
                   {/* <button
                         onClick={
                           cart.length === 0 ? handleEmptyCartClick : handleProceed
@@ -614,8 +641,7 @@ export default function AddtoCart() {
                           disabled={!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time}
                           className="mr-3 text-[#249370] focus:ring-[#249370]"
                         />
-                        <span className="font-medium flex items-center gap-2">
-                          <FaWallet className="text-lg text-[#249370]" />
+                        <span className="font-medium">
                           {payment.payment_name}
                         </span>
                       </label>
@@ -827,11 +853,7 @@ export default function AddtoCart() {
               <button
                 onClick={() => {
                   setIsOrderConfirmed(false);
-                  if (tempOrderNumber) {
-                    navigate(`${config.VITE_BASE_URL}/booking-success/${tempOrderNumber}`);
-                  } else {
-                    navigate(`${config.VITE_BASE_URL}/booking-success`);
-                  }
+                  navigate(`${config.VITE_BASE_URL}/booking-success`);
                 }}
                 className="px-6 py-2 bg-[#035240] text-white rounded-lg hover:bg-[#024535]"
               >
@@ -851,9 +873,8 @@ export default function AddtoCart() {
             />
           </section>
         )}
-        </>
-        )}
       </div>
+
       {/* Modals */}
       <DateTimeModal
         isOpen={isDateTimeModalOpen}
