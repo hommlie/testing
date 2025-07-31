@@ -174,6 +174,35 @@ const LoginSignup = ({ isOpen, onClose }) => {
   };
 
   
+useEffect(() => {
+  if (isOtpSent && 'OTPCredential' in window) {
+    const abortController = new AbortController();
+
+    navigator.credentials
+      .get({
+        otp: { transport: ['sms'] },
+        signal: abortController.signal,
+      })
+      .then((otpCredential) => {
+        if (otpCredential && otpCredential.code) {
+          const autoOtp = otpCredential.code.slice(0, 4); // Adjust based on your OTP length
+          setOtp(autoOtp.split(""));
+
+          // Optional: auto-submit after short delay
+          setTimeout(() => {
+            handleProceed(new Event("submit"));
+          }, 1000);
+        }
+      })
+      .catch((err) => {
+        console.warn("OTP Auto-fetch failed or dismissed:", err);
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }
+}, [isOtpSent]);
 
 
   return (
@@ -219,6 +248,7 @@ const LoginSignup = ({ isOpen, onClose }) => {
                     </label>
                     <input
                       type="text"
+
                       value={otp.join("")}
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "").slice(0, 4);
@@ -445,6 +475,8 @@ const LoginSignup = ({ isOpen, onClose }) => {
                 </label>
                 <input
                   type="text"
+                  inputMode="numeric"                  // ⬅️ NEW ✅
+                  autoComplete="one-time-code"  
                   value={otp.join("")}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, "").slice(0, 4);
