@@ -463,9 +463,12 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       {/* Typewriter Hero Headline - Desktop Only */}
       
         <section
-          className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-center bg-no-repeat "
-          style={{background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",}}>
-          
+          className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-center bg-no-repeat h-[450px] md:h-auto"
+          style={{
+            background:
+              "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
+        >
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">

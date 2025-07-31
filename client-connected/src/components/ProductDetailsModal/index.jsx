@@ -705,7 +705,7 @@ const ProductDetailModal = ({
                   dangerouslySetInnerHTML={{ __html: product?.description }}
                 /> */}
                 {/* Included Section */}
-                <div className="mt-6">
+                {/* <div className="mt-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">Included</h3>
                   <ol className="relative border-l border-gray-300 space-y-6 ml-4">
                     <li className="ml-4">
@@ -736,19 +736,19 @@ const ProductDetailModal = ({
                       </p>
                     </li>
                   </ol>
-                </div>
+                </div> */}
 
                 {/* Excluded Section */}
-                <div className="mt-6">
+                {/* <div className="mt-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Excluded</h3>
                   <div className="flex items-start space-x-2 text-sm text-red-600">
                     <span className="font-bold text-xl">×</span>
                     <span>Please provide a stool/ladder if required</span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* FAQ Section */}
-                <div className="mt-6">
+                {/* <div className="mt-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Frequently Asked Questions</h3>
                   <ul className="divide-y divide-gray-200">
                     {[
@@ -786,13 +786,13 @@ const ProductDetailModal = ({
                               <span className="absolute inset-0 hidden group-open:inline">−</span>
                             </span>
                           </summary>
-                          {/* Answer section */}
+                          
                           <p className="mt-2 text-sm text-gray-600">{faq.answer}</p>
                         </details>
                       </li>
                     ))}
                   </ul>
-                </div>
+                </div> */}
 
                 {/* Image Gallery */}
                 {/* <div className="space-y-4">

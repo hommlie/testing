@@ -70,7 +70,7 @@ const ContactForm = ({ user }) => {
       <form onSubmit={handleSubmit} className="flex justify-center">
         <button
           type="submit"
-          className="bg-[#92b876] text-white border border-[#92B775] hover:bg-[#52852d] hover:text-white font-medium py-3 px-8 rounded-md transition duration-200"
+          className="bg-[#92b876] text-white border border-black hover:bg-[#52852d] hover:text-white font-medium py-3 px-8 rounded-md transition duration-200 sm:mt-0 mt-5"
         >
           Request a call back
         </button>

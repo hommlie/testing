@@ -486,15 +486,32 @@ const offers = [
               <div className="flex items-center space-x-6">
                 {/* Logo Section */}
                 <div className="hidden sm:flex flex-shrink-0">
+                  <NavLink to="/">
+                    <img
+                      src={logo}
+                      alt={logoAlt}
+                      className="h-10 w-auto object-contain"
+                    />
+                  </NavLink>
+                </div>
+                  <div className="flex sm:hidden w-full items-center justify-between px-2">
+              {/* Logo aligned left */}
+              <div className="flex items-center flex-shrink-0 -ml-8">
                 <NavLink to="/">
                   <img
-                    src={logo}
-                    alt={logoAlt}
-                    className="h-10 w-auto object-contain"
+                    src="/images/logoh.png"
+                    alt="Hommlie Logo"
+                    className="h-14 w-auto object-contain"
                   />
                 </NavLink>
               </div>
-              <div className="flex sm:hidden">
+
+              {/* Divider and Location grouped together */}
+              <div className="flex items-center space-x-3">
+                {/* Vertical Line */}
+                <div className="h-8 w-px bg-gray-300" />
+
+                {/* Location aligned right */}
                 <button
                   onClick={() => setIsLocationModalOpen(true)}
                   className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
@@ -511,6 +528,8 @@ const offers = [
                   </div>
                 </button>
               </div>
+            </div>
+
             <div className="hidden sm:block h-10 w-px bg-gray-200 mx-3"></div>
 
             {/* Location and Search Section */}

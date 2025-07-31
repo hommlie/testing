@@ -169,9 +169,9 @@ const ServiceGrid = () => {
 
   return (
     <div className="p-4 mb-0 bg-cover bg-center bg-no-repeat mt-4">
-      <h2 className="sm:text-xl font-bold text-gray-500 sm:ml-7 ml-4 sm:mb-6 -mt-6">
-          On-demand Home Services In Bangalore
-        </h2>
+      <h2 className="text-lg sm:text-xl font-medium text-black sm:ml-7 -ml-4 sm:mb-6 -mt-2 mb-2 sm:mb-0 sm:-mt-4">
+        On-demand Home Services In Bangalore
+      </h2>
       <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-1">
         <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
           {services.map((service) => (

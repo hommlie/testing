@@ -90,13 +90,21 @@ const ServiceSection = ({ categories }) => {
     }
   }, [selectedProduct]);
 
+  
   const handleCategorySelect = (category) => {
-    if (category.is_form === 1) {
-      navigate(`${config.VITE_BASE_URL}/${category.slug}`);
-      return;
-    }
-    setSelectedCategory(category.id);
-  };
+  if (category.slug === "disinfection-services") {
+    window.location.href = `${config.VITE_BASE_URL}/subcategory/disinfection-services-near-you-in-bangalore`; // Replace with your actual URL
+    return;
+  }
+
+  if (category.is_form === 1) {
+    navigate(`${config.VITE_BASE_URL}/${category.slug}`);
+    return;
+  }
+
+  setSelectedCategory(category.id);
+};
+
 
   const formatDescription = (desc) =>
     desc?.split("|").filter((pt) => pt.trim());
@@ -303,12 +311,12 @@ const ServiceSection = ({ categories }) => {
     return (
       <motion.div
         whileHover={{ y: -5 }}
-        className={`relative w-full max-w-[360px] rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col justify-between 
-          h-[460px] bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
+        className={`relative w-full max-w-[360px] rounded-xl border border-black transition-all duration-300 overflow-hidden flex flex-col justify-between 
+          h-[530px] bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
       >
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="relative bg-[#133215] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
+            <div className=" relative bg-[#133215] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
               <Star className="w-3 h-3 mr-1 fill-current text-white" />
               RECOMMENDED
               <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
@@ -412,7 +420,7 @@ const ServiceSection = ({ categories }) => {
           <Requestacallback device="mobile" />
         </div>
 
-{/* Desktop View Only */}
+        {/* Desktop View Only */}
         <div className="hidden md:block mb-5 -mt-6">
           <Requestacallback device="desktop" />
         </div>
@@ -426,11 +434,11 @@ const ServiceSection = ({ categories }) => {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleCategorySelect(category)}
-                  className={`w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
+                  className={`border border-black w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                     ${
-                      selectedCategory === category.id
-                        ? "bg-[#92B775] text-white shadow-md"
-                        : "bg-white text-gray-800 border border-gray-200 hover:border-black"
+                      selectedCategory === category.id && category.slug !== "disinfection-services"
+                        ? "bg-[#92B775] text-white shadow-md "
+                        : "bg-white text-gray-800 border border-black hover:border-black"
                     }`}
                 >
                   {category.icon_url && <img src={category.icon_url} alt="" className="w-6 h-6 mb-1 flex-shrink-0" />}
@@ -482,10 +490,10 @@ const ServiceSection = ({ categories }) => {
 
         <div className="mb-0">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Available Service Packages</h3>
-          <div className="flex justify-center">
+          <div className="flex justify-center ">
             <div className={`grid gap-4 sm:gap-6 px-4 w-full 
               ${
-                (recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px]") ||
+                (recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
                 (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
                 "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
               }`}>
