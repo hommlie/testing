@@ -149,7 +149,7 @@ const ServiceGrid = () => {
                 href={sub.url || '#'}
                 className="flex flex-col items-center text-center p-2 hover:shadow transition rounded-lg"
               >
-                <div className="w-24 h-24 sm:w-28 sm:h-28 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
+                <div className="border border-black w-24 h-24 sm:w-28 sm:h-28 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
                   <img
                     src={sub.image}
                     alt={sub.name}
