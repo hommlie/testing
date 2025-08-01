@@ -480,7 +480,7 @@ export default function AddtoCart() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Cart Content */}
           <div   className="w-full lg:w-[750px] order-2 lg:order-1">
-            <div className="bg-white rounded-xl shadow-sm p-6 space-y-10 w-100px">
+            <div className="bg-white rounded-xl shadow-sm p-6  order-3 lg:order-none space-y-10 w-100px">
               {/* Account Section */}
               <div>
                 <div className="flex justify-between items-center mb-4">
