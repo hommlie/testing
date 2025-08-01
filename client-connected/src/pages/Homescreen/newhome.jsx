@@ -36,7 +36,7 @@ import {
   FaEllipsisH 
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
-import photo1 from '../../assets/images/photo1.png';
+import photo1 from '../../assets/images/photo1.webp';
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
