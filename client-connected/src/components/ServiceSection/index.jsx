@@ -311,9 +311,10 @@ const ServiceSection = ({ categories }) => {
     return (
       <motion.div
         whileHover={{ y: -5 }}
-        className={`relative w-full max-w-[360px] rounded-xl border border-black transition-all duration-300 overflow-hidden flex flex-col justify-between 
+        className={`relative w-[94vw] sm:max-w-[360px] rounded-xl border border-black transition-all duration-300 overflow-hidden flex flex-col justify-between 
           h-[530px] bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
       >
+
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2 z-10">
             <div className=" relative bg-[#133215] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">

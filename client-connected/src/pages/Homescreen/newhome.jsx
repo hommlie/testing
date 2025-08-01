@@ -314,44 +314,48 @@ const HomePage = () => {
     : data?.faqs;
 
    return (
-    <div className="w-full mx-auto px-4" style={{ maxWidth: "1320px" }}>
+    <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
       <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
         Frequently Asked Questions
       </h2>
-      <div className="space-y-4">
-        {displayedFaqs?.map((faq, index) => (
-          <motion.div
-            key={index}
-            className="border rounded-lg overflow-hidden"
-            initial={false}
-          >
-            <button
-              className="w-full flex justify-between items-center p-4 text-left bg-white"
-              onClick={() =>
-                setOpenFaqIndex(openFaqIndex === index ? null : index)
-              }
+        <div className="space-y-4">
+          {displayedFaqs?.map((faq, index) => (
+            <motion.div
+              key={index}
+              className="border rounded-lg overflow-hidden"
+              initial={false}
             >
-              <span className="font-medium text-sm sm:text-base">{faq.question}</span>
-              <span className="text-xl font-bold">
-                {openFaqIndex === index ? "−" : "+"}
-              </span>
-            </button>
-            <AnimatePresence>
-              {openFaqIndex === index && (
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: "auto" }}
-                  exit={{ height: 0 }}
-                  className="overflow-hidden"
-                >
-                  <p className="p-4 bg-gray-50 text-sm sm:text-base">{faq.answer}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        ))}
+              <button
+                className="w-full flex justify-between items-center p-4 text-left bg-white"
+                onClick={() =>
+                  setOpenFaqIndex(openFaqIndex === index ? null : index)
+                }
+              >
+                <span className="font-medium text-sm sm:text-base">
+                  {faq.question}
+                </span>
+                <span className="text-xl font-bold">
+                  {openFaqIndex === index ? "−" : "+"}
+                </span>
+              </button>
+              <AnimatePresence>
+                {openFaqIndex === index && (
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: "auto" }}
+                    exit={{ height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <p className="p-4 bg-gray-50 text-sm sm:text-base">
+                      {faq.answer}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
   );
 };
 
