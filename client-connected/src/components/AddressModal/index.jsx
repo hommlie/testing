@@ -111,37 +111,51 @@ const AddressModal = ({ isOpen, onClose }) => {
           });
 
           autocompleteRef.current.addListener('place_changed', () => {
-            const place = autocompleteRef.current.getPlace();
-            
-            if (!place.geometry) {
-              warningNotify('Please select an address from the dropdown');
-              return;
+          const place = autocompleteRef.current.getPlace();
+          
+          if (!place.geometry) {
+            warningNotify('Please select an address from the dropdown');
+            return;
+          }
+
+          const lat = place.geometry.location.lat();
+          const lng = place.geometry.location.lng();
+
+          let address = place.formatted_address || '';
+          let postcode = '';
+          let locality = '';
+
+          place.address_components.forEach(component => {
+            const types = component.types;
+
+            if (types.includes('postal_code')) {
+              postcode = component.long_name;
             }
-
-            let address = place.formatted_address || '';
-            let postcode = '';
-            let locality = '';
-
-            place.address_components.forEach(component => {
-              const types = component.types;
-              
-              if (types.includes('postal_code')) {
-                postcode = component.long_name;
-              }
-              if (types.includes('sublocality_level_1') || types.includes('locality')) {
-                locality = component.long_name;
-              }
-            });
-
-            setFormData(prev => ({
-              ...prev,
-              address: address,
-              pincode: postcode || prev.pincode,
-              landmark: locality || prev.landmark,
-              latitude: place.geometry.location.lat().toString(),
-              longitude: place.geometry.location.lng().toString()
-            }));
+            if (types.includes('sublocality_level_1') || types.includes('locality')) {
+              locality = component.long_name;
+            }
           });
+
+          // ✅ Update form data
+          setFormData(prev => ({
+            ...prev,
+            address: address,
+            pincode: postcode || prev.pincode,
+            landmark: locality || prev.landmark,
+            latitude: lat.toString(),
+            longitude: lng.toString()
+          }));
+
+          // ✅ Move marker and pan map
+          if (markerRef.current) {
+            markerRef.current.setPosition({ lat, lng });
+          }
+
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.panTo({ lat, lng });
+          }
+        });
+
         }
       } catch (error) {
         console.error('Error initializing Google Maps:', error);
@@ -204,37 +218,102 @@ const AddressModal = ({ isOpen, onClose }) => {
     </div>
   );
 
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        try {
-          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-          const data = await response.json();
-          
-          setCurrentLocationName(data.address?.neighbourhood);
-          setFormClicked(true);
-          setEditId(null);
-          setFormData({
-            ...formData,
-            address: data.display_name,
-            pincode: data.address.postcode || "",
-            latitude: latitude.toString(),
-            longitude: longitude.toString()
-          });
-        } catch (error) {
-          console.error("Error fetching location data:", error);
-          errorNotify("Failed to fetch current location. Please try again.");
-        }
-      }, () => {
-        errorNotify("Unable to retrieve your location. Please check your browser settings.");
-      });
-    } else {
-      errorNotify("Geolocation is not supported by this browser.");
-    }
-  };
+  const extractAddressDetails = (components) => {
+  const pincode = components.find(c => c.types.includes('postal_code'))?.long_name || '';
+  const landmark = components.find(c =>
+    c.types.includes('sublocality') ||
+    c.types.includes('neighborhood') ||
+    c.types.includes('locality')
+  )?.long_name || '';
+  return { pincode, landmark };
+};
 
-  if (!isOpen) return null;
+
+  const getCurrentLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        await loadGoogleMapsApi();
+
+        const geocoder = new window.google.maps.Geocoder();
+        const latlng = { lat: latitude, lng: longitude };
+
+        geocoder.geocode({ location: latlng }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            const address = results[0].formatted_address;
+            const { pincode, landmark } = extractAddressDetails(results[0].address_components);
+
+            setFormClicked(true);
+            setEditId(null);
+            setFormData({
+              ...formData,
+              address,
+              pincode,
+              landmark,
+              latitude: latitude.toString(),
+              longitude: longitude.toString()
+            });
+
+            setTimeout(() => {
+              if (mapRef.current && window.google?.maps) {
+                const map = new window.google.maps.Map(mapRef.current, {
+                  center: latlng,
+                  zoom: 16,
+                });
+                mapInstanceRef.current = map;
+
+                const marker = new window.google.maps.Marker({
+                  position: latlng,
+                  map,
+                  draggable: true,
+                });
+
+                markerRef.current = marker;
+
+                marker.addListener("dragend", () => {
+                  const newPos = marker.getPosition();
+                  const newLat = newPos.lat();
+                  const newLng = newPos.lng();
+
+                  geocoder.geocode({ location: { lat: newLat, lng: newLng } }, (res, status) => {
+                    if (status === "OK" && res[0]) {
+                      const updatedAddress = res[0].formatted_address;
+                      const { pincode, landmark } = extractAddressDetails(res[0].address_components);
+
+                      setFormData(prev => ({
+                        ...prev,
+                        address: updatedAddress,
+                        pincode,
+                        landmark,
+                        latitude: newLat.toString(),
+                        longitude: newLng.toString()
+                      }));
+                    } else {
+                      errorNotify("Error updating location.");
+                    }
+                  });
+                });
+              }
+            }, 300);
+
+          } else {
+            errorNotify("Unable to reverse geocode coordinates.");
+          }
+        });
+      } catch (error) {
+        console.error("Error using Google Geocoder:", error);
+        errorNotify("Failed to fetch location using Google.");
+      }
+    }, () => {
+      errorNotify("Unable to retrieve your location. Please check your browser settings.");
+    }, { enableHighAccuracy: true });
+  } else {
+    errorNotify("Geolocation is not supported by this browser.");
+  }
+};
+
 
   const handleProceed = () => {
     console.log(selected);
@@ -244,9 +323,19 @@ const AddressModal = ({ isOpen, onClose }) => {
     onClose();
   }
 
-  const handleAddNew = () => {
-    setFormClicked(true);
-    setEditId(null);
+  const handleAddNew = async () => {
+  setFormClicked(true);
+  setEditId(null);
+
+  // Use browser's actual location
+  if (!navigator.geolocation) {
+    errorNotify("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const { latitude, longitude } = position.coords;
+
     setFormData({
       name: "",
       address: "",
@@ -254,10 +343,82 @@ const AddressModal = ({ isOpen, onClose }) => {
       pincode: "",
       mobile: "",
       email: "",
-      latitude: "",
-      longitude: "",
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
     });
-  };
+
+    try {
+      await loadGoogleMapsApi();
+
+      const geocoder = new window.google.maps.Geocoder();
+      const latlng = { lat: latitude, lng: longitude };
+
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const address = results[0].formatted_address;
+          const { pincode, landmark } = extractAddressDetails(results[0].address_components);
+
+          setFormData((prev) => ({
+            ...prev,
+            address,
+            pincode,
+            landmark,
+          }));
+
+          setTimeout(() => {
+            if (mapRef.current && window.google?.maps) {
+              const map = new window.google.maps.Map(mapRef.current, {
+                center: latlng,
+                zoom: 15,
+              });
+              mapInstanceRef.current = map;
+
+              const marker = new window.google.maps.Marker({
+                position: latlng,
+                map,
+                draggable: true,
+              });
+
+              markerRef.current = marker;
+
+              marker.addListener("dragend", () => {
+                const newPos = marker.getPosition();
+                const newLat = newPos.lat();
+                const newLng = newPos.lng();
+
+                geocoder.geocode({ location: { lat: newLat, lng: newLng } }, (res, status) => {
+                  if (status === "OK" && res[0]) {
+                    const updatedAddress = res[0].formatted_address;
+                    const { pincode, landmark } = extractAddressDetails(res[0].address_components);
+
+                    setFormData((prev) => ({
+                      ...prev,
+                      address: updatedAddress,
+                      pincode,
+                      landmark,
+                      latitude: newLat.toString(),
+                      longitude: newLng.toString(),
+                    }));
+                  } else {
+                    errorNotify("Error updating location.");
+                  }
+                });
+              });
+            }
+          }, 300);
+        } else {
+          errorNotify("Unable to get your location address.");
+        }
+      });
+    } catch (err) {
+      errorNotify("Failed to initialize map.");
+    }
+  }, () => {
+    errorNotify("Unable to fetch your location. Please allow location access.");
+  }, { enableHighAccuracy: true });
+};
+
+
 
   const handleEditAdd = (id) => {
     setFormClicked(true);
@@ -395,8 +556,13 @@ const AddressModal = ({ isOpen, onClose }) => {
     setSelected(address);
   };
 
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const mapInstanceRef = useRef(null); // ⬅️ New
+  
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className={`fixed inset-0 z-50 ${isOpen ? 'flex' : 'hidden'} items-center justify-center bg-black bg-opacity-50`}>
       <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-2xl font-semibold text-gray-800">Manage Addresses</h2>
@@ -407,87 +573,95 @@ const AddressModal = ({ isOpen, onClose }) => {
         
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
           {formClicked ? (
-            <form onSubmit={handleFormSubmit} className="space-y-4">
-              <button
-                type="button"
-                onClick={() => setFormClicked(false)}
-                className="mb-4 flex items-center text-[#249370] hover:text-green-700"
-              >
-                <FaCircleArrowLeft className="mr-2" /> Back to Addresses
-              </button>
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.name ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                />
-                {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Left - Google Map */}
+              <div className="w-full lg:w-1/2 h-[300px] lg:h-auto">
+                <div ref={mapRef} className="w-full h-full rounded-lg border shadow border-gray-300" />
               </div>
-              {formClicked && renderAddressInput()}
-              <div>
-                <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
-                <input
-                  type="text"
-                  id="landmark"
-                  name="landmark"
-                  value={formData.landmark}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">Pincode *</label>
-                  <input
-                    type="text"
-                    id="pincode"
-                    name="pincode"
-                    value={formData.pincode}
-                    onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.pincode ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                  />
-                  {errors.pincode && <p className="mt-2 text-sm text-red-600">{errors.pincode}</p>}
-                </div>
-                <div>
-                  <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile *</label>
-                  <input
-                    type="text"
-                    id="mobile"
-                    name="mobile"
-                    minLength={10}
-                    maxLength={10}
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.mobile ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                  />
-                  {errors.mobile && <p className="mt-2 text-sm text-red-600">{errors.mobile}</p>}
-                </div>
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.email ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                />
-                {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
-              </div>
-              <div className="flex justify-end mt-6">
+
+              {/* Right - Form */}
+              <form onSubmit={handleFormSubmit} className="space-y-4 w-full lg:w-1/2">
                 <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#249370] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  type="button"
+                  onClick={() => setFormClicked(false)}
+                  className="mb-4 flex items-center text-[#249370] hover:text-green-700"
                 >
-                  {editId ? 'Update Address' : 'Save Address'}
+                  <FaCircleArrowLeft className="mr-2" /> Back to Addresses
                 </button>
-              </div>
-            </form>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.name ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
+                  />
+                  {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
+                </div>
+                {renderAddressInput()}
+                <div>
+                  <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
+                  <input
+                    type="text"
+                    id="landmark"
+                    name="landmark"
+                    value={formData.landmark}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">Pincode *</label>
+                    <input
+                      type="text"
+                      id="pincode"
+                      name="pincode"
+                      value={formData.pincode}
+                      onChange={handleChange}
+                      className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.pincode ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
+                    />
+                    {errors.pincode && <p className="mt-2 text-sm text-red-600">{errors.pincode}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile *</label>
+                    <input
+                      type="text"
+                      id="mobile"
+                      name="mobile"
+                      minLength={10}
+                      maxLength={10}
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.mobile ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
+                    />
+                    {errors.mobile && <p className="mt-2 text-sm text-red-600">{errors.mobile}</p>}
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.email ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
+                  />
+                  {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                </div>
+                <div className="flex justify-end mt-6">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#249370] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  >
+                    {editId ? 'Update Address' : 'Save Address'}
+                  </button>
+                </div>
+              </form>
+            </div>
           ) : (
             <>
               {addresses.length > 0 ? (

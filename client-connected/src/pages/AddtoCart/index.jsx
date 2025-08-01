@@ -479,7 +479,7 @@ export default function AddtoCart() {
           <>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Cart Content */}
-          <div   className="w-full lg:w-[750px]">
+          <div   className="w-full lg:w-[750px] order-2 lg:order-1">
             <div className="bg-white rounded-xl shadow-sm p-6 space-y-10 w-100px">
               {/* Account Section */}
               <div>
@@ -703,7 +703,7 @@ export default function AddtoCart() {
             </div>
           </div>
           {/* Order Summary */}
-          <div className="w-full lg:w-[550px] space-y-6">
+          <div className="w-full lg:w-[550px] space-y-6 order-1 lg:order-2">
             {isLoading && cart.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-6 flex justify-center items-center min-h-[200px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#249370] border-t-transparent"></div>
