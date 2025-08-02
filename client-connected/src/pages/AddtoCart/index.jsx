@@ -606,7 +606,7 @@ const paymentRef = useRef(null);
                         )}
                       </div>
 
-                      <div className="border-t border-gray-100 pt-4">
+                      <div className="border-t border-gray-100 pt-4 ml-8">
                         {!selectedAddrs ? (
                           <p className="text-red-400">Please select a delivery address first</p>
                         ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
