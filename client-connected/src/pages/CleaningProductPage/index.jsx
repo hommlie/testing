@@ -123,9 +123,9 @@ const CartSection = ({ cart }) => {
     return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0).toFixed(2);
   };
 
-  const calculateSavings = () => {
-    return cart.reduce((sum, item) => sum + 78, 0).toFixed(2); // Replace with actual savings calculation
-  };
+  // const calculateSavings = () => {
+  //   return cart.reduce((sum, item) => sum + 78, 0).toFixed(2); // Replace with actual savings calculation
+  // };
 
   return (
     <div className="overflow-y-auto">
@@ -162,22 +162,22 @@ const CartSection = ({ cart }) => {
                   <span>Subtotal</span>
                   <span>₹{parseFloat(calculateCartTotal()).toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                {/* <div className="flex justify-between text-gray-600">
                   <span>Platform Fee</span>
                   <span>₹{parseFloat(calculateTaxTotal()).toFixed(2)}</span>
-                </div>
+                </div> */}
                 <div className="flex justify-between font-medium pt-2 border-t">
                   <span>Total</span>
                   <span>₹{parseFloat(calculateCartTotal() + calculateTaxTotal()).toFixed(2)}</span>
                 </div>
               </div>
 
-              {calculateSavings() > 0 && (
+              {/* {calculateSavings() > 0 && (
                 <div className="flex items-center justify-between text-green-600 pt-2">
                   <span>Congratulations!</span>
                   <span>₹{parseFloat(calculateSavings()).toFixed(2)}</span>
                 </div>
-              )}
+              )} */}
 
               <button
                 className="bg-emerald-600 hover:bg-emerald-700 w-full text-white py-2 rounded-md transition"

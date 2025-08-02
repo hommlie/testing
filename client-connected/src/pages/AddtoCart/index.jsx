@@ -799,8 +799,35 @@ const paymentRef = useRef(null);
                 ))}
               </div>
             )}
-            {/* Coupon Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6 transition-all">
+            
+            <div className="lg:col-span-1">
+              <div className="sticky top-[100px] space-y-6">
+                {/* Order Summary */}
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all">
+                  <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                  <div className="space-y-4">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Items ({itemCount})</span>
+                      <span>₹{totalItemPrice?.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Platform Fee</span>
+                      <span>₹{tax?.toFixed(2)}</span>
+                    </div>
+                    {couponDiscount > 0 && (
+                      <div className="flex justify-between text-green-600">
+                        <span>Coupon Discount</span>
+                        <span>-₹{couponDiscount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {tipAmount > 0 && (
+                      <div className="flex justify-between text-gray-600">
+                        <span>Tip</span>
+                        <span>+₹{tipAmount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {/* Coupon Section */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all border border-black">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <BiSolidOffer className="text-xl text-[#249370]" />
@@ -830,32 +857,6 @@ const paymentRef = useRef(null);
                   </div>
                 )}
             </div>
-            <div className="lg:col-span-1">
-              <div className="sticky top-[100px] space-y-6">
-                {/* Order Summary */}
-                <div className="bg-white rounded-xl shadow-sm p-6 transition-all">
-                  <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-gray-600">
-                      <span>Items ({itemCount})</span>
-                      <span>₹{totalItemPrice?.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-gray-600">
-                      <span>Platform Fee</span>
-                      <span>₹{tax?.toFixed(2)}</span>
-                    </div>
-                    {couponDiscount > 0 && (
-                      <div className="flex justify-between text-green-600">
-                        <span>Coupon Discount</span>
-                        <span>-₹{couponDiscount.toFixed(2)}</span>
-                      </div>
-                    )}
-                    {tipAmount > 0 && (
-                      <div className="flex justify-between text-gray-600">
-                        <span>Tip</span>
-                        <span>+₹{tipAmount.toFixed(2)}</span>
-                      </div>
-                    )}
                     <div className="border-t border-gray-200 pt-4">
                       <div className="flex justify-between text-lg font-semibold">
                         <span>Total Amount</span>
