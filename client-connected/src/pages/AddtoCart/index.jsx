@@ -22,7 +22,7 @@ import { BsFillCartXFill } from "react-icons/bs";
 import { FaWallet } from "react-icons/fa";
 import { FaCreditCard } from "react-icons/fa";
 import { CiDeliveryTruck } from "react-icons/ci";
-
+import { useRef } from "react";
 
 
 export default function AddtoCart() {
@@ -454,6 +454,27 @@ export default function AddtoCart() {
 
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
 
+  useEffect(() => {
+  if (
+    selectedAddrs &&
+    (!selectedDayTime?.date?.day || !selectedDayTime?.time)
+  ) {
+    setTimeout(() => {
+      setIsDateTimeModalOpen(true);
+    }, 300); // Add delay for smooth modal opening
+  }
+}, [selectedAddrs]);
+
+useEffect(() => {
+  if (selectedDayTime?.date?.day && selectedDayTime?.time) {
+    setTimeout(() => {
+      paymentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 500); // Delay ensures DateTimeModal closes first
+  }
+}, [selectedDayTime]);
+
+
+const paymentRef = useRef(null);
 
   return (
     <div className=""  style={{
@@ -596,7 +617,10 @@ export default function AddtoCart() {
                   </div>
                 </div>
                   {/* Payment Options */}
-                  <h3 className="text-xl -mt-3 mb-3 font-semibold flex items-center gap-2">
+                  <h3
+                    ref={paymentRef}
+                    className="text-xl -mt-3 mb-3 font-semibold flex items-center gap-2"
+                  >
                     <FaCreditCard className="text-[#249370]" />
                     Payment Method
                   </h3>

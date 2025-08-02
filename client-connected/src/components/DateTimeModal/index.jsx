@@ -5,6 +5,8 @@ import { useCont } from '../../context/MyContext';
 import axios from 'axios';
 import config from '../../config/config';
 import { useToast } from '../../context/ToastProvider';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, order_id, order_type, slotFull }) => {
     const [selectedDate, setSelectedDate] = useState(null);
@@ -156,89 +158,109 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
         }
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="fixed inset-0 opacity-60 bg-black" onClick={onClose}></div>
-            <div className="relative bg-white w-[80%] md:w-full max-w-[24rem] max-h-[40rem] overflow-y-scroll p-4 md:p-8 md:px-12 rounded-2xl shadow-lg z-30 space-y-4 scrollbar-hide">
-                <h2 className='text-lg font-bold'>Select Date & Time for the appointment</h2>
+  <AnimatePresence>
+    {isOpen && (
+      <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+        {/* Backdrop */}
+        <motion.div
+          className="fixed inset-0 bg-black bg-opacity-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.5 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onClick={onClose}
+        />
 
-                <div className='flex flex-col gap-3'>
-                    <h3 className='font-bold'>When would you like your service?</h3>
-                    <div className='flex flex-row justify-around gap-2 w-72'>
-                        {dates.map((dt, index) => (
-                            <div
-                                key={index}
-                                className={`w-12 h-12 flex flex-col justify-center items-center p-2 rounded border cursor-pointer`}
-                                style={{
-                                    color: selectedDate?.date === dt.date ? '#249370' : '',
-                                    border: `1px solid ${selectedDate?.date === dt.date ? '#249370' : '#C7C9D9'}`
-                                }}
-                                onClick={() => {
-                                    setSelectedDate(dt);
-                                    setSelectedTime(null); // reset time on date change
-                                }}
-                            >
-                                <span className='text-sm'>{dt.day}</span>
-                                <span className='font-bold'>{dt.date}</span>
-                            </div>
-                        ))}
-                    </div>
+        {/* Sliding Modal */}
+        <motion.div
+          className="relative bg-white w-[90%] md:w-[500px] max-w-[90vw] max-h-[40rem] overflow-y-scroll p-4 md:p-8 md:px-12 rounded-t-2xl shadow-lg z-30 space-y-4 scrollbar-hide"
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+        >
+          <h2 className='text-lg font-bold'>Select Date & Time for the appointment</h2>
+
+          <div className='flex flex-col gap-3'>
+            <h3 className='font-bold'>When would you like your service?</h3>
+            <div className='flex flex-row justify-around gap-2 w-72'>
+              {dates.map((dt, index) => (
+                <div
+                  key={index}
+                  className={`w-12 h-12 flex flex-col justify-center items-center p-2 rounded border cursor-pointer`}
+                  style={{
+                    color: selectedDate?.date === dt.date ? '#249370' : '',
+                    border: `1px solid ${selectedDate?.date === dt.date ? '#249370' : '#C7C9D9'}`
+                  }}
+                  onClick={() => {
+                    setSelectedDate(dt);
+                    setSelectedTime(null);
+                  }}
+                >
+                  <span className='text-sm'>{dt.day}</span>
+                  <span className='font-bold'>{dt.date}</span>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <div className='flex flex-col gap-3'>
-                    <h3 className='font-bold'>At what time?</h3>
-                    <div className='flex flex-wrap justify-around gap-2 w-72'>
-                        {times.map((time, index) => (
-                            <div
-                                key={index}
-                                className={`w-[135px] h-[39px] flex justify-center items-center p-2 rounded border cursor-pointer`}
-                                style={{
-                                    color: selectedTime === time ? '#249370' : '',
-                                    border: `1px solid ${selectedTime === time ? '#249370' : '#C7C9D9'}`
-                                }}
-                                onClick={() => setSelectedTime(time)}
-                            >
-                                <span className='text-sm'>{time}</span>
-                            </div>
-                        ))}
+          <div className='flex flex-col gap-3'>
+            <h3 className='font-bold'>At what time?</h3>
+            <div className="grid grid-cols-3 sm:grid-cols-3 gap-3 w-full px-2">
+                {times.map((time, index) => (
+                    <div
+                    key={index}
+                    className={`h-[40px] flex justify-center items-center rounded border cursor-pointer text-sm text-center transition-all duration-150 ${
+                        selectedTime === time
+                        ? 'text-[#249370] border-[#249370] font-medium'
+                        : 'border-[#C7C9D9] text-black'
+                    }`}
+                    onClick={() => setSelectedTime(time)}
+                    >
+                    {time}
                     </div>
-                </div>
-                {(selectedDate || selectedTime) && (
-                    <button
-                        onClick={() => {
-                        setSelectedDate(null);
-                        setSelectedTime(null);
-                        setSelectedDayTime(null);
-                        localStorage.removeItem("HommlieselectedDayTime"); // 🧹 This is the key fix!
-                        }}
-                        className="text-sm text-red-500 underline"
-                    >
-                        Clear Selection
-                    </button>
-                )}
-
-                <div className='flex justify-center'>
-                    <button
-                        style={{ backgroundColor: "#249370" }}
-                        className={`block mt-4 px-8 py-2 text-xs text-center text-white tracking-widest disabled:opacity-60 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                        onClick={handleProceed}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (
-                            <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
-                                <span className="ml-2">Loading...</span>
-                            </div>
-                        ) : (
-                            'PROCEED'
-                        )}
-                    </button>
+                ))}
                 </div>
             </div>
-        </div>
-    );
+
+          {(selectedDate || selectedTime) && (
+            <button
+              onClick={() => {
+                setSelectedDate(null);
+                setSelectedTime(null);
+                setSelectedDayTime(null);
+                localStorage.removeItem("HommlieselectedDayTime");
+              }}
+              className="text-sm text-red-500 underline"
+            >
+              Clear Selection
+            </button>
+          )}
+
+          <div className='flex justify-center'>
+            <button
+              style={{ backgroundColor: "#249370" }}
+              className={`block mt-4 px-8 py-2 text-xs text-center text-white tracking-widest disabled:opacity-60 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              onClick={handleProceed}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                  <span className="ml-2">Loading...</span>
+                </div>
+              ) : (
+                'PROCEED'
+              )}
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    )}
+  </AnimatePresence>
+);
+
 };
 
 export default DateTimeModal;
