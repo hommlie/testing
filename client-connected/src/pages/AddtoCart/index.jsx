@@ -956,17 +956,19 @@ const paymentRef = useRef(null);
                   </p>
                 </div>
                 {/* Return Policy */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <CiDeliveryTruck className="text-2xl text-[#249370]" />
-                    <h3 className="font-semibold">Return Policy</h3>
+                <div className="hidden lg:block">
+                  <div className="bg-white rounded-xl shadow-sm p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <CiDeliveryTruck className="text-2xl text-[#249370]" />
+                      <h3 className="font-semibold">Return Policy</h3>
+                    </div>
+                    <a
+                      href={`${config.VITE_BASE_URL}/privacy-policy`}
+                      className="text-gray-600 hover:underline"
+                    >
+                      Learn More
+                    </a>
                   </div>
-                  <a
-                    href={`${config.VITE_BASE_URL}/privacy-policy`}
-                    className="text-gray-600 hover:underline"
-                  >
-                    Learn More
-                  </a>
                 </div>
               </div>
             </div>
@@ -1036,6 +1038,20 @@ const paymentRef = useRef(null);
         )}
         </>
         )}
+        <div className="block lg:hidden mt-6 px-4">
+          <div className="-ml-4 bg-white rounded-xl shadow-sm p-6 p-6 w-[110%] mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <CiDeliveryTruck className="text-2xl text-[#249370]" />
+              <h3 className="font-semibold">Return Policy</h3>
+            </div>
+            <a
+              href={`${config.VITE_BASE_URL}/privacy-policy`}
+              className="text-gray-600 hover:underline"
+            >
+              Learn More
+            </a>
+          </div>
+        </div>
       </div>
       {/* Modals */}
       <DateTimeModal
