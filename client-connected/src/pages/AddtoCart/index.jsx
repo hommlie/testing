@@ -457,13 +457,18 @@ export default function AddtoCart() {
   useEffect(() => {
   if (
     selectedAddrs &&
+    typeof selectedAddrs === "object" &&
+    Object.keys(selectedAddrs).length > 0 && // Ensure it's a valid object
+    selectedAddrs?.address && // Validate essential address fields
+    selectedAddrs?.pincode &&
     (!selectedDayTime?.date?.day || !selectedDayTime?.time)
   ) {
     setTimeout(() => {
       setIsDateTimeModalOpen(true);
-    }, 300); // Add delay for smooth modal opening
+    }, 300);
   }
 }, [selectedAddrs]);
+
 
 useEffect(() => {
   if (selectedDayTime?.date?.day && selectedDayTime?.time) {
@@ -500,20 +505,22 @@ const paymentRef = useRef(null);
           <>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Cart Content */}
-          <div   className="w-full lg:w-[750px] order-2 lg:order-1">
+          <div   className="-ml-8 w-full lg:w-[800px] order-2 lg:order-1">
             <div className="bg-white rounded-xl shadow-sm p-6  order-3 lg:order-none space-y-10 w-100px">
               {/* Account Section */}
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-l font-semibold flex items-center gap-2">
-                    <MdOutlineSendToMobile className="text-xl text-[#249370]" />
+                    <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
+                      <MdOutlineSendToMobile className="text-xl text-[#249370]" />
+                    </div>
                     Send Your Booking Details To
                   </h2>
                 </div>
 
                 <div className="-mt-3 ml-7">
                   <div className="space-y-2 text-gray-600">
-                    <p className="text-gray-500 mb-3">
+                    <p className="text-gray-500 mb-3 ml-2">
                       {user?.name}{" ( "}{user?.mobile}{" ) "}, {user?.email}
                     </p>
                   </div>
@@ -524,7 +531,9 @@ const paymentRef = useRef(null);
               <div>
                 <div className="flex justify-between items-center mb-4 -mt-8">
                   <div className="flex items-center gap-3">
-                    <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
+                    <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
+                      <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
+                    </div>
                     <h2 className="text-xl font-semibold -ml-2">Delivery Address</h2>
                   </div>
                   <button
@@ -556,7 +565,7 @@ const paymentRef = useRef(null);
                       {/* <p>Mobile: {selectedAddrs.mobile}</p> */}
                     </div>
                   ) : (
-                    <p className="text-gray-500 -mt-5">Please select a delivery address</p>
+                    <p className="text-gray-500 -mt-4 mb-3 ml-2">Please select a delivery address</p>
                   )}
                 </div>
                 <div className="border-t border-gray-100"></div>
@@ -568,10 +577,11 @@ const paymentRef = useRef(null);
                   <div className="flex justify-between items-center mb-4">
                     <div className="w-full">
                       <div className="flex items-center gap-3 -mt-5">
-                        <RiTimerLine className="text-2xl text-[#249370]" />
-                        <h2 className="text-xl font-semibold">Select Your Slot</h2>
+                        <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
+                          <RiTimerLine className="text-2xl text-[#249370]" />
+                        </div>
+                        <h2 className="text-xl font-semibold -ml-1">Select Your Slot</h2>
                       </div>
-
                       <div className="mt-4 ml-7">
                         {!selectedDayTime?.date?.day || !selectedDayTime?.time ? (
                           <button
@@ -605,14 +615,12 @@ const paymentRef = useRef(null);
                           </div>
                         )}
                       </div>
-
-                      <div className="border-t border-gray-100 pt-4 ml-8">
-                        {!selectedAddrs ? (
-                          <p className="text-red-400">Please select a delivery address first</p>
-                        ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                          <p className="text-red-500">Please select delivery date and time</p>
-                        ) : null}
-                      </div>
+                      {!selectedAddrs ? (
+                            <p className="text-red-400 ml-8 mt-3">Please select a delivery address first</p>
+                          ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
+                            <p className="text-red-500">Please select delivery date and time</p>
+                          ) : null}
+                        <div className="border-t border-gray-100 pt-4"></div>
                     </div>
                   </div>
                 </div>
@@ -621,7 +629,9 @@ const paymentRef = useRef(null);
                     ref={paymentRef}
                     className="text-xl -mt-3 mb-3 font-semibold flex items-center gap-2"
                   >
-                    <FaCreditCard className="text-[#249370]" />
+                    <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
+                      <FaCreditCard className="text-[#249370]" />
+                    </div>
                     Payment Method
                   </h3>
                   {/* <button
@@ -704,8 +714,7 @@ const paymentRef = useRef(null);
                       Safe and Secure Payments
                     </p>
                   </div>
-                
-              </div>
+                </div>
               {/* Need Help Section */}
               {/* <section className="mt-12 bg-white rounded-xl shadow-sm p-8">
                 <div className="max-w-3xl mx-auto text-center">
@@ -727,7 +736,7 @@ const paymentRef = useRef(null);
             </div>
           </div>
           {/* Order Summary */}
-          <div className="w-full lg:w-[550px] space-y-6 order-1 lg:order-2">
+          <div className="-mr-7 w-full lg:w-[600px] space-y-6 order-1 lg:order-2">
             {isLoading && cart.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-6 flex justify-center items-center min-h-[200px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#249370] border-t-transparent"></div>
@@ -961,7 +970,7 @@ const paymentRef = useRef(null);
                   <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <CiDeliveryTruck className="text-2xl text-[#249370]" />
-                      <h3 className="font-semibold">Return Policy</h3>
+                      <h3 className="font-semibold">Refund Policy</h3>
                     </div>
                     <a
                       href={`${config.VITE_BASE_URL}/privacy-policy`}
