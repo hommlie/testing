@@ -11,6 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 import config from '../../config/config';
 import { useToast } from "../../context/ToastProvider";
 import { IoMdClose } from 'react-icons/io';
+import { BiSearch } from "react-icons/bi";
 
 // Create a function to load Google Maps script
 const loadGoogleMapsApi = (() => {
@@ -185,38 +186,41 @@ const AddressModal = ({ isOpen, onClose }) => {
   // };
 
   const renderAddressInput = () => (
+  <div className="relative">
     <div className="relative">
-      <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-        Address *
-      </label>
-      <div className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          id="address"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          placeholder="Type to search address..."
-          autoComplete="off"
-          disabled={isLoading}
-          className={`mt-1 block w-full rounded-md p-2 border shadow ${
-            errors.address 
-              ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' 
-              : 'border-gray-300 focus:border-green-500 focus:ring-green-500'
-          } ${isLoading ? 'bg-gray-100' : ''}`}
-        />
-        {isLoading && (
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-500"></div>
-          </div>
-        )}
-      </div>
-      {errors.address && (
-        <p className="mt-2 text-sm text-red-600">{errors.address}</p>
+      <input
+        ref={inputRef}
+        type="text"
+        id="address"
+        name="address"
+        value={formData.address}
+        onChange={handleChange}
+        placeholder="Search location..."
+        autoComplete="off"
+        disabled={isLoading}
+        className={`pl-10 pr-4 py-2 w-full rounded-full border shadow-sm text-sm transition focus:outline-none focus:ring-2 ${
+          errors.address 
+            ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' 
+            : 'border-black focus:border-green-500 focus:ring-green-500'
+        } ${isLoading ? 'bg-gray-100' : 'bg-white'}`}
+      />
+      {/* Search icon inside input */}
+      <BiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+
+      {/* Loading spinner if needed */}
+      {isLoading && (
+        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-500"></div>
+        </div>
       )}
     </div>
-  );
+    {errors.address && (
+      <p className="mt-2 text-sm text-red-600">{errors.address}</p>
+    )}
+  </div>
+);
+
+
 
   const extractAddressDetails = (components) => {
   const pincode = components.find(c => c.types.includes('postal_code'))?.long_name || '';
@@ -588,6 +592,7 @@ const AddressModal = ({ isOpen, onClose }) => {
                 >
                   <FaCircleArrowLeft className="mr-2" /> Back to Addresses
                 </button>
+                {renderAddressInput()}
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name *</label>
                   <input
@@ -600,7 +605,7 @@ const AddressModal = ({ isOpen, onClose }) => {
                   />
                   {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
                 </div>
-                {renderAddressInput()}
+                {/* {renderAddressInput()} */}
                 <div>
                   <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
                   <input
