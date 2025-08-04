@@ -30,6 +30,7 @@ exports.saveAddress = async(req, res) => {
         name,
         address,
         landmark,
+        building,
         pincode,
         mobile,
         email,
