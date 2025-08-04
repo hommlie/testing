@@ -70,6 +70,7 @@ const AddressModal = ({ isOpen, onClose }) => {
     name: "",
     address: "",
     landmark: "",
+    building: "",
     pincode: "",
     mobile: "",
     email: "",
@@ -495,6 +496,7 @@ const AddressModal = ({ isOpen, onClose }) => {
               name: formData.name,
               address: formData.address,
               landmark: formData.landmark,
+              building: formData.building,
               pincode: formData.pincode,
               mobile: formData.mobile,
               email: formData.email,
@@ -519,6 +521,7 @@ const AddressModal = ({ isOpen, onClose }) => {
                 name: formData.name,
                 address: formData.address,
                 landmark: formData.landmark,
+                building: formData.building,
                 pincode: formData.pincode,
                 mobile: formData.mobile,
                 email: formData.email,
@@ -606,16 +609,31 @@ const AddressModal = ({ isOpen, onClose }) => {
                   {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
                 </div>
                 {/* {renderAddressInput()} */}
-                <div>
-                  <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
-                  <input
-                    type="text"
-                    id="landmark"
-                    name="landmark"
-                    value={formData.landmark}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
+                    <input
+                      type="text"
+                      id="landmark"
+                      name="landmark"
+                      value={formData.landmark}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
+                      placeholder="e.g., Near SBI ATM"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="building" className="block text-sm font-medium text-gray-700">Building No.</label>
+                    <input
+                      type="text"
+                      id="building"
+                      name="building"
+                      value={formData.building || ""}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
+                      placeholder="e.g., #101"
+                    />
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
