@@ -505,7 +505,7 @@ const paymentRef = useRef(null);
           <>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Cart Content */}
-          <div   className="-ml-8 w-full lg:w-[800px] order-2 lg:order-1">
+          <div   className="w-full lg:w-[800px] order-2 lg:order-1">
             <div className="bg-white rounded-xl shadow-sm p-6  order-3 lg:order-none space-y-10 w-100px border border-black">
               {/* Account Section */}
               <div>
