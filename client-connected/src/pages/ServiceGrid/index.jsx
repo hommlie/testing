@@ -49,9 +49,9 @@ const ServiceGrid = () => {
       { name: "Termite Treatment", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
     ],
     "Deep Cleaning": [
-      { name: "Sofa Cleaning", image: "/images/sofaicon.png", url: "/subcategory/top-sofa-cleaning-services-in-bangalore" },
-      { name: "Bathroom Cleaning", image: "/images/bathroomicon.png", url: "/subcategory/professional-bathroom-cleaning-services-in-bangalore" },
-      { name: "Kitchen Cleaning", image: "/images/kitchenicon.png", url: "/subcategory/top-kitchen-cleaning-services-in-bangalore" },
+      // { name: "Sofa Cleaning", image: "/images/sofaicon.png", url: "/subcategory/top-sofa-cleaning-services-in-bangalore" },
+      // { name: "Bathroom Cleaning", image: "/images/bathroomicon.png", url: "/subcategory/professional-bathroom-cleaning-services-in-bangalore" },
+      // { name: "Kitchen Cleaning", image: "/images/kitchenicon.png", url: "/subcategory/top-kitchen-cleaning-services-in-bangalore" },
       { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
       { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
     ],

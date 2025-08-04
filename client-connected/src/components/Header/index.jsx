@@ -519,7 +519,7 @@ const offers = [
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
                       <MdLocationOn className="text-black mr-1 text-lg" />
-                      Delivery in 40 min
+                      Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
                       <span className="truncate">{currentLocation}</span>
@@ -560,7 +560,7 @@ const offers = [
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
                       <MdLocationOn className="text-black mr-1 text-lg" />
-                      Delivery in 40 min
+                      Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
                       <span className="truncate">{currentLocation}</span>

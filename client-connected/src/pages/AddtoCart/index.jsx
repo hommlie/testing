@@ -506,7 +506,7 @@ const paymentRef = useRef(null);
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Cart Content */}
           <div   className="-ml-8 w-full lg:w-[800px] order-2 lg:order-1">
-            <div className="bg-white rounded-xl shadow-sm p-6  order-3 lg:order-none space-y-10 w-100px">
+            <div className="bg-white rounded-xl shadow-sm p-6  order-3 lg:order-none space-y-10 w-100px border border-black">
               {/* Account Section */}
               <div>
                 <div className="flex justify-between items-center mb-4">
@@ -758,7 +758,7 @@ const paymentRef = useRef(null);
                 </button>
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 space-y-6">
+              <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 space-y-6 border border-black">
                 {cart?.map((pd, index) => (
                   <div key={pd.id} className="flex gap-4 md:gap-6 items-start border-b pb-4 last:border-b-0">
                     {/* Image */}
@@ -812,7 +812,7 @@ const paymentRef = useRef(null);
             <div className="lg:col-span-1">
               <div className="sticky top-[100px] space-y-6">
                 {/* Order Summary */}
-                <div className="bg-white rounded-xl shadow-sm p-6 transition-all">
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all border border-black">
                   <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                   <div className="space-y-4">
                     <div className="flex justify-between text-gray-600">
@@ -875,7 +875,7 @@ const paymentRef = useRef(null);
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-black">
                   <h3 className="text-base font-semibold mb-3">Add a tip to thank the Professional</h3>
 
                   <div className="flex items-center gap-3 flex-wrap">
@@ -967,7 +967,7 @@ const paymentRef = useRef(null);
                 </div>
                 {/* Return Policy */}
                 <div className="hidden lg:block">
-                  <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="bg-white rounded-xl shadow-sm p-6 border border-black">
                     <div className="flex items-center gap-3 mb-4">
                       <CiDeliveryTruck className="text-2xl text-[#249370]" />
                       <h3 className="font-semibold">Refund Policy</h3>
