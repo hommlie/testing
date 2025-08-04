@@ -1,5 +1,5 @@
 // Due to the large size, the code is split into multiple parts.
-// Please scroll down until you see: 🔚 END OF FILE
+
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, Star, ChevronRight, Check } from "lucide-react";
