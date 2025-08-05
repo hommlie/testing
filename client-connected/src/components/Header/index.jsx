@@ -342,13 +342,13 @@ const offers = [
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-20 shadow-sm font-sans"
+       className="w-full max-w-7xl mx-auto px-1 sticky top-0 z-20 shadow-sm font-sans"
       style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}
     >
       {showMobileBanner && (
-        <div className="block sm:hidden bg-[#92b775] text-white text-sm px-4 py-2 flex justify-between items-center">
+        <div className="w-full fixed top-0 left-0 z-50 bg-[#92b775] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
           <a
             href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
             target="_blank"
@@ -365,7 +365,7 @@ const offers = [
           </button>
         </div>
       )}
-      
+
       {/* Top Header with contact and social info */}
       <div className="">
         <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
@@ -571,7 +571,7 @@ const offers = [
               </div>
 
               {/* Search Bar */}
-              <div className="w-[630px] hidden lg:block">
+              <div className="w-[620px] hidden lg:block">
                 <div className="relative">
                   <input
                     ref={searchInputRef}
