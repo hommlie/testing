@@ -10,6 +10,7 @@ import LoginSignup from "../LoginModal";
 import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
 import Requestacallback from "../../pages/Requestacallback";
+import { Suspense } from "react";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
@@ -257,7 +258,7 @@ const ServiceSection = ({ categories }) => {
                 <div
                   key={option.id}
                   onClick={() => handleSelect(option.id)}
-                  className={`cursor-pointer p-3 flex items-start justify-between hover:bg-[#92B775] transition-colors ${
+                  className={`cursor-pointer p-3 flex items-start justify-between hover:bg-green-700 transition-colors ${
                     isSelected ? "bg-white text-black" : "text-gray-900"
                   } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
                 >
@@ -266,7 +267,7 @@ const ServiceSection = ({ categories }) => {
                       <div
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                           isSelected
-                            ? "border-[#493f9e] bg-[#92B775]"
+                            ? "border-[#493f9e] bg-green-700"
                             : "border-gray-300"
                         }`}
                       >
@@ -398,7 +399,7 @@ const ServiceSection = ({ categories }) => {
                 e.stopPropagation();
                 if (matchedVariation) handleAddToCart(matchedVariation, product);
               }}
-              className={`w-full py-3 rounded-lg font-bold transition-colors bg-[#92b876] text-white hover:bg-[#133215] hover:text-white 
+              className={`w-full py-3 rounded-lg font-bold transition-colors  bg-green-700 text-white hover:bg-[#133215] hover:text-white 
                 ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}
@@ -416,13 +417,18 @@ const ServiceSection = ({ categories }) => {
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}
       >
-       <div className="block md:hidden mb-5 -mt-12">
-          <Requestacallback device="mobile" />
+       
+        <div className="block md:hidden mb-5 -mt-12">
+          <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
+            <Requestacallback device="mobile" />
+          </Suspense>
         </div>
 
         {/* Desktop View Only */}
         <div className="hidden md:block mb-5 -mt-6">
-          <Requestacallback device="desktop" />
+          <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
+            <Requestacallback device="desktop" />
+          </Suspense>
         </div>
         <div className="mb-0 text-center">
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Your Service Category</h2>
@@ -437,11 +443,11 @@ const ServiceSection = ({ categories }) => {
                   className={`border border-black w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                     ${
                       selectedCategory === category.id && category.slug !== "disinfection-services"
-                        ? "bg-[#92B775] text-white shadow-md "
+                        ? "bg-green-700 text-white shadow-md "
                         : "bg-white text-gray-800 border border-black hover:border-black"
                     }`}
                 >
-                  {category.icon_url && <img src={category.icon_url} alt="" className="w-6 h-6 mb-1 flex-shrink-0" />}
+                  {category.icon_url && <img loading="lazy" src={category.icon_url} alt="" className="w-6 h-6 mb-1 flex-shrink-0" />}
                   <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
                     {category.category_name}
                   </span>
@@ -489,23 +495,32 @@ const ServiceSection = ({ categories }) => {
         </div>
 
         <div className="mb-0">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Available Service Packages</h3>
-          <div className="flex justify-center ">
-            <div className={`grid gap-4 sm:gap-6 px-4 w-full 
-              ${
-                (recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
-                (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
-                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
-              }`}>
-              {[...recommended, ...regular].map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  isSelected={selectedProduct === product.id}
-                  onClick={() => setSelectedProduct(product.id)}
-                />
-              ))}
-            </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            {recommended.length + regular.length === 0
+              ? "Loading Services..."
+              : "Available Service Packages"}
+          </h3>
+
+          <div className="flex justify-center">
+            {recommended.length + regular.length === 0 ? (
+              <div className="text-center text-gray-500 py-10">Loading service packages...</div>
+            ) : (
+              <div className={`grid gap-4 sm:gap-6 px-4 w-full 
+                ${
+                  (recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
+                  (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
+                  "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
+                }`}>
+                {[...recommended, ...regular].map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    isSelected={selectedProduct === product.id}
+                    onClick={() => setSelectedProduct(product.id)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

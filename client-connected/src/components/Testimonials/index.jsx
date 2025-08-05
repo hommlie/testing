@@ -68,7 +68,7 @@ const Testimonials = () => {
                     {testimonial.type === 'image' ? (
                       <img
                         src={testimonial.image}
-                        alt={testimonial.author}
+                        alt={`Customer from ${testimonial.location}`}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
                     ) : (
@@ -80,7 +80,6 @@ const Testimonials = () => {
                         }}
                       />
                     )}
-
                     {isFull && (
                       <div className="relative z-10 w-full px-4 pb-4">
                         <div className="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-md">
@@ -119,8 +118,6 @@ export default Testimonials;
 
 // ✅ HoverVideo – auto loads thumbnail from YouTube video
 const HoverVideo = ({ src, onClick }) => {
-  const [isHovering, setIsHovering] = useState(false);
-
   const getYouTubeId = (url) => {
     const regex = /(?:youtube\.com\/.*v=|youtu\.be\/)([^&?/]+)/;
     const match = url.match(regex);
@@ -128,37 +125,19 @@ const HoverVideo = ({ src, onClick }) => {
   };
 
   const videoId = getYouTubeId(src);
-  // For silent hover preview
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1`;
   const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
   return (
     <div
       className="absolute inset-0 w-full h-full cursor-pointer rounded-3xl overflow-hidden bg-black"
       onClick={onClick}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
     >
-      {/* Thumbnail always rendered below */}
       <img
         src={thumbnail}
-        alt="Video thumbnail"
+        alt="Customer video testimonial thumbnail"
         className="absolute inset-0 w-full h-full object-cover z-0"
+        loading="lazy"
       />
-
-      {/* YouTube iframe rendered on hover and layered above */}
-      {isHovering && (
-        <iframe
-          src={embedUrl}
-          title="YouTube Preview"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full z-10"
-          frameBorder="0"
-        />
-      )}
-
-      {/* Play icon always on top */}
       <div className="absolute inset-0 z-20 flex items-center justify-center">
         <div className="w-12 h-12 bg-white/30 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
           <IoMdPlay className="text-2xl text-white" />
@@ -167,4 +146,3 @@ const HoverVideo = ({ src, onClick }) => {
     </div>
   );
 };
-

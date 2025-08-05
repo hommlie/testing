@@ -342,13 +342,13 @@ const offers = [
   return (
     <header
       ref={headerRef}
-       className="w-full max-w-7xl mx-auto px-1 sticky top-0 z-20 shadow-sm font-sans"
+      className="w-full sticky top-0 z-20 shadow-sm font-sans bg-gradient-to-r from-[#e6f6f1] via-[#fdf4f4] via-40% via-[#f0e6f9] via-60% to-[#e6faec] sm:max-w-7xl sm:mx-auto sm:px-1"
       style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}
     >
       {showMobileBanner && (
-        <div className="w-full fixed top-0 left-0 z-50 bg-[#92b775] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
+        <div className="w-full fixed top-0 left-0 z-50 bg-green-800 text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
           <a
             href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
             target="_blank"
@@ -360,6 +360,7 @@ const offers = [
           <button 
             onClick={() => setShowMobileBanner(false)} 
             className="text-white text-xl hover:text-amber-200 transition-colors"
+            aria-label="Close mobile banner"
           >
             <RxCross1 />
           </button>
@@ -399,7 +400,7 @@ const offers = [
             {/* Left: Brand + Message */}
             <span className=" font-normal text-black z-20">
               <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
-                <button className="px-3 py-0 pb-1 bg-[#92b775] text-white">Residential</button>
+                <button className="px-3 py-0 pb-1 bg-green-800 text-white">Residential</button>
                 <a
                   href="https://b2b.hommlie.com"
                   className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
@@ -795,6 +796,7 @@ const offers = [
               <button
                 onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
                 className="relative text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
+                aria-label="Go to cart"
               >
                 <FaShoppingCart />
                 {cart?.length > 0 && (
@@ -803,10 +805,10 @@ const offers = [
                   </span>
                 )}
               </button>
-
               <button
                 className="text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               >
                 {isMobileMenuOpen ? <RxCross1 /> : <AiOutlineMenu />}
               </button>

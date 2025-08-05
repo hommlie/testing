@@ -127,14 +127,18 @@ export default function Footer({
                 <a
                   href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
                   className="rounded-xl flex flex-row justify-center items-center gap-2"
+                  aria-label="Download Hommlie app from Google Play"
+                  title="Google Play Store"
                 >
-                  <img src={Playstore} alt="" />
+                  <img src={Playstore} alt="Google Playstore icon" />
                 </a>
                 <a
                   href="#"
                   className="rounded-xl flex flex-row justify-center items-center gap-2"
+                  aria-label="Download Hommlie app from Apple App Store"
+                  title="Apple App Store"
                 >
-                  <img src={Appstore} alt="" />
+                  <img src={Appstore} alt="Apple Appstore icon" />
                 </a>
               </div>
             </div>
@@ -215,11 +219,28 @@ const FooterSection = ({ title, links, hideinMobile }) => (
   </div>
 );
 
-const SocialIcon = ({ Icon, link }) => (
-  <a
-    href={link}
-    className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white"
-  >
-    <Icon className="text-[#035240] text-sm" />
-  </a>
-);
+const SocialIcon = ({ Icon, link }) => {
+  const labelMap = {
+    facebook: "Facebook",
+    instagram: "Instagram",
+    twitter: "Twitter",
+    linkedin: "LinkedIn",
+    youtube: "YouTube",
+  };
+
+  // Extract platform from URL for accessibility label
+  const platform = Object.keys(labelMap).find((key) => link?.includes(key));
+  const label = platform ? `Visit our ${labelMap[platform]} page` : "Social link";
+
+  return (
+    <a
+      href={link}
+      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white"
+      aria-label={label}
+      title={label}
+    >
+      <Icon className="text-[#035240] text-sm" />
+    </a>
+  );
+};
+

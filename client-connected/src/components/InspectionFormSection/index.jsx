@@ -199,8 +199,9 @@ const InspectionFormSection = () => {
                   {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
                 </div>
                 <div>
-                  <label className="block mb-1">Select Service *</label>
+                  <label htmlFor="service" className="block mb-1">Select Service *</label>
                   <select
+                    id="service"
                     value={formData.service}
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                     className={`w-full px-3 py-2 border rounded-lg ${errors.service ? 'border-red-500' : 'border-gray-300'}`}
@@ -247,8 +248,9 @@ const InspectionFormSection = () => {
                     />
                   </div>
                   <div>
-                    <label className="block mb-1">Time Slot *</label>
+                    <label htmlFor="timeSlot" className="block mb-1">Time Slot *</label>
                     <select 
+                      id="timeSlot"
                       value={formData.time} 
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })} 
                       className={`w-full px-3 py-2 border rounded-lg ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
