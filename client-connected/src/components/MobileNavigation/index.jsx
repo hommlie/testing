@@ -2,12 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  RiHome5Line,
-  RiHome5Fill,
   RiBuilding2Line,
   RiBuilding2Fill,
-  RiGlobalLine,
-  RiGlobalFill,
   RiTeamLine,
   RiTeamFill,
 } from "react-icons/ri";
@@ -19,36 +15,28 @@ import {
 } from "react-icons/fa";
 import { IoCartOutline } from "react-icons/io5";
 import { MdEmail, MdLocationOn } from "react-icons/md";
-import { useCont } from "../../context/MyContext";
 import { MdProductionQuantityLimits } from "react-icons/md";
-
+import { useCont } from "../../context/MyContext";
 
 const MobileNavigation = () => {
   const navItems = [
     {
-    path: "/",
-    label: "Home",
-    iconImage: "/images/logoH.svg", 
-  },
+      path: "/",
+      label: "Home",
+      iconImage: "/images/logoh.png", // image only for Home
+    },
     {
       path: "https://b2b.hommlie.com/",
       label: "B2B",
       IconOutline: RiBuilding2Line,
       IconFill: RiBuilding2Fill,
     },
-    // {
-    //   path: "/konnect",
-    //   label: "Konnect",
-    //   IconOutline: RiGlobalLine,
-    //   IconFill: RiGlobalFill,
-    // },
     {
-  path: "/product", // update later if needed
-  label: "Product",
-  IconOutline: MdProductionQuantityLimits,
-  IconFill: MdProductionQuantityLimits, // same for now
-},
-
+      path: "/product",
+      label: "Product",
+      IconOutline: MdProductionQuantityLimits,
+      IconFill: MdProductionQuantityLimits,
+    },
     {
       path: "/community",
       label: "Community",
@@ -59,7 +47,6 @@ const MobileNavigation = () => {
 
   const {
     user,
-    setUser,
     handleLogout,
     setIsAddressModalOpen,
     setIsReferAndEarnOpen,
@@ -70,10 +57,7 @@ const MobileNavigation = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        loginDropdownRef.current &&
-        !loginDropdownRef.current.contains(e.target)
-      ) {
+      if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target)) {
         setIsLoginOpen(false);
       }
     };
@@ -85,60 +69,61 @@ const MobileNavigation = () => {
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="-mb-3 md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
+      className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow z-50 -mb-2"
     >
-      <nav className="flex justify-between px-4 py-2 relative">
-        {navItems.map(({ path, label, IconOutline, IconFill, iconImage }) => (
+      <nav className="flex justify-between items-center px-0 py-1">
+        {navItems.map(({ path, label, IconOutline, IconFill, iconImage }, index) => (
           <NavLink
             key={path}
             to={path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-all duration-300 ${
-                isActive ? "text-gray-600" : "text-gray-500"
+              `flex flex-col items-center justify-center flex-1 py-2 transition-all duration-300 ${
+                isActive ? "text-emerald-600" : "text-gray-500"
               }`
             }
           >
             {({ isActive }) => (
-              <motion.div whileTap={{ scale: 0.9 }} className="flex flex-col items-center">
-                {iconImage ? (
+              <motion.div
+                whileTap={{ scale: 0.9 }}
+                className="flex flex-col items-center gap-1"
+              >
+                {iconImage && index === 0 ? (
                   <img
                     src={iconImage}
                     alt={label}
-                    className="w-6 h-6 mb-1 object-contain"
+                    className="w-9 h-9 object-contain"
                   />
                 ) : isActive ? (
-                  <IconFill className="text-2xl mb-1" />
+                  <IconFill className="w-6 h-6" />
                 ) : (
-                  <IconOutline className="text-2xl mb-1" />
+                  <IconOutline className="w-6 h-6" />
                 )}
-                <span className="text-xs font-medium">{label}</span>
+                <span className="text-[11px] font-medium leading-none">{label}</span>
               </motion.div>
             )}
           </NavLink>
         ))}
 
         {user?.length !== 0 && (
-          <div className="relative">
+          <div className="relative flex flex-col items-center justify-center flex-1 py-2 text-gray-500">
             <button
               onClick={() => setIsLoginOpen(!isLoginOpen)}
-              className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-all duration-300 ${
-                isLoginOpen ? "text-green-600" : "text-gray-500"
-              }`}
+              className="flex flex-col items-center gap-1"
             >
-              <motion.div whileTap={{ scale: 0.9 }} className="flex flex-col items-center">
-                <FaUser className="text-2xl mb-1" />
-                <span className="text-xs font-medium">Account</span>
-              </motion.div>
+              <FaUser className="w-6 h-6" />
+              <span className="text-[11px] font-medium leading-none">
+                Account
+              </span>
             </button>
 
             {isLoginOpen && (
               <div
                 ref={loginDropdownRef}
-                className="absolute bottom-12 right-0 w-56 bg-white rounded-lg shadow-xl py-1 z-50 border border-gray-100"
+                className="absolute bottom-14 right-1 w-56 bg-white rounded-lg shadow-xl py-1 z-50 border border-gray-100"
               >
                 <NavLink
                   to="/add-to-cart"
-                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 border-b"
                   onClick={() => setIsLoginOpen(false)}
                 >
                   <div className="flex items-center">
@@ -148,7 +133,7 @@ const MobileNavigation = () => {
                 </NavLink>
                 <NavLink
                   to="/my-bookings"
-                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 border-b"
                   onClick={() => setIsLoginOpen(false)}
                 >
                   <div className="flex items-center">
@@ -158,7 +143,7 @@ const MobileNavigation = () => {
                 </NavLink>
                 <NavLink
                   to="/edit-profile"
-                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 border-b"
                   onClick={() => setIsLoginOpen(false)}
                 >
                   <div className="flex items-center">
@@ -168,7 +153,7 @@ const MobileNavigation = () => {
                 </NavLink>
                 <NavLink
                   to="/my-wallet"
-                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 border-b"
                   onClick={() => setIsLoginOpen(false)}
                 >
                   <div className="flex items-center">
@@ -181,7 +166,7 @@ const MobileNavigation = () => {
                     setIsAddressModalOpen(true);
                     setIsLoginOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b"
+                  className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 border-b"
                 >
                   <div className="flex items-center">
                     <MdLocationOn className="mr-2 text-emerald-600" />
@@ -193,7 +178,7 @@ const MobileNavigation = () => {
                     setIsReferAndEarnOpen(true);
                     setIsLoginOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b"
+                  className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 border-b"
                 >
                   <div className="flex items-center">
                     <FaGift className="mr-2 text-emerald-600" />
@@ -202,7 +187,7 @@ const MobileNavigation = () => {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
                 >
                   <div className="flex items-center">
                     <FaSignOutAlt className="mr-2" />
