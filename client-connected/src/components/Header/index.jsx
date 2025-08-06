@@ -348,7 +348,7 @@ const offers = [
           }}
     >
       {showMobileBanner && (
-        <div className="w-full fixed top-0 left-0 z-50 bg-green-800 text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
+        <div className="w-full top-0 left-0 z-50 bg-green-800 text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
           <a
             href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
             target="_blank"

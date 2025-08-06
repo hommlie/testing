@@ -114,21 +114,21 @@ const InspectionFormSection = () => {
               <p className="text-sm sm:text-base text-gray-600 mb-6">Get professional help for your home or business</p>
               <div className="space-y-6 text-sm">
                 <div className="flex items-start gap-3">
-                  <MdOutlineLocalPostOffice className="text-xl text-black bg-[#92B775] rounded-full p-2 w-8 h-8" />
+                  <MdOutlineLocalPostOffice className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500">Email</h3>
                     <p className="text-gray-800 font-medium">reach@hommlie.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <IoCallOutline className="text-xl text-black bg-[#92B775] rounded-full p-2 w-8 h-8" />
+                  <IoCallOutline className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500">Phone</h3>
                     <p className="text-gray-800 font-medium">+91-6363865658</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <IoBusiness className="text-xl text-black bg-[#92B775] rounded-full p-2 w-8 h-8" />
+                  <IoBusiness className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500">Our Offices</h3>
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -164,7 +164,7 @@ const InspectionFormSection = () => {
           <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
             {[1, 2].map((s, i) => (
               <React.Fragment key={s}>
-                <div className={`w-8 h-8 flex items-center justify-center rounded-full ${step === s ? 'bg-[#92B775] text-black' : 'bg-gray-200 text-gray-600'}`}>{s}</div>
+                <div className={`w-8 h-8 flex items-center justify-center rounded-full ${step === s ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-600'}`}>{s}</div>
                 {i < 1 && <div className={`h-1 w-8 ${step > s ? 'bg-black' : 'bg-gray-300'}`} />}
               </React.Fragment>
             ))}
@@ -216,7 +216,7 @@ const InspectionFormSection = () => {
                 <button 
                   type="button" 
                   onClick={() => validateStepOne() && setStep(2)} 
-                  className="w-full bg-[#92B775] text-black py-2 rounded-lg"
+                  className="w-full bg-green-700 text-white py-2 rounded-lg"
                 >
                   Continue to Schedule
                 </button>
@@ -274,7 +274,7 @@ const InspectionFormSection = () => {
                   <button 
                     type="submit" 
                     disabled={loading} 
-                    className="w-full bg-[#92B775] text-black py-2 rounded-lg disabled:opacity-70"
+                    className="w-full bg-green-700 text-white py-2 rounded-lg disabled:opacity-70"
                   >
                     {loading ? "Processing..." : "Confirm Inspection"}
                   </button>
