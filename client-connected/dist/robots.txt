@@ -6,4 +6,4 @@ Allow: /blogs/
 Allow: /subcategory/
 Allow: /category/
 
-Sitemap: https://hommlie.com/sitemap.xml
+Sitemap: https://www.hommlie.com/sitemap.xml
