@@ -178,7 +178,7 @@ const SubCategoryPage = () => {
   // Generate canonical URL based on the current location
   const generateCanonicalUrl = () => {
     // Base URL from your config
-    const baseUrl = config.VITE_BASE_URL || "https://hommlie.com";
+    const baseUrl = config.VITE_BASE_URL || "https://www.hommlie.com";
 
     // Determine the path based on current parameters
     let path = `/category/${categorySlug}`;
