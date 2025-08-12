@@ -169,10 +169,10 @@ const ServiceGrid = () => {
 
   return (
     <div className="p-4 mb-0 bg-cover bg-center bg-no-repeat mt-4">
-      <h1 className="text-lg sm:text-2xl font-medium text-black sm:ml-1 -ml-4 sm:mb-6 -mt-2 mb-2 sm:mb-0 sm:-mt-5">
+      <h1 className="text-lg sm:text-2xl font-medium text-black sm:ml-2 -ml-4 sm:mb-6 -mt-2 mb-2 sm:mb-0 sm:-mt-5">
         Home services at your doorstep
       </h1>
-      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-1">
+      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-2">
         <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
           {services.map((service) => (
             <div
