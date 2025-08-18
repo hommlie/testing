@@ -4,13 +4,13 @@ import { useInView } from 'react-intersection-observer';
 import DownloadHommlieApp from '../DownloadHommlieApp';
 
 const tasks = [
-  { title: 'Pest Control', image: '/images/pest-control.png', link: '/category/pest-control-services' },
-  { title: 'Deep Cleaning', image: '/images/deep-cleaning.png', link: '/category/cleaning-services' },
-  { title: 'Mosquito & Safety Net', image: '/images/mosquito-mesh.png', link: '/services/laundry' },
-  { title: 'Disinfection', image: '/images/disinfectionsnap.png', link: '/subcategory/disinfection-services-near-you-in-bangalore' },
-  { title: 'Scrap', image: '/images/scrapsnap.png', link: '/services/kitchen-prep' },
-  { title: 'AC Services', image: '/images/ac-services.png', link: '/services/window-cleaning' },
-  { title: 'Plumbing', image: '/images/bird-netting.png', link: '/services/bathroom-cleaning' },
+  { title: 'Pest Control', image: '/images/pest-control.webp', link: '/category/pest-control-services' },
+  { title: 'Deep Cleaning', image: '/images/deep-cleaning.webp', link: '/category/cleaning-services' },
+  { title: 'Mosquito & Safety Net', image: '/images/mosquito-mesh.webp', link: '/services/laundry' },
+  { title: 'Disinfection', image: '/images/disinfectionsnap.webp', link: '/subcategory/disinfection-services-near-you-in-bangalore' },
+  { title: 'Scrap', image: '/images/scrapsnap.webp', link: '/services/kitchen-prep' },
+  { title: 'AC Services', image: '/images/ac-services.webp', link: '/services/window-cleaning' },
+  { title: 'Plumbing', image: '/images/bird-netting.webp', link: '/services/bathroom-cleaning' },
 ];
 
 
@@ -74,8 +74,8 @@ export default function QuickHeroSection() {
         </div>
 
         <div className="flex justify-center items-end gap-8 md:gap-36 z-10 relative">
-          <img src="/images/image3.png" alt="Left" className="h-[240px] md:h-[320px] object-contain mr-20" />
-          <img src="/images/image1.png" alt="Right" className="h-[240px] md:h-[320px] object-contain ml-20" />
+          <img src="/images/image3.webp" alt="Left" className="h-[240px] md:h-[320px] object-contain mr-20" />
+          <img src="/images/image1.webp" alt="Right" className="h-[240px] md:h-[320px] object-contain ml-20" />
         </div>
       </section>
 
@@ -90,7 +90,7 @@ export default function QuickHeroSection() {
           <div className="flex flex-col items-center justify-center  space-y-0 h-[420px]">
             {/* Hommlie Logo */}
             <img
-              src="/assets/logo/homlogo.png"
+              src="/assets/logo/logo.webp"
               alt="Hommlie Logo"
               className="w-40 -mt-20 h-auto"
             />

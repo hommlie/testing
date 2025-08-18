@@ -8,7 +8,7 @@ const BannerImage = () => {
     <div className="hidden sm:flex w-full justify-center">
       <div className="relative rounded-lg overflow-hidden">
         <img
-          src="/images/scrap.png"
+          src="/images/scrap.webp"
           alt="Banner Desktop"
           className="w-[1250px] h-auto object-cover"
         />

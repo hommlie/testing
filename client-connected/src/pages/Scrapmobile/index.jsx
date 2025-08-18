@@ -8,7 +8,7 @@ const BannerImageMobile = () => {
     <div className="sm:hidden -mt-4 mb-3">
       <div className="relative w-full rounded-lg overflow-hidden">
         <img
-          src="/images/scrapmob.png"
+          src="/images/scrapmob.webp"
           alt="Banner Mobile"
           className="w-full h-auto object-cover"
         />

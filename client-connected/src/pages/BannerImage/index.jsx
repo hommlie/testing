@@ -8,7 +8,7 @@ const BannerImage = () => {
     <div className="hidden sm:flex w-full justify-center mb-3 mt-2" >
       <div className="relative rounded-lg overflow-hidden">
         <img
-          src="/images/banner.png"
+          src="/images/baner.webp"
           alt="Banner Desktop"
           className="w-[1250px] h-auto object-cover"
         />

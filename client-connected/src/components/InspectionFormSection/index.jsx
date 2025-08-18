@@ -149,9 +149,9 @@ const InspectionFormSection = () => {
             <div className="w-full md:w-1/2 flex justify-center items-center">
               <div className="w-full sm:w-96 md:w-[450px] lg:w-[600px]">
                 <img
-                  src="/images/jeani.jpg"
+                  src="/images/jeani.webp"
                   alt="Jeani"
-                  className="w-full h-auto object-cover rounded-2xl"
+                  className="-mt-12 -mb-12 w-full h-auto object-cover rounded-2xl"
                 />
               </div>
             </div>
