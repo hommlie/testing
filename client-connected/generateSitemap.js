@@ -56,24 +56,28 @@ async function generateSitemap() {
     const dynamicUrls = [
       // Category pages
       ...categories.map(
-        (category) => `${VITE_BASE_URL}/${category.slug}/${category.id}`
+        // (category) => `${VITE_BASE_URL}/${category.slug}/${category.id}`
+        (category) => `${VITE_BASE_URL}/${category.slug}`
       ),
 
       // Subcategory pages
       ...subcategories.map(
         (subcategory) =>
-          `${VITE_BASE_URL}/subcategory/${subcategory.slug}/${subcategory.id}`
+          // `${VITE_BASE_URL}/subcategory/${subcategory.slug}/${subcategory.id}`
+        `${VITE_BASE_URL}/subcategory/${subcategory.slug}`
       ),
 
       // Product list pages
       ...subcategories.map(
         (subcategory) =>
-          `${VITE_BASE_URL}/products/${subcategory.slug}/${subcategory.id}`
+          // `${VITE_BASE_URL}/products/${subcategory.slug}/${subcategory.id}`
+        `${VITE_BASE_URL}/products/${subcategory.slug}`
       ),
 
       // Product detail pages
       ...products.map(
-        (product) => `${VITE_BASE_URL}/product/${product.id}/${product.slug}`
+        // (product) => `${VITE_BASE_URL}/product/${product.id}/${product.slug}`
+        (product) => `${VITE_BASE_URL}/product/${product.slug}`
       ),
 
       // Blog pages
