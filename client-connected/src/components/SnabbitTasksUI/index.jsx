@@ -13,7 +13,6 @@ const tasks = [
   { title: 'Plumbing', image: '/images/bird-netting.webp', link: '/services/bathroom-cleaning' },
 ];
 
-
 export default function QuickHeroSection() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -32,50 +31,44 @@ export default function QuickHeroSection() {
   return (
     <div ref={containerRef} className="hidden sm:block relative overflow-hidden mr-2" >
       {/* Hero Section */}
-      <section className="relative  pb-12 text-center overflow-hidden" >
-        {/* <h1 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-4">
-          INDIA'S FIRST <br />
-          <span className="inline-block relative text-[#fcce00] font-extrabold italic">
-            HOME
-
-          </span>{' '}
-          <span className="text-[#2a0014] font-extrabold">SERVICE'S APP</span>
-        </h1> */}
+      <section className="relative pb-12 text-center overflow-hidden" >
         <div className="text-center relative py-2">
-        {/* Sparkles */}
-        <div className="absolute top-4 left-4 text-[#133215] text-5xl animate-pulse">✦</div>
-        <div className="absolute top-4 right-4 text-[#133215] text-5xl animate-pulse">✦</div>
-        <div className="absolute bottom-4 left-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
-        <div className="absolute bottom-4 right-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
+          {/* Sparkles */}
+          <div className="absolute top-4 left-4 text-[#133215] text-5xl animate-pulse">✦</div>
+          <div className="absolute top-4 right-4 text-[#133215] text-5xl animate-pulse">✦</div>
+          <div className="absolute bottom-4 left-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
+          <div className="absolute bottom-4 right-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
 
-        {/* Heading */}
-        <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
-          INDIA'S FIRST <br />
-        </h2>
+          {/* Heading */}
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
+            INDIA'S FIRST <br />
+          </h2>
 
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
+            <span className="text-3xl md:text-5xl italic font-extrabold text-[#92B775] leading-tight mb-4 uppercase">
+              HOME
+            </span>{' '}
+            SERVICE APP
+          </h2>
 
-        <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
-          <span className="text-3xl md:text-5xl italic font-extrabold text-[#92B775] leading-tight mb-4 uppercase">
-            HOME
-          </span>{' '}
-          SERVICE APP
-        </h2>
-
-
-        {/* Subtext */}
-        <p className="text-sm md:text-base text-[#133215] font-medium mt-2 mb-3">
-          On-demand home services to empower <br /> urban households
-        </p>
-      </div>
+          {/* Subtext */}
+          <p className="text-sm md:text-base text-[#133215] font-medium mt-2 mb-3">
+            On-demand home services to empower <br /> urban households
+          </p>
+        </div>
 
         <div className="flex justify-center gap-6 mb-16">
-          <a href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"><img src="/images/playstore.svg" alt="Google Play" className="h-10 md:h-12" /></a>
-          <a href="https://apps.apple.com/in/app/hommile/id6744694127"><img src="/images/appstore.svg" alt="App Store" className="h-10 md:h-12" /></a>
+          <a href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share">
+            <img src="/images/playstore.svg" alt="Download on Google Play" className="h-10 md:h-12" />
+          </a>
+          <a href="https://apps.apple.com/in/app/hommile/id6744694127">
+            <img src="/images/appstore.svg" alt="Download on App Store" className="h-10 md:h-12" />
+          </a>
         </div>
 
         <div className="flex justify-center items-end gap-8 md:gap-36 z-10 relative">
-          <img src="/images/image3.webp" alt="Left" className="h-[240px] md:h-[320px] object-contain mr-20" />
-          <img src="/images/image1.webp" alt="Right" className="h-[240px] md:h-[320px] object-contain ml-20" />
+          <img src="/images/image3.webp" alt="" className="h-[240px] md:h-[320px] object-contain mr-20" />
+          <img src="/images/image1.webp" alt="" className="h-[240px] md:h-[320px] object-contain ml-20" />
         </div>
       </section>
 
@@ -87,7 +80,7 @@ export default function QuickHeroSection() {
       >
         <div className="rounded-[40px] shadow-2xl border-8 border-black bg-[#F3E8D3] relative overflow-hidden">
           <div className="w-20 h-4 rounded-full bg-black mt-2 mb-2 mx-auto"></div>
-          <div className="flex flex-col items-center justify-center  space-y-0 h-[420px]">
+          <div className="flex flex-col items-center justify-center space-y-0 h-[420px]">
             {/* Hommlie Logo */}
             <img
               src="/assets/logo/logo.webp"
@@ -98,7 +91,7 @@ export default function QuickHeroSection() {
             {/* QR Code */}
             <img
               src="/assets/logo/qr.png"
-              alt="Download QR"
+              alt="Scan to download Hommlie App"
               className="w-40 h-auto ml-1"
             />
           </div>
@@ -119,7 +112,7 @@ export default function QuickHeroSection() {
           </h2>
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">
             <span className="text-3xl md:text-5xl italic font-extrabold text-[#92b876] leading-tight mb-4">
-            Right at Your Doorstep
+              Right at Your Doorstep
             </span>{' '}
           </h2>
           <motion.p
@@ -131,8 +124,8 @@ export default function QuickHeroSection() {
 
           {/* Scroll Track positioned above phone */}
           <div className="w-full max-w-6xl mx-auto relative h-[320px] overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0 w-24  z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-24  z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" />
 
             <motion.div
               className="flex absolute top-0 left-1/2 -translate-x-1/2 h-full items-center"
@@ -166,7 +159,7 @@ export default function QuickHeroSection() {
                         <div className="h-40 bg-gray-100 overflow-hidden relative">
                           <img
                             src={task.image}
-                            alt={task.title}
+                            alt=""
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>

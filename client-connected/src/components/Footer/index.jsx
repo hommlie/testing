@@ -133,7 +133,7 @@ export default function Footer({
                   <img src={Playstore} alt="Google Playstore icon" />
                 </a>
                 <a
-                  href="#"
+                  href="https://apps.apple.com/in/app/hommile/id6744694127"
                   className="rounded-xl flex flex-row justify-center items-center gap-2"
                   aria-label="Download Hommlie app from Apple App Store"
                   title="Apple App Store"
