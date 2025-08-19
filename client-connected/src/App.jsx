@@ -29,15 +29,15 @@ function App() {
   useEffect(() => {
     if (settings) {
       // Update favicon
-      const favicon = document.querySelector('link[rel="icon"]');
-      if (favicon) {
-        favicon.href = settings?.favicon;
-      } else {
-        const newFavicon = document.createElement("link");
-        newFavicon.rel = "icon";
-        newFavicon.href = settings?.favicon;
-        document.head.appendChild(newFavicon);
-      }
+      // const favicon = document.querySelector('link[rel="icon"]');
+      // if (favicon) {
+      //   favicon.href = settings?.favicon;
+      // } else {
+      //   const newFavicon = document.createElement("link");
+      //   newFavicon.rel = "icon";
+      //   newFavicon.href = settings?.favicon;
+      //   document.head.appendChild(newFavicon);
+      // }
 
       // Update meta tags
       const updateMetaTag = (name, content) => {
