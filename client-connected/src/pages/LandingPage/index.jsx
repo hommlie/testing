@@ -3,13 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import WhyChooseBg from "../../assets/bg/why-choose-img.jpg";
-import ScheduleImg from "../../assets/bg/schedule-img.svg";
 import axios from "axios";
 import config from "../../config/config";
 import StatsSection from "../../components/StatsSection";
 import PopularCategorySection from "../../components/PopularCategorySection";
 import InspectionFormSection from "../../components/InspectionFormSection";
+import { Helmet } from "react-helmet-async";
 
 const useTypewriter = (text = "", speed = 100) => {
   const [displayText, setDisplayText] = useState("");
@@ -56,18 +55,6 @@ const LandingPage = () => {
         );
         if (response.data.status === 1) {
           setPageData(response.data.data);
-
-          // Update meta tags
-          document.title = response.data.data?.landing_page?.meta_title;
-          const metaDescription = document.querySelector(
-            'meta[name="description"]'
-          );
-          if (metaDescription) {
-            metaDescription.setAttribute(
-              "content",
-              response.data.data?.landing_page?.meta_description
-            );
-          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -104,8 +91,21 @@ const LandingPage = () => {
     );
   }
 
-  return (
-    <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl font-poppins space-y-20">
+  // ✅ Canonical URL dynamically generate with correct format
+const canonicalUrl = `https://www.hommlie.com/service/${slug}`;
+
+return (
+  <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl font-poppins space-y-20">
+    <Helmet>
+      <title>{pageData?.landing_page?.meta_title}</title>
+      <meta
+        name="description"
+        content={pageData?.landing_page?.meta_description}
+      />
+      {/* ✅ Correct canonical with key to force override */}
+      <link rel="canonical" href={canonicalUrl} key="canonical" />
+    </Helmet>
+
       {/* Hero Section */}
       <section className="relative px-4 sm:px-6 lg:px-8">
         <div className="">
@@ -258,7 +258,7 @@ const LandingPage = () => {
         className="bg-hommlie-gradient px-4 sm:px-6 lg:px-8 rounded-lg"
         style={{
           backgroundImage: `url(${
-            pageData?.landing_page?.banner || ScheduleImg
+            pageData?.landing_page?.banner
           })`,
           backgroundSize: "cover",
           backgroundPosition: "center",

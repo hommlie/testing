@@ -8,7 +8,7 @@ import { FaCartPlus } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import InspectionModal from "../../components/InspectionModal";
 import ServiceSelector from "./ServiceSelector";
-import InspectionForm from "./ServiceForm";
+import { Helmet } from "react-helmet-async";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -36,18 +36,6 @@ const SEOPage = () => {
         if (response.data?.status === 1) {
           setPageData(response.data?.data?.pageData);
           setServices(response.data?.data?.services);
-
-          // Update meta tags
-          document.title = response.data?.data?.pageData?.meta_title;
-          const metaDescription = document.querySelector(
-            'meta[name="description"]'
-          );
-          if (metaDescription) {
-            metaDescription.setAttribute(
-              "content",
-              response.data?.data?.pageData?.meta_description
-            );
-          }
         }
       } catch (error) {
         setError(error.response?.data?.message || "An error occurred");
@@ -78,8 +66,18 @@ const SEOPage = () => {
     );
   }
 
+  // Canonical URL dynamically generate
+  const canonicalUrl = `https://www.hommlie.com/page/${slug}`;
+
+
   return (
     <main className="min-h-screen max-w-7xl mx-auto">
+      <Helmet>
+        <title>{pageData?.meta_title}</title>
+        <meta name="description" content={pageData?.meta_description} />
+        <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
+
       {/* Hero Section */}
       <motion.section
         initial="initial"
