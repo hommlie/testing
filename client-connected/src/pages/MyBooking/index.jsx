@@ -815,74 +815,73 @@ const handleComplaintSubmit = () => {
         onReviewSubmitted={handleReviewSubmitted}
       />
       {/* Complaint Modal */}
-{isComplaintModalOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-    <div className="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 relative">
-      {/* Close Button */}
-      <button
-        onClick={closeComplaintModal}
-        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-      >
-        ✕
-      </button>
+        {isComplaintModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+            <div className="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 relative">
+              {/* Close Button */}
+              <button
+                onClick={closeComplaintModal}
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
 
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">
-        Raise a Complaint
-      </h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Raise a Complaint
+              </h3>
 
-      {/* Complaint Description */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Describe your issue
-        </label>
-        <textarea
-          value={complaintText}
-          onChange={(e) => setComplaintText(e.target.value)}
-          rows={4}
-          placeholder="Write your issue here..."
-          className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-red-500 focus:outline-none"
-        />
-      </div>
+              {/* Complaint Description */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Describe your issue
+                </label>
+                <textarea
+                  value={complaintText}
+                  onChange={(e) => setComplaintText(e.target.value)}
+                  rows={4}
+                  placeholder="Write your issue here..."
+                  className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                />
+              </div>
 
-      {/* Upload Image */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Add a photo (optional)
-        </label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setComplaintImage(e.target.files[0])}
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none"
-        />
-        {complaintImage && (
-          <img
-            src={URL.createObjectURL(complaintImage)}
-            alt="Preview"
-            className="mt-3 w-32 h-32 object-cover rounded-lg border"
-          />
+              {/* Upload Image */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Add a photo (optional)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setComplaintImage(e.target.files[0])}
+                  className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none"
+                />
+                {complaintImage && (
+                  <img
+                    src={URL.createObjectURL(complaintImage)}
+                    alt="Preview"
+                    className="mt-3 w-32 h-32 object-cover rounded-lg border"
+                  />
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={closeComplaintModal}
+                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleComplaintSubmit}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                >
+                  Submit Complaint
+                </button>
+              </div>
+            </div>
+          </div>
         )}
-      </div>
-
-      {/* Submit Button */}
-      <div className="flex justify-end gap-3">
-        <button
-          onClick={closeComplaintModal}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleComplaintSubmit}
-          className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
-        >
-          Submit Complaint
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
     </div>
   );
 }
