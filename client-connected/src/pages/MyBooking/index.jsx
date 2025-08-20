@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useCont } from "../../context/MyContext";
 import { LiaShippingFastSolid } from "react-icons/lia";
-import { FaFileInvoice, FaFilePdf, FaSearch } from "react-icons/fa";
+import { FaFileInvoice, FaFilePdf, FaSearch, } from "react-icons/fa";
 import { FiFilter, FiCalendar, FiClock } from "react-icons/fi";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 import emptyBooking from "../../assets/images/illustrator/empty_booking.png";
@@ -557,10 +557,24 @@ export default function MyBookings() {
                       </p>
                     </div>
                     <div className="space-y-1 text-right">
+                      {/* Order Number */}
                       <p className="text-sm text-gray-500">Order Number</p>
-                      <p className="font-medium text-gray-900">
-                        #{orderNumber}
-                      </p>
+
+                      <div className="flex flex-col-reverse md:flex-row md:items-center md:gap-3 md:justify-end text-right">
+                        {/* Raise Complaint Button */}
+                        <button
+                          onClick={() =>
+                            navigate(`${config.VITE_BASE_URL}/raise-complaint/${orders[0]?.id}`)
+                          }
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 font-medium text-sm transition-colors duration-200 mt-2 md:mt-0"
+                        >
+                          <FaFileInvoice className="text-base" />
+                          Raise Complaint
+                        </button>
+
+                        {/* Order Number */}
+                        <p className="font-medium text-gray-900">#{orderNumber}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
