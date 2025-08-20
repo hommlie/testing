@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Routes from "./Routes";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -12,6 +12,37 @@ import { ToastProvider } from "./context/ToastProvider";
 
 import "tailwindcss/tailwind.css";
 import "./App.css";
+
+function SEOHelmet({ settings }) {
+  const location = useLocation();
+  const baseUrl = "https://www.hommlie.com";
+  const path = location.pathname === "/" ? "" : location.pathname.replace(/\/$/, "");
+  const canonicalUrl = `${baseUrl}${path}`;
+
+  return (
+    <Helmet>
+      <title>{settings?.meta_title || "Hommlie - Pest Control & Cleaning Services in Bangalore"}</title>
+      <meta
+        name="description"
+        content={
+          settings?.meta_description ||
+          "Hommlie provides professional pest control, deep cleaning, and home services in Bangalore. Book trusted experts today!"
+        }
+      />
+      <meta property="og:title" content={settings?.meta_title || "Hommlie"} />
+      <meta
+        property="og:description"
+        content={settings?.meta_description || "Book pest control & cleaning services in Bangalore."}
+      />
+      <meta property="og:image" content={settings?.og_image || "/default-og-image.jpg"} />
+      <meta property="og:type" content="website" />
+      <meta name="author" content={settings?.site_title || "Hommlie"} />
+
+      {/* ✅ Dynamic Canonical */}
+      <link rel="canonical" href={canonicalUrl} key="canonical" />
+    </Helmet>
+  );
+}
 
 function App() {
   const [settings, setSettings] = useState(null);
@@ -37,23 +68,8 @@ function App() {
         <AuthProvider>
           <ToastProvider>
             <Router>
-              {/* ✅ Default Helmet SEO */}
-              <Helmet>
-                <title>{settings?.meta_title || "Hommlie - Pest Control & Cleaning Services in Bangalore"}</title>
-                <meta
-                  name="description"
-                  content={
-                    settings?.meta_description ||
-                    "Hommlie provides professional pest control, deep cleaning, and home services in Bangalore. Book trusted experts today!"
-                  }
-                />
-                <meta property="og:title" content={settings?.meta_title || "Hommlie"} />
-                <meta property="og:description" content={settings?.meta_description || "Book pest control & cleaning services in Bangalore."} />
-                <meta property="og:image" content={settings?.og_image || "/default-og-image.jpg"} />
-                <meta property="og:type" content="website" />
-                <meta name="author" content={settings?.site_title || "Hommlie"} />
-                <link rel="canonical" href="https://www.hommlie.com/" key="canonical" />
-              </Helmet>
+              {/* ✅ SEO Helmet with Dynamic Canonical */}
+              <SEOHelmet settings={settings} />
 
               {/* ✅ Header */}
               <Header
@@ -66,7 +82,7 @@ function App() {
                 youtube={settings?.youtube}
               />
 
-              {/* ✅ Routes (show loader until settings are fetched) */}
+              {/* ✅ Routes */}
               {loading ? (
                 <div className="flex items-center justify-center h-screen">
                   <p className="text-lg font-medium text-gray-600">Loading...</p>
