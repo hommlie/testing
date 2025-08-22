@@ -485,7 +485,7 @@ export default function ProductPage() {
       <iframe
         width="100%"
         height="100%"
-        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=0`}
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
@@ -611,6 +611,61 @@ export default function ProductPage() {
     return `${baseUrl}${path}`;
   };
 
+
+  const [selectedTab, setSelectedTab] = useState("testimonials");
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  // ✅ Testimonials Data
+  const testimonials = [
+    { question: "Pets", answer: "The treatment is 100% safe for pets." },
+    { question: "Kids & Elders", answer: "No harmful chemicals are used, safe for kids and elders." },
+    { question: "Very professional and informative", answer: "Technicians explained everything clearly and were very professional." },
+    { question: "Not a single cockroach!", answer: "After the service, cockroaches were completely gone." },
+  ];
+
+  // ✅ FAQs Data
+  const faqs = [
+    {
+      question: "How to get rid of cockroaches permanently?",
+      answer:
+        "Cockroaches can be controlled with a 4D treatment plan involving sanitation, baiting, and sealing cracks. Regular professional service ensures permanent results."
+    },
+    {
+      question: "Is it worth booking cockroach control services?",
+      answer:
+        "Yes, professional services use safe and effective methods to eliminate cockroaches quickly, reducing health risks and future infestations."
+    },
+    {
+      question: "How is a 4D cockroach control service different from a standard cockroach control service?",
+      answer:
+        "The 4D service includes advanced monitoring, baiting, residual spray, and preventive measures, making it more effective than standard sprays."
+    },
+    {
+      question: "What is the cost of 4D cockroach control?",
+      answer:
+        "Costs vary depending on property size and duration of contract (single service vs. annual/biannual contracts)."
+    },
+    {
+      question: "What is the method used in 4D cockroach pest control?",
+      answer:
+        "It involves gel baiting, residual spray treatment, traps, and sealing entry points to ensure long-term protection."
+    },
+    {
+      question: "Do I need to leave my house during a cockroach treatment?",
+      answer:
+        "Usually not required, as treatments are safe for children and pets. However, you may leave temporarily if advised by the technician."
+    }
+  ];
+
+  // ✅ Pick current list (based on selected tab)
+  const currentList = selectedTab === "testimonials" ? testimonials : faqs;
+
+  const [isDescOpen, setIsDescOpen] = useState(false);
+
   return (
     <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
       {isLoading ? (
@@ -722,14 +777,15 @@ export default function ProductPage() {
                     </p>
                   </div>
                   {/* <div>
-                                {addBtn()}
-                            </div> */}
+                    {addBtn()}
+                  </div> */}
                 </div>
               </section>
 
               <section className="block md:hidden bg-white lg:w-1/3 h-fit space-y-4">
                 <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                   <div className="flex justify-between items-center">
+                    
                     <div className="flex flex-row items-center">
                       <img
                         src={cartBag}
@@ -1216,6 +1272,115 @@ export default function ProductPage() {
                 )}
               </section>
 
+              <div className="features-section">
+                <div className="features-box">
+                  <h2 className="features-heading">Service Features</h2>
+                  <ul>
+                    <li>
+                      <strong>Deny Shelter</strong> with natural dust, drain enzymes in their hideouts; close the cracks, crevices with silicon gel
+                    </li>
+                    <li>
+                      <strong>Deny Food</strong> using Sustainable Compostable Garbage Bags that have repellent effect
+                    </li>
+                    <li>
+                      <strong>Destroy & Control</strong> with traps, gel baiting to kill hidden colonies & spray treatment for visible roaches
+                    </li>
+                    <li>
+                      <strong>Digital Monitoring</strong> of end-to-end service treatment to maximize effectiveness with 100% safety
+                    </li>
+                  </ul>
+
+                  <h2 className="service-feature">Scientifically designed service interventions</h2>
+                  <h2 className="service-feature">100% safe & minimized use of synthetic chemicals</h2>
+                  <h2 className="service-feature">Complementary Ant Treatment</h2>
+                  <h2 className="service-feature">Single Service do not include warranty or complaint support unlike 1 and 2 year contract</h2>
+
+                  {/* Details Section */}
+                  <h2 className="section-heading">Details</h2>
+                  <h3 className="service-feature">Video:</h3>
+                  <div className="video-container">
+                    <iframe
+                      src="https://www.youtube.com/embed/VIDEO_ID"
+                      title="Professional Cockroach Control"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <div className="space">
+                    <h3 className="service-feature">Visits:</h3>
+                    <p className="visit">
+                      Single Service – 1 Service <br />
+                      1 Year AMC – 3 services, 1 every 4 months <br />
+                      2 Year AMC – 6 services, 1 every 4 months
+                    </p>
+
+                    <h3 className="service-feature">Manpower:</h3>
+                    <p className="visit">1 for each visit</p>
+
+                    {/* Terms & Conditions */}
+                    <h2 className="section-heading">Terms & Conditions</h2>
+                    <div className="visit">
+                      <h3 className="bullet-point">Efficacy will be effective post 15 days of service</h3>
+                      <h3 className="bullet-point">Service needs to be taken within 30 days of the scheduled date</h3>
+                      <h3 className="bullet-point">Important to maintain the hygiene of the kitchen for best effectiveness</h3>
+                    </div>
+
+                    {/* Safety Precautions */}
+                    <h2 className="section-heading">Safety Precautions</h2>
+                    <div className="visit">
+                      <h3 className="bullet-point">3-Line of Defence to provide Covid Suraksha Kavach</h3>
+                      <h3 className="bullet-point">Chemical is safe for kids, elderly people & pets</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+               <div className="tabs-section">
+                {/* Tabs */}
+                <div className="tabs-header">
+                  <button
+                    className={`tab-btn ${selectedTab === "testimonials" ? "active" : ""}`}
+                    onClick={() => setSelectedTab("testimonials")}
+                  >
+                    Testimonials
+                  </button>
+                  <button
+                    className={`tab-btn ${selectedTab === "faqs" ? "active" : ""}`}
+                    onClick={() => setSelectedTab("faqs")}
+                  >
+                    FAQ's
+                  </button>
+                </div>
+
+                {/* Accordion */}
+                <div className="tabs-content">
+                  {currentList.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`faq-item ${openIndex === index ? "active" : ""}`}
+                    >
+                      <button
+                        className="faq-question"
+                        onClick={() => toggleFAQ(index)}
+                      >
+                        <span>{item.question}</span>
+                        <span className="faq-icon">
+                          {openIndex === index ? "−" : "+"}
+                        </span>
+                      </button>
+
+                      {openIndex === index && (
+                        <div className="faq-answer">
+                          <p>{item.answer}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <section className="bg-white rounded-lg p-4 glow-border">
                 <ul
                   className="flex mb-3"
@@ -1244,7 +1409,7 @@ export default function ProductPage() {
                       activeTab === 2 ? "border-[#035240]" : ""
                     }`}
                   >
-                    <button
+                    {/* <button
                       className={`hidden sm:inline-block py-2 px-4 text-[#035240] ${
                         activeTab === 2 ? "font-medium" : ""
                       }`}
@@ -1255,8 +1420,8 @@ export default function ProductPage() {
                       }}
                     >
                       Frequently Ask Question
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       className={`inline-block sm:hidden py-2 px-4 text-[#035240] ${
                         activeTab === 2 ? "font-medium" : ""
                       }`}
@@ -1267,14 +1432,14 @@ export default function ProductPage() {
                       }}
                     >
                       FAQs
-                    </button>
+                    </button> */}
                   </li>
                   <li
                     className={`mr-1 ${
                       activeTab === 3 ? "border-[#035240]" : ""
                     }`}
                   >
-                    <button
+                    {/* <button
                       className={`hidden sm:inline-block py-2 px-4 text-[#035240] ${
                         activeTab === 3 ? "font-medium" : ""
                       }`}
@@ -1285,8 +1450,8 @@ export default function ProductPage() {
                       }}
                     >
                       Customer Feedback
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       className={`inline-block sm:hidden py-2 px-4 text-[#035240] ${
                         activeTab === 3 ? "font-medium" : ""
                       }`}
@@ -1297,24 +1462,35 @@ export default function ProductPage() {
                       }}
                     >
                       Reviews
-                    </button>
+                    </button> */}
                   </li>
                 </ul>
                 <div>
-                  {activeTab === 1 && (
-                    <div
-                      className="space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
-                      dangerouslySetInnerHTML={{
-                        __html: prodData?.description,
-                      }}
-                    />
-                  )}
-                  {activeTab === 2 && (
+                  <div className="product-description">
+                    {/* Toggle Button */}
+                    <button
+                      className="dropdown-toggle"
+                      onClick={() => setIsDescOpen(!isDescOpen)}
+                    >
+                      {isDescOpen ? "Hide Description ▲" : "Show Description ▼"}
+                    </button>
+
+                    {/* Dropdown Content */}
+                    {isDescOpen && (
+                      <div
+                        className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
+                        dangerouslySetInnerHTML={{
+                          __html: prodData?.description,
+                        }}
+                      />
+                    )}
+                  </div>
+                  {/* {activeTab === 2 && (
                     <div
                       className="space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
                       dangerouslySetInnerHTML={{ __html: prodData?.faqs }}
                     />
-                  )}
+                  )} */}
                   {activeTab === 3 && (
                     <div className="p-4 space-y-6">
                       {prodData?.rattings.map((ratting, index) => (
@@ -1387,9 +1563,9 @@ export default function ProductPage() {
                 </div>
               </section>
 
-              {videoItems?.length > 0 && (
+              {/* {videoItems?.length > 0 && (
                 <section className="bg-white rounded-lg mt-6">
-                  {/* <h2 className="text-2xl font-semibold mb-4">Product Video</h2> */}
+                 
                   <div className="">
                     {videoItems?.map((video, index) => (
                       <div key={index} className="video-container h-[500px]">
@@ -1398,7 +1574,7 @@ export default function ProductPage() {
                     ))}
                   </div>
                 </section>
-              )}
+              )} */}
             </div>
 
             <div className="hidden md:block md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
@@ -1437,11 +1613,11 @@ export default function ProductPage() {
                 <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
                   <h3 className="text-xl font-semibold">Select Frequency</h3>
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       {attributes.map((attr) => (
                         <button
                           key={attr}
-                          className={`w-full p-3 rounded-lg border ${
+                          className={`w-full p-2 rounded-lg border text-sm ${
                             selectedAttribute === attr
                               ? "bg-[#10847E] text-white"
                               : "border-gray-300"
@@ -1451,17 +1627,14 @@ export default function ProductPage() {
                           <div className="flex items-center justify-between">
                             <span>{attr}</span>
                             <IoCheckmarkCircleSharp
-                              className={`text-xl ${
-                                selectedAttribute === attr
-                                  ? "text-white"
-                                  : "text-gray-300"
+                              className={`text-lg ${
+                                selectedAttribute === attr ? "text-white" : "text-gray-300"
                               }`}
                             />
                           </div>
                         </button>
                       ))}
                     </div>
-
                     {selectedAttribute && (
                       <div>
                         <h3 className="text-xl font-semibold mb-2">

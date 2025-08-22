@@ -21,3 +21,356 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.features-section {
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.features-box {
+  border: 1px solid #3ad167;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  margin-left: -20px;
+  width: 105%;
+}
+
+.features-heading {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #111;
+  position: relative;
+  padding-left: 28px; /* space for tick */
+}
+
+.features-heading::before {
+  content: "✔";     /* tick mark */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: green;     
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.features-box ul {
+  list-style: disc;   
+  padding-left: 60px; 
+  margin: 0;          
+}
+
+.features-box li {
+  margin-bottom: 15px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #222;
+}
+
+.features-box strong {
+  font-weight: 600;
+}
+
+.service-feature {
+  font-size: 18px;
+  font-weight: 540;
+  color: #111;
+  margin-bottom: 12px;
+  position: relative;
+  padding-left: 28px; 
+  line-height: 1.6;
+}
+
+.service-feature::before {
+  content: "✔";            
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: green;            
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.section-heading {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 0 10px;
+  color: #000;
+}
+
+.visit {
+  padding-left: 50px;
+  padding-bottom: 5px;
+  margin-top: -5px;
+}
+
+.bullet-point {
+  font-size: 16px;
+  font-weight: 400;
+  color: #222;
+  margin: 10px 0;
+  position: relative;
+  padding-left: 28px;  
+  line-height: 1.6;
+}
+
+.bullet-point::before {
+  content: "•";         
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #444;          
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ✅ Responsive video */
+.video-container {
+  position: relative;
+  width: 50%;
+  padding-bottom: 66.25%; /* 16:9 ratio */
+  height: 0;
+  margin: 15px 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  border: none;
+}
+
+@media (max-width: 767px) {
+  .video-container {
+    width: 100%;          /* full width for mobile */
+    padding-bottom: 120%; /* taller ratio, adjust manually */
+    margin: 10px 0;
+  }
+
+  .video-container iframe {
+    height: 80%;         /* make iframe fill container */
+  }
+}
+
+/* ✅ Mobile responsiveness */
+@media (max-width: 768px) {
+  .features-box {
+    width: 100%;
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  .features-heading,
+  .service-feature,
+  .section-heading {
+    font-size: 16px;
+  }
+
+  .bullet-point,
+  .features-box li {
+    font-size: 14px;
+  }
+
+  .visit {
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .features-box {
+    width: 113%;         /* ✅ always fit screen */
+    margin-left: -20px;      /* ✅ remove shifting */
+    padding: 15px;       /* ✅ keep spacing inside */
+    box-sizing: border-box; /* ✅ ensures padding doesn’t break width */
+  }
+
+  .features-heading,
+  .service-feature,
+  .section-heading {
+    font-size: 16px;   /* ✅ smaller font for mobile */
+  }
+
+  .bullet-point,
+  .features-box li {
+    font-size: 14px;
+  }
+
+  .visit {
+    padding-left: 15px;
+  }
+}
+
+/* ✅ Extra tweak for very small screens */
+@media (max-width: 480px) {
+  .features-box {
+    padding: 12px;     
+  }
+
+  .features-heading,
+  .service-feature,
+  .section-heading {
+    font-size: 14px;
+  }
+
+  .bullet-point,
+  .features-box li {
+    font-size: 13px;
+  }
+}
+
+.tabs-section {
+  max-width: 900px;
+  margin: 20px auto;
+  font-family: Helvetica, Arial, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* Tabs Header */
+.tabs-header {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #f9f9f9;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.tab-btn.active {
+  background: #fff;
+  border-bottom: 3px solid #035240;
+  color: #035240;
+}
+
+/* Accordion Container */
+.tabs-content {
+  padding: 16px;
+}
+
+/* Each Item */
+.faq-item {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+}
+
+/* Question */
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+.faq-question span:first-child {
+  flex: 1;
+  margin-right: 12px;
+}
+
+/* Icon */
+.faq-icon {
+  font-size: 20px;
+  font-weight: bold;
+  color: #20b526;
+  transition: transform 0.3s ease;
+}
+
+/* Answer */
+.faq-answer {
+  margin-top: 8px;
+  padding-left: 4px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .tab-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .faq-question {
+    font-size: 14px;
+  }
+  .faq-answer {
+    font-size: 13px;
+  }
+}
+
+.product-description {
+  margin-top: 15px;
+}
+
+.dropdown-toggle {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  width: 100%;
+  text-align: left;
+  transition: background 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+  background: #eaeaea;
+}
+
+.dropdown-content {
+  margin-top: 10px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  animation: dropdownFade 0.3s ease-in-out;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply only on desktop (≥1024px) */
+@media (min-width: 1024px) {
+  .space {
+    margin-top: -220px;
+  }
+}
+
+/* On mobile/tablet, no effect */
+@media (max-width: 1023px) {
+  .space {
+    margin-top: 0; /* or whatever default you want */
+  }
+}
+
+@media (max-width: 767px) {
+  .space {
+    margin-top: -60px;
+  }
+}
