@@ -667,7 +667,10 @@ export default function ProductPage() {
   const [isDescOpen, setIsDescOpen] = useState(false);
 
   return (
-    <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth bg-white">
+    <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth"
+    style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}>
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <Loading />
@@ -684,7 +687,7 @@ export default function ProductPage() {
             <link rel="canonical" href={generateCanonicalUrl()} />
           </Helmet>
 
-          <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0">
+          <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0 ml-4">
             <NavLink to="/" className="text-blue-500">
               Home
             </NavLink>
@@ -740,7 +743,7 @@ export default function ProductPage() {
                     <p className="text-2xl sm:text-4xl font-bold mb-2">
                       {prodData?.product_name}
                     </p>
-                    <div className="flex items-center mb-2">
+                    {/* <div className="flex items-center mb-2">
                       <MdStars
                         className="text-base md:text-2xl"
                         color="#FF3269"
@@ -748,7 +751,7 @@ export default function ProductPage() {
                       <p className="text-base md:text-xl font-normal ml-2">
                         {reviewData?.avg_ratting} ({reviewData?.total} reviews)
                       </p>
-                    </div>
+                    </div> */}
                     <p className="flex items-center">
                       <span className="text-xl md:text-3xl font-bold">
                         ₹
@@ -1336,7 +1339,7 @@ export default function ProductPage() {
 
                <div className="tabs-section">
                 {/* Tabs */}
-                <div className="tabs-header">
+                <div className="tabs-header rounded-lg glow-border">
                   <button
                     className={`tab-btn ${selectedTab === "testimonials" ? "active" : ""}`}
                     onClick={() => setSelectedTab("testimonials")}
@@ -1352,7 +1355,7 @@ export default function ProductPage() {
                 </div>
 
                 {/* Accordion */}
-                <div className="tabs-content">
+                <div className="tabs-content rounded-lg p-4 glow-border bg-white">
                   {currentList.map((item, index) => (
                     <div
                       key={index}
@@ -1574,13 +1577,13 @@ export default function ProductPage() {
               )} */}
             </div>
 
-                <div className="hidden md:block md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px] ">
+                <div className="hidden md:block md:sticky top-48 z-10  lg:w-1/3 h-fit space-y-4 mt-[40px] ">
                   <div className="bg-white rounded-lg p-4 mb-4 glow-border px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
                     <div className="space-y-1 sm:space-y-3 lg:space-y-4">
                       <p className="text-2xl sm:text-2xl font-bold mb-2">
                         {prodData?.product_name}
                       </p>
-                      <div className="flex items-center mb-2">
+                      {/* <div className="flex items-center mb-2">
                         <MdStars
                           className="text-base md:text-2xl"
                           color="#FF3269"
@@ -1588,7 +1591,7 @@ export default function ProductPage() {
                         <p className="text-base md:text-xl font-normal ml-2">
                           {reviewData?.avg_ratting} ({reviewData?.total} reviews)
                         </p>
-                      </div>
+                      </div> */}
                       <p className="flex items-center">
                         <span className="text-xl md:text-3xl font-bold">
                           ₹
