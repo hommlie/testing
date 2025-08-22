@@ -625,7 +625,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
             {/* Always show on both desktop and mobile */}
             <ServiceGrid />
             <div className="hidden md:flex max-w-7xl ml-14 mt-10 mx-auto">
-            <h2 className="text-2xl font-bold text-black -ml-8">
+            <h2 className="text-2xl font-medium text-black -ml-8">
               <span
               // style={{
               //   background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",

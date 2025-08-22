@@ -782,7 +782,7 @@ export default function ProductPage() {
                 </div>
               </section>
 
-              <section className="block md:hidden bg-white lg:w-1/3 h-fit space-y-4">
+              <section className="block md:hidden lg:w-1/3 h-fit space-y-4">
                 {/* <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                   <div className="flex justify-between items-center">
                     

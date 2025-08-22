@@ -38,6 +38,7 @@ const ServiceGrid = () => {
 
   const serviceData = {
     "Pest Control": [
+      { name: "General PestControl Service", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
       { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
       { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
       { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
@@ -46,8 +47,6 @@ const ServiceGrid = () => {
       { name: "Flies Management", image: "/images/fliesicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
       { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
       { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
-      { name: "Honey Bee Removal", image: "/images/beeicon.png", url: "/subcategory/honey-bee-removal-services-in-bangalore" },
-      
     ],
     "Deep Cleaning": [
       // { name: "Sofa Cleaning", image: "/images/sofaicon.png", url: "/subcategory/top-sofa-cleaning-services-in-bangalore" },
@@ -157,7 +156,7 @@ const ServiceGrid = () => {
                     className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
                   />
                 </div>
-                <h3 className="text-xs sm:text-sm font-semibold mt-2">{sub.name}</h3>
+                <h3 className="text-xs sm:text-sm font-medium mt-2">{sub.name}</h3>
                 {sub.price && <p className="text-xs text-[#52852d] font-bold">{sub.price}</p>}
                 {sub.note && <p className="text-[10px] text-gray-500 leading-tight text-center">{sub.note}</p>}
               </a>
@@ -192,7 +191,7 @@ const ServiceGrid = () => {
                   />
                 )}
               </div>
-              <span className="mt-2 text-xs sm:text-sm font-semibold text-gray-800 text-center">
+              <span className="mt-2 text-xs sm:text-sm font-medium text-gray-800 text-center">
                 {service.name}
               </span>
             </div>
