@@ -712,7 +712,7 @@ export default function ProductPage() {
               />
 
               <section className="bg-white rounded-lg md:p-4 md:mb-6 glow-border mt-5 md:mt-10">
-                <div className="relative h-[250px] lg:h-[450px]">
+                <div className="relative h-[250px] lg:h-[400px]">
                   {imageItems.length > 0 && (
                     <div className="w-full h-full">
                       {renderMedia(imageItems[currentMediaIndex])}
@@ -735,7 +735,7 @@ export default function ProductPage() {
                     </>
                   )}
                 </div>
-                <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between mt-10">
+                <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between mt-10 block md:hidden">
                   <div className="space-y-1 sm:space-y-3 lg:space-y-4">
                     <p className="text-2xl sm:text-4xl font-bold mb-2">
                       {prodData?.product_name}
@@ -776,14 +776,11 @@ export default function ProductPage() {
                       ) : null}
                     </p>
                   </div>
-                  {/* <div>
-                    {addBtn()}
-                  </div> */}
                 </div>
               </section>
 
               <section className="block md:hidden bg-white lg:w-1/3 h-fit space-y-4">
-                <div className="bg-white rounded-lg p-4 mb-4 glow-border">
+                {/* <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                   <div className="flex justify-between items-center">
                     
                     <div className="flex flex-row items-center">
@@ -813,7 +810,7 @@ export default function ProductPage() {
                       <p className="text-base font-semibold ml-2">Item Added</p>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {variations.length > 0 && (
                   <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
@@ -1577,8 +1574,53 @@ export default function ProductPage() {
               )} */}
             </div>
 
-            <div className="hidden md:block md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px]">
-              <div className="bg-white rounded-lg p-4 mb-4 glow-border">
+                <div className="hidden md:block md:sticky top-48 z-10 bg-white lg:w-1/3 h-fit space-y-4 mt-[40px] ">
+                  <div className="bg-white rounded-lg p-4 mb-4 glow-border px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
+                    <div className="space-y-1 sm:space-y-3 lg:space-y-4">
+                      <p className="text-2xl sm:text-2xl font-bold mb-2">
+                        {prodData?.product_name}
+                      </p>
+                      <div className="flex items-center mb-2">
+                        <MdStars
+                          className="text-base md:text-2xl"
+                          color="#FF3269"
+                        />
+                        <p className="text-base md:text-xl font-normal ml-2">
+                          {reviewData?.avg_ratting} ({reviewData?.total} reviews)
+                        </p>
+                      </div>
+                      <p className="flex items-center">
+                        <span className="text-xl md:text-3xl font-bold">
+                          ₹
+                          {selectedVariation
+                            ? selectedVariation.discounted_variation_price
+                            : prodData?.discounted_price}
+                        </span>
+                        <span
+                          className="line-through text-lg md:text-2xl sm:text-3xl font-light ml-4"
+                          style={{ color: "#545454" }}
+                        >
+                          ₹
+                          {selectedVariation
+                            ? selectedVariation.price
+                            : prodData?.product_price}
+                        </span>
+                        {prodData?.est_shipping_days != 0 ? (
+                          <span
+                            className="flex flex-row items-center gap-2 text-base sm:text-2xl font-normal ml-8"
+                            style={{ color: "#545454" }}
+                          >
+                            <CiClock1 />
+                            {prodData?.est_shipping_days}
+                          </span>
+                        ) : null}
+                      </p>
+                    </div>
+                    {/* <div>
+                      {addBtn()}
+                    </div> */}
+                  </div>
+              {/* <div className="bg-white rounded-lg p-4 mb-4 glow-border">
                 <div className="flex justify-between items-center">
                   <div className="flex flex-row items-center">
                     <img
@@ -1607,7 +1649,7 @@ export default function ProductPage() {
                     <p className="text-base font-semibold ml-2">Item Added</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {variations.length > 0 && (
                 <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
@@ -2064,85 +2106,94 @@ export default function ProductPage() {
               />
             </section>
 
-            <section className="w-full bg-white rounded-lg p-4 space-y-4 glow-border">
-              {/* Locations Section */}
-              {locations && locations?.length ? (
-                <div>
-                  <div
-                    className="flex justify-between items-center cursor-pointer"
-                    onClick={toggleLocationsExpansion}
-                  >
-                    <h2 className="text-base lg:text-2xl font-semibold">
-                      Available Locations
-                    </h2>
-                    {isLocationsExpanded ? (
-                      <IoIosArrowUp size={24} />
-                    ) : (
-                      <IoIosArrowDown size={24} />
-                    )}
-                  </div>
+           <section className="w-full bg-white rounded-lg p-6 space-y-6 border border-green-300">
+  {/* Locations Section */}
+  {locations && locations?.length ? (
+    <div>
+      {/* Heading */}
+      <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
+        Quick Links
+      </h2>
+      <hr className="border-t-2 border-[#10847E] w-40 mb-4" />
 
-                  {isLocationsExpanded && (
-                    <div className="mt-6 transition-all duration-300 ease-in-out">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {locations?.map((loc, index) => {
-                          const formattedLoc = loc.trim();
-                          const capitalizedLoc =
-                            formattedLoc.charAt(0).toUpperCase() +
-                            formattedLoc.slice(1);
-                          return (
-                            <a
-                              key={index}
-                              href={`${config.VITE_BASE_URL}/product/${
-                                prodData.slug
-                              }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
-                              className="text-[#10847E] hover:text-[#0d6d68] transition-colors duration-300"
-                            >
-                              <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                                <span className="text-lg">
-                                  {prodData.product_name} in {capitalizedLoc}
-                                </span>
-                              </div>
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : null}
+      {/* Accordion Button */}
+      <div
+        className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
+        onClick={toggleLocationsExpansion}
+      >
+        <span className="font-medium text-black">Available Locations</span>
+        {isLocationsExpanded ? (
+          <IoIosArrowUp className="text-black" />
+        ) : (
+          <IoIosArrowDown className="text-black" />
+        )}
+      </div>
 
-              {/* Keywords Section */}
-              <div className="border-t border-t-gray-200">
-                <div
-                  className="flex justify-between items-center cursor-pointer"
-                  onClick={toggleKeywordsExpansion}
+      {/* Accordion Content */}
+      {isLocationsExpanded && (
+        <div className="mt-4 transition-all duration-300 ease-in-out">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {locations?.map((loc, index) => {
+              const formattedLoc = loc.trim();
+              const capitalizedLoc =
+                formattedLoc.charAt(0).toUpperCase() +
+                formattedLoc.slice(1);
+              return (
+                <a
+                  key={index}
+                  href={`${config.VITE_BASE_URL}/product/${
+                    prodData.slug
+                  }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
+                  className="text-[#10847E] hover:underline transition-colors"
                 >
-                  <h2 className="text-base lg:text-2xl font-semibold">
-                    Keywords
-                  </h2>
-                  {isKeywordsExpanded ? (
-                    <IoIosArrowUp size={24} />
-                  ) : (
-                    <IoIosArrowDown size={24} />
-                  )}
-                </div>
+                  {prodData.product_name} in {capitalizedLoc}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  ) : null}
 
-                {isKeywordsExpanded && prodData?.tags && (
-                  <div className="mt-4 transition-all duration-300 ease-in-out">
-                    {prodData.tags.split(",").map((tag, index) => (
-                      <a
-                        key={index}
-                        onClick={() => handleTagClick(tag)}
-                        className="text-blue-500 hover:underline cursor-pointer mr-2"
-                      >
-                        #{tag.trim()}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </section>
+  {/* Keywords Section */}
+  <div className="">
+    {/* Heading */}
+    {/* <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
+      Keywords
+    </h2>
+    <hr className="border-t-2 border-[#10847E] w-28 mb-4" /> */}
+
+    {/* Accordion Button */}
+    <div
+      className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
+      onClick={toggleKeywordsExpansion}
+    >
+      <span className="font-medium text-black">Keywords</span>
+      {isKeywordsExpanded ? (
+        <IoIosArrowUp className="text-black" />
+      ) : (
+        <IoIosArrowDown className="text-black" />
+      )}
+    </div>
+
+    {/* Accordion Content */}
+    {isKeywordsExpanded && prodData?.tags && (
+      <div className="mt-4 flex flex-wrap gap-3 transition-all duration-300 ease-in-out">
+        {prodData.tags.split(",").map((tag, index) => (
+          <a
+            key={index}
+            onClick={() => handleTagClick(tag)}
+            className="px-3 py-1 text-sm rounded-md bg-[#E6F6F5] text-[#10847E] hover:bg-[#10847E] hover:text-white transition-colors cursor-pointer"
+          >
+            #{tag.trim()}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
           </div>
         </>
       )}
