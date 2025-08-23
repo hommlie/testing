@@ -349,7 +349,8 @@ export default function MyBookings() {
 const [isComplaintModalOpen, setIsComplaintModalOpen] = useState(false);
 const [complaintOrder, setComplaintOrder] = useState(null);
 const [complaintText, setComplaintText] = useState("");
-const [complaintImage, setComplaintImage] = useState(null);
+const [isSubmittingComplaint, setIsSubmittingComplaint] = useState(false);
+
 
 const openComplaintModal = (order) => {
   setComplaintOrder(order);
@@ -359,26 +360,45 @@ const openComplaintModal = (order) => {
 const closeComplaintModal = () => {
   setComplaintOrder(null);
   setComplaintText("");
-  setComplaintImage(null);
   setIsComplaintModalOpen(false);
 };
 
-const handleComplaintSubmit = () => {
+const handleComplaintSubmit = async () => {
   if (!complaintText.trim()) {
-    errorNotify("Please describe your issue before submitting.");
+    errorNotify("Please enter a description.");
     return;
   }
 
-  // Here you can send API request with complaintText and complaintImage
-  console.log("Complaint submitted:", {
-    orderId: complaintOrder?.id,
-    complaintText,
-    complaintImage,
-  });
+  setIsSubmittingComplaint(true);
+  try {
+    // Optional auth header if your API needs it:
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    const headers = { "Content-Type": "application/json" };
+    if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
 
-  successNotify("Complaint submitted successfully!");
-  closeComplaintModal();
+    const res = await axios.post(
+      `${config.API_URL}/api/raisecomplaint`,
+      {
+        orderId: complaintOrder?.id,   // send which order the complaint is for
+        complaintText,                 // the description only
+      },
+      { headers }
+    );
+
+    console.log("Server Response:", res.data);
+    successNotify("Complaint submitted successfully!");
+    closeComplaintModal();
+  } catch (err) {
+    console.error("Error submitting complaint:", err);
+    errorNotify(
+      err?.response?.data?.error || "Failed to submit complaint. Please try again."
+    );
+  } finally {
+    setIsSubmittingComplaint(false);
+  }
 };
+
+
 
 
   return (
@@ -845,7 +865,7 @@ const handleComplaintSubmit = () => {
               </div>
 
               {/* Upload Image */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Add a photo (optional)
                 </label>
@@ -862,7 +882,7 @@ const handleComplaintSubmit = () => {
                     className="mt-3 w-32 h-32 object-cover rounded-lg border"
                   />
                 )}
-              </div>
+              </div> */}
 
               {/* Submit Button */}
               <div className="flex justify-end gap-3">
@@ -873,11 +893,13 @@ const handleComplaintSubmit = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={handleComplaintSubmit}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
-                >
-                  Submit Complaint
-                </button>
+  onClick={handleComplaintSubmit}
+  disabled={isSubmittingComplaint}
+  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+>
+  {isSubmittingComplaint ? "Submitting..." : "Submit Complaint"}
+</button>
+
               </div>
             </div>
           </div>

@@ -738,48 +738,6 @@ export default function ProductPage() {
                     </>
                   )}
                 </div>
-                <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between mt-10 block md:hidden">
-                  <div className="space-y-1 sm:space-y-3 lg:space-y-4">
-                    <p className="text-2xl sm:text-4xl font-bold mb-2">
-                      {prodData?.product_name}
-                    </p>
-                    {/* <div className="flex items-center mb-2">
-                      <MdStars
-                        className="text-base md:text-2xl"
-                        color="#FF3269"
-                      />
-                      <p className="text-base md:text-xl font-normal ml-2">
-                        {reviewData?.avg_ratting} ({reviewData?.total} reviews)
-                      </p>
-                    </div> */}
-                    <p className="flex items-center">
-                      <span className="text-xl md:text-3xl font-bold">
-                        ₹
-                        {selectedVariation
-                          ? selectedVariation.discounted_variation_price
-                          : prodData?.discounted_price}
-                      </span>
-                      <span
-                        className="line-through text-lg md:text-2xl sm:text-3xl font-light ml-4"
-                        style={{ color: "#545454" }}
-                      >
-                        ₹
-                        {selectedVariation
-                          ? selectedVariation.price
-                          : prodData?.product_price}
-                      </span>
-                      {prodData?.est_shipping_days != 0 ? (
-                        <span
-                          className="flex flex-row items-center gap-2 text-base sm:text-2xl font-normal ml-8"
-                          style={{ color: "#545454" }}
-                        >
-                          <CiClock1 />
-                          {prodData?.est_shipping_days}
-                        </span>
-                      ) : null}
-                    </p>
-                  </div>
-                </div>
               </section>
 
               <section className="block md:hidden lg:w-1/3 h-fit space-y-4">
@@ -814,9 +772,51 @@ export default function ProductPage() {
                     </div>
                   </div>
                 </div> */}
-
+                
                 {variations.length > 0 && (
                   <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
+                    <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between block md:hidden  rounded-lg p-4 space-y-4 glow-border">
+                      <div className="space-y-1 sm:space-y-3 lg:space-y-4">
+                        <p className="text-[20px] sm:text-4xl font-bold mb-2">
+                          {prodData?.product_name}
+                        </p>
+                        {/* <div className="flex items-center mb-2">
+                          <MdStars
+                            className="text-base md:text-2xl"
+                            color="#FF3269"
+                          />
+                          <p className="text-base md:text-xl font-normal ml-2">
+                            {reviewData?.avg_ratting} ({reviewData?.total} reviews)
+                          </p>
+                        </div> */}
+                        <p className="flex items-center">
+                          <span className="text-xl md:text-3xl font-bold">
+                            ₹
+                            {selectedVariation
+                              ? selectedVariation.discounted_variation_price
+                              : prodData?.discounted_price}
+                          </span>
+                          <span
+                            className="line-through text-lg md:text-2xl sm:text-3xl font-light ml-4"
+                            style={{ color: "#545454" }}
+                          >
+                            ₹
+                            {selectedVariation
+                              ? selectedVariation.price
+                              : prodData?.product_price}
+                          </span>
+                          {prodData?.est_shipping_days != 0 ? (
+                            <span
+                              className="flex flex-row items-center gap-2 text-base sm:text-2xl font-normal ml-8"
+                              style={{ color: "#545454" }}
+                            >
+                              <CiClock1 />
+                              {prodData?.est_shipping_days}
+                            </span>
+                          ) : null}
+                        </p>
+                      </div>
+                    </div>
                     <h3 className="text-xl font-semibold">Select Frequency</h3>
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-2">
@@ -1272,8 +1272,8 @@ export default function ProductPage() {
                 )}
               </section>
 
-              <div className="features-section">
-                <div className="features-box">
+              <div className="features-section ">
+                <div className="features-box -mt-5">
                   <h2 className="features-heading">Service Features</h2>
                   <ul>
                     <li>
@@ -1336,10 +1336,9 @@ export default function ProductPage() {
                 </div>
               </div>
 
-
-               <div className="tabs-section">
+               <div className="tabs-section ">
                 {/* Tabs */}
-                <div className="tabs-header rounded-lg glow-border">
+                <div className="tabs-header rounded-lg glow-border -mt-5">
                   <button
                     className={`tab-btn ${selectedTab === "testimonials" ? "active" : ""}`}
                     onClick={() => setSelectedTab("testimonials")}
