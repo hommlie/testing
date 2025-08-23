@@ -131,6 +131,8 @@ app.get(
   "/downloadOrSendInvoice/:order_id",
   OrderController.generateServiceReport
 );
+app.post("/raisecomplaint", OrderController.raiseComplaint);
+
 
 //Notification
 app.post("/notification", NotificationController.notification);

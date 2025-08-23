@@ -1395,6 +1395,25 @@ exports.generateInvoice = async (req, res) => {
   }
 };
 
+exports.raiseComplaint = (req, res) => {
+  try {
+    const { complaintText } = req.body;
+
+    console.log("Complaint Text:", complaintText);
+
+    // TODO: Save complaintText to DB if needed
+
+    res.status(200).json({
+      message: "Complaint received successfully",
+      complaintText,
+    });
+  } catch (error) {
+    console.error("Error in raiseComplaint:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
 // Generate Service Report PDF Controller
 exports.generateServiceReport = async (req, res) => {
   const { order_id } = req.params;

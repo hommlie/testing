@@ -142,6 +142,14 @@ Order.init(
     assigned_to: {
       type: DataTypes.INTEGER,
     },
+    complaint_remark: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    order_type: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     sequelize,
