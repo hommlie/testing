@@ -24,7 +24,7 @@ const ServiceGrid = () => {
 
 
   // ✅ List of services to show "Coming Soon"
-  const comingSoonServices = ["Scrap", "AC Services", "Plumbing", "Painting"];
+  const comingSoonServices = ["AC Services", "Plumbing", "Painting"];
 
   const handleServiceClick = (serviceName) => {
   if (comingSoonServices.includes(serviceName) || serviceName === "See More") {

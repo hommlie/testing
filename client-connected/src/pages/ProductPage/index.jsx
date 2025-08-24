@@ -1272,7 +1272,7 @@ export default function ProductPage() {
                 )}
               </section>
 
-              <div className="features-section ">
+              {/* <div className="features-section ">
                 <div className="features-box -mt-5">
                   <h2 className="features-heading">Service Features</h2>
                   <ul>
@@ -1295,7 +1295,7 @@ export default function ProductPage() {
                   <h2 className="service-feature">Complementary Ant Treatment</h2>
                   <h2 className="service-feature">Single Service do not include warranty or complaint support unlike 1 and 2 year contract</h2>
 
-                  {/* Details Section */}
+              
                   <h2 className="section-heading">Details</h2>
                   <h3 className="service-feature">Video:</h3>
                   <div className="video-container">
@@ -1317,16 +1317,15 @@ export default function ProductPage() {
 
                     <h3 className="service-feature">Manpower:</h3>
                     <p className="visit">1 for each visit</p>
-
-                    {/* Terms & Conditions */}
-                    <h2 className="section-heading">Terms & Conditions</h2>
+        
+                   <h2 className="section-heading">Terms & Conditions</h2>
                     <div className="visit">
                       <h3 className="bullet-point">Efficacy will be effective post 15 days of service</h3>
                       <h3 className="bullet-point">Service needs to be taken within 30 days of the scheduled date</h3>
                       <h3 className="bullet-point">Important to maintain the hygiene of the kitchen for best effectiveness</h3>
                     </div>
 
-                    {/* Safety Precautions */}
+                 
                     <h2 className="section-heading">Safety Precautions</h2>
                     <div className="visit">
                       <h3 className="bullet-point">3-Line of Defence to provide Covid Suraksha Kavach</h3>
@@ -1334,7 +1333,7 @@ export default function ProductPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
                <div className="tabs-section ">
                 {/* Tabs */}
@@ -1477,7 +1476,7 @@ export default function ProductPage() {
                     {/* Dropdown Content */}
                     {isDescOpen && (
                       <div
-                        className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none"
+                        className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none lg:max-w-[900px]"
                         dangerouslySetInnerHTML={{
                           __html: prodData?.description,
                         }}
