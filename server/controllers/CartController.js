@@ -89,10 +89,7 @@ exports.addToCart = async (req, res) => {
           .json({ status: 0, message: "Something went wrong" });
       }
     } else {
-      if (
-        existingCart.vendor_id !== vendor_id &&
-        existingCart.user_id === user_id
-      ) {
+      if (existingCart.vendor_id !== vendor_id && existingCart.user_id === user_id){
         return res.status(400).json({
           status: 0,
           message: "First empty your Cart, Then add new product in Cart",
@@ -107,7 +104,7 @@ exports.addToCart = async (req, res) => {
           attributeData = await Attribute.findOne({
             where: { id: attribute },
           });
-        }
+      }
 
         let variationData = null;
         if (variation) {

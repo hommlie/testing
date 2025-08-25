@@ -780,7 +780,7 @@ export default function ProductPage() {
                         <p className="text-[20px] sm:text-4xl font-bold mb-2">
                           {prodData?.product_name}
                         </p>
-                        {/* <div className="flex items-center mb-2">
+                        <div className="flex items-center mb-2">
                           <MdStars
                             className="text-base md:text-2xl"
                             color="#FF3269"
@@ -788,7 +788,7 @@ export default function ProductPage() {
                           <p className="text-base md:text-xl font-normal ml-2">
                             {reviewData?.avg_ratting} ({reviewData?.total} reviews)
                           </p>
-                        </div> */}
+                        </div>
                         <p className="flex items-center">
                           <span className="text-xl md:text-3xl font-bold">
                             ₹
@@ -1335,8 +1335,8 @@ export default function ProductPage() {
                 </div>
               </div> */}
 
-               <div className="tabs-section ">
-                {/* Tabs */}
+               {/* <div className="tabs-section ">
+              
                 <div className="tabs-header rounded-lg glow-border -mt-5">
                   <button
                     className={`tab-btn ${selectedTab === "testimonials" ? "active" : ""}`}
@@ -1352,7 +1352,7 @@ export default function ProductPage() {
                   </button>
                 </div>
 
-                {/* Accordion */}
+                
                 <div className="tabs-content rounded-lg p-4 glow-border bg-white">
                   {currentList.map((item, index) => (
                     <div
@@ -1377,7 +1377,7 @@ export default function ProductPage() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               <section className="bg-white rounded-lg p-4 glow-border">
                 <ul
@@ -1449,7 +1449,7 @@ export default function ProductPage() {
                     >
                       Customer Feedback
                     </button> */}
-                    {/* <button
+                    <button
                       className={`inline-block sm:hidden py-2 px-4 text-[#035240] ${
                         activeTab === 3 ? "font-medium" : ""
                       }`}
@@ -1460,7 +1460,7 @@ export default function ProductPage() {
                       }}
                     >
                       Reviews
-                    </button> */}
+                    </button>
                   </li>
                 </ul>
                 <div>
