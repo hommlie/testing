@@ -28,6 +28,7 @@ import CouponModal from "../../components/CouponModal";
 import InspectionModal from "../../components/InspectionModal";
 import LocationSuggestion from "../../components/LocationSuggestion";
 import { BiSolidOffer } from "react-icons/bi";
+import Rating from "../../components/Rating";
 
 export default function ProductPage() {
   const {
@@ -771,7 +772,7 @@ export default function ProductPage() {
                       <p className="text-base font-semibold ml-2">Item Added</p>
                     </div>
                   </div>
-                </div> */}
+                </div> */} 
                 
                 {variations.length > 0 && (
                   <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
@@ -780,7 +781,7 @@ export default function ProductPage() {
                         <p className="text-[20px] sm:text-4xl font-bold mb-2">
                           {prodData?.product_name}
                         </p>
-                        <div className="flex items-center mb-2">
+                        {/* <div className="flex items-center mb-2">
                           <MdStars
                             className="text-base md:text-2xl"
                             color="#FF3269"
@@ -788,7 +789,8 @@ export default function ProductPage() {
                           <p className="text-base md:text-xl font-normal ml-2">
                             {reviewData?.avg_ratting} ({reviewData?.total} reviews)
                           </p>
-                        </div>
+                        </div> */}
+                        <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? 0} />
                         <p className="flex items-center">
                           <span className="text-xl md:text-3xl font-bold">
                             ₹
@@ -1590,6 +1592,7 @@ export default function ProductPage() {
                           {reviewData?.avg_ratting} ({reviewData?.total} reviews)
                         </p>
                       </div> */}
+                      <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? "1.4k"} />
                       <p className="flex items-center">
                         <span className="text-xl md:text-3xl font-bold">
                           ₹
