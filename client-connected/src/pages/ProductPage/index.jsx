@@ -369,22 +369,50 @@ export default function ProductPage() {
   }, []);
 
   useEffect(() => {
+    // if (prodData && prodData.variations) {
+    //   const attrs = [
+    //     ...new Set(prodData.variations.map((v) => v.attribute_name)),
+    //   ];
+    //   setAttributes(attrs);
+    //   setVariations(prodData.variations);
+    //   if (attrs.length > 0) {
+    //     setSelectedAttribute(attrs[0]);
+    //     const firstVariation = prodData.variations.find(
+    //       (v) => v.attribute_name === attrs[0]
+    //     );
+    //     if (firstVariation) {
+    //       setSelectedVariation(firstVariation.data);
+    //     }
+    //   }
+    // }
     if (prodData && prodData.variations) {
-      const attrs = [
-        ...new Set(prodData.variations.map((v) => v.attribute_name)),
-      ];
-      setAttributes(attrs);
-      setVariations(prodData.variations);
-      if (attrs.length > 0) {
-        setSelectedAttribute(attrs[0]);
-        const firstVariation = prodData.variations.find(
-          (v) => v.attribute_name === attrs[0]
-        );
-        if (firstVariation) {
-          setSelectedVariation(firstVariation.data);
-        }
-      }
-    }
+  const attrs = [...new Set(prodData.variations.map(v => v.attribute_name))];
+  setAttributes(attrs);
+  setVariations(prodData.variations);
+
+  if (attrs.length > 0) {
+    // const firstAttr = attrs[0];
+    // setSelectedAttribute(firstAttr);
+
+    // const related = prodData.variations.filter(v => v.attribute_name === firstAttr);
+    // Prefer "One Time Service" if available, else fallback to first
+const defaultAttr = attrs.includes("One Time Service") ? "One Time Service" : attrs[0];
+setSelectedAttribute(defaultAttr);
+
+const related = prodData.variations.filter(v => v.attribute_name === defaultAttr);
+
+    const sorted = [...related].sort((a, b) => {
+      const num = v => {
+        const m = String(v?.data?.variation).match(/\d+/);
+        return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
+      };
+      return num(a) - num(b);
+    });
+
+    if (sorted.length) setSelectedVariation(sorted[0].data); // -> 1 BHK
+  }
+}
+
   }, [prodData]);
 
   useEffect(() => {
@@ -421,14 +449,24 @@ export default function ProductPage() {
   }, [selectedVariation, prodData]);
 
   const handleAttributeSelect = (attr) => {
-    setSelectedAttribute(attr);
-    const firstVariation = variations.find((v) => v.attribute_name === attr);
-    if (firstVariation) {
-      setSelectedVariation(firstVariation.data);
-    } else {
-      setSelectedVariation(null);
-    }
-  };
+  setSelectedAttribute(attr);
+
+  const related = variations.filter(v => v.attribute_name === attr);
+  if (related.length) {
+    const sorted = [...related].sort((a, b) => {
+      const num = v => {
+        const m = String(v?.data?.variation).match(/\d+/);
+        return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
+      };
+      return num(a) - num(b);
+    });
+
+    setSelectedVariation(sorted[0].data); // -> resets to 1 BHK
+  } else {
+    setSelectedVariation(null);
+  }
+};
+
 
   const handleVariationSelect = (variation) => {
     setSelectedVariation(variation.data);
@@ -790,7 +828,7 @@ export default function ProductPage() {
                             {reviewData?.avg_ratting} ({reviewData?.total} reviews)
                           </p>
                         </div> */}
-                        <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? 0} />
+                        <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? "1.4k"} />
                         <p className="flex items-center">
                           <span className="text-xl md:text-3xl font-bold">
                             ₹
@@ -820,7 +858,7 @@ export default function ProductPage() {
                       </div>
                     </div>
                     <h3 className="text-xl font-semibold">Select Frequency</h3>
-                    <div className="space-y-4">
+                    {/* <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-2">
                         {attributes.map((attr) => (
                           <button
@@ -886,7 +924,93 @@ export default function ProductPage() {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
+                    <div className="space-y-4">
+  <div className="grid grid-cols-2 gap-2">
+    {[...attributes]
+      .sort((a, b) => {
+        // Ensure "One Time Service" or first attribute always comes first
+        if (a === "One Time Service") return -1;
+        if (b === "One Time Service") return 1;
+        return 0;
+      })
+      .map((attr, index) => (
+        <button
+          key={attr}
+          className={`w-full p-3 rounded-lg border ${
+            // if no selection yet, auto-pick first attribute
+            (selectedAttribute || attributes[0]) === attr
+              ? "bg-[#10847E] text-white"
+              : "border-gray-300"
+          }`}
+          onClick={() => handleAttributeSelect(attr)}
+        >
+          <div className="flex items-center justify-between">
+            <span>{attr}</span>
+            <IoCheckmarkCircleSharp
+              className={`text-xl ${
+                (selectedAttribute || attributes[0]) === attr
+                  ? "text-white"
+                  : "text-gray-300"
+              }`}
+            />
+          </div>
+        </button>
+      ))}
+  </div>
+
+  {(selectedAttribute || attributes[0]) && (
+    <div>
+      <h3 className="text-xl font-semibold mb-2">Select BHK</h3>
+      <div className="grid grid-cols-2 gap-2">
+        {variations
+          .filter(
+            (v) => v.attribute_name === (selectedAttribute || attributes[0])
+          )
+          .sort((a, b) => {
+            // Extract number from "X BHK" and sort ascending
+            const numA = parseInt(a.data.variation);
+            const numB = parseInt(b.data.variation);
+            return numA - numB;
+          })
+          .map((variation, index) => (
+            <button
+              key={variation.data.id}
+              className={`w-full p-3 rounded-lg border ${
+                // if no selection yet, auto-pick first variation (1 BHK)
+                (selectedVariation?.id ||
+                  variations.find(
+                    (v) =>
+                      v.attribute_name === (selectedAttribute || attributes[0])
+                  )?.data.id) === variation.data.id
+                  ? "bg-[#10847E] text-white"
+                  : "border-gray-300"
+              }`}
+              onClick={() => handleVariationSelect(variation)}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-medium">{variation.data.variation}</span>
+                <IoCheckmarkCircleSharp
+                  className={`text-xl ${
+                    (selectedVariation?.id ||
+                      variations.find(
+                        (v) =>
+                          v.attribute_name ===
+                          (selectedAttribute || attributes[0])
+                      )?.data.id) === variation.data.id
+                      ? "text-white"
+                      : "text-gray-300"
+                  }`}
+                />
+              </div>
+            </button>
+          ))}
+      </div>
+    </div>
+  )}
+</div>
+
+
 
                     {selectedVariation && (
                       <div className="mt-4 p-4 bg-gray-100 rounded-lg">
@@ -1658,7 +1782,7 @@ export default function ProductPage() {
               {variations.length > 0 && (
                 <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
                   <h3 className="text-xl font-semibold">Select Frequency</h3>
-                  <div className="space-y-4">
+                  {/* <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-2">
                       {attributes.map((attr) => (
                         <button
@@ -1719,7 +1843,74 @@ export default function ProductPage() {
                         </div>
                       </div>
                     )}
-                  </div>
+                  </div> */}
+                  <div className="space-y-4">
+  <div className="grid grid-cols-2 gap-2">
+    {[...attributes].sort((a, b) => {
+      // Ensure "One Time Service" comes first
+      if (a === "One Time Service") return -1;
+      if (b === "One Time Service") return 1;
+      return 0;
+    }).map((attr) => (
+      <button
+        key={attr}
+        className={`w-full p-3 rounded-lg border ${
+          selectedAttribute === attr
+            ? "bg-[#10847E] text-white"
+            : "border-gray-300"
+        }`}
+        onClick={() => handleAttributeSelect(attr)}
+      >
+        <div className="flex items-center justify-between">
+          <span>{attr}</span>
+          <IoCheckmarkCircleSharp
+            className={`text-xl ${
+              selectedAttribute === attr ? "text-white" : "text-gray-300"
+            }`}
+          />
+        </div>
+      </button>
+    ))}
+  </div>
+
+  {selectedAttribute && (
+    <div>
+      <h3 className="text-xl font-semibold mb-2">Select BHK</h3>
+      <div className="grid grid-cols-2 gap-2">
+        {variations
+          .filter((v) => v.attribute_name === selectedAttribute)
+          .sort((a, b) => {
+            // Extract number from "X BHK" and sort ascending
+            const numA = parseInt(a.data.variation);
+            const numB = parseInt(b.data.variation);
+            return numA - numB;
+          })
+          .map((variation) => (
+            <button
+              key={variation.data.id}
+              className={`w-full p-3 rounded-lg border ${
+                selectedVariation?.id === variation.data.id
+                  ? "bg-[#10847E] text-white"
+                  : "border-gray-300"
+              }`}
+              onClick={() => handleVariationSelect(variation)}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-medium">{variation.data.variation}</span>
+                <IoCheckmarkCircleSharp
+                  className={`text-xl ${
+                    selectedVariation?.id === variation.data.id
+                      ? "text-white"
+                      : "text-gray-300"
+                  }`}
+                />
+              </div>
+            </button>
+          ))}
+      </div>
+    </div>
+  )}
+</div>
 
                   {selectedVariation && (
                     <div className="mt-4 p-4 bg-gray-100 rounded-lg">
