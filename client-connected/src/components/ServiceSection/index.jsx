@@ -413,9 +413,9 @@ const ServiceSection = ({ categories }) => {
   return (
     <>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
-        style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+        // style={{
+        //     background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+        //   }}
       >
        
         <div className="block md:hidden mb-5 -mt-12">

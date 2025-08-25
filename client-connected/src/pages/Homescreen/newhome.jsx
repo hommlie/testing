@@ -459,6 +459,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
   return (
     <div
       className="bg-cover bg-center bg-no-repeat font-headerFont"
+      style={{
+            background:
+              "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
     >
       <SchemaMarkup />
       <Helmet>
@@ -468,10 +472,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       
         <section
           className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-center bg-no-repeat h-[450px] md:h-auto"
-          style={{
-            background:
-              "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+          // style={{
+          //   background:
+          //     "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          // }}
         >
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
@@ -694,14 +698,14 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
     <ServiceSection categories={data.all_categories} />
         {/* <Roadmap />    */}
         <section className="px-2 sm:px-12" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
           <BannerImageMobile />
           <BannerImage />
         </section>
         
         <section className="px-10 py-5" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
           <SnabbitTasksUI />
         </section> 
@@ -711,7 +715,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <Testimonials />
         </section> */}
         <section className="px-2 sm:px-11" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
           <Scrapbanner />
           <Scrapmobile />
@@ -719,9 +723,9 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <section
           id="inspection-section"
           className="px-4 sm:px-10 py-0s sm:py-10"
-          style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+          // style={{
+          //   background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          // }}
         >
           <div className="max-w-7xl mx-auto">
             <InspectionFormSection />
@@ -892,7 +896,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
       {/* Stats Section */}
       <section className="px-10 py-5 md:py-10"  style={{
-        background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
       }}>
         <StatsSection />
       </section>
@@ -934,7 +938,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <Refermobile />
         </section> */}
       <section className="px-10 py-5 md:py-10" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
         <FaqSection />
       </section>
