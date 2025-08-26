@@ -33,6 +33,7 @@ import BlogPage from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import LandingPage from "./pages/LandingPage";
 import CommunitySoon from "./pages/ComingSoon";
+import HomeScreendup from "./pages/HomeScreendup";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -220,6 +221,10 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/community`,
       element: <CommunitySoon />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/quickservice`,
+      element: <HomeScreendup />,
     },
   ]);
 
