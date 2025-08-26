@@ -83,9 +83,6 @@ export function ContProvider({ children }) {
     getLocalStorageItem(`HommlieselectedCoupon`, {})
   );
   // const [coupons, setCoupons] = useState(() => getLocalStorageItem(`HommlieCoupons`, []));
-  const removeFromCart = (id) => {
-  setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-};
 
   const incrementApiCall = useCallback(() => {
     setActiveApiCalls((prev) => prev + 1);
@@ -440,7 +437,6 @@ export function ContProvider({ children }) {
     fetchAllData,
     startLoading: () => setIsLoading(true),
     stopLoading: () => setIsLoading(false),
-      removeFromCart,
   };
 
   return (

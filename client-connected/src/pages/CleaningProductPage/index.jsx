@@ -115,15 +115,14 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 };
 
 const CartSection = ({ cart }) => {
-  const { removeFromCart } = useCont();
-
   const calculateCartTotal = () => {
-  return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0).toFixed(3);
-  };
+  return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
+};
 
-  const calculateTaxTotal = () => {
-    return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0).toFixed(3);
-  };
+// const calculateTaxTotal = () => {
+//   return cart.reduce((sum, item) => sum + Number(item.tax || 0) * item.qty, 0);
+// };
+
 
   // const calculateSavings = () => {
   //   return cart.reduce((sum, item) => sum + 78, 0).toFixed(2); // Replace with actual savings calculation
@@ -155,12 +154,6 @@ const CartSection = ({ cart }) => {
                     <span className="text-sm text-gray-500 block">
                       Qty: {item.qty}
                     </span>
-                     <button
-                      onClick={() => removeFromCart(item.id)}
-                      className="text-red-500 text-xs mt-1 hover:underline"
-                    >
-                      Remove
-                    </button>
                   </div>
                 </div>
               ))}
@@ -168,7 +161,7 @@ const CartSection = ({ cart }) => {
               <div className="pt-2 space-y-2">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>₹{parseFloat(calculateCartTotal()).toFixed(2)}</span>
+                  <span>₹{calculateCartTotal().toFixed(2)}</span>
                 </div>
                 {/* <div className="flex justify-between text-gray-600">
                   <span>Platform Fee</span>
@@ -176,7 +169,7 @@ const CartSection = ({ cart }) => {
                 </div> */}
                 <div className="flex justify-between font-medium pt-2 border-t">
                   <span>Total</span>
-                  <span>₹{parseFloat(calculateCartTotal() + calculateTaxTotal()).toFixed(2)}</span>
+                  <span>₹{(calculateCartTotal()).toFixed(2)}</span>
                 </div>
               </div>
 
