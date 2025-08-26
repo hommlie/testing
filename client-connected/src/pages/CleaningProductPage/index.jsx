@@ -115,6 +115,8 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 };
 
 const CartSection = ({ cart }) => {
+  const { removeFromCart } = useCont();
+
   const calculateCartTotal = () => {
   return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0).toFixed(3);
   };
@@ -153,6 +155,12 @@ const CartSection = ({ cart }) => {
                     <span className="text-sm text-gray-500 block">
                       Qty: {item.qty}
                     </span>
+                     <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-red-500 text-xs mt-1 hover:underline"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               ))}
