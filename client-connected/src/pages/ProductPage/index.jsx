@@ -753,7 +753,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 checkoutPd={checkoutPd}
               />
 
-              <section className="bg-white rounded-lg md:p-4 md:mb-6 glow-border mt-5 md:mt-10">
+              <section className="bg-white rounded-lg md:p-4 md:mb-6 border border-black mt-5 md:mt-10">
                 <div className="relative h-[250px] lg:h-[400px]">
                   {imageItems.length > 0 && (
                     <div className="w-full h-full">
@@ -813,8 +813,8 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 </div> */} 
                 
                 {variations.length > 0 && (
-                  <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
-                    <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between block md:hidden  rounded-lg p-4 space-y-4 glow-border">
+                  <div className="bg-white rounded-lg p-4 space-y-4 border border-black">
+                    <div className="px-4 md:px-0 flex flex-col md:flex-row gap-4 justify-between block md:hidden  rounded-lg p-4 space-y-4 border border-black">
                       <div className="space-y-1 sm:space-y-3 lg:space-y-4">
                         <p className="text-[20px] sm:text-4xl font-bold mb-2">
                           {prodData?.product_name}
@@ -1049,7 +1049,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 )}
 
                 {prodData?.is_form === 0 && (
-                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
                     <div className="flex justify-between items-center mb-4">
                       <div className="flex items-center">
                         <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
@@ -1099,7 +1099,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 )}
 
                 {prodData?.is_form === 0 && (
-                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
                     <h3 className="text-xl font-semibold">Payment Summary</h3>
                     <div className="space-y-2">
                       <div className="flex flex-row justify-between">
@@ -1196,7 +1196,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 )}
 
                 {prodData?.is_form === 1 && (
-                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
                     <h3 className="text-xl font-semibold">
                       Book an Inspection
                     </h3>
@@ -1505,7 +1505,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 </div>
               </div> */}
 
-              <section className="bg-white rounded-lg p-4 glow-border">
+              <section className="bg-white rounded-lg p-4 border border-black">
                 <ul
                   className="flex mb-3"
                   style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
@@ -1702,7 +1702,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
             </div>
 
                 <div className="hidden md:block md:sticky top-48 z-10  lg:w-1/3 h-fit space-y-4 mt-[40px] ">
-                  <div className="bg-white rounded-lg p-4 mb-4 glow-border px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
+                  <div className="bg-white rounded-lg p-4 mb-4 border border-black px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
                     <div className="space-y-1 sm:space-y-3 lg:space-y-4">
                       <p className="text-2xl sm:text-2xl font-bold mb-2">
                         {prodData?.product_name}
@@ -1780,7 +1780,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               </div> */}
 
               {variations.length > 0 && (
-                <div className="bg-white rounded-lg p-4 space-y-4 glow-border">
+                <div className="bg-white rounded-lg p-4 space-y-4 border border-black">
                   <h3 className="text-xl font-semibold">Select Frequency</h3>
                   {/* <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-2">
@@ -1949,7 +1949,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               )}
 
               {prodData?.is_form === 0 && (
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center">
                       <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
@@ -1996,7 +1996,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               )}
 
               {prodData?.is_form === 0 && (
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
                   <h3 className="text-xl font-semibold">Payment Summary</h3>
                   <div className="space-y-2">
                     <div className="flex flex-row justify-between">
@@ -2091,7 +2091,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               )}
 
               {prodData?.is_form === 1 && (
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 glow-border">
+                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
                   <h3 className="text-xl font-semibold">Book an Inspection</h3>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -2293,7 +2293,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
           </section>
 
           <div className="flex flex-col gap-4 mt-4">
-            <section className="bg-white rounded-lg w-full p-4 glow-border">
+            <section className="bg-white rounded-lg w-full p-4 border border-black">
               <ProdSection
                 title="Similar Services"
                 items={visibleItems ? visibleItems : []}
