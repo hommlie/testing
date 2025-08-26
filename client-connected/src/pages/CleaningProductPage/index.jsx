@@ -116,11 +116,11 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 
 const CartSection = ({ cart }) => {
   const calculateCartTotal = () => {
-  return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0).toFixed(2);
+  return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0).toFixed(3);
   };
 
   const calculateTaxTotal = () => {
-    return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0).toFixed(2);
+    return cart.reduce((sum, item) => sum + Number(item.tax) * item.qty, 0).toFixed(3);
   };
 
   // const calculateSavings = () => {
