@@ -11,6 +11,9 @@ import ProductDetailModal from "../../components/ProductDetailsModal";
 import NoImage from "../../assets/bg/no-image.svg";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+
 
 const StarRating = ({ rating }) => {
   return (
@@ -114,11 +117,10 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
   );
 };
 
-const CartSection = ({ cart }) => {
-  const calculateCartTotal = () => {
-  return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
-};
-
+// const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
+//   const calculateCartTotal = () => {
+//     return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
+//   };
 // const calculateTaxTotal = () => {
 //   return cart.reduce((sum, item) => sum + Number(item.tax || 0) * item.qty, 0);
 // };
@@ -127,6 +129,11 @@ const CartSection = ({ cart }) => {
   // const calculateSavings = () => {
   //   return cart.reduce((sum, item) => sum + 78, 0).toFixed(2); // Replace with actual savings calculation
   // };
+
+  const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
+  const calculateCartTotal = () => {
+    return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
+  };
 
   return (
     <div className="overflow-y-auto">
@@ -141,44 +148,57 @@ const CartSection = ({ cart }) => {
                   key={item.id}
                   className="flex items-center justify-between py-2 border-b"
                 >
+                  {/* Product info */}
                   <div className="flex flex-col">
                     <span className="text-sm md:text-base font-medium">
                       {item.product_name}
                     </span>
-                    <span className="text-sm text-gray-500">
-                      {item.variation_name}
-                    </span>
+                    {item.variation_name && (
+                      <span className="text-sm text-gray-500">
+                        {item.variation_name}
+                      </span>
+                    )}
                   </div>
-                  <div className="text-right">
-                    <span className="font-medium">₹{item.price}</span>
-                    <span className="text-sm text-gray-500 block">
-                      Qty: {item.qty}
+
+                  {/* Line total + qty controls */}
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="font-medium">
+                      ₹{(Number(item.price) * item.qty).toFixed(2)}
                     </span>
+
+                    {/* ⬇️ The qty control you asked to reuse */}
+                    <div className="flex items-center border border-[#249370] rounded-lg">
+                      <button
+                        onClick={() => onUpdateQty(item.id, item.qty - 1)}
+                        className="px-2 py-1 text-[#249370] hover:bg-[#249370] hover:text-white"
+                        disabled={isQtyLoading && loadingItemId === item.id}
+                      >
+                        -
+                      </button>
+                      <span className="px-3">{item.qty}</span>
+                      <button
+                        onClick={() => onUpdateQty(item.id, item.qty + 1)}
+                        className="px-2 py-1 text-[#249370] hover:bg-[#249370] hover:text-white"
+                        disabled={isQtyLoading && loadingItemId === item.id}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
 
+              {/* Totals */}
               <div className="pt-2 space-y-2">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
                   <span>₹{calculateCartTotal().toFixed(2)}</span>
                 </div>
-                {/* <div className="flex justify-between text-gray-600">
-                  <span>Platform Fee</span>
-                  <span>₹{parseFloat(calculateTaxTotal()).toFixed(2)}</span>
-                </div> */}
                 <div className="flex justify-between font-medium pt-2 border-t">
                   <span>Total</span>
-                  <span>₹{(calculateCartTotal()).toFixed(2)}</span>
+                  <span>₹{calculateCartTotal().toFixed(2)}</span>
                 </div>
               </div>
-
-              {/* {calculateSavings() > 0 && (
-                <div className="flex items-center justify-between text-green-600 pt-2">
-                  <span>Congratulations!</span>
-                  <span>₹{parseFloat(calculateSavings()).toFixed(2)}</span>
-                </div>
-              )} */}
 
               <button
                 className="bg-emerald-600 hover:bg-emerald-700 w-full text-white py-2 rounded-md transition"
@@ -227,12 +247,14 @@ const CartSection = ({ cart }) => {
   );
 };
 
+
 const CleaningProductPage = () => {
   const locationState = useLocation().state;
   const location = locationState?.location;
   const { slug, tag } = useParams();
   const navigate = useNavigate();
-  const { cart, user, checkoutPd } = useCont();
+  const { cart, user, checkoutPd, getCart } = useCont();
+
 
   const [isLoading, setIsLoading] = useState(false);
   const [innerSubCategoryData, setInnerSubCategoryData] = useState(null);
@@ -248,6 +270,10 @@ const CleaningProductPage = () => {
   const [openSection, setOpenSection] = useState("");
 
   const productRefs = useRef([]);
+
+  const [isQtyLoading, setIsQtyLoading] = useState(false);
+  const [loadingItemId, setLoadingItemId] = useState(null);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -377,6 +403,56 @@ const CleaningProductPage = () => {
     // Complete canonical URL
     return `${baseUrl}${path}`;
   };
+
+  const handleRemoveFromCart = async (cartId) => {
+  const jwtToken = Cookies.get("HommlieUserjwtToken");
+  if (!jwtToken) {
+    setIsModalOpen(true); // open login modal if you want
+    return;
+  }
+  const decoded = jwtDecode(jwtToken);
+
+  try {
+    await axios.post(
+      `${config.API_URL}/api/deleteproduct`,
+      { user_id: decoded.id, cart_id: cartId },
+      { headers: { Authorization: `Bearer ${jwtToken}` } }
+    );
+    await getCart();
+  } catch (err) {
+    console.error("error removing from cart:", err);
+  }
+};
+
+const handleQtyUpdate = async (cartId, newQty) => {
+  const jwtToken = Cookies.get("HommlieUserjwtToken");
+  if (!jwtToken) {
+    setIsModalOpen(true);
+    return;
+  }
+
+  setIsQtyLoading(true);
+  setLoadingItemId(cartId);
+
+  try {
+    if (newQty <= 0) {
+      await handleRemoveFromCart(cartId);
+    } else {
+      const res = await axios.post(
+        `${config.API_URL}/api/qtyUpdate`,
+        { qty: newQty, cart_id: cartId },
+        { headers: { Authorization: `Bearer ${jwtToken}` } }
+      );
+      // Optional: check res.data.status === 1
+      await getCart();
+    }
+  } catch (err) {
+    console.error("error updating cart:", err);
+  } finally {
+    setIsQtyLoading(false);
+    setLoadingItemId(null);
+  }
+};
 
   return (
     <main className="md:max-w-7xl w-full" style={{
@@ -652,7 +728,13 @@ const CleaningProductPage = () => {
             {/* Right Cart Section */}
             <div className="lg:w-1/4">
               <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
-                <CartSection cart={cart} />
+                <CartSection
+  cart={cart}
+  onUpdateQty={handleQtyUpdate}
+  isQtyLoading={isQtyLoading}
+  loadingItemId={loadingItemId}
+/>
+
               </div>
             </div>
           </div>
