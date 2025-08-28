@@ -56,7 +56,9 @@ const PartnerWithUs = () => {
     };
 
     return (
-        <div className="min-h-screen font-sans bg-white">
+        <div className="min-h-screen font-sans"
+        style={{background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)"}}
+        >
         <main className="container mx-auto px-4 py-16">
             <section className="mb-24 text-center space-y-12">
             <h1 className="text-5xl font-extrabold mb-6 text-gray-800">

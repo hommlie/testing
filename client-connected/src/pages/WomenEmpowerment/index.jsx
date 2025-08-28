@@ -69,7 +69,12 @@ export default function WomenEmpowerment() {
   };
 
   return (
-    <main className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-10 xl:px-20 py-8 sm:py-10 lg:py-12 flex flex-col gap-10 sm:gap-12 lg:gap-16 overflow-x-hidden">
+    <main className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-10 xl:px-20 py-8 sm:py-10 lg:py-12 flex flex-col gap-10 sm:gap-12 lg:gap-16 overflow-x-hidden"
+    style={{
+            background:
+              "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
+          >
       {/* floating bg art (hidden on small) */}
       <img
         className="hidden xl:block pointer-events-none select-none absolute -left-2 top-[280px] max-w-none"
