@@ -33,6 +33,10 @@ import BlogPage from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import LandingPage from "./pages/LandingPage";
 import CommunitySoon from "./pages/ComingSoon";
+import HelpModal from "./components/HelpModal";
+import { useCont } from "./context/MyContext";
+import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import HomeScreendup from "./pages/HomeScreendup";
 
 const ProjectRoutes = () => {
@@ -62,6 +66,17 @@ const ProjectRoutes = () => {
     }
     return children;
   };
+
+
+ 
+  function HelpPage() {
+    const { user } = useCont();
+    const [forceLogin, setForceLogin] = useState(false);
+    useEffect(() => {
+      if (!user?.name) setForceLogin(true);
+    }, [user]);
+    return <HelpModal isOpen={true} onClose={() => navigate(`${config.VITE_BASE_URL}/`)} forceLogin={forceLogin} />;
+  }
 
   let element = useRoutes([
     { path: "*", element: <NotFound /> },
@@ -225,6 +240,10 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/quickservice`,
       element: <HomeScreendup />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/help`,
+      element: <HelpPage />,
     },
   ]);
 

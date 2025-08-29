@@ -18,10 +18,17 @@ import { NavLink } from "react-router-dom";
 import ReferAndEarn from "../ReferAndEarnModal";
 import AddressModal from "../AddressModal";
 
-const HelpModal = ({ isOpen, onClose }) => {
+
+const HelpModal = ({ isOpen, onClose, forceLogin }) => {
   const { user, setUser } = useCont();
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [selectedTopic, setSelectedTopic] = React.useState(null);
+
+  React.useEffect(() => {
+    if (forceLogin && !user?.name) {
+      setIsLoginOpen(true);
+    }
+  }, [forceLogin, user]);
 
   const handleLogout = () => {
     setUser([]);
