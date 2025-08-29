@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Share2, MessageSquare, Edit2, Trash2, Send, X } from "lucide-react";
+import { Share2, MessageSquare, Edit2, Trash2 } from "lucide-react";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import axios from "axios";
@@ -9,6 +9,7 @@ import LoginSignup from "../../components/LoginModal";
 import RelatedBlogs from "./RelatedBlogs";
 import { Helmet } from "react-helmet";
 
+// ================= Comment Component =================
 const Comment = React.memo(
   ({
     comment,
@@ -22,15 +23,17 @@ const Comment = React.memo(
     replyingTo,
     setReplyingTo,
   }) => {
-    const paddingLeft = level * 2;
+    const paddingLeft = level * 24; // Better control for nesting
 
     return (
-      <div className={`pl-${paddingLeft} mt-4`}>
-        <div className="bg-white rounded-lg p-6 border border-gray-200 transition-all hover:shadow-md">
-          <div className="flex justify-between items-start mb-4">
+      <div className="mt-6" style={{ paddingLeft }}>
+        <div className="bg-white rounded-xl p-5 border border-gray-200 transition-all hover:shadow-md">
+          <div className="flex justify-between items-start mb-3">
             <div>
-              <h3 className="font-semibold">{comment.author.name}</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-semibold text-gray-800">
+                {comment.author.name}
+              </h3>
+              <p className="text-xs text-gray-500">
                 {new Date(comment.created_at).toLocaleDateString()}
               </p>
             </div>
@@ -41,13 +44,13 @@ const Comment = React.memo(
                   onClick={() => setEditingComment(comment)}
                   className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  <Edit2 className="w-4 h-4" />
+                  <Edit2 className="w-4 h-4 text-gray-600" />
                 </button>
                 <button
                   onClick={() => onDelete(comment.id)}
                   className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4 text-red-500" />
                 </button>
               </div>
             )}
@@ -69,31 +72,33 @@ const Comment = React.memo(
                     content: e.target.value,
                   })
                 }
-                className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
               />
               <div className="flex gap-2 mt-2">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                  className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm"
                 >
                   Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingComment(null)}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
                 >
                   Cancel
                 </button>
               </div>
             </form>
           ) : (
-            <p className="text-gray-700">{comment.content}</p>
+            <p className="text-gray-700 text-sm leading-relaxed">
+              {comment.content}
+            </p>
           )}
 
           <button
             onClick={() => setReplyingTo({ id: comment.id, newReply: "" })}
-            className="mt-4 text-sm text-gray-500 hover:text-gray-700 flex items-center gap-2"
+            className="mt-3 text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
           >
             <MessageSquare className="w-4 h-4" />
             Reply
@@ -105,7 +110,7 @@ const Comment = React.memo(
                 e.preventDefault();
                 onReply(comment.id, replyingTo.newReply);
               }}
-              className="mt-4"
+              className="mt-3"
             >
               <textarea
                 value={replyingTo.newReply}
@@ -116,19 +121,19 @@ const Comment = React.memo(
                   })
                 }
                 placeholder="Write a reply..."
-                className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-20 text-sm"
               />
               <div className="flex gap-2 mt-2">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                  className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm"
                 >
                   Reply
                 </button>
                 <button
                   type="button"
                   onClick={() => setReplyingTo(null)}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
                 >
                   Cancel
                 </button>
@@ -157,6 +162,7 @@ const Comment = React.memo(
   }
 );
 
+// ================= BlogPost Component =================
 const BlogPost = () => {
   const { slug } = useParams();
   const { user } = useCont();
@@ -230,7 +236,7 @@ const BlogPost = () => {
   }, [slug, navigate]);
 
   const handleCommentSubmit = async (parentId = null, content = newComment) => {
-    if (!user && !user.length) {
+    if (!user || !user.id) {
       setIsLoginOpen(true);
       return null;
     }
@@ -257,7 +263,7 @@ const BlogPost = () => {
   };
 
   const handleCommentEdit = async (commentId, content) => {
-    if (!user && !user.length) {
+    if (!user || !user.id) {
       setIsLoginOpen(true);
       return null;
     }
@@ -265,9 +271,7 @@ const BlogPost = () => {
     try {
       const res = await axios.put(
         `${config.API_URL}/api/comments/update/${commentId}/${user.id}`,
-        {
-          content,
-        }
+        { content }
       );
 
       if (res.data.status === 1) {
@@ -281,7 +285,7 @@ const BlogPost = () => {
   };
 
   const handleCommentDelete = async (commentId) => {
-    if (!user && !user.length) {
+    if (!user || !user.id) {
       setIsLoginOpen(true);
       return null;
     }
@@ -326,137 +330,121 @@ const BlogPost = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6B1F40]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
-  if (!blog) {
-    return null;
-  }
+  if (!blog) return null;
 
-  // Generate canonical URL based on the current location
   const generateCanonicalUrl = () => {
-    // Base URL from your config
     const baseUrl = config.VITE_BASE_URL || "https://www.hommlie.com";
-
-    // Determine the path based on current parameters
     let path = `/blog/${slug}`;
-
-    // Complete canonical URL
     return `${baseUrl}${path}`;
   };
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto">
+    <div className="min-h-screen max-w-7xl mx-auto font-sans">
       <Helmet>
         <title>{blog?.meta_title || "Category Page"}</title>
         <meta name="description" content={blog?.meta_description || ""} />
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
 
-      <div className="relative h-[500px]">
+      {/* Hero Section */}
+      <div className="relative h-[450px] sm:h-[500px] rounded-b-2xl overflow-hidden">
         <img
           src={blog.featured_image || "/api/placeholder/1920/500"}
           alt={blog.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="text-center text-white max-w-4xl px-4">
-            <h1 className="text-5xl font-italiana mb-4">{blog.title}</h1>
-            <p className="text-xl">{blog.meta_description}</p>
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center px-4">
+          <div className="text-center text-white max-w-3xl">
+            <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight">
+              {blog.title}
+            </h1>
+            <p className="text-base sm:text-lg text-gray-200">
+              {blog.meta_description}
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="px-4 py-12">
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="capitalize text-emerald-500">
-                {blog.BlogCategory?.title}
-              </span>
-              <span className="mx-2">•</span>
-              <span className="text-gray-500">
-                {new Date(blog.created_at).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-            </div>
+      {/* Blog Content */}
+      <div className="px-4 sm:px-8 lg:px-16 py-12">
+        <div className="mb-10 flex items-center justify-between text-sm">
+          <div>
+            <span className="capitalize text-emerald-600 font-medium">
+              {blog.BlogCategory?.title}
+            </span>
+            <span className="mx-2">•</span>
+            <span className="text-gray-500">
+              {new Date(blog.created_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </div>
 
-            <div className="relative">
-              <button
-                onClick={() => setShareMenuOpen(!shareMenuOpen)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
+          <div className="relative">
+            <button
+              onClick={() => setShareMenuOpen(!shareMenuOpen)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <Share2 className="w-5 h-5 text-gray-600" />
+            </button>
 
-              {shareMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+            {shareMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+                {["twitter", "facebook", "linkedin", "email"].map((p) => (
                   <button
-                    onClick={() => handleShare("twitter")}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                    key={p}
+                    onClick={() => handleShare(p)}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm capitalize"
                   >
-                    Share on Twitter
+                    Share on {p}
                   </button>
-                  <button
-                    onClick={() => handleShare("facebook")}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
-                  >
-                    Share on Facebook
-                  </button>
-                  <button
-                    onClick={() => handleShare("linkedin")}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
-                  >
-                    Share on LinkedIn
-                  </button>
-                  <button
-                    onClick={() => handleShare("email")}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
-                  >
-                    Share via Email
-                  </button>
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="ck-content">
-          <div
-            className="space-y-4 prose prose-sm sm:prose lg:prose-2xl max-w-none"
-            dangerouslySetInnerHTML={{
-              __html: blog.content,
-            }}
-          />
-        </div>
 
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-8">Comments</h2>
+        {/* Blog Content - Full Width Responsive */}
+<div className="w-full px-4 sm:px-6 md:px-10 lg:px-20 xl:px-32 py-12">
+  <div
+    className="max-w-screen-2xl mx-auto text-lg leading-8 tracking-wide text-justify space-y-6 text-gray-800"
+    dangerouslySetInnerHTML={{ __html: blog.content }}
+  />
+</div>
+
+        {/* Comments */}
+        <div className="mt-16 border-t border-gray-200 pt-10">
+          <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800">
+            Comments
+          </h2>
 
           <form onSubmit={handleCommentSubmit} className="mb-12">
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add a comment..."
-                className="flex-1 p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24"
+                className="flex-1 p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24 text-sm"
               />
               <button
                 type="submit"
                 disabled={!newComment.trim()}
-                className="px-6 py-2 h-fit bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm h-fit"
               >
                 Post
               </button>
             </div>
           </form>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {comments?.map((comment) => (
               <Comment
                 key={comment.id}
@@ -474,9 +462,11 @@ const BlogPost = () => {
           </div>
         </div>
 
+        {/* Related Blogs */}
         <RelatedBlogs blogs={relatedBlogs} />
 
-        <div className="mt-12">
+        {/* Back Button */}
+        <div className="mt-12 flex justify-center">
           <button
             onClick={() => navigate(`${config.VITE_BASE_URL}/blogs`)}
             className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
