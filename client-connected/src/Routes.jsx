@@ -75,7 +75,8 @@ const ProjectRoutes = () => {
     useEffect(() => {
       if (!user?.name) setForceLogin(true);
     }, [user]);
-    return <HelpModal isOpen={true} onClose={() => navigate(`${config.VITE_BASE_URL}/`)} forceLogin={forceLogin} />;
+    // Render HelpModal as a full page (not modal)
+    return <HelpModal asPage={true} forceLogin={forceLogin} />;
   }
 
   let element = useRoutes([

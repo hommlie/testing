@@ -19,7 +19,8 @@ import ReferAndEarn from "../ReferAndEarnModal";
 import AddressModal from "../AddressModal";
 
 
-const HelpModal = ({ isOpen, onClose, forceLogin }) => {
+// Accepts `asPage` prop to render as a full page (no modal overlay/close)
+const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
   const { user, setUser } = useCont();
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [selectedTopic, setSelectedTopic] = React.useState(null);
@@ -136,40 +137,53 @@ const HelpModal = ({ isOpen, onClose, forceLogin }) => {
       </NavLink>
 
       <button
-  onClick={() => {
-    setSelectedTopic(null);
-    setIsAddressModalOpen(true);
-  }}
-  className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
->
-  <MdLocationOn className="text-emerald-600 w-6 h-6" />
-  <span className="text-sm font-medium text-gray-800">
-    Your Addresses
-  </span>
-</button>
+        onClick={() => {
+          setSelectedTopic(null);
+          setIsAddressModalOpen(true);
+        }}
+        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
+      >
+        <MdLocationOn className="text-emerald-600 w-6 h-6" />
+        <span className="text-sm font-medium text-gray-800">
+          Your Addresses
+        </span>
+      </button>
 
-<button
-  onClick={() => {
-    setSelectedTopic(null);
-    setIsReferAndEarnOpen(true);
-  }}
-  className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
->
-  <FaGift className="text-emerald-600 w-6 h-6" />
-  <span className="text-sm font-medium text-gray-800">Refer & Earn</span>
-</button>
+      <button
+        onClick={() => {
+          setSelectedTopic(null);
+          setIsReferAndEarnOpen(true);
+        }}
+        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
+      >
+        <FaGift className="text-emerald-600 w-6 h-6" />
+        <span className="text-sm font-medium text-gray-800">Refer & Earn</span>
+      </button>
 
-    </div>
-  </div>
-);
+          </div>
+        </div>
+      );
 
 
-  if (!isOpen) return null;
+  if (!isOpen && !asPage) return null;
 
+  // If asPage, remove modal overlay and centering, use responsive container
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-center items-center p-4">
-        <div className="bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col max-h-[90vh]">
+      <div
+        className={
+          asPage
+            ? "w-full min-h-screen flex justify-center items-start bg-gray-50 py-8 px-2"
+            : "fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-center items-center p-4"
+        }
+      >
+        <div
+          className={
+            asPage
+              ? "bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col min-h-[80vh]"
+              : "bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col max-h-[90vh]"
+          }
+        >
           {/* Modal Header */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex justify-between items-start">
@@ -177,12 +191,14 @@ const HelpModal = ({ isOpen, onClose, forceLogin }) => {
                 <h2 className="text-2xl font-bold text-gray-800">Help Center</h2>
                 <p className="text-gray-600">How can we help you today?</p>
               </div>
-              <button
-                className="text-gray-600 hover:text-black"
-                onClick={onClose}
-              >
-                <FaTimes size={20} />
-              </button>
+              {!asPage && (
+                <button
+                  className="text-gray-600 hover:text-black"
+                  onClick={onClose}
+                >
+                  <FaTimes size={20} />
+                </button>
+              )}
             </div>
 
             {/* User Status Section */}
@@ -250,7 +266,7 @@ const HelpModal = ({ isOpen, onClose, forceLogin }) => {
                         <NavLink
                           key={idx}
                           to={topic.route}
-                          onClick={onClose}
+                          onClick={asPage ? undefined : onClose}
                           className="border rounded-lg p-4 flex flex-col items-center hover:shadow transition cursor-pointer hover:border-emerald-200"
                         >
                           <div className="text-3xl mb-2">{topic.icon}</div>
@@ -287,6 +303,7 @@ const HelpModal = ({ isOpen, onClose, forceLogin }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="border rounded-lg p-4 flex items-center gap-4 hover:shadow transition cursor-pointer hover:border-emerald-200"
+                        tabIndex={0}
                       >
                         <div className="flex-shrink-0">{method.icon}</div>
                         <div>
