@@ -377,14 +377,13 @@ const handleComplaintSubmit = async () => {
     if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
 
     const res = await axios.post(
-      `${config.API_URL}/api/raisecomplaint`,
-      {
-        orderId: complaintOrder?.id,   // send which order the complaint is for
-        complaintText,                 // the description only
-      },
-      { headers }
-    );
-
+  `${config.API_URL}/api/raisecomplaint`,
+  {
+    orderId: complaintOrder?.id,
+    complaintText,
+  },
+  { headers }
+);
     console.log("Server Response:", res.data);
     successNotify("Complaint submitted successfully!");
     closeComplaintModal();
@@ -893,13 +892,12 @@ const handleComplaintSubmit = async () => {
                   Cancel
                 </button>
                 <button
-  onClick={handleComplaintSubmit}
-  disabled={isSubmittingComplaint}
-  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
->
-  {isSubmittingComplaint ? "Submitting..." : "Submit Complaint"}
-</button>
-
+                  onClick={handleComplaintSubmit}
+                  disabled={isSubmittingComplaint}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                >
+                  {isSubmittingComplaint ? "Submitting..." : "Submit Complaint"}
+                </button>
               </div>
             </div>
           </div>
