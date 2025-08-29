@@ -76,7 +76,11 @@ const ContactUs = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-50">
+    <div className="max-w-7xl mx-auto p-6 bg-gray-50"
+      style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
+    >
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">Contact Us</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white rounded-lg shadow-md p-6">

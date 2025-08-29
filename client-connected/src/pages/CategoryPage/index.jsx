@@ -101,7 +101,11 @@ const CategoryPage = () => {
   }
 
   return (
-    <main className="md:max-w-7xl mx-auto w-full">
+    <main className="md:max-w-7xl mx-auto w-full"
+      style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
+    >
       <div className="container px-4 pt-6 md:pt-10">
         {/* Banner Section */}
         <div className="relative bg-hommlie w-full h-[150px] md:h-[300px] rounded-xl overflow-hidden mb-8">
