@@ -355,6 +355,7 @@ export default function BlogPage() {
             className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mt-10 mb-8"
             aria-label="Pagination"
           >
+            {/* Previous Arrow */}
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
@@ -364,21 +365,31 @@ export default function BlogPage() {
               <ChevronLeft className="w-5 h-5" />
             </button>
 
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                onClick={() => setCurrentPage(n)}
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg border text-sm sm:text-base transition-colors ${
-                  currentPage === n
-                    ? "bg-emerald-500 text-white border-emerald-500"
-                    : "border-gray-200 hover:bg-emerald-50"
-                }`}
-                aria-current={currentPage === n ? "page" : undefined}
-              >
-                {n}
-              </button>
-            ))}
+            {/* Page Numbers */}
+            {(() => {
+              const windowSize = 10; // show only 10 at a time
+              const windowStart = Math.floor((currentPage - 1) / windowSize) * windowSize + 1;
+              const windowEnd = Math.min(windowStart + windowSize - 1, totalPages);
 
+              return Array.from({ length: windowEnd - windowStart + 1 }, (_, i) => windowStart + i).map(
+                (n) => (
+                  <button
+                    key={n}
+                    onClick={() => setCurrentPage(n)}
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg border text-sm sm:text-base transition-colors ${
+                      currentPage === n
+                        ? "bg-emerald-500 text-white border-emerald-500"
+                        : "border-gray-200 hover:bg-emerald-50"
+                    }`}
+                    aria-current={currentPage === n ? "page" : undefined}
+                  >
+                    {n}
+                  </button>
+                )
+              );
+            })()}
+
+            {/* Next Arrow */}
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
@@ -389,6 +400,7 @@ export default function BlogPage() {
             </button>
           </motion.nav>
         )}
+
       </div>
     </main>
   );
