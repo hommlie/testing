@@ -424,8 +424,8 @@ const handleComplaintSubmit = async () => {
             </div>
           </div>
 
-          {/* Filter Panel */}
-          <div className="mt-4 border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          {/* <div className="mt-4 border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Service Status
@@ -500,7 +500,7 @@ const handleComplaintSubmit = async () => {
                 Reset Filters
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Filter Badges */}
@@ -633,133 +633,132 @@ const handleComplaintSubmit = async () => {
 
                 <div className="divide-y divide-gray-100">
                   {orders.map((od, index) => (
-                    <div key={index} className="p-6">
-                      <div className="flex flex-col lg:flex-row gap-6">
-                        <div
-                          onClick={() => handleProductClick(od)}
-                          className="w-full lg:w-1/4 cursor-pointer"
-                        >
-                          <div className="relative overflow-hidden rounded-lg shadow-md group">
-                            <img
-                              src={od.image}
-                              alt={od.product_name}
-                              className="w-full h-48 transform transition-transform duration-300 group-hover:scale-110 object-cover"
-                            />
+                  <div
+                    key={index}
+                    className="bg-white shadow-md rounded-xl overflow-hidden mb-6 border hover:shadow-lg transition-shadow"
+                  >
+                    <div className="flex flex-col lg:flex-row">
+                      {/* Left side - Product Image (commented out) */}
+                      {/*
+                      <div
+                        onClick={() => handleProductClick(od)}
+                        className="w-full lg:w-1/4 cursor-pointer"
+                      >
+                        <div className="relative overflow-hidden h-52 lg:h-full group">
+                          <img
+                            src={od.image || "/placeholder.jpg"}
+                            alt={od.product_name}
+                            className="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      </div>
+                      */}
+
+                      {/* Right side - Order Details (now full width) */}
+                      <div className="flex-1 p-6 flex flex-col justify-between">
+                        {/* Top Row: Status + Actions */}
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                          <span
+                            className={`inline-block px-4 py-1.5 rounded-full text-sm border font-medium ${getStatusStyles(
+                              od?.order_status
+                            )}`}
+                          >
+                            {OrderStatuses[od?.order_status]}
+                          </span>
+
+                          <div className="flex gap-4 flex-wrap">
+                            <NavLink
+                              to={`${config.VITE_BASE_URL}/track-order/${od.id}`}
+                              className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 gap-1.5"
+                            >
+                              <LiaShippingFastSolid className="text-xl" />
+                              <span className="font-medium">Track Order</span>
+                            </NavLink>
+
+                            {od?.order_status === 0 && (
+                              <button
+                                onClick={() => handleCancelOrder(od.id)}
+                                className="text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+                              >
+                                Cancel Order
+                              </button>
+                            )}
+
+                            {od?.order_status === 4 && (
+                              <>
+                                <button
+                                  onClick={() => openReviewModal(od)}
+                                  className="text-green-600 hover:text-green-800 font-medium transition-colors duration-200"
+                                >
+                                  Write Review
+                                </button>
+                                <button
+                                  onClick={() => generateInvoicePDF(od)}
+                                  disabled={loadingPdf}
+                                  className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200 gap-1.5"
+                                >
+                                  <FaFileInvoice className="text-xl" />
+                                  <span className="font-medium">
+                                    {loadingPdf ? "Generating..." : "Download Invoice"}
+                                  </span>
+                                </button>
+                                <button
+                                  onClick={() => generateServiceReportPDF(od)}
+                                  disabled={loadingPdf}
+                                  className="flex items-center text-purple-600 hover:text-purple-800 transition-colors duration-200 gap-1.5"
+                                >
+                                  <FaFilePdf className="text-xl" />
+                                  <span className="font-medium">
+                                    {loadingPdf ? "Generating..." : "Service Report"}
+                                  </span>
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
 
-                        <div className="flex-1 space-y-4">
-                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-                            <div>
-                              <span
-                                className={`inline-block px-4 py-1.5 rounded-full text-sm border ${getStatusStyles(
-                                  od?.order_status
-                                )}`}
-                              >
-                                {OrderStatuses[od?.order_status]}
-                              </span>
-                            </div>
-                            <div className="flex gap-4 flex-wrap">
-                              <NavLink
-                                to={`${config.VITE_BASE_URL}/track-order/${od.id}`}
-                                className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 gap-1.5"
-                              >
-                                <LiaShippingFastSolid className="text-xl" />
-                                <span className="font-medium">Track Order</span>
-                              </NavLink>
-                              {od?.order_status === 0 && (
-                                <button
-                                  onClick={() => handleCancelOrder(od.id)}
-                                  className="text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
-                                >
-                                  Cancel Order
-                                </button>
-                              )}
-                              {od?.order_status === 4 && (
-                                <>
-                                  <button
-                                    onClick={() => openReviewModal(od)}
-                                    className="text-green-600 hover:text-green-800 font-medium transition-colors duration-200"
-                                  >
-                                    Write Review
-                                  </button>
-                                  <button
-                                    onClick={() => generateInvoicePDF(od)}
-                                    disabled={loadingPdf}
-                                    className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200 gap-1.5"
-                                  >
-                                    <FaFileInvoice className="text-xl" />
-                                    <span className="font-medium">
-                                      {loadingPdf
-                                        ? "Generating..."
-                                        : "Download Invoice"}
-                                    </span>
-                                  </button>
-                                  <button
-                                    onClick={() => generateServiceReportPDF(od)}
-                                    disabled={loadingPdf}
-                                    className="flex items-center text-purple-600 hover:text-purple-800 transition-colors duration-200 gap-1.5"
-                                  >
-                                    <FaFilePdf className="text-xl" />
-                                    <span className="font-medium">
-                                      {loadingPdf
-                                        ? "Generating..."
-                                        : "Service Report"}
-                                    </span>
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
+                        {/* Product Info */}
+                        <div className="mt-4">
+                          <h4 className="text-lg font-semibold text-gray-900">
+                            {od?.product_name}
+                          </h4>
+                          <p className="text-gray-600">
+                            {od?.attribute} {od?.variation ? `(${od?.variation})` : null}
+                          </p>
+                        </div>
 
+                        {/* Order Info Grid */}
+                        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
                           <div>
-                            <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                              {od?.product_name}
-                            </h4>
-                            <p className="text-gray-600 mb-4">
-                              {od?.attribute}{" "}
-                              {od?.variation ? `(${od?.variation})` : null}
+                            <p className="text-gray-500">Quantity</p>
+                            <p className="font-medium text-gray-900">{od?.qty}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500">Price (Including Tax)</p>
+                            <p className="font-medium text-gray-900">₹{od?.price}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500">Scheduled Time</p>
+                            <p className="font-medium text-gray-900">
+                              {od?.desired_date} at {od?.desired_time}
                             </p>
                           </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <p className="text-gray-500">Quantity</p>
-                              <p className="font-medium text-gray-900">
-                                {od?.qty}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-gray-500">
-                                Price (Including tax)
-                              </p>
-                              <p className="font-medium text-gray-900">
-                                ₹{od?.price}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-gray-500">Total Amount</p>
-                              <p className="font-medium text-gray-900">
-                                ₹{od?.grand_total}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-gray-500">Scheduled Time</p>
-                              <p className="font-medium text-gray-900">
-                                {od?.desired_date} at {od?.desired_time}
-                              </p>
-                            </div>
-                          </div>
+                          {/* Uncomment if you want Total */}
+                          {/* <div>
+                            <p className="text-gray-500">Total Amount</p>
+                            <p className="font-medium text-gray-900">₹{od?.grand_total}</p>
+                          </div> */}
                         </div>
                       </div>
                     </div>
-                  ))}
-
+                  </div>
+                ))}
                   <div className="bg-gray-50 p-6">
                     <h5 className="font-semibold text-gray-900 mb-4">
                       Order Summary
                     </h5>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div className="flex flex-col md:flex-row md:items-start md:gap-10 text-sm">
+                      {/* Delivery Address */}
                       <div>
                         <p className="text-gray-500">Delivery Address</p>
                         <p className="font-medium text-gray-900">
@@ -770,30 +769,34 @@ const handleComplaintSubmit = async () => {
                           {orders[0]?.mobile}
                         </p>
                       </div>
+
+                      {/* Payment Method */}
                       <div>
                         <p className="text-gray-500">Payment Method</p>
                         <p className="font-medium text-gray-900">
                           {orders[0]?.payment?.payment_name}
                         </p>
                       </div>
-                      {orders[0]?.coupon_name &&
-                        orders[0]?.coupon_name !== 0 && (
-                          <div>
-                            <p className="text-gray-500">Applied Coupon</p>
-                            <p className="font-medium text-gray-900">
-                              {orders[0]?.coupon_name}
-                            </p>
-                          </div>
-                        )}
-                      {orders[0]?.discount_amount &&
-                        orders[0]?.discount_amount !== 0 && (
-                          <div>
-                            <p className="text-gray-500">Total Discount</p>
-                            <p className="font-medium text-gray-900">
-                              ₹{findTotalDiscount(orders)}
-                            </p>
-                          </div>
-                        )}
+
+                      {/* Applied Coupon */}
+                      {orders[0]?.coupon_name && orders[0]?.coupon_name !== 0 && (
+                        <div>
+                          <p className="text-gray-500">Applied Coupon</p>
+                          <p className="font-medium text-gray-900">
+                            {orders[0]?.coupon_name}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Discount (optional) */}
+                      {orders[0]?.discount_amount && orders[0]?.discount_amount !== 0 && (
+                        <div>
+                          {/* <p className="text-gray-500">Total Discount</p>
+                          <p className="font-medium text-gray-900">
+                            ₹{findTotalDiscount(orders)}
+                          </p> */}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
