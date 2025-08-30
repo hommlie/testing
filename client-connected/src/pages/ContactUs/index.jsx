@@ -82,7 +82,7 @@ const ContactUs = () => {
           }}
     >
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">Contact Us</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:ml-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -156,7 +156,7 @@ const ContactUs = () => {
             </div>
           </form>
         </div>
-        <div className="space-y-6">
+        <div className="space-y-6 sm:mr-6">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">Need help?</h2>
             <p className="mb-4" style={{color: "#545454"}} >

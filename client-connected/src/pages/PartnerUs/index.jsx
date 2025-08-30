@@ -87,7 +87,7 @@ const PartnerWithUs = () => {
 
             <section className="mb-24">
             <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Join us in these categories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:ml-8">
                 {[
                 { title: "AC & appliance technicians", description: "Installation, repairs, maintenance, servicing, cleaning" },
                 { title: "Electricians, plumbers & carpenters", description: "Furniture installation, plumbing repairs, wiring or rewiring" },
@@ -108,7 +108,7 @@ const PartnerWithUs = () => {
 
             <section className="mb-24">
             <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">How Hommlie Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:ml-8">
                 {[
                 { title: "Use the app", description: "Tell us when and where you want to work" },
                 { title: "Delight your customers", description: "Work your magic in a 1:1 setting with your clients" },
@@ -122,9 +122,9 @@ const PartnerWithUs = () => {
             </div>
             </section>
 
-            <section className="mb-24">
+            {/* <section className="mb-24">
                 <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Join Hommlie in 3 easy steps</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 sm:ml-8">
                     {[
                     {
                         number: 1,
@@ -159,9 +159,9 @@ const PartnerWithUs = () => {
                     </div>
                     ))}
                 </div>
-            </section>
+            </section> */}
 
-            <section id='form' ref={formRef} className="flex flex-col items-center px-5 w-full max-w-4xl mx-auto max-md:py-16">
+            <section id='form' ref={formRef} className="flex flex-col items-center px-5 w-full max-w-4xl mx-auto max-md:py-16 sm:-mt-16">
                 <h2 className="text-4xl font-black tracking-tighter text-black capitalize bg-clip-text bg-white mb-8">
                 Why work with us?
                 </h2>
@@ -217,7 +217,7 @@ const PartnerWithUs = () => {
                 </form>
             </section>
 
-            <section className="text-center text-white py-16 shadow-2xl mt-4" style={{backgroundColor: "#249370"}}>
+            <section className="ml-8 mr-10 text-center text-white py-16 shadow-2xl sm:mt-10" style={{backgroundColor: "#249370"}}>
                 <h2 className="text-4xl font-bold mb-8">Ready to transform your career?</h2>
                 <button onClick={scrollToForm} style={{color: "#249370"}} className="bg-white px-10 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-xl transform hover:scale-105">
                     Join 50,000+ other partners

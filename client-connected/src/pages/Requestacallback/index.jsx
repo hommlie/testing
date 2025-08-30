@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import axios from 'axios';
 import config from '../../config/config';
 
-const ContactForm = ({ user, isOpen, onClose }) => {
+const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
   const [callbackName, setCallbackName] = useState('');
   const [callbackPhone, setCallbackPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
@@ -35,9 +35,12 @@ const ContactForm = ({ user, isOpen, onClose }) => {
     const fullPhone = `${countryCode}${callbackPhone.trim()}`;
 
     try {
+      const address = source === "qrproject"
+        ? "Callback request from qrproject"
+        : "Callback request from homepage";
       await axios.post(`${config.API_URL}/api/createInspection`, {
         fullName: callbackName,
-        address: "Callback request from homepage",
+        address,
         mobile: fullPhone,
         email: "",
         date: new Date().toISOString(),

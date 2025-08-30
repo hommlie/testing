@@ -375,8 +375,9 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
       {isCallbackOpen && (
         <ContactForm
           user={user}
-          isOpen={isCallbackOpen}   // pass open state
+          isOpen={isCallbackOpen}
           onClose={() => setIsCallbackOpen(false)}
+          source="qrproject"
         />
       )}
 
