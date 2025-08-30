@@ -18,13 +18,16 @@ import { NavLink } from "react-router-dom";
 import ReferAndEarn from "../ReferAndEarnModal";
 import AddressModal from "../AddressModal";
 import ContactForm from "../../pages/Requestacallback"; 
+import OffersModal from "../OffersModal";
+
 
 // Accepts `asPage` prop to render as a full page (no modal overlay/close)
 const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
   const { user, setUser } = useCont();
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [selectedTopic, setSelectedTopic] = React.useState(null);
-   const [isCallbackOpen, setIsCallbackOpen] = React.useState(false);
+  const [isCallbackOpen, setIsCallbackOpen] = React.useState(false);
+  const [isOffersOpen, setIsOffersOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (forceLogin && !user?.name) {
@@ -45,13 +48,17 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
 
   const topics = [
   { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
-  { title: "Request a Call Back", icon: "📞",},
-  { title: "Book New Services", icon: "🛠️", route: "/quickservice" },
-  { title: "Refer and Earn", icon: "🎁", route: "/refer-earn" },
-  { title: "View Recent Offers", icon: "🏷️", route: "/offers" },
+  { title: "Request a Call", icon: "📞",},
+  { title: "Book Services", icon: "🛠️", route: "/quickservice" },
+  { title: "Refer and Earn", icon: "🎁",},
+  { title: "View Offers", icon: "🏷️",},
   { title: "Order Related", icon: "🛒", route: "/my-bookings" },
-  { title: "Give Feedback / Rating", icon: "⭐", route: "/feedback" },
-  { title: "Hommlie Account", icon: "👤" },
+  {
+    title: "Give Feedback",
+    icon: "⭐",
+    external: "https://www.google.com/maps/place/Hommlie+-+Best+Pest+Control+%26+Home+Services+in+Bangalore/@12.9434865,77.5528263,15.71z/data=!4m6!3m5!1s0x3bae3ffd65961b83:0x1a2fbd7cafae966c!8m2!3d12.9419479!4d77.5517609!16s%2Fg%2F11ldwmwf4t"
+  },
+  { title: "Account", icon: "👤" },
   { title: "Payments", icon: "💳", route: "/my-wallet" },
 ];
 
@@ -179,7 +186,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
       <div
         className={
           asPage
-            ? "w-full min-h-screen flex justify-center items-start bg-gray-50 py-8 px-2"
+            ? "-mt-7 sm:-mt-0 w-full min-h-screen flex justify-center items-start bg-gray-50 py-8 px-2"
             : "fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-center items-center p-4"
         }
       >
@@ -232,7 +239,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
                 </button>
               </div>
             ) : (
-              <div className="flex items-center justify-between border rounded-lg px-4 py-3 mt-4 bg-emerald-50 border-emerald-100">
+              <div className="w-[107%] -ml-3 sm:w-auto sm:ml-0 flex items-center justify-between border px-4 py-3 mt-4 bg-emerald-50 border-emerald-100 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -265,35 +272,65 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
               <>
                 {/* Browse Topics */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold mb-4">Browse Topics</h3>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-x-5 sm:gap-x-4 -ml-3 sm:ml-0 gap-y-4">
                     {topics.map((topic, idx) =>
                       topic.route ? (
                         <NavLink
                           key={idx}
                           to={topic.route}
                           onClick={asPage ? undefined : onClose}
-                          className="border rounded-lg p-4 flex flex-col items-center hover:shadow transition cursor-pointer hover:border-emerald-200"
+                          className="
+                            mt-4 flex flex-col items-center justify-center cursor-pointer
+                            w-[110px] h-[80px] bg-[#f5f5f5] rounded-xl shadow border border-black
+                            sm:w-auto sm:h-auto sm:bg-transparent sm:rounded-lg sm:shadow-none sm:border sm:border-gray-200 sm:p-3 sm:hover:shadow
+                          "
                         >
-                          <div className="text-3xl mb-2">{topic.icon}</div>
-                          <p className="text-sm font-medium text-center">{topic.title}</p>
+                          <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{topic.icon}</div>
+                          <p className="text-xs sm:text-sm font-medium text-center">
+                            {topic.title}
+                          </p>
                         </NavLink>
+                      ) : topic.external ? (
+                        <a
+                          key={idx}
+                          href={topic.external}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="
+                            mt-4 flex flex-col items-center justify-center cursor-pointer
+                            w-[110px] h-[80px] bg-[#f5f5f5] rounded-xl shadow border border-black
+                            sm:w-auto sm:h-auto sm:bg-transparent sm:rounded-lg sm:shadow-none sm:border sm:border-gray-200 sm:p-3 sm:hover:shadow
+                          "
+                        >
+                          <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{topic.icon}</div>
+                          <p className="text-xs sm:text-sm font-medium text-center">
+                            {topic.title}
+                          </p>
+                        </a>
                       ) : (
                         <div
                           key={idx}
-                          className="border rounded-lg p-4 flex flex-col items-center hover:shadow transition cursor-pointer hover:border-emerald-200"
                           onClick={() => {
-                            if (topic.title === "Hommlie Account") {
+                            if (topic.title === "Account") {
                               setSelectedTopic("account");
-                            } else if (topic.title === "Request a Call Back") {
-                              setIsCallbackOpen(true); // <-- open callback modal
-                            } else {
-                              console.log(`Selected topic: ${topic.title}`);
+                            } else if (topic.title === "Request a Call") {
+                              setIsCallbackOpen(true);
+                            } else if (topic.title === "Refer and Earn") {
+                              setIsReferAndEarnOpen(true);
+                            } else if (topic.title === "View Offers") {
+                              setIsOffersOpen(true);
                             }
                           }}
+                          className="
+                            mt-4 flex flex-col items-center justify-center cursor-pointer
+                            w-[110px] h-[80px] bg-[#f5f5f5] rounded-xl shadow border border-black
+                            sm:w-auto sm:h-auto sm:bg-transparent sm:rounded-lg sm:shadow-none sm:border sm:border-gray-200 sm:p-3 sm:hover:shadow
+                          "
                         >
-                          <div className="text-3xl mb-2">{topic.icon}</div>
-                          <p className="text-sm font-medium text-center">{topic.title}</p>
+                          <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{topic.icon}</div>
+                          <p className="text-xs sm:text-sm font-medium text-center">
+                            {topic.title}
+                          </p>
                         </div>
                       )
                     )}
@@ -310,7 +347,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
                         href={method.action}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="border rounded-lg p-4 flex items-center gap-4 hover:shadow transition cursor-pointer hover:border-emerald-200"
+                        className="border rounded-lg border-black p-4 flex items-center gap-4 hover:shadow transition cursor-pointer hover:border-emerald-200"
                         tabIndex={0}
                       >
                         <div className="flex-shrink-0">{method.icon}</div>
@@ -336,12 +373,18 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
       </div>
 
       {isCallbackOpen && (
-  <ContactForm
-    user={user}
-    isOpen={isCallbackOpen}   // pass open state
-    onClose={() => setIsCallbackOpen(false)}
-  />
-)}
+        <ContactForm
+          user={user}
+          isOpen={isCallbackOpen}   // pass open state
+          onClose={() => setIsCallbackOpen(false)}
+        />
+      )}
+
+      <ReferAndEarn
+        isOpen={isReferAndEarnOpen}
+        onClose={() => setIsReferAndEarnOpen(false)}
+      />
+
 
       {/* Login Modal */}
             <LoginSignup
@@ -352,7 +395,11 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
         }}
       />
 
-      
+      <OffersModal
+  isOpen={isOffersOpen}
+  onClose={() => setIsOffersOpen(false)}
+/>
+
 
       {/* Refer & Earn Modal */}
       <ReferAndEarn
