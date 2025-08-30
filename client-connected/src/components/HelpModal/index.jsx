@@ -42,13 +42,17 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
   };
 
   const topics = [
-    { title: "Order Related", icon: "🛒", route: "/my-bookings" },
-    { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
-    { title: "Shopping", icon: "🛍️", route: "/add-to-cart" },
-    { title: "Hommlie Account", icon: "👤" },
-    { title: "Payments", icon: "💳", route: "/my-wallet" },
-    { title: "Others", icon: "📄", route: "/privacy-policy" },
-  ];
+  { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
+  { title: "Request a Call Back", icon: "📞", route: "/request-callback" },
+  { title: "Book New Services", icon: "🛠️", route: "/quickservice" },
+  { title: "Refer and Earn", icon: "🎁", route: "/refer-earn" },
+  { title: "View Recent Offers", icon: "🏷️", route: "/offers" },
+  { title: "Order Related", icon: "🛒", route: "/my-bookings" },
+  { title: "Give Feedback / Rating", icon: "⭐", route: "/feedback" },
+  { title: "Hommlie Account", icon: "👤" },
+  { title: "Payments", icon: "💳", route: "/my-wallet" },
+];
+
 
   const contactMethods = [
     {
@@ -180,7 +184,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
         <div
           className={
             asPage
-              ? "bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col min-h-[80vh]"
+              ? "bg-white w-full max-w-6xl rounded-lg shadow-lg flex flex-col min-h-[80vh]"
               : "bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col max-h-[90vh]"
           }
         >
@@ -260,8 +264,8 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
                 {/* Browse Topics */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold mb-4">Browse Topics</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {topics.map((topic, idx) => (
+                  <div className="grid grid-cols-3 gap-4">
+                    {topics.map((topic, idx) =>
                       topic.route ? (
                         <NavLink
                           key={idx}
@@ -288,7 +292,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
                           <p className="text-sm font-medium text-center">{topic.title}</p>
                         </div>
                       )
-                    ))}
+                    )}
                   </div>
                 </div>
 
