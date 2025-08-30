@@ -1395,16 +1395,21 @@ exports.generateInvoice = async (req, res) => {
   }
 };
 
-exports.raiseComplaint = (req, res) => {
+const { Order } = require("../models");
+exports.raiseComplaint = async (req, res) => {
   try {
-    const { complaintText } = req.body;
-
-    console.log("Complaint Text:", complaintText);
-
-    // TODO: Save complaintText to DB if needed
-
+    const { orderId, complaintText } = req.body;
+    if (!orderId || !complaintText) {
+      return res.status(400).json({ error: "Order ID and complaint text are required." });
+    }
+    const order = await Order.findByPk(orderId);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+    order.complaint_remark = complaintText;
+    await order.save();
     res.status(200).json({
-      message: "Complaint received successfully",
+      message: "Complaint received and saved successfully.",
       complaintText,
     });
   } catch (error) {
