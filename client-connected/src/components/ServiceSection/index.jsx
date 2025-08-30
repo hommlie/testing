@@ -22,6 +22,7 @@ const ServiceSection = ({ categories }) => {
   const [selectedBhk, setSelectedBhk] = useState("1 BHK");
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCallbackOpen, setIsCallbackOpen] = useState(false);
 
   const notify = useToast();
   const successNotify = (success) => notify(success, "success");
@@ -418,18 +419,17 @@ const ServiceSection = ({ categories }) => {
         //   }}
       >
        
-        <div className="block md:hidden mb-5 -mt-12">
-          <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
-            <Requestacallback device="mobile" />
-          </Suspense>
+        {/* Request a Callback Button (visible on all devices) */}
+        <div className="mb-5 flex justify-center">
+          <button
+            className="bg-[#92B775] text-white px-6 py-2 rounded-md font-semibold hover:bg-[#52852d] transition"
+            onClick={() => setIsCallbackOpen(true)}
+          >
+            Request a Callback
+          </button>
         </div>
-
-        {/* Desktop View Only */}
-        <div className="hidden md:block mb-5 -mt-6">
-          <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
-            <Requestacallback device="desktop" />
-          </Suspense>
-        </div>
+        {/* Modal for callback */}
+        <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} />
         <div className="mb-0 text-center">
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Your Service Category</h2>
           <div className="w-full flex justify-center sm:justify-center">
