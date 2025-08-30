@@ -3,8 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import axios from 'axios';
 import config from '../../config/config';
 
-const ContactForm = ({ user }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const ContactForm = ({ user, isOpen, onClose }) => {
   const [callbackName, setCallbackName] = useState('');
   const [callbackPhone, setCallbackPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
@@ -29,11 +28,6 @@ const ContactForm = ({ user }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsModalOpen(true); // Allowing modal to open for all users
-  };
-
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -45,7 +39,7 @@ const ContactForm = ({ user }) => {
         fullName: callbackName,
         address: "Callback request from homepage",
         mobile: fullPhone,
-        email: "", // No email for callback
+        email: "",
         date: new Date().toISOString(),
         time: "N/A",
         service: "Request Callback",
@@ -53,7 +47,7 @@ const ContactForm = ({ user }) => {
 
       setIsSubmitted(true);
       setTimeout(() => {
-        setIsModalOpen(false);
+        onClose(); // close after success
         setIsSubmitted(false);
         setCallbackName('');
         setCallbackPhone('');
@@ -65,87 +59,71 @@ const ContactForm = ({ user }) => {
     }
   };
 
+  if (!isOpen) return null; // <-- render only when open
+
   return (
-    <div className="">
-      <form onSubmit={handleSubmit} className="flex justify-center">
-        <button
-          type="submit"
-          className="bg-green-800 text-white border border-black hover:bg-[#52852d] hover:text-white font-medium py-3 px-8 rounded-md transition duration-200 sm:mt-0 mt-5"
-        >
-          Request a call back
-        </button>
-      </form>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full text-center">
-            {!isSubmitted ? (
-              <>
-                <h2 className="text-xl font-semibold mb-4 text-black">Enter Your Details</h2>
-                <form onSubmit={handlePhoneSubmit} className="space-y-4 text-left">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Enter your name"
-                      value={callbackName}
-                      onChange={(e) => setCallbackName(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                    />
-                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-                  </div>
-
-                  <div className="flex gap-2">
-                    <select
-                      value={countryCode}
-                      onChange={(e) => setCountryCode(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                    >
-                      <option value="+91">+91 🇮🇳</option>
-                      <option value="+1">+1 🇺🇸</option>
-                      <option value="+44">+44 🇬🇧</option>
-                      <option value="+61">+61 🇦🇺</option>
-                    </select>
-                    <input
-                      type="tel"
-                      placeholder="Phone number"
-                      value={callbackPhone}
-                      onChange={(e) => setCallbackPhone(e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                    />
-                  </div>
-                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-
-                  <button
-                    type="submit"
-                    className="w-full bg-[#92B775] text-white py-2 rounded-md hover:bg-[#52852d] hover:text-white transition"
-                  >
-                    Submit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setCallbackName('');
-                      setCallbackPhone('');
-                      setErrors({});
-                    }}
-                    className="w-full text-sm text-gray-500 mt-2 hover:underline"
-                  >
-                    Cancel
-                  </button>
-                </form>
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-6">
-                <CheckCircle className="text-emerald-600 w-12 h-12 mb-3" />
-                <p className="text-lg font-medium text-emerald-700">
-                  Request has been sent successfully!
-                </p>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full text-center">
+        {!isSubmitted ? (
+          <>
+            <h2 className="text-xl font-semibold mb-4 text-black">Enter Your Details</h2>
+            <form onSubmit={handlePhoneSubmit} className="space-y-4 text-left">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Enter your name"
+                  value={callbackName}
+                  onChange={(e) => setCallbackName(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                />
+                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
-            )}
+
+              <div className="flex gap-2">
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                >
+                  <option value="+91">+91 🇮🇳</option>
+                  <option value="+1">+1 🇺🇸</option>
+                  <option value="+44">+44 🇬🇧</option>
+                  <option value="+61">+61 🇦🇺</option>
+                </select>
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={callbackPhone}
+                  onChange={(e) => setCallbackPhone(e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                />
+              </div>
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+
+              <button
+                type="submit"
+                className="w-full bg-[#92B775] text-white py-2 rounded-md hover:bg-[#52852d] hover:text-white transition"
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full text-sm text-gray-500 mt-2 hover:underline"
+              >
+                Cancel
+              </button>
+            </form>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-6">
+            <CheckCircle className="text-emerald-600 w-12 h-12 mb-3" />
+            <p className="text-lg font-medium text-emerald-700">
+              Request has been sent successfully!
+            </p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

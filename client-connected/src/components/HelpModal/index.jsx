@@ -17,18 +17,20 @@ import config from "../../config/config";
 import { NavLink } from "react-router-dom";
 import ReferAndEarn from "../ReferAndEarnModal";
 import AddressModal from "../AddressModal";
-
+import ContactForm from "../../pages/Requestacallback"; 
 
 // Accepts `asPage` prop to render as a full page (no modal overlay/close)
 const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
   const { user, setUser } = useCont();
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [selectedTopic, setSelectedTopic] = React.useState(null);
+   const [isCallbackOpen, setIsCallbackOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (forceLogin && !user?.name) {
       setIsLoginOpen(true);
     }
+    // Do not auto-close or open callback modal on mount/refresh
   }, [forceLogin, user]);
 
   const handleLogout = () => {
@@ -43,7 +45,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
 
   const topics = [
   { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
-  { title: "Request a Call Back", icon: "📞", route: "/request-callback" },
+  { title: "Request a Call Back", icon: "📞",},
   { title: "Book New Services", icon: "🛠️", route: "/quickservice" },
   { title: "Refer and Earn", icon: "🎁", route: "/refer-earn" },
   { title: "View Recent Offers", icon: "🏷️", route: "/offers" },
@@ -283,6 +285,8 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
                           onClick={() => {
                             if (topic.title === "Hommlie Account") {
                               setSelectedTopic("account");
+                            } else if (topic.title === "Request a Call Back") {
+                              setIsCallbackOpen(true); // <-- open callback modal
                             } else {
                               console.log(`Selected topic: ${topic.title}`);
                             }
@@ -331,6 +335,14 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
         </div>
       </div>
 
+      {isCallbackOpen && (
+  <ContactForm
+    user={user}
+    isOpen={isCallbackOpen}   // pass open state
+    onClose={() => setIsCallbackOpen(false)}
+  />
+)}
+
       {/* Login Modal */}
             <LoginSignup
         isOpen={isLoginOpen}
@@ -339,6 +351,8 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
           setIsLoginOpen(false);
         }}
       />
+
+      
 
       {/* Refer & Earn Modal */}
       <ReferAndEarn
