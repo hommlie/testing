@@ -19,7 +19,14 @@ const ServiceSection = ({ categories }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
-  const [selectedBhk, setSelectedBhk] = useState("1 BHK");
+  const [selectedBhk, setSelectedBhk] = useState("");
+  // Set default variation (property size) when attribute changes
+  useEffect(() => {
+    const attr = getCurrentAttributes().find((a) => a.id === selectedAttribute);
+    if (attr && attr.variations && attr.variations.length > 0) {
+      setSelectedBhk(attr.variations[0].variation);
+    }
+  }, [selectedAttribute]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
@@ -28,7 +35,12 @@ const ServiceSection = ({ categories }) => {
   const successNotify = (success) => notify(success, "success");
   const errorNotify = (error) => notify(error, "error");
 
-  const bhkOptions = ["1 BHK", "2 BHK", "3 BHK", "4 BHK", "5 BHK", "6 BHK"];
+  // Dynamically get property size (variation) options from selected attribute
+  const getVariationOptions = () => {
+    const attr = getCurrentAttributes().find((a) => a.id === selectedAttribute);
+    if (!attr || !attr.variations) return [];
+    return attr.variations.map((v) => v.variation);
+  };
 
   // Initialize selection on mount
   useEffect(() => {
@@ -252,7 +264,7 @@ const ServiceSection = ({ categories }) => {
         </button>
 
         {isOpen && (
-          <div className="absolute z-20 mt-1 w-full bg-white border border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          <div className="absolute z-10 mt-1 w-full bg-white border border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
             {options.map((option) => {
               const isSelected = value === option.id;
               return (
@@ -386,8 +398,8 @@ const ServiceSection = ({ categories }) => {
                 onChange={(e) => setSelectedBhk(e.target.value)}
                 className="ml-1 p-1 rounded text-sm bg-white text-black border border-black"
               >
-                {bhkOptions.map((bhk) => (
-                  <option key={bhk} value={bhk}>{bhk}</option>
+                {getVariationOptions().map((variation) => (
+                  <option key={variation} value={variation}>{variation}</option>
                 ))}
               </select>
             </div>
@@ -468,7 +480,7 @@ const ServiceSection = ({ categories }) => {
                 <Dropdown
                   label=""
                   value={selectedBhk}
-                  options={bhkOptions.map((bhk) => ({ id: bhk, attribute: bhk, subcategory_name: bhk }))}
+                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
                   onChange={setSelectedBhk}
                   disabled={!selectedProduct}
                 />
@@ -480,9 +492,9 @@ const ServiceSection = ({ categories }) => {
             <div className="hidden md:block">
               <label className="block text-sm font-medium text-gray-700 mb-1">Property Size</label>
               <Dropdown
-                label="Select BHK"
+                label="Select Property Size"
                 value={selectedBhk}
-                options={bhkOptions.map((bhk) => ({ id: bhk, attribute: bhk, subcategory_name: bhk }))}
+                options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
                 onChange={setSelectedBhk}
                 disabled={!selectedProduct}
               />
