@@ -420,7 +420,7 @@ const ServiceSection = ({ categories }) => {
       >
        
         {/* Request a Callback Button (visible on all devices) */}
-        <div className="mb-5 flex justify-center">
+        <div className="mb-5 -mt-9 sm:-mt-0 flex justify-center">
           <button
             className="bg-[#92B775] text-white px-6 py-2 rounded-md font-semibold hover:bg-[#52852d] transition"
             onClick={() => setIsCallbackOpen(true)}
