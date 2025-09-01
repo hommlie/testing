@@ -397,11 +397,9 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
       />
 
       <OffersModal
-  isOpen={isOffersOpen}
-  onClose={() => setIsOffersOpen(false)}
-/>
-
-
+        isOpen={isOffersOpen}
+        onClose={() => setIsOffersOpen(false)}
+      />
       {/* Refer & Earn Modal */}
       <ReferAndEarn
         isOpen={isReferAndEarnOpen}

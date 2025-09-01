@@ -343,6 +343,7 @@ const BlogPost = () => {
     return `${baseUrl}${path}`;
   };
 
+
   return (
     <div className="min-h-screen max-w-7xl mx-auto font-sans">
       <Helmet>
@@ -351,28 +352,60 @@ const BlogPost = () => {
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
 
-      {/* Hero Section */}
-      <div className="relative h-[450px] sm:h-[500px] rounded-b-2xl overflow-hidden">
+      {/* Breadcrumbs - Mobile Responsive */}
+      <nav
+        className="ml-4 sm:ml-0 sm:-ml-4 px-2 sm:px-8 lg:px-16 py-3 text-xs sm:text-sm text-gray-500 flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+        aria-label="Breadcrumb"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
+        <span
+          className="hover:underline cursor-pointer text-emerald-600 min-w-fit"
+          onClick={() => navigate("/")}
+        >
+          Home
+        </span>
+        <span className="mx-1">/</span>
+        <span
+          className="hover:underline cursor-pointer text-emerald-600 min-w-fit"
+          onClick={() => navigate("/blogs")}
+        >
+          Blogs
+        </span>
+        <span className="mx-1">/</span>
+        <span
+          className="text-gray-700 font-medium truncate max-w-[120px] sm:max-w-xs min-w-0"
+          title={blog.title}
+        >
+          {blog.title}
+        </span>
+      </nav>
+
+      <div className="">
         <img
           src={blog.featured_image || "/api/placeholder/1920/500"}
           alt={blog.title}
-          className="w-full h-full object-cover"
+          className="w-[100%] sm:w-[80%] h-[60vh] object-cover object-center sm:ml-12"
+          style={{ minHeight: '50%', minWidth: '92%' }}
         />
-        <div className="absolute inset-0 bg-black/60 flex items-center justify-center px-4">
+        {/* <div className="absolute inset-0 bg-black/60 flex items-center justify-center px-2 sm:px-4">
           <div className="text-center text-white max-w-3xl">
-            <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight">
+            <h1 className="text-xl xs:text-2xl sm:text-5xl font-bold mb-2 sm:mb-4 leading-tight">
               {blog.title}
             </h1>
-            <p className="text-base sm:text-lg text-gray-200">
+            <p className="text-xs xs:text-sm sm:text-lg text-gray-200">
               {blog.meta_description}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Blog Content */}
-      <div className="px-4 sm:px-8 lg:px-16 py-12">
-        <div className="mb-10 flex items-center justify-between text-sm">
+      <div className="px-6 sm:px-8 lg:px-12 py-12">
+        <h1 className="sm:-ml-2 -ml-1 text-md xs:text-2xl sm:text-2xl font-bold mb-2 sm:mb-6 leading-tight">
+          {blog.title}
+        </h1>
+        <div className="flex items-center justify-between text-sm">
+          
           <div>
             <span className="capitalize text-emerald-600 font-medium">
               {blog.BlogCategory?.title}
@@ -413,15 +446,15 @@ const BlogPost = () => {
 
 
         {/* Blog Content - Full Width Responsive */}
-<div className="w-full px-4 sm:px-6 md:px-10 lg:px-20 xl:px-32 py-12">
-  <div
-    className="max-w-screen-2xl mx-auto text-lg leading-8 tracking-wide text-justify space-y-6 text-gray-800"
-    dangerouslySetInnerHTML={{ __html: blog.content }}
-  />
-</div>
+      <div className="">
+        <div
+          className="max-w-screen-2xl mx-auto text-md leading-8 tracking-wide text-justify space-y-6 text-gray-800"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        />
+      </div>
 
         {/* Comments */}
-        <div className="mt-16 border-t border-gray-200 pt-10">
+        <div className="border-t border-gray-200 pt-10">
           <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800">
             Comments
           </h2>
