@@ -780,11 +780,9 @@ const paymentRef = useRef(null);
                         )}
                       </div>
 
-                      {/* Price & Qty control */}
                       <div className="flex items-center justify-between mt-4">
                         <span className="text-xl font-bold text-[#249370]">₹{pd.price * pd.qty}</span>
 
-                        {/* Qty controller */}
                         <div className="flex items-center border border-[#249370] rounded-lg">
                           <button
                             onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
