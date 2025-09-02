@@ -38,6 +38,9 @@ export default function AddtoCart() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [walletApplied, setWalletApplied] = useState(false);
+  const [walletUsed, setWalletUsed] = useState(0);
 
   const {
     user,
@@ -129,6 +132,38 @@ export default function AddtoCart() {
   }
 }
 
+
+useEffect(() => {
+  const fetchWallet = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      const response = await fetch("http://localhost:5000/wallet", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Failed to fetch wallet");
+      const data = await response.json();
+      setWalletBalance(data.balance || 0);
+    } catch (err) {
+      console.error("Wallet fetch error:", err);
+    }
+  };
+  fetchWallet();
+}, []);
+
+// Toggle wallet usage
+const handleWalletToggle = () => {
+  if (walletApplied) {
+    // remove wallet usage
+    setWalletApplied(false);
+    setWalletUsed(0);
+  } else {
+    // apply wallet usage
+    const usable = Math.min(walletBalance, totalAmount);
+    setWalletApplied(true);
+    setWalletUsed(usable);
+  }
+};
 
   useEffect(() => {
     const updateVisibleItemsCount = () => {
@@ -443,7 +478,10 @@ export default function AddtoCart() {
   const [customTipActive, setCustomTipActive] = useState(false);
   const [customInput, setCustomInput] = useState("");
   const [tipAmount, setTipAmount] = useState(0);
-  const totalAmount = totalItemPrice + tax - couponDiscount + tipAmount;
+ const totalAmount = Math.max(
+  0,
+  totalItemPrice + tax - couponDiscount + tipAmount - (walletApplied ? walletUsed : 0)
+);
 
   const handleProductClick = (item) => {
     const slug = item.product_name.toLowerCase().replace(/ /g, "-");
@@ -864,6 +902,32 @@ const paymentRef = useRef(null);
                   </div>
                 )}
             </div>
+
+                     {/* Wallet Balance Section */}
+
+  <div className="flex justify-between items-center text-gray-700 mt-3">
+    <span className="flex items-center">
+      <FaWallet className="mr-2 text-[#249370]" />
+      Wallet Balance: ₹{walletBalance.toFixed(2)}
+    </span>
+    <button
+      className={`px-3 py-1 rounded-lg text-sm font-medium ${
+        walletApplied ? "bg-red-500 text-white" : "bg-green-500 text-white"
+      } ${walletBalance === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+      onClick={handleWalletToggle}
+      disabled={walletBalance === 0}
+    >
+      {walletApplied ? "Remove" : "Apply"}
+    </button>
+  </div>
+
+  {/* Show deduction if applied */}
+  {walletApplied && (
+    <div className="flex justify-between text-green-600">
+      <span>Wallet Applied</span>
+      <span>-₹{walletUsed.toFixed(2)}</span>
+    </div>
+  )}
                     <div className="border-t border-gray-200 pt-4">
                       <div className="flex justify-between text-lg font-semibold">
                         <span>Total Amount</span>

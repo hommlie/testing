@@ -8,7 +8,7 @@ import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import RelatedBlogs from "./RelatedBlogs";
 import { Helmet } from "react-helmet";
-
+import BlogForm from "../BlogForm/BlogForm";
 // ================= Comment Component =================
 const Comment = React.memo(
   ({
@@ -354,7 +354,7 @@ const BlogPost = () => {
 
       {/* Breadcrumbs - Mobile Responsive */}
       <nav
-        className="ml-4 sm:ml-0 sm:-ml-4 px-2 sm:px-8 lg:px-16 py-3 text-xs sm:text-sm text-gray-500 flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+        className="ml-4 sm:ml-0 sm:-ml-5 px-2 sm:px-8 lg:px-16 py-3 text-xs sm:text-sm text-gray-500 flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
         aria-label="Breadcrumb"
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
@@ -397,6 +397,9 @@ const BlogPost = () => {
             </p>
           </div>
         </div> */}
+      </div>
+      <div className="mt-8 px-4 sm:px-12">
+        <BlogForm />
       </div>
 
       {/* Blog Content */}
@@ -460,21 +463,27 @@ const BlogPost = () => {
           </h2>
 
           <form onSubmit={handleCommentSubmit} className="mb-12">
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row items-end gap-4">
               <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment..."
-                className="flex-1 p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none h-24 text-sm"
+                placeholder="Write your comment..."
+                className="flex-1 w-full rounded-2xl border border-gray-200 bg-white 
+                          p-4 text-sm text-gray-700 shadow-sm transition 
+                          focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 
+                          focus:outline-none resize-none min-h-[120px]"
               />
-              <button
+            </div>
+            <button
                 type="submit"
                 disabled={!newComment.trim()}
-                className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm h-fit"
+                className="mt-4 shrink-0 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold 
+                          text-white shadow-md transition-all 
+                          hover:bg-emerald-600 hover:shadow-lg 
+                          disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Post
+                Post Comment
               </button>
-            </div>
           </form>
 
           <div className="space-y-6">
