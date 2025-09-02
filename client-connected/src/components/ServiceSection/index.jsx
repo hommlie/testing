@@ -329,7 +329,7 @@ const ServiceSection = ({ categories }) => {
       >
 
         {product.is_recommended == 1 && (
-          <div className="absolute top-2 right-2 z-10">
+          <div className="absolute top-2 right-2">
             <div className=" relative bg-[#133215] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
               <Star className="w-3 h-3 mr-1 fill-current text-white" />
               RECOMMENDED
@@ -489,12 +489,18 @@ const ServiceSection = ({ categories }) => {
                 <Dropdown label="" value={selectedAttribute} options={getCurrentAttributes()} onChange={setSelectedAttribute} disabled={!selectedProduct} showRecommended />
               </div>
             </div>
-            <div className="hidden md:block">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Property Size</label>
+            <div className="hidden md:block relative z-10">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Property Size
+              </label>
               <Dropdown
                 label="Select Property Size"
                 value={selectedBhk}
-                options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
+                options={getVariationOptions().map((variation) => ({
+                  id: variation,
+                  attribute: variation,
+                  subcategory_name: variation,
+                }))}
                 onChange={setSelectedBhk}
                 disabled={!selectedProduct}
               />
