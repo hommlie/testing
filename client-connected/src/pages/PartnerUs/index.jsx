@@ -60,8 +60,8 @@ const PartnerWithUs = () => {
         style={{background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)"}}
         >
         <main className="container mx-auto px-4 py-16">
-            <section className="mb-24 text-center space-y-12">
-            <h1 className="text-5xl font-extrabold mb-6 text-gray-800">
+            <section className=" text-center space-y-12">
+            <h1 className="text-2xl font-extrabold mb-6 text-gray-800">
                 Earn up to <span style={{color: "#249370"}}>3 times</span> your current income
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
@@ -87,7 +87,7 @@ const PartnerWithUs = () => {
 
             <section className="mb-24">
             <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Join us in these categories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:ml-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:ml-8 sm:mr-10">
                 {[
                 { title: "AC & appliance technicians", description: "Installation, repairs, maintenance, servicing, cleaning" },
                 { title: "Electricians, plumbers & carpenters", description: "Furniture installation, plumbing repairs, wiring or rewiring" },
@@ -108,7 +108,7 @@ const PartnerWithUs = () => {
 
             <section className="mb-24">
             <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">How Hommlie Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:ml-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:ml-8 sm:mr-10">
                 {[
                 { title: "Use the app", description: "Tell us when and where you want to work" },
                 { title: "Delight your customers", description: "Work your magic in a 1:1 setting with your clients" },
