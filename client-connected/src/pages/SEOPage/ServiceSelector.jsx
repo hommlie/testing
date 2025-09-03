@@ -167,7 +167,7 @@ const ServiceSelector = ({ services, onCallClick }) => {
   };
 
   return (
-    <div className="sticky top-44 bg-white rounded-xl shadow-lg p-6 space-y-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 space-y-6 lg:sticky lg:top-44">
       <h3 className="text-xl font-semibold mb-4">Book Our Service</h3>
 
       {/* Service Selection */}
