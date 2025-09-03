@@ -6,6 +6,7 @@ import Loading from "../../components/Loading";
 import axios from "axios";
 import config from "../../config/config";
 import { Helmet } from "react-helmet";
+import ShareButton from "../ShareButtoncat";
 
 const StarRating = ({ rating, reviews }) => {
   return (
@@ -321,6 +322,7 @@ const SubCategoryPage = () => {
     <main className="md:max-w-7xl w-full" style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
+            <ShareButton />
       <Helmet>
         <title>{data?.categoryData?.meta_title || "Category Page"}</title>
         <meta
@@ -331,7 +333,7 @@ const SubCategoryPage = () => {
       </Helmet>
       <div className="container px-4 mt-5">
         {/* Breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm mb-6">
+        {/* <nav className="flex items-center space-x-2 text-sm mb-6">
           <a href="/" className="text-emerald-600 hover:text-emerald-700">
             Home
           </a>
@@ -339,7 +341,7 @@ const SubCategoryPage = () => {
           <span className="text-gray-500">
             {data?.categoryData?.category_name}
           </span>
-        </nav>
+        </nav> */}
 
         {/* Banner Section */}
         <div className="relative w-full h-[150px] md:h-[300px] rounded-xl overflow-hidden mb-8">
@@ -364,7 +366,7 @@ const SubCategoryPage = () => {
         </div>
 
         {/* Services Quick Nav */}
-        <div className="flex items-center bg-white rounded-lg glow-border mb-8 relative">
+        <div className="-mt-4 sm:-mt-0 flex items-center bg-white rounded-lg glow-border mb-8 relative">
           {/* Left Arrow */}
           <div
             className="absolute left-0 z-10 p-1 md:p-2 cursor-pointer bg-white glow-border rounded-full shadow-md hover:bg-gray-100 transition-all duration-200"
@@ -394,7 +396,7 @@ const SubCategoryPage = () => {
           {/* Scrollable Content */}
           <div
             id="scroll-container"
-            className="flex gap-2 md:gap-4 p-4 overflow-x-auto scrollbar-hide"
+            className="-ml-2 sm:-ml-0 flex gap-0 md:gap-2 p-0 overflow-x-auto scrollbar-hide"
             onScroll={(e) => {
               const container = e.target;
               const leftArrow = document.getElementById("left-arrow");
@@ -474,7 +476,7 @@ const SubCategoryPage = () => {
                   variants={item}
                   ref={(el) => (sectionRefs.current[cat.subcat_id] = el)}
                   onClick={() => handleSubCategoryClick(cat)}
-                  className="bg-white rounded-xl p-2 md:p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                  className="-mt-1 bg-white rounded-xl p-2 md:p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <div className="flex gap-1 md:gap-6">
                     <div className="flex-1">

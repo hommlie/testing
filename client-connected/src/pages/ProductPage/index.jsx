@@ -29,6 +29,7 @@ import InspectionModal from "../../components/InspectionModal";
 import LocationSuggestion from "../../components/LocationSuggestion";
 import { BiSolidOffer } from "react-icons/bi";
 import Rating from "../../components/Rating";
+import ShareButton from "../ShareButtonservcies";
 
 export default function ProductPage() {
   const {
@@ -710,6 +711,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
     style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
+             <ShareButton />
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <Loading />
@@ -726,7 +728,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
             <link rel="canonical" href={generateCanonicalUrl()} />
           </Helmet>
 
-          <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0 ml-4">
+          {/* <nav className="flex space-x-1 lg:space-x-2 text-gray-500 text-xs lg:text-base mt-4 md:mt-0 ml-4">
             <NavLink to="/" className="text-blue-500">
               Home
             </NavLink>
@@ -743,7 +745,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 <span>{prodData?.product_name}</span>
               </>
             )}
-          </nav>
+          </nav> */}
 
           <section className="flex flex-col-reverse lg:flex-row lg:space-x-4 scroll-smooth">
             <div className="flex-1 space-y-6 lg:w-2/3">

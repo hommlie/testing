@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-
+import ShareButton from "../ShareButtonsubcat.jsx";
 
 const StarRating = ({ rating }) => {
   return (
@@ -833,6 +833,8 @@ const handleQtyUpdate = async (cartId, newQty) => {
           selectedAttributeId={selectedAttributeId}
         />
       </div>
+
+    <ShareButton />
     </main>
   );
 };
