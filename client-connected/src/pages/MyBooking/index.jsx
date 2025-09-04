@@ -616,14 +616,16 @@ const handleComplaintSubmit = async () => {
                       <p className="text-sm text-gray-500">Order Number</p>
 
                       <div className="flex flex-col-reverse md:flex-row md:items-center md:gap-3 md:justify-end text-right">
-                        {/* Raise Complaint Button */}
-                        <button
-                          onClick={() => openComplaintModal(orders[0])}
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 font-medium text-sm transition-colors duration-200 mt-2 md:mt-0"
-                        >
-                          <FaFileInvoice className="text-base" />
-                          Raise Complaint
-                        </button>
+                        {/* Raise Complaint Button - only show if order status is Completed */}
+                        {orders[0]?.order_status === 4 && (
+                          <button
+                            onClick={() => openComplaintModal(orders[0])}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 font-medium text-sm transition-colors duration-200 mt-2 md:mt-0"
+                          >
+                            <FaFileInvoice className="text-base" />
+                            Raise Complaint
+                          </button>
+                        )}
                         {/* Order Number */}
                         <p className="font-medium text-gray-900">#{orderNumber}</p>
                       </div>
