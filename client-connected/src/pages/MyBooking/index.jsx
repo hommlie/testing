@@ -396,10 +396,6 @@ const handleComplaintSubmit = async () => {
     setIsSubmittingComplaint(false);
   }
 };
-
-
-
-
   return (
     <div className="min-h-screen font-headerFont bg-white py-12" style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
