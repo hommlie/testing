@@ -1395,7 +1395,6 @@ exports.generateInvoice = async (req, res) => {
   }
 };
 
-const { Order } = require("../models");
 exports.raiseComplaint = async (req, res) => {
   try {
     const { orderId, complaintText } = req.body;
