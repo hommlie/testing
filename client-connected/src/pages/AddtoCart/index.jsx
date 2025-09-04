@@ -305,9 +305,9 @@ export default function AddtoCart() {
       // If wallet is applied, deduct from wallet before order (sync with backend)
       let walletDeducted = 0;
       if (walletApplied && walletUsed > 0) {
-        try {
-          const walletRes = await axios.post(
-            `${config.API_URL}/api/deductMoneyFromWallet`,
+            try {
+              const walletRes = await axios.post(
+                `${config.API_URL}/wallet/deduct-money`,
             {
               userId: user.id,
               amount: walletUsed
