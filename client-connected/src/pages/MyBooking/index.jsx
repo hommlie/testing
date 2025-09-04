@@ -528,58 +528,12 @@ const handleComplaintSubmit = async () => {
     const headers = { "Content-Type": "application/json" };
     if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
 
-    // clone booking/order details
-    const data = {
-      user_id: order.user_id,
-      vendor_id: order.vendor_id,
-      product_id: order.product_id,
-      product_name: order.product_name,
-      order_number: order.order_number,
-      service_number: order.service_number,
-      image: order.image,
-      qty: order.qty,
-      order_total: order.order_total,
-      full_name: order.full_name,
-      email: order.email,
-      mobile: order.mobile,
-      alternate_mobile: order.alternate_mobile,
-      address: order.address,
-      address2: order.address2,
-      city: order.city,
-      state: order.state,
-      country: order.country,
-      pincode: order.pincode,
-      landmark: order.landmark,
-      latitude: order.latitude,
-      longitude: order.longitude,
-      booking_date: order.booking_date,
-      booking_time: order.booking_time,
-      booking_status: order.booking_status,
-      payment_status: order.payment_status,
-      payment_mode: order.payment_mode,
-      transaction_id: order.transaction_id,
-      razorpay_order_id: order.razorpay_order_id,
-      razorpay_payment_id: order.razorpay_payment_id,
-      razorpay_signature: order.razorpay_signature,
-      coupon_code: order.coupon_code,
-      coupon_discount: order.coupon_discount,
-      gst_amount: order.gst_amount,
-      sub_total: order.sub_total,
-      vendor_commission: order.vendor_commission,
-      admin_commission: order.admin_commission,
-      created_at: order.created_at,
-      updated_at: order.updated_at,
-      complaint_remark: text,   // <-- complaint text entered by user
-      order_type: 1,
-    };
-
-    // final payload
+    // Only send orderId and complaintText as required by backend
     const payload = {
       orderId: order.id,
-      clonedData: data,
+      complaintText: text,
     };
 
-    // API call
     const res = await axios.post(
       `${config.API_URL}/api/raisecomplaint`,
       payload,
@@ -587,12 +541,8 @@ const handleComplaintSubmit = async () => {
     );
 
     const result = res?.data || {};
-    if (result?.status === "success") {
-      successNotify(
-        result?.complaint_id
-          ? `Complaint submitted successfully! ID: ${result.complaint_id}`
-          : "Complaint submitted successfully!"
-      );
+    if (result?.message) {
+      successNotify("Complaint submitted successfully!");
       closeComplaintModal();
     } else {
       errorNotify(result?.error || "Failed to submit complaint. Please try again.");

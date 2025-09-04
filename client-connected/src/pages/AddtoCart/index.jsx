@@ -38,9 +38,15 @@ export default function AddtoCart() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
-  const [walletBalance, setWalletBalance] = useState(0);
-  const [walletApplied, setWalletApplied] = useState(false);
-  const [walletUsed, setWalletUsed] = useState(0);
+  const [walletBalance, setWalletBalance] = useState(0); // Actual balance from backend
+  const [walletApplied, setWalletApplied] = useState(() => {
+    const stored = localStorage.getItem("HommlieWalletApplied");
+    return stored === "true";
+  });
+  const [walletUsed, setWalletUsed] = useState(() => {
+    const stored = localStorage.getItem("HommlieWalletUsed");
+    return stored ? Number(stored) : 0;
+  });
 
   const {
     user,
@@ -133,37 +139,56 @@ export default function AddtoCart() {
 }
 
 
-useEffect(() => {
+
+  // Fetch wallet balance from backend using user token
+  // Always fetch wallet balance from backend on mount and after order
   const fetchWallet = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      const response = await fetch("http://localhost:5000/wallet", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) throw new Error("Failed to fetch wallet");
-      const data = await response.json();
-      setWalletBalance(data.balance || 0);
+      const jwtToken = Cookies.get("HommlieUserjwtToken");
+      if (!jwtToken) return;
+      const user = jwtDecode(jwtToken);
+      const response = await axios.post(
+        `${config.API_URL}/api/wallet/balance`,
+        { userId: user.id },
+        { headers: { Authorization: `Bearer ${jwtToken}` } }
+      );
+      if (response.data.status === 0 && response.data.balance !== undefined) {
+        setWalletBalance(Number(response.data.balance));
+      } else {
+        setWalletBalance(0);
+      }
     } catch (err) {
+      setWalletBalance(0);
       console.error("Wallet fetch error:", err);
     }
   };
-  fetchWallet();
-}, []);
 
-// Toggle wallet usage
-const handleWalletToggle = () => {
-  if (walletApplied) {
-    // remove wallet usage
-    setWalletApplied(false);
-    setWalletUsed(0);
-  } else {
-    // apply wallet usage
-    const usable = Math.min(walletBalance, totalAmount);
-    setWalletApplied(true);
-    setWalletUsed(usable);
-  }
-};
+  useEffect(() => {
+    fetchWallet();
+  }, [user]);
+
+
+  // Toggle wallet usage
+  // Toggle wallet usage (UI only, backend is updated on order)
+  const handleWalletToggle = () => {
+    if (walletApplied) {
+      setWalletApplied(false);
+      setWalletUsed(0);
+      localStorage.setItem("HommlieWalletApplied", "false");
+      localStorage.setItem("HommlieWalletUsed", "0");
+    } else {
+      const usable = Math.min(walletBalance, totalItemPrice + tax - couponDiscount + tipAmount);
+      setWalletApplied(true);
+      setWalletUsed(usable);
+      localStorage.setItem("HommlieWalletApplied", "true");
+      localStorage.setItem("HommlieWalletUsed", String(usable));
+    }
+  };
+  // Keep wallet state in sync with localStorage if changed elsewhere
+  useEffect(() => {
+    localStorage.setItem("HommlieWalletApplied", walletApplied ? "true" : "false");
+    localStorage.setItem("HommlieWalletUsed", String(walletUsed));
+  }, [walletApplied, walletUsed]);
 
   useEffect(() => {
     const updateVisibleItemsCount = () => {
@@ -253,167 +278,198 @@ const handleWalletToggle = () => {
     notify("Your cart is empty. Add items to proceed.", "warning");
   };
 
+
   const handleProceed = async () => {
-  if (cart.length === 0) {
-    notify("Your cart is empty. Please add items before placing the order.", "warning");
-    return;
-  }
+    if (cart.length === 0) {
+      notify("Your cart is empty. Please add items before placing the order.", "warning");
+      return;
+    }
+    if (!selectedAddrs) {
+      addressNotify();
+      return;
+    }
+    if (!selectedDayTime?.date?.day || !selectedDayTime?.time) {
+      dateTimeNotify();
+      return;
+    }
+    if (!paymentType) {
+      paymentNotify();
+      return;
+    }
+    setIsLoading(true);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (jwtToken) {
+      const user = jwtDecode(jwtToken);
+      const payment_id = Math.random().toString(36).substring(2, 12);
 
-  if (!selectedAddrs) {
-    addressNotify();
-    return;
-  }
+      // If wallet is applied, deduct from wallet before order (sync with backend)
+      let walletDeducted = 0;
+      if (walletApplied && walletUsed > 0) {
+        try {
+          const walletRes = await axios.post(
+            `${config.API_URL}/api/deductMoneyFromWallet`,
+            {
+              userId: user.id,
+              amount: walletUsed
+            },
+            { headers: { Authorization: `Bearer ${jwtToken}` } }
+          );
+          if (walletRes.data.wallet !== undefined) {
+            walletDeducted = walletUsed;
+            // Always fetch wallet balance from backend after deduction
+            await fetchWallet();
+          } else {
+            notify("Wallet deduction failed. Please try again.", "error");
+            setIsLoading(false);
+            return;
+          }
+        } catch (err) {
+          notify("Wallet deduction error. Please try again.", "error");
+          setIsLoading(false);
+          return;
+        }
+      }
 
-  if (!selectedDayTime?.date?.day || !selectedDayTime?.time) {
-    dateTimeNotify();
-    return;
-  }
+      if (paymentType?.payment_name === "Online") {
+        try {
+          const orderResponse = await axios.post(
+            `${config.API_URL}/api/initiatePayment`,
+            {
+              amount: totalAmount,
+              currency: "INR",
+              user_id: user.id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
 
-  if (!paymentType) {
-    paymentNotify();
-    return;
-  }
+          const options = {
+            key: config.RAZORPAY_KEY_ID,
+            amount: orderResponse.data.data.amount,
+            currency: orderResponse.data.data.currency,
+            name: "Hommlie",
+            description: "Order Payment",
+            order_id: orderResponse.data.data.id,
+            handler: async function (response) {
+              try {
+                const verifyResponse = await axios.post(
+                  `${config.API_URL}/api/verifyPayment`,
+                  {
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${jwtToken}`,
+                    },
+                  }
+                );
 
-  setIsLoading(true);
-  const jwtToken = Cookies.get("HommlieUserjwtToken");
+                if (verifyResponse.data.status === 1) {
+                  await placeOrder(user, payment_id, response.razorpay_payment_id, walletDeducted);
+                } else {
+                  notify("Payment verification failed. Please try again.", "error");
+                }
+              } catch (error) {
+                console.error("Error verifying payment:", error);
+                notify("Error verifying payment. Please contact support.", "error");
+              }
+            },
+            prefill: {
+              name: selectedAddrs?.name,
+              email: selectedAddrs?.email,
+              contact: selectedAddrs?.mobile,
+            },
+            theme: {
+              color: "#249370",
+            },
+          };
 
-  if (jwtToken) {
-    const user = jwtDecode(jwtToken);
-    const payment_id = Math.random().toString(36).substring(2, 12);
+          const razorpay = new window.Razorpay(options);
+          razorpay.open();
+        } catch (error) {
+          console.error("Error creating Razorpay order:", error);
+          notify("Error processing payment. Please try again.", "error");
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        await placeOrder(user, payment_id, null, walletDeducted);
+      }
+    } else {
+      notify("Please login before proceeding to checkout.", "warning");
+      setIsLoading(false);
+    }
+  };
 
-    if (paymentType?.payment_name === "Online") {
+
+    // Add walletDeducted param to order placement
+    const placeOrder = async (user, payment_id, razorpay_payment_id = null, walletDeducted = 0) => {
       try {
-        const orderResponse = await axios.post(
-          `${config.API_URL}/api/initiatePayment`,
+        const response = await axios.post(
+          `${config.API_URL}/api/order`,
           {
-            amount: totalAmount,
-            currency: "INR",
             user_id: user.id,
+            payment_type: paymentType?.id,
+            payment_id: razorpay_payment_id || payment_id,
+            grand_total: totalAmount - couponDiscount,
+            discount_amount: couponDiscount,
+            coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null,
+            coupon_id: selectedCoupon ? selectedCoupon.id : null,
+            order_notes: null,
+            full_name: selectedAddrs?.name,
+            email: selectedAddrs?.email,
+            mobile: selectedAddrs?.mobile,
+            landmark: selectedAddrs?.landmark,
+            street_address: selectedAddrs?.address,
+            pincode: selectedAddrs.pincode,
+            latitude: selectedAddrs.latitude,
+            longitude: selectedAddrs.longitude,
+            desired_date: selectedDayTime?.date?.formattedDate,
+            desired_time: selectedDayTime?.time,
+            tip_amount: tipAmount,
+            wallet_used: walletDeducted,
           },
           {
             headers: {
-              Authorization: `Bearer ${jwtToken}`,
+              Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}`,
             },
           }
         );
 
-        const options = {
-          key: config.RAZORPAY_KEY_ID,
-          amount: orderResponse.data.data.amount,
-          currency: orderResponse.data.data.currency,
-          name: "Hommlie",
-          description: "Order Payment",
-          order_id: orderResponse.data.data.id,
-          handler: async function (response) {
-            try {
-              const verifyResponse = await axios.post(
-                `${config.API_URL}/api/verifyPayment`,
-                {
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${jwtToken}`,
-                  },
-                }
-              );
-
-              if (verifyResponse.data.status === 1) {
-                await placeOrder(user, payment_id, response.razorpay_payment_id);
-              } else {
-                notify("Payment verification failed. Please try again.", "error");
-              }
-            } catch (error) {
-              console.error("Error verifying payment:", error);
-              notify("Error verifying payment. Please contact support.", "error");
-            }
-          },
-          prefill: {
-            name: selectedAddrs?.name,
-            email: selectedAddrs?.email,
-            contact: selectedAddrs?.mobile,
-          },
-          theme: {
-            color: "#249370",
-          },
-        };
-
-        const razorpay = new window.Razorpay(options);
-        razorpay.open();
+        if (response.data.status === 1) {
+          console.log(response.data.message);
+          notify("Successfully placed your order", "success");
+          localStorage.removeItem("cart");
+          setCart([]);
+          localStorage.removeItem("HommlieselectedAddrs");
+          localStorage.removeItem("HommlieselectedDayTime");
+          localStorage.removeItem("HommlieselectedCoupon");
+          localStorage.removeItem("HommliepaymentType");
+          getBookings();
+          getCart();
+          setIsOrderConfirmed(true); // ✅ Always show confirmation
+          setTempOrderNumber(response.data.order_number);
+          // After order, always fetch wallet balance from backend
+          await fetchWallet();
+          setWalletApplied(false);
+          setWalletUsed(0);
+          localStorage.setItem("HommlieWalletApplied", "false");
+          localStorage.setItem("HommlieWalletUsed", "0");
+        } else {
+          errorNotify(response.data.message);
+          console.log("error placing order:", response.data);
+        }
       } catch (error) {
-        console.error("Error creating Razorpay order:", error);
-        notify("Error processing payment. Please try again.", "error");
+        console.log("error placing order:", error);
+        errorNotify(error.response?.data?.message || "Error placing order. Please try again.");
       } finally {
         setIsLoading(false);
       }
-    } else {
-      await placeOrder(user, payment_id);
-    }
-  } else {
-    notify("Please login before proceeding to checkout.", "warning");
-    setIsLoading(false);
-  }
-};
-
-
-    const placeOrder = async (user, payment_id, razorpay_payment_id = null) => {
-        try {
-
-            const response = await axios.post(`${config.API_URL}/api/order`, 
-                {
-                    user_id: user.id, 
-                    payment_type: paymentType?.id, 
-                    payment_id: razorpay_payment_id || payment_id, 
-                    grand_total: totalAmount - couponDiscount,
-                    discount_amount: couponDiscount,
-                    coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
-                    coupon_id: selectedCoupon ? selectedCoupon.id : null, 
-                    order_notes: null, 
-                    full_name: selectedAddrs?.name, 
-                    email: selectedAddrs?.email, 
-                    mobile: selectedAddrs?.mobile, 
-                    landmark: selectedAddrs?.landmark, 
-                    street_address: selectedAddrs?.address, 
-                    pincode: selectedAddrs.pincode,
-                    latitude: selectedAddrs.latitude,
-                    longitude: selectedAddrs.longitude,
-                    desired_date: selectedDayTime?.date?.formattedDate,
-                    desired_time: selectedDayTime?.time,
-                    tip_amount: tipAmount,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}`,
-                    },
-                }
-            );            
-
-            if (response.data.status === 1) {
-                console.log(response.data.message);
-                notify("Successfully placed your order", "success");
-                localStorage.removeItem("cart");
-                setCart([]);
-                localStorage.removeItem("HommlieselectedAddrs");
-                localStorage.removeItem("HommlieselectedDayTime");
-                localStorage.removeItem("HommlieselectedCoupon");
-                localStorage.removeItem("HommliepaymentType");
-                getBookings();
-                placeOrder();
-                getCart();
-                setIsOrderConfirmed(true); // ✅ Always show confirmation
-                setTempOrderNumber(response.data.order_number);
-            } else {
-                errorNotify(response.data.message);
-                console.log("error placing order:",response.data);
-            }
-        } catch (error) {
-            console.log("error placing order:", error);
-            errorNotify(error.response?.data?.message || "Error placing order. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
     };
 
   // const handleCallbackRequest = async () => {
@@ -908,7 +964,7 @@ const paymentRef = useRef(null);
   <div className="flex justify-between items-center text-gray-700 mt-3">
     <span className="flex items-center">
       <FaWallet className="mr-2 text-[#249370]" />
-      Wallet Balance: ₹{walletBalance.toFixed(2)}
+      Wallet Balance: ₹{(walletApplied ? walletBalance - walletUsed : walletBalance).toFixed(2)}
     </span>
     <button
       className={`px-3 py-1 rounded-lg text-sm font-medium ${

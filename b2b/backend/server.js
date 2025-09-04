@@ -82,3 +82,7 @@ app.use(aboutusRoute);
 
 const contactUsRoute = require("./routes/contactus");
 app.use(contactUsRoute);
+
+// Wallet route
+const walletRoutes = require("./routes/wallet");
+app.use("/api", walletRoutes);
