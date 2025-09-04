@@ -152,7 +152,31 @@ exports.order = async (req, res) => {
       return res.status(200).json({ status: 0, message: "Your cart is empty" });
     }
 
-    const { wallet } = await User.findByPk(user_id);
+    // Deduct wallet if walletDeducted is sent in request
+    let walletDeducted = 0;
+    if (req.body.walletDeducted && Number(req.body.walletDeducted) > 0) {
+      const user = await User.findByPk(user_id);
+      if (!user) {
+        return res.status(400).json({ status: 0, message: "User not found for wallet deduction" });
+      }
+      walletDeducted = Number(req.body.walletDeducted);
+      if (user.wallet < walletDeducted) {
+        return res.status(400).json({ status: 0, message: "Insufficient wallet balance" });
+      }
+      const newWallet = user.wallet - walletDeducted;
+      await User.update({ wallet: newWallet }, { where: { id: user_id } });
+      // Record transaction as debit
+      await Transaction.create({
+        user_id,
+        order_id: null,
+        order_number: null,
+        wallet: -walletDeducted,
+        payment_id,
+        transaction_type: "debit", // debit for deduction
+        username: user.name,
+        type: payment_type,
+      });
+    }
 
     const orders = [];
 
