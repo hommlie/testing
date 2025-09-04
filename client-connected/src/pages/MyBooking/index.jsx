@@ -398,119 +398,218 @@ const closeComplaintModal = () => {
 //   }
 // };
   // Add New Complaint 
-  const handleComplaintSubmit = async () => {
-    if (isSubmittingComplaint) return;
-    const order = complaintOrder?.id || {};
-    const text = (complaintText || "").trim();
-    if (!order || !Number.isInteger(Number(order))) {
-      errorNotify("Invalid Order. Please reopen the complaint form.");
-      return;
-    }
-    setIsSubmittingComplaint(true);
-    try {
-      const jwtToken = Cookies.get("HommlieUserjwtToken");
-      const headers = { "Content-Type": "application/json" };
-      if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
-      const data = {
-        user_id:             order.user_id,
-        vendor_id:           order.vendor_id,
-        product_id:          order.product_id,
-        product_name:        order.product_name,
-        order_number:        order.order_number,
-        service_number:      order.service_number,
-        image:               order.image,
-        qty:                 order.qty,
-        price:               0,
-        tax:                 0,
-        order_total:         order.order_total,
-        full_name:           order.full_name,
-        email:               order.email,
-        mobile:              order.mobile,
-        landmark:            order.landmark,
-        street_address:      order.street_address,
-        pincode:             order.pincode,
-        latitude:            order.latitude,
-        longitude:           order.longitude,
-        // desired_date:      (removed)
-        // desired_time:      (removed)
-        employee_name:       order.employee_name,
-        billing:             order.billing,
-        account_type:        order.account_type,
-        account_sub_type:    order.account_sub_type,
-        business_region:     order.business_region,
-        business_sub_region: order.business_sub_region,
-        branch_code:         order.branch_code,
-        customer_type:       order.customer_type,
-        business_lead:       order.business_lead,
-        house_number:        order.house_number,
-        attribute:           order.attribute,
-        variation:           order.variation,
-        variations_sku:      order.variations_sku,
-        service_center_type: order.service_center_type,
-        assigned_to:         null,          // no random assignment
-        payment_id:          null,
-        coupon_name:         "",
-        coupon_id:           0,
-        discount_amount:     0,
-        extra_charges:       0,
-        extra_charge_remark: "",
-        shipping_cost:       0,
-        order_notes:         "",
-        comment:             "",
-        vendor_comment:      "",
-        remark:              "",
-        return_reason:       "",
-        return_number:       "",
-        otp:                 null,
-        emp_onsite_image:    null,
-        signature:           null,
-        chemicalsUsed:       null,
-        is_otp_verified:     0,
-        payment_type:        order.payment_type,
-        status:              1,
-        order_status:        2,
-        reselling_order_flag:"no",
-        resell_margin:       null,
-        slug:                null,
-        is_booked_by:        order.is_booked_by,
-        complaint_remark:    text,
-        order_type:          1, 
-      };
-      const payload = {
-        orderId: Number(order.id),
-        clonedData: data,
-      };
-      const res = await axios.post(
-        `${config.API_URL}/api/raisecomplaint`,
-        payload,
-        { headers, timeout: 20000 }
+  // const handleComplaintSubmit = async () => {
+  //   if (isSubmittingComplaint) return;
+  //   const order = complaintOrder?.id || {};
+  //   const text = (complaintText || "").trim();
+  //   if (!order || !Number.isInteger(Number(order))) {
+  //     errorNotify("Invalid Order. Please reopen the complaint form.");
+  //     return;
+  //   }
+  //   setIsSubmittingComplaint(true);
+  //   try {
+  //     const jwtToken = Cookies.get("HommlieUserjwtToken");
+  //     const headers = { "Content-Type": "application/json" };
+  //     if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
+  //     const data = {
+  //       user_id:             order.user_id,
+  //       vendor_id:           order.vendor_id,
+  //       product_id:          order.product_id,
+  //       product_name:        order.product_name,
+  //       order_number:        order.order_number,
+  //       service_number:      order.service_number,
+  //       image:               order.image,
+  //       qty:                 order.qty,
+  //       price:               0,
+  //       tax:                 0,
+  //       order_total:         order.order_total,
+  //       full_name:           order.full_name,
+  //       email:               order.email,
+  //       mobile:              order.mobile,
+  //       landmark:            order.landmark,
+  //       street_address:      order.street_address,
+  //       pincode:             order.pincode,
+  //       latitude:            order.latitude,
+  //       longitude:           order.longitude,
+  //       // desired_date:      (removed)
+  //       // desired_time:      (removed)
+  //       employee_name:       order.employee_name,
+  //       billing:             order.billing,
+  //       account_type:        order.account_type,
+  //       account_sub_type:    order.account_sub_type,
+  //       business_region:     order.business_region,
+  //       business_sub_region: order.business_sub_region,
+  //       branch_code:         order.branch_code,
+  //       customer_type:       order.customer_type,
+  //       business_lead:       order.business_lead,
+  //       house_number:        order.house_number,
+  //       attribute:           order.attribute,
+  //       variation:           order.variation,
+  //       variations_sku:      order.variations_sku,
+  //       service_center_type: order.service_center_type,
+  //       assigned_to:         null,          // no random assignment
+  //       payment_id:          null,
+  //       coupon_name:         "",
+  //       coupon_id:           0,
+  //       discount_amount:     0,
+  //       extra_charges:       0,
+  //       extra_charge_remark: "",
+  //       shipping_cost:       0,
+  //       order_notes:         "",
+  //       comment:             "",
+  //       vendor_comment:      "",
+  //       remark:              "",
+  //       return_reason:       "",
+  //       return_number:       "",
+  //       otp:                 null,
+  //       emp_onsite_image:    null,
+  //       signature:           null,
+  //       chemicalsUsed:       null,
+  //       is_otp_verified:     0,
+  //       payment_type:        order.payment_type,
+  //       status:              1,
+  //       order_status:        2,
+  //       reselling_order_flag:"no",
+  //       resell_margin:       null,
+  //       slug:                null,
+  //       is_booked_by:        order.is_booked_by,
+  //       complaint_remark:    text,
+  //       order_type:          1, 
+  //     };
+  //     const payload = {
+  //       orderId: Number(order.id),
+  //       clonedData: data,
+  //     };
+  //     const res = await axios.post(
+  //       `${config.API_URL}/api/raisecomplaint`,
+  //       payload,
+  //       { headers, timeout: 20000 }
+  //     );
+  //     const result = res?.data || {};
+  //     if (result?.status === "success") {
+  //       const cid = result?.complaint_id;
+  //       successNotify(cid ? `Complaint submitted successfully! ID: ${cid}` : "Complaint submitted successfully!");
+  //       closeComplaintModal();
+  //     } else {
+  //       errorNotify(result?.error || "Failed to submit complaint. Please try again.");
+  //     }
+  //   } catch (err) {
+  //     const status = err?.response?.status;
+  //     if (status === 422) {
+  //       errorNotify(err?.response?.data?.error || "Validation failed. Please check your input.");
+  //     } else if (status === 404) {
+  //       errorNotify("Order not found. Please refresh and try again.");
+  //     } else if (status === 500) {
+  //       errorNotify("Server error. Please try again in a moment.");
+  //     } else if (err?.code === "ECONNABORTED") {
+  //       errorNotify("Request timed out. Please check your connection and try again.");
+  //     } else {
+  //       errorNotify(err?.response?.data?.error || "Failed to submit complaint. Please try again.");
+  //     }
+  //     console.error("Error submitting complaint:", err);
+  //   } finally {
+  //     setIsSubmittingComplaint(false);
+  //   }
+  // };
+const handleComplaintSubmit = async () => {
+  if (isSubmittingComplaint) return;
+
+  const order = complaintOrder; // keep full booking object
+  const text = (complaintText || "").trim();
+
+  if (!order?.id) {
+    errorNotify("Invalid Order. Please reopen the complaint form.");
+    return;
+  }
+
+  setIsSubmittingComplaint(true);
+  try {
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    const headers = { "Content-Type": "application/json" };
+    if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
+
+    // clone booking/order details
+    const data = {
+      user_id: order.user_id,
+      vendor_id: order.vendor_id,
+      product_id: order.product_id,
+      product_name: order.product_name,
+      order_number: order.order_number,
+      service_number: order.service_number,
+      image: order.image,
+      qty: order.qty,
+      order_total: order.order_total,
+      full_name: order.full_name,
+      email: order.email,
+      mobile: order.mobile,
+      alternate_mobile: order.alternate_mobile,
+      address: order.address,
+      address2: order.address2,
+      city: order.city,
+      state: order.state,
+      country: order.country,
+      pincode: order.pincode,
+      landmark: order.landmark,
+      latitude: order.latitude,
+      longitude: order.longitude,
+      booking_date: order.booking_date,
+      booking_time: order.booking_time,
+      booking_status: order.booking_status,
+      payment_status: order.payment_status,
+      payment_mode: order.payment_mode,
+      transaction_id: order.transaction_id,
+      razorpay_order_id: order.razorpay_order_id,
+      razorpay_payment_id: order.razorpay_payment_id,
+      razorpay_signature: order.razorpay_signature,
+      coupon_code: order.coupon_code,
+      coupon_discount: order.coupon_discount,
+      gst_amount: order.gst_amount,
+      sub_total: order.sub_total,
+      vendor_commission: order.vendor_commission,
+      admin_commission: order.admin_commission,
+      created_at: order.created_at,
+      updated_at: order.updated_at,
+      complaint_remark: text,   // <-- complaint text entered by user
+      order_type: 1,
+    };
+
+    // final payload
+    const payload = {
+      orderId: order.id,
+      clonedData: data,
+    };
+
+    // API call
+    const res = await axios.post(
+      `${config.API_URL}/api/raisecomplaint`,
+      payload,
+      { headers, timeout: 20000 }
+    );
+
+    const result = res?.data || {};
+    if (result?.status === "success") {
+      successNotify(
+        result?.complaint_id
+          ? `Complaint submitted successfully! ID: ${result.complaint_id}`
+          : "Complaint submitted successfully!"
       );
-      const result = res?.data || {};
-      if (result?.status === "success") {
-        const cid = result?.complaint_id;
-        successNotify(cid ? `Complaint submitted successfully! ID: ${cid}` : "Complaint submitted successfully!");
-        closeComplaintModal();
-      } else {
-        errorNotify(result?.error || "Failed to submit complaint. Please try again.");
-      }
-    } catch (err) {
-      const status = err?.response?.status;
-      if (status === 422) {
-        errorNotify(err?.response?.data?.error || "Validation failed. Please check your input.");
-      } else if (status === 404) {
-        errorNotify("Order not found. Please refresh and try again.");
-      } else if (status === 500) {
-        errorNotify("Server error. Please try again in a moment.");
-      } else if (err?.code === "ECONNABORTED") {
-        errorNotify("Request timed out. Please check your connection and try again.");
-      } else {
-        errorNotify(err?.response?.data?.error || "Failed to submit complaint. Please try again.");
-      }
-      console.error("Error submitting complaint:", err);
-    } finally {
-      setIsSubmittingComplaint(false);
+      closeComplaintModal();
+    } else {
+      errorNotify(result?.error || "Failed to submit complaint. Please try again.");
     }
-  };
+  } catch (err) {
+    console.error("Error submitting complaint:", err);
+    if (err.response?.data?.error) {
+      errorNotify(err.response.data.error);
+    } else if (err.code === "ECONNABORTED") {
+      errorNotify("Request timed out. Please check your connection and try again.");
+    } else {
+      errorNotify("Something went wrong. Please try again.");
+    }
+  } finally {
+    setIsSubmittingComplaint(false);
+  }
+};
 
   return (
     <div className="min-h-screen font-headerFont bg-white py-12" style={{
