@@ -138,10 +138,6 @@ export default function AddtoCart() {
   }
 }
 
-
-
-  // Fetch wallet balance from backend using user token
-  // Always fetch wallet balance from backend on mount and after order
   const fetchWallet = async () => {
     try {
       const jwtToken = Cookies.get("HommlieUserjwtToken");
