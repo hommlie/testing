@@ -303,19 +303,17 @@ export default function AddtoCart() {
       const payment_id = Math.random().toString(36).substring(2, 12);
 
       // If wallet is applied, deduct from wallet before order (sync with backend)
-      let walletDeducted = 0;
       if (walletApplied && walletUsed > 0) {
-            try {
-              const walletRes = await axios.post(
-                `${config.API_URL}/wallet/deduct-money`,
+        try {
+          const walletRes = await axios.post(
+            `${config.API_URL}/wallet/deduct-money`,
             {
               userId: user.id,
               amount: walletUsed
             },
             { headers: { Authorization: `Bearer ${jwtToken}` } }
           );
-          if (walletRes.data.wallet !== undefined) {
-            walletDeducted = walletUsed;
+          if (walletRes.data.status === 1) {
             // Always fetch wallet balance from backend after deduction
             await fetchWallet();
           } else {
