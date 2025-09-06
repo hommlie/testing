@@ -31,7 +31,7 @@ export default function ShareButton() {
       {/* Back Button (Top-Left) */}
       <button
         onClick={handleBack}
-        className="absolute top-36 left-2 bg-white text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
+        className="absolute top-36 left-5 bg-white text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
       >
         <FaArrowLeft size={20} />
       </button>
