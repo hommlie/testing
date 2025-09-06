@@ -302,8 +302,8 @@ export default function AddtoCart() {
       let walletDeducted = 0;
       if (walletApplied && walletUsed > 0) {
         try {
-          const walletRes = await axios.post(
-            `${config.API_URL}/wallet/deduct-money`,
+            const walletRes = await axios.post(
+              `${config.API_URL}/hommlieserver/api/wallet/deduct-money`,
             {
               userId: user.id,
               amount: walletUsed,
