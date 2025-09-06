@@ -309,9 +309,12 @@ const HomePage = () => {
   const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
-  const displayedFaqs = isMobile
+  let displayedFaqs = isMobile
     ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
     : data?.faqs;
+
+  // Ensure displayedFaqs is always an array
+  displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
 
    return (
     <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
