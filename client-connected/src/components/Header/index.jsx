@@ -984,21 +984,21 @@ const offers = [
              */}
              <NavLink
               to="/services"
-              className="block py-2 px-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg text-center font-medium shadow hover:from-emerald-700 hover:to-emerald-800 transition-all"
+              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Services
             </NavLink>
             <NavLink
               to="/help"
-              className="block py-2 px-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg text-center font-medium shadow hover:from-emerald-700 hover:to-emerald-800 transition-all"
+              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Help
             </NavLink>
             <NavLink
               to="/register-free-listing"
-              className="block py-2 px-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg text-center font-medium shadow hover:from-emerald-700 hover:to-emerald-800 transition-all"
+              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Join ONDC

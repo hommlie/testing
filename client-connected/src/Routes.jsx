@@ -210,7 +210,7 @@ const ProjectRoutes = () => {
       element: <PrivacyPolicy />,
     },
     { path: `${config.VITE_BASE_URL}/about-us`, element: <AboutUs /> },
-    { path: `${config.VITE_BASE_URL}/contact-us`, element: <ContactUs /> },
+    { path: `${config.VITE_BASE_URL}/contact-us`, element: <Navigate to={`${config.VITE_BASE_URL}/help`} replace /> },
     { path: `${config.VITE_BASE_URL}/careers`, element: <CareerPage /> },
     { path: `${config.VITE_BASE_URL}/partner-us`, element: <PartnerWithUs /> },
     {

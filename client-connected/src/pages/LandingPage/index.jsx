@@ -95,7 +95,11 @@ const LandingPage = () => {
 const canonicalUrl = `https://www.hommlie.com/service/${slug}`;
 
 return (
-  <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl font-poppins space-y-20">
+  <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl font-poppins space-y-20"
+    style={{
+            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+          }}
+  >
     <Helmet>
       <title>{pageData?.landing_page?.meta_title}</title>
       <meta
@@ -107,11 +111,11 @@ return (
     </Helmet>
 
       {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8">
+      <section className="relative px-4 sm:px-6 lg:px-8 -mt-16">
         <div className="">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-10 md:mb-0">
-              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="text-4xl sm:text-3xl font-bold text-gray-900 mb-4">
                 {displayText}
               </h1>
               <p className="text-lg text-gray-600 mb-8">
