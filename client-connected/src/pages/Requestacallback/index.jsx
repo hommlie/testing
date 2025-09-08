@@ -10,8 +10,10 @@ const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // ---------- Validation ----------
   const validateForm = () => {
     const newErrors = {};
+
     if (!callbackName.trim()) {
       newErrors.name = 'Name is required.';
     } else if (!/^[A-Za-z ]+$/.test(callbackName.trim())) {
@@ -20,14 +22,15 @@ const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
 
     if (!callbackPhone.trim()) {
       newErrors.phone = 'Phone number is required.';
-    } else if (!/^[0-9]{10,}$/.test(callbackPhone.trim())) {
-      newErrors.phone = 'Phone must be at least 10 digits.';
+    } else if (!/^[0-9]{10}$/.test(callbackPhone.trim())) {
+      newErrors.phone = 'Phone number must be exactly 10 digits.';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // ---------- Submit ----------
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -38,6 +41,7 @@ const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
       const address = source === "qrproject"
         ? "Callback request from qrproject"
         : "Callback request from homepage";
+
       await axios.post(`${config.API_URL}/api/createInspection`, {
         fullName: callbackName,
         address,
@@ -71,6 +75,8 @@ const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
           <>
             <h2 className="text-xl font-semibold mb-4 text-black">Enter Your Details</h2>
             <form onSubmit={handlePhoneSubmit} className="space-y-4 text-left">
+              
+              {/* Name Input */}
               <div>
                 <input
                   type="text"
@@ -82,6 +88,7 @@ const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
 
+              {/* Phone Input */}
               <div className="flex gap-2">
                 <select
                   value={countryCode}
@@ -97,12 +104,17 @@ const ContactForm = ({ user, isOpen, onClose, source = "homepage" }) => {
                   type="tel"
                   placeholder="Phone number"
                   value={callbackPhone}
-                  onChange={(e) => setCallbackPhone(e.target.value)}
+                  onChange={(e) => {
+                    // Only digits, max 10
+                    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setCallbackPhone(value);
+                  }}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-600"
                 />
               </div>
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
 
+              {/* Buttons */}
               <button
                 type="submit"
                 className="w-full bg-[#92B775] text-white py-2 rounded-md hover:bg-[#52852d] hover:text-white transition"

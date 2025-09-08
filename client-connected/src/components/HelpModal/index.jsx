@@ -80,7 +80,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
       icon: <MdEmail className="text-red-500 text-xl" />,
       title: "Email",
       detail: "reach@hommlie.com",
-      action: "mailto:help@hommlie.com"
+      action: "mailto:reach@hommlie.com"
     },
     {
       icon: <MdLocationOn className="text-amber-500 text-xl" />,
