@@ -13,8 +13,10 @@ import {
   FaLinkedin,
   FaUser,
   FaWallet,
+  FaTimes,
   FaGift,
   FaSignOutAlt,
+  FaMoneyBillWave,
 } from "react-icons/fa";
 import { MdLocationOn, MdEmail, MdKeyboardArrowDown } from "react-icons/md";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -339,6 +341,106 @@ const offers = [
     return () => clearInterval(interval);
   }, []);
 
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
+const fetchWalletBalance = async () => {
+  try {
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (!jwtToken) {
+      setWalletBalance(0);
+      return;
+    }
+    const user = jwtDecode(jwtToken);
+
+    const res = await axios.post(
+      `${config.API_URL}/api/wallet/transactions`,
+      { userId: user.id },
+      { headers: { Authorization: `Bearer ${jwtToken}` } }
+    );
+
+    if (res.data?.status === 1 && res.data?.wallet) {
+      setWalletBalance(Number(res.data.wallet.balance) || 0);
+    } else if (
+      res.data?.message &&
+      res.data.message.toLowerCase().includes("wallet not found")
+    ) {
+      setWalletBalance(0);
+    } else {
+      // silently fallback to 0 for header; you can toast if you want
+      setWalletBalance(0);
+    }
+  } catch {
+    setWalletBalance(0);
+  }
+};
+
+// Fetch once when user logs in / changes
+useEffect(() => {
+  if (user && user.length !== 0) fetchWalletBalance();
+}, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+// Also refresh whenever the wallet modal opens
+useEffect(() => {
+  if (isWalletModalOpen) fetchWalletBalance();
+}, [isWalletModalOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+// Little SVG that looks like your money note
+const MoneyNoteIcon = ({ className = "w-8 h-8" }) => (
+  <svg viewBox="0 0 36 36" className={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="noteGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#22c55e" />   {/* light green */}
+        <stop offset="100%" stopColor="#16a34a" /> {/* darker green */}
+      </linearGradient>
+    </defs>
+    {/* slight tilt like the mock */}
+    <g transform="rotate(8 18 18)">
+      {/* outer card */}
+      <rect x="6" y="7" width="24" height="22" rx="7" fill="url(#noteGrad)" />
+      {/* inner inset */}
+      <rect x="9" y="10" width="18" height="16" rx="6" fill="#19b874" />
+      {/* rupee mark in white (simple text works fine at this size) */}
+      <text
+        x="18"
+        y="22"
+        textAnchor="middle"
+        fontSize="14"
+        fontWeight="800"
+        fill="#fff"
+      >
+        ₹
+      </text>
+    </g>
+  </svg>
+);
+
+// Wallet pill that shows full amount and overlaps the green note
+const WalletPill = ({ amount = 0, onClick }) => (
+  <div className="relative inline-flex items-center">
+    <button
+      onClick={onClick}
+      className="inline-flex items-center rounded-full bg-white px-2 py-1 pr-7
+                 border border-gray-200 shadow-sm hover:shadow-md transition-all
+                 whitespace-nowrap"
+      aria-label={`Wallet balance rupees ${amount}`}
+    >
+      <span className="text-[#0B1727] font-extrabold tracking-tight leading-none">
+        ₹{amount}
+      </span>
+    </button>
+
+    {/* money note badge; sits on the outside corner, doesn't block clicks */}
+    <span
+      className="pointer-events-none absolute right-[-8px] bottom-[-8px] rounded-lg
+                 shadow-md ring-2 ring-white rotate-6"
+    >
+      <MoneyNoteIcon className="w-8 h-8" />
+    </span>
+  </div>
+);
+
+
   return (
     <header
       ref={headerRef}
@@ -477,6 +579,20 @@ const offers = [
                 <FaQuestionCircle className="text-inherit" />
                 Help
               </button>
+              <span className="hidden md:inline-block text-black">|</span>
+              {user?.length === 0 ? (
+                // Not signed in: show normal button that opens login
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                >
+                  <FaWallet className="text-inherit" />
+                  Wallet
+                </button>
+              ) : (
+                // Signed in: show pill with amount and money note icon
+                <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} />
+              )}
             </div>
           </div>
         </div>
@@ -1028,6 +1144,8 @@ const offers = [
         </div>
       )}
 
+      
+
       {isOfferModalOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
           <motion.div
@@ -1108,8 +1226,182 @@ const offers = [
       )}
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
       
+      {isWalletModalOpen && (
+  <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <AnimatePresence>
+      <motion.div
+        key="wallet-modal"
+        className="fixed inset-0 z-50 flex items-center justify-center px-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
+          initial={{ scale: 0.92, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.92, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+        >
+          {/* Minimal header accent */}
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
+
+          {/* Card body */}
+          <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
+            {/* Close */}
+            <button
+              onClick={() => setIsWalletModalOpen(false)}
+              className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
+              aria-label="Close"
+            >
+              <FaTimes />
+            </button>
+
+            {/* Animated Wallet Icon */}
+            <div className="relative flex items-center justify-center mb-4">
+              {/* Soft pulsing ring */}
+              <motion.span
+                className="absolute h-20 w-20 rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
+                  filter: "blur(2px)",
+                }}
+                initial={{ scale: 0.9, opacity: 0.5 }}
+                animate={{ scale: 1.1, opacity: 1 }}
+                transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
+              />
+              {/* Icon wrapper with subtle bob + glow */}
+              <motion.div
+                className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
+                initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
+                animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
+                transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+              >
+                {/* Gentle inner glow */}
+                <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
+                {/* Wallet icon with soft gradient stroke */}
+                <FaWallet
+                  className="text-white drop-shadow-sm"
+                  style={{
+                    fontSize: "28px",
+                    WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
+                  }}
+                />
+                {/* Quick shimmer sweep */}
+                <motion.span
+                  className="absolute -inset-1 rounded-2xl"
+                  style={{
+                    background:
+                      "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
+                    mixBlendMode: "screen",
+                  }}
+                  initial={{ x: "-120%" }}
+                  animate={{ x: "120%" }}
+                  transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
+                />
+              </motion.div>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
+              Your Wallet
+            </h3>
+
+            {/* Balance label */}
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
+                Available Balance
+              </span>
+              <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
+                Secured by Razorpay
+              </span>
+            </div>
+
+            {/* Amount */}
+            <motion.p
+              key={walletBalance}
+              className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 220, damping: 18 }}
+            >
+              ₹{walletBalance}
+            </motion.p>
+
+            {/* Micro copy */}
+            <p className="mt-3 text-white/90 text-center text-sm">
+              {walletBalance > 0
+                ? "Use your wallet amount instantly at checkout."
+                : "Your wallet is empty. Invite friends to earn or add money to start."}
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-6 grid grid-cols-1 gap-3">
+              {walletBalance > 0 ? (
+                <>
+                  <button
+                    onClick={() => {
+                      setIsWalletModalOpen(false);
+                      navigate("/quickservice");
+                    }}
+                    className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                  >
+                    Book a Service
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsWalletModalOpen(false);
+                      navigate("/my-wallet");
+                    }}
+                    className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                  >
+                    View Transactions
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setIsWalletModalOpen(false);
+                      setIsReferAndEarnOpen(true);
+                    }}
+                    className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                  >
+                    Refer a Friend & Earn
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsWalletModalOpen(false);
+                      navigate("/my-wallet");
+                    }}
+                    className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                  >
+                    Add Money
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Subtle trust row */}
+            <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
+              <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
+              <span>Instant apply at checkout</span>
+              <span className="mx-1">•</span>
+              <span>No extra fees</span>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  </div>
+)}
+
     </header>
   );
+  
 };
 
 export default Header;

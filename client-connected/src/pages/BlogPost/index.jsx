@@ -385,15 +385,15 @@ const BlogPost = () => {
           src={blog.featured_image || "/api/placeholder/1920/500"}
           alt={blog.title}
           className="
-    w-full 
-    h-auto              /* ✅ mobile: auto height */
-    object-cover object-center
-    sm:w-[100%] 
-    sm:h-[100vh]        /* ✅ desktop: keep full height */
-    sm:ml-12 sm:pr-24
-  "
-  style={{ minHeight: "auto", minWidth: "100%" }} /* ✅ overrides only for mobile */
-/>
+            w-full 
+            h-auto              /* ✅ mobile: auto height */
+            object-cover object-center
+            sm:w-[100%] 
+            sm:h-[100vh]        /* ✅ desktop: keep full height */
+            sm:ml-12 sm:pr-24
+          "
+          style={{ minHeight: "auto", minWidth: "100%" }} /* ✅ overrides only for mobile */
+        />
         {/* <div className="absolute inset-0 bg-black/60 flex items-center justify-center px-2 sm:px-4">
           <div className="text-center text-white max-w-3xl">
             <h1 className="text-xl xs:text-2xl sm:text-5xl font-bold mb-2 sm:mb-4 leading-tight">

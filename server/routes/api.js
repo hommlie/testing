@@ -5,7 +5,7 @@ const checkUserToken = require("../middleware/userMiddleware");
 const upload = require("../config/multerConfig");
 
 const UserController = require("../controllers/UserController");
-const ProductsController = require("../controllers/ProductsController ");
+const ProductsController = require("../controllers/ProductsController");
 const HomeController = require("../controllers/HomeController");
 const CategoryController = require("../controllers/CategoryController");
 const BannerController = require("../controllers/BannerController");

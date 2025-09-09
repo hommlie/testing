@@ -12,6 +12,7 @@ import { ToastProvider } from "./context/ToastProvider";
 
 import "tailwindcss/tailwind.css";
 import "./App.css";
+import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
 
 function SEOHelmet({ settings }) {
   const location = useLocation();
@@ -90,6 +91,8 @@ function App() {
               ) : (
                 <Routes />
               )}
+
+              <FloatingPromoDrawer />
 
               {/* ✅ Footer */}
               <Footer
