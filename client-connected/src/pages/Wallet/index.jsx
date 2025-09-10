@@ -217,7 +217,7 @@ export default function Wallet() {
                           {t.description}
                         </p>
                         <p className="text-white/60 text-xs sm:text-sm">
-                          {format(new Date(t.created_at), "MMM dd, yyyy HH:mm")}
+                          {format(new Date(t.created_at || t.createdAt), "MMM dd, yyyy HH:mm")}
                         </p>
                       </div>
                     </div>

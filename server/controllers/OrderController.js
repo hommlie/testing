@@ -13,6 +13,8 @@ const {
   Variation,
   Coupons,
   Attribute,
+  Wallet,            
+  WalletTransaction,
 } = require("../models");
 // const stripe = require('stripe')('your_stripe_secret_key');
 const moment = require("moment");
@@ -98,8 +100,8 @@ exports.order = async (req, res) => {
   const {
     user_id,
     payment_type,
-    payment_id,
-    grand_total,
+    payment_id,            // COD random id or Razorpay payment id
+    grand_total,           // must already include coupon, tip, wallet deductions in the client math
     discount_amount,
     coupon_name,
     coupon_id,
@@ -114,84 +116,92 @@ exports.order = async (req, res) => {
     longitude,
     desired_time,
     desired_date,
+    wallet_used = 0,       // ⬅ amount user chose to use from wallet (numeric)
   } = req.body;
 
   if (!user_id) {
-    return res
-      .status(400)
-      .json({ status: 0, message: "Please login to save address" });
+    return res.status(400).json({ status: 0, message: "Please login to save address" });
   }
 
   const userData = await User.findByPk(user_id);
+  if (!userData) return res.status(400).json({ status: 0, message: "Invalid user ID" });
 
-  if (!userData) {
-    return res.status(400).json({ status: 0, message: "Invalid user ID" });
-  }
-
+  const t = await sequelize.transaction();      // ⬅ single transaction for EVERYTHING
   try {
-    let formattedTime = desired_time;
-    if (desired_time) {
-      formattedTime = moment(desired_time, "hh:mm A").format("HH:mm");
-    }
+    let formattedTime = desired_time ? moment(desired_time, "hh:mm A").format("HH:mm") : desired_time;
 
-    const lastOrder = await Order.findOne({
-      order: [["id", "DESC"]],
-    });
-
-    const lastOrderNumber = lastOrder
-      ? parseInt(lastOrder.order_number)
-      : 10000;
+    // next order number
+    const lastOrder = await Order.findOne({ order: [["id", "DESC"]] });
+    const lastOrderNumber = lastOrder ? parseInt(lastOrder.order_number) : 10000;
     const order_number = (lastOrderNumber + 1).toString();
 
-    const cartItems = await Cart.findAll({
-      where: { user_id },
-      order: [["id", "DESC"]],
-    });
+    // cart
+      const cartItems = await Cart.findAll({
+    where: { user_id },
+    order: [["id", "DESC"]],
+    transaction: t,
+    lock: t.LOCK.UPDATE,
+  });
+  if (cartItems.length === 0) {
+    await t.rollback();
+    return res.status(200).json({ status: 0, message: "Your cart is empty" });
+  }
 
-    if (cartItems.length === 0) {
-      return res.status(200).json({ status: 0, message: "Your cart is empty" });
-    }
+  const wantToUse = Number(wallet_used || 0);
+   let walletDebited = 0;
+ if (wantToUse > 0) {
+   // Amount due before wallet (derived from cart): sum(price*qty + tax*qty + shipping) - discount
+   const preWalletDue = Math.max(0,
+     cartItems.reduce((sum, it) =>
+       sum
+        + Number(it.price || 0) * Number(it.qty || 0)
+        + Number(it.tax || 0)   * Number(it.qty || 0)
+        + Number(it.shipping_cost || 0),
+     0) - Number(discount_amount || 0)
+   );
 
+   // find/create wallet and lock
+   const [wallet] = await Wallet.findOrCreate({
+     where: { user_id },
+     defaults: { user_id, balance: 0 },
+     transaction: t,
+    lock: t.LOCK.UPDATE,
+   });
 
+   const balance = Number(wallet.balance) || 0;
+   walletDebited = Math.max(0, Math.min(wantToUse, balance, preWalletDue));
+
+   if (walletDebited > 0) {
+     wallet.balance = balance - walletDebited;
+     await wallet.save({ transaction: t });
+
+     await WalletTransaction.create({
+       wallet_id: wallet.id,
+       transaction_type: "debit",
+       amount: walletDebited,
+       payment_id: String(payment_id || `WAL-${order_number}`),
+       description: `Order #${order_number} payment`,
+     }, { transaction: t });
+   }
+ }
+    // create orders (your existing logic, with `transaction: t`)
     const orders = [];
-
     for (const cartItem of cartItems) {
       const {
-        vendor_id,
-        product_id,
-        product_name,
-        image,
-        qty,
-        price,
-        attribute,
-        variation,
-        tax,
-        shipping_cost,
+        vendor_id, product_id, product_name, image, qty, price,
+        attribute, variation, tax, shipping_cost,
       } = cartItem;
 
-      const discountAmount = discount_amount / cartItems.length;
+      const discountPerItem = Number(discount_amount || 0) / cartItems.length;
+      const variationDetails = await Variation.findOne({ where: { id: variation, product_id }, transaction: t });
+      const attributeDetails = await Attribute.findOne({ where: { id: attribute }, transaction: t });
 
-      const variationDetails = await Variation.findOne({
-        where: { id: variation, product_id },
-      });
-
-      const attributeDetails = await Attribute.findOne({
-        where: { id: attribute },
-      });
-
-      // if (variationDetails && attributeDetails.attribute.includes('AMC')) {
-      if (
-        variationDetails &&
-        variationDetails.variation_times &&
-        variationDetails.variation_times > 1
-      ) {
+      if (variationDetails && variationDetails.variation_times && variationDetails.variation_times > 1) {
         const { variation_interval, variation_times } = variationDetails;
         const pricePerOrder = price / variation_times;
 
         for (let i = 0; i < variation_times; i++) {
-          const orderDate = moment(desired_date)
-            .add(i * variation_interval, "days")
-            .format("YYYY-MM-DD");
+          const orderDate = moment(desired_date).add(i * variation_interval, "days").format("YYYY-MM-DD");
 
           const order = await Order.create({
             user_id,
@@ -208,8 +218,8 @@ exports.order = async (req, res) => {
             tax: (tax / variation_times) * qty,
             coupon_name,
             coupon_id,
-            shipping_cost: shipping_cost,
-            order_total: grand_total,
+            shipping_cost,
+            order_total: grand_total,                 // store full order total as you already do
             order_notes,
             payment_type,
             full_name,
@@ -220,30 +230,13 @@ exports.order = async (req, res) => {
             pincode,
             latitude,
             longitude,
-            discount_amount: discountAmount / variation_times,
+            discount_amount: discountPerItem / variation_times,
             order_status: 1,
             desired_time: formattedTime,
             desired_date: orderDate,
-          });
+          }, { transaction: t });
 
           orders.push(order);
-
-          const currentDate = new Date();
-          const currentTime = currentDate.toLocaleTimeString();
-
-          sendWhatsAppNotification({
-            campaignName: "⁠Booking Service Details",
-            phoneNumber: userData.mobile,
-            userName: userData.name,
-            templateParams: [
-              userData.name?.toString(),
-              order_number?.toString(),
-              currentDate.toLocaleDateString(),
-              currentTime?.toString(),
-              product_name,
-              order.order_total?.toString(),
-            ],
-          });
         }
       } else {
         const order = await Order.create({
@@ -262,7 +255,7 @@ exports.order = async (req, res) => {
           coupon_name,
           coupon_id,
           shipping_cost,
-          order_total: grand_total,
+          order_total: grand_total,                 // store full order total
           order_notes,
           payment_type,
           full_name,
@@ -273,39 +266,44 @@ exports.order = async (req, res) => {
           pincode,
           latitude,
           longitude,
-          discount_amount: discountAmount,
+          discount_amount: discountPerItem,
           order_status: 1,
           desired_time: formattedTime,
           desired_date,
-        });
+        }, { transaction: t });
 
         orders.push(order);
-
-        const currentDate = new Date();
-        const currentTime = currentDate.toLocaleTimeString();
-
-        sendWhatsAppNotification({
-          campaignName: "Booking Service Details",
-          phoneNumber: userData.mobile,
-          userName: userData.name,
-          templateParams: [
-            userData.name?.toString(),
-            order_number?.toString(),
-            currentDate.toLocaleDateString(),
-            currentTime?.toString(),
-            product_name,
-            order.price?.toString(),
-          ],
-        });
       }
     }
 
-    const order_id = orders[0].id;
+    // clear cart
+    await Cart.destroy({ where: { user_id }, transaction: t });
 
-    await Cart.destroy({ where: { user_id } });
+    // commit everything
+    await t.commit();
 
-    if (userData?.email) {
-      try {
+    // non-critical notifications/emails can be sent after commit
+    try {
+      const currentDate = new Date();
+      const currentTime = currentDate.toLocaleTimeString();
+      const firstName = userData.name;
+      const firstProduct = orders[0]?.product_name || "Service";
+
+      sendWhatsAppNotification({
+        campaignName: "Booking Service Details",
+        phoneNumber: userData.mobile,
+        userName: userData.name,
+        templateParams: [
+          firstName?.toString(),
+          order_number?.toString(),
+          currentDate.toLocaleDateString(),
+          currentTime?.toString(),
+          firstProduct,
+          grand_total?.toString(),
+        ],
+      });
+
+      if (userData?.email) {
         const subject = `Order Confirmation - Order #${order_number}`;
         const html = `
           <h1>Your order has been placed successfully!</h1>
@@ -314,23 +312,26 @@ exports.order = async (req, res) => {
           <p>Thank you for shopping with us!</p>
         `;
         await sendEmail(userData.email, subject, html);
-      } catch (emailError) {
-        console.error("Error sending order confirmation email:", emailError);
       }
+    } catch (e) {
+      console.error("Post-commit notify error:", e);
     }
 
-    return res.status(200).json({
-      status: 1,
-      message: "Order has been placed successfully",
-      order_number,
-    });
+   const freshWallet = await Wallet.findOne({ where: { user_id } });
+ return res.status(200).json({
+   status: 1,
+   message: "Order has been placed successfully",
+   order_number,
+   wallet_debited: walletDebited,
+   wallet_balance: Number(freshWallet?.balance || 0),
+});
   } catch (error) {
     console.error("Error placing order:", error);
-    return res
-      .status(500)
-      .json({ status: 0, message: "Failed to place order", error: error });
+    try { await t.rollback(); } catch (e) {}
+    return res.status(500).json({ status: 0, message: "Failed to place order", error: error.message });
   }
 };
+
 
 exports.orderhistory = async (req, res) => {
   const { user_id } = req.body;
@@ -1550,7 +1551,7 @@ row.forEach((val, i) => {
 
 
     // ===== PAYMENT TYPE =====
-    const payTop = rowY + 40;
+  const payTop = rowY + 40;
 
 // Title
 doc.font("Helvetica-Bold").fontSize(10).text("Payment Type", 40, payTop);

@@ -139,7 +139,7 @@ export default function FloatingPromoDrawer() {
         whileTap={{ scale: 0.98 }}
       >
         <div
-          className="relative h-56 w-16 rounded-l-3xl overflow-hidden flex items-center justify-center shadow-[0_16px_40px_-12px_rgba(2,6,23,0.45)]"
+          className="relative h-56 w-12 rounded-l-3xl overflow-hidden flex items-center justify-center shadow-[0_16px_40px_-12px_rgba(2,6,23,0.45)]"
           style={{ background: V.bg, backdropFilter: V.backdrop }}
         >
           <span
@@ -201,7 +201,7 @@ export default function FloatingPromoDrawer() {
     <>
       {/* CLOSED STATE HANDLE (top:10px, height:530px; centered) */}
       {!open && (
-        <div className="fixed right-0 top-[10px] h-[530px] z-[60] flex items-center hidden md:flex">
+        <div className="fixed right-0 top-[10px] h-[530px] z-[60] flex items-center hidden md:flex ">
           <VerticalHandle
             direction="left"
             ariaLabel="Show Hommlie offer"
