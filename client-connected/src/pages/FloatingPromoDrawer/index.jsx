@@ -68,169 +68,149 @@ export default function FloatingPromoDrawer() {
     copyTimer.current = setTimeout(() => setCopied(false), 1800);
   };
 
-  // NEW: close drawer, then open Login modal after animation (matches spring ~250-300ms)
+  // close drawer, then open Login modal after animation
   const openLoginModal = () => {
     setOpen(false);
     window.setTimeout(() => setShowLogin(true), 300);
   };
 
- const VerticalHandle = ({
-  direction = "left",
-  onClick,
-  ariaLabel,
-  variant = "brand",          // 👈 pick: brand | slate | emerald | rose | glass
-  text = "UPTO ₹200 OFF",
-}) => {
-  const isLeft = direction === "left";
+  // ——— PREMIUM HANDLE (same component you’re already using, Helvetica label) ———
+  const VerticalHandle = ({
+    direction = "left",
+    onClick,
+    ariaLabel,
+    variant = "brand", // brand | slate | emerald | rose | glass
+    text = "UPTO ₹200 OFF",
+  }) => {
+    const isLeft = direction === "left";
 
-  // Theme tokens
-  const VARIANTS = {
-    brand: {
-      bg: "linear-gradient(180deg, #16a085 0%, #0f8a6f 45%, #035240 100%)",
-      shard: "#035240",
-      label: "#ffffff",
-      sheen: "rgba(255,255,255,0.18)",
-      ring: "rgba(255,255,255,0.18)",
-      backdrop: "",
-    },
-    slate: {
-      bg: "linear-gradient(180deg, #64748b 0%, #475569 50%, #374151 100%)",
-      shard: "#475569",
-      label: "#ffffff",
-      sheen: "rgba(255,255,255,0.15)",
-      ring: "rgba(255,255,255,0.10)",
-      backdrop: "",
-    },
-    emerald: {
-      bg: "linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%)",
-      shard: "#059669",
-      label: "#042f2e",
-      sheen: "rgba(255,255,255,0.20)",
-      ring: "rgba(255,255,255,0.16)",
-      backdrop: "",
-    },
-    rose: {
-      bg: "linear-gradient(180deg, #fb7185 0%, #f43f5e 50%, #e11d48 100%)",
-      shard: "#e11d48",
-      label: "#ffffff",
-      sheen: "rgba(255,255,255,0.15)",
-      ring: "rgba(255,255,255,0.12)",
-      backdrop: "",
-    },
-    glass: {
-      bg: "linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.12))",
-      shard: "#94a3b8",
-      label: "#0f172a",
-      sheen: "rgba(255,255,255,0.35)",
-      ring: "rgba(255,255,255,0.30)",
-      backdrop: "blur(8px) saturate(120%)", // frosted
-    },
-  };
-  const V = VARIANTS[variant] || VARIANTS.brand;
+    const VARIANTS = {
+      brand: {
+        bg: "linear-gradient(180deg, #16a085 0%, #0f8a6f 45%, #035240 100%)",
+        shard: "#035240",
+        label: "#ffffff",
+        sheen: "rgba(255,255,255,0.18)",
+        ring: "rgba(255,255,255,0.18)",
+        backdrop: "",
+      },
+      slate: {
+        bg: "linear-gradient(180deg, #64748b 0%, #475569 50%, #374151 100%)",
+        shard: "#475569",
+        label: "#ffffff",
+        sheen: "rgba(255,255,255,0.15)",
+        ring: "rgba(255,255,255,0.10)",
+        backdrop: "",
+      },
+      emerald: {
+        bg: "linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%)",
+        shard: "#059669",
+        label: "#042f2e",
+        sheen: "rgba(255,255,255,0.20)",
+        ring: "rgba(255,255,255,0.16)",
+        backdrop: "",
+      },
+      rose: {
+        bg: "linear-gradient(180deg, #fb7185 0%, #f43f5e 50%, #e11d48 100%)",
+        shard: "#e11d48",
+        label: "#ffffff",
+        sheen: "rgba(255,255,255,0.15)",
+        ring: "rgba(255,255,255,0.12)",
+        backdrop: "",
+      },
+      glass: {
+        bg: "linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.12))",
+        shard: "#94a3b8",
+        label: "#0f172a",
+        sheen: "rgba(255,255,255,0.35)",
+        ring: "rgba(255,255,255,0.30)",
+        backdrop: "blur(8px) saturate(120%)",
+      },
+    };
+    const V = VARIANTS[variant] || VARIANTS.brand;
 
-  return (
-    <motion.button
-      type="button"
-      aria-label={ariaLabel}
-      onClick={onClick}
-      className="group"
-      initial={false}
-      whileHover={{ x: isLeft ? -4 : 4 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <div
-        className="relative h-56 w-16 rounded-l-3xl overflow-hidden flex items-center justify-center shadow-[0_16px_40px_-12px_rgba(2,6,23,0.45)]"
-        style={{ background: V.bg, backdropFilter: V.backdrop }}
+    return (
+      <motion.button
+        type="button"
+        aria-label={ariaLabel}
+        onClick={onClick}
+        className="group"
+        initial={false}
+        whileHover={{ x: isLeft ? -4 : 4 }}
+        whileTap={{ scale: 0.98 }}
       >
-        {/* glossy edge */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-l-3xl"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(255,255,255,0.12), transparent)",
-          }}
-        />
-        {/* inner ring */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-l-3xl"
-          style={{ boxShadow: `inset 0 0 0 1px ${V.ring}` }}
-        />
-
-        {/* moving sheen */}
-        <motion.span
-          aria-hidden
-          className="pointer-events-none absolute -inset-y-1 -left-14 w-12 rotate-12 blur-md"
-          style={{ background: V.sheen }}
-          animate={{ x: isLeft ? [0, 96, 0] : [96, 0, 96] }}
-          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* directional shard */}
-        {isLeft ? (
-          <span
-            aria-hidden
-            className="absolute -left-2 top-1/2 -translate-y-1/2 border-y-8 border-y-transparent border-r-8 drop-shadow-[0_2px_6px_rgba(2,6,23,0.35)]"
-            style={{ borderRightColor: V.shard }}
-          />
-        ) : (
-          <span
-            aria-hidden
-            className="absolute -right-2 top-1/2 -translate-y-1/2 border-y-8 border-y-transparent border-l-8 drop-shadow-[0_2px_6px_rgba(2,6,23,0.35)]"
-            style={{ borderLeftColor: V.shard }}
-          />
-        )}
-
-        {/* label */}
-        <span
-          className="block rotate-90 origin-center whitespace-nowrap tracking-[0.35em] font-black text-[12.5px] leading-tight drop-shadow-[0_1px_0_rgba(0,0,0,0.25)] transition-colors duration-200 group-hover:brightness-110"
-          style={{ color: V.label, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+        <div
+          className="relative h-56 w-16 rounded-l-3xl overflow-hidden flex items-center justify-center shadow-[0_16px_40px_-12px_rgba(2,6,23,0.45)]"
+          style={{ background: V.bg, backdropFilter: V.backdrop }}
         >
-          {text}
-        </span>
-
-        {/* hover accent glow */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-l-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background:
-              "radial-gradient(120px 60px at 80% 20%, rgba(255,255,255,0.10), transparent 60%)",
-          }}
-        />
-      </div>
-    </motion.button>
-  );
-};
-
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-l-3xl"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(255,255,255,0.12), transparent)",
+            }}
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-l-3xl"
+            style={{ boxShadow: `inset 0 0 0 1px ${V.ring}` }}
+          />
+          <motion.span
+            aria-hidden
+            className="pointer-events-none absolute -inset-y-1 -left-14 w-12 rotate-12 blur-md"
+            style={{ background: V.sheen }}
+            animate={{ x: isLeft ? [0, 96, 0] : [96, 0, 96] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {isLeft ? (
+            <span
+              aria-hidden
+              className="absolute -left-2 top-1/2 -translate-y-1/2 border-y-8 border-y-transparent border-r-8 drop-shadow-[0_2px_6px_rgba(2,6,23,0.35)]"
+              style={{ borderRightColor: V.shard }}
+            />
+          ) : (
+            <span
+              aria-hidden
+              className="absolute -right-2 top-1/2 -translate-y-1/2 border-y-8 border-y-transparent border-l-8 drop-shadow-[0_2px_6px_rgba(2,6,23,0.35)]"
+              style={{ borderLeftColor: V.shard }}
+            />
+          )}
+          <span
+            className="block rotate-90 origin-center whitespace-nowrap tracking-[0.35em] font-black text-[12.5px] leading-tight drop-shadow-[0_1px_0_rgba(0,0,0,0.25)] transition-colors duration-200 group-hover:brightness-110"
+            style={{
+              color: V.label,
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            }}
+          >
+            {text}
+          </span>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-l-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background:
+                "radial-gradient(120px 60px at 80% 20%, rgba(255,255,255,0.10), transparent 60%)",
+            }}
+          />
+        </div>
+      </motion.button>
+    );
+  };
 
   return (
     <>
-      
-{!open && (
-  <div className="fixed right-0 top-1/3 z-[60]">
-    <VerticalHandle
-      direction="left"
-      ariaLabel="Show Hommlie offer"
-      onClick={() => setOpen(true)}
-      variant="brand"       
-      text="UPTO ₹200 OFF"
-    />
-  </div>
-)}
-
-{/* attached handle on the drawer */}
-<div className="absolute -left-16 top-1/3 z-[71] hidden md:block">
-  <VerticalHandle
-    direction="right"
-    ariaLabel="Hide Hommlie offer"
-    onClick={() => setOpen(false)}
-    variant="brand"
-    text="UPTO ₹200 OFF"
-  />
-</div>
-
+      {/* CLOSED STATE HANDLE (top:10px, height:530px; centered) */}
+      {!open && (
+        <div className="fixed right-0 top-[10px] h-[530px] z-[60] flex items-center hidden md:flex">
+          <VerticalHandle
+            direction="left"
+            ariaLabel="Show Hommlie offer"
+            onClick={() => setOpen(true)}
+            variant="brand"
+            text="UPTO ₹200 OFF"
+          />
+        </div>
+      )}
 
       <AnimatePresence>
         {open && (
@@ -240,20 +220,22 @@ export default function FloatingPromoDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="fixed right-0 top-0 h-full w-[360px] max-w-[92vw] z-[70] shadow-2xl"
+            className="fixed right-0 top-[10px] h-[530px] w-[360px] max-w-[92vw] z-[70] shadow-2xl"
             role="dialog"
             aria-modal="true"
             style={{
               background:
-                "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)"
+                "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
             }}
           >
-            {/* ATTACHED HANDLE: hidden on mobile, visible on md+ */}
-            <div className="absolute -left-16 top-1/3 z-[71] hidden md:block">
+            {/* ATTACHED HANDLE (INSIDE the drawer; vertically centered) */}
+            <div className="absolute -left-16 top-1/2 -translate-y-1/2 z-[71] hidden md:block">
               <VerticalHandle
                 direction="right"
                 ariaLabel="Hide Hommlie offer"
                 onClick={() => setOpen(false)}
+                variant="brand"
+                text="UPTO ₹200 OFF"
               />
             </div>
 
@@ -261,7 +243,7 @@ export default function FloatingPromoDrawer() {
             <div className="h-full flex flex-col">
               <div className="h-1.5 bg-gradient-to-r from-emerald-400 via-amber-300 to-sky-400" />
 
-              {/* Close button (needed on mobile since handle is hidden) */}
+              {/* Close (mobile) */}
               <button
                 onClick={() => setOpen(false)}
                 className="ml-auto m-3 rounded-full p-2 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-slate-300"
@@ -282,8 +264,12 @@ export default function FloatingPromoDrawer() {
               <div className="px-6 pb-7 -mt-2">
                 <p className="text-sm font-semibold text-slate-700">Avail Upto</p>
                 <div className="mt-1 flex items-end gap-2">
-                  <span className="text-5xl font-black text-slate-900 leading-none">₹200</span>
-                  <span className="text-2xl font-extrabold text-slate-900 leading-none">OFF</span>
+                  <span className="text-5xl font-black text-slate-900 leading-none">
+                    ₹200
+                  </span>
+                  <span className="text-2xl font-extrabold text-slate-900 leading-none">
+                    OFF
+                  </span>
                 </div>
 
                 {/* Greeting / welcome card */}
@@ -297,12 +283,11 @@ export default function FloatingPromoDrawer() {
                       : "Sign in to unlock your welcome offer."}
                   </div>
 
-                  {/* Sign-in CTA (only when NOT signed in) */}
                   {!isSignedIn && (
                     <div className="mt-4">
                       <button
                         type="button"
-                        onClick={openLoginModal}  // ← CLOSE DRAWER, THEN OPEN MODAL
+                        onClick={openLoginModal}
                         className="inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold text-white bg-[#035240] hover:bg-[#024235] shadow"
                       >
                         Sign in to unlock
@@ -344,21 +329,6 @@ export default function FloatingPromoDrawer() {
                   BOOK NOW
                 </a>
 
-                {/* <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs">
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                    <div className="font-semibold text-slate-900">Genuine</div>
-                    <div className="text-slate-600">Products</div>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                    <div className="font-semibold text-slate-900">Try &amp; Buy</div>
-                    <div className="text-slate-600">Eligible*</div>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                    <div className="font-semibold text-slate-900">Easy</div>
-                    <div className="text-slate-600">Rescheduling</div>
-                  </div>
-                </div> */}
-
                 <div className="mt-5 text-[11px] text-slate-600">
                   By Hommlie Pest Control • Safe chemicals • Trained technicians • Service warranty available.
                 </div>
@@ -368,13 +338,8 @@ export default function FloatingPromoDrawer() {
         )}
       </AnimatePresence>
 
-      {/* Login modal mount (only when needed) */}
-      {showLogin && (
-        <LoginSignup
-          isOpen={showLogin}
-          onClose={() => setShowLogin(false)}
-        />
-      )}
+      {/* Login modal mount */}
+      {showLogin && <LoginSignup isOpen={showLogin} onClose={() => setShowLogin(false)} />}
     </>
   );
 }

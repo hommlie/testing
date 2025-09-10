@@ -415,30 +415,59 @@ const MoneyNoteIcon = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
-// Wallet pill that shows full amount and overlaps the green note
-const WalletPill = ({ amount = 0, onClick }) => (
-  <div className="relative inline-flex items-center">
+// Wallet pill styled like the screenshot (amount + overlapping money.png on the right)
+const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
+  // format & safe number
+  const fmt = new Intl.NumberFormat("en-IN").format(
+    Math.max(0, Math.floor(Number(amount) || 0))
+  );
+
+  // size tokens so text/img/padding stay proportionate
+  const S = {
+    sm: { h: "h-8",  text: "text-sm",  pad: "pl-3 pr-10", img: "w-5 h-5", shift: "-right-2" },
+    md: { h: "h-8", text: "text-base", pad: "pl-3 pr-7", img: "w-7 h-7", shift: "-right-2.5" },
+    lg: { h: "h-12", text: "text-lg",  pad: "pl-4 pr-8", img: "w-8 h-8", shift: "-right-3" },
+  }[size] || {};
+
+  return (
     <button
       onClick={onClick}
-      className="inline-flex items-center rounded-full bg-white px-2 py-1 pr-7
-                 border border-gray-200 shadow-sm hover:shadow-md transition-all
-                 whitespace-nowrap"
-      aria-label={`Wallet balance rupees ${amount}`}
+      className={[
+        "relative inline-flex items-center rounded-full bg-white",
+        "border border-gray-200 shadow-sm hover:shadow-md transition-all",
+        "whitespace-nowrap",
+        S.h,
+        S.pad,
+        className,
+      ].join(" ")}
+      aria-label={`Wallet balance ${fmt}`}
+      type="button"
     >
-      <span className="text-[#0B1727] font-extrabold tracking-tight leading-none">
-        ₹{amount}
+      {/* amount (no ₹) */}
+      <span className={`text-[#0B1727] font-extrabold tracking-tight leading-none tabular-nums ${S.text}`}>
+        {fmt}
+      </span>
+
+      {/* money.png badge overlapping the right edge */}
+      <span
+        aria-hidden
+        className={[
+          "pointer-events-none absolute top-1/2 -translate-y-1/2",
+          S.shift,
+          "rounded-xl ring-2 ring-white shadow-md rotate-6",
+        ].join(" ")}
+      >
+        <img
+          src="/money.png"  // from public/
+          alt=""
+          className={`${S.img} object-contain`}
+          draggable="false"
+        />
       </span>
     </button>
+  );
+};
 
-    {/* money note badge; sits on the outside corner, doesn't block clicks */}
-    <span
-      className="pointer-events-none absolute right-[-8px] bottom-[-8px] rounded-lg
-                 shadow-md ring-2 ring-white rotate-6"
-    >
-      <MoneyNoteIcon className="w-8 h-8" />
-    </span>
-  </div>
-);
 
 
   return (

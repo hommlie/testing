@@ -13,6 +13,8 @@ import { ToastProvider } from "./context/ToastProvider";
 import "tailwindcss/tailwind.css";
 import "./App.css";
 import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
+import MobileBottomLeftCTA from "./pages/MobileBottomLeftCTA";
+
 
 function SEOHelmet({ settings }) {
   const location = useLocation();
@@ -93,6 +95,8 @@ function App() {
               )}
 
               <FloatingPromoDrawer />
+
+              <MobileBottomLeftCTA imgSrc="/hommlie-thumb.jpg" />
 
               {/* ✅ Footer */}
               <Footer
