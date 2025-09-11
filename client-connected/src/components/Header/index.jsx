@@ -444,8 +444,8 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
       type="button"
     >
       {/* amount (no ₹) */}
-      <span className={`text-[#0B1727] font-extrabold tracking-tight leading-none tabular-nums ${S.text}`}>
-        {fmt}
+      <span className={`text-[#0B1727] font-semibold tracking-tight leading-none tabular-nums ${S.text}`}>
+        ₹{fmt}
       </span>
 
       {/* money.png badge overlapping the right edge */}
@@ -830,7 +830,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#92B775] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
+              className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#15803d] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
             >
                <span className="font-medium">Join ONDC</span>
                <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" />
