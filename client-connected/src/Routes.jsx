@@ -38,6 +38,8 @@ import { useCont } from "./context/MyContext";
 import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import HomeScreendup from "./pages/HomeScreendup";
+import Scrap from "./pages/Scrap";
+
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -246,8 +248,11 @@ const ProjectRoutes = () => {
       path: `${config.VITE_BASE_URL}/help`,
       element: <HelpPage />,
     },
+    {
+      path: `${config.VITE_BASE_URL}/scrap`,
+      element: <Scrap />,
+    },
   ]);
-
   return element;
 };
 
