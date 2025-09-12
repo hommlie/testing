@@ -39,7 +39,7 @@ import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import HomeScreendup from "./pages/HomeScreendup";
 import Scrap from "./pages/Scrap";
-
+import Business from "./pages/ScrapBusiness";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -251,6 +251,10 @@ const ProjectRoutes = () => {
     {
       path: `${config.VITE_BASE_URL}/scrap`,
       element: <Scrap />,
+    },
+    {
+      path: `${config.VITE_BASE_URL}/business`,
+      element: <Business />,
     },
   ]);
   return element;

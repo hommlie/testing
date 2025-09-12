@@ -5,7 +5,7 @@ const checkUserToken = require("../middleware/userMiddleware");
 const upload = require("../config/multerConfig");
 
 const UserController = require("../controllers/UserController");
-const ProductsController = require("../controllers/ProductsController");
+const ProductsController = require("../controllers/ProductsController ");
 const HomeController = require("../controllers/HomeController");
 const CategoryController = require("../controllers/CategoryController");
 const BannerController = require("../controllers/BannerController");
@@ -33,6 +33,7 @@ const blogController = require("../controllers/BlogController");
 const commentController = require("../controllers/CommentController");
 const LandingPageController = require("../controllers/LandingPageController");
 // const RequestacallbackController = require("../controllers/RequestacallbackController")
+
 const app = express();
 
 app.use(bodyparser.json());

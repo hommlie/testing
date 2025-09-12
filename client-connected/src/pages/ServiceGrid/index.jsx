@@ -1,41 +1,44 @@
 import { useState, useEffect } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaEllipsisH } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import ComingSoonModal from "../ComingSoonPage";
-import { FaEllipsisH } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ServiceGrid = () => {
   const [showModal, setShowModal] = useState(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-  const isMobile = window.innerWidth < 640;
-  if ((showModal || showComingSoon) && isMobile) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
-
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [showModal, showComingSoon]);
-
-
+    const isMobile = window.innerWidth < 640;
+    if ((showModal || showComingSoon) && isMobile) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showModal, showComingSoon]);
 
   // ✅ List of services to show "Coming Soon"
   const comingSoonServices = ["AC Services", "Plumbing", "Painting"];
 
   const handleServiceClick = (serviceName) => {
-  if (comingSoonServices.includes(serviceName) || serviceName === "See More") {
-    setShowModal(null); // ensure standard modal is closed
-    setShowComingSoon(serviceName); // pass the triggering service name
-  } else {
-    setShowModal(serviceName);
-  }
-};
+    // Redirect Scrap to /scrap
+    if (serviceName === "Scrap") {
+      navigate("/scrap");
+      return;
+    }
+    if (comingSoonServices.includes(serviceName) || serviceName === "See More") {
+      setShowModal(null);
+      setShowComingSoon(serviceName);
+    } else {
+      setShowModal(serviceName);
+    }
+  };
 
-
+  // Removed "Scrap" details from here
   const serviceData = {
     "Pest Control": [
       { name: "General PestControl Service", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
@@ -49,9 +52,6 @@ const ServiceGrid = () => {
       { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
     ],
     "Deep Cleaning": [
-      // { name: "Sofa Cleaning", image: "/images/sofaicon.png", url: "/subcategory/top-sofa-cleaning-services-in-bangalore" },
-      // { name: "Bathroom Cleaning", image: "/images/bathroomicon.png", url: "/subcategory/professional-bathroom-cleaning-services-in-bangalore" },
-      // { name: "Kitchen Cleaning", image: "/images/kitchenicon.png", url: "/subcategory/top-kitchen-cleaning-services-in-bangalore" },
       { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
       { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
     ],
@@ -61,64 +61,29 @@ const ServiceGrid = () => {
       { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "/subcategory/mosquito-net-for-windows-in-bangalore" },
       { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "/subcategory/anti-bird-spikes" },
       { name: "Bird Netting", image: "/images/nettingicon.png", url: "/subcategory/bird-netting-for-balcony-in-bangalore" },
-      // { name: "Balcony Safety Net", image: "/images/balconyneticon.png", url: "#" },
     ],
     "Disinfection": [
       { name: "Disinfection", image: "/images/disinfection.png", url: "/subcategory/disinfection-services-near-you-in-bangalore" },
     ],
-    "Scrap": [
-      { name: "Newspaper", image: "/images/newspaper-icon.png", price: "₹14/KG", note: "Market rates dropped recently", isComingSoon: true },
-      { name: "Cardboard", image: "/images/cardboard-icon.png", price: "₹8/KG", note: "Call for bulk quantity quote" },
-      { name: "Office Paper (A3/A4)", image: "/images/paper-icon.png", price: "₹8/KG" },
-      { name: "Copies/Books", image: "/images/book-icon.png", price: "₹24/KG" },
-      { name: "Clothes", image: "/images/clothes-icon.png", price: "₹40/KG", note: "Accepted only with other scrap items (No undergarments)" },
-      { name: "Glass Bottles", image: "/images/glass-icon.png", price: "₹105/KG", note: "Accepted only with other scrap items" },
-      { name: "PET Bottles/Other Plastic", image: "/images/plastic-icon.png", price: "₹14/KG" },
-      { name: "Iron", image: "/images/iron-icon.png", price: "₹12/KG", note: "Call for bulk quantity quote" },
-      { name: "Steel Utensils", image: "/images/utensils-icon.png", price: "₹2/KG" },
-    ],
-    "AC Services": [
-      { name: "AC Installation", image: "/images/ac-install.png", url: "#" },
-      { name: "Gas Refill", image: "/images/ac-gas.png", url: "#" },
-      { name: "AC Servicing", image: "/images/ac-service.png", url: "#" },
-      { name: "AC Repair", image: "/images/ac-repair.png", url: "#" },
-    ],
-    "Plumbing": [
-      { name: "Leak Repair", image: "/images/leak.png", url: "#" },
-      { name: "Drain Cleaning", image: "/images/drain.png", url: "#" },
-      { name: "Fitting Installation", image: "/images/fitting.png", url: "#" },
-      { name: "Water Heater", image: "/images/geyser.png", url: "#" },
-    ],
-    "Painting": [
-      { name: "Interior Painting", image: "/images/wallpaint.png", url: "#" },
-      { name: "Texture Finish", image: "/images/texture.png", url: "#" },
-      { name: "Waterproofing", image: "/images/waterproof.png", url: "#" },
-      { name: "Wood Paint", image: "/images/woodpaint.png", url: "#" },
-    ],
+    // (No "Scrap" section here anymore)
   };
 
   const services = [
     { id: 1, name: "Pest Control", image: "/images/pestcontrol1.png" },
     { id: 2, name: "Deep Cleaning", image: "/images/deepcleaning1.png" },
-    { id: 3, name: "Scrap", image: "/images/scrap1.png" },
+    { id: 3, name: "Scrap", image: "/images/scrap1.png" }, // will redirect
     { id: 4, name: "Mosquito & Safety Net", image: "/images/mosquito1.png" },
     { id: 5, name: "Disinfection", image: "/images/disinfection1.png" },
-    // { id: 6, name: "AC Services", image: "/images/ac1.png" },
-    // { id: 7, name: "Plumbing", image: "/images/plumbing1.png" },
-    // { id: 8, name: "Painting", image: "/images/painting1.png" },
     {
-    id: 9,
-    name: "See More",
-    icon: <FaEllipsisH className="text-3xl text-[#035240]" />,
-    isIconOnly: true,
-  },
+      id: 9,
+      name: "See More",
+      icon: <FaEllipsisH className="text-3xl text-[#035240]" />,
+      isIconOnly: true,
+    },
   ];
 
   const renderModal = () => {
     const items = serviceData[showModal] || [];
-
-    
-
     return (
       <motion.div
         key="modal"
@@ -129,7 +94,7 @@ const ServiceGrid = () => {
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl  sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[80vh] overflow-y-auto"
+          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[80vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
@@ -208,7 +173,7 @@ const ServiceGrid = () => {
           <ComingSoonModal
             isOpen={!!showComingSoon}
             onClose={() => setShowComingSoon(false)}
-            source={showComingSoon} // pass which service triggered this
+            source={showComingSoon}
           />
         )}
       </AnimatePresence>
