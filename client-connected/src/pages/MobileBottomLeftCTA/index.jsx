@@ -99,7 +99,7 @@ export default function MobileBottomLeftCTA({ imgSrc = "/hommlie-thumb.png" }) {
       <button
         aria-label={open ? "Close Hommlie info" : "Open Hommlie info"}
         onClick={() => setOpen((s) => !s)}
-        className="fixed bottom-20 left-4 z-[60] rounded-2xl shadow-lg bg-white/90 backdrop-blur border border-slate-200 p-1 active:scale-95 transition"
+        className="fixed bottom-16 left-6 z-[60] rounded-2xl shadow-lg bg-white/90 backdrop-blur border border-slate-200 p-1 active:scale-95 transition"
       >
         <img
           src={imgSrc}

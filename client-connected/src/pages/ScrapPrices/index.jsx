@@ -56,7 +56,7 @@ export default function ScrapPrices() {
     time: "",
     agree: false,
   });
-
+ 
   const filtered = useMemo(() => {
     const byCat =
       activeCat === "All"
@@ -256,28 +256,40 @@ export default function ScrapPrices() {
         {/* Spacer for sticky */}
         <div className="h-20 sm:h-16" />
 
-        {/* Sticky selection footer */}
+                {/* Sticky selection footer */}
         {selected.length > 0 && (
           <div className="fixed left-0 right-0 bottom-0 z-40">
             <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl pb-4">
-              <div className="rounded-2xl border border-gray-200 bg-white/95 backdrop-blur shadow-lg p-3 sm:p-4 flex flex-wrap items-center gap-3">
+              <div
+                className="
+                  rounded-t-2xl sm:rounded-2xl
+                  border border-gray-200 bg-white/95 backdrop-blur shadow-lg
+                  p-3 sm:p-4
+                  flex flex-col sm:flex-row
+                  items-stretch sm:items-center
+                  gap-2 sm:gap-3
+                  pb-[max(env(safe-area-inset-bottom),0px)]
+                "
+              >
                 <div className="text-sm sm:text-base">
                   <b>{selected.length}</b> item(s) selected ·{" "}
                   <span className="text-green-700 font-semibold">₹{totalPrice}</span>{" "}
                   <span className="text-gray-500 text-xs">(est.)</span>
                 </div>
+
                 <button
                   onClick={clearAll}
-                  className="px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm transition"
+                  className="w-full sm:w-auto px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm transition"
                 >
                   Clear
                 </button>
+
                 <button
                   onClick={() => {
                     setMode("checkout");
                     setStep(1);
                   }}
-                  className="ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+                  className="w-full sm:w-auto sm:ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
                 >
                   Continue to place order
                 </button>
@@ -285,7 +297,6 @@ export default function ScrapPrices() {
             </div>
           </div>
         )}
-
         {/* Footer nav */}
         <div className="mt-8 sm:mt-10 text-center text-xs sm:text-sm text-gray-600">
           Not in {CITY_LABEL}?{" "}
@@ -389,6 +400,22 @@ export default function ScrapPrices() {
 }
 
 /* -------------------- subcomponents (UI-polished) -------------------- */
+function rateSummary(items) {
+  if (!items || items.length === 0) return "—";
+
+  // Map to price + normalized unit label ("kg" or "piece(s)")
+  const mapped = items.map((it) => ({
+    price: Number(it.price) || 0,
+    unit: unitLabel(it.unit),
+  }));
+
+  const allSameUnit = mapped.every((m) => m.unit === mapped[0].unit);
+  const avg = Math.round(
+    mapped.reduce((sum, m) => sum + m.price, 0) / mapped.length
+  );
+
+  return allSameUnit ? `₹${avg}/${mapped[0].unit}` : `Varies (avg ₹${avg})`;
+}
 
 function KeyValue({ label, value }) {
   return (
@@ -412,9 +439,10 @@ function Step1Intro({ items, onCancel, onContinue }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-        <KeyValue label="Rate" value="₹120/kg" />
+        <KeyValue label="Rate" value={rateSummary(items)} />
         <KeyValue label="Pickup type" value="Doorstep" />
       </div>
+
 
       <p className="text-gray-600 mt-6">
         Tap continue to start a short, 3-step booking for your pickup.
@@ -450,7 +478,8 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      {/* header row */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
         <div className="text-xl font-semibold">Quantity</div>
         <div className="text-gray-500 text-sm">Est. price appears live</div>
       </div>
@@ -459,32 +488,36 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
         Enter weight/pieces for each item you want to hand over.
       </div>
 
+      {/* item cards */}
       <div className="mt-4 space-y-3">
         {items.map((it) => (
           <div key={it.name} className="rounded-xl border border-gray-200 p-3 sm:p-4">
             <div className="font-medium">{it.name}</div>
-            <div className="mt-3 flex flex-wrap items-center gap-3">
+
+            {/* controls: stack on mobile, row on desktop */}
+            <div className="mt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <input
                 type="number"
                 min={1}
                 value={it.qty}
                 onChange={(e) => update(it.name, Number(e.target.value) || 0)}
-                className="w-28 h-11 rounded-xl border px-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="h-11 rounded-xl border px-3 w-full sm:w-28 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <select
                 value={it.measure}
                 onChange={(e) => changeMeasure(it.name, e.target.value)}
-                className="h-11 rounded-xl border px-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="h-11 rounded-xl border px-3 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="kg">kg</option>
                 <option value="piece(s)">piece(s)</option>
               </select>
 
-              <div className="ml-auto rounded-xl border bg-gray-50 px-4 py-2 text-center">
+              <div className="sm:ml-auto rounded-xl border bg-gray-50 px-4 py-2 text-center w-full sm:w-auto">
                 <div className="text-xs text-gray-500">Estimated</div>
                 <div className="text-lg font-bold">₹{it.qty * it.price}</div>
               </div>
             </div>
+
             <div className="mt-2 text-xs text-gray-500">
               Tip: For electronic devices, remove batteries if possible and keep cords bundled.
             </div>
@@ -492,22 +525,29 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
         ))}
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
-        <div className="rounded-xl border bg-gray-50 px-4 py-2">
+      {/* footer actions: stack on mobile, align like before on desktop */}
+      <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="rounded-xl border bg-gray-50 px-4 py-2 w-full sm:w-auto text-center sm:text-left">
           <span className="text-xs text-gray-500 mr-2">Total</span>
           <span className="text-lg font-bold">₹{total}</span>
         </div>
 
-        <div className="flex gap-3">
-          <button onClick={onBack} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
+        <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
+          <button
+            onClick={onBack}
+            className="w-full sm:w-auto px-5 py-2 rounded-xl border hover:bg-gray-50 transition"
+          >
             Back
           </button>
-          <button onClick={onSkip} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
+          <button
+            onClick={onSkip}
+            className="w-full sm:w-auto px-5 py-2 rounded-xl border hover:bg-gray-50 transition"
+          >
             Skip
           </button>
           <button
             onClick={onContinue}
-            className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+            className="w-full sm:w-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
           >
             Continue
           </button>
@@ -516,6 +556,7 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
     </>
   );
 }
+
 
 function Step3Pickup({ pickup, setPickup, onBack, onContinue }) {
   const set = (k, v) => setPickup((p) => ({ ...p, [k]: v }));

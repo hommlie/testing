@@ -1,6 +1,8 @@
+// App.jsx
 import React, { useEffect, useState } from "react";
 import Routes from "./Routes";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import config from "./config/config"; // 👈 add this import
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -14,7 +16,6 @@ import "tailwindcss/tailwind.css";
 import "./App.css";
 import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
 import MobileBottomLeftCTA from "./pages/MobileBottomLeftCTA";
-
 
 function SEOHelmet({ settings }) {
   const location = useLocation();
@@ -40,11 +41,27 @@ function SEOHelmet({ settings }) {
       <meta property="og:image" content={settings?.og_image || "/default-og-image.jpg"} />
       <meta property="og:type" content="website" />
       <meta name="author" content={settings?.site_title || "Hommlie"} />
-
-      {/* ✅ Dynamic Canonical */}
       <link rel="canonical" href={canonicalUrl} key="canonical" />
     </Helmet>
   );
+}
+
+/** ✅ Only render the CTA on Home paths */
+function HomeOnlyCTA() {
+  const { pathname } = useLocation();
+  const base = (config?.VITE_BASE_URL || "").replace(/\/$/, ""); // no trailing slash
+
+  // normalize: keep "/" as is; trim trailing slash for others
+  const normalized =
+    pathname === "/"
+      ? "/"
+      : pathname.replace(/\/+$/, "");
+
+  const isRoot = normalized === (base ? `${base}/` : "/");
+  const isHome = normalized === `${base}/home`;
+
+  if (!(isRoot || isHome)) return null;
+  return <MobileBottomLeftCTA imgSrc="/hommlie-thumb.jpg" />;
 }
 
 function App() {
@@ -71,10 +88,8 @@ function App() {
         <AuthProvider>
           <ToastProvider>
             <Router>
-              {/* ✅ SEO Helmet with Dynamic Canonical */}
               <SEOHelmet settings={settings} />
 
-              {/* ✅ Header */}
               <Header
                 logo={settings?.logo}
                 logoAlt={settings?.site_title || "Hommlie"}
@@ -85,7 +100,6 @@ function App() {
                 youtube={settings?.youtube}
               />
 
-              {/* ✅ Routes */}
               {loading ? (
                 <div className="flex items-center justify-center h-screen">
                   <p className="text-lg font-medium text-gray-600">Loading...</p>
@@ -96,9 +110,9 @@ function App() {
 
               <FloatingPromoDrawer />
 
-              <MobileBottomLeftCTA imgSrc="/hommlie-thumb.jpg" />
+              {/* 👇 CTA now only on Home */}
+              <HomeOnlyCTA />
 
-              {/* ✅ Footer */}
               <Footer
                 logo={settings?.logo}
                 logoAlt={settings?.site_title || "Hommlie"}

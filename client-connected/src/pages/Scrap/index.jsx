@@ -218,34 +218,69 @@ export default function Scrap() {
 
       {/* COMING SOON MODAL */}
       {showComingSoon && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl p-6 text-center">
-            <div className="mx-auto h-12 w-12 grid place-items-center rounded-full bg-amber-100 text-amber-700 text-xl">⏳</div>
-            <h3 className="mt-3 text-xl font-semibold">We’re not here yet</h3>
-            <p className="text-gray-600 mt-2">
-              Sorry! We’re currently serving only <b>Bangalore</b>.<br />
-              <span className="text-gray-800">“{comingSoonCity}”</span> is coming soon.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <button
-                onClick={() => setShowComingSoon(false)}
-                className="flex-1 rounded-xl border px-4 py-2.5 font-medium hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                Okay
-              </button>
-              <button
-                onClick={() => {
-                  setShowComingSoon(false);
-                  navigate("/scrap/bangalore");
-                }}
-                className="flex-1 rounded-xl bg-emerald-600 px-4 py-2.5 text-white font-medium hover:bg-emerald-700 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                View Bangalore
-              </button>
-            </div>
+  <div
+    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="coming-soon-title"
+  >
+    {/* Enable scrolling on very small devices */}
+    <div className="h-full w-full overflow-y-auto">
+      {/* Bottom sheet on mobile, centered on ≥sm */}
+      <div className="min-h-full flex items-end sm:items-center justify-center p-3 sm:p-4">
+        <div className="
+          w-full sm:w-auto
+          max-w-md sm:max-w-lg
+          rounded-t-2xl sm:rounded-2xl
+          bg-white shadow-2xl
+          p-4 sm:p-6
+          mx-auto
+          translate-y-0
+        ">
+          {/* Icon */}
+          <div className="mx-auto h-12 w-12 grid place-items-center rounded-full bg-amber-100 text-amber-700 text-xl">
+            ⏳
           </div>
+
+          {/* Title */}
+          <h3 id="coming-soon-title" className="mt-3 text-lg sm:text-xl font-semibold text-gray-900 text-center">
+            We’re not here yet
+          </h3>
+
+          {/* Message */}
+          <p className="text-gray-600 mt-2 text-center text-sm sm:text-base leading-relaxed">
+            Sorry! We’re currently serving only <b>Bangalore</b>.<br />
+            <span className="text-gray-800">“{comingSoonCity}”</span> is coming soon.
+          </p>
+
+          {/* Actions */}
+          <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => setShowComingSoon(false)}
+              className="w-full sm:flex-1 rounded-xl border px-4 py-3 text-sm sm:text-base font-medium hover:bg-gray-50 active:scale-[0.99] transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              Okay
+            </button>
+
+            <button
+              onClick={() => {
+                setShowComingSoon(false);
+                navigate("/scrap/bangalore"); // use your BASE_URL if needed
+              }}
+              className="w-full sm:flex-1 rounded-xl bg-emerald-600 px-4 py-3 text-sm sm:text-base text-white font-medium hover:bg-emerald-700 active:scale-[0.99] transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              View Bangalore
+            </button>
+          </div>
+
+          {/* Safe area padding for devices with home indicator */}
+          <div className="pt-[max(env(safe-area-inset-bottom),0px)]" />
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
