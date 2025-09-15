@@ -100,11 +100,11 @@ export default function ScrapPrices() {
   /* -------------- city not served -------------- */
   if (citySlug !== ACTIVE_CITY) {
     return (
-      <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[1200px] xl:max-w-[1280px] 2xl:max-w-[1360px] py-16">
+      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl py-16">
         <h1 className="text-3xl sm:text-4xl font-extrabold mb-4 text-center">
           Scrap Prices
         </h1>
-        <div className="rounded-2xl border p-6 sm:p-8 text-center bg-white shadow-sm">
+        <div className="rounded-2xl border border-gray-200 p-6 sm:p-8 text-center bg-white shadow-sm">
           <p className="text-base sm:text-lg">
             We’re currently serving only <b>Bangalore</b>.
           </p>
@@ -112,13 +112,13 @@ export default function ScrapPrices() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => navigate("/scrap")}
-              className="px-5 py-2 rounded-xl border hover:bg-gray-50"
+              className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition"
             >
               Back to Scrap
             </button>
             <button
               onClick={() => navigate(`/scrap/${ACTIVE_CITY}`)}
-              className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+              className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
             >
               View Bangalore
             </button>
@@ -131,34 +131,31 @@ export default function ScrapPrices() {
   /* -------------- browse (select items) -------------- */
   if (mode === "browse") {
     return (
-      <div
-        className="
-        mx-auto w-full
-        px-4 sm:px-6 lg:px-4 xl:px-0
-        max-w-[1200px] xl:max-w-[1180px] 2xl:max-w-[1360px]
-        py-8 sm:py-10
-      "
-      >
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-6 sm:mb-8">
-          Scrap Prices
-        </h1>
+      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl py-8 sm:py-10">
+        {/* Page header */}
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-center">
+            Scrap Prices
+          </h1>
+          <p className="text-center text-gray-600 mt-2 text-sm sm:text-base">
+            Search and add items. Adjust quantities later during checkout.
+          </p>
+        </div>
 
         {/* Top controls: city + search */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center mb-6">
-          <div>
-            <button
-              className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 rounded-xl border text-sm sm:text-base"
-              onClick={() => navigate("/scrap")}
-              title="Change city"
-            >
-              <span className="i-lucide-map-pin" />
-              {CITY_LABEL}
-              <span className="i-lucide-chevron-down" />
-            </button>
-          </div>
+          <button
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 rounded-xl border bg-white text-sm sm:text-base hover:bg-gray-50 transition"
+            onClick={() => navigate("/scrap")}
+            title="Change city"
+          >
+            <span className="i-lucide-map-pin" />
+            {CITY_LABEL}
+            <span className="i-lucide-chevron-down" />
+          </button>
 
           <div className="flex-1">
-            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl border bg-white">
+            <label className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl border bg-white focus-within:ring-2 focus-within:ring-green-500">
               <span className="i-lucide-search" />
               <input
                 value={query}
@@ -166,28 +163,30 @@ export default function ScrapPrices() {
                 className="w-full outline-none text-sm sm:text-base"
                 placeholder="Search any materials..."
               />
-            </div>
+            </label>
           </div>
         </div>
 
-        {/* Category tabs (single-line scroll on mobile) */}
-        <div className="flex gap-2 sm:gap-3 mb-6 sm:mb-8 overflow-x-auto flex-nowrap scrollbar-hide">
-          {CATEGORIES.map((c) => {
-            const active = c === activeCat;
-            return (
-              <button
-                key={c}
-                onClick={() => setActiveCat(c)}
-                className={`flex-shrink-0 px-4 sm:px-6 py-2 rounded-2xl border text-sm sm:text-base transition ${
-                  active
-                    ? "bg-green-700 text-white border-green-700"
-                    : "bg-white hover:bg-gray-50"
-                }`}
-              >
-                {c}
-              </button>
-            );
-          })}
+        {/* Category tabs */}
+        <div className="mb-6 sm:mb-8">
+          <div className="flex gap-2 sm:gap-3 overflow-x-auto flex-nowrap scrollbar-hide snap-x">
+            {CATEGORIES.map((c) => {
+              const active = c === activeCat;
+              return (
+                <button
+                  key={c}
+                  onClick={() => setActiveCat(c)}
+                  className={`flex-shrink-0 px-4 sm:px-6 py-2 rounded-2xl border text-sm sm:text-base transition snap-start ${
+                    active
+                      ? "bg-green-700 text-white border-green-700 shadow-sm"
+                      : "bg-white hover:bg-gray-50"
+                  }`}
+                >
+                  {c}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Grid of items */}
@@ -197,11 +196,10 @@ export default function ScrapPrices() {
             return (
               <div
                 key={item.name}
-                className="rounded-2xl border bg-white p-4 shadow-sm hover:shadow transition"
+                className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition"
               >
-                {/* header row: info left, controls right */}
                 <div className="flex items-start gap-3">
-                  {/* left info */}
+                  {/* info */}
                   <div className="flex-1 min-w-0">
                     <div className="text-base sm:text-lg font-semibold truncate">
                       {item.name}
@@ -213,11 +211,11 @@ export default function ScrapPrices() {
                     <div className="text-xs text-gray-500 mt-1">{item.category}</div>
                   </div>
 
-                  {/* right controls */}
+                  {/* controls */}
                   {!sel ? (
                     <button
                       onClick={() => addItem(item)}
-                      className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 text-sm"
+                      className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                     >
                       Add
                     </button>
@@ -225,7 +223,7 @@ export default function ScrapPrices() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQty(item.name, sel.qty - 1)}
-                        className="w-9 h-9 rounded-xl border hover:bg-gray-50 text-lg leading-none"
+                        className="w-9 h-9 rounded-xl border hover:bg-gray-50 text-lg leading-none focus:outline-none focus:ring-2 focus:ring-green-500"
                         aria-label="Decrease"
                       >
                         −
@@ -237,12 +235,12 @@ export default function ScrapPrices() {
                         onChange={(e) =>
                           updateQty(item.name, Number(e.target.value) || 0)
                         }
-                        className="w-14 h-9 rounded-xl border text-center text-sm"
+                        className="w-16 h-9 rounded-xl border text-center text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                       <span className="text-xs text-gray-600">{sel.measure}</span>
                       <button
                         onClick={() => updateQty(item.name, sel.qty + 1)}
-                        className="w-9 h-9 rounded-xl border hover:bg-gray-50 text-lg leading-none"
+                        className="w-9 h-9 rounded-xl border hover:bg-gray-50 text-lg leading-none focus:outline-none focus:ring-2 focus:ring-green-500"
                         aria-label="Increase"
                       >
                         +
@@ -255,51 +253,53 @@ export default function ScrapPrices() {
           })}
         </div>
 
-        {/* Sticky footer for selection */}
-        <div className="h-16" />
-          {selected.length > 0 && (
-            <div className="fixed left-0 right-0 bottom-0 z-40">
-              <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[1200px] xl:max-w-[1180px] 2xl:max-w-[1360px] pb-4">
-                <div className="rounded-2xl border bg-white shadow-lg p-3 sm:p-4 flex items-center gap-3">
-                  <div className="text-sm sm:text-base">
-                    <b>{selected.length}</b> item(s) selected ·{" "}
-                    <span className="text-green-700 font-semibold">₹{totalPrice}</span>{" "}
-                    <span className="text-gray-500 text-xs"> (est.)</span>
-                  </div>
-                  <button
-                    onClick={clearAll}
-                    className="ml-2 px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm"
-                  >
-                    Clear
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMode("checkout");
-                      setStep(1);
-                    }}
-                    className="ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
-                  >
-                    Continue to place order
-                  </button>
+        {/* Spacer for sticky */}
+        <div className="h-20 sm:h-16" />
+
+        {/* Sticky selection footer */}
+        {selected.length > 0 && (
+          <div className="fixed left-0 right-0 bottom-0 z-40">
+            <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl pb-4">
+              <div className="rounded-2xl border border-gray-200 bg-white/95 backdrop-blur shadow-lg p-3 sm:p-4 flex flex-wrap items-center gap-3">
+                <div className="text-sm sm:text-base">
+                  <b>{selected.length}</b> item(s) selected ·{" "}
+                  <span className="text-green-700 font-semibold">₹{totalPrice}</span>{" "}
+                  <span className="text-gray-500 text-xs">(est.)</span>
                 </div>
+                <button
+                  onClick={clearAll}
+                  className="px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm transition"
+                >
+                  Clear
+                </button>
+                <button
+                  onClick={() => {
+                    setMode("checkout");
+                    setStep(1);
+                  }}
+                  className="ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+                >
+                  Continue to place order
+                </button>
               </div>
             </div>
-          )}
-
-          {/* Footer nav */}
-          <div className="mt-8 sm:mt-10 text-center text-xs sm:text-sm text-gray-600">
-            Not in {CITY_LABEL}?{" "}
-            <Link to="/scrap" className="text-green-700 underline">
-              Check other cities
-            </Link>
           </div>
+        )}
+
+        {/* Footer nav */}
+        <div className="mt-8 sm:mt-10 text-center text-xs sm:text-sm text-gray-600">
+          Not in {CITY_LABEL}?{" "}
+          <Link to="/scrap" className="text-green-700 underline">
+            Check other cities
+          </Link>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
   /* -------------- checkout (5-step flow) -------------- */
   return (
-    <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[1180px] py-8 sm:py-10">
+    <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-lg py-8 sm:py-10">
       {/* Header & rate */}
       <div className="flex items-start justify-between">
         <h1 className="text-2xl sm:text-3xl font-extrabold">
@@ -308,23 +308,29 @@ export default function ScrapPrices() {
       </div>
 
       {/* Stepper */}
-      <div className="flex items-center gap-3 mt-4 mb-6">
-        {[1, 2, 3, 4, 5].map((n) => (
+      <div className="mt-5 mb-6">
+        <div className="relative">
+          <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-gray-200 rounded-full" />
           <div
-            key={n}
-            className={`w-9 h-9 rounded-full flex items-center justify-center border ${
-              n <= step
-                ? "bg-green-600 text-white border-green-600"
-                : "bg-white text-gray-600"
-            }`}
-          >
-            {n}
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-green-600 rounded-full transition-all"
+            style={{ width: `${((step - 1) / 4) * 100}%` }}
+          />
+          <div className="relative flex items-center justify-between">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <div
+                key={n}
+                className={`w-9 h-9 rounded-full flex items-center justify-center border transition
+                ${n <= step ? "bg-green-600 text-white border-green-600 shadow" : "bg-white text-gray-600 border-gray-300"}`}
+              >
+                {n}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Card */}
-      <div className="rounded-2xl border bg-white shadow-sm p-5 sm:p-6">
+      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 sm:p-6">
         {step === 1 && (
           <Step1Intro
             items={selected}
@@ -382,11 +388,11 @@ export default function ScrapPrices() {
   );
 }
 
-/* -------------------- steps -------------------- */
+/* -------------------- subcomponents (UI-polished) -------------------- */
 
 function KeyValue({ label, value }) {
   return (
-    <div className="flex-1 rounded-xl border bg-gray-50 px-4 py-3">
+    <div className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
       <div className="text-xs text-gray-500">{label}</div>
       <div className="text-lg font-semibold">{value}</div>
     </div>
@@ -415,12 +421,12 @@ function Step1Intro({ items, onCancel, onContinue }) {
       </p>
 
       <div className="mt-6 flex gap-3 justify-end">
-        <button onClick={onCancel} className="px-5 py-2 rounded-xl border hover:bg-gray-50">
+        <button onClick={onCancel} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
           Cancel
         </button>
         <button
           onClick={onContinue}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
         >
           Continue
         </button>
@@ -455,20 +461,20 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
 
       <div className="mt-4 space-y-3">
         {items.map((it) => (
-          <div key={it.name} className="rounded-xl border p-3 sm:p-4">
+          <div key={it.name} className="rounded-xl border border-gray-200 p-3 sm:p-4">
             <div className="font-medium">{it.name}</div>
-            <div className="mt-3 flex items-center gap-3">
+            <div className="mt-3 flex flex-wrap items-center gap-3">
               <input
                 type="number"
                 min={1}
                 value={it.qty}
                 onChange={(e) => update(it.name, Number(e.target.value) || 0)}
-                className="w-28 h-11 rounded-xl border px-3 focus:outline-none"
+                className="w-28 h-11 rounded-xl border px-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <select
                 value={it.measure}
                 onChange={(e) => changeMeasure(it.name, e.target.value)}
-                className="h-11 rounded-xl border px-3"
+                className="h-11 rounded-xl border px-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="kg">kg</option>
                 <option value="piece(s)">piece(s)</option>
@@ -493,15 +499,15 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
         </div>
 
         <div className="flex gap-3">
-          <button onClick={onBack} className="px-5 py-2 rounded-xl border hover:bg-gray-50">
+          <button onClick={onBack} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
             Back
           </button>
-          <button onClick={onSkip} className="px-5 py-2 rounded-xl border hover:bg-gray-50">
+          <button onClick={onSkip} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
             Skip
           </button>
           <button
             onClick={onContinue}
-            className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+            className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
           >
             Continue
           </button>
@@ -524,20 +530,20 @@ function Step3Pickup({ pickup, setPickup, onBack, onContinue }) {
           value={pickup.name}
           onChange={(e) => set("name", e.target.value)}
           placeholder="Full name"
-          className="w-full rounded-xl border px-4 py-3 bg-blue-50/40"
+          className="w-full rounded-xl border px-4 py-3 bg-blue-50/40 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <input
           value={pickup.phone}
           onChange={(e) => set("phone", e.target.value)}
           placeholder="Phone"
-          className="w-full rounded-xl border px-4 py-3"
+          className="w-full rounded-xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <textarea
           value={pickup.address}
           onChange={(e) => set("address", e.target.value)}
           rows={3}
           placeholder="Address"
-          className="w-full rounded-xl border px-4 py-3 bg-blue-50/40"
+          className="w-full rounded-xl border px-4 py-3 bg-blue-50/40 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -545,12 +551,12 @@ function Step3Pickup({ pickup, setPickup, onBack, onContinue }) {
             type="date"
             value={pickup.date}
             onChange={(e) => set("date", e.target.value)}
-            className="w-full rounded-xl border px-4 py-3"
+            className="w-full rounded-xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <select
             value={pickup.time}
             onChange={(e) => set("time", e.target.value)}
-            className="w-full rounded-xl border px-4 py-3"
+            className="w-full rounded-xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="">Select a slot</option>
             <option>09:00 - 11:00</option>
@@ -571,13 +577,13 @@ function Step3Pickup({ pickup, setPickup, onBack, onContinue }) {
       </div>
 
       <div className="mt-6 flex gap-3">
-        <button onClick={onBack} className="px-5 py-2 rounded-xl border hover:bg-gray-50">
+        <button onClick={onBack} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
           Back
         </button>
         <button
           onClick={onContinue}
           disabled={!pickup.name || !pickup.phone || !pickup.address || !pickup.date || !pickup.time || !pickup.agree}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white disabled:opacity-50 hover:bg-green-700"
+          className="px-5 py-2 rounded-xl bg-green-600 text-white disabled:opacity-50 hover:bg-green-700 transition"
         >
           Next: Review
         </button>
@@ -604,7 +610,7 @@ function Step4Review({ items, pickup, total, onEdit, onConfirm }) {
     <>
       <div className="text-xl font-semibold">Confirm Pickup</div>
 
-      <div className="rounded-xl border p-4 sm:p-5 mt-4">
+      <div className="rounded-xl border border-gray-200 p-4 sm:p-5 mt-4">
         <div className="text-gray-600 text-sm">Items</div>
         <Line />
         {items.map((it) => (
@@ -618,7 +624,7 @@ function Step4Review({ items, pickup, total, onEdit, onConfirm }) {
         <Row label={<b>Total</b>} value={<b>₹{total}</b>} />
       </div>
 
-      <div className="rounded-xl border p-4 sm:p-5 mt-4">
+      <div className="rounded-xl border border-gray-200 p-4 sm:p-5 mt-4">
         <div className="text-gray-600 text-sm">Pickup Info</div>
         <Line />
         <div className="font-semibold">
@@ -631,12 +637,12 @@ function Step4Review({ items, pickup, total, onEdit, onConfirm }) {
       </div>
 
       <div className="mt-6 flex justify-between">
-        <button onClick={onEdit} className="px-5 py-2 rounded-xl border hover:bg-gray-50">
+        <button onClick={onEdit} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
           Edit
         </button>
         <button
           onClick={onConfirm}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
         >
           Confirm Pickup
         </button>
@@ -660,7 +666,7 @@ function Step5Success({ items, total, pickup, onBookAnother, onTrack }) {
         </p>
       </div>
 
-      <div className="rounded-xl border p-4 sm:p-5 mt-6">
+      <div className="rounded-xl border border-gray-200 p-4 sm:p-5 mt-6">
         <div className="flex items-center justify-between">
           <div className="text-gray-600">Item</div>
           <div className="text-gray-600">Est. Price</div>
@@ -682,12 +688,12 @@ function Step5Success({ items, total, pickup, onBookAnother, onTrack }) {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-        <button onClick={onBookAnother} className="px-5 py-2 rounded-xl border hover:bg-gray-50">
+        <button onClick={onBookAnother} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
           Book Another
         </button>
         <button
           onClick={onTrack}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
         >
           Track Pickup
         </button>

@@ -130,26 +130,27 @@ export default function Business() {
   return (
     <div className="w-full">
       {/* ======================= Hero ======================= */}
-      <div className="relative w-full h-[60vh] sm:h-[70vh] flex items-center overflow-hidden">
+      <div className="relative w-full h-[520px] flex items-center overflow-hidden">
   {/* MOBILE background (shows < md) */}
   <div className="absolute inset-0 md:hidden">
     <img
-      src="/images/scrap-desk.jpg"   
+      src="/images/scrap-desk.jpg"
       alt="Business Background (mobile)"
       className="w-full h-full object-cover"
     />
-    {/* subtle dark overlay for text legibility on mobile */}
     <div className="absolute inset-0 bg-black/40" />
   </div>
 
-  {/* DESKTOP background (shows ≥ md) — keeps your exact sizing */}
-  <div className="absolute inset-0 hidden md:block md:ml-10 md:mr-14">
-    <img
-      src="/images/scrap-bg.png"  /* <-- desktop image */
-      alt="Business Background (desktop)"
-      className="w-full h-full object-cover opacity-90 md:w-[1220px]"
-    />
-  </div>
+  {/* DESKTOP background (shows ≥ md) */}
+
+<div className="absolute inset-0 hidden md:flex justify-center">
+  <img
+    src="/images/scrap-bg.png"
+    alt="Business Background (desktop)"
+    className="h-full w-[1180px] object-cover opacity-90 mr-6 ml-6"
+  />
+</div>
+
 
   {/* Content */}
   <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center md:justify-end">
@@ -162,7 +163,6 @@ export default function Business() {
         <span className="text-white">Business.</span>
       </h1>
 
-      {/* White on mobile for contrast; black on desktop (unchanged) */}
       <p className="text-base sm:text-xl mb-8 text-white md:text-black font-medium">
         Helping brands go{" "}
         <span className="text-emerald-200 md:text-emerald-500 font-semibold">Plastic-Neutral</span>{" "}
@@ -178,6 +178,7 @@ export default function Business() {
     </div>
   </div>
 </div>
+
 
       {/* ======================= Services / Carbon section ======================= */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
