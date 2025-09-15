@@ -257,55 +257,54 @@ export default function ScrapPrices() {
 
         {/* Sticky footer for selection */}
         <div className="h-16" />
-        {selected.length > 0 && (
-          <div className="fixed left-0 right-0 bottom-0 z-40">
-            <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[1200px] xl:max-w-[1180px] 2xl:max-w-[1360px] pb-4">
-              <div className="rounded-2xl border bg-white shadow-lg p-3 sm:p-4 flex items-center gap-3">
-                <div className="text-sm sm:text-base">
-                  <b>{selected.length}</b> item(s) selected ·{" "}
-                  <span className="text-green-700 font-semibold">₹{totalPrice}</span>{" "}
-                  <span className="text-gray-500 text-xs"> (est.)</span>
+          {selected.length > 0 && (
+            <div className="fixed left-0 right-0 bottom-0 z-40">
+              <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[1200px] xl:max-w-[1180px] 2xl:max-w-[1360px] pb-4">
+                <div className="rounded-2xl border bg-white shadow-lg p-3 sm:p-4 flex items-center gap-3">
+                  <div className="text-sm sm:text-base">
+                    <b>{selected.length}</b> item(s) selected ·{" "}
+                    <span className="text-green-700 font-semibold">₹{totalPrice}</span>{" "}
+                    <span className="text-gray-500 text-xs"> (est.)</span>
+                  </div>
+                  <button
+                    onClick={clearAll}
+                    className="ml-2 px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm"
+                  >
+                    Clear
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMode("checkout");
+                      setStep(1);
+                    }}
+                    className="ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+                  >
+                    Continue to place order
+                  </button>
                 </div>
-                <button
-                  onClick={clearAll}
-                  className="ml-2 px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm"
-                >
-                  Clear
-                </button>
-                <button
-                  onClick={() => {
-                    setMode("checkout");
-                    setStep(1);
-                  }}
-                  className="ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
-                >
-                  Continue to place order
-                </button>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Footer nav */}
-        <div className="mt-8 sm:mt-10 text-center text-xs sm:text-sm text-gray-600">
-          Not in {CITY_LABEL}?{" "}
-          <Link to="/scrap" className="text-green-700 underline">
-            Check other cities
-          </Link>
+          {/* Footer nav */}
+          <div className="mt-8 sm:mt-10 text-center text-xs sm:text-sm text-gray-600">
+            Not in {CITY_LABEL}?{" "}
+            <Link to="/scrap" className="text-green-700 underline">
+              Check other cities
+            </Link>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
   /* -------------- checkout (5-step flow) -------------- */
   return (
-    <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[900px] py-8 sm:py-10">
+    <div className="mx-auto w-full px-4 sm:px-6 lg:px-4 xl:px-0 max-w-[1180px] py-8 sm:py-10">
       {/* Header & rate */}
       <div className="flex items-start justify-between">
         <h1 className="text-2xl sm:text-3xl font-extrabold">
           E-Waste Pickup — Preview Flow
         </h1>
-        <div className="text-sm text-gray-600">Rate: ₹120/kg</div>
       </div>
 
       {/* Stepper */}
