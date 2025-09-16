@@ -130,54 +130,81 @@ export default function Business() {
   return (
     <div className="w-full">
       {/* ======================= Hero ======================= */}
-      <div className="relative w-full h-[520px] flex items-center overflow-hidden">
-  {/* MOBILE background (shows < md) */}
-  <div className="absolute inset-0 md:hidden">
+
+      <section class="relative w-full h-[72svh] md:h-[520px] overflow-hidden isolate">
+ 
+  <div class="absolute inset-0 md:hidden">
     <img
       src="/images/scrap-desk.jpg"
       alt="Business Background (mobile)"
-      className="w-full h-full object-cover"
+      class="w-full h-full object-cover object-center"
     />
-    <div className="absolute inset-0 bg-black/40" />
+    
+    <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/10"></div>
   </div>
 
-  {/* DESKTOP background (shows ≥ md) */}
 
-<div className="absolute inset-0 hidden md:flex justify-center">
-  <img
-    src="/images/scrap-bg.png"
-    alt="Business Background (desktop)"
-    className="h-full w-[1180px] object-cover opacity-90 mr-6 ml-6"
-  />
-</div>
+  <div class="absolute inset-0 hidden md:flex justify-center">
+    <img
+      src="/images/scrap-bg.png"
+      alt="Business Background (desktop)"
+      class="h-full w-[1180px] object-cover opacity-90 mr-6 ml-6"
+    />
+  </div>
 
-
-  {/* Content */}
-  <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center md:justify-end">
-    <div className="text-center md:text-right text-white max-w-xl">
-      <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight mb-6">
-        <span className="text-black px-2 rounded md:bg-transparent">Your</span>{" "}
-        <span className="text-white">Waste.</span>
-        <br />
-        <span className="text-black px-2 rounded md:bg-transparent">Our</span>{" "}
-        <span className="text-white">Business.</span>
-      </h1>
-
-      <p className="text-base sm:text-xl mb-8 text-white md:text-black font-medium">
-        Helping brands go{" "}
-        <span className="text-emerald-200 md:text-emerald-500 font-semibold">Plastic-Neutral</span>{" "}
-        and offset their <span className="text-emerald-200 md:text-emerald-500 font-semibold">carbon footprint</span>.
-      </p>
-
-      <Link
-        onClick={scrollToForm}
-        className="inline-block px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-lg font-medium transition"
+ 
+  <div class="mt-28 relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6">
+    <div
+      class="
+        flex
+        items-start md:items-center
+        justify-center md:justify-end
+        h-[72svh] md:h-[520px]
+      "
+    >
+      <div
+        class="
+          text-center md:text-right
+          text-white md:text-black
+          max-w-[22rem] sm:max-w-xl
+          pt-8 md:pt-0 -mt-4 sm:-mt-48
+         "
       >
-        Contact Us
-      </Link>
+    
+        <h1 class="font-extrabold leading-tight tracking-tight ">
+          <span class="block text-[48px] sm:text-5xl">
+            <span class="text-white md:text-black md:px-2 md:rounded">Your</span>
+            <span class="text-black"> Waste,</span>
+          </span>
+          <span class="block mt-1 text-[26px] sm:text-5xl">
+            <span class="text-black md:text-black md:px-2 md:rounded">Our</span>
+            <span class="text-white"> Business.</span>
+          </span>
+        </h1>
+
+        
+        <p class="mt-3 text-[15px] sm:text-lg leading-relaxed text-white/90 md:text-black/80">
+          Helping brands go
+          <span class="font-semibold text-emerald-300 md:text-emerald-600">Plastic-Neutral</span>
+          and offset their
+          <span class="font-semibold text-emerald-300 md:text-emerald-600">carbon footprint</span>.
+        </p>
+
+   
+        <a
+          onclick="scrollToForm && scrollToForm()"
+          class="inline-block mt-5 px-6 py-3 rounded-xl text-base sm:text-lg font-medium
+                 bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
+                 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+        >
+          Contact Us
+        </a>
+      </div>
     </div>
   </div>
-</div>
+
+  <div class="h-[env(safe-area-inset-bottom)]"></div>
+</section>
 
 
       {/* ======================= Services / Carbon section ======================= */}
@@ -383,7 +410,7 @@ export default function Business() {
                   <div>
                     Hommlie, Bengaluru, Karnataka
                     <br />
-                    (Full address here)
+                    57 2nd floor, Place building, 6th Main Rd, Nagendra Block, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560050
                   </div>
                 </div>
               </div>

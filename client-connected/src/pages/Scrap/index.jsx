@@ -36,49 +36,73 @@ export default function Scrap() {
   return (
     <div className="w-full bg-gradient-to-b from-white to-gray-50">
 
-      {/* HERO — full-bleed, zoom-proof */}
-      {/* HERO — fixed-height banner (won’t increase with viewport) */}
-<section className="relative w-full h-[520px] overflow-hidden flex items-center">
-  {/* Responsive image */}
-  <picture className="absolute inset-0">
-    <source media="(min-width: 768px)" srcSet="/images/scrap-bg.png" />
+<section
+  class="relative w-full h-[72svh] md:h-[520px] overflow-hidden flex items-start md:items-center isolate"
+>
+
+  <picture class="absolute inset-0 -z-10">
+    <source media="(min-width:768px)" srcset="/images/scrap-bg.png" />
     <img
       src="/images/scrap-desk.jpg"
-      alt="Scrap pickup banner"
-      className="w-full h-full object-cover"
+      alt="Hommlie executive receiving scrap from customer"
+      class="w-full h-full object-cover object-center"
+      fetchpriority="high"
+      decoding="async"
     />
   </picture>
 
-  {/* Overlay */}
-  <div className="absolute inset-0 md:bg-black/40 bg-gradient-to-t from-black/70 via-black/35 to-black/10" />
 
-  {/* Content */}
-  <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center md:justify-end">
-    <div className="text-white max-w-xl text-center md:text-right">
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-        Got <span className="bg-emerald-600 px-2 py-1 rounded-xl">scrap?</span><br />
-        Sell it to us.
+  <div
+    class="absolute inset-0 pointer-events-none -z-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:from-black/35 md:via-black/10"
+  ></div>
+
+
+  <div class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-10 md:pt-0">
+    <div
+      class="ml-auto md:max-w-md lg:max-w-lg text-white text-center md:text-right mt-16"
+    >
+      
+      <h1 class="font-extrabold leading-tight tracking-tight">
+        <span class="block text-[26px] xs:text-[28px] sm:text-5xl">
+          Got
+          <span
+            class="align-middle inline-block rounded-md px-2 py-0.5 bg-emerald-600 text-black "
+          >
+            scrap?
+          </span>
+        </span>
+        <span class="block mt-1 text-[24px] xs:text-[26px] sm:text-5xl">
+          Sell it to us.
+        </span>
       </h1>
-      <p className="mt-4 sm:mt-5 text-base sm:text-lg lg:text-xl text-white/90">
+
+    
+      <p class="mt-3 text-sm sm:text-base text-white/90 leading-relaxed">
         Turn your recyclables into cash and help the circular economy thrive.
       </p>
-      <div className="mt-6 flex flex-col sm:flex-row sm:justify-end items-stretch sm:items-end gap-3 sm:gap-4">
+
+     
+      <div
+        class="mt-4 sm:mt-5 flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4"
+      >
         <a
           href="tel:6363865658"
-          className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition"
+          class="inline-flex items-center justify-center w-full sm:w-auto h-12 px-6 rounded-xl font-semibold bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
         >
           Contact me
         </a>
-        <Link
-          to="/business"
-          className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white text-white font-medium hover:bg-white hover:text-black transition"
+
+        <a
+          href="/business"
+          class="inline-flex items-center justify-center w-full sm:w-auto h-12 px-6 rounded-xl font-semibold border border-white/80 text-white backdrop-blur-[2px] bg-white/0 hover:bg-white hover:text-black transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
         >
           For Business
-        </Link>
+        </a>
       </div>
     </div>
   </div>
 </section>
+
 
 
       {/* CATEGORIES */}
