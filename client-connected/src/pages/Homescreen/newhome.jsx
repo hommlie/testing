@@ -719,6 +719,9 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           }}>
           <Testimonials />
         </section> */}
+        <section className="block md:hidden px-2 sm:px-11">
+          <TestimonialCarousel />
+        </section>
         <section className="px-2 sm:px-11" style={{
             // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>

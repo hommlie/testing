@@ -138,7 +138,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
   return (
     <div className="overflow-y-auto">
       <div className="space-y-4">
-        <section className="bg-white rounded-lg p-4 space-y-4">
+        <section className="bg-white rounded-lg p-4 space-y-4 border border-black">
           <h2 className="text-base md:text-xl font-semibold">Cart Summary</h2>
 
           {cart?.length > 0 ? (
@@ -231,7 +231,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
           )}
         </section>
 
-        <section className="bg-white rounded-lg p-4 space-y-4 ">
+        <section className="bg-white rounded-lg p-4 space-y-4 border border-black">
           <h2 className="text-base md:text-xl font-semibold">
             Hommlie Features
           </h2>
@@ -522,7 +522,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                 </div>
 
                 {/* Main Box Section */}
-                <section className="bg-white rounded-lg p-4 space-y-4 shadow mt-2">
+                <section className="bg-white rounded-lg p-4 space-y-4 shadow mt-2 border border-black">
                   
                   {/* Select a service heading - Centered */}
                   <div className="flex justify-center items-center">
@@ -585,7 +585,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                   <section
                     key={product.id}
                     ref={(el) => (productRefs.current[index] = el)}
-                    className="bg-white rounded-lg p-6 space-y-6 shadow scroll-mt-4"
+                    className="bg-white rounded-lg p-6 space-y-6 shadow scroll-mt-4 border border-black"
                   >
                     <h3 className="text-base md:text-2xl font-semibold">
                       {product.product_name}
