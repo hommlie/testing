@@ -1,141 +1,109 @@
 const { Address } = require('../models');
-const apiUrl = process.env.apiUrl;
 
-exports.saveAddress = async(req, res) => {
-    const { user_id, name, address, landmark, pincode, mobile, email, latitude, longitude } = req.body;
+exports.saveAddress = async (req, res) => {
+  const {
+    user_id,
+    name,
+    address,
+    landmark,
+    house_number, // ✅ read it
+    pincode,
+    mobile,
+    email,
+    latitude,
+    longitude
+  } = req.body;
 
-    try {
-      if (!user_id) {
-        return res.status(400).json({ status: 0, message: 'Please login to save address' });
-      }
+  try {
+    if (!user_id) return res.status(400).json({ status: 0, message: 'Please login to save address' });
+    if (!name) return res.status(400).json({ status: 0, message: 'Please enter full name' });
+    if (!address) return res.status(400).json({ status: 0, message: 'Please enter address' });
+    if (!pincode) return res.status(400).json({ status: 0, message: 'Please enter pincode' });
+    if (!mobile) return res.status(400).json({ status: 0, message: 'Please enter mobile number' });
+    if (!latitude || !longitude) return res.status(400).json({ status: 0, message: 'Latitude/Longitude required' });
 
-      if (!name) {
-        return res.status(400).json({ status: 0, message: 'Please enter first name' });
-      }
+    const fullAddress = await Address.create({
+      user_id,
+      name,
+      address,
+      landmark,
+      house_number, // ✅ save it
+      pincode,
+      mobile,
+      email,
+      latitude,
+      longitude
+    });
 
-      if (!address) {
-        return res.status(400).json({ status: 0, message: 'Please enter address' });
-      }
+    return res.status(200).json({ status: 1, message: 'Success', data: fullAddress });
+  } catch (error) {
+    return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
+  }
+};
 
-      if (!pincode) {
-        return res.status(400).json({ status: 0, message: 'Please enter pincode' });
-      }
+exports.getAddress = async (req, res) => {
+  const { user_id } = req.body;
 
-      if (!mobile) {
-        return res.status(400).json({ status: 0, message: 'Please enter mobile number' });
-      }
+  try {
+    if (!user_id) return res.status(400).json({ status: 0, message: 'Please login to check address' });
 
-      const fullAddress = await Address.create({
-        user_id,
-        name,
-        address,
-        landmark,
-        building,
-        pincode,
-        mobile,
-        email,
-        latitude, 
-        longitude
-      });
+    const addresses = await Address.findAll({ where: { user_id } });
 
-      if (fullAddress) {
-        return res.status(200).json({ status: 1, message: 'Success' });
-      } else {
-        return res.status(200).json({ status: 0, message: 'Something went wrong' });
-      }
-    } catch (error) {
-      return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
+    if (addresses.length > 0) {
+      return res.status(200).json({ status: 1, message: 'Success', data: addresses });
     }
-}
+    return res.status(200).json({ status: 0, message: 'No addresses found', data: [] });
+  } catch (error) {
+    return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
+  }
+};
 
-exports.getAddress = async(req, res) => {
-    const { user_id } = req.body;
-    console.log(user_id);
+exports.editAddress = async (req, res) => {
+  const {
+    id,
+    name,
+    address,
+    landmark,
+    house_number, // ✅ allow edit
+    pincode,
+    mobile,
+    email,
+    latitude,
+    longitude
+  } = req.body;
 
-    try {
-      if (!user_id) {
-        return res.status(400).json({ status: 0, message: 'Please login to check address' });
-      }
+  try {
+    if (!id) return res.status(400).json({ status: 0, message: 'Invalid Address ID' });
+    if (!name) return res.status(400).json({ status: 0, message: 'Please enter full name' });
+    if (!address) return res.status(400).json({ status: 0, message: 'Please enter address' });
+    if (!pincode) return res.status(400).json({ status: 0, message: 'Please enter pincode' });
+    if (!mobile) return res.status(400).json({ status: 0, message: 'Please enter mobile number' });
 
-      const addresses = await Address.findAll({
-        where: { user_id }
-      });
+    const [affected] = await Address.update(
+      { name, address, landmark, house_number, pincode, mobile, email, latitude, longitude },
+      { where: { id } }
+    );
 
-      if (addresses.length > 0) {
-        return res.status(200).json({ status: 1, message: 'Success', data: addresses });
-      } else {
-        return res.status(200).json({ status: 0, message: 'No addresses found' });
-      }
-    } catch (error) {
-      return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
+    if (affected > 0) {
+      return res.status(200).json({ status: 1, message: 'Success' });
     }
-}
+    return res.status(404).json({ status: 0, message: 'Address not found' });
+  } catch (error) {
+    return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
+  }
+};
 
-exports.editAddress = async(req, res) => {
-    const { id, name, address, landmark, pincode, mobile, email, latitude, longitude } = req.body;
+exports.deleteAddress = async (req, res) => {
+  const { address_id } = req.body;
 
-    try {
-      if (!id) {
-        return res.status(400).json({ status: 0, message: 'Invalid Address ID' });
-      }
+  try {
+    if (!address_id) return res.status(400).json({ status: 0, message: 'Please provide Address ID' });
 
-      if (!name) {
-        return res.status(400).json({ status: 0, message: 'Please enter first name' });
-      }
+    const deleted = await Address.destroy({ where: { id: address_id } });
 
-      if (!address) {
-        return res.status(400).json({ status: 0, message: 'Please enter address' });
-      }
-
-      if (!pincode) {
-        return res.status(400).json({ status: 0, message: 'Please enter pincode' });
-      }
-
-      if (!mobile) {
-        return res.status(400).json({ status: 0, message: 'Please enter mobile number' });
-      }
-
-      const updatedAddress = await Address.update({
-        name,
-        address,
-        landmark,
-        pincode,
-        mobile,
-        email,
-        latitude, 
-        longitude
-      }, {
-        where: { id: id }
-      });
-
-      if (updatedAddress) {
-        return res.status(200).json({ status: 1, message: 'Success' });
-      } else {
-        return res.status(200).json({ status: 0, message: 'Something went wrong' });
-      }
-    } catch (error) {
-      return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
-    }
-}
-
-exports.deleteAddress = async(req, res) => {
-    const { address_id } = req.body;
-
-    try {
-      if (!address_id) {
-        return res.status(200).json({ status: 0, message: 'Please provide Address ID' });
-      }
-
-      const deleted = await Address.destroy({
-        where: { id: address_id }
-      });
-
-      if (deleted) {
-        return res.status(200).json({ status: 1, message: 'Success' });
-      } else {
-        return res.status(200).json({ status: 0, message: 'Something went wrong' });
-      }
-    } catch (error) {
-      return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
-    }
-}
+    if (deleted) return res.status(200).json({ status: 1, message: 'Success' });
+    return res.status(404).json({ status: 0, message: 'Address not found' });
+  } catch (error) {
+    return res.status(500).json({ status: 0, message: 'Something went wrong', error: error.message });
+  }
+};

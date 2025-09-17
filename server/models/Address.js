@@ -21,6 +21,10 @@ Address.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    house_number: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     pincode: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -32,9 +36,7 @@ Address.init(
     email: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isEmail: true,
-      },
+      validate: { isEmail: true },
     },
     latitude: {
       type: DataTypes.STRING,
