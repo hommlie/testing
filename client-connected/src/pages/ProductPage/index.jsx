@@ -1951,8 +1951,8 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               )}
 
               {prodData?.is_form === 0 && (
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
-                  <div className="flex justify-between items-center mb-4">
+                <div className="bg-white rounded-lg px-5 py-2 space-y-4 border border-black">
+                  <div className="flex justify-between items-center">
                     <div className="flex items-center">
                       <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
                       <h2 className="text-lg font-semibold">Coupons</h2>
@@ -1998,7 +1998,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               )}
 
               {prodData?.is_form === 0 && (
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
+                <div className="bg-white rounded-lg px-5 py-2 space-y-4 border border-black">
                   <h3 className="text-xl font-semibold">Payment Summary</h3>
                   <div className="space-y-2">
                     <div className="flex flex-row justify-between">

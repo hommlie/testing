@@ -105,31 +105,48 @@ export default function Scrap() {
 
 
 
-      {/* CATEGORIES */}
-      <section className="mx-auto max-w-[1240px] px-4 sm:px-6 py-12 sm:py-14 lg:py-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-10">Scrap Categories We Collect</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {categories.map((cat) => (
-            <article key={cat.name} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition">
-              <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                <div className={`h-12 w-12 shrink-0 grid place-items-center rounded-xl text-xl ${cat.color}`} aria-hidden>
-                  <span className="select-none">{cat.icon}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">{cat.name}</h3>
-                  <p className="mt-1 text-sm text-gray-600">{cat.desc}</p>
-                </div>
-                <button
-                  onClick={() => setSelectedCategory(cat)}
-                  className="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto rounded-xl bg-emerald-600 px-4 py-2 text-sm text-white hover:bg-emerald-700 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                  More
-                </button>
-              </div>
-            </article>
-          ))}
+     {/* CATEGORIES */}
+<section className="mx-auto max-w-[1240px] px-4 sm:px-6 py-12 sm:py-14 lg:py-16">
+  <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10 text-gray-900">
+    Scrap Categories We Collect
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {categories.map((cat) => (
+      <article
+        key={cat.name}
+        className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg transition duration-300"
+      >
+        {/* Icon + Name row */}
+        <div className="flex items-center gap-3 mb-3">
+          <div
+            className={`h-12 w-12 flex items-center justify-center rounded-xl text-2xl shadow-sm ${cat.color}`}
+            aria-hidden
+          >
+            <span className="select-none">{cat.icon}</span>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900">{cat.name}</h3>
         </div>
-      </section>
+
+        {/* Description */}
+        <p className="text-sm text-gray-600 mb-4">{cat.desc}</p>
+
+        {/* Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => setSelectedCategory(cat)}
+            className="rounded-xl bg-emerald-600 px-5 py-2 text-sm font-medium text-white 
+                       hover:bg-emerald-700 shadow-md hover:shadow-lg transition 
+                       focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            More
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
 
       {/* Individuals & Businesses strips — remove drifting margins */}
       <section className="mx-auto max-w-[1250px] px-4 sm:px-6 pb-12 sm:pb-16">

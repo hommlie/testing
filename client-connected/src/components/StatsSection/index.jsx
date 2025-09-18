@@ -17,14 +17,14 @@ const statsData = [
 const StatsSection = () => {
   const scrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const itemWidth = 180; // Includes margin
+  const itemWidth = 180; // Width of one item (card), including margin/padding
 
   // Auto scroll logic for mobile only
   useEffect(() => {
     const interval = setInterval(() => {
       if (window.innerWidth < 640 && scrollRef.current) {
         setActiveIndex((prevIndex) =>
-          prevIndex === statsData.length - 1 ? 0 : prevIndex + 1
+          prevIndex === statsData.length - 2 ? 0 : prevIndex + 1
         );
       }
     }, 3000);
@@ -36,18 +36,19 @@ const StatsSection = () => {
   useEffect(() => {
     if (window.innerWidth < 640 && scrollRef.current) {
       scrollRef.current.scrollTo({
-        left: activeIndex * itemWidth,
+        left: activeIndex * itemWidth * 2, // Multiply by 2 to scroll two items at once
         behavior: "smooth",
       });
     }
   }, [activeIndex]);
 
   return (
-    <section className="py-6">
-      <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-0 sm:ml-4 -ml-6">
+    <section className="py-5">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div
           ref={scrollRef}
           className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-8 overflow-x-auto scrollbar-hide sm:overflow-visible scroll-smooth transition-all duration-500"
+          style={{ overflowY: "hidden", display: "flex" }} // Enable side-scrolling
         >
           {statsData.map((stat, index) => (
             <motion.div
@@ -56,7 +57,7 @@ const StatsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex-shrink-0 sm:flex-shrink bg-gray-50 p-2 rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[160px] sm:min-w-0 w-[160px] flex flex-col items-center text-center"
+              className="flex-shrink-0 bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[160px] sm:min-w-0 w-[160px] flex flex-col items-center text-center"
             >
               <img
                 src={stat.icon}
@@ -76,7 +77,7 @@ const StatsSection = () => {
           {statsData.map((_, i) => (
             <span
               key={i}
-              className={`h-2 w-2 mx-1 rounded-full ${
+              className={`h-2 w-2 mx-1 rounded-full transition-all duration-300 ${
                 i === activeIndex ? "bg-emerald-600" : "bg-gray-300"
               }`}
             />
