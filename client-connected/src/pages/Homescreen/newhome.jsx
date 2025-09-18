@@ -735,7 +735,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           //   background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           // }}
         >
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto mt-7 sm:mt-0">
             <InspectionFormSection />
           </div>
         </section>
