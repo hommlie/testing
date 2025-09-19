@@ -1,5 +1,3 @@
-// Due to the large size, the code is split into multiple parts.
-
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, Star, ChevronRight, Check } from "lucide-react";
@@ -211,7 +209,6 @@ const ServiceSection = ({ categories }) => {
 
   const { recommended, regular } = groupProducts();
 
-  // ... continue in next message with JSX layout and components
   // Dropdown Component
   const Dropdown = ({
     label,
@@ -279,9 +276,7 @@ const ServiceSection = ({ categories }) => {
                     <div className="flex-shrink-0 mt-1">
                       <div
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          isSelected
-                            ? "border-[#493f9e] bg-green-700"
-                            : "border-gray-300"
+                          isSelected ? "border-[#493f9e] bg-green-700" : "border-gray-300"
                         }`}
                       >
                         {isSelected && <Check className="w-3 h-3 text-white" />}
@@ -425,12 +420,7 @@ const ServiceSection = ({ categories }) => {
 
   return (
     <>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
-        // style={{
-        //     background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-        //   }}
-      >
-       
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica]">
         {/* Request a Callback Button (visible on all devices) */}
         <div className="mb-5 -mt-9 sm:-mt-0 flex justify-center">
           <button
@@ -441,7 +431,7 @@ const ServiceSection = ({ categories }) => {
           </button>
         </div>
         {/* Modal for callback */}
-  <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
+        <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
         <div className="mb-0 text-center">
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Your Service Category</h2>
           <div className="w-full flex justify-center sm:justify-center">
@@ -480,7 +470,7 @@ const ServiceSection = ({ categories }) => {
                 <Dropdown
                   label=""
                   value={selectedBhk}
-                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
+                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))} 
                   onChange={setSelectedBhk}
                   disabled={!selectedProduct}
                 />
