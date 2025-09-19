@@ -407,7 +407,7 @@ const ServiceSection = ({ categories }) => {
                 e.stopPropagation();
                 if (matchedVariation) handleAddToCart(matchedVariation, product);
               }}
-              className={`w-full py-3 rounded-lg font-bold transition-colors  bg-green-700 text-white hover:bg-[#133215] hover:text-white 
+              className={`w-full py-3 rounded-lg font-bold transition-colors  bg-green-700 text-white hover:bg-[#52852d] hover:text-white 
                 ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}
@@ -503,7 +503,7 @@ const ServiceSection = ({ categories }) => {
         </div>
 
         <div className="mb-0">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
             {recommended.length + regular.length === 0
               ? "Loading Services..."
               : "Available Service Packages"}

@@ -759,7 +759,7 @@ export default function AddtoCart() {
                         </span>
                         <button
                           className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                            walletApplied ? "bg-red-500 text-white" : "bg-green-500 text-white"
+                            walletApplied ? "bg-red-500 text-white" : "bg-green-600 text-white"
                           } ${walletBalance <= 0 || payableBeforeWallet <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
                           onClick={handleWalletToggle}
                           disabled={walletBalance <= 0 || payableBeforeWallet <= 0}

@@ -201,7 +201,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
               </div>
 
               <button
-                className="bg-emerald-600 hover:bg-emerald-700 w-full text-white py-2 rounded-md transition"
+                className="bg-emerald-700 hover:bg-[#52852d] w-full text-white py-2 rounded-md transition"
                 onClick={() => (window.location.href = "/add-to-cart")}
               >
                 Checkout Now
@@ -571,7 +571,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                   <img
                     src={innerSubCategoryData?.subcategory_banner}
                     alt={innerSubCategoryData?.innersubcategory_name}
-                    className="hidden sm:block w-full h-[150px] md:h-[300px] rounded-lg mt-4"
+                    className="hidden sm:block w-full h-[150px] md:h-[300px] rounded-lg mt-4 border border-black"
                   />
                 ) : (
                   <img

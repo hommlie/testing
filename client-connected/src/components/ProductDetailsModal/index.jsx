@@ -931,7 +931,7 @@ const ProductDetailModal = ({
                   onClick={() =>
                     navigate(`${config.VITE_BASE_URL}/add-to-cart`)
                   }
-                  className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700"
+                  className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-[#52852d]"
                 >
                   Checkout Now
                 </button>
