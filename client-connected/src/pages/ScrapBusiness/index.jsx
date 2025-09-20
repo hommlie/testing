@@ -193,8 +193,8 @@ export default function Business() {
    
         <a
           onclick="scrollToForm && scrollToForm()"
-          class="inline-block mt-5 px-6 py-3 rounded-xl text-base sm:text-lg font-medium
-                 bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800
+          class="inline-block mt-5 px-4 py-2 rounded-lg text-base sm:text-lg font-medium
+                 bg-[#15803d]  text-white hover:bg-[#52852d] active:bg-emerald-800
                  transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
         >
           Contact Us
@@ -265,8 +265,8 @@ export default function Business() {
 
               <div className="mt-6">
                 <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-white font-semibold hover:bg-emerald-700 transition"
+                  to="/help"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#15803d] px-4 py-2 text-white font-semibold hover:bg-[#52852d] transition"
                 >
                   Know More <span aria-hidden>→</span>
                 </Link>
@@ -296,7 +296,7 @@ export default function Business() {
               {["Ramamurthy Nagar", "Hoskote", "Banashankari", "Vidyaranyapura"].map((c) => (
                 <span
                   key={c}
-                  className="inline-flex items-center rounded-2xl bg-emerald-700 text-white px-5 py-2 font-semibold"
+                  className="inline-flex items-center rounded-lg bg-[#15803d] text-white px-5 py-2 font-semibold"
                 >
                   {c}
                 </span>
@@ -346,7 +346,7 @@ export default function Business() {
             </p>
             <button
               onClick={scrollToForm}
-              className="mt-8 inline-flex items-center rounded-full bg-gray-900 px-6 py-3 text-white font-medium hover:bg-black"
+              className="mt-8 inline-flex items-center rounded-lg bg-[#15803d] px-4 py-2 text-white font-medium hover:bg-black"
             >
               Schedule a consultation call today
             </button>
@@ -473,7 +473,7 @@ export default function Business() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="rounded-xl bg-emerald-600 px-6 py-2.5 text-white font-medium hover:bg-emerald-700"
+                  className="rounded-lg bg-[#15803d] px-4 py-2 text-white font-medium hover:bg-[#52852d]"
                 >
                   Send Message
                 </button>

@@ -215,7 +215,7 @@ export default function ScrapPrices() {
                   {!sel ? (
                     <button
                       onClick={() => addItem(item)}
-                      className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="px-4 py-2 rounded-lg bg-[#15803d] text-white hover:bg-[#52852d] text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                     >
                       Add
                     </button>
@@ -279,7 +279,7 @@ export default function ScrapPrices() {
 
                 <button
                   onClick={clearAll}
-                  className="w-full sm:w-auto px-3 py-2 rounded-xl border hover:bg-gray-50 text-sm transition"
+                  className="w-full sm:w-auto px-4 py-2 rounded-lg border border-black hover:bg-red-600 text-sm transition"
                 >
                   Clear
                 </button>
@@ -289,7 +289,7 @@ export default function ScrapPrices() {
                     setMode("checkout");
                     setStep(1);
                   }}
-                  className="w-full sm:w-auto sm:ml-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+                  className="w-full sm:w-auto sm:ml-auto px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-[#52852d]  transition"
                 >
                   Continue to place order
                 </button>
@@ -323,7 +323,7 @@ export default function ScrapPrices() {
         <div className="relative">
           <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-gray-200 rounded-full" />
           <div
-            className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-green-600 rounded-full transition-all"
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-[#15803d]  rounded-full transition-all"
             style={{ width: `${((step - 1) / 4) * 100}%` }}
           />
           <div className="relative flex items-center justify-between">
@@ -449,12 +449,12 @@ function Step1Intro({ items, onCancel, onContinue }) {
       </p>
 
       <div className="mt-6 flex gap-3 justify-end">
-        <button onClick={onCancel} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
+        <button onClick={onCancel} className="px-4 py-2 rounded-lg border border-black hover:bg-gray-50 transition">
           Cancel
         </button>
         <button
           onClick={onContinue}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+          className="px-4 py-2 rounded-lg bg-[#15803d]  text-white hover:bg-[#52852d] transition"
         >
           Continue
         </button>
@@ -535,19 +535,19 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
         <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
           <button
             onClick={onBack}
-            className="w-full sm:w-auto px-5 py-2 rounded-xl border hover:bg-gray-50 transition"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg border hover:bg-gray-50 transition"
           >
             Back
           </button>
           <button
             onClick={onSkip}
-            className="w-full sm:w-auto px-5 py-2 rounded-xl border hover:bg-gray-50 transition"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg border hover:bg-gray-50 transition"
           >
             Skip
           </button>
           <button
             onClick={onContinue}
-            className="w-full sm:w-auto px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[#15803d] text-white hover:bg-[#52852d] transition"
           >
             Continue
           </button>
@@ -624,7 +624,7 @@ function Step3Pickup({ pickup, setPickup, onBack, onContinue }) {
         <button
           onClick={onContinue}
           disabled={!pickup.name || !pickup.phone || !pickup.address || !pickup.date || !pickup.time || !pickup.agree}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white disabled:opacity-50 hover:bg-green-700 transition"
+          className="px-4 py-2 rounded-lg bg-[#15803d] hover:bg-[#52852d] text-white disabled:opacity-50 transition"
         >
           Next: Review
         </button>
@@ -678,12 +678,12 @@ function Step4Review({ items, pickup, total, onEdit, onConfirm }) {
       </div>
 
       <div className="mt-6 flex justify-between">
-        <button onClick={onEdit} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
+        <button onClick={onEdit} className="px-4 py-2 rounded-lg border hover:bg-gray-50 transition">
           Edit
         </button>
         <button
           onClick={onConfirm}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+          className="px-4 py-2 rounded-lg bg-[#15803d] hover:bg-[#52852d] text-white transition"
         >
           Confirm Pickup
         </button>
@@ -729,12 +729,12 @@ function Step5Success({ items, total, pickup, onBookAnother, onTrack }) {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-        <button onClick={onBookAnother} className="px-5 py-2 rounded-xl border hover:bg-gray-50 transition">
+        <button onClick={onBookAnother} className="px-4 py-2 rounded-lg border hover:bg-gray-50 transition">
           Book Another
         </button>
         <button
           onClick={onTrack}
-          className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+          className="px-4 py-2 rounded-lg bg-[#15803d] hover:bg-[#52852d] text-white transition"
         >
           Track Pickup
         </button>

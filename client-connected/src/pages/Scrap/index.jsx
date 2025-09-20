@@ -66,7 +66,7 @@ export default function Scrap() {
         <span class="block text-[26px] xs:text-[28px] sm:text-5xl">
           Got
           <span
-            class="align-middle inline-block rounded-md px-2 py-0.5 bg-emerald-600 text-black "
+            class="align-middle inline-block rounded-md px-2 py-0.5 bg-[#15803d] text-black "
           >
             scrap?
           </span>
@@ -87,7 +87,7 @@ export default function Scrap() {
       >
         <a
           href="tel:6363865658"
-          class="inline-flex items-center justify-center w-full sm:w-auto h-12 px-6 rounded-xl font-semibold bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          class="inline-flex items-center justify-center w-full sm:w-auto h-12 px-6 rounded-xl font-semibold bg-[#15803d] hover:bg-[#52852d] active:bg-emerald-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
         >
           Contact me
         </a>
@@ -135,8 +135,8 @@ export default function Scrap() {
         <div className="flex justify-end">
           <button
             onClick={() => setSelectedCategory(cat)}
-            className="rounded-xl bg-emerald-600 px-5 py-2 text-sm font-medium text-white 
-                       hover:bg-emerald-700 shadow-md hover:shadow-lg transition 
+            className="rounded-md bg-[#15803d] px-5 py-2 text-sm font-medium text-white 
+                       hover:bg-[#52852d] shadow-md hover:shadow-lg transition 
                        focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             More
@@ -219,7 +219,7 @@ export default function Scrap() {
               manage waste efficiently &amp; cost-effectively—contributing in closing the loop of product life cycle &amp; attain
               circular economy while infusing sustainability into lives.
             </p>
-            <button className="mt-5 inline-flex items-center gap-2 rounded-md bg-emerald-600 px-5 py-2.5 text-white font-medium hover:bg-emerald-700">
+            <button className="mt-5 inline-flex items-center gap-2 rounded-md bg-[#15803d] px-5 py-2.5 text-white font-medium hover:bg-[#52852d]">
               Learn More <span aria-hidden>→</span>
             </button>
           </div>
@@ -249,7 +249,7 @@ export default function Scrap() {
             </div>
             <button
               onClick={() => setSelectedCategory(null)}
-              className="mt-6 w-full rounded-xl bg-gray-900 py-2.5 text-white hover:bg-black transition focus:outline-none focus:ring-2 focus:ring-gray-800"
+              className="mt-6 w-full rounded-lg bg-[#15803d] py-2.5 text-white hover:bg-[#52852d] transition focus:outline-none focus:ring-2 focus:ring-gray-800"
             >
               Close
             </button>
@@ -308,7 +308,7 @@ export default function Scrap() {
                 setShowComingSoon(false);
                 navigate("/scrap/bangalore"); // use your BASE_URL if needed
               }}
-              className="w-full sm:flex-1 rounded-xl bg-emerald-600 px-4 py-3 text-sm sm:text-base text-white font-medium hover:bg-emerald-700 active:scale-[0.99] transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full sm:flex-1 rounded-lg bg-[#15803d] bg-emerald-600 px-4 py-2 text-sm sm:text-base text-white font-medium hover:bg-[#52852d] active:scale-[0.99] transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               View Bangalore
             </button>

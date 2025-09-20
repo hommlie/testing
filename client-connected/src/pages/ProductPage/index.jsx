@@ -1858,7 +1858,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
         key={attr}
         className={`w-full p-3 rounded-lg border ${
           selectedAttribute === attr
-            ? "bg-[#10847E] text-white"
+            ? "bg-[#15803d] text-white"
             : "border-gray-300"
         }`}
         onClick={() => handleAttributeSelect(attr)}
@@ -1892,7 +1892,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               key={variation.data.id}
               className={`w-full p-3 rounded-lg border ${
                 selectedVariation?.id === variation.data.id
-                  ? "bg-[#10847E] text-white"
+                  ? "bg-[#15803d] text-white"
                   : "border-gray-300"
               }`}
               onClick={() => handleVariationSelect(variation)}
@@ -2081,8 +2081,8 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       </div>
                     </div>
                     <button
-                      className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold"
-                      style={{ backgroundColor: "#249370" }}
+                      className="bg-[#15803d] hover:bg-[#52852d] uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold"
+                     
                       onClick={handleProceed}
                       id="proceed-btn"
                     >
