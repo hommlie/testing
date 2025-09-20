@@ -47,7 +47,7 @@ const StatsSection = () => {
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div
           ref={scrollRef}
-          className="flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-8 overflow-x-auto scrollbar-hide sm:overflow-visible scroll-smooth transition-all duration-500"
+          className="sm:-ml-4 sm:mr-4 mr-0 -ml-0 flex sm:grid sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-8 overflow-x-auto scrollbar-hide sm:overflow-visible scroll-smooth transition-all duration-500"
           style={{ overflowY: "hidden", display: "flex" }} // Enable side-scrolling
         >
           {statsData.map((stat, index) => (
@@ -57,7 +57,7 @@ const StatsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex-shrink-0 bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[160px] sm:min-w-0 w-[160px] flex flex-col items-center text-center"
+              className="flex-shrink-0 bg-gray-50 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[160px] sm:min-w-0 w-[200px] flex flex-col items-center text-center"
             >
               <img
                 src={stat.icon}
