@@ -461,7 +461,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   return (
     <div
-      className="bg-cover bg-center bg-no-repeat font-headerFont"
+      className="sm:max-w-7xl sm:mx-auto bg-cover bg-center bg-no-repeat font-headerFont"
       style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}
