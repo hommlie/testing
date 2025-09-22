@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Share2, MessageSquare, Edit2, Trash2 } from "lucide-react";
 import config from "../../config/config";
@@ -9,6 +9,7 @@ import LoginSignup from "../../components/LoginModal";
 import RelatedBlogs from "./RelatedBlogs";
 import { Helmet } from "react-helmet";
 import BlogForm from "../BlogForm/BlogForm";
+
 // ================= Comment Component =================
 const Comment = React.memo(
   ({
@@ -177,6 +178,8 @@ const BlogPost = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
 
+  const contentRef = useRef(null); // ⬅ to enhance injected HTML
+
   const notify = useToast();
   const notifyOnSuccess = (success) => notify(success, "success");
   const notifyOnFail = (error) => notify(error, "error");
@@ -233,7 +236,55 @@ const BlogPost = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, navigate]);
+
+  // Enhance injected HTML: links + tables
+  useEffect(() => {
+    const root = contentRef.current;
+    if (!root) return;
+
+    // Make all links blue, underlined, clickable, opening in new tab
+    root.querySelectorAll("a[href]").forEach((a) => {
+      a.classList.add("text-blue-600", "underline", "hover:text-blue-800", "break-words");
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+      a.style.color = ""; // clear inline colors pasted from editor
+    });
+
+    // Style all tables and make them responsive
+    root.querySelectorAll("table").forEach((table) => {
+      table.classList.add("w-full", "text-sm", "border", "border-gray-300");
+
+      // Wrap in scroll container on small screens
+      if (!table.parentElement || !table.parentElement.classList.contains("overflow-x-auto")) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "overflow-x-auto my-6";
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      }
+
+      // thead
+      table.querySelectorAll("thead").forEach((thead) => {
+        thead.classList.add("bg-gray-100");
+      });
+
+      // th
+      table.querySelectorAll("th").forEach((th) => {
+        th.classList.add("border", "border-gray-300", "p-2", "text-left", "font-semibold", "align-top");
+      });
+
+      // td
+      table.querySelectorAll("td").forEach((td) => {
+        td.classList.add("border", "border-gray-300", "p-2", "align-top");
+      });
+
+      // zebra striping
+      table.querySelectorAll("tbody tr:nth-child(odd)").forEach((tr) => {
+        tr.classList.add("bg-gray-50");
+      });
+    });
+  }, [blog?.content]);
 
   const handleCommentSubmit = async (parentId = null, content = newComment) => {
     if (!user || !user.id) {
@@ -343,7 +394,6 @@ const BlogPost = () => {
     return `${baseUrl}${path}`;
   };
 
-
   return (
     <div className="min-h-screen max-w-7xl mx-auto font-sans">
       <Helmet>
@@ -356,7 +406,7 @@ const BlogPost = () => {
       <nav
         className="ml-4 sm:ml-0 sm:-ml-5 px-2 sm:px-8 lg:px-16 py-3 text-xs sm:text-sm text-gray-500 flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
         aria-label="Breadcrumb"
-        style={{ WebkitOverflowScrolling: 'touch' }}
+        style={{ WebkitOverflowScrolling: "touch" }}
       >
         <span
           className="hover:underline cursor-pointer text-emerald-600 min-w-fit"
@@ -386,25 +436,16 @@ const BlogPost = () => {
           alt={blog.title}
           className="
             w-full 
-            h-auto              /* ✅ mobile: auto height */
+            h-auto
             object-cover object-center
             sm:w-[100%] 
-            sm:h-[100vh]        /* ✅ desktop: keep full height */
+            sm:h-[100vh]
             sm:ml-12 sm:pr-24
           "
-          style={{ minHeight: "auto", minWidth: "100%" }} /* ✅ overrides only for mobile */
+          style={{ minHeight: "auto", minWidth: "100%" }}
         />
-        {/* <div className="absolute inset-0 bg-black/60 flex items-center justify-center px-2 sm:px-4">
-          <div className="text-center text-white max-w-3xl">
-            <h1 className="text-xl xs:text-2xl sm:text-5xl font-bold mb-2 sm:mb-4 leading-tight">
-              {blog.title}
-            </h1>
-            <p className="text-xs xs:text-sm sm:text-lg text-gray-200">
-              {blog.meta_description}
-            </p>
-          </div>
-        </div> */}
       </div>
+
       <div className="mt-8 px-4 sm:px-12">
         <BlogForm />
       </div>
@@ -414,8 +455,8 @@ const BlogPost = () => {
         <h1 className="sm:-ml-2 -ml-1 text-md xs:text-2xl sm:text-2xl font-bold mb-2 sm:mb-6 leading-tight">
           {blog.title}
         </h1>
+
         <div className="flex items-center justify-between text-sm">
-          
           <div>
             <span className="capitalize text-emerald-600 font-medium">
               {blog.BlogCategory?.title}
@@ -454,14 +495,14 @@ const BlogPost = () => {
           </div>
         </div>
 
-
         {/* Blog Content - Full Width Responsive */}
-      <div className="">
-        <div
-          className="max-w-screen-2xl mx-auto text-md leading-8 tracking-wide text-justify space-y-6 text-gray-800"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
-      </div>
+        <div className="">
+          <div
+            ref={contentRef}
+            className="max-w-screen-2xl mx-auto text-md leading-8 tracking-wide text-justify space-y-6 text-gray-800"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
+        </div>
 
         {/* Comments */}
         <div className="border-t border-gray-200 pt-10">
@@ -482,15 +523,15 @@ const BlogPost = () => {
               />
             </div>
             <button
-                type="submit"
-                disabled={!newComment.trim()}
-                className="mt-4 shrink-0 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold 
+              type="submit"
+              disabled={!newComment.trim()}
+              className="mt-4 shrink-0 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold 
                           text-white shadow-md transition-all 
                           hover:bg-emerald-600 hover:shadow-lg 
                           disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Post Comment
-              </button>
+            >
+              Post Comment
+            </button>
           </form>
 
           <div className="space-y-6">

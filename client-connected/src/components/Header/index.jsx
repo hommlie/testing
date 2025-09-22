@@ -473,10 +473,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-20 shadow-sm font-sans bg-gradient-to-r from-[#e6f6f1] via-[#fdf4f4] via-40% via-[#f0e6f9] via-60% to-[#e6faec] sm:max-w-7xl sm:mx-auto sm:px-1"
-      style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+      className="w-full sticky top-0 z-20 shadow-sm font-sans bg-gradient-to-r from-[#e6f6f1] via-[#fdf4f4] via-40% via-[#f0e6f9] via-60% to-[#e6faec] sm:max-w-8xl sm:mx-auto sm:px-1"
     >
       {showMobileBanner && (
         <div className="w-full top-0 left-0 z-50 bg-green-800 text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
