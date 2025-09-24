@@ -28,45 +28,36 @@ const SEOPage = () => {
   }, [slug]);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 py-8">
-      {/* Hero Section */}
+    <main className="max-w-[1200px] mx-auto px-4 py-8">
       <section
-        className="
-          sm:ml-8
-          relative 
-          w-full lg:w-[196vh] 
-          h-52 sm:h-64 md:h-80 lg:h-[50vh] 
-          rounded-xl overflow-hidden
-        "
-      >
-        <img
-          src={pageData?.banner_url || "/og/fallback-hero.jpg"}
-          alt={pageData?.alt_tag || "Hommlie Services"}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center px-4 sm:px-6">
-          <h1 className="text-white text-lg sm:text-2xl md:text-3xl font-bold mb-2">
-            {pageData?.title || "Hommlie Services"}
-          </h1>
-          {pageData?.sub_title && (
-            <p className="text-gray-200 text-sm sm:text-base md:text-lg max-w-xl">
-              {pageData.sub_title}
-            </p>
-          )}
-        </div>
-      </section>
+  className="relative w-full h-[40vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden"
+>
+  <img
+    src={pageData?.banner_url || "/og/fallback-hero.jpg"}
+    alt={pageData?.title || "Hommlie Services"}
+    className="w-full h-full object-cover object-center"
+    loading="lazy"
+    decoding="async"
+  />
 
-      {/* Content Section */}
+  {/* Dark overlay for text readability */}
+  <div className="absolute inset-0 bg-black/50 flex flex-col justify-center px-4 sm:px-6">
+    <h1 className="text-white text-xl sm:text-3xl md:text-4xl font-bold mb-2 leading-tight">
+      {pageData?.title || "Hommlie Services"}
+    </h1>
+
+    {pageData?.sub_title && (
+      <p className="text-gray-200 text-sm sm:text-base md:text-lg max-w-xl">
+        {pageData.sub_title}
+      </p>
+    )}
+  </div>
+</section>
+
+      
       <section
-        className="
-          sm:ml-8
-          sm:mr-10
-          grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 
-          mt-6 sm:mt-8 
-          px-0 sm:px-6 lg:px-0
-        "
-      >
-        {/* Sidebar first on mobile, second on desktop */}
+        className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 mt-6 sm:mt-8 px-0 sm:px-6 lg:px-0" >
+        
         <aside className="lg:col-span-2 space-y-6 order-1 lg:order-2">
           <ServiceSelector
             services={services}
@@ -85,7 +76,6 @@ const SEOPage = () => {
           </div>
         </aside>
 
-        {/* Main Content comes after sidebar on mobile */}
         <article className="lg:col-span-3 bg-white shadow-md rounded-xl p-4 sm:p-6 order-2 lg:order-1">
           {pageData?.description ? (
             <div

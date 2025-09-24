@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import axios from "axios";
+import config from "../../config/config";
 
 /* -------------------- helpers -------------------- */
 const slugify = (s) =>
@@ -56,7 +58,8 @@ export default function ScrapPrices() {
     time: "",
     agree: false,
   });
- 
+  const [submitting, setSubmitting] = useState(false);
+
   const filtered = useMemo(() => {
     const byCat =
       activeCat === "All"
@@ -97,11 +100,67 @@ export default function ScrapPrices() {
 
   const clearAll = () => setSelected([]);
 
+  // keep minimal + safe formatting so server doesn't 500 on validation
+  const formatPhone = (raw) => {
+    // keep only 10 digits to match common backend validations
+    const onlyDigits = String(raw || "").replace(/\D/g, "").slice(0, 10);
+    return onlyDigits;
+  };
+
+  // kept, but no longer used in payload (to avoid very long address strings)
+  const buildItemsSummary = () => {
+    if (!selected.length) return "No items";
+    return selected
+      .map((it) => `${it.qty} ${it.measure} ${it.name} (₹${it.price}/unit)`)
+      .join(", ");
+  };
+
+  const submitPickup = async () => {
+    if (
+      !pickup.name ||
+      !pickup.phone ||
+      !pickup.address ||
+      !pickup.agree
+    ) {
+      alert("Please fill name, phone, address and agree to terms before confirming.");
+      return;
+    }
+
+    const fullPhone = formatPhone(pickup.phone);
+
+    // Minimal payload: name, mobile, address + safe defaults (email/date/time/service)
+    const payload = {
+      fullName: pickup.name,
+      address: `Scrap pickup address: ${pickup.address}`,
+      mobile: fullPhone,
+      email: "",
+      date: new Date().toISOString(), // safe default (like ContactForm)
+      time: "N/A",                     // safe default (like ContactForm)
+      service: "Scrap Pickup",         // helps you filter these in admin
+    };
+
+    try {
+      setSubmitting(true);
+      await axios.post(`${config.API_URL}/api/createInspection`, payload);
+      setSubmitting(false);
+      setStep(5);
+    } catch (err) {
+      console.error("Scrap pickup submission failed:", err);
+      setSubmitting(false);
+      // show any server message if present
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "Something went wrong while booking your pickup. Please try again.";
+      alert(msg);
+    }
+  };
+
   /* -------------- city not served -------------- */
   if (citySlug !== ACTIVE_CITY) {
     return (
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl py-16">
-        <h1 className="text-3xl sm:text-4xl font-extrabold mb-4 text-center">
+        <h1 className="text-3xl sm:4xl font-extrabold mb-4 text-center">
           Scrap Prices
         </h1>
         <div className="rounded-2xl border border-gray-200 p-6 sm:p-8 text-center bg-white shadow-sm">
@@ -143,6 +202,7 @@ export default function ScrapPrices() {
         </div>
 
         {/* Top controls: city + search */}
+       <div className="ml-0 mr-0 sm:ml-2 sm:mr-6">
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center mb-6">
           <button
             className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 rounded-xl border bg-white text-sm sm:text-base hover:bg-gray-50 transition"
@@ -256,7 +316,7 @@ export default function ScrapPrices() {
         {/* Spacer for sticky */}
         <div className="h-20 sm:h-16" />
 
-                {/* Sticky selection footer */}
+        {/* Sticky selection footer */}
         {selected.length > 0 && (
           <div className="fixed left-0 right-0 bottom-0 z-40">
             <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl pb-4">
@@ -298,15 +358,17 @@ export default function ScrapPrices() {
           </div>
         )}
         {/* Footer nav */}
-        <div className="mt-8 sm:mt-10 text-center text-xs sm:text-sm text-gray-600">
+        <div className="text-center text-xs sm:text-sm text-gray-600">
           Not in {CITY_LABEL}?{" "}
           <Link to="/scrap" className="text-green-700 underline">
             Check other cities
           </Link>
         </div>
+        </div>
       </div>
     );
   }
+  
 
   /* -------------- checkout (5-step flow) -------------- */
   return (
@@ -376,7 +438,8 @@ export default function ScrapPrices() {
             pickup={pickup}
             total={totalPrice}
             onEdit={() => setStep(3)}
-            onConfirm={() => setStep(5)}
+            onConfirm={submitPickup}
+            submitting={submitting}
           />
         )}
 
@@ -646,7 +709,7 @@ function Row({ label, value }) {
   );
 }
 
-function Step4Review({ items, pickup, total, onEdit, onConfirm }) {
+function Step4Review({ items, pickup, total, onEdit, onConfirm, submitting = false }) {
   return (
     <>
       <div className="text-xl font-semibold">Confirm Pickup</div>
@@ -683,9 +746,12 @@ function Step4Review({ items, pickup, total, onEdit, onConfirm }) {
         </button>
         <button
           onClick={onConfirm}
-          className="px-4 py-2 rounded-lg bg-[#15803d] hover:bg-[#52852d] text-white transition"
+          disabled={submitting}
+          className={`px-4 py-2 rounded-lg text-white transition ${
+            submitting ? "bg-green-900/60 cursor-not-allowed" : "bg-[#15803d] hover:bg-[#52852d]"
+          }`}
         >
-          Confirm Pickup
+          {submitting ? "Confirming..." : "Confirm Pickup"}
         </button>
       </div>
     </>

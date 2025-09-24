@@ -56,7 +56,7 @@ const BlogForm = () => {
     <div className="relative">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0 bg-white shadow-lg rounded-2xl p-4 md:p-2"
+        className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0 bg-white shadow-lg rounded-l p-4 md:p-2"
       >
         {/* Name */}
         <div className="flex-1 md:border-r md:border-gray-300 md:px-3">
@@ -118,7 +118,7 @@ const BlogForm = () => {
         <div className="flex justify-center md:px-3">
           <button
             type="submit"
-            className="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg md:rounded-md transition"
+            className="w-full md:w-auto bg-[#15803d] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg md:rounded-md transition"
           >
             Submit
           </button>

@@ -41,6 +41,7 @@ import HomeScreendup from "./pages/HomeScreendup";
 import Scrap from "./pages/Scrap";
 import Business from "./pages/ScrapBusiness";
 import ScrapPrices from "./pages/ScrapPrices";
+import Product from "./pages/Product";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -261,6 +262,11 @@ const ProjectRoutes = () => {
       path: `${config.VITE_BASE_URL}/business`,
       element: <Business />,
     },
+    {
+      path: `${config.VITE_BASE_URL}/product`,
+      element: <Product />,
+    },
+
   ]);
   return element;
 };

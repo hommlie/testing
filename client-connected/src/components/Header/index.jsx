@@ -517,7 +517,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
+                    className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-72"
                   >
                     <NavLink to={offers[current].link} className=" pointer-events-auto">
                       🛡️ {offers[current].label}
@@ -557,14 +557,14 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                 Offer
               </button>
               <span className="hidden md:inline-block text-black">|</span>
-              {/* <button
-                onClick={() => setIsComingSoonOpen(true)}
+              <button
+                onClick={() => navigate("/product")}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
               >
                 <FaShoppingCart className="text-inherit" />
                 Product
-              </button> */}
-              {/* <span className="hidden md:inline-block text-black">|</span> */}
+              </button>
+              <span className="hidden md:inline-block text-black">|</span>
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}
@@ -1225,11 +1225,6 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
           </motion.div>
         </div>
       )}
-      <ComingSoonModal
-        isOpen={isComingSoonOpen}
-        onClose={() => setIsComingSoonOpen(false)}
-        source="Product"
-      />
 
 
       {/* Modals */}
