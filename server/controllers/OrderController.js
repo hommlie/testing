@@ -130,10 +130,20 @@ exports.order = async (req, res) => {
   try {
     let formattedTime = desired_time ? moment(desired_time, "hh:mm A").format("HH:mm") : desired_time;
 
-    // next order number
-    const lastOrder = await Order.findOne({ order: [["id", "DESC"]] });
-    const lastOrderNumber = lastOrder ? parseInt(lastOrder.order_number) : 10000;
-    const order_number = (lastOrderNumber + 1).toString();
+    // // next order number
+    // const lastOrder = await Order.findOne({ order: [["id", "DESC"]] });
+    // const lastOrderNumber = lastOrder ? parseInt(lastOrder.order_number) : 10000;
+    // const order_number = (lastOrderNumber + 1).toString();
+// next order number (based on MAX in DB)
+const maxOrderNumber = await Order.max("order_number", {
+  where: {
+    order_number: { [Op.ne]: null },
+  },
+  transaction: t, // keep inside same transaction
+  lock: t.LOCK.UPDATE, // prevents race conditions
+});
+
+const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
 
     // cart
       const cartItems = await Cart.findAll({
