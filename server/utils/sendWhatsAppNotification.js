@@ -13,7 +13,7 @@ const sendWhatsAppNotification = async ({
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "X-AiSensy-Partner-API-Key": "123",
+  // "X-AiSensy-Partner-API-Key": "", // Not required for this API, remove or set if needed
       },
       data: {
         apiKey:
