@@ -165,6 +165,9 @@ export default function ReviewBooking() {
     const placeOrder = async (user, payment_id, razorpay_payment_id = null) => {
         try {
 
+            const contractStartDate = selectedDayTime?.date?.formattedDate;
+            // For now, let contract end date be null; backend will calculate if not sent
+            const contractEndDate = null;
             const response = await axios.post(`${config.API_URL}/api/order`, 
                 {
                     user_id: user.id, 
@@ -185,6 +188,8 @@ export default function ReviewBooking() {
                     longitude: selectedAddrs.longitude,
                     desired_date: selectedDayTime?.date?.formattedDate,
                     desired_time: selectedDayTime?.time,
+                    contract_start_date: contractStartDate,
+                    contract_end_date: contractEndDate,
                 },
                 {
                     headers: {

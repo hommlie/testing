@@ -467,9 +467,6 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
     </button>
   );
 };
-
-
-
   return (
     <header
       ref={headerRef}
@@ -557,14 +554,14 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                 Offer
               </button>
               <span className="hidden md:inline-block text-black">|</span>
-              <button
+              {/* <button
                 onClick={() => navigate("/product")}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
               >
                 <FaShoppingCart className="text-inherit" />
                 Product
-              </button>
-              <span className="hidden md:inline-block text-black">|</span>
+              </button> */}
+              {/* <span className="hidden md:inline-block text-black">|</span> */}
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}

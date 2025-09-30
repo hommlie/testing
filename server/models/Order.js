@@ -150,6 +150,14 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    contract_start_date: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    contract_end_date: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,
