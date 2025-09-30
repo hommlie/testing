@@ -211,7 +211,8 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
         // helper to compute contract dates from a start date (YYYY-MM-DD)
         const getContractDates = (startYMD) => {
           const start = moment(startYMD, "YYYY-MM-DD");
-          const end   = start.clone().add(warrantyDays, "days");
+          // Warranty covers from start date, inclusive, for warrantyDays days, so end date is start + (warrantyDays - 1)
+          const end   = start.clone().add(warrantyDays - 1, "days");
           return {
             contract_start_date: start.format("YYYY-MM-DD"),
             contract_end_date:   end.format("YYYY-MM-DD"),
@@ -336,12 +337,22 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
       });
 
       if (userData?.email) {
-        const subject = `Order Confirmation - Order #${order_number}`;
+        const subject = `Your Hommlie Service Booking is Confirmed! 🧹✨`;
         const html = `
-          <h1>Your order has been placed successfully!</h1>
-          <p>Order Number: ${order_number}</p>
-          <p>Total Amount: ₹${grand_total}</p>
-          <p>Thank you for shopping with us!</p>
+          <h2>Your Hommlie Service Booking is Confirmed! 🧹✨</h2>
+          <p>Hi ${userData.name},</p>
+          <p>Thanks for booking with Hommlie! 🧹✨</p>
+          <ul style="list-style:none;padding:0;">
+            <li><b>🆔 Order ID:</b> ${order_number}</li>
+            <li><b>🗓 Date:</b> ${orders[0]?.desired_date || "-"}</li>
+            <li><b>🕒 Time:</b> ${orders[0]?.desired_time || "-"}</li>
+            <li><b>🛠 Service:</b> ${orders.map(o => o.product_name).join(", ") || firstProduct}</li>
+            <li><b>💰 Amount:</b> ₹${grand_total}</li>
+          </ul>
+          <p>Our team is ready to make your home shine!</p>
+          <br/>
+          <p>Your hygiene, our priority!<br/>
+          Hommlie – Your Hygiene Partner</p>
         `;
         await sendEmail(userData.email, subject, html);
       }
