@@ -519,6 +519,14 @@ const ServiceSection = ({ categories }) => {
                   (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
                   "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
                 }`}>
+                {/* {[...recommended, ...regular].map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    isSelected={selectedProduct === product.id}
+                    onClick={() => setSelectedProduct(product.id)}
+                  />
+                ))} */}
                 {[...recommended, ...regular]
                   .filter((product) => product.product_mode === 0)
                   .map((product) => (

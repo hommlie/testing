@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize");
+    const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 const {
   Category,
@@ -14,6 +14,11 @@ class Product extends Model {}
 
 Product.init(
   {
+    product_mode: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     vendor_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
