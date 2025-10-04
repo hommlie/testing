@@ -201,8 +201,7 @@ const ServiceSection = ({ categories }) => {
   };
 
   const groupProducts = () => {
-    // Only show products with product_mode === 0
-    const products = getCurrentProducts().filter((p) => p.product_mode === 0);
+    const products = getCurrentProducts();
     const recommended = products.filter((p) => p.is_recommended === 1);
     const regular = products.filter((p) => p.is_recommended !== 1);
     return { recommended, regular };

@@ -802,7 +802,7 @@ exports.getHomePageData = async (req, res) => {
               model: Product,
               where: {
                 status: 1,
-                product_mode: 0, // Only include products with product_mode = 0
+                product_mode: 0, 
               },
               attributes: [
                 "id",
@@ -906,6 +906,7 @@ exports.getHomePageData = async (req, res) => {
           tax_type: product.getDataValue("tax_type"),
           discounted_price: product.discounted_price,
           vendor_id: product.vendor_id,
+          product_mode: product.product_mode, // Ensure product_mode is included
           productimage: product.productimage,
           attributes: Array.from(groupedVariations.values()),
         };
