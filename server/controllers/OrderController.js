@@ -100,8 +100,8 @@ exports.order = async (req, res) => {
   const {
     user_id,
     payment_type,
-    payment_id,            // COD random id or Razorpay payment id
-    grand_total,           // must already include coupon, tip, wallet deductions in the client math
+    payment_id,            
+    grand_total,           
     discount_amount,
     coupon_name,
     coupon_id,
@@ -211,8 +211,9 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
         // helper to compute contract dates from a start date (YYYY-MM-DD)
         const getContractDates = (startYMD) => {
           const start = moment(startYMD, "YYYY-MM-DD");
-          // Warranty covers from start date, inclusive, for warrantyDays days, so end date is start + (warrantyDays - 1)
-          const end   = start.clone().add(warrantyDays - 1, "days");
+          // Warranty covers from start date, inclusive, for warrantyDays days, so end date is start + warrantyDays (exclusive)
+          // If booked on 4th Oct and warranty is 20, contract_end_date should be 24th Oct (4th + 20 days)
+          const end = start.clone().add(warrantyDays, "days");
           return {
             contract_start_date: start.format("YYYY-MM-DD"),
             contract_end_date:   end.format("YYYY-MM-DD"),

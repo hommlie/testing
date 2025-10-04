@@ -87,6 +87,7 @@ exports.viewAllListing = async (req, res) => {
           where: {
             is_featured: 1,
             status: 1,
+            product_mode: 0,
           },
           order: sequelize.random(),
           limit: 10,
@@ -100,6 +101,7 @@ exports.viewAllListing = async (req, res) => {
           where: {
             is_hot: 1,
             status: 1,
+            product_mode: 0,
           },
           order: sequelize.random(),
           limit: 10,
@@ -112,6 +114,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             status: 1,
+            product_mode: 0,
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -134,6 +137,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             status: 1,
+            product_mode: 0,
           },
           order: [[sequelize.literal("order_count"), "DESC"]],
           group: [
@@ -171,6 +175,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 19,
+            product_mode: 0,
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -183,6 +188,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 18,
+            product_mode: 0,
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -195,6 +201,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 30,
+            product_mode: 0,
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -207,6 +214,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 29,
+            product_mode: 0,
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -219,6 +227,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 38,
+            product_mode: 0,
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -339,7 +348,7 @@ exports.productDetails = async (req, res) => {
 
   try {
     const product = await Product.findOne({
-      where: { slug: slug, status: 1 },
+  where: { slug: slug, status: 1, product_mode: 0 },
       attributes: [
         "id",
         "product_name",
@@ -468,7 +477,7 @@ exports.productDetails = async (req, res) => {
     plainProduct.variations = restructuredVariations;
 
     const related_products = await Product.findAll({
-      where: { cat_id: product.cat_id, status: 1, id: { [Op.ne]: product.id } },
+  where: { cat_id: product.cat_id, status: 1, product_mode: 0, id: { [Op.ne]: product.id } },
       attributes: [
         "id",
         "product_name",
@@ -573,6 +582,7 @@ exports.vendorProducts = async (req, res) => {
       where: {
         vendor_id,
         status: 1,
+        product_mode: 0,
       },
       include: [
         { model: ProductImage, where: { media: "Image" }, as: "productimage" },
@@ -771,6 +781,7 @@ exports.products = async (req, res) => {
       where: {
         subcat_id: subcategory.id,
         status: 1,
+        product_mode: 0,
       },
       order: [["id", "DESC"]],
       limit: 10,
@@ -796,6 +807,7 @@ exports.searchProducts = async (req, res) => {
     const products = await Product.findAll({
       where: {
         status: true,
+        product_mode: 0,
       },
       attributes: [
         "id",
@@ -984,6 +996,7 @@ exports.allProductsList = async (req, res) => {
     const products = await Product.findAll({
       where: {
         status: 1,
+        product_mode: 0,
       },
       attributes: ["id", "product_name", "slug"],
       order: [["id", "DESC"]],
@@ -1014,6 +1027,7 @@ exports.search = async (req, res) => {
           [Op.like]: `%${keyword}%`,
         },
         status: 1,
+        product_mode: 0,
       },
       attributes: [
         "id",
