@@ -200,19 +200,20 @@ const ServiceSection = ({ categories }) => {
     );
   };
 
-  // const groupProducts = () => {
-  //   const products = getCurrentProducts();
-  //   const recommended = products.filter((p) => p.is_recommended === 1);
-  //   const regular = products.filter((p) => p.is_recommended !== 1);
-  //   return { recommended, regular };
-  // };
   const groupProducts = () => {
-  // Only show products with product_mode === 0
-  const products = getCurrentProducts().filter((p) => p.product_mode === 0);
-  const recommended = products.filter((p) => p.is_recommended === 1);
-  const regular = products.filter((p) => p.is_recommended !== 1);
-  return { recommended, regular };
+    // Only show products with product_mode === 0
+    const products = getCurrentProducts().filter((p) => p.product_mode === 0);
+    const recommended = products.filter((p) => p.is_recommended === 1);
+    const regular = products.filter((p) => p.is_recommended !== 1);
+    return { recommended, regular };
   };
+  // const groupProducts = () => {
+  // // Only show products with product_mode === 0
+  // const products = getCurrentProducts().filter((p) => p.product_mode === 0);
+  // const recommended = products.filter((p) => p.is_recommended === 1);
+  // const regular = products.filter((p) => p.is_recommended !== 1);
+  // return { recommended, regular };
+  // };
 
   const { recommended, regular } = groupProducts();
 

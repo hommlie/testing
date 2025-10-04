@@ -802,6 +802,7 @@ exports.getHomePageData = async (req, res) => {
               model: Product,
               where: {
                 status: 1,
+                product_mode: 0, // Only include products with product_mode = 0
               },
               attributes: [
                 "id",
