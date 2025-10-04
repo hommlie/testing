@@ -87,7 +87,7 @@ exports.viewAllListing = async (req, res) => {
           where: {
             is_featured: 1,
             status: 1,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: sequelize.random(),
           limit: 10,
@@ -95,13 +95,14 @@ exports.viewAllListing = async (req, res) => {
         break;
 
       case "hot_products":
-        products = await await Product.findAll({
+        // removed duplicate `await`
+        products = await Product.findAll({
           attributes: commonProductAttributes,
           include: commonIncludes,
           where: {
             is_hot: 1,
             status: 1,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: sequelize.random(),
           limit: 10,
@@ -114,7 +115,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             status: 1,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -137,7 +138,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             status: 1,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [[sequelize.literal("order_count"), "DESC"]],
           group: [
@@ -155,15 +156,7 @@ exports.viewAllListing = async (req, res) => {
             "productimage.alt_tag",
             "productimage.image_title",
             "productimage.image",
-            // "variation.id",
-            // "variation.product_id",
-            // "variation.price",
-            // "variation.discounted_variation_price",
-            // "variation.variation",
-            // "variation.qty",
-            // "rattings.id",
-            // "rattings.product_id",
-            // Add other necessary columns here
+            // keep additional group columns as required by your DB mode
           ],
           limit: 10,
         });
@@ -175,7 +168,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 19,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -188,7 +181,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 18,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -201,7 +194,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 30,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -214,7 +207,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 29,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -227,7 +220,7 @@ exports.viewAllListing = async (req, res) => {
           include: commonIncludes,
           where: {
             cat_id: 38,
-            product_mode: 0,
+            product_mode: 0, // enforce product_mode = 0
           },
           order: [["id", "DESC"]],
           limit: 10,
@@ -348,7 +341,7 @@ exports.productDetails = async (req, res) => {
 
   try {
     const product = await Product.findOne({
-  where: { slug: slug, status: 1, product_mode: 0 },
+      where: { slug: slug, status: 1, product_mode: 0 }, // enforced here
       attributes: [
         "id",
         "product_name",
@@ -465,10 +458,11 @@ exports.productDetails = async (req, res) => {
     // Convert the Sequelize model instance to a plain JavaScript object
     const plainProduct = product.get({ plain: true });
 
-    const restructuredVariations = plainProduct.variations.map((variation) => {
-      const { attribute, ...variationData } = variation;
+    const restructuredVariations = (plainProduct.variations || []).map((variation) => {
+      // safe-check attribute existence
+      const { attribute = {}, ...variationData } = variation;
       return {
-        attribute_name: attribute.attribute,
+        attribute_name: attribute.attribute || null,
         data: variationData,
       };
     });
@@ -477,7 +471,7 @@ exports.productDetails = async (req, res) => {
     plainProduct.variations = restructuredVariations;
 
     const related_products = await Product.findAll({
-  where: { cat_id: product.cat_id, status: 1, product_mode: 0, id: { [Op.ne]: product.id } },
+      where: { cat_id: product.cat_id, status: 1, product_mode: 0, id: { [Op.ne]: product.id } }, // enforced here
       attributes: [
         "id",
         "product_name",
@@ -529,18 +523,6 @@ exports.productDetails = async (req, res) => {
           as: "rattings",
           required: false,
         },
-        // {
-        //   model: Wishlist,
-        //   attributes: [
-        //     [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-        //   ],
-        //   where: {
-        //     user_id: user_id
-        //   },
-        //   required: false,
-        //   as: 'wishlist'
-        // },
-        // { model: User, as: 'vendor', where: { is_available: 1 }, attributes: [] }
       ],
       order: [["id", "DESC"]],
       limit: 10,
@@ -582,7 +564,7 @@ exports.vendorProducts = async (req, res) => {
       where: {
         vendor_id,
         status: 1,
-        product_mode: 0,
+        product_mode: 0, // enforced here
       },
       include: [
         { model: ProductImage, where: { media: "Image" }, as: "productimage" },
@@ -688,8 +670,6 @@ exports.products = async (req, res) => {
             ),
             "image_url",
           ],
-          // 'video',
-          // [sequelize.literal(`CONCAT('${apiUrl}/storage/app/public/images/category/', Category.thumbnail)`), 'thumbnail'],
           "is_form",
           "is_page",
           [
@@ -741,47 +721,15 @@ exports.products = async (req, res) => {
           where: { media: "Image" },
           as: "productimage",
         },
-        // {
-        //   model: Variation,
-        //   as: "variations",
-        //   include: [
-        //     {
-        //       model: Attribute,
-        //       attributes: ["id", "attribute"],
-        //       where: { status: 1 },
-        //       as: "attribute",
-        //     },
-        //   ],
-        // },
         {
           model: Ratting,
           as: "rattings",
         },
-        // {
-        //     model: Wishlist,
-        //     attributes: [
-        //         [sequelize.literal('CASE WHEN wishlist.product_id IS NULL THEN 0 ELSE 1 END'), 'is_wishlist']
-        //     ],
-        //     where: {
-        //         user_id: user_id
-        //     },
-        //     required: false,
-        //     as: 'wishlist'
-        // },
-        // {
-        //     model: User,
-        //     attributes: [],
-        //     where: {
-        //         is_available: 1
-        //     },
-        //     required: true,
-        //     as: 'vendor'
-        // }
       ],
       where: {
         subcat_id: subcategory.id,
         status: 1,
-        product_mode: 0,
+        product_mode: 0, // enforced here
       },
       order: [["id", "DESC"]],
       limit: 10,
@@ -807,7 +755,7 @@ exports.searchProducts = async (req, res) => {
     const products = await Product.findAll({
       where: {
         status: true,
-        product_mode: 0,
+        product_mode: 0, // already enforced
       },
       attributes: [
         "id",
@@ -878,6 +826,7 @@ exports.filter = async (req, res) => {
         products = await Product.findAll({
           where: {
             status: true,
+            product_mode: 0, // enforced here
           },
           include: [
             {
@@ -929,6 +878,7 @@ exports.filter = async (req, res) => {
         products = await Product.findAll({
           where: {
             status: true,
+            product_mode: 0, // enforced here
           },
           include: [
             {
@@ -996,7 +946,7 @@ exports.allProductsList = async (req, res) => {
     const products = await Product.findAll({
       where: {
         status: 1,
-        product_mode: 0,
+        product_mode: 0, // enforced here
       },
       attributes: ["id", "product_name", "slug"],
       order: [["id", "DESC"]],
@@ -1027,7 +977,7 @@ exports.search = async (req, res) => {
           [Op.like]: `%${keyword}%`,
         },
         status: 1,
-        product_mode: 0,
+        product_mode: 0, // enforced here
       },
       attributes: [
         "id",
@@ -1058,8 +1008,6 @@ exports.search = async (req, res) => {
           where: { media: "Image" },
           as: "productimage",
         },
-        // { model: Variation, as: "variations" },
-        // { model: Ratting, as: "rattings" },
       ],
       order: [["id", "DESC"]],
       limit: 10,

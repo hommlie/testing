@@ -200,11 +200,18 @@ const ServiceSection = ({ categories }) => {
     );
   };
 
+  // const groupProducts = () => {
+  //   const products = getCurrentProducts();
+  //   const recommended = products.filter((p) => p.is_recommended === 1);
+  //   const regular = products.filter((p) => p.is_recommended !== 1);
+  //   return { recommended, regular };
+  // };
   const groupProducts = () => {
-    const products = getCurrentProducts();
-    const recommended = products.filter((p) => p.is_recommended === 1);
-    const regular = products.filter((p) => p.is_recommended !== 1);
-    return { recommended, regular };
+  // Only show products with product_mode === 0
+  const products = getCurrentProducts().filter((p) => p.product_mode === 0);
+  const recommended = products.filter((p) => p.is_recommended === 1);
+  const regular = products.filter((p) => p.is_recommended !== 1);
+  return { recommended, regular };
   };
 
   const { recommended, regular } = groupProducts();
@@ -519,15 +526,15 @@ const ServiceSection = ({ categories }) => {
                   (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
                   "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
                 }`}>
-                {/* {[...recommended, ...regular].map((product) => (
+                {[...recommended, ...regular].map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                     isSelected={selectedProduct === product.id}
                     onClick={() => setSelectedProduct(product.id)}
                   />
-                ))} */}
-                {[...recommended, ...regular]
+                ))}
+                {/* {[...recommended, ...regular]
                   .filter((product) => product.product_mode === 0)
                   .map((product) => (
                     <ProductCard
@@ -536,7 +543,7 @@ const ServiceSection = ({ categories }) => {
                       isSelected={selectedProduct === product.id}
                       onClick={() => setSelectedProduct(product.id)}
                     />
-                  ))}
+                  ))} */}
               </div>
             )}
           </div>
