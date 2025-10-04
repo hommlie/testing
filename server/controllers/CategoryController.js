@@ -430,6 +430,7 @@ exports.getCleaningSubcategory = async (req, res) => {
       where: {
         subcat_id: subcategoryData.id,
         status: 1,
+        product_mode: 0,
       },
       attributes: [
         "id",

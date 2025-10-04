@@ -729,12 +729,11 @@ const handleQtyUpdate = async (cartId, newQty) => {
             <div className="lg:w-1/4">
               <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
                 <CartSection
-  cart={cart}
-  onUpdateQty={handleQtyUpdate}
-  isQtyLoading={isQtyLoading}
-  loadingItemId={loadingItemId}
-/>
-
+                  cart={cart}
+                  onUpdateQty={handleQtyUpdate}
+                  isQtyLoading={isQtyLoading}
+                  loadingItemId={loadingItemId}
+                />
               </div>
             </div>
           </div>

@@ -206,13 +206,6 @@ const ServiceSection = ({ categories }) => {
     const regular = products.filter((p) => p.is_recommended !== 1);
     return { recommended, regular };
   };
-  // const groupProducts = () => {
-  // // Only show products with product_mode === 0
-  // const products = getCurrentProducts().filter((p) => p.product_mode === 0);
-  // const recommended = products.filter((p) => p.is_recommended === 1);
-  // const regular = products.filter((p) => p.is_recommended !== 1);
-  // return { recommended, regular };
-  // };
 
   const { recommended, regular } = groupProducts();
 
@@ -534,16 +527,7 @@ const ServiceSection = ({ categories }) => {
                     onClick={() => setSelectedProduct(product.id)}
                   />
                 ))}
-                {/* {[...recommended, ...regular]
-                  .filter((product) => product.product_mode === 0)
-                  .map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      isSelected={selectedProduct === product.id}
-                      onClick={() => setSelectedProduct(product.id)}
-                    />
-                  ))} */}
+                
               </div>
             )}
           </div>

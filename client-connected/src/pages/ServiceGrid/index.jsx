@@ -41,7 +41,7 @@ const ServiceGrid = () => {
   // Removed "Scrap" details from here
   const serviceData = {
     "Pest Control": [
-      { name: "General PestControl Service", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
+      { name: "General Pest Control", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
       { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
       { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
       { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
