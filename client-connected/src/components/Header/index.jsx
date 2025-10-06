@@ -351,28 +351,26 @@ const fetchWalletBalance = async () => {
       return;
     }
     const user = jwtDecode(jwtToken);
-
     const res = await axios.post(
-      `${config.API_URL}/api/wallet/transactions`,
+      `${config.API_URL}/api/wallet/balance`,
       { userId: user.id },
       { headers: { Authorization: `Bearer ${jwtToken}` } }
     );
-
-    if (res.data?.status === 1 && res.data?.wallet) {
-      setWalletBalance(Number(res.data.wallet.balance) || 0);
-    } else if (
-      res.data?.message &&
-      res.data.message.toLowerCase().includes("wallet not found")
-    ) {
-      setWalletBalance(0);
-    } else {
-      // silently fallback to 0 for header; you can toast if you want
-      setWalletBalance(0);
-    }
+    const bal =
+      (res.data.status === 1 || res.data.status === 0) && res.data.balance !== undefined
+        ? Number(res.data.balance) || 0
+        : 0;
+    setWalletBalance(bal);
   } catch {
     setWalletBalance(0);
   }
 };
+// Listen for wallet updates from other parts of the app
+useEffect(() => {
+  const handler = () => fetchWalletBalance();
+  window.addEventListener("hommlie-wallet-updated", handler);
+  return () => window.removeEventListener("hommlie-wallet-updated", handler);
+}, []);
 
 // Fetch once when user logs in / changes
 useEffect(() => {

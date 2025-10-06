@@ -117,7 +117,7 @@ exports.verifyOtp = async (req, res) => {
       // Creating wallet and adding joining bonus 50
       await Wallet.create({
         user_id: user.id,
-        balance: 50,
+        balance: 100,
       });
     }
 
@@ -138,7 +138,11 @@ exports.verifyOtp = async (req, res) => {
             campaignName: "Welcome Login Message",
             phoneNumber: user.mobile,
             userName: name,
-            templateParams: [name],
+            templateParams: [
+              name,
+              "100 rupees have been added to your wallet. Book now!",
+              "https://hommlie.com"
+            ],
           });
           const token = jwt.sign(
             {

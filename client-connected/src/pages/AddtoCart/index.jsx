@@ -66,6 +66,7 @@ export default function AddtoCart() {
     paymentList,
     getPaymentList,
     getBookings,
+    addresses,
   } = useCont();
 
   // Helpers
@@ -75,8 +76,18 @@ export default function AddtoCart() {
 
   const openAddressModal = () => setIsAddressModalOpen(true);
   const closeAddressModal = () => setIsAddressModalOpen(false);
-  const openDateTimeModal = () => setIsDateTimeModalOpen(true);
+
+  // UPDATED: only open slot modal when there are cart items AND an address
+  const openDateTimeModal = () => {
+    const itemCount = cart?.length || 0;
+    if (itemCount > 0 && selectedAddrs) {
+      setIsDateTimeModalOpen(true);
+    } else {
+      notify("Add at least one item and select an address first.", "warning");
+    }
+  };
   const closeDateTimeModal = () => setIsDateTimeModalOpen(false);
+
   const openCouponModal = () => setIsCouponModalOpen(true);
   const closeCouponModal = () => setIsCouponModalOpen(false);
 
@@ -96,11 +107,19 @@ export default function AddtoCart() {
   }, [cartLength]);
 
   useEffect(() => {
-    setSelectedAddrs(
-      localStorage.getItem("HommlieselectedAddrs") == "undefined"
-        ? []
-        : JSON.parse(localStorage.getItem("HommlieselectedAddrs"))
-    );
+    // Try to get selected address from localStorage
+    let storedSelected = localStorage.getItem("HommlieselectedAddrs");
+    let selected = (storedSelected && storedSelected !== "undefined") ? JSON.parse(storedSelected) : null;
+
+    // If not selected, but addresses exist, auto-select the first one
+    if ((!selected || Object.keys(selected).length === 0) && Array.isArray(addresses) && addresses.length > 0) {
+      selected = addresses[0];
+      setSelectedAddrs(selected);
+      localStorage.setItem("HommlieselectedAddrs", JSON.stringify(selected));
+    } else {
+      setSelectedAddrs(selected || []);
+    }
+
     setSelectedDayTime(
       localStorage.getItem("HommlieselectedDayTime") == "undefined"
         ? null
@@ -113,7 +132,7 @@ export default function AddtoCart() {
     );
     setPaymentType(paymentList?.[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [addresses]);
 
   async function getProductDetails() {
     if (!cart || cart.length === 0 || !cart[0]?.product_id) return;
@@ -143,7 +162,9 @@ export default function AddtoCart() {
           ? Number(response.data.balance) || 0
           : 0;
 
-      setWalletBalance(bal);
+  setWalletBalance(bal);
+  // Notify header to refresh wallet
+  window.dispatchEvent(new Event("hommlie-wallet-updated"));
 
       // If balance is 0, force-clear any stale localStorage toggle
       if (bal <= 0) {
@@ -154,7 +175,8 @@ export default function AddtoCart() {
       }
     } catch (err) {
       console.error("Wallet fetch error:", err);
-      setWalletBalance(0);
+  setWalletBalance(0);
+  window.dispatchEvent(new Event("hommlie-wallet-updated"));
       // Defensive: also clear UI if fetch fails
       setWalletApplied(false);
       setWalletUsed(0);
@@ -439,27 +461,28 @@ export default function AddtoCart() {
 
   // UI helpers
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
+
+  // UPDATED: guard auto-open of slot modal (no first render, require items)
+  const firstRenderRef = useRef(true);
   useEffect(() => {
-    if (
-      selectedAddrs &&
-      typeof selectedAddrs === "object" &&
-      Object.keys(selectedAddrs).length > 0 &&
-      selectedAddrs?.address &&
-      selectedAddrs?.pincode &&
-      (!selectedDayTime?.date?.day || !selectedDayTime?.time)
-    ) {
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false; // don't run on hydration/refresh
+      return;
+    }
+
+    const hasAddr = selectedAddrs && typeof selectedAddrs === "object" &&
+                    Object.keys(selectedAddrs).length > 0 &&
+                    selectedAddrs?.address && selectedAddrs?.pincode;
+
+    const noSlotChosen = !selectedDayTime?.date?.day || !selectedDayTime?.time;
+
+    if ((cart?.length || 0) > 0 && hasAddr && noSlotChosen) {
       setTimeout(() => setIsDateTimeModalOpen(true), 300);
     }
-  }, [selectedAddrs]);
+  }, [selectedAddrs, cart?.length]); // include itemCount via cart.length
 
-  useEffect(() => {
-    if (selectedDayTime?.date?.day && selectedDayTime?.time) {
-      setTimeout(() => {
-        paymentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 500);
-    }
-  }, [selectedDayTime]);
-
+  // (Old scroll-to-payment effect removed)
+  // Keep responsive visible items
   useEffect(() => {
     const updateVisibleItemsCount = () => {
       if (window.innerWidth >= 1024) setVisibleItemsCount(5);
@@ -480,6 +503,36 @@ export default function AddtoCart() {
   const paymentRef = useRef(null);
 
   const visibleItems = prodRelatedProds?.slice(currentIndex, currentIndex + visibleItemsCount);
+
+  // Keep page at top on refresh; disable scroll restoration
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
+  // UPDATED: only scroll to payment after first render and when slot chosen
+  const didMountRef = useRef(false);
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true; // skip first run (hydration from localStorage)
+      return;
+    }
+    if ((cart?.length || 0) > 0 && selectedDayTime?.date?.day && selectedDayTime?.time) {
+      setTimeout(() => {
+        paymentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 500);
+    }
+  }, [selectedDayTime, cart?.length]);
+
+  // OPTIONAL: if cart becomes empty, clear any persisted slot so UI doesn't nag later
+  useEffect(() => {
+    if ((cart?.length || 0) === 0) {
+      setSelectedDayTime(null);
+      localStorage.removeItem("HommlieselectedDayTime");
+    }
+  }, [cart?.length, setSelectedDayTime]);
 
   return (
     <div
@@ -607,10 +660,13 @@ export default function AddtoCart() {
                             </div>
                           )}
                         </div>
-                        {!selectedAddrs ? (
-                          <p className="text-red-400 ml-8 mt-3">Please select a delivery address first</p>
-                        ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                          <p className="text-red-500">Please select delivery date and time</p>
+                        {/* UPDATED: validation messages only when there are items */}
+                        {(cart?.length || 0) > 0 ? (
+                          !selectedAddrs ? (
+                            <p className="text-red-400 ml-8 mt-3">Please select a delivery address first</p>
+                          ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
+                            <p className="text-red-500">Please select delivery date and time</p>
+                          ) : null
                         ) : null}
                         <div className="border-t border-gray-100 pt-4"></div>
                       </div>
@@ -623,7 +679,11 @@ export default function AddtoCart() {
                       </div>
                       Payment Method
                     </h3>
-                    <div className={`flex flex-col sm:grid sm:grid-cols-2 gap-3 px-4 sm:ml-7 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <div
+                      className={`flex flex-col sm:grid sm:grid-cols-2 gap-3 px-4 sm:ml-7 ${
+                        (!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''
+                      }`}
+                    >
                       {paymentList?.map((payment) => (
                         <label key={payment.id}
                           className={`w-full flex items-center px-3 py-2 rounded-lg border-2 cursor-pointer text-sm transition-colors

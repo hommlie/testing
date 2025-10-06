@@ -451,6 +451,11 @@ const LoginSignup = ({ isOpen, onClose }) => {
                     setOtp(pastedData.split(""));
                     e.preventDefault();
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && otp.every((digit) => digit) && name.trim() !== "") {
+                      handleProceed(e);
+                    }
+                  }}
                   maxLength={4}
                   className="w-full tracking-[1em] text-center text-2xl font-bold p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035240] focus:border-transparent"
                   placeholder="- - - -"

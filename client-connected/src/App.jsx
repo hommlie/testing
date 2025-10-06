@@ -14,8 +14,8 @@ import { ToastProvider } from "./context/ToastProvider";
 
 import "tailwindcss/tailwind.css";
 import "./App.css";
-import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
-import MobileBottomLeftCTA from "./pages/MobileBottomLeftCTA";
+// import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
+// import MobileBottomLeftCTA from "./pages/MobileBottomLeftCTA";
 
 function SEOHelmet({ settings }) {
   const location = useLocation();
@@ -47,22 +47,22 @@ function SEOHelmet({ settings }) {
 }
 
 /** ✅ Only render the CTA on Home paths */
-function HomeOnlyCTA() {
-  const { pathname } = useLocation();
-  const base = (config?.VITE_BASE_URL || "").replace(/\/$/, ""); // no trailing slash
+// function HomeOnlyCTA() {
+//   const { pathname } = useLocation();
+//   const base = (config?.VITE_BASE_URL || "").replace(/\/$/, ""); // no trailing slash
 
-  // normalize: keep "/" as is; trim trailing slash for others
-  const normalized =
-    pathname === "/"
-      ? "/"
-      : pathname.replace(/\/+$/, "");
+//   // normalize: keep "/" as is; trim trailing slash for others
+//   const normalized =
+//     pathname === "/"
+//       ? "/"
+//       : pathname.replace(/\/+$/, "");
 
-  const isRoot = normalized === (base ? `${base}/` : "/");
-  const isHome = normalized === `${base}/home`;
+//   const isRoot = normalized === (base ? `${base}/` : "/");
+//   const isHome = normalized === `${base}/home`;
 
-  if (!(isRoot || isHome)) return null;
-  return <MobileBottomLeftCTA imgSrc="/hommlie-thumb.jpg" />;
-}
+//   if (!(isRoot || isHome)) return null;
+//   return <MobileBottomLeftCTA imgSrc="/hommlie-thumb.jpg" />;
+// }
 
 function App() {
   const [settings, setSettings] = useState(null);
@@ -108,10 +108,10 @@ function App() {
                 <Routes />
               )}
 
-              <FloatingPromoDrawer />
+              {/* <FloatingPromoDrawer /> */}
 
               {/* 👇 CTA now only on Home */}
-              <HomeOnlyCTA />
+              {/* <HomeOnlyCTA /> */}
 
               <Footer
                 logo={settings?.logo}
