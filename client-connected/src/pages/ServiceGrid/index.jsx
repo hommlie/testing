@@ -69,11 +69,11 @@ const ServiceGrid = () => {
   };
 
   const services = [
-    { id: 1, name: "Pest Control", image: "/images/pestcontrol1.png" },
-    { id: 2, name: "Deep Cleaning", image: "/images/deepcleaning1.png" },
-    { id: 3, name: "Scrap", image: "/images/scrap1.png" }, // will redirect
-    { id: 4, name: "Mosquito & Safety Net", image: "/images/mosquito1.png" },
-    { id: 5, name: "Disinfection", image: "/images/disinfection1.png" },
+    { id: 1, name: "Pest Control", image: "/images/pestcontrol1nn.png" },
+    { id: 2, name: "Deep Cleaning", image: "/images/deepcleaning1nn.png" },
+    { id: 3, name: "Scrap", image: "/images/scrap1nn.png" }, // will redirect
+    { id: 4, name: "Mosquito & Safety Net", image: "/images/mosquito1nn.png" },
+    { id: 5, name: "Disinfection", image: "/images/disinfection1nn.png" },
     {
       id: 9,
       name: "See More",

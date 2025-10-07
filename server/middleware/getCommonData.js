@@ -52,6 +52,7 @@ async function fetchProductReviews(product_id, reviewDataIncluded) {
           ),
           "date",
         ],
+          "created_at",
       ],
       order: [["created_at", "DESC"]],
       limit: 10,
