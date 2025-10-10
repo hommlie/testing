@@ -536,12 +536,13 @@ export default function AddtoCart() {
 
   return (
     <div
+      
+    >
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12"
       style={{
         background:
           "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}
-    >
-      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+      }}>
         {cart.length === 0 ? (
           <div className="flex justify-center items-center min-h-[50vh] -mt-5">
             <div className="p-8 flex flex-col items-center">
@@ -729,37 +730,60 @@ export default function AddtoCart() {
               </div>
 
               {/* Right column */}
-              <div className="-mr-7 w-full lg:w-[600px] space-y-6 order-1 lg:order-2">
-                {/* Cart items */}
-                <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 space-y-6 border border-black">
-                  {cart?.map((pd) => (
-                    <div key={pd.id} className="flex gap-4 md:gap-6 items-start border-b pb-4 last:border-b-0">
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div className="flex flex-col-3 justify-between">
-                          <h3 className="text-base md:text-sm font-semibold">{pd.product_name}</h3>
-                          {pd?.attribute_name && <p className="text-sm text-gray-600">{pd.attribute_name}</p>}
-                          {pd?.variation_name && <p className="text-sm text-gray-600">{pd.variation_name}</p>}
-                        </div>
-                        <div className="flex items-center justify-between mt-4">
-                          <span className="text-xl font-bold text-[#249370]">₹{pd.price * pd.qty}</span>
-                          <div className="flex items-center border border-[#249370] rounded-lg">
-                            <button
-                              onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
-                              className="px-2 py-1 text-[#249370] hover:bg-[#249370] hover:text-white"
-                              disabled={isLoading && loadingItemId === pd?.id}
-                            >-</button>
-                            <span className="px-3">{pd?.qty}</span>
-                            <button
-                              onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
-                              className="px-2 py-1 text-[#249370] hover:bg-[#249370] hover:text-white"
-                              disabled={isLoading && loadingItemId === pd?.id}
-                            >+</button>
-                          </div>
-                        </div>
+              <div className="-mr-7 w-full lg:w-[600px] space-y-5 order-1 lg:order-2">
+              
+              <div className="bg-white rounded-xl shadow-sm p-4 transition-all border border-black">
+                {cart?.map((pd) => (
+                  <div
+                    key={pd.id}
+                    className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 border border-gray-100 rounded-lg p-4 mb-2"
+                  >
+                    {/* Left: title + meta */}
+                    <div className="flex-1">
+                      <h3 className="text-l font-semibold text-gray-900 leading-snug">
+                        {pd.product_name}
+                      </h3>
+
+                      <div className="mt-1 text-sm text-gray-600 flex flex-wrap items-center gap-x-3 gap-y-1">
+                        {/* Combine all meta details in one line */}
+                        {pd?.attribute_name && <span>{pd.attribute_name}</span>}
+                        {pd?.variation_name && <span>{pd.variation_name}</span>}
+                        {pd?.duration && <span>{pd.duration}</span>}
+                        {pd?.bhk && <span>{pd.bhk} BHK</span>}
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    {/* Right: price + qty */}
+                    <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center gap-2">
+                      <span className="text-lg font-semibold text-[#249370] whitespace-nowrap">
+                        ₹{pd.price * pd.qty}
+                      </span>
+
+                      <div className="flex items-center border border-[#249370] rounded-lg overflow-hidden">
+                        <button
+                          onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
+                          className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
+                          disabled={isLoading && loadingItemId === pd?.id}
+                          aria-label="Decrease quantity"
+                        >
+                          –
+                        </button>
+                        <span className="px-3 text-sm font-medium min-w-6 text-center">
+                          {pd?.qty}
+                        </span>
+                        <button
+                          onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
+                          className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
+                          disabled={isLoading && loadingItemId === pd?.id}
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
                 <div className="sticky top-[100px] space-y-6">
                   {/* Summary */}

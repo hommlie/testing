@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from "react";
+import LoginModal from "../../components/LoginModal";
+import { useCont } from "../../context/MyContext";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/config";
@@ -38,6 +40,8 @@ export default function ScrapPrices() {
   const { city } = useParams();
   const navigate = useNavigate();
   const citySlug = slugify(city || "");
+  const { user } = useCont();
+  const [showLogin, setShowLogin] = useState(false);
 
   const [activeCat, setActiveCat] = useState("All");
   const [query, setQuery] = useState("");
@@ -346,8 +350,12 @@ export default function ScrapPrices() {
 
                 <button
                   onClick={() => {
-                    setMode("checkout");
-                    setStep(1);
+                    if (!user || Object.keys(user).length === 0) {
+                      setShowLogin(true);
+                    } else {
+                      setMode("checkout");
+                      setStep(1);
+                    }
                   }}
                   className="w-full sm:w-auto sm:ml-auto px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-[#52852d]  transition"
                 >
@@ -357,6 +365,15 @@ export default function ScrapPrices() {
             </div>
           </div>
         )}
+        {/* Login Modal */}
+        <LoginModal isOpen={showLogin} onClose={() => {
+          setShowLogin(false);
+          // If user is now logged in, continue order
+          if (user && Object.keys(user).length > 0) {
+            setMode("checkout");
+            setStep(1);
+          }
+        }} />
         {/* Footer nav */}
         <div className="text-center text-xs sm:text-sm text-gray-600">
           Not in {CITY_LABEL}?{" "}
@@ -798,12 +815,12 @@ function Step5Success({ items, total, pickup, onBookAnother, onTrack }) {
         <button onClick={onBookAnother} className="px-4 py-2 rounded-lg border hover:bg-gray-50 transition">
           Book Another
         </button>
-        <button
+        {/* <button
           onClick={onTrack}
           className="px-4 py-2 rounded-lg bg-[#15803d] hover:bg-[#52852d] text-white transition"
         >
           Track Pickup
-        </button>
+        </button> */}
       </div>
 
       <p className="text-center text-gray-500 text-xs mt-6">

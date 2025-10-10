@@ -72,7 +72,7 @@ const ServiceGrid = () => {
     { id: 1, name: "Pest Control", image: "/images/pestcontrol1nn.png" },
     { id: 2, name: "Deep Cleaning", image: "/images/deepcleaning1nn.png" },
     { id: 3, name: "Scrap", image: "/images/scrap1nn.png" }, // will redirect
-    { id: 4, name: "Mosquito & Safety Net", image: "/images/mosquito1nn.png" },
+    { id: 4, name: "Safety Net", image: "/images/mosquito1nn.png" },
     { id: 5, name: "Disinfection", image: "/images/disinfection1nn.png" },
     {
       id: 9,
@@ -156,7 +156,7 @@ const ServiceGrid = () => {
                   />
                 )}
               </div>
-              <span className="mt-2 text-xs sm:text-sm font-medium text-gray-800 text-center">
+              <span className="mt-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
                 {service.name}
               </span>
             </div>
