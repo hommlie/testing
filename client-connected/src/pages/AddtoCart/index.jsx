@@ -318,11 +318,28 @@ export default function AddtoCart() {
     setLoadingItemId(null);
   };
 
+  // const handlePaymentChange = (e) => {
+  //   const { value } = e.target;
+  //   const selected = paymentList.find((payment) => payment.id == value);
+  //   setPaymentType(selected);
+  // };
+
+  const isZeroOrLess = totalAmount <= 0;
+  const isOnline = (p) => (p?.payment_name || "").toLowerCase().includes("online");
+
   const handlePaymentChange = (e) => {
-    const { value } = e.target;
-    const selected = paymentList.find((payment) => payment.id == value);
-    setPaymentType(selected);
-  };
+  const { value } = e.target;
+  const selected = (paymentList || []).find((p) => String(p.id) === String(value));
+
+  // BLOCK ONLINE when total is 0 or less
+  if (selected && isZeroOrLess && isOnline(selected)) {
+    notify("Online payment isn’t allowed for zero-amount orders.", "warning");
+    return; // do nothing, keep current paymentType
+  }
+
+  if (selected) setPaymentType(selected);
+};
+
 
   // Proceed
   const handleProceed = async () => {
