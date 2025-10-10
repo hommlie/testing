@@ -334,6 +334,7 @@ const ProductDetailModal = ({
   const [displayedAttributes, setDisplayedAttributes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInspectionModalOpen, setIsInspectionModalOpen] = useState(false);
+  const [pendingVariation, setPendingVariation] = useState(null);
 
   const variationRefs = useRef({});
   const navigate = useNavigate();
@@ -394,6 +395,8 @@ const ProductDetailModal = ({
   const jwtToken = Cookies.get("HommlieUserjwtToken");
 
   if (!jwtToken) {
+    // Store the variation the user attempted to add and open login modal.
+    setPendingVariation(variation);
     setIsModalOpen(true);
     setAddingVariationId(null);
     return;
@@ -421,7 +424,6 @@ const ProductDetailModal = ({
     tax: taxAmount,
     shipping_cost: product.shipping_cost || 0,
   };
-
   try {
     const response = await axios.post(
       `${config.API_URL}/api/addtocart`,
@@ -466,6 +468,26 @@ const ProductDetailModal = ({
       errorNotify(error.message);
     } finally {
       setIsAddingToCart(false);
+    }
+  };
+
+  // Called after a successful login when user had attempted to add a variation
+  const handlePostLoginAdd = async () => {
+    if (!pendingVariation) return;
+    // close the modal first
+    setIsModalOpen(false);
+    // small delay to ensure auth state is ready
+    await new Promise((res) => setTimeout(res, 200));
+    // attempt to add the stored variation
+    try {
+      await handleAddToCart(pendingVariation);
+      // after successful add, navigate to add-to-cart page
+      navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+    } catch (e) {
+      // errors are already notified inside handleAddToCart
+      console.error(e);
+    } finally {
+      setPendingVariation(null);
     }
   };
 
@@ -949,7 +971,11 @@ const ProductDetailModal = ({
           onClose={onClose}
         />
       )}
-      <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <LoginSignup
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onLoginSuccess={handlePostLoginAdd}
+      />
     </>
   );
 };

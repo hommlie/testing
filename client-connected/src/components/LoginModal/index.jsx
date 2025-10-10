@@ -10,7 +10,7 @@ import hommlieLogo from "/assets/logo/loogo.png";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const LoginSignup = ({ isOpen, onClose }) => {
+const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(true);
@@ -161,7 +161,16 @@ const LoginSignup = ({ isOpen, onClose }) => {
         getBookings();
         getAddresses();
         getPaymentList();
+        // call onClose then invoke onLoginSuccess if provided
         onClose();
+        if (typeof onLoginSuccess === "function") {
+          try {
+            onLoginSuccess();
+          } catch (e) {
+            // ignore errors from callback
+            console.error("onLoginSuccess callback error:", e);
+          }
+        }
       } else {
         errorNotify(response.data.message);
       }

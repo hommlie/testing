@@ -143,20 +143,41 @@ export default function MyBookings() {
     }
 
     // Apply sorting
+    const parseDate = (item) => {
+      // Prefer desired_date if present, fallback to date or created_at
+      const raw = item.desired_date || item.date || item.created_at || item.order_date;
+      if (!raw) return new Date(0);
+
+      // If it's already a Date object
+      if (raw instanceof Date) return raw;
+
+      // Try ISO parse first
+      const iso = new Date(raw);
+      if (!isNaN(iso)) return iso;
+
+      // Handle common DD-MM-YYYY or DD/MM/YYYY formats
+      const normalized = String(raw).trim().replace(/\//g, "-");
+      const parts = normalized.split("-").map((p) => p.trim());
+      if (parts.length === 3) {
+        // If first part looks like year (YYYY), assume YYYY-MM-DD
+        if (parts[0].length === 4) {
+          return new Date(`${parts[0]}-${parts[1]}-${parts[2]}`);
+        }
+        // Otherwise assume DD-MM-YYYY
+        return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+      }
+
+      // Last resort
+      const fallback = new Date(raw);
+      return isNaN(fallback) ? new Date(0) : fallback;
+    };
+
     switch (sortOption) {
       case "oldest":
-        filtered.sort(
-          (a, b) =>
-            new Date(a.date.split("-").reverse().join("-")) -
-            new Date(b.date.split("-").reverse().join("-"))
-        );
+        filtered.sort((a, b) => parseDate(a) - parseDate(b));
         break;
       case "newest":
-        filtered.sort(
-          (a, b) =>
-            new Date(b.date.split("-").reverse().join("-")) -
-            new Date(a.date.split("-").reverse().join("-"))
-        );
+        filtered.sort((a, b) => parseDate(b) - parseDate(a));
         break;
       case "priceHighToLow":
         filtered.sort(
@@ -182,6 +203,7 @@ export default function MyBookings() {
     }, {});
 
     setGroupedBookings(grouped);
+    setFilteredBookings(filtered);
   };
 
   const resetFilters = () => {
@@ -562,7 +584,7 @@ const handleComplaintSubmit = async () => {
 };
 
   return (
-    <div className="min-h-screen font-headerFont bg-white py-12" style={{
+    <div className="sm:mx-7xl bg-cover bg-center bg-no-repeat" style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
       <section className="px-4 sm:px-6 lg:px-8">

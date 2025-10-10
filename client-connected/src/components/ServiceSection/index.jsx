@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { ChevronDown, Star, ChevronRight, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import config from "../../config/config";
 import LoginSignup from "../LoginModal";
 import { useCont } from "../../context/MyContext";
@@ -27,6 +29,7 @@ const ServiceSection = ({ categories }) => {
   }, [selectedAttribute]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingAdd, setPendingAdd] = useState(null);
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
 
   const notify = useToast();
@@ -122,6 +125,8 @@ const ServiceSection = ({ categories }) => {
 
   const handleAddToCart = async (variation, product) => {
     if (!user || user.length === 0) {
+      // store the intended add-to-cart action and open login modal
+      setPendingAdd({ variation, product });
       setIsModalOpen(true);
       return;
     }
@@ -148,10 +153,9 @@ const ServiceSection = ({ categories }) => {
     };
 
     try {
-      const response = await axios.post(
-        `${config.API_URL}/api/addtocart`,
-        cartItem
-      );
+      const jwtToken = Cookies.get("HommlieUserjwtToken");
+      const headers = jwtToken ? { Authorization: `Bearer ${jwtToken}` } : {};
+      const response = await axios.post(`${config.API_URL}/api/addtocart`, cartItem, { headers });
       if (response.data.status === 1) {
         successNotify("Successfully added to Cart");
         const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -163,6 +167,68 @@ const ServiceSection = ({ categories }) => {
     } catch (error) {
       errorNotify(error.message || "Error adding to cart");
       console.error("Error adding to cart:", error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
+  // Called after successful login when user had attempted to add an item
+  const handlePostLoginAdd = async () => {
+    if (!pendingAdd) return;
+    // Close the modal first (LoginSignup calls onClose before this callback)
+    setIsModalOpen(false);
+    // Small delay to ensure auth state is populated
+    await new Promise((res) => setTimeout(res, 300));
+    const { variation, product } = pendingAdd;
+    setPendingAdd(null);
+
+    // Use JWT directly to perform the add-to-cart so we don't depend on context update timing
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (!jwtToken) {
+      console.error("No JWT token available after login");
+      return;
+    }
+
+    const decoded = jwtDecode(jwtToken);
+    const tax_amount =
+      product.tax_type === "amount"
+        ? Number(product.tax)
+        : (Number(product.tax) / 100) * (variation.discounted_variation_price || variation.price);
+
+    const cartItem = {
+      user_id: decoded.id,
+      product_id: product.id,
+      vendor_id: product.vendor_id,
+      product_name: product.product_name,
+      image: product?.productimage?.image_url,
+      qty: 1,
+      price: variation.discounted_variation_price || variation.price,
+      attribute: selectedAttribute,
+      variation: variation.id,
+      tax: tax_amount?.toFixed(2) || 0,
+      shipping_cost: product.shipping_cost || 0,
+      bhk: selectedBhk,
+    };
+
+    try {
+      setIsAddingToCart(true);
+      const response = await axios.post(`${config.API_URL}/api/addtocart`, cartItem, {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      });
+
+      if (response.data.status === 1) {
+        successNotify("Successfully added to Cart");
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        existingCart.push(cartItem);
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        await getCart();
+        navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+      } else {
+        errorNotify(response.data.message || "Failed to add to cart after login");
+      }
+    } catch (err) {
+      console.error("Post-login add to cart failed:", err);
+      errorNotify(err.message || "Error adding to cart after login");
     } finally {
       setIsAddingToCart(false);
     }
@@ -533,7 +599,7 @@ const ServiceSection = ({ categories }) => {
           </div>
         </div>
       </section>
-      <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+  <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLoginSuccess={handlePostLoginAdd} />
     </>
   );
 };
