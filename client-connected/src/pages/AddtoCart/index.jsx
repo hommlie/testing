@@ -576,9 +576,9 @@ export default function AddtoCart() {
           </div>
         ) : (
           <>
-            <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex flex-col lg:flex-row gap-6">
               {/* Main */}
-              <div className="w-full lg:w-[800px] order-2 lg:order-1">
+              <div className="w-full lg:w-[700px] order-2 lg:order-1 sm:ml-8">
                 <div className="bg-white rounded-xl shadow-sm p-6 order-3 lg:order-none space-y-10 border border-black">
                   {/* Account */}
                   <div>
@@ -747,7 +747,7 @@ export default function AddtoCart() {
               </div>
 
               {/* Right column */}
-              <div className="-mr-7 w-full lg:w-[600px] space-y-5 order-1 lg:order-2">
+              <div className="sm:mr-10  w-full lg:w-[460px] space-y-5 order-1 lg:order-2">
               
               <div className="bg-white rounded-xl shadow-sm p-4 transition-all border border-black">
                 {cart?.map((pd) => (
