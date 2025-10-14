@@ -13,16 +13,14 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
   const { selectedCoupon, setSelectedCoupon } = useCont();
   const [searchTerm, setSearchTerm] = useState("");
   const [coupons, setCoupons] = useState([]);
+  const [filteredCoupons, setFilteredCoupons] = useState([]);
   const [enableLottie, setEnableLottie] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   // derive user id from stored decoded token
   const storedUser = (() => {
-    try {
-      return JSON.parse(localStorage.getItem("HommlieUser") || "null");
-    } catch {
-      return null;
-    }
+    try { return JSON.parse(localStorage.getItem("HommlieUser") || "null"); }
+    catch { return null; }
   })();
   const userId = storedUser?.id || storedUser?.user_id || null;
 
@@ -40,43 +38,49 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
     }
     // Fallback: compute on FE
     if (coupon?.amount != null && coupon.amount !== "") {
-      return clampDiscount(Number(coupon.amount)); // flat ₹
+      return clampDiscount(Number(coupon.amount)); // flat ₹ (HOMMLIEFIRST uses this)
     } else if (coupon?.percentage != null && coupon.percentage !== "") {
-      return clampDiscount(
-        (Number(totalAmount) * Number(coupon.percentage)) / 100
-      );
+      return clampDiscount((Number(totalAmount) * Number(coupon.percentage)) / 100);
     }
     return 0;
   };
 
-  // ---- API: fetch coupons (now supports search) ----------------------------
-  async function getCoupons(queryText = "") {
+  async function getCoupons() {
+    setCoupons([]);
     try {
       const response = await axios.post(`${config.API_URL}/api/coupons`, {
         cat_id,
-        user_id: userId, // backend may hide first-time coupon for old users on normal list
-        query: queryText, // empty => only defaults; non-empty => search (includes non-default)
+        user_id: userId, // let backend hide HOMMLIEFIRST for old users
       });
-      const rows = response.data.status === 1 ? response.data.data : [];
-      setCoupons(rows);
+      if (response.data.status === 1) {
+        setCoupons(response.data.data);
+      } else {
+        setCoupons([]);
+      }
     } catch (error) {
       console.log("error getting coupons:", error);
-      setCoupons([]);
     }
   }
 
-  // open → load default visible coupons (is_default = 1)
   useEffect(() => {
     if (!isOpen) return;
-    setSearchTerm("");
-    getCoupons(""); // empty query → normal list (defaults only)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getCoupons();
   }, [isOpen]);
 
-  // search: ask server so it can include is_default = 0 when name matches
+  useEffect(() => {
+    handleSearch(searchTerm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coupons]);
+
   const handleSearch = (value) => {
     setSearchTerm(value);
-    getCoupons(value); // server returns matching coupons (any is_default)
+    const v = (value || "").toLowerCase();
+    const newCoupons = (coupons || []).filter(
+      (cp) =>
+        (cp.coupon_name || "").toLowerCase().includes(v) ||
+        (cp.subTitle || "").toLowerCase().includes(v)
+    );
+    setFilteredCoupons(newCoupons);
   };
 
   // Always validate with backend → compute once → clamp → apply
@@ -100,13 +104,13 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
           if (srv.amount != null && srv.amount !== "") {
             base = Number(srv.amount);
           } else if (srv.percentage != null && srv.percentage !== "") {
-            base =
-              (Number(totalAmount) * Number(srv.percentage)) / 100;
+            base = (Number(totalAmount) * Number(srv.percentage)) / 100;
           } else {
             base = 0;
           }
         }
         const discount = clampDiscount(base);
+
         applySelectedCoupon({ ...srv, calculatedDiscount: discount });
       } else {
         console.log(resp.data.message || "Invalid or ineligible coupon");
@@ -165,11 +169,11 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
           <h2 className="font-bold text-center">Apply Coupon</h2>
         </div>
 
-        {/* Enter code / Search */}
+        {/* Enter code */}
         <div className="flex flex-row gap-2 items-center justify-center w-full px-4 my-4">
           <input
             type="text"
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
             className="w-4/5 h-10 rounded-md pl-4"
             placeholder="Enter Coupon Code"
@@ -183,17 +187,17 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
           </button>
         </div>
 
-        {/* List of coupons from server */}
+        {/* List of coupons */}
         <div className="flex flex-col gap-4 justify-center w-full px-4 my-2">
           <h3 className="font-bold">Available Coupons</h3>
 
-          {(!coupons || coupons.length === 0) && (
+          {filteredCoupons?.length === 0 && (
             <div className="p-4">
               <img src={NoResultFoundImg} alt="No coupons" />
             </div>
           )}
 
-          {coupons?.map((cp, index) => (
+          {filteredCoupons?.map((cp, index) => (
             <div
               key={index}
               className="relative bg-white rounded-md shadow-md p-2 px-8 space-y-3"

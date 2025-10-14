@@ -41,15 +41,15 @@ const ServiceGrid = () => {
   // Removed "Scrap" details from here
   const serviceData = {
     "Pest Control": [
-      { name: "General Pest Control", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
+      { name: "Ant Services & Roach X Gel Treatment", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
       { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
       { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
       { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
       { name: "Mosquito Control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
       { name: "Termite Treatment", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
-      { name: "Flies Management", image: "/images/fliesicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
-      { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
-      { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
+      // { name: "Flies Management", image: "/images/fliesicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
+      // { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
+      // { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
     ],
     "Deep Cleaning": [
       { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
