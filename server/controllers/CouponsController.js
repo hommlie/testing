@@ -353,7 +353,13 @@ exports.applycoupons = async (req, res) => {
 // (unchanged) fetch-all admin util if you use it elsewhere
 exports.getCoupons = async (req, res) => {
   try {
-    const couponsdata = await Coupons.findAll();
+    // Support optional search via query param `q`. If absent, return only default-visible coupons.
+    const q = (req.query.q || "").trim();
+    const where = q
+      ? { coupon_name: { [Op.substring]: q } }
+      : { is_default: 1 };
+
+    const couponsdata = await Coupons.findAll({ where });
     if (couponsdata.length > 0) {
       return res
         .status(200)

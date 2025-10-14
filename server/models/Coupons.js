@@ -41,6 +41,12 @@ Coupon.init({
         allowNull: false,
         defaultValue: 1 
     }
+    ,
+    is_default: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
+    }
 }, {
     sequelize,
     modelName: 'Coupon',
