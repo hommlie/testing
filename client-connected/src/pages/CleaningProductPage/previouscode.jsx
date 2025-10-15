@@ -18,7 +18,7 @@ import ShareButton from "../ShareButtonsubcat.jsx";
 const StarRating = ({ rating }) => {
   return (
     <div className="flex items-center">
-      {[1].map((star) => {
+      {[1, 2, 3, 4, 5].map((star) => {
         const starValue = star;
         const fillPercentage = Math.max(
           0,
@@ -610,164 +610,113 @@ const handleQtyUpdate = async (cartId, newQty) => {
                               : "border-gray-200"
                           }`}
                         >
-                          
-                          <div className="md:flex md:items-start md:gap-10">
-                            {/* LEFT (desktop): Image → Specs → Actions */}
-                            <div className="md:w-72 w-full md:shrink-0">
-                              {/* Image (bigger/clearer on desktop) */}
-                              <div className="relative w-full h-36 md:h-48">
-                                <img
-                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
-                                  alt={product.product_name}
-                                  className="w-full h-full rounded-lg object-cover border"
-                                />
-                              </div>
-                            </div>
-
-                            {/* RIGHT: Title, rating, price (desktop) + mobile content unchanged */}
-                            <div className="flex-1 mt-4 md:mt-0">
-                              {/* Header: service name, rating, price */}
-                              <div className="space-y-3">
+                          <div className="flex justify-between items-center gap-6">
+                            <div className="space-y-4 flex-1">
+                              <div className="space-y-2">
                                 <h3 className="text-sm md:text-lg font-medium">
                                   {attribute.attribute_name}
                                 </h3>
 
-                                {(attribute?.avg_rating || attribute?.total_reviews) && (
-                                  <div className="flex items-center gap-2 border-b border-dotted border-gray-400 w-fit pb-[2px]">
-                                    {/* Purple circular star icon */}
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
-                                      <Star className="w-3 h-3 text-white" fill="currentColor" />
-                                    </span>
-
-                                    {/* Rating number */}
-                                    <span className="text-sm md:text-base font-semibold text-gray-800">
-                                      {(Number(attribute?.avg_rating) || 0).toFixed(2)}
-                                    </span>
-
-                                    {/* Reviews count */}
-                                    {attribute?.total_reviews && (
+                                {/* Rating and Reviews */}
+                                {(attribute.avg_rating ||
+                                  attribute.total_reviews) && (
+                                  <div className="flex items-center space-x-2">
+                                    <StarRating rating={attribute.avg_rating} />
+                                    {attribute.total_reviews && (
                                       <span className="text-xs md:text-sm text-gray-500">
                                         (
                                         {attribute.total_reviews >= 1000
-                                          ? `${(attribute.total_reviews / 1000).toFixed(0)}K`
+                                          ? `${(
+                                              attribute.total_reviews / 1000
+                                            ).toFixed(1)}K`
                                           : attribute.total_reviews}{" "}
                                         reviews)
                                       </span>
                                     )}
                                   </div>
                                 )}
-                                {attribute.variations?.length > 0 && (
-                                  <p className="text-l sm:text-xs md:text-base flex gap-2 items-center">
-                                    Starts from
-                                    <span className="text-black-600 font-medium">
-                                      ₹{attribute?.starting_price}
+
+                                {/* Price */}
+                                <p className="text-gray-500">
+                                  {attribute.variations?.length > 0 && (
+                                    <span className="text-xs md:text-base flex gap-2 items-center">
+                                      Starts from
+                                      <span className="text-emerald-600 font-medium">
+                                        ₹{attribute?.starting_price}
+                                      </span>
                                     </span>
-                                  </p>
-                                )}
+                                  )}
+                                </p>
                               </div>
 
-                              {/* MOBILE: keep your existing specs & actions exactly the same */}
+                              {/* Specifications */}
                               {attribute.specifications && (
-                                <div className="space-y-2 mt-4 md:hidden">
-                                  <h4 className="text-sm md:text-base font-semibold text-gray-700">
+                                <div className="space-y-2">
+                                  <h4 className="text-sm md:text-base font-medium text-gray-700">
                                     Specifications:
                                   </h4>
-                                  <ul className="space-y-2 md:space-y-2">
+                                  <ul className="space-y-1">
                                     {attribute.specifications
                                       .split("|")
-                                      .map((s) => s.trim())
-                                      .filter(Boolean)
-                                      .map((spec, i) => (
-                                        <li key={i} className="text-base">
-                                          <div className="flex items-start gap-2">
-                                            <span className="mt-1 leading-6 text-black">•</span>
-                                            {/* one long line, wraps to the next line only if needed */}
-                                            <span className="text-gray-700 leading-6 whitespace-normal break-words">
-                                              {spec.replace(/^"|"$/g, "")}
-                                            </span>
-                                          </div>
+                                      .map((spec, index) => spec.trim())
+                                      .filter((spec) => spec)
+                                      .map((spec, index) => (
+                                        <li
+                                          key={index}
+                                          className="text-xs md:text-base flex items-start space-x-2"
+                                        >
+                                          <span className="text-black">•</span>
+                                          <span className="text-gray-600">
+                                            {spec.replace(/^"|"$/g, "")}
+                                          </span>
                                         </li>
                                       ))}
                                   </ul>
-
                                 </div>
                               )}
 
-                              <div className="flex items-start justify-between mt-4 md:hidden">
-                                <button
-                                  className="text-sm text-[#6c43f3]  hover:text-blue-700 font-semibold mt-4"
-                                  onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                                >
-                                  View Service Details
-                                </button>
-
-                                {/* Add button + variation count stacked */}
-                                <div className="flex flex-col items-center">
-                                  <button
-                                    className="bg-white text-[#6c43f3]  px-5 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
-                                    onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                                  >
-                                    Add to cart
-                                  </button>
-
-                                  {/* Dynamic variation count below the Add button */}
-                                  {attribute?.variations?.length > 0 && (
-                                    <p className="mt-1 text-center text-xs text-gray-600">
-                                      {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
+                              <button
+                                className="text-sm md:text-base text-blue-500 hover:text-blue-600 font-semibold"
+                                onClick={() =>
+                                  handleViewDetails(
+                                    product,
+                                    attribute.attribute_id
+                                  )
+                                }
+                              >
+                                View Details
+                              </button>
                             </div>
+
+                            {/* Image with overlapped Add button */}
+                            <div className="relative w-24 md:w-32 flex-shrink-0">
+                              <div className="relative w-24 md:w-32 h-24 md:h-32">
+                                <img
+                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
+                                  alt=""
+                                  className="w-full h-full rounded-lg object-cover"
+                                />
+                                <button
+                                  className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
+                                            bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
+                                            hover:bg-emerald-50 transition-colors"
+                                  onClick={() =>
+                                    handleViewDetails(product, attribute.attribute_id)
+                                  }
+                                >
+                                  Add
+                                </button>
+                              </div>
+
+                              {/* Dynamic variation count below the image */}
+                              {attribute?.variations?.length > 0 && (
+                                <p className="text-center text-xs text-gray-600 mt-6">
+                                  {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                </p>
+                              )}
+                            </div>
+
                           </div>
-
-                        {/* SPECS (desktop only) */}
-                      {attribute.specifications && (
-                        <div className="hidden md:block mt-4">
-                          <h4 className="text-base font-semibold text-gray-700 mb-2">Specifications:</h4>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                            {attribute.specifications
-                              .split("|")
-                              .map((s) => s.trim())
-                              .filter(Boolean)
-                              .map((spec, i) => (
-                                <div key={i} className="flex items-center">
-                                  <span className="text-black mr-2">•</span>
-                                  <span className="text-gray-700 text-base whitespace-normal break-words">
-                                    {spec.replace(/^"|"$/g, "")}
-                                  </span>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      )}
-
-                        <div className="hidden md:flex items-start justify-between mt-4">
-                          <button
-                            className="text-base text-[#6c43f3]  hover:text-blue-700 font-semibold mt-2"
-                            onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                          >
-                            View Services Details
-                          </button>
-
-                          {/* Add button + variation count stacked */}
-                          <div className="flex flex-col items-start">
-                            <button
-                              className="bg-white text-[#6c43f3] font-semibold px-6 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                            >
-                              Add to cart
-                            </button>
-
-                            {/* Dynamic variation count below the Add button */}
-                            {attribute?.variations?.length > 0 && (
-                              <p className="mt-1 text-xs text-gray-600 ml-10">
-                                {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-               
                         </div>
                       ))}
                     </div>

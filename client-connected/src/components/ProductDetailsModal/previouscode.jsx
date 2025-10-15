@@ -722,10 +722,10 @@ const ProductDetailModal = ({
                           </div> */}
 
                 {/* Description Section */}
-                <div
+                {/* <div
                   className="prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: product?.description }}
-                />
+                /> */}
                 {/* Included Section */}
                 {/* <div className="mt-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">Included</h3>
