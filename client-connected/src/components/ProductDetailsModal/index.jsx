@@ -21,7 +21,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const StarRating = ({ rating }) => {
   return (
     <div className="flex items-center">
-      {[1, 2, 3, 4, 5].map((star) => {
+      {[1].map((star) => {
         const starValue = star;
         const fillPercentage = Math.max(
           0,
@@ -326,9 +326,10 @@ const ProductDetailModal = ({
   onClose,
   product,
   selectedAttributeId = null,
+  mode = "view", // mode: 'view' (default) shows details+reviews; 'add' shows only variations/BHK cards
 }) => {
   const { cart, getCart } = useCont();
-  const [selectedTab, setSelectedTab] = useState("details");
+
   const [addingVariationId, setAddingVariationId] = useState(null);
   const [cartTotal, setCartTotal] = useState(0);
   const [displayedAttributes, setDisplayedAttributes] = useState([]);
@@ -570,12 +571,16 @@ const ProductDetailModal = ({
 
   if (!isOpen) return null;
 
-  const tabs = [
-    // { id: 'variations', label: 'Variations' },
-    { id: "details", label: "Details" },
-    // { id: 'gallery', label: 'Gallery' },
-    { id: "reviews", label: "Reviews" },
-  ];
+  const tabs =
+    mode === "add"
+      ? [
+          // In 'add' mode we only need the variations/options (kept under 'details')
+          { id: "details", label: "Options" },
+        ]
+      : [
+          { id: "details", label: "Details" },
+          { id: "reviews", label: "Reviews" },
+        ];
 
   return (
     <>
@@ -634,313 +639,143 @@ const ProductDetailModal = ({
                   )}
                 </>
               )}
-            <div className="w-full flex space-x-4 mt-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  className={`w-full px-4 py-2 font-medium ${
-                    selectedTab === tab.id
-                      ? "text-emerald-600 border-b-2 border-emerald-600"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                  onClick={() => setSelectedTab(tab.id)}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+            
           </div>
 
           {/* Main Content */}
-          <div className="p-6">
-            {selectedTab === "details" && (
-              <section className="space-y-5 my-0">
-                {/* Carousel Section */}
-                {displayedAttributes?.map((attribute) => (
-                  <div key={attribute.attribute_id} className="space-y-4">
-                    <div
-                      className="relative overflow-x-auto hide-scrollbar"
-                      ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
-                    >
-                      <div className="flex gap-3 min-w-max py-0 px-1">
-                        {attribute?.variations?.map((variation) => (
-                          <div
-                            key={variation.id}
-                            className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
-                          >
-                            <div className="p-3 space-y-2">
-                              <h4 className="font-medium text-sm">{variation.variation}</h4>
-
-                              {/* Ratings */}
-                              {(variation.avg_rating || variation.total_reviews) && (
-                                <div className="flex items-center space-x-1">
-                                  {variation.avg_rating && (
-                                    <StarRating rating={variation.avg_rating} size={14} />
-                                  )}
-                                  {variation.total_reviews && (
-                                    <span className="text-xs text-gray-500">
-                                      ({variation.total_reviews >= 1000
-                                        ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                                        : variation.total_reviews})
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-
-                              {/* Price */}
-                              <div className="space-x-1 text-sm">
-                                <span className="text-emerald-600 font-semibold">
-                                  ₹{variation.discounted_variation_price}
-                                </span>
-                                {variation.price !== variation.discounted_variation_price && (
-                                  <span className="text-gray-500 line-through text-xs">
-                                    ₹{variation.price}
-                                  </span>
-                                )}
-                              </div>
-
-                              {/* Add Button or Qty Control */}
-                              <AddButton variation={variation} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Image Section with Overlapped Add Button */}
-                          {/* <div className="relative w-0 h-0 flex items-center p-4">
-                            {variation.image && (
-                              <img
-                                src={variation.image}
-                                alt={variation.variation}
-                                className="w-full h-full rounded-lg object-cover"
-                              />
-                            )}
-                            <AddButton variation={variation} />
-                          </div> */}
-
-                {/* Description Section */}
+          {/* Main Content */}
+<div className="p-6">
+  {/* ADD MODE: show ONLY the options (variations/BHK cards) */}
+  {mode === "add" && (
+    <section className="space-y-5 my-0">
+      {displayedAttributes?.map((attribute) => (
+        <div key={attribute.attribute_id} className="space-y-4">
+          <div
+            className="relative overflow-x-auto hide-scrollbar"
+            ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
+          >
+            <div className="flex gap-3 min-w-max py-0 px-1">
+              {attribute?.variations?.map((variation) => (
                 <div
-                  className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: product?.description }}
-                />
-                {/* Included Section */}
-                {/* <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Included</h3>
-                  <ol className="relative border-l border-gray-300 space-y-6 ml-4">
-                    <li className="ml-4">
-                      <div className="absolute -left-5 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                        1
+                  key={variation.id}
+                  className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="p-3 space-y-2">
+                    <h4 className="font-medium text-sm">{variation.variation}</h4>
+
+                    {(variation.avg_rating || variation.total_reviews) && (
+                      <div className="flex items-center space-x-1">
+                        {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
+                        {variation.total_reviews && (
+                          <span className="text-xs text-gray-500">
+                            ({variation.total_reviews >= 1000
+                              ? `${(variation.total_reviews / 1000).toFixed(1)}K`
+                              : variation.total_reviews})
+                          </span>
+                        )}
                       </div>
-                      <h4 className="font-semibold">Detailed inspection</h4>
-                      <p className="text-gray-600 text-sm">
-                        Professionals identify all kinds of pests in hidden and tricky areas
-                      </p>
-                    </li>
-                    <li className="ml-4">
-                      <div className="absolute -left-5 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                        2
-                      </div>
-                      <h4 className="font-semibold">First visit</h4>
-                      <p className="text-gray-600 text-sm">
-                        Spray treatment to target adult pests
-                      </p>
-                    </li>
-                    <li className="ml-4">
-                      <div className="absolute -left-5 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                        3
-                      </div>
-                      <h4 className="font-semibold">Second visit</h4>
-                      <p className="text-gray-600 text-sm">
-                        Gel treatment after two weeks to target nymphs and newly-hatched eggs
-                      </p>
-                    </li>
-                  </ol>
-                </div> */}
+                    )}
 
-                {/* Excluded Section */}
-                {/* <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Excluded</h3>
-                  <div className="flex items-start space-x-2 text-sm text-red-600">
-                    <span className="font-bold text-xl">×</span>
-                    <span>Please provide a stool/ladder if required</span>
-                  </div>
-                </div> */}
-
-                {/* FAQ Section */}
-                {/* <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Frequently Asked Questions</h3>
-                  <ul className="divide-y divide-gray-200">
-                    {[
-                      {
-                        question: "What will the first visit include?",
-                        answer: "The first visit includes a thorough inspection of your kitchen, identification of areas that need cleaning, and an overview of the cleaning process."
-                      },
-                      {
-                        question: "Will I have to empty the kitchen for the first visit?",
-                        answer: "Yes, we recommend emptying the kitchen to allow our professionals to clean all surfaces and areas properly without any obstructions."
-                      },
-                      {
-                        question: "Will the professional restock the utensils in my kitchen?",
-                        answer: "Yes, after the cleaning, the professional will restock all kitchen utensils and ensure everything is in place."
-                      },
-                      {
-                        question: "What will the second visit include?",
-                        answer: "The second visit includes a final inspection and follow-up cleaning, focusing on any remaining areas that need attention."
-                      },
-                      {
-                        question: "What safety precautions should be followed?",
-                        answer: "Our professionals follow strict safety protocols, including the use of eco-friendly cleaning products and wearing necessary protective gear."
-                      },
-                      {
-                        question: "Is the service safe for children and pets?",
-                        answer: "Yes, all cleaning products used are safe for children and pets, ensuring a healthy and clean environment."
-                      }
-                    ].map((faq, idx) => (
-                      <li key={idx} className="py-3">
-                        <details className="group">
-                          <summary className="flex justify-between items-center cursor-pointer font-medium text-gray-700 hover:text-emerald-600">
-                            {faq.question}
-                            <span className="ml-2 w-5 h-5 relative text-lg font-bold">
-                              <span className="absolute inset-0 group-open:hidden">+</span>
-                              <span className="absolute inset-0 hidden group-open:inline">−</span>
-                            </span>
-                          </summary>
-                          
-                          <p className="mt-2 text-sm text-gray-600">{faq.answer}</p>
-                        </details>
-                      </li>
-                    ))}
-                  </ul>
-                </div> */}
-
-                {/* Image Gallery */}
-                {/* <div className="space-y-4">
-                  {product?.productimages?.map((image) => (
-                    <img
-                      key={image.id}
-                      src={image.image_url}
-                      alt={product.product_name}
-                      className="w-full h-64 object-cover rounded-lg"
-                    />
-                  ))}
-                </div> */}
-              </section>
-            )}
-
-            {/* Reviews Section */}       
-            {selectedTab === "reviews" && (
-              <div className="space-y-6">
-                {/* Ratings Summary */}
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
-              
-              <div className="flex flex-col md:flex-row gap-6">
-                {/* Overall Rating */}
-                <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
-                  <span className="text-5xl font-bold text-gray-900">
-                    4.9
-                  </span>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                      const isFilled = star <= 4; // 4 full stars for 4.9 rating
-                      const isPartial = star === 5; // 5th star should be 90% filled
-                      const partialFill = isPartial ? 90 : 0;
-
-                      return (
-                        <div key={star} className="relative">
-                          <Star className="w-5 h-5 text-gray-300" />
-                          {(isFilled || isPartial) && (
-                            <div
-                              className="absolute inset-0 overflow-hidden"
-                              style={{ width: isFilled ? '100%' : `${partialFill}%` }}
-                            >
-                              <Star className="w-5 h-5 text-yellow-400 fill-current absolute top-0 left-0" />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    128 reviews
-                  </p>
-                </div>
-
-                {/* Rating Breakdown - Manually set for 4.9 rating */}
-                <div className="flex-1 space-y-3">
-                  {[
-                    { star: 5, percent: 90, count: 115 }, // 90% of 128 = ~115
-                    { star: 4, percent: 7, count: 9 },    // 7% of 128 = ~9
-                    { star: 3, percent: 2, count: 3 },    // 2% of 128 = ~3
-                    { star: 2, percent: 1, count: 1 },    // 1% of 128 = ~1
-                    { star: 1, percent: 0, count: 0 }    // 0% of 128 = 0
-                  ].map(({ star, percent, count }) => (
-                    <div key={star} className="flex items-center gap-3">
-                      <div className="flex items-center w-10">
-                        <span className="text-sm font-medium text-gray-700">★{star}</span>
-                      </div>
-                      <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-yellow-400 rounded-full"
-                          style={{ width: `${percent}%` }}
-                        />
-                      </div>
-                      <span className="text-sm text-gray-600 w-12 text-right">
-                        {count}
+                    <div className="space-x-1 text-sm">
+                      <span className="text-emerald-600 font-semibold">
+                        ₹{variation.discounted_variation_price}
                       </span>
+                      {variation.price !== variation.discounted_variation_price && (
+                        <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
 
-            {/* All Reviews */}
-            <div className="space-y-4">
-              {/* <div className="flex justify-between items-center">
-                <h4 className="text-lg font-semibold text-gray-900">
-                  Customer Reviews (128)
-                </h4>
-              </div> */}
-              
-              {/* Sample Review */}
-              {/* <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <p className="font-medium text-gray-900">CH Sudheer</p>
-                    <p className="text-sm text-gray-500">Bangalore, BTM Layout</p>
-                    <div className="flex items-center mt-1 space-x-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <div key={star} className="relative w-4 h-4">
-                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        </div>
-                      ))}
-                      <span className="text-xs text-gray-500 ml-1">5.0</span>
-                    </div>
+                    <AddButton variation={variation} />
                   </div>
-                  <span className="text-xs text-gray-400">
-                    {new Date().toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </span>
                 </div>
-
-                <h5 className="font-medium text-gray-800 mb-1">Great Treatment</h5>
-
-                <p className="text-gray-700 mb-2">
-                  The service was really good. I would appreciate their work. We were really
-                  facing a lot of problems with pests and now we don't see any in the
-                  home. Thanks for your service.
-                </p>
-              </div> */}
+              ))}
             </div>
           </div>
-        )}
+        </div>
+      ))}
+    </section>
+  )}
+
+  {/* VIEW MODE: show Details FIRST, then Reviews BELOW (no tabs) */}
+  {mode !== "add" && (
+    <>
+      <section className="space-y-5 my-0">
+        {/* optional title/one-attribute preface you already have */}
+        {/* Description / Details */}
+        <div
+          className="prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: product?.description }}
+        />
+      </section>
+
+      {/* Reviews moved here, directly below details */}
+      <section className="space-y-6 mt-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
+
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Overall Rating (use your dynamic product rating if available) */}
+            <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
+              <span className="text-5xl font-bold text-gray-900">
+                {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
+              </span>
+              <div className="flex items-center">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const score = product?.rating ? Number(product.rating) : 4.9;
+                  const isFilled = star <= Math.floor(score);
+                  const isPartial = star === Math.ceil(score) && !isFilled;
+                  const partialFill = isPartial ? Math.round((score % 1) * 100) : 0;
+
+                  return (
+                    <div key={star} className="relative">
+                      <Star className="w-5 h-5 text-gray-300" />
+                      {(isFilled || isPartial) && (
+                        <div
+                          className="absolute inset-0 overflow-hidden"
+                          style={{ width: isFilled ? "100%" : `${partialFill}%` }}
+                        >
+                          <Star className="w-5 h-5 text-yellow-400 fill-current absolute top-0 left-0" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-sm text-gray-500">
+                {product?.total_reviews ? product.total_reviews : 128} reviews
+              </p>
+            </div>
+
+            {/* Rating breakdown (keep your static version or wire to backend later) */}
+            <div className="flex-1 space-y-3">
+              {[
+                { star: 5, percent: 90, count: 115 },
+                { star: 4, percent: 7, count: 9 },
+                { star: 3, percent: 2, count: 3 },
+                { star: 2, percent: 1, count: 1 },
+                { star: 1, percent: 0, count: 0 },
+              ].map(({ star, percent, count }) => (
+                <div key={star} className="flex items-center gap-3">
+                  <div className="flex items-center w-10">
+                    <span className="text-sm font-medium text-gray-700">★{star}</span>
+                  </div>
+                  <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
+                  </div>
+                  <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* If you later list individual reviews, render them here */}
+        {/* <div className="space-y-4"> ... </div> */}
+      </section>
+    </>
+  )}
+</div>
+
           {/* Cart Total Section */}
           {cartTotal > 0 && (
             <div className="sticky bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg">

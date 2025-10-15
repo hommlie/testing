@@ -265,6 +265,7 @@ const CleaningProductPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [modalMode, setModalMode] = useState("view"); // 'view' or 'add'
   const [activeImage, setActiveImage] = useState();
   const [selectedAttributeId, setSelectedAttributeId] = useState();
   const [openSection, setOpenSection] = useState("");
@@ -356,9 +357,10 @@ const CleaningProductPage = () => {
     ].scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleViewDetails = (product, attributeId = null) => {
+  const handleViewDetails = (product, attributeId = null, mode = "view") => {
     setSelectedProduct(product);
     setSelectedAttributeId(attributeId);
+    setModalMode(mode);
     setIsDetailModalOpen(true);
   };
 
@@ -696,7 +698,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                               <div className="flex items-start justify-between mt-4 md:hidden">
                                 <button
                                   className="text-sm text-[#6c43f3]  hover:text-blue-700 font-semibold mt-4"
-                                  onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                                  onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
                                 >
                                   View Service Details
                                 </button>
@@ -705,7 +707,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                 <div className="flex flex-col items-center">
                                   <button
                                     className="bg-white text-[#6c43f3]  px-5 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
-                                    onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                                    onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
                                   >
                                     Add to cart
                                   </button>
@@ -743,18 +745,18 @@ const handleQtyUpdate = async (cartId, newQty) => {
                       )}
 
                         <div className="hidden md:flex items-start justify-between mt-4">
-                          <button
-                            className="text-base text-[#6c43f3]  hover:text-blue-700 font-semibold mt-2"
-                            onClick={() => handleViewDetails(product, attribute.attribute_id)}
-                          >
-                            View Services Details
-                          </button>
+                            <button
+                              className="text-base text-[#6c43f3]  hover:text-blue-700 font-semibold mt-2"
+                              onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                            >
+                              View Services Details
+                            </button>
 
                           {/* Add button + variation count stacked */}
                           <div className="flex flex-col items-start">
                             <button
                               className="bg-white text-[#6c43f3] font-semibold px-6 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id)}
+                              onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
                             >
                               Add to cart
                             </button>
@@ -881,6 +883,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
           onClose={() => setIsDetailModalOpen(false)}
           product={selectedProduct}
           selectedAttributeId={selectedAttributeId}
+          mode={modalMode}
         />
       </div>
 
