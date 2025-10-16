@@ -620,7 +620,7 @@ const ProductDetailModal = ({
                 )}
               </div>
             )}
-              {/* {displayedAttributes?.length === 1 && (
+              {displayedAttributes?.length === 1 && (
                 <>
                   <h3 className="text-lg font-semibold text-gray-800 mt-3">
                     {displayedAttributes[0].attribute_name}
@@ -646,7 +646,7 @@ const ProductDetailModal = ({
                     </div>
                   )}
                 </>
-              )} */}
+              )}
             
           </div>
 
