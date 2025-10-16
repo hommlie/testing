@@ -454,7 +454,7 @@ const ServiceSection = ({ categories }) => {
               </div>
 
               <span className="ml-2 text-base font-semibold text-gray-900">
-                {rating.toFixed(2)}
+                {rating.toFixed(1)}
               </span>
 
               <span className="ml-1 text-sm text-gray-500">

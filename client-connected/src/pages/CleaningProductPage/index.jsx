@@ -649,7 +649,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
 
                                     {/* Rating number */}
                                     <span className="text-sm md:text-base font-semibold text-gray-800">
-                                      {(Number(attribute?.avg_rating) || 0).toFixed(2)}
+                                      {(Number(attribute?.avg_rating) || 0).toFixed(1)}
                                     </span>
 
                                     {/* Reviews count */}

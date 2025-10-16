@@ -620,13 +620,12 @@ const ProductDetailModal = ({
                 )}
               </div>
             )}
-              {displayedAttributes?.length === 1 && (
+              {/* {displayedAttributes?.length === 1 && (
                 <>
                   <h3 className="text-lg font-semibold text-gray-800 mt-3">
                     {displayedAttributes[0].attribute_name}
                   </h3>
 
-                  {/* Description for single attribute, using first variation */}
                   {displayedAttributes[0]?.variations?.[0]?.description && (
                     <div className="mt-2">
                       <ul className="space-y-1">
@@ -647,136 +646,136 @@ const ProductDetailModal = ({
                     </div>
                   )}
                 </>
-              )}
+              )} */}
             
           </div>
 
           {/* Main Content */}
-          {/* Main Content */}
-<div className="p-6">
-  {/* ADD MODE: show ONLY the options (variations/BHK cards) */}
-  {localMode === "add" && (
-    <section className="space-y-5 my-0">
-      {displayedAttributes?.map((attribute) => (
-        <div key={attribute.attribute_id} className="space-y-4">
-          <div
-            className="relative overflow-x-auto hide-scrollbar"
-            ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
-          >
-            <div className="flex gap-3 min-w-max py-0 px-1">
-              {attribute?.variations?.map((variation) => (
-                <div
-                  key={variation.id}
-                  className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="p-3 space-y-2">
-                    <h4 className="font-medium text-sm">{variation.variation}</h4>
+          
+          <div className="p-6">
+            {/* ADD MODE: show ONLY the options (variations/BHK cards) */}
+            {/* {localMode === "add" && (
+              <section className="space-y-5 my-0">
+                {displayedAttributes?.map((attribute) => (
+                  <div key={attribute.attribute_id} className="space-y-4">
+                    <div
+                      className="relative overflow-x-auto hide-scrollbar"
+                      ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
+                    >
+                      <div className="flex gap-3 min-w-max py-0 px-1">
+                        {attribute?.variations?.map((variation) => (
+                          <div
+                            key={variation.id}
+                            className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                          >
+                            <div className="p-3 space-y-2">
+                              <h4 className="font-medium text-sm">{variation.variation}</h4>
 
-                    {(variation.avg_rating || variation.total_reviews) && (
-                      <div className="flex items-center space-x-1">
-                        {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
-                        {variation.total_reviews && (
-                          <span className="text-xs text-gray-500">
-                            ({variation.total_reviews >= 1000
-                              ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                              : variation.total_reviews})
-                          </span>
-                        )}
+                              {(variation.avg_rating || variation.total_reviews) && (
+                                <div className="flex items-center space-x-1">
+                                  {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
+                                  {variation.total_reviews && (
+                                    <span className="text-xs text-gray-500">
+                                      ({variation.total_reviews >= 1000
+                                        ? `${(variation.total_reviews / 1000).toFixed(1)}K`
+                                        : variation.total_reviews})
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+
+                              <div className="space-x-1 text-sm">
+                                <span className="text-emerald-600 font-semibold">
+                                  ₹{variation.discounted_variation_price}
+                                </span>
+                                {variation.price !== variation.discounted_variation_price && (
+                                  <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
+                                )}
+                              </div>
+
+                              <AddButton variation={variation} />
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    )}
-
-                    <div className="space-x-1 text-sm">
-                      <span className="text-emerald-600 font-semibold">
-                        ₹{variation.discounted_variation_price}
-                      </span>
-                      {variation.price !== variation.discounted_variation_price && (
-                        <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
-                      )}
                     </div>
-
-                    <AddButton variation={variation} />
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ))}
-    </section>
-  )}
+                ))}
+              </section>
+            )} */}
 
-  {/* VIEW MODE: show Details FIRST, then Reviews BELOW (no tabs) */}
-  {localMode !== "add" && (
-    <>
-      <section className="space-y-5 my-0">
-        {/* Description / Details */}
-        <div
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: product?.description }}
-        />
-      </section>
+            {/* VIEW MODE: show Details FIRST, then Reviews BELOW (no tabs) */}
+            {localMode !== "add" && (
+              <>
+                <section className="space-y-5">
+                  {/* Description / Details */}
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: product?.description }}
+                  />
+                </section>
 
-      {/* Reviews moved here, directly below details */}
-      <section className="space-y-6 mt-6">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
+                {/* Reviews moved here, directly below details */}
+                <section className="space-y-6 mt-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
 
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Overall Rating (use your dynamic product rating if available) */}
-            <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
-              <span className="text-5xl font-bold text-gray-900">
-                {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
-              </span>
-              <div className="flex items-center">
-                {[1].map((star) => {
-                  const score = product?.rating ? Number(product.rating) : 4.9;
-                  const isFilled = star <= Math.floor(score);
-                  const isPartial = star === Math.ceil(score) && !isFilled;
-                  const partialFill = isPartial ? Math.round((score % 1) * 100) : 0;
-
-                  return (
-                    <div key={star} className="relative">
-                       <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
-                          <Star className="w-3 h-3 text-white" fill="currentColor" />
+                    <div className="flex flex-col md:flex-row gap-6">
+                      {/* Overall Rating (use your dynamic product rating if available) */}
+                      <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
+                        <span className="text-5xl font-bold text-gray-900">
+                          {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
                         </span>
+                        <div className="flex items-center">
+                          {[1].map((star) => {
+                            const score = product?.rating ? Number(product.rating) : 4.9;
+                            const isFilled = star <= Math.floor(score);
+                            const isPartial = star === Math.ceil(score) && !isFilled;
+                            const partialFill = isPartial ? Math.round((score % 1) * 100) : 0;
+
+                            return (
+                              <div key={star} className="relative">
+                                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+                                    <Star className="w-3 h-3 text-white" fill="currentColor" />
+                                  </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {product?.total_reviews ? product.total_reviews : 128} reviews
+                        </p>
+                      </div>
+
+                      {/* Rating breakdown (keep your static version or wire to backend later) */}
+                      <div className="flex-1 space-y-3">
+                        {[
+                          { star: 5, percent: 90, count: 115 },
+                          { star: 4, percent: 7, count: 9 },
+                          { star: 3, percent: 2, count: 3 },
+                          { star: 2, percent: 1, count: 1 },
+                          { star: 1, percent: 0, count: 0 },
+                        ].map(({ star, percent, count }) => (
+                          <div key={star} className="flex items-center gap-3">
+                            <div className="flex items-center w-10">
+                              <span className="text-sm font-medium text-gray-700">★{star}</span>
+                            </div>
+                            <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
+                            </div>
+                            <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
-              <p className="text-sm text-gray-500">
-                {product?.total_reviews ? product.total_reviews : 128} reviews
-              </p>
-            </div>
+                  </div>
 
-            {/* Rating breakdown (keep your static version or wire to backend later) */}
-            <div className="flex-1 space-y-3">
-              {[
-                { star: 5, percent: 90, count: 115 },
-                { star: 4, percent: 7, count: 9 },
-                { star: 3, percent: 2, count: 3 },
-                { star: 2, percent: 1, count: 1 },
-                { star: 1, percent: 0, count: 0 },
-              ].map(({ star, percent, count }) => (
-                <div key={star} className="flex items-center gap-3">
-                  <div className="flex items-center w-10">
-                    <span className="text-sm font-medium text-gray-700">★{star}</span>
-                  </div>
-                  <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
-                  </div>
-                  <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
-                </div>
-              ))}
-            </div>
+                  {/* If you later list individual reviews, render them here */}
+                  {/* <div className="space-y-4"> ... </div> */}
+                </section>
+              </>
+            )}
           </div>
-        </div>
-
-        {/* If you later list individual reviews, render them here */}
-        {/* <div className="space-y-4"> ... </div> */}
-      </section>
-    </>
-  )}
-</div>
 
           {/* Cart Total Section removed per requirement: modal should not show checkout CTA */}
           {/* Sticky bottom section inside the white card to attach Add to cart */}
