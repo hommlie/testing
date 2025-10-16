@@ -470,7 +470,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
       </Helmet>
       <div className="container px-4 mt-5">
         <div className="mt-5">
-          <nav className="hidden sm:block flex space-x-2 text-gray-500 text-sm mb-8">
+          <nav className="hidden sm:block flex space-x-1 text-gray-500 text-xs">
             <a href="/" className="text-blue-500">
               Home
             </a>
@@ -498,9 +498,9 @@ const handleQtyUpdate = async (cartId, newQty) => {
                 className="block sm:hidden w-full h-[150px] rounded-lg opacity-40"
               />
           )}
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Left Sidebar */}
-            <div className="lg:w-1/4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-8">
+            {/* Left Sidebar (span two rows so it stays beside banner + content) */}
+            <div className="lg:col-span-1 lg:row-span-2">
               <div className="sticky top-44 transition-all duration-300 ease-in-out">
                 {/* Title and Reviews - OUTSIDE the section box */}
                 <div className="space-y-1">
@@ -566,22 +566,26 @@ const handleQtyUpdate = async (cartId, newQty) => {
               </div>
             </div>
 
-            {/* Main Content */}
-            <div className="lg:w-1/2 -mt-4">
+            {/* Banner spanning main + center (desktop) - row 1 */}
+            <div className="hidden sm:block lg:col-start-2 lg:col-span-3 lg:row-start-1">
+              {innerSubCategoryData?.subcategory_banner ? (
+                <img
+                  src={innerSubCategoryData?.subcategory_banner}
+                  alt={innerSubCategoryData?.innersubcategory_name}
+                  className="w-full h-[160px] md:h-[290px] rounded-lg -mt-4 border border-black"
+                />
+              ) : (
+                <img
+                  src={NoImage}
+                  alt=""
+                  className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
+                />
+              )}
+            </div>
+
+            {/* Main Content - start on row 2 under the banner */}
+            <div className="lg:col-start-2 lg:col-span-2 lg:row-start-2">
               <div className="space-y-6">
-                {innerSubCategoryData?.subcategory_banner ? (
-                  <img
-                    src={innerSubCategoryData?.subcategory_banner}
-                    alt={innerSubCategoryData?.innersubcategory_name}
-                    className="hidden sm:block w-full h-[150px] md:h-[300px] rounded-lg mt-4 border border-black"
-                  />
-                ) : (
-                  <img
-                    src={NoImage}
-                    alt=""
-                    className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
-                  />
-                )}
 
                 {innerSubCategoryData?.products?.map((product, index) => (
                   <section
@@ -778,9 +782,9 @@ const handleQtyUpdate = async (cartId, newQty) => {
               </div>
             </div>
 
-            {/* Right Cart Section */}
-            <div className="lg:w-1/4">
-              <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
+            {/* Right Cart Section (will appear beside main content on row 2) */}
+            <div className="lg:col-start-4 lg:col-span-1 lg:row-start-2">
+              <div className="sticky h-fit top-8 transition-all duration-300 ease-in-out">
                 <CartSection
                   cart={cart}
                   onUpdateQty={handleQtyUpdate}

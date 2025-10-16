@@ -31,7 +31,7 @@ export default function ShareButton() {
       {/* Back Button (Top-Left) */}
       <button
         onClick={handleBack}
-        className="absolute top-7 left-2 bg-white text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
+        className="absolute top-7 left-2 text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
       >
         <FaArrowLeft size={20} />
       </button>
@@ -39,7 +39,7 @@ export default function ShareButton() {
       {/* Share Button (Top-Right) */}
       <button
         onClick={handleShare}
-        className="absolute top-7 right-2 bg-white text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
+        className="absolute top-7 right-2 text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
       >
         <FaShareAlt size={20} />
       </button>

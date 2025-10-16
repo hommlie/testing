@@ -340,14 +340,6 @@ const ProductDetailModal = ({
   const variationRefs = useRef({});
   const navigate = useNavigate();
 
-  // Local mode allows switching inside the modal from 'view' -> 'add'
-  const [localMode, setLocalMode] = useState(mode);
-
-  // Keep localMode in sync when parent changes the mode prop
-  useEffect(() => {
-    setLocalMode(mode);
-  }, [mode]);
-
   const notify = useToast();
   const successNotify = (success) => notify(success, "success");
   const errorNotify = (error) => notify(error, "error");
@@ -580,7 +572,7 @@ const ProductDetailModal = ({
   if (!isOpen) return null;
 
   const tabs =
-    localMode === "add"
+    mode === "add"
       ? [
           // In 'add' mode we only need the variations/options (kept under 'details')
           { id: "details", label: "Options" },
@@ -593,7 +585,7 @@ const ProductDetailModal = ({
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4 relative">
+        <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
           {/* Header Section */}
           <div className="sticky top-0 bg-white p-4 border-b z-10">
             <div className="flex justify-between items-center">
@@ -654,7 +646,7 @@ const ProductDetailModal = ({
           {/* Main Content */}
 <div className="p-6">
   {/* ADD MODE: show ONLY the options (variations/BHK cards) */}
-  {localMode === "add" && (
+  {mode === "add" && (
     <section className="space-y-5 my-0">
       {displayedAttributes?.map((attribute) => (
         <div key={attribute.attribute_id} className="space-y-4">
@@ -705,9 +697,10 @@ const ProductDetailModal = ({
   )}
 
   {/* VIEW MODE: show Details FIRST, then Reviews BELOW (no tabs) */}
-  {localMode !== "add" && (
+  {mode !== "add" && (
     <>
       <section className="space-y-5 my-0">
+        {/* optional title/one-attribute preface you already have */}
         {/* Description / Details */}
         <div
           className="prose max-w-none"
@@ -784,33 +777,9 @@ const ProductDetailModal = ({
 </div>
 
           {/* Cart Total Section removed per requirement: modal should not show checkout CTA */}
-          {/* Sticky bottom section inside the white card to attach Add to cart */}
-          {localMode === "view" && displayedAttributes?.length === 1 && (
-            <div className="sticky bottom-0 left-0 right-0 bg-white border-t p-4 z-10">
-              <div className="max-w-7xl mx-auto flex justify-end">
-                <button
-                  className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 shadow-lg"
-                  onClick={() => {
-                    // switch modal to add mode to reveal BHK cards inside the same card
-                    setLocalMode("add");
-                    const attrId = displayedAttributes[0].attribute_id;
-                    const container = variationRefs.current[attrId];
-                    if (container) {
-                      setTimeout(() => {
-                        container.scrollTo({ left: 0, behavior: "smooth" });
-                      }, 120);
-                    }
-                  }}
-                >
-                  Add to cart
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Bottom-right Add to cart button shown only when modal opened in 'view' and a single attribute is displayed */}
       {isInspectionModalOpen && (
         <InspectionModal
           setIsInspectionModalOpen={setIsInspectionModalOpen}
