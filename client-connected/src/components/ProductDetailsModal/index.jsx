@@ -654,7 +654,7 @@ const ProductDetailModal = ({
           
           <div className="p-6">
             {/* ADD MODE: show ONLY the options (variations/BHK cards) */}
-            {/* {localMode === "add" && (
+            {localMode === "add" && (
               <section className="space-y-5 my-0">
                 {displayedAttributes?.map((attribute) => (
                   <div key={attribute.attribute_id} className="space-y-4">
@@ -702,7 +702,7 @@ const ProductDetailModal = ({
                   </div>
                 ))}
               </section>
-            )} */}
+            )}
 
             {/* VIEW MODE: show Details FIRST, then Reviews BELOW (no tabs) */}
             {localMode !== "add" && (
