@@ -621,7 +621,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                             {/* LEFT (desktop): Image → Specs → Actions */}
                             <div className="md:w-72 w-full md:shrink-0">
                               {/* Image (bigger/clearer on desktop) */}
-                              <div className="relative w-full h-36 md:h-48">
+                              <div className="relative w-full h-36 md:h-48 -mt-6">
                                 <img
                                   src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
                                   alt={product.product_name}
