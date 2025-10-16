@@ -1644,7 +1644,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                                 </span>
                               </div>
                               <div className="flex items-center mb-2">
-                                {[1, 2, 3, 4, 5].map((star, index) => {
+                                {[1].map((star, index) => {
                                   if (index != ratting?.ratting) {
                                     return (
                                       <svg

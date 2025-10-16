@@ -30,12 +30,14 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-            <Star className="w-2 md:w-4 h-2 md:h-4 text-gray-300" />
-            <div
+           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+             <Star className="w-3 h-3 text-white" fill="currentColor" />
+           </span>
+           <div
               className="absolute inset-0 overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
             >
-              <Star className="w-2 md:w-4 h-2 md:h-4 text-yellow-400 fill-current absolute top-0 left-0" />
+              
             </div>
           </div>
         );
@@ -572,7 +574,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                 <img
                   src={innerSubCategoryData?.subcategory_banner}
                   alt={innerSubCategoryData?.innersubcategory_name}
-                  className="w-full h-[160px] md:h-[290px] rounded-lg -mt-4 border border-black"
+                  className="w-full h-[160px] md:h-[295px] rounded-lg -mt-4 border border-black"
                 />
               ) : (
                 <img

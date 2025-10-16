@@ -55,7 +55,7 @@ const ServiceGrid = () => {
       { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
       { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
     ],
-    "Mosquito & Safety Net": [
+    "Safety Net": [
       { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "/subcategory/mosquito-mesh-services-in-bangalore" },
       { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "/subcategory/mosquito-mesh-door-services-in-bangalore" },
       { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "/subcategory/mosquito-net-for-windows-in-bangalore" },

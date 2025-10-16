@@ -33,12 +33,13 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-            <Star className="w-4 h-4 text-gray-300" />
+           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+              <Star className="w-3 h-3 text-white" fill="currentColor" />
+            </span>
             <div
               className="absolute inset-0 overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
             >
-              <Star className="w-4 h-4 text-yellow-400 fill-current absolute top-0 left-0" />
             </div>
           </div>
         );
@@ -727,7 +728,7 @@ const ProductDetailModal = ({
                 {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
               </span>
               <div className="flex items-center">
-                {[1, 2, 3, 4, 5].map((star) => {
+                {[1].map((star) => {
                   const score = product?.rating ? Number(product.rating) : 4.9;
                   const isFilled = star <= Math.floor(score);
                   const isPartial = star === Math.ceil(score) && !isFilled;
@@ -735,15 +736,9 @@ const ProductDetailModal = ({
 
                   return (
                     <div key={star} className="relative">
-                      <Star className="w-5 h-5 text-gray-300" />
-                      {(isFilled || isPartial) && (
-                        <div
-                          className="absolute inset-0 overflow-hidden"
-                          style={{ width: isFilled ? "100%" : `${partialFill}%` }}
-                        >
-                          <Star className="w-5 h-5 text-yellow-400 fill-current absolute top-0 left-0" />
-                        </div>
-                      )}
+                       <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+                          <Star className="w-3 h-3 text-white" fill="currentColor" />
+                        </span>
                     </div>
                   );
                 })}
