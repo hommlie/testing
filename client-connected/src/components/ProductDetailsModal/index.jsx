@@ -711,7 +711,7 @@ const ProductDetailModal = ({
                   {/* Description / Details */}
                   <div
                     className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: product?.description }}
+                    dangerouslySetInnerHTML={{ __html: product?.service_details}}
                   />
                 </section>
 

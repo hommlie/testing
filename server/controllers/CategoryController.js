@@ -439,6 +439,7 @@ exports.getCleaningSubcategory = async (req, res) => {
         "cat_id",
         "discounted_price",
         "description",
+        "service_details",
         "tags",
         "product_qty",
         "is_variation",

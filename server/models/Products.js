@@ -55,12 +55,18 @@ Product.init(
       allowNull: false,
     },
     brand: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING,  
     },
     description: {
       type: DataTypes.TEXT("long"),
       allowNull: false,
     },
+
+    service_details: {
+      type: DataTypes.TEXT("long"),
+      allowNull: false,
+    },
+
     tags: {
       type: DataTypes.TEXT,
     },
