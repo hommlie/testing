@@ -593,9 +593,10 @@ const handleQtyUpdate = async (cartId, newQty) => {
                   <section
                     key={product.id}
                     ref={(el) => (productRefs.current[index] = el)}
-                    className="bg-white rounded-lg p-6 space-y-6 shadow scroll-mt-4 border border-black"
+                    className="bg-white rounded-lg p-4 shadow scroll-mt-2 border border-black"
                   >
-                    <h3 className="text-base md:text-2xl font-semibold">
+                    {/* Desktop and tablet: show title in its original place; hide on small screens */}
+                    <h3 className="hidden sm:block text-base md:text-2xl font-semibold">
                       {product.product_name}
                     </h3>
                     <div className="divide-y">
@@ -623,12 +624,18 @@ const handleQtyUpdate = async (cartId, newQty) => {
                             {/* LEFT (desktop): Image → Specs → Actions */}
                             <div className="md:w-72 w-full md:shrink-0">
                               {/* Image (bigger/clearer on desktop) */}
-                              <div className="relative w-full h-36 md:h-48 -mt-2">
+                              <div className="relative w-full h-40 md:h-48 sm:-mt-2">
                                 <img
                                   src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
                                   alt={product.product_name}
                                   className="w-full h-full rounded-lg object-cover border"
                                 />
+                              </div>
+                              {/* Mobile-only: show the product title below the image */}
+                              <div className="block md:hidden mt-2 ">
+                                <h3 className="text-base font-semibold text-center">
+                                  {product.product_name}
+                                </h3>
                               </div>
                             </div>
 
