@@ -102,9 +102,7 @@ export default function QuickHeroSection() {
       <section
         ref={cardsRef}
         className="text-black min-h-[650px] pt-[15px] pb-[120px] relative z-0"
-        style={{
-          background: "linear-gradient(180deg, #F5D8CC 0%, #E0E5F7 100%)"
-        }}
+        
       >
         <div className="flex flex-col items-center px-4">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3">

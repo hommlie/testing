@@ -708,9 +708,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
 
   return (
     <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth"
-    style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
+   >
              <ShareButton />
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

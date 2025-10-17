@@ -556,10 +556,7 @@ export default function AddtoCart() {
       
     >
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12"
-      style={{
-        background:
-          "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}>
+      >
         {cart.length === 0 ? (
           <div className="flex justify-center items-center min-h-[50vh] -mt-5">
             <div className="p-8 flex flex-col items-center">

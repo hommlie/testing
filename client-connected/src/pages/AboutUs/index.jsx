@@ -11,9 +11,7 @@ export default function AboutUs() {
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl" 
-       style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+      
     >
       {/* SEO Meta and Canonical */}
       <Helmet>
