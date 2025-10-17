@@ -459,9 +459,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
 };
 
   return (
-    <main className="md:max-w-7xl w-full" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
+    <main className="md:max-w-7xl w-full">
       <Helmet>
         <title>{innerSubCategoryData?.meta_title || "Category Page"}</title>
         <meta
@@ -491,7 +489,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
               <img
                 src={innerSubCategoryData?.subcategory_banner}
                 alt={innerSubCategoryData?.innersubcategory_name}
-                className="block sm:hidden w-full h-[200px] rounded-lg mb-5"
+                className="block sm:hidden w-full h-[240px] rounded-lg mb-5"
               />
             ) : (
               <img
@@ -529,7 +527,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                 <section className="bg-white rounded-lg p-4 space-y-4 shadow mt-2 border border-black">
                   
                   {/* Select a service heading - Centered */}
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-start items-center">
                     <span className="text-sm font-medium text-gray-600">Select a service</span>
                   </div>
 
@@ -596,7 +594,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                     className="bg-white rounded-lg p-4 shadow scroll-mt-2 border border-black"
                   >
                     {/* Desktop and tablet: show title in its original place; hide on small screens */}
-                    <h3 className="hidden sm:block text-base md:text-2xl font-semibold">
+                    <h3 className="text-base md:text-2xl font-semibold">
                       {product.product_name}
                     </h3>
                     <div className="divide-y">
@@ -631,19 +629,13 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                   className="w-full h-full rounded-lg object-cover border"
                                 />
                               </div>
-                              {/* Mobile-only: show the product title below the image */}
-                              <div className="block md:hidden mt-2 ">
-                                <h3 className="text-base font-semibold text-center">
-                                  {product.product_name}
-                                </h3>
-                              </div>
                             </div>
 
                             {/* RIGHT: Title, rating, price (desktop) + mobile content unchanged */}
                             <div className="flex-1 mt-4 md:mt-0">
                               {/* Header: service name, rating, price */}
                               <div className="space-y-3">
-                                <h3 className="text-sm md:text-lg font-medium">
+                                <h3 className="text-l sm:text-xs md:text-base flex gap-2 items-center font-semibold">
                                   {attribute.attribute_name}
                                 </h3>
 

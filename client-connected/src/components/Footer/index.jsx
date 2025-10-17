@@ -26,9 +26,7 @@ export default function Footer({
   const locationArray = locations ? locations.split("|") : [];
 
   return (
-    <footer className="footer mt-0 z-10 px-2 md:px-10 pb-4 sm:max-w-7xl sm:mx-auto" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
+    <footer className="footer mt-0 z-10 px-2 md:px-10 pb-4 sm:max-w-7xl sm:mx-auto">
       <div className="container-sm max-w-7xl   mx-auto px-5 md:px-10 space-y-8">
         <div className="" style={{ border: "1px dotted #E5E7EB" }}></div>
         <div className="flex flex-col lg:flex-row justify-between gap-8">

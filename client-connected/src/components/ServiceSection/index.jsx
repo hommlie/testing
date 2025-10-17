@@ -106,18 +106,16 @@ const ServiceSection = ({ categories }) => {
 
   
   const handleCategorySelect = (category) => {
-  if (category.slug === "disinfection-services") {
-    window.location.href = `${config.VITE_BASE_URL}/subcategory/disinfection-services-near-you-in-bangalore`; // Replace with your actual URL
-    return;
-  }
+    // Keep the special redirect for disinfection-services only
+    if (category.slug === "disinfection-services") {
+      window.location.href = `${config.VITE_BASE_URL}/subcategory/disinfection-services-near-you-in-bangalore`;
+      return;
+    }
 
-  if (category.is_form === 1) {
-    navigate(`${config.VITE_BASE_URL}/${category.slug}`);
-    return;
-  }
-
-  setSelectedCategory(category.id);
-};
+    // For categories like bird-control do not navigate away even if is_form is set.
+    // Instead, show the category in-page by updating local state.
+    setSelectedCategory(category.id);
+  };
 
 
   const formatDescription = (desc) =>
@@ -371,9 +369,10 @@ const ServiceSection = ({ categories }) => {
 
   // ProductCard
   const ProductCard = ({ product, isSelected, onClick }) => {
-    const selectedAttr = selectedAttribute
-      ? product.attributes?.find((attr) => attr.id === selectedAttribute)
-      : product.attributes?.[0];
+    // If the globally selectedAttribute belongs to this product, use it.
+    // Otherwise, fall back to this product's first attribute so the card
+    // displays its own data even when not selected.
+    const selectedAttr = product.attributes?.find((attr) => attr.id === selectedAttribute) || product.attributes?.[0];
 
     const matchedVariation =
       selectedAttr?.variations?.find((v) => v.variation === selectedBhk) ||
@@ -497,7 +496,7 @@ const ServiceSection = ({ categories }) => {
     <>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica]">
         {/* Request a Callback Button (visible on all devices) */}
-        <div className="mb-5 -mt-9 sm:-mt-0 flex justify-center">
+        <div className="mb-5 -mt-20 sm:-mt-0 flex justify-center">
           <button
             className="bg-[#15803d] text-white px-6 py-2 rounded-md hover:bg-[#52852d] transition"
             onClick={() => setIsCallbackOpen(true)}
@@ -534,43 +533,32 @@ const ServiceSection = ({ categories }) => {
           </div>
         </div>
 
-        <div className="pt-2 mb-8 max-w-4xl mx-auto">
+          <div className="pt-2 mb-8 max-w-4xl mx-auto">
+          {/* Responsive layout:
+              - Desktop (md+): 3 columns: Service Type | Property Size | Service Variant
+              - Mobile (sm): 2 columns: Service Type | Property Size (side-by-side)
+                Variant will appear as a full-width row below occupying both columns
+          */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="hidden sm:block pl-2 block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+            <div className="col-span-1 md:col-span-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
               <Dropdown label="Select Subcategory" value={selectedSubCategory} options={getCurrentSubcategories()} onChange={setSelectedSubCategory} disabled={!selectedCategory} />
             </div>
-            <div className="flex gap-2 md:hidden w-full">
-              <div className="flex-1">
-                <Dropdown
-                  label=""
-                  value={selectedBhk}
-                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))} 
-                  onChange={setSelectedBhk}
-                  disabled={!selectedProduct}
-                />
-              </div>
-              <div className="flex-1">
-                <Dropdown label="" value={selectedAttribute} options={getCurrentAttributes()} onChange={setSelectedAttribute} disabled={!selectedProduct} showRecommended />
-              </div>
-            </div>
-            <div className="hidden md:block relative z-10">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Property Size
-              </label>
+
+            {/* Property Size (BHK) - shown beside Service Type on mobile and in second column on desktop */}
+            <div className="col-span-1 md:col-span-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Property Size</label>
               <Dropdown
-                label="Select Property Size"
+                label="Select BHK"
                 value={selectedBhk}
-                options={getVariationOptions().map((variation) => ({
-                  id: variation,
-                  attribute: variation,
-                  subcategory_name: variation,
-                }))}
+                options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
                 onChange={setSelectedBhk}
                 disabled={!selectedProduct}
               />
             </div>
-            <div className="hidden md:block">
+
+            {/* Service Variant - on mobile this will move to the next row and span two columns; on desktop it sits in the third column */}
+            <div className="col-span-1 md:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Variant</label>
               <Dropdown label="Select Variant" value={selectedAttribute} options={getCurrentAttributes()} onChange={setSelectedAttribute} disabled={!selectedProduct} showRecommended />
             </div>
