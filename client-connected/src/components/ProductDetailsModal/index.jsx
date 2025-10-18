@@ -501,6 +501,27 @@ const ProductDetailModal = ({
     }
   };
 
+  // Helper: wrap iframes/videos in a responsive container to avoid overflow on mobile
+  const prepareServiceDetailsHtml = (html) => {
+    if (!html) return "";
+    try {
+      // Wrap iframes and video tags with a div.responsive-embed
+      let transformed = html
+        .replace(/<iframe/gi, '<div class="responsive-embed"><iframe')
+        .replace(/<\/iframe>/gi, '</iframe></div>')
+        .replace(/<video/gi, '<div class="responsive-embed"><video')
+        .replace(/<\/video>/gi, '</video></div>');
+
+      // Also ensure images don't have fixed widths that overflow
+      transformed = transformed.replace(/width=\"?\d+\"?/gi, '');
+
+      return transformed;
+    } catch (e) {
+      console.error('Error preparing service details html', e);
+      return html;
+    }
+  };
+
   const handleRemoveFromCart = async (cartId) => {
     const jwtToken = Cookies.get("HommlieUserjwtToken");
     const user = jwtDecode(jwtToken);
@@ -595,6 +616,25 @@ const ProductDetailModal = ({
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4 relative">
+          {/* Scoped styles for modal content: keep videos/iframes responsive on small screens */}
+          <style>{`
+            /* Ensure embedded media fits inside the modal on small screens */
+            .service-details-html { width: 100%; }
+            .service-details-html iframe,
+            .service-details-html video,
+            .service-details-html img { max-width: 100% !important; height: auto !important; }
+
+            /* For iframes (youtube etc) maintain aspect ratio and avoid overflow */
+            .service-details-html .responsive-embed { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+            .service-details-html .responsive-embed iframe,
+            .service-details-html .responsive-embed video { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
+
+            /* Reduce vertical spacing slightly on small screens */
+            @media (max-width: 640px) {
+              .space-y-5 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(1rem * 0.6); margin-bottom: 0; }
+              .prose { font-size: 0.95rem; }
+            }
+          `}</style>
           {/* Header Section */}
           <div className="sticky top-0 bg-white p-4 border-b z-10">
             <div className="flex justify-between items-center">
@@ -707,12 +747,22 @@ const ProductDetailModal = ({
             {/* VIEW MODE: show Details FIRST, then Reviews BELOW (no tabs) */}
             {localMode !== "add" && (
               <>
-                <section className="space-y-5">
+                {/*
+                  Wrap the service details in a responsive container. We add a small
+                  mobile-specific override: reduce vertical spacing (space-y-5 -> space-y-3 on sm)
+                  and ensure any embedded <iframe>, <video>, or <img> inside the HTML
+                  scales to the container using max-width and aspect-ratio handling.
+                */}
+                <section className="space-y-5 sm:space-y-4">
                   {/* Description / Details */}
-                  <div
-                    className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: product?.service_details}}
-                  />
+                  <div className="prose max-w-none">
+                    <div className="service-details-html">
+                      <div
+                        className="service-details-content"
+                        dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
+                      />
+                    </div>
+                  </div>
                 </section>
 
                 {/* Reviews moved here, directly below details */}

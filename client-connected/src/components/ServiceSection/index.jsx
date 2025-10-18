@@ -494,7 +494,7 @@ const ServiceSection = ({ categories }) => {
 
   return (
     <>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica]">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica] bg-white rounded-xl shadow-md">
         {/* Request a Callback Button (visible on all devices) */}
         <div className="mb-5 -mt-20 sm:-mt-0 flex justify-center">
           <button

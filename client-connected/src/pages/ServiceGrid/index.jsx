@@ -41,12 +41,12 @@ const ServiceGrid = () => {
   // Removed "Scrap" details from here
   const serviceData = {
     "Pest Control": [
-      { name: "Ant Services & Roach X Gel Treatment", image: "/images/genralpestcontrol.webp", url: "/subcategory/general-pest-control" },
-      { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
-      { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
-      { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
-      { name: "Mosquito Control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
-      { name: "Termite Treatment", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
+      { name: "", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
+      { name: "", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
+      { name: "", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
+      { name: "", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
+      { name: "", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
+      { name: "", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
       // { name: "Flies Management", image: "/images/fliesicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
       // { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
       // { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
@@ -94,7 +94,7 @@ const ServiceGrid = () => {
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[80vh] overflow-y-auto"
+          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[66vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
