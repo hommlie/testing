@@ -15,6 +15,7 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
   const [coupons, setCoupons] = useState([]);
   const [enableLottie, setEnableLottie] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   // derive user id from stored decoded token
   const storedUser = (() => {
@@ -93,6 +94,7 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
 
       if (resp.data.status === 1 && resp.data.data) {
         const srv = resp.data.data;
+        setErrorMsg(null);
 
         // If backend sent a value (flat amount), use it; else compute here
         let base = srv.calculatedDiscount;
@@ -109,10 +111,13 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
         const discount = clampDiscount(base);
         applySelectedCoupon({ ...srv, calculatedDiscount: discount });
       } else {
-        console.log(resp.data.message || "Invalid or ineligible coupon");
+        const msg = resp.data.message || "Invalid or ineligible coupon";
+        setErrorMsg(msg);
+        return; // do not proceed
       }
     } catch (err) {
       console.log("applycoupons error:", err);
+      setErrorMsg("Failed to validate coupon. Please try again.");
     }
   };
 
@@ -182,6 +187,12 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
             APPLY
           </button>
         </div>
+
+        {errorMsg && (
+          <div className="px-4">
+            <p className="text-sm text-red-500">{errorMsg}</p>
+          </div>
+        )}
 
         {/* List of coupons from server */}
         <div className="flex flex-col gap-4 justify-center w-full px-4 my-2">

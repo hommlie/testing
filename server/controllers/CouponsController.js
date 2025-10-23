@@ -316,11 +316,19 @@ exports.applycoupons = async (req, res) => {
     }
 
     // Usage gating by quantity/times (keep existing semantics)
+    // If coupon.quantity == 1 it means the coupon is limited. `times` is
+    // how many times it may be used per user (or globally depending on previous semantics).
+    // Enforce per-user usage: if the user already used the coupon times or more, reject.
     if (coupon.quantity == 1) {
-      if (orderCountWithThisCoupon > coupon.times) {
+      // If times is null/undefined, treat as single-use (times=1)
+      const allowedTimes = Number.isFinite(Number(coupon.times))
+        ? Number(coupon.times)
+        : 1;
+
+      if (orderCountWithThisCoupon >= allowedTimes) {
         return res.status(200).json({
           status: 0,
-          message: "Coupon usage limit has been reached.",
+          message: "You have already used this coupon the maximum number of times.",
         });
       }
     }
