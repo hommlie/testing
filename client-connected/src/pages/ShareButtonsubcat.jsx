@@ -29,20 +29,20 @@ export default function ShareButton() {
   return (
     <>
       {/* Back Button (Top-Left) */}
-      <button
+      {/* <button
         onClick={handleBack}
         className="absolute top-36 left-5 text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
       >
         <FaArrowLeft size={20} />
-      </button>
+      </button> */}
 
       {/* Share Button (Top-Right) */}
-      <button
+      {/* <button
         onClick={handleShare}
         className="absolute top-36 right-2 right-5 text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
       >
         <FaShareAlt size={20} />
-      </button>
+      </button> */}
     </>
   );
 }

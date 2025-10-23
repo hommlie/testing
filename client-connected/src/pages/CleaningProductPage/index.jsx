@@ -485,19 +485,19 @@ const handleQtyUpdate = async (cartId, newQty) => {
             <span>{innerSubCategoryData?.subcategory_name}</span>
           </nav>
           {/* //mobile view image  */}
-          {innerSubCategoryData?.subcategory_banner ? (
+          {/* {innerSubCategoryData?.subcategory_banner ? (
               <img
                 src={innerSubCategoryData?.subcategory_banner}
                 alt={innerSubCategoryData?.innersubcategory_name}
-                className="block sm:hidden w-full h-[240px] rounded-lg mb-5"
+                className="block sm:hidden hidden md:flex w-full h-[240px] rounded-lg mb-5"
               />
             ) : (
               <img
                 src={NoImage}
                 alt=""
-                className="block sm:hidden w-full h-[150px] rounded-lg opacity-40"
+                className="block sm:hidden hidden md:flex w-full h-[150px] rounded-lg opacity-40"
               />
-          )}
+          )} */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-8">
             {/* Left Sidebar (span two rows so it stays beside banner + content) */}
             <div className="lg:col-span-1 lg:row-span-2">
@@ -622,7 +622,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                             {/* LEFT (desktop): Image → Specs → Actions */}
                             <div className="md:w-72 w-full md:shrink-0">
                               {/* Image (bigger/clearer on desktop) */}
-                              <div className="relative w-full h-40 md:h-48 sm:-mt-2">
+                              <div className="relative w-full h-46 md:h-48 sm:-mt-2">
                                 <img
                                   src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
                                   alt={product.product_name}

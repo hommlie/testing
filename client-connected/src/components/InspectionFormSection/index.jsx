@@ -107,44 +107,43 @@ const InspectionFormSection = () => {
   };
 
   return (
-    <div className="w-[95vw] sm:max-w-6xl mx-auto px-2 sm:px-0 py-2 sm:ml-5 -ml-2">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="w-full sm:max-w-6xl mx-auto px-4 sm:px-0 py-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Contact Info */}
-        <div className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            {/* Left - Contact Info */}
-            <div className="w-full md:w-1/2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 whitespace-nowrap">
+        <div className="bg-white p-4 rounded-2xl shadow-md border border-gray-100">
+          <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6">
+            <div className="w-full">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                 Schedule Your Inspection
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 mb-6">
+              <p className="text-sm sm:text-base text-gray-600 mb-4">
                 Get professional help for your home or business
               </p>
-              <div className="space-y-6 text-sm">
-                <div className="flex items-start gap-3">
+              <div className="space-y-4 text-sm">
+                <div className="flex items-center gap-3">
                   <MdOutlineLocalPostOffice className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
                   <div>
-                    <h3 className="text-gray-500">Email</h3>
-                    <p className="text-gray-800 font-medium">reach@hommlie.com</p>
+                    <h3 className="text-gray-500 text-xs">Email</h3>
+                    <p className="text-gray-800 font-medium text-sm">reach@hommlie.com</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-center gap-3">
                   <IoCallOutline className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
                   <div>
-                    <h3 className="text-gray-500">Phone</h3>
-                    <p className="text-gray-800 font-medium">+91-6363865658</p>
+                    <h3 className="text-gray-500 text-xs">Phone</h3>
+                    <p className="text-gray-800 font-medium text-sm">+91-6363865658</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <IoBusiness className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
                   <div>
-                    <h3 className="text-gray-500">Our Offices</h3>
+                    <h3 className="text-gray-500 text-xs">Our Offices</h3>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map(
                         (city) => (
                           <span
                             key={city}
-                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm"
+                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
                           >
                             {city}
                           </span>
@@ -156,7 +155,8 @@ const InspectionFormSection = () => {
               </div>
             </div>
 
-            <div className="w-full md:w-1/2 flex justify-center items-center">
+            {/* Image hidden on mobile */}
+            <div className="hidden md:flex w-full md:w-1/2 justify-center items-center">
               <div className="w-full sm:w-96 md:w-[450px] lg:w-[600px]">
                 <img
                   src="/images/jeani.webp"
@@ -169,12 +169,13 @@ const InspectionFormSection = () => {
         </div>
 
         {/* Booking Form */}
-        <div className="bg-white mr-0 p-6 sm:p-8 rounded-2xl shadow-sm border ">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-md border">
+          {/* Step Indicator */}
           <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
             {[1, 2].map((s, i) => (
               <React.Fragment key={s}>
                 <div
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold ${
                     step === s
                       ? "bg-green-700 text-white"
                       : "bg-gray-200 text-gray-600"
@@ -182,39 +183,30 @@ const InspectionFormSection = () => {
                 >
                   {s}
                 </div>
-                {i < 1 && (
-                  <div
-                    className={`h-1 w-8 ${
-                      step > s ? "bg-black" : "bg-gray-300"
-                    }`}
-                  />
-                )}
+                {i < 1 && <div className={`h-1 w-6 ${step > s ? "bg-black" : "bg-gray-300"}`} />}
               </React.Fragment>
             ))}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 text-sm">
+          <form onSubmit={handleSubmit} className="space-y-4 text-sm">
             {step === 1 && (
               <>
                 <div>
-                  <label className="block mb-1">Full Name *</label>
+                  <label className="block mb-1 text-sm font-medium">Full Name *</label>
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className={`w-full px-3 py-2 border rounded-lg ${
                       errors.name ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter Your Name"
                   />
-                  {errors.name && (
-                    <p className="text-xs text-red-500 mt-1">{errors.name}</p>
-                  )}
+                  {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                 </div>
+
                 <div>
-                  <label className="block mb-1">Phone Number *</label>
+                  <label className="block mb-1 text-sm font-medium">Phone Number *</label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-100 text-gray-600">
                       +91
@@ -223,7 +215,6 @@ const InspectionFormSection = () => {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => {
-                        // Only digits, max 10
                         const digits = e.target.value.replace(/\D/g, "");
                         if (digits.length <= 10) {
                           setFormData({ ...formData, phone: digits });
@@ -236,20 +227,17 @@ const InspectionFormSection = () => {
                       placeholder="9876543210"
                     />
                   </div>
-                  {errors.phone && (
-                    <p className="text-xs text-red-500 mt-1">{errors.phone}</p>
-                  )}
+                  {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
                 </div>
+
                 <div>
-                  <label htmlFor="service" className="block mb-1">
+                  <label htmlFor="service" className="block mb-1 text-sm font-medium">
                     Select Service *
                   </label>
                   <select
                     id="service"
                     value={formData.service}
-                    onChange={(e) =>
-                      setFormData({ ...formData, service: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                     className={`w-full px-3 py-2 border rounded-lg ${
                       errors.service ? "border-red-500" : "border-gray-300"
                     }`}
@@ -261,16 +249,13 @@ const InspectionFormSection = () => {
                       </option>
                     ))}
                   </select>
-                  {errors.service && (
-                    <p className="text-xs text-red-500 mt-1">
-                      {errors.service}
-                    </p>
-                  )}
+                  {errors.service && <p className="text-xs text-red-500 mt-1">{errors.service}</p>}
                 </div>
+
                 <button
                   type="button"
                   onClick={() => validateStepOne() && setStep(2)}
-                  className="w-full bg-green-700 text-white py-2 rounded-lg"
+                  className="w-full bg-green-700 text-white py-3 rounded-lg text-sm font-medium"
                 >
                   Continue to Schedule
                 </button>
@@ -280,26 +265,22 @@ const InspectionFormSection = () => {
             {step === 2 && (
               <>
                 <div>
-                  <label className="block mb-1">Address *</label>
+                  <label className="block mb-1 text-sm font-medium">Address *</label>
                   <textarea
                     value={formData.address}
-                    onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     className={`w-full px-3 py-2 border rounded-lg ${
                       errors.address ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter your full address with landmark"
                     rows={3}
                   />
-                  {errors.address && (
-                    <p className="text-xs text-red-500 mt-1">{errors.address}</p>
-                  )}
+                  {errors.address && <p className="text-xs text-red-500 mt-1">{errors.address}</p>}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block mb-1">Date *</label>
+                    <label className="block mb-1 text-sm font-medium">Date *</label>
                     <DatePicker
                       selected={formData.date}
                       onChange={(date) => setFormData({ ...formData, date })}
@@ -308,15 +289,13 @@ const InspectionFormSection = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="timeSlot" className="block mb-1">
+                    <label htmlFor="timeSlot" className="block mb-1 text-sm font-medium">
                       Time Slot *
                     </label>
                     <select
                       id="timeSlot"
                       value={formData.time}
-                      onChange={(e) =>
-                        setFormData({ ...formData, time: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                       className={`w-full px-3 py-2 border rounded-lg ${
                         errors.time ? "border-red-500" : "border-gray-300"
                       }`}
@@ -328,23 +307,22 @@ const InspectionFormSection = () => {
                         </option>
                       ))}
                     </select>
-                    {errors.time && (
-                      <p className="text-xs text-red-500 mt-1">{errors.time}</p>
-                    )}
+                    {errors.time && <p className="text-xs text-red-500 mt-1">{errors.time}</p>}
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-4">
+
+                <div className="flex flex-col sm:flex-row gap-3 mt-2">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="w-full border border-gray-300 py-2 rounded-lg"
+                    className="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-green-700 text-white py-2 rounded-lg disabled:opacity-70"
+                    className="w-full bg-green-700 text-white py-3 rounded-lg text-sm font-medium disabled:opacity-70"
                   >
                     {loading ? "Processing..." : "Confirm Inspection"}
                   </button>
@@ -352,41 +330,42 @@ const InspectionFormSection = () => {
               </>
             )}
           </form>
-
-          {submitted && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md mx-4">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-[#92B775]"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  Booking Inspection Confirmed!
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  We've received your request and will contact you shortly to
-                  confirm the details.
-                </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="w-full bg-[#92B775] text-black py-2 rounded-lg"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Success Modal */}
+      {submitted && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md mx-4">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-[#92B775]"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Booking Inspection Confirmed!
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              We've received your request and will contact you shortly to
+              confirm the details.
+            </p>
+            <button
+              onClick={() => setSubmitted(false)}
+              className="w-full bg-[#92B775] text-black py-3 rounded-lg text-sm font-medium"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
