@@ -112,21 +112,28 @@ const ServiceGrid = () => {
               <a
                 key={index}
                 href={sub.url || '#'}
-                className="flex flex-col items-center text-center p-2 hover:shadow transition rounded-lg"
+                className="flex flex-col items-center text-center p-2 "
               >
-                <div className="border border-black w-24 h-24 sm:w-28 sm:h-28 bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center">
-                  <img
-                    src={sub.image}
-                    alt={sub.name}
-                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
-                  />
+                <div className="flex flex-col items-center group transition-all relative cursor-pointer">
+                  <div className="border bg-[#f8f1dd] w-24 h-24 sm:w-28 sm:h-28 bg-[#f5f5f5] rounded-xl shadow-xl flex items-center justify-center
+                                  group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300 ease-in-out">
+                    <img
+                      src={sub.image}
+                      alt={sub.name}
+                      className="w-20 h-20 sm:w-24 sm:h-24 object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
+                    />
+                  </div>
+                  <h3 className="text-xs mb-1 sm:text-sm font-medium mt-2 text-center">{sub.name}</h3>
+
+                  {/* Sub-card underline hover effect */}
+                  <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
                 </div>
-                <h3 className="text-xs sm:text-sm font-medium mt-2">{sub.name}</h3>
                 {sub.price && <p className="text-xs text-[#52852d] font-bold">{sub.price}</p>}
                 {sub.note && <p className="text-[10px] text-gray-500 leading-tight text-center">{sub.note}</p>}
               </a>
             ))}
           </div>
+          
         </motion.div>
       </motion.div>
     );
@@ -143,27 +150,28 @@ const ServiceGrid = () => {
             <div
               key={service.id}
               onClick={() => handleServiceClick(service.name)}
-              className="flex flex-col items-center group transition-all cursor-pointer relative" // added 'group' and 'relative'
+              className="flex flex-col items-center group transition-all cursor-pointer relative"
             >
-              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center group-hover:shadow-md transition border">
+              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center border 
+                              group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300 ease-in-out">
                 {service.isIconOnly ? (
                   service.icon
                 ) : (
                   <img
                     src={service.image}
                     alt={service.name}
-                    className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain"
+                    className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
                   />
                 )}
               </div>
-              <span className="mt-2 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px] group-hover:decoration-[#035240] group-hover:decoration-2">
+              <span className="mt-2 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
                 {service.name}
               </span>
-              
-              {/* Add underline on hover */}
 
+              {/* Underline hover effect (same as text) */}
               <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
             </div>
+
           ))}
         </div>
       </div>
