@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import LoginModal from "../../components/LoginModal";
 import { useCont } from "../../context/MyContext";
 import { useNavigate, useParams, Link } from "react-router-dom";
@@ -42,6 +42,16 @@ export default function ScrapPrices() {
   const citySlug = slugify(city || "");
   const { user } = useCont();
   const [showLogin, setShowLogin] = useState(false);
+
+  // Ensure we always start in browse mode (step 1) when city changes / page mounts.
+  // This avoids landing directly on the success view (step 5) due to any preserved
+  // state from a previous session or navigation.
+  useEffect(() => {
+    setMode("browse");
+    setStep(1);
+    // Do not clear `selected` here because we want previously added items to remain
+    // visible when the user navigates to the prices page (so their items are shown).
+  }, [city]);
 
   const [activeCat, setActiveCat] = useState("All");
   const [query, setQuery] = useState("");
@@ -822,11 +832,6 @@ function Step5Success({ items, total, pickup, onBookAnother, onTrack }) {
           Track Pickup
         </button> */}
       </div>
-
-      <p className="text-center text-gray-500 text-xs mt-6">
-        This preview is a static UI demo. Integrate backend endpoints to persist bookings,
-        and replace address with a maps/autocomplete input for a production experience.
-      </p>
     </>
   );
 }

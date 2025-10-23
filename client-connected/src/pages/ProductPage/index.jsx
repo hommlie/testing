@@ -707,7 +707,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
   const [isDescOpen, setIsDescOpen] = useState(false);
 
   return (
-    <main className="container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth"
+    <main className="bg-white container mx-auto px-4 sm:px-5 lg:px-6 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth"
    >
              <ShareButton />
       {isLoading ? (

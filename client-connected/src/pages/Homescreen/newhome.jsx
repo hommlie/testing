@@ -36,7 +36,7 @@ import {
   FaEllipsisH 
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
-import photo1 from '../../assets/images/photo1.png';
+import photo1 from '../../assets/images/photo1.jpeg';
 import ServiceSection from "../../components/ServiceSection";
 import BannerDatalider from "../../components/BannerSection";
 import TestimonialCarousel from "../../components/TestimonialCarousel";
@@ -69,6 +69,7 @@ import Scrapmobile from '../Scrapmobile'
 import Refermobile  from '../Refermobile'
 import Roadmap from "../../components/Roadmap";
 import CityServiceLinks from "../CityServiceLinks";
+import HomeForm from "../HomeForm";
 
 
 const HomePage = () => {
@@ -461,7 +462,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   return (
     <div
-      className="sm:max-w-7xl sm:mx-auto bg-cover bg-center bg-no-repeat font-headerFont"
+      className="sm:max-w-7xl sm:mx-auto bg-cover bg-center bg-no-repeat font-headerFont bg-white"
      
     >
       <SchemaMarkup />
@@ -640,7 +641,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
               //   display: "inline-block"
               // }}
             >
-              <Typewriter
+              {/* <Typewriter
                 words={[
                   "Trained & Verified Professionals..",
                   "Available All 365 Days..",
@@ -657,7 +658,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                 typeSpeed={50}
                 deleteSpeed={40}
                 delaySpeed={1500}
-              />
+              /> */}
+              <HomeForm />
             </span>
             </h2>
           </div>

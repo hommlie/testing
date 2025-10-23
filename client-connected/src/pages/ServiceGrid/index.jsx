@@ -41,12 +41,12 @@ const ServiceGrid = () => {
   // Removed "Scrap" details from here
   const serviceData = {
     "Pest Control": [
-      { name: "", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
-      { name: "", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
-      { name: "", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
-      { name: "", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
-      { name: "", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
-      { name: "", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
+      { name: "Cockroach & Ant Gel Treatment", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
+      { name: "Cockroach control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
+      { name: "Bedbugs Treatment", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
+      { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
+      { name: "Mosquito control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
+      { name: "Termite control", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
       // { name: "Flies Management", image: "/images/fliesicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
       // { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
       // { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
@@ -94,7 +94,7 @@ const ServiceGrid = () => {
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[66vh] overflow-y-auto"
+          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-lg p-4 sm:p-6 sm:mb-0 mb-0 h-[60vh] sm:h-[74vh] overflow-y-auto"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
@@ -133,7 +133,7 @@ const ServiceGrid = () => {
   };
 
   return (
-    <div className="p-4 mb-0 bg-cover bg-center bg-no-repeat mt-4">
+    <div className="p-4 mb-0 bg-cover bg-center bg-no-repeat">
       <h1 className="text-lg sm:text-2xl font-medium text-black sm:ml-2 -ml-4 sm:mb-6 -mt-2 mb-2 sm:mb-0 sm:-mt-5">
         Home services at your doorstep
       </h1>
@@ -143,9 +143,9 @@ const ServiceGrid = () => {
             <div
               key={service.id}
               onClick={() => handleServiceClick(service.name)}
-              className="flex flex-col items-center group transition-all cursor-pointer"
+              className="flex flex-col items-center group transition-all cursor-pointer relative" // added 'group' and 'relative'
             >
-              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f5f5f5] rounded-xl shadow flex items-center justify-center group-hover:shadow-md transition border border-black">
+              <div className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center group-hover:shadow-md transition border">
                 {service.isIconOnly ? (
                   service.icon
                 ) : (
@@ -156,9 +156,13 @@ const ServiceGrid = () => {
                   />
                 )}
               </div>
-              <span className="mt-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
+              <span className="mt-2 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px] group-hover:decoration-[#035240] group-hover:decoration-2">
                 {service.name}
               </span>
+              
+              {/* Add underline on hover */}
+
+              <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
             </div>
           ))}
         </div>

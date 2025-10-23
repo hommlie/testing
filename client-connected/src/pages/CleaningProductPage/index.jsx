@@ -459,7 +459,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
 };
 
   return (
-    <main className="md:max-w-7xl w-full">
+    <main className="md:max-w-7xl w-full bg-white">
       <Helmet>
         <title>{innerSubCategoryData?.meta_title || "Category Page"}</title>
         <meta

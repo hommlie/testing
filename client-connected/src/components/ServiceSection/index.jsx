@@ -496,7 +496,7 @@ const ServiceSection = ({ categories }) => {
     <>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica] bg-white rounded-xl shadow-md">
         {/* Request a Callback Button (visible on all devices) */}
-        <div className="mb-5 -mt-20 sm:-mt-0 flex justify-center">
+        <div className="block sm:hidden mb-5 -mt-20 sm:-mt-0 flex justify-center">
           <button
             className="bg-[#15803d] text-white px-6 py-2 rounded-md hover:bg-[#52852d] transition"
             onClick={() => setIsCallbackOpen(true)}
@@ -506,7 +506,7 @@ const ServiceSection = ({ categories }) => {
         </div>
         {/* Modal for callback */}
         <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
-        <div className="mb-0 text-center">
+        <div className="mb-0 text-center sm:-mt-6">
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Your Service Category</h2>
           <div className="w-full flex justify-center sm:justify-center">
             <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2 px-2 sm:overflow-visible">
