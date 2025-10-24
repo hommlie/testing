@@ -133,11 +133,23 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
     setSelectedCoupon(payload);
     localStorage.setItem("HommlieselectedCoupon", JSON.stringify(payload));
 
+    // show success UI (keep lottie briefly for delight)
     setEnableLottie(true);
     setTimeout(() => {
       setEnableLottie(false);
-      onClose();
-    }, 3000);
+      // keep modal open so user can see success card and act (Continue / Remove)
+    }, 1200);
+  };
+
+  const handleContinue = () => {
+    // Close the modal but keep the applied coupon in context/localStorage
+    onClose();
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setSelectedCoupon(null);
+    localStorage.removeItem("HommlieselectedCoupon");
   };
 
   if (!isOpen) return null;
@@ -170,8 +182,48 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
           <h2 className="font-bold text-center">Apply Coupon</h2>
         </div>
 
-        {/* Enter code / Search */}
-        <div className="flex flex-row gap-2 items-center justify-center w-full px-4 my-4">
+        {/* If a coupon was just applied, show success card (like the reference UI) */}
+        {appliedCoupon ? (
+          <div className="flex flex-col items-center justify-center p-6">
+            <div className="bg-white rounded-xl shadow-xl w-full p-6 text-center" style={{ borderRadius: 16 }}>
+              <div className="flex justify-center mb-2">
+                {/* simple confetti emoji/icon */}
+                <div className="text-4xl" aria-hidden>
+                  🎉
+                </div>
+              </div>
+
+              <h2 className="text-2xl font-bold mb-2">Congratulations!</h2>
+
+              <p className="text-sm text-gray-700 mb-2">
+                Your coupon <strong>"{appliedCoupon.coupon_name}"</strong> has been successfully applied.
+              </p>
+
+              <p className="text-base font-semibold text-green-700 mb-4 flex items-center justify-center gap-2">
+                <span style={{ fontSize: 18 }}>💰</span>
+                You saved ₹{Number(appliedCoupon.calculatedDiscount || 0)} on this order!
+              </p>
+
+              <button
+                onClick={handleContinue}
+                className="w-full py-3 rounded-md text-white font-semibold"
+                style={{ backgroundColor: "#1E9A56" }}
+              >
+                Continue
+              </button>
+
+              <button
+                onClick={handleRemoveCoupon}
+                className="mt-3 text-sm text-gray-500"
+                style={{ background: "transparent" }}
+              >
+                Remove Coupon
+              </button>
+            </div>
+          </div>
+        ) : (
+            <>
+            <div className="flex flex-row gap-2 items-center justify-center w-full px-4 my-4">
           <input
             type="text"
             onChange={(e) => handleSearch(e.target.value)}
@@ -204,7 +256,7 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
             </div>
           )}
 
-          {coupons?.map((cp, index) => (
+      {coupons?.map((cp, index) => (
             <div
               key={index}
               className="relative bg-white rounded-md shadow-md p-2 px-8 space-y-3"
@@ -249,6 +301,8 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
             </div>
           ))}
         </div>
+      </>
+    )}
       </div>
     </div>
   );
