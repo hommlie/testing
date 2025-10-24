@@ -182,7 +182,8 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     }
   };
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    // Ensure login modal stacks above other site modals (increase z-index)
+    <div className="fixed inset-0 z-[2002] flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative bg-white w-[90%] max-w-96 p-8 rounded-3xl shadow-2xl md:hidden">
         {/* Mobile view logic here (can be filled in as needed) */}
           <div className="text-center mb-6">
