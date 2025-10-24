@@ -456,7 +456,7 @@ const CleaningProductPage = () => {
               {innerSubCategoryData?.category?.category_name}
             </a>
             <span>/</span>
-            <span>{innerSubCategoryData?.subcategory_name}</span>
+            {/* <span>{innerSubCategoryData?.subcategory_name}</span> */}
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-8">
@@ -503,7 +503,7 @@ const CleaningProductPage = () => {
                           <img
                             src={product.productimages[0]?.image_url}
                             alt={product.product_name}
-                            className="w-20 h-20 rounded-md object-cover"
+                            className="w-26 h-26 rounded-md object-cover"
                           />
                         ) : (
                           <img
