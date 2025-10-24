@@ -69,7 +69,7 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
             <div className="px-6 pb-6">
               {isHtml ? (
@@ -119,20 +119,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
   );
 };
 
-// const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
-//   const calculateCartTotal = () => {
-//     return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
-//   };
-// const calculateTaxTotal = () => {
-//   return cart.reduce((sum, item) => sum + Number(item.tax || 0) * item.qty, 0);
-// };
-
-
-  // const calculateSavings = () => {
-  //   return cart.reduce((sum, item) => sum + 78, 0).toFixed(2); // Replace with actual savings calculation
-  // };
-
-  const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
+const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
   const calculateCartTotal = () => {
     return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
   };
@@ -168,7 +155,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
                       ₹{(Number(item.price) * item.qty).toFixed(2)}
                     </span>
 
-                    {/* ⬇️ The qty control you asked to reuse */}
+                    {/* Qty control */}
                     <div className="flex items-center border border-[#249370] rounded-lg">
                       <button
                         onClick={() => onUpdateQty(item.id, item.qty - 1)}
@@ -249,14 +236,12 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
   );
 };
 
-
 const CleaningProductPage = () => {
   const locationState = useLocation().state;
   const location = locationState?.location;
   const { slug, tag } = useParams();
   const navigate = useNavigate();
   const { cart, user, checkoutPd, getCart } = useCont();
-
 
   const [isLoading, setIsLoading] = useState(false);
   const [innerSubCategoryData, setInnerSubCategoryData] = useState(null);
@@ -276,7 +261,6 @@ const CleaningProductPage = () => {
 
   const [isQtyLoading, setIsQtyLoading] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -378,14 +362,11 @@ const CleaningProductPage = () => {
     const locations = innerSubCategoryData?.location?.split("|") || [];
 
     const locationObjects = locations.map((location) => {
-      // Trim any extra spaces
       const trimmedLocation = location.trim();
-
-      // Convert the title to a slug
       const slug = trimmedLocation
-        .toLowerCase() // Convert to lowercase
-        .replace(/\s+/g, "-") // Replace spaces with hyphens
-        .replace(/[^a-z0-9-]/g, ""); // Remove any non-alphanumeric characters except hyphens
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
 
       return {
         title: trimmedLocation,
@@ -396,67 +377,60 @@ const CleaningProductPage = () => {
     return locationObjects;
   };
 
-  // Generate canonical URL based on the current location
   const generateCanonicalUrl = () => {
-    // Base URL from your config
     const baseUrl = config.VITE_BASE_URL || "https://www.hommlie.com";
-
-    // Determine the path based on current parameters
     let path = `/subcategory/${slug}`;
-
-    // Complete canonical URL
     return `${baseUrl}${path}`;
   };
 
   const handleRemoveFromCart = async (cartId) => {
-  const jwtToken = Cookies.get("HommlieUserjwtToken");
-  if (!jwtToken) {
-    setIsModalOpen(true); // open login modal if you want
-    return;
-  }
-  const decoded = jwtDecode(jwtToken);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (!jwtToken) {
+      setIsModalOpen(true);
+      return;
+    }
+    const decoded = jwtDecode(jwtToken);
 
-  try {
-    await axios.post(
-      `${config.API_URL}/api/deleteproduct`,
-      { user_id: decoded.id, cart_id: cartId },
-      { headers: { Authorization: `Bearer ${jwtToken}` } }
-    );
-    await getCart();
-  } catch (err) {
-    console.error("error removing from cart:", err);
-  }
-};
-
-const handleQtyUpdate = async (cartId, newQty) => {
-  const jwtToken = Cookies.get("HommlieUserjwtToken");
-  if (!jwtToken) {
-    setIsModalOpen(true);
-    return;
-  }
-
-  setIsQtyLoading(true);
-  setLoadingItemId(cartId);
-
-  try {
-    if (newQty <= 0) {
-      await handleRemoveFromCart(cartId);
-    } else {
-      const res = await axios.post(
-        `${config.API_URL}/api/qtyUpdate`,
-        { qty: newQty, cart_id: cartId },
+    try {
+      await axios.post(
+        `${config.API_URL}/api/deleteproduct`,
+        { user_id: decoded.id, cart_id: cartId },
         { headers: { Authorization: `Bearer ${jwtToken}` } }
       );
-      // Optional: check res.data.status === 1
       await getCart();
+    } catch (err) {
+      console.error("error removing from cart:", err);
     }
-  } catch (err) {
-    console.error("error updating cart:", err);
-  } finally {
-    setIsQtyLoading(false);
-    setLoadingItemId(null);
-  }
-};
+  };
+
+  const handleQtyUpdate = async (cartId, newQty) => {
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (!jwtToken) {
+      setIsModalOpen(true);
+      return;
+    }
+
+    setIsQtyLoading(true);
+    setLoadingItemId(cartId);
+
+    try {
+      if (newQty <= 0) {
+        await handleRemoveFromCart(cartId);
+      } else {
+        const res = await axios.post(
+          `${config.API_URL}/api/qtyUpdate`,
+          { qty: newQty, cart_id: cartId },
+          { headers: { Authorization: `Bearer ${jwtToken}` } }
+        );
+        await getCart();
+      }
+    } catch (err) {
+      console.error("error updating cart:", err);
+    } finally {
+      setIsQtyLoading(false);
+      setLoadingItemId(null);
+    }
+  };
 
   return (
     <main className="md:max-w-7xl w-full bg-white">
@@ -484,25 +458,11 @@ const handleQtyUpdate = async (cartId, newQty) => {
             <span>/</span>
             <span>{innerSubCategoryData?.subcategory_name}</span>
           </nav>
-          {/* //mobile view image  */}
-          {/* {innerSubCategoryData?.subcategory_banner ? (
-              <img
-                src={innerSubCategoryData?.subcategory_banner}
-                alt={innerSubCategoryData?.innersubcategory_name}
-                className="block sm:hidden hidden md:flex w-full h-[240px] rounded-lg mb-5"
-              />
-            ) : (
-              <img
-                src={NoImage}
-                alt=""
-                className="block sm:hidden hidden md:flex w-full h-[150px] rounded-lg opacity-40"
-              />
-          )} */}
+
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-8">
-            {/* Left Sidebar (span two rows so it stays beside banner + content) */}
+            {/* Left Sidebar */}
             <div className="lg:col-span-1 lg:row-span-2">
               <div className="sticky top-44 transition-all duration-300 ease-in-out">
-                {/* Title and Reviews - OUTSIDE the section box */}
                 <div className="space-y-1">
                   <h1 className="text-2xl font-semibold">
                     {location ? location : innerSubCategoryData?.subcategory_name}
@@ -523,15 +483,11 @@ const handleQtyUpdate = async (cartId, newQty) => {
                   )}
                 </div>
 
-                {/* Main Box Section */}
                 <section className="bg-white rounded-lg p-4 space-y-4 shadow mt-2 border border-black">
-                  
-                  {/* Select a service heading - Centered */}
                   <div className="flex justify-start items-center">
                     <span className="text-sm font-medium text-gray-600">Select a service</span>
                   </div>
 
-                  {/* Product Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-2 gap-2 max-h-[calc(100vh-16rem)] overflow-y-auto">
                     {innerSubCategoryData?.products?.map((product, index) => (
                       <div
@@ -566,7 +522,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
               </div>
             </div>
 
-            {/* Banner spanning main + center (desktop) - row 1 */}
+            {/* Banner */}
             <div className="hidden sm:block lg:col-start-2 lg:col-span-3 lg:row-start-1">
               {innerSubCategoryData?.subcategory_banner ? (
                 <img
@@ -583,17 +539,15 @@ const handleQtyUpdate = async (cartId, newQty) => {
               )}
             </div>
 
-            {/* Main Content - start on row 2 under the banner */}
+            {/* Main Content */}
             <div className="lg:col-start-2 lg:col-span-2 lg:row-start-2">
               <div className="space-y-6">
-
                 {innerSubCategoryData?.products?.map((product, index) => (
                   <section
                     key={product.id}
                     ref={(el) => (productRefs.current[index] = el)}
                     className="bg-white rounded-lg p-4 shadow scroll-mt-2 border border-black"
                   >
-                    {/* Desktop and tablet: show title in its original place; hide on small screens */}
                     <h3 className="text-base md:text-2xl font-semibold">
                       {product.product_name}
                     </h3>
@@ -602,8 +556,6 @@ const handleQtyUpdate = async (cartId, newQty) => {
                         .sort((a, b) => {
                           const aName = a.attribute_name?.toLowerCase() || "";
                           const bName = b.attribute_name?.toLowerCase() || "";
-
-                          // Move "one time" services to the top
                           if (aName.includes("one time")) return -1;
                           if (bName.includes("one time")) return 1;
                           return 0;
@@ -617,11 +569,9 @@ const handleQtyUpdate = async (cartId, newQty) => {
                               : "border-gray-200"
                           }`}
                         >
-                          
                           <div className="md:flex md:items-start md:gap-10">
-                            {/* LEFT (desktop): Image → Specs → Actions */}
+                            {/* LEFT */}
                             <div className="md:w-72 w-full md:shrink-0">
-                              {/* Image (bigger/clearer on desktop) */}
                               <div className="relative w-full h-46 md:h-48 sm:-mt-2">
                                 <img
                                   src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
@@ -631,9 +581,8 @@ const handleQtyUpdate = async (cartId, newQty) => {
                               </div>
                             </div>
 
-                            {/* RIGHT: Title, rating, price (desktop) + mobile content unchanged */}
+                            {/* RIGHT */}
                             <div className="flex-1 mt-4 md:mt-0">
-                              {/* Header: service name, rating, price */}
                               <div className="space-y-3">
                                 <h3 className="text-l sm:text-xs md:text-base flex gap-2 items-center font-semibold">
                                   {attribute.attribute_name}
@@ -641,17 +590,12 @@ const handleQtyUpdate = async (cartId, newQty) => {
 
                                 {(attribute?.avg_rating || attribute?.total_reviews) && (
                                   <div className="flex items-center gap-2 border-b border-dotted border-gray-400 w-fit pb-[2px]">
-                                    {/* Purple circular star icon */}
                                     <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
                                       <Star className="w-3 h-3 text-white" fill="currentColor" />
                                     </span>
-
-                                    {/* Rating number */}
                                     <span className="text-sm md:text-base font-semibold text-gray-800">
                                       {(Number(attribute?.avg_rating) || 0).toFixed(1)}
                                     </span>
-
-                                    {/* Reviews count */}
                                     {attribute?.total_reviews && (
                                       <span className="text-xs md:text-sm text-gray-500">
                                         (
@@ -673,7 +617,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                 )}
                               </div>
 
-                              {/* MOBILE: keep your existing specs & actions exactly the same */}
+                              {/* MOBILE specs */}
                               {attribute.specifications && (
                                 <div className="space-y-2 mt-4 md:hidden">
                                   <h4 className="text-sm md:text-base font-semibold text-gray-700">
@@ -688,7 +632,6 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                         <li key={i} className="text-base">
                                           <div className="flex items-start gap-2">
                                             <span className="mt-1 leading-6 text-black">•</span>
-                                            {/* one long line, wraps to the next line only if needed */}
                                             <span className="text-gray-700 leading-6 whitespace-normal break-words">
                                               {spec.replace(/^"|"$/g, "")}
                                             </span>
@@ -696,7 +639,6 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                         </li>
                                       ))}
                                   </ul>
-
                                 </div>
                               )}
 
@@ -708,7 +650,6 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                   View Service Details
                                 </button>
 
-                                {/* Add button + variation count stacked */}
                                 <div className="flex flex-col items-center">
                                   <button
                                     className="bg-white text-[#6c43f3]  px-5 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
@@ -717,7 +658,6 @@ const handleQtyUpdate = async (cartId, newQty) => {
                                     Add to cart
                                   </button>
 
-                                  {/* Dynamic variation count below the Add button */}
                                   {attribute?.variations?.length > 0 && (
                                     <p className="mt-1 text-center text-xs text-gray-600">
                                       {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
@@ -728,28 +668,28 @@ const handleQtyUpdate = async (cartId, newQty) => {
                             </div>
                           </div>
 
-                        {/* SPECS (desktop only) */}
-                      {attribute.specifications && (
-                        <div className="hidden md:block mt-4">
-                          <h4 className="text-base font-semibold text-gray-700 mb-2">Specifications:</h4>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                            {attribute.specifications
-                              .split("|")
-                              .map((s) => s.trim())
-                              .filter(Boolean)
-                              .map((spec, i) => (
-                                <div key={i} className="flex items-center">
-                                  <span className="text-black mr-2">•</span>
-                                  <span className="text-gray-700 text-base whitespace-normal break-words">
-                                    {spec.replace(/^"|"$/g, "")}
-                                  </span>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      )}
+                          {/* DESKTOP specs */}
+                          {attribute.specifications && (
+                            <div className="hidden md:block mt-4">
+                              <h4 className="text-base font-semibold text-gray-700 mb-2">Specifications:</h4>
+                              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                                {attribute.specifications
+                                  .split("|")
+                                  .map((s) => s.trim())
+                                  .filter(Boolean)
+                                  .map((spec, i) => (
+                                    <div key={i} className="flex items-center">
+                                      <span className="text-black mr-2">•</span>
+                                      <span className="text-gray-700 text-base whitespace-normal break-words">
+                                        {spec.replace(/^"|"$/g, "")}
+                                      </span>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          )}
 
-                        <div className="hidden md:flex items-start justify-between mt-4">
+                          <div className="hidden md:flex items-start justify-between mt-4">
                             <button
                               className="text-base text-[#6c43f3]  hover:text-blue-700 font-semibold mt-2"
                               onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
@@ -757,24 +697,21 @@ const handleQtyUpdate = async (cartId, newQty) => {
                               View Services Details
                             </button>
 
-                          {/* Add button + variation count stacked */}
-                          <div className="flex flex-col items-start">
-                            <button
-                              className="bg-white text-[#6c43f3] font-semibold px-6 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                            >
-                              Add to cart
-                            </button>
+                            <div className="flex flex-col items-start">
+                              <button
+                                className="bg-white text-[#6c43f3] font-semibold px-6 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
+                                onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                              >
+                                Add to cart
+                              </button>
 
-                            {/* Dynamic variation count below the Add button */}
-                            {attribute?.variations?.length > 0 && (
-                              <p className="mt-1 text-xs text-gray-600 ml-10">
-                                {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                              </p>
-                            )}
+                              {attribute?.variations?.length > 0 && (
+                                <p className="mt-1 text-xs text-gray-600 ml-10">
+                                  {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                </p>
+                              )}
+                            </div>
                           </div>
-                        </div>
-               
                         </div>
                       ))}
                     </div>
@@ -783,7 +720,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
               </div>
             </div>
 
-            {/* Right Cart Section (will appear beside main content on row 2) */}
+            {/* Right Cart */}
             <div className="lg:col-start-4 lg:col-span-1 lg:row-start-2">
               <div className="sticky h-fit top-8 transition-all duration-300 ease-in-out">
                 <CartSection
@@ -819,7 +756,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
           </div>
         )}
 
-        {/* Quick Links Section */}
+        {/* Quick Links */}
         <section className="mt-8 bg-white rounded-xl shadow-lg">
           <h2 className="text-base md:text-2xl font-semibold p-6">
             Quick Links
@@ -883,7 +820,12 @@ const handleQtyUpdate = async (cartId, newQty) => {
           checkoutPd={checkoutPd}
         />
 
+        {/* Render the modal always and let the modal's internal AnimatePresence
+            control entry/exit based on the `isOpen` prop. Passing the real
+            `isDetailModalOpen` value lets the modal play its exit animation
+            (slide down) when the parent toggles the flag. */}
         <ProductDetailModal
+          key={`pdm-${selectedProduct?.id || "x"}`}
           isOpen={isDetailModalOpen}
           onClose={() => setIsDetailModalOpen(false)}
           product={selectedProduct}
@@ -892,7 +834,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
         />
       </div>
 
-    <ShareButton />
+      <ShareButton />
     </main>
   );
 };

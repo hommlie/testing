@@ -18,7 +18,7 @@ import ShareButton from "../ShareButtonsubcat.jsx";
 const StarRating = ({ rating }) => {
   return (
     <div className="flex items-center">
-      {[1, 2, 3, 4, 5].map((star) => {
+      {[1].map((star) => {
         const starValue = star;
         const fillPercentage = Math.max(
           0,
@@ -30,12 +30,14 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-            <Star className="w-2 md:w-4 h-2 md:h-4 text-gray-300" />
-            <div
+           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+             <Star className="w-3 h-3 text-white" fill="currentColor" />
+           </span>
+           <div
               className="absolute inset-0 overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
             >
-              <Star className="w-2 md:w-4 h-2 md:h-4 text-yellow-400 fill-current absolute top-0 left-0" />
+              
             </div>
           </div>
         );
@@ -63,12 +65,22 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
       </button>
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
+         <motion.div
+      key="pdm-overlay"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+    >
+      <motion.div
+        key="pdm-card"
+        className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4 relative"
+        initial={{ y: 80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 80, opacity: 0 }}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+      >
             <div className="px-6 pb-6">
               {isHtml ? (
                 <div
@@ -79,6 +91,7 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
                 <div className="prose max-w-none">{content}</div>
               )}
             </div>
+          </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -265,6 +278,7 @@ const CleaningProductPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [modalMode, setModalMode] = useState("view"); // 'view' or 'add'
   const [activeImage, setActiveImage] = useState();
   const [selectedAttributeId, setSelectedAttributeId] = useState();
   const [openSection, setOpenSection] = useState("");
@@ -356,9 +370,10 @@ const CleaningProductPage = () => {
     ].scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleViewDetails = (product, attributeId = null) => {
+  const handleViewDetails = (product, attributeId = null, mode = "view") => {
     setSelectedProduct(product);
     setSelectedAttributeId(attributeId);
+    setModalMode(mode);
     setIsDetailModalOpen(true);
   };
 
@@ -455,9 +470,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
 };
 
   return (
-    <main className="md:max-w-7xl w-full" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
+    <main className="md:max-w-7xl w-full bg-white">
       <Helmet>
         <title>{innerSubCategoryData?.meta_title || "Category Page"}</title>
         <meta
@@ -468,7 +481,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
       </Helmet>
       <div className="container px-4 mt-5">
         <div className="mt-5">
-          <nav className="hidden sm:block flex space-x-2 text-gray-500 text-sm mb-8">
+          <nav className="hidden sm:block flex space-x-1 text-gray-500 text-xs">
             <a href="/" className="text-blue-500">
               Home
             </a>
@@ -483,22 +496,22 @@ const handleQtyUpdate = async (cartId, newQty) => {
             <span>{innerSubCategoryData?.subcategory_name}</span>
           </nav>
           {/* //mobile view image  */}
-          {innerSubCategoryData?.subcategory_banner ? (
+          {/* {innerSubCategoryData?.subcategory_banner ? (
               <img
                 src={innerSubCategoryData?.subcategory_banner}
                 alt={innerSubCategoryData?.innersubcategory_name}
-                className="block sm:hidden w-full h-[200px] rounded-lg mb-5"
+                className="block sm:hidden hidden md:flex w-full h-[240px] rounded-lg mb-5"
               />
             ) : (
               <img
                 src={NoImage}
                 alt=""
-                className="block sm:hidden w-full h-[150px] rounded-lg opacity-40"
+                className="block sm:hidden hidden md:flex w-full h-[150px] rounded-lg opacity-40"
               />
-          )}
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Left Sidebar */}
-            <div className="lg:w-1/4">
+          )} */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-8">
+            {/* Left Sidebar (span two rows so it stays beside banner + content) */}
+            <div className="lg:col-span-1 lg:row-span-2">
               <div className="sticky top-44 transition-all duration-300 ease-in-out">
                 {/* Title and Reviews - OUTSIDE the section box */}
                 <div className="space-y-1">
@@ -525,7 +538,7 @@ const handleQtyUpdate = async (cartId, newQty) => {
                 <section className="bg-white rounded-lg p-4 space-y-4 shadow mt-2 border border-black">
                   
                   {/* Select a service heading - Centered */}
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-start items-center">
                     <span className="text-sm font-medium text-gray-600">Select a service</span>
                   </div>
 
@@ -564,29 +577,34 @@ const handleQtyUpdate = async (cartId, newQty) => {
               </div>
             </div>
 
-            {/* Main Content */}
-            <div className="lg:w-1/2 -mt-4">
+            {/* Banner spanning main + center (desktop) - row 1 */}
+            <div className="hidden sm:block lg:col-start-2 lg:col-span-3 lg:row-start-1">
+              {innerSubCategoryData?.subcategory_banner ? (
+                <img
+                  src={innerSubCategoryData?.subcategory_banner}
+                  alt={innerSubCategoryData?.innersubcategory_name}
+                  className="w-full h-[160px] md:h-[295px] rounded-lg -mt-4 border border-black"
+                />
+              ) : (
+                <img
+                  src={NoImage}
+                  alt=""
+                  className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
+                />
+              )}
+            </div>
+
+            {/* Main Content - start on row 2 under the banner */}
+            <div className="lg:col-start-2 lg:col-span-2 lg:row-start-2">
               <div className="space-y-6">
-                {innerSubCategoryData?.subcategory_banner ? (
-                  <img
-                    src={innerSubCategoryData?.subcategory_banner}
-                    alt={innerSubCategoryData?.innersubcategory_name}
-                    className="hidden sm:block w-full h-[150px] md:h-[300px] rounded-lg mt-4 border border-black"
-                  />
-                ) : (
-                  <img
-                    src={NoImage}
-                    alt=""
-                    className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
-                  />
-                )}
 
                 {innerSubCategoryData?.products?.map((product, index) => (
                   <section
                     key={product.id}
                     ref={(el) => (productRefs.current[index] = el)}
-                    className="bg-white rounded-lg p-6 space-y-6 shadow scroll-mt-4 border border-black"
+                    className="bg-white rounded-lg p-4 shadow scroll-mt-2 border border-black"
                   >
+                    {/* Desktop and tablet: show title in its original place; hide on small screens */}
                     <h3 className="text-base md:text-2xl font-semibold">
                       {product.product_name}
                     </h3>
@@ -610,113 +628,164 @@ const handleQtyUpdate = async (cartId, newQty) => {
                               : "border-gray-200"
                           }`}
                         >
-                          <div className="flex justify-between items-center gap-6">
-                            <div className="space-y-4 flex-1">
-                              <div className="space-y-2">
-                                <h3 className="text-sm md:text-lg font-medium">
+                          
+                          <div className="md:flex md:items-start md:gap-10">
+                            {/* LEFT (desktop): Image → Specs → Actions */}
+                            <div className="md:w-72 w-full md:shrink-0">
+                              {/* Image (bigger/clearer on desktop) */}
+                              <div className="relative w-full h-46 md:h-48 sm:-mt-2">
+                                <img
+                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
+                                  alt={product.product_name}
+                                  className="w-full h-full rounded-lg object-cover border"
+                                />
+                              </div>
+                            </div>
+
+                            {/* RIGHT: Title, rating, price (desktop) + mobile content unchanged */}
+                            <div className="flex-1 mt-4 md:mt-0">
+                              {/* Header: service name, rating, price */}
+                              <div className="space-y-3">
+                                <h3 className="text-l sm:text-xs md:text-base flex gap-2 items-center font-semibold">
                                   {attribute.attribute_name}
                                 </h3>
 
-                                {/* Rating and Reviews */}
-                                {(attribute.avg_rating ||
-                                  attribute.total_reviews) && (
-                                  <div className="flex items-center space-x-2">
-                                    <StarRating rating={attribute.avg_rating} />
-                                    {attribute.total_reviews && (
+                                {(attribute?.avg_rating || attribute?.total_reviews) && (
+                                  <div className="flex items-center gap-2 border-b border-dotted border-gray-400 w-fit pb-[2px]">
+                                    {/* Purple circular star icon */}
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+                                      <Star className="w-3 h-3 text-white" fill="currentColor" />
+                                    </span>
+
+                                    {/* Rating number */}
+                                    <span className="text-sm md:text-base font-semibold text-gray-800">
+                                      {(Number(attribute?.avg_rating) || 0).toFixed(1)}
+                                    </span>
+
+                                    {/* Reviews count */}
+                                    {attribute?.total_reviews && (
                                       <span className="text-xs md:text-sm text-gray-500">
                                         (
                                         {attribute.total_reviews >= 1000
-                                          ? `${(
-                                              attribute.total_reviews / 1000
-                                            ).toFixed(1)}K`
+                                          ? `${(attribute.total_reviews / 1000).toFixed(0)}K`
                                           : attribute.total_reviews}{" "}
                                         reviews)
                                       </span>
                                     )}
                                   </div>
                                 )}
-
-                                {/* Price */}
-                                <p className="text-gray-500">
-                                  {attribute.variations?.length > 0 && (
-                                    <span className="text-xs md:text-base flex gap-2 items-center">
-                                      Starts from
-                                      <span className="text-emerald-600 font-medium">
-                                        ₹{attribute?.starting_price}
-                                      </span>
+                                {attribute.variations?.length > 0 && (
+                                  <p className="text-l sm:text-xs md:text-base flex gap-2 items-center">
+                                    Starts from
+                                    <span className="text-black-600 font-medium">
+                                      ₹{attribute?.starting_price}
                                     </span>
-                                  )}
-                                </p>
+                                  </p>
+                                )}
                               </div>
 
-                              {/* Specifications */}
+                              {/* MOBILE: keep your existing specs & actions exactly the same */}
                               {attribute.specifications && (
-                                <div className="space-y-2">
-                                  <h4 className="text-sm md:text-base font-medium text-gray-700">
+                                <div className="space-y-2 mt-4 md:hidden">
+                                  <h4 className="text-sm md:text-base font-semibold text-gray-700">
                                     Specifications:
                                   </h4>
-                                  <ul className="space-y-1">
+                                  <ul className="space-y-2 md:space-y-2">
                                     {attribute.specifications
                                       .split("|")
-                                      .map((spec, index) => spec.trim())
-                                      .filter((spec) => spec)
-                                      .map((spec, index) => (
-                                        <li
-                                          key={index}
-                                          className="text-xs md:text-base flex items-start space-x-2"
-                                        >
-                                          <span className="text-black">•</span>
-                                          <span className="text-gray-600">
-                                            {spec.replace(/^"|"$/g, "")}
-                                          </span>
+                                      .map((s) => s.trim())
+                                      .filter(Boolean)
+                                      .map((spec, i) => (
+                                        <li key={i} className="text-base">
+                                          <div className="flex items-start gap-2">
+                                            <span className="mt-1 leading-6 text-black">•</span>
+                                            {/* one long line, wraps to the next line only if needed */}
+                                            <span className="text-gray-700 leading-6 whitespace-normal break-words">
+                                              {spec.replace(/^"|"$/g, "")}
+                                            </span>
+                                          </div>
                                         </li>
                                       ))}
                                   </ul>
+
                                 </div>
                               )}
 
-                              <button
-                                className="text-sm md:text-base text-blue-500 hover:text-blue-600 font-semibold"
-                                onClick={() =>
-                                  handleViewDetails(
-                                    product,
-                                    attribute.attribute_id
-                                  )
-                                }
-                              >
-                                View Details
-                              </button>
-                            </div>
-
-                            {/* Image with overlapped Add button */}
-                            <div className="relative w-24 md:w-32 flex-shrink-0">
-                              <div className="relative w-24 md:w-32 h-24 md:h-32">
-                                <img
-                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
-                                  alt=""
-                                  className="w-full h-full rounded-lg object-cover"
-                                />
+                              <div className="flex items-start justify-between mt-4 md:hidden">
                                 <button
-                                  className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 
-                                            bg-white text-emerald-600 px-6 py-2 rounded-lg shadow-md 
-                                            hover:bg-emerald-50 transition-colors"
-                                  onClick={() =>
-                                    handleViewDetails(product, attribute.attribute_id)
-                                  }
+                                  className="text-sm text-[#6c43f3]  hover:text-blue-700 font-semibold mt-4"
+                                  onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
                                 >
-                                  Add
+                                  View Service Details
                                 </button>
+
+                                {/* Add button + variation count stacked */}
+                                <div className="flex flex-col items-center">
+                                  <button
+                                    className="bg-white text-[#6c43f3]  px-5 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
+                                    onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                                  >
+                                    Add to cart
+                                  </button>
+
+                                  {/* Dynamic variation count below the Add button */}
+                                  {attribute?.variations?.length > 0 && (
+                                    <p className="mt-1 text-center text-xs text-gray-600">
+                                      {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-
-                              {/* Dynamic variation count below the image */}
-                              {attribute?.variations?.length > 0 && (
-                                <p className="text-center text-xs text-gray-600 mt-6">
-                                  {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                                </p>
-                              )}
                             </div>
-
                           </div>
+
+                        {/* SPECS (desktop only) */}
+                      {attribute.specifications && (
+                        <div className="hidden md:block mt-4">
+                          <h4 className="text-base font-semibold text-gray-700 mb-2">Specifications:</h4>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            {attribute.specifications
+                              .split("|")
+                              .map((s) => s.trim())
+                              .filter(Boolean)
+                              .map((spec, i) => (
+                                <div key={i} className="flex items-center">
+                                  <span className="text-black mr-2">•</span>
+                                  <span className="text-gray-700 text-base whitespace-normal break-words">
+                                    {spec.replace(/^"|"$/g, "")}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+
+                        <div className="hidden md:flex items-start justify-between mt-4">
+                            <button
+                              className="text-base text-[#6c43f3]  hover:text-blue-700 font-semibold mt-2"
+                              onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                            >
+                              View Services Details
+                            </button>
+
+                          {/* Add button + variation count stacked */}
+                          <div className="flex flex-col items-start">
+                            <button
+                              className="bg-white text-[#6c43f3] font-semibold px-6 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
+                              onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                            >
+                              Add to cart
+                            </button>
+
+                            {/* Dynamic variation count below the Add button */}
+                            {attribute?.variations?.length > 0 && (
+                              <p className="mt-1 text-xs text-gray-600 ml-10">
+                                {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+               
                         </div>
                       ))}
                     </div>
@@ -725,9 +794,9 @@ const handleQtyUpdate = async (cartId, newQty) => {
               </div>
             </div>
 
-            {/* Right Cart Section */}
-            <div className="lg:w-1/4">
-              <div className="sticky h-fit top-44 transition-all duration-300 ease-in-out">
+            {/* Right Cart Section (will appear beside main content on row 2) */}
+            <div className="lg:col-start-4 lg:col-span-1 lg:row-start-2">
+              <div className="sticky h-fit top-8 transition-all duration-300 ease-in-out">
                 <CartSection
                   cart={cart}
                   onUpdateQty={handleQtyUpdate}
@@ -825,12 +894,18 @@ const handleQtyUpdate = async (cartId, newQty) => {
           checkoutPd={checkoutPd}
         />
 
-        <ProductDetailModal
-          isOpen={isDetailModalOpen}
-          onClose={() => setIsDetailModalOpen(false)}
-          product={selectedProduct}
-          selectedAttributeId={selectedAttributeId}
-        />
+        <AnimatePresence>
+          {isDetailModalOpen && (
+            <ProductDetailModal
+              key={`pdm-${selectedProduct?.id || 'x'}`}   // a stable key helps smooth exits
+              isOpen={true}
+              onClose={() => setIsDetailModalOpen(false)}
+              product={selectedProduct}
+              selectedAttributeId={selectedAttributeId}
+              mode={modalMode}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
     <ShareButton />
