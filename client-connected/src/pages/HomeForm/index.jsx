@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 import axios from "axios";
 import config from "../../config/config";
 
-const BlogForm = () => {
+const HomeForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -28,7 +28,7 @@ const BlogForm = () => {
         email: "",
         date: new Date().toISOString(),
         time: "N/A",
-        service: formData.interest || "BlogForm Lead",
+        service: formData.interest || "HomeForm Lead",
       });
 
       setShowPopup(true);
@@ -41,7 +41,7 @@ const BlogForm = () => {
         interest: "",
       });
     } catch (err) {
-      console.error("BlogForm submission failed:", err);
+      console.error("HomeForm submission failed:", err);
       alert("Something went wrong. Please try again.");
     }
   };
@@ -115,4 +115,4 @@ const BlogForm = () => {
   );
 };
 
-export default BlogForm;
+export default HomeForm;
