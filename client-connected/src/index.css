@@ -38,11 +38,8 @@
   /* Paragraphs and list text: comfortable reading rhythm */
   p, li {
     font-size: 1rem;
-    line-height: 1.7;
     font-weight: 400;
     color: #374151; /* neutral slate for body text */
-    margin-top: 0;
-    margin-bottom: 1rem;
   }
 
   /* Small captions and meta text */
