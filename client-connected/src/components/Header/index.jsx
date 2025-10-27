@@ -571,10 +571,10 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               ) : (
                 <button
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
-                  className="flex items-center gap-2 hover:text-[#52852d] transition-colors"
+                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
                 >
                   <FaUser className="text-black text-base" />
-                  <span className="text-black font-medium">Account</span>
+                  <span className="text-black">Account</span>
                 </button>
               )}
               <span className="hidden md:inline-block text-black">|</span>
