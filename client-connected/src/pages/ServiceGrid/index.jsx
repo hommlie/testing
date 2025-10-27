@@ -41,12 +41,12 @@ const ServiceGrid = () => {
   // Removed "Scrap" details from here
   const serviceData = {
     "Pest Control": [
-      { name: "Cockroach & Ant Gel Treatment", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
-      { name: "Cockroach control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
-      { name: "Bedbugs Treatment", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
+      { name: "General Pest Control", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
+      { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
+      { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
       { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
-      { name: "Mosquito control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
-      { name: "Termite control", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
+      { name: "Mosquito Control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
+      { name: "Termite Control", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
       // { name: "Flies Management", image: "/images/fliesicon.png", url: "/subcategory/flies-pest-control-in-bangalore" },
       // { name: "Weed Management", image: "/images/weedicon.png", url: "/subcategory/pest-control-weed-management" },
       // { name: "Wood Borer", image: "/images/woodborericon.png", url: "/subcategory/wood-borer-control-in-bangalore" },
@@ -60,7 +60,7 @@ const ServiceGrid = () => {
       // { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "/subcategory/mosquito-mesh-door-services-in-bangalore" },
       // { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "/subcategory/mosquito-net-for-windows-in-bangalore" },
       { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "/subcategory/anti-bird-spikes" },
-      { name: "Bird Netting", image: "/images/nettingicon.png", url: "/subcategory/bird-netting-for-balcony-in-bangalore" },
+      { name: "Bird Control", image: "/images/nettingicon.png", url: "/subcategory/bird-netting-for-balcony-in-bangalore" },
     ],
     "Disinfection": [
       { name: "Disinfection", image: "/images/disinfection.png", url: "/subcategory/disinfection-services-near-you-in-bangalore" },
