@@ -164,7 +164,7 @@ const ServiceGrid = () => {
                   />
                 )}
               </div>
-              <span className="mt-2 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
+              <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
                 {service.name}
               </span>
 
