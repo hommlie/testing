@@ -493,8 +493,14 @@ export default function AddtoCart() {
 
     const noSlotChosen = !selectedDayTime?.date?.day || !selectedDayTime?.time;
 
-    if ((cart?.length || 0) > 0 && hasAddr && noSlotChosen) {
-      setTimeout(() => setIsDateTimeModalOpen(true), 300);
+    // Prevent repeatedly auto-opening the slot modal on refresh — only auto-open once per session
+    const hasAutoPrompted = localStorage.getItem('HommlieSlotAutoPrompted') === 'true';
+
+    if ((cart?.length || 0) > 0 && hasAddr && noSlotChosen && !hasAutoPrompted) {
+      setTimeout(() => {
+        setIsDateTimeModalOpen(true);
+        try { localStorage.setItem('HommlieSlotAutoPrompted', 'true'); } catch(e){}
+      }, 300);
     }
   }, [selectedAddrs, cart?.length]); // include itemCount via cart.length
 
@@ -563,12 +569,21 @@ export default function AddtoCart() {
               <BsFillCartXFill className="text-6xl text-[#035240] mb-4" />
               <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
               <p className="text-gray-600 mb-4">Add items to start a purchase</p>
-              <button
-                onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
-                className="px-8 py-3 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition duration-300"
-              >
-                Browse Services
-              </button>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <button
+                  onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
+                  className="px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
+                >
+                  Browse Services
+                </button>
+
+                <button
+                  onClick={() => navigate(`${config.VITE_BASE_URL}/my-bookings`)}
+                  className="px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
+                >
+                  My Bookings
+                </button>
+              </div>
             </div>
           </div>
         ) : (
@@ -582,7 +597,7 @@ export default function AddtoCart() {
                     <div className="flex justify-between items-center mb-4">
                       <h2 className="text-l font-semibold flex items-center gap-2">
                         <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                          <MdOutlineSendToMobile className="text-xl text-[#249370]" />
+                          <MdOutlineSendToMobile className="text-xl text-[#0463ac]" />
                         </div>
                         Send Your Booking Details To
                       </h2>
@@ -602,7 +617,7 @@ export default function AddtoCart() {
                     <div className="flex justify-between items-center mb-4 -mt-8">
                       <div className="flex items-center gap-3">
                         <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                          <HiOutlineLocationMarker className="text-2xl text-[#249370]" />
+                          <HiOutlineLocationMarker className="text-2xl text-[#0463ac]" />
                         </div>
                         <h2 className="text-xl font-semibold -ml-2">Delivery Address</h2>
                       </div>
@@ -644,7 +659,7 @@ export default function AddtoCart() {
                       <div className="w-full">
                         <div className="flex items-center gap-3 -mt-5">
                           <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                            <RiTimerLine className="text-2xl text-[#249370]" />
+                            <RiTimerLine className="text-2xl text-[#0463ac]" />
                           </div>
                           <h2 className="text-xl font-semibold -ml-1">Select Your Slot</h2>
                         </div>
@@ -655,7 +670,7 @@ export default function AddtoCart() {
                               disabled={!selectedAddrs}
                               className={`w-full px-4 py-2 border-2 rounded-lg transition-colors
                                 ${selectedAddrs
-                                  ? "text-[#249370] border-[#249370] hover:bg-[#249370] hover:text-white"
+                                  ? "text-[#249370] border-[#249370] hover:bg-[#0463ac] hover:text-white"
                                   : "text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
                                 }`}
                             >
@@ -716,7 +731,7 @@ export default function AddtoCart() {
                         </label>
                       ))}
                       <button
-                        className="w-[280px] sm:w-[360px] md:w-[480px] lg:w-[520px] py-4 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition-colors mx-auto sm:col-span-2"
+                        className="w-[280px] sm:w-[360px] md:w-[480px] lg:w-[520px] py-4 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#52852d] transition-colors mx-auto sm:col-span-2"
                         disabled={isLoading}
                         onClick={handleProceed}
                       >
@@ -857,7 +872,7 @@ export default function AddtoCart() {
                         </span>
                         <button
                           className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                            walletApplied ? "bg-red-500 text-white" : "bg-green-600 text-white"
+                            walletApplied ? "bg-red-500 text-white" : "bg-[#0463ac] text-white"
                           } ${walletBalance <= 0 || payableBeforeWallet <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
                           onClick={handleWalletToggle}
                           disabled={walletBalance <= 0 || payableBeforeWallet <= 0}

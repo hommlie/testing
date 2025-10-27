@@ -57,7 +57,7 @@ const ComingSoonModal = ({ isOpen, onClose, source }) => {
 
         <Link
           to="/register-free-listing"
-          className="mt-6 inline-block bg-[#92b876] text-white px-6 py-2 rounded-lg hover:bg-[#044d3f] transition-all text-sm font-medium"
+          className="mt-6 inline-block bg-[#0463ac] text-white px-6 py-2 rounded-md hover:bg-[#1e7a5c] transition-all text-sm font-medium"
         >
           Join ONDC
         </Link>

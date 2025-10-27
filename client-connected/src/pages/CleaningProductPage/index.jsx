@@ -30,7 +30,7 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
              <Star className="w-3 h-3 text-white" fill="currentColor" />
            </span>
            <div
@@ -190,7 +190,7 @@ const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
               </div>
 
               <button
-                className="bg-emerald-700 hover:bg-[#52852d] w-full text-white py-2 rounded-md transition"
+                className="bg-[#0463ac] hover:bg-[#52852d] w-full text-white py-2 rounded-md transition"
                 onClick={() => (window.location.href = "/add-to-cart")}
               >
                 Checkout Now
@@ -584,13 +584,13 @@ const CleaningProductPage = () => {
                             {/* RIGHT */}
                             <div className="flex-1 mt-4 md:mt-0">
                               <div className="space-y-3">
-                                <h3 className="text-l sm:text-xs md:text-base flex gap-2 items-center font-semibold">
+                                <h3 className="text-l sm:text-xs md:text-xl flex gap-2 items-center font-bold">
                                   {attribute.attribute_name}
                                 </h3>
 
                                 {(attribute?.avg_rating || attribute?.total_reviews) && (
                                   <div className="flex items-center gap-2 border-b border-dotted border-gray-400 w-fit pb-[2px]">
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
                                       <Star className="w-3 h-3 text-white" fill="currentColor" />
                                     </span>
                                     <span className="text-sm md:text-base font-semibold text-gray-800">
@@ -608,9 +608,9 @@ const CleaningProductPage = () => {
                                   </div>
                                 )}
                                 {attribute.variations?.length > 0 && (
-                                  <p className="text-l sm:text-xs md:text-base flex gap-2 items-center">
+                                  <p className="font-bold text-l sm:text-xs md:text-base flex gap-2 items-center">
                                     Starts from
-                                    <span className="text-black-600 font-medium">
+                                    <span className="text-black-600 font-bold">
                                       ₹{attribute?.starting_price}
                                     </span>
                                   </p>
@@ -620,7 +620,7 @@ const CleaningProductPage = () => {
                               {/* MOBILE specs */}
                               {attribute.specifications && (
                                 <div className="space-y-2 mt-4 md:hidden">
-                                  <h4 className="text-sm md:text-base font-semibold text-gray-700">
+                                  <h4 className="text-sm md:text-base font-bold text-gray-700">
                                     Specifications:
                                   </h4>
                                   <ul className="space-y-2 md:space-y-2">
@@ -643,20 +643,25 @@ const CleaningProductPage = () => {
                               )}
 
                               <div className="flex items-start justify-between mt-4 md:hidden">
-                                <button
-                                  className="text-sm text-[#6c43f3]  hover:text-blue-700 font-semibold mt-4"
-                                  onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
-                                >
-                                  View Service Details
-                                </button>
+                                <div className="relative inline-block group">
+                              <button
+                                className="text-base text-[#0463ac] hover:text-blue-700 font-bold mt-2 group-hover:scale-105 transition-all duration-300 ease-in-out"
+                                onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                              >
+                                View Details
+                              </button>
+                              <div
+                                className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#0463ac] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
+                              />
+                            </div>
 
                                 <div className="flex flex-col items-center">
                                   <button
-                                    className="bg-white text-[#6c43f3]  px-5 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
-                                    onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                                  >
-                                    Add to cart
-                                  </button>
+                                className="bg-[#0463ac] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg shadow-md border transition-colors"
+                                onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                              >
+                                Add to cart
+                              </button>
 
                                   {attribute?.variations?.length > 0 && (
                                     <p className="mt-1 text-center text-xs text-gray-600">
@@ -671,7 +676,7 @@ const CleaningProductPage = () => {
                           {/* DESKTOP specs */}
                           {attribute.specifications && (
                             <div className="hidden md:block mt-4">
-                              <h4 className="text-base font-semibold text-gray-700 mb-2">Specifications:</h4>
+                              <h4 className="text-base font-bold text-gray-700 mb-2">Specifications:</h4>
                               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                                 {attribute.specifications
                                   .split("|")
@@ -680,7 +685,7 @@ const CleaningProductPage = () => {
                                   .map((spec, i) => (
                                     <div key={i} className="flex items-center">
                                       <span className="text-black mr-2">•</span>
-                                      <span className="text-gray-700 text-base whitespace-normal break-words">
+                                      <span className="text-gray-700 text-sm whitespace-normal break-words">
                                         {spec.replace(/^"|"$/g, "")}
                                       </span>
                                     </div>
@@ -689,17 +694,22 @@ const CleaningProductPage = () => {
                             </div>
                           )}
 
-                          <div className="hidden md:flex items-start justify-between mt-4">
-                            <button
-                              className="text-base text-[#6c43f3]  hover:text-blue-700 font-semibold mt-2"
-                              onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
-                            >
-                              View Services Details
-                            </button>
+                          <div className="hidden md:flex items-start justify-between mt-4 group transition-all relative cursor-pointer">
+                           <div className="relative inline-block group">
+                              <button
+                                className="text-base text-[#0463ac] hover:text-blue-700 font-bold mt-2 group-hover:scale-105 transition-all duration-300 ease-in-out"
+                                onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                              >
+                                View Details
+                              </button>
+                              <div
+                                className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#0463ac] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
+                              />
+                            </div>
 
                             <div className="flex flex-col items-start">
                               <button
-                                className="bg-white text-[#6c43f3] font-semibold px-6 py-2 rounded-lg shadow-md border hover:bg-emerald-50 transition-colors"
+                                className="bg-[#0463ac] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg shadow-md border transition-colors"
                                 onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
                               >
                                 Add to cart

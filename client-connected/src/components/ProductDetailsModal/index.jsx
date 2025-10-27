@@ -34,7 +34,7 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
               <Star className="w-3 h-3 text-white" fill="currentColor" />
             </span>
             <div
@@ -823,7 +823,7 @@ const ProductDetailModal = ({
                 <div className="sticky  bottom-[-22px] left-0 right-0 bg-white border-t p-4 z-10">
                   <div className="max-w-7xl mx-auto flex justify-end">
                     <button
-                      className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 shadow-lg"
+                      className="bg-[#0463ac] text-white px-4 py-2 rounded-md hover:bg-emerald-700 shadow-lg"
                       onClick={() => {
                         setLocalMode("add");
                         const attrId = displayedAttributes[0].attribute_id;

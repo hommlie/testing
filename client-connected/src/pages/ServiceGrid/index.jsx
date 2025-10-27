@@ -55,10 +55,10 @@ const ServiceGrid = () => {
       { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
       { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
     ],
-    "Safety Net": [
-      { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "/subcategory/mosquito-mesh-services-in-bangalore" },
-      { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "/subcategory/mosquito-mesh-door-services-in-bangalore" },
-      { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "/subcategory/mosquito-net-for-windows-in-bangalore" },
+    "Bird Control": [
+      // { name: "Mosquito Mesh - Balcony", image: "/images/balconyicon.png", url: "/subcategory/mosquito-mesh-services-in-bangalore" },
+      // { name: "Mosquito Mesh Doors", image: "/images/dooricon.png", url: "/subcategory/mosquito-mesh-door-services-in-bangalore" },
+      // { name: "Mosquito Net - Windows", image: "/images/windowicon.png", url: "/subcategory/mosquito-net-for-windows-in-bangalore" },
       { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "/subcategory/anti-bird-spikes" },
       { name: "Bird Netting", image: "/images/nettingicon.png", url: "/subcategory/bird-netting-for-balcony-in-bangalore" },
     ],
@@ -72,7 +72,7 @@ const ServiceGrid = () => {
     { id: 1, name: "Pest Control", image: "/images/pestcontrol1nn.png" },
     { id: 2, name: "Deep Cleaning", image: "/images/deepcleaning1nn.png" },
     { id: 3, name: "Scrap", image: "/images/scrap1nn.png" }, // will redirect
-    { id: 4, name: "Safety Net", image: "/images/mosquito1nn.png" },
+    { id: 4, name: "Bird Control", image: "/images/mosquito1nn.png" },
     { id: 5, name: "Disinfection", image: "/images/disinfection1nn.png" },
     {
       id: 9,

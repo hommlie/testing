@@ -8,7 +8,7 @@ import { useToast } from '../../context/ToastProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 
 
-const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, order_id, order_type, slotFull }) => {
+const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, order_id, order_type, slotFull, autoSelect = true }) => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [dates, setDates] = useState([]);
@@ -89,9 +89,19 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
                 datesArray.push({ day, date, month, formattedDate });
             }
 
-            setDates(datesArray);
+        setDates(datesArray);
 
-            // ❌ Removed auto-selection of first date/time
+          // Auto-select first available date when modal opens and no persisted selection
+          try {
+            const stored = localStorage.getItem("HommlieselectedDayTime");
+            const hasStored = stored && stored !== "undefined" && JSON.parse(stored);
+            if (autoSelect && !hasStored) {
+              // set selected date to first available
+              setSelectedDate(datesArray[0]);
+            }
+          } catch (e) {
+            // ignore JSON parse errors
+          }
         };
 
         generateDates();
@@ -102,6 +112,21 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
             generateTimesForDate(selectedDate);
         }
     }, [selectedDate]);
+
+  // Auto-select first available time when times are generated and autoSelect is enabled
+  useEffect(() => {
+    if (autoSelect && isOpen && times && times.length > 0 && !selectedTime) {
+      try {
+        const stored = localStorage.getItem("HommlieselectedDayTime");
+        const hasStored = stored && stored !== "undefined" && JSON.parse(stored);
+        if (!hasStored) {
+          setSelectedTime(times[0]);
+        }
+      } catch (e) {
+        setSelectedTime(times[0]);
+      }
+    }
+  }, [times, isOpen]);
 
     const handleProceed = async () => {
         if (!selectedDate || !selectedTime) {
@@ -240,7 +265,7 @@ const DateTimeModal = ({ isOpen, onClose, startDate, startTime, reSchedule, orde
 
           <div className='flex justify-center'>
             <button
-              style={{ backgroundColor: "#249370" }}
+              style={{ backgroundColor: "#0463ac" }}
               className={`block mt-4 px-8 py-2 text-xs text-center text-white tracking-widest disabled:opacity-60 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
               onClick={handleProceed}
               disabled={isLoading}

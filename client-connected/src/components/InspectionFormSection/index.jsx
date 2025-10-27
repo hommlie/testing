@@ -121,21 +121,21 @@ const InspectionFormSection = () => {
               </p>
               <div className="space-y-4 text-sm">
                 <div className="flex items-center gap-3">
-                  <MdOutlineLocalPostOffice className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
+                  <MdOutlineLocalPostOffice className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500 text-xs">Email</h3>
                     <p className="text-gray-800 font-medium text-sm">reach@hommlie.com</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <IoCallOutline className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
+                  <IoCallOutline className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500 text-xs">Phone</h3>
                     <p className="text-gray-800 font-medium text-sm">+91-6363865658</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <IoBusiness className="text-xl bg-green-700 text-white rounded-full p-2 w-8 h-8" />
+                  <IoBusiness className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500 text-xs">Our Offices</h3>
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -177,7 +177,7 @@ const InspectionFormSection = () => {
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold ${
                     step === s
-                      ? "bg-green-700 text-white"
+                      ? "bg-[#0463ac] text-white"
                       : "bg-gray-200 text-gray-600"
                   }`}
                 >
@@ -255,7 +255,7 @@ const InspectionFormSection = () => {
                 <button
                   type="button"
                   onClick={() => validateStepOne() && setStep(2)}
-                  className="w-full bg-green-700 text-white py-3 rounded-lg text-sm font-medium"
+                  className="w-full bg-[#0463ac] text-white py-3 rounded-lg text-sm font-medium"
                 >
                   Continue to Schedule
                 </button>
@@ -322,7 +322,7 @@ const InspectionFormSection = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-green-700 text-white py-3 rounded-lg text-sm font-medium disabled:opacity-70"
+                    className="w-full bg-[#0463ac] text-white py-3 rounded-lg text-sm font-medium disabled:opacity-70"
                   >
                     {loading ? "Processing..." : "Confirm Inspection"}
                   </button>

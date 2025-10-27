@@ -209,11 +209,13 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
         const warrantyDays = Number(attributeDetails?.under_warranty_day || 0);
 
         // helper to compute contract dates from a start date (YYYY-MM-DD)
+        // NOTE: warrantyDays is treated as inclusive number of days. For example,
+        // if warrantyDays = 7 and start = 2025-10-01 then contract_end_date = 2025-10-07.
         const getContractDates = (startYMD) => {
           const start = moment(startYMD, "YYYY-MM-DD");
-          // Warranty covers from start date, inclusive, for warrantyDays days, so end date is start + warrantyDays (exclusive)
-          // If booked on 4th Oct and warranty is 20, contract_end_date should be 24th Oct (4th + 20 days)
-          const end = start.clone().add(warrantyDays, "days");
+          // make warranty inclusive: add (warrantyDays - 1) days; if warrantyDays <= 0 keep same day
+          const addDays = Math.max(0, Number(warrantyDays) - 1);
+          const end = start.clone().add(addDays, "days");
           return {
             contract_start_date: start.format("YYYY-MM-DD"),
             contract_end_date:   end.format("YYYY-MM-DD"),
@@ -725,8 +727,10 @@ exports.rescheduleOrder = async (req, res) => {
     const attributeDetails = await Attribute.findByPk(order.attribute);
     const warrantyDays = Number(attributeDetails?.under_warranty_day || 0);
 
-    const start = moment(desired_date, "YYYY-MM-DD");
-    const end   = start.clone().add(warrantyDays, "days");
+  const start = moment(desired_date, "YYYY-MM-DD");
+  // make warranty inclusive: if warrantyDays = 7, end should be start + 6 days
+  const addDays = Math.max(0, Number(warrantyDays) - 1);
+  const end   = start.clone().add(addDays, "days");
 
     const formattedTime = moment(desired_time, "hh:mm A").format("HH:mm");
 

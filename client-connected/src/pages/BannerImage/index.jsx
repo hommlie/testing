@@ -8,7 +8,7 @@ const BannerImage = () => {
     <div className="hidden sm:flex w-full justify-center mb-3 mt-2" >
       <div className="relative rounded-lg overflow-hidden">
         <img
-          src="/images/baner.png"
+          src="/images/baner.webp"
           alt="Banner Desktop"
           className="w-[1250px] h-auto object-cover"
         />
@@ -17,7 +17,7 @@ const BannerImage = () => {
             onClick={() =>
               navigate('/product/cockroach-control-services-in-bangalore')
             }
-            className="px-6 py-3 bg-green-600 text-white text-base font-bold rounded-md shadow-lg hover:from-emerald-700 hover:to-lime-700 transform hover:scale-105 transition-all duration-300 ease-in-out"
+            className="px-6 py-3 bg-[#0463ac] text-white text-base font-bold rounded-md shadow-lg hover:from-emerald-700 hover:to-lime-700 transform hover:scale-105 transition-all duration-300 ease-in-out"
           >
              Book Now
           </button>

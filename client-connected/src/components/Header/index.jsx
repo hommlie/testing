@@ -523,7 +523,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
             {/* Left: Brand + Message */}
             <span className=" font-normal text-black z-20">
               <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
-                <button className="px-3 py-0 pb-1 bg-green-800 text-white">Residential</button>
+                <button className="px-3 py-0 pb-1 bg-[#0463ac] text-white">Residential</button>
                 <a
                   href="https://b2b.hommlie.com"
                   className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
@@ -656,7 +656,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                 >
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
-                      <MdLocationOn className="text-black mr-1 text-lg" />
+                      <MdLocationOn className="text-white mr-1 text-lg" />
                       Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
@@ -697,7 +697,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                 >
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
-                      <MdLocationOn className="text-black mr-1 text-lg" />
+                      <MdLocationOn className="text-red mr-1 text-lg" />
                       Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
@@ -709,7 +709,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               </div>
 
               {/* Search Bar */}
-              <div className="w-[620px] hidden lg:block">
+              <div className="w-[600px] hidden lg:block">
                 <div className="relative">
                   <input
                     ref={searchInputRef}
@@ -822,10 +822,10 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#15803d] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
+              className="hidden md:flex items-center gap-2 px-5 py-3 bg-[#0463ac] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
             >
-               <span className="font-medium">Join ONDC</span>
-               <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" />
+               <span className="font-medium">PARTNER WITH US</span>
+               {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
             </NavLink>
            
             <div className="relative">

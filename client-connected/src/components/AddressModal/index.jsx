@@ -707,7 +707,7 @@ const AddressModal = ({ isOpen, onClose }) => {
 
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <button
-                  className="px-4 py-2 bg-[#249370] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center"
+                  className="px-4 py-2 bg-[#0463ac] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center"
                   onClick={getCurrentLocation}
                 >
                   <GrLocation className="mr-2" />
@@ -724,7 +724,7 @@ const AddressModal = ({ isOpen, onClose }) => {
 
                 {selected && (
                   <button
-                    className="px-4 py-2 bg-[#249370] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="px-4 py-2 bg-[#0463ac] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     onClick={handleProceed}
                   >
                     Proceed with Selected Address

@@ -1,18 +1,19 @@
 const { Address } = require('../models');
 
 exports.saveAddress = async (req, res) => {
+  // Normalize incoming house/flat fields so we always use `house_number` internally
   const {
     user_id,
     name,
     address,
     landmark,
-    house_number, // ✅ read it
     pincode,
     mobile,
     email,
     latitude,
     longitude
   } = req.body;
+  const house_number = req.body.house_number || req.body.houseNo || req.body.houseFlatNo || '';
 
   try {
     if (!user_id) return res.status(400).json({ status: 0, message: 'Please login to save address' });
@@ -27,7 +28,7 @@ exports.saveAddress = async (req, res) => {
       name,
       address,
       landmark,
-      house_number, // ✅ save it
+      house_number, // normalized value
       pincode,
       mobile,
       email,
@@ -59,18 +60,19 @@ exports.getAddress = async (req, res) => {
 };
 
 exports.editAddress = async (req, res) => {
+  // Normalize incoming house/flat fields so we always use `house_number` internally
   const {
     id,
     name,
     address,
     landmark,
-    house_number, // ✅ allow edit
     pincode,
     mobile,
     email,
     latitude,
     longitude
   } = req.body;
+  const house_number = req.body.house_number || req.body.houseNo || req.body.houseFlatNo || '';
 
   try {
     if (!id) return res.status(400).json({ status: 0, message: 'Invalid Address ID' });

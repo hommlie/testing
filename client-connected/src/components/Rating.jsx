@@ -10,7 +10,7 @@ export default function Rating({ value = 4.9, count = 0, className = "" }) {
   return (
     <div className={`flex items-center ${className}`}>
       {[1].map((i) => (
-        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
           <Star className="w-3 h-3 text-white" fill="currentColor" />
         </span>
       ))}

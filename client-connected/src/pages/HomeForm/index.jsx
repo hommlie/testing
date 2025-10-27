@@ -87,7 +87,7 @@ const HomeForm = () => {
         <div className="flex justify-center md:px-3">
           <button
             type="submit"
-            className="w-full md:w-auto bg-[#15803d] hover:bg-[#52852d] text-white font-medium text-sm px-6 py-2 rounded-lg md:rounded-md transition"
+            className="w-full md:w-auto bg-[#0463ac] hover:bg-[#52852d] text-white font-medium text-sm px-6 py-2 rounded-lg md:rounded-md transition"
           >
             Submit
           </button>

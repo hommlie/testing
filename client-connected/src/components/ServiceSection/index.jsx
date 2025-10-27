@@ -390,7 +390,7 @@ const ServiceSection = ({ categories }) => {
 
         {product.is_recommended == 1 && (
           <div className="absolute top-2 right-2">
-            <div className=" relative bg-[#133215] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
+            <div className=" relative bg-[#0463ac] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
               <Star className="w-3 h-3 mr-1 fill-current text-white" />
               RECOMMENDED
               <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
@@ -434,14 +434,14 @@ const ServiceSection = ({ categories }) => {
 
             <a
             href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
-            className="text-left mb-2 text-sm text-green-600 text-bold text-decoration-line: underline"
+            className="text-center mb-2 text-md text-[#0463ac] text-bold text-decoration-line: underline"
           >
             View Details
           </a>
 
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center border-b border-dotted border-gray-300 pb-1 w-fit">
-              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#6D4AFF] text-white">
+              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac] text-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -481,7 +481,7 @@ const ServiceSection = ({ categories }) => {
                 e.stopPropagation();
                 if (matchedVariation) handleAddToCart(matchedVariation, product);
               }}
-              className={`w-full py-3 rounded-lg font-bold transition-colors  bg-green-700 text-white hover:bg-[#52852d] hover:text-white 
+              className={`w-full py-3 rounded-lg font-bold transition-colors  bg-[#0463ac] text-white hover:bg-[#52852d] hover:text-white 
                 ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
             >
               {isAddingToCart ? "Adding..." : "Book Now"}
@@ -519,7 +519,7 @@ const ServiceSection = ({ categories }) => {
                   className={`border border-black w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                     ${
                       selectedCategory === category.id && category.slug !== "disinfection-services"
-                        ? "bg-green-700 text-white shadow-md "
+                        ? "bg-[#0463ac] text-white shadow-md "
                         : "bg-white text-gray-800 border border-black hover:border-black"
                     }`}
                 >

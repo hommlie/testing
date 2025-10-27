@@ -97,7 +97,7 @@ const BlogCard = ({ blog, categories, index }) => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={goToPost}
-            className="w-full px-4 sm:px-6 py-2.5 sm:py-3 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            className="w-full px-4 sm:px-6 py-2.5 sm:py-3 bg-[#0463ac] text-white rounded-lg font-medium hover:bg-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           >
             Read Article
           </motion.button>
