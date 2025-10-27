@@ -24,7 +24,8 @@ body {
 
 .features-section {
   padding: 20px;
-  font-family: "Poppins", sans-serif;
+  /* inherit the global site font (Helvetica stack) */
+  font-family: var(--site-sans, "\"Helvetica Neue\"", Helvetica, Arial, sans-serif);
 }
 
 .features-box {
@@ -224,7 +225,7 @@ body {
 .tabs-section {
   max-width: 900px;
   margin: 20px auto;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: var(--site-sans, "\"Helvetica Neue\"", Helvetica, Arial, sans-serif);
   border: 1px solid #ddd;
   border-radius: 6px;
 }

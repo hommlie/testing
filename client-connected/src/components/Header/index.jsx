@@ -709,13 +709,13 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               </div>
 
               {/* Search Bar */}
-              <div className="w-[600px] hidden lg:block">
+              <div className="w-[590px] hidden lg:block">
                 <div className="relative">
                   <input
                     ref={searchInputRef}
                     type="text"
                     placeholder={`Search ${services[placeholderIndex]}...`}
-                    className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     onFocus={() => setIsSearchFocused(true)}

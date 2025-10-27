@@ -97,7 +97,7 @@ const LandingPage = () => {
 
   return (
     <main
-      className="container mx-auto px-3 sm:px-5 lg:px-6 max-w-7xl font-poppins space-y-16 sm:space-y-20"
+    className="container mx-auto px-3 sm:px-5 lg:px-6 max-w-7xl font-sans space-y-16 sm:space-y-20"
       style={{
         background:
           "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",

@@ -4,8 +4,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        // make the default sans font a Helvetica stack so the whole site uses the same font
+        sans: ["\"Helvetica Neue\"", "Helvetica", "Arial", "sans-serif"],
+        // keep a named headerFont (same stack) for any explicit references
+        headerFont: ["\"Helvetica Neue\"", "Helvetica", "Arial", "sans-serif"],
         poppins: ["Poppin", "sans-serif"],
-        headerFont: ["Roboto", "Helvetica", "Arial", "sans-serif"],
       },
       colors: {
         hommlie: "#02513E",

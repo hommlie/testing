@@ -579,7 +579,7 @@ export default function AddtoCart() {
 
                 <button
                   onClick={() => navigate(`${config.VITE_BASE_URL}/my-bookings`)}
-                  className="px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
+                  className="px-12 sm:px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
                 >
                   My Bookings
                 </button>
@@ -595,7 +595,7 @@ export default function AddtoCart() {
                   {/* Account */}
                   <div>
                     <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-l font-semibold flex items-center gap-2">
+                      <h2 className="text-xl font-semibold flex items-center gap-2">
                         <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
                           <MdOutlineSendToMobile className="text-xl text-[#0463ac]" />
                         </div>
@@ -769,7 +769,7 @@ export default function AddtoCart() {
                   >
                     {/* Left: title + meta */}
                     <div className="flex-1">
-                      <h3 className="text-l font-semibold text-gray-900 leading-snug">
+                      <h3 className="text-xl font-semibold text-gray-900 leading-snug">
                         {pd.product_name}
                       </h3>
 
@@ -972,7 +972,7 @@ export default function AddtoCart() {
                     <div className="bg-white rounded-xl shadow-sm p-6 border border-black">
                       <div className="flex items-center gap-3 mb-4">
                         <CiDeliveryTruck className="text-2xl text-[#249370]" />
-                        <h3 className="font-semibold">Refund Policy</h3>
+                        <h3 className="font-semibold text-xl">Refund Policy</h3>
                       </div>
                       <a href={`${config.VITE_BASE_URL}/privacy-policy`} className="text-gray-600 hover:underline">
                         Learn More
