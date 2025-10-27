@@ -33,8 +33,9 @@ body {
   border-radius: 8px;
   padding: 20px;
   background-color: #fff;
-  margin-left: -20px;
-  width: 105%;
+  margin-left: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .features-heading {
@@ -126,13 +127,14 @@ body {
   font-weight: bold;
 }
 
-/* ✅ Responsive video */
+/* Responsive video: use site-wide default in src/styles/index.css; here keep a small max-width for large screens */
 .video-container {
   position: relative;
-  width: 50%;
-  padding-bottom: 66.25%; /* 16:9 ratio */
+  width: 100%;
+  max-width: 900px;
+  padding-bottom: 56.25%; /* 16:9 ratio */
   height: 0;
-  margin: 15px 0;
+  margin: 15px auto;
 }
 
 .video-container iframe {
@@ -140,7 +142,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 50%;
+  height: 100%;
   border: none;
 }
 
@@ -162,36 +164,13 @@ body {
     width: 100%;
     margin-left: 0;
     padding: 15px;
+    box-sizing: border-box;
   }
 
   .features-heading,
   .service-feature,
   .section-heading {
     font-size: 16px;
-  }
-
-  .bullet-point,
-  .features-box li {
-    font-size: 14px;
-  }
-
-  .visit {
-    padding-left: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .features-box {
-    width: 113%;         /* ✅ always fit screen */
-    margin-left: -20px;      /* ✅ remove shifting */
-    padding: 15px;       /* ✅ keep spacing inside */
-    box-sizing: border-box; /* ✅ ensures padding doesn’t break width */
-  }
-
-  .features-heading,
-  .service-feature,
-  .section-heading {
-    font-size: 16px;   /* ✅ smaller font for mobile */
   }
 
   .bullet-point,
