@@ -385,7 +385,7 @@ const ServiceSection = ({ categories }) => {
       <motion.div
         whileHover={{ y: -5 }}
         className={`relative w-[94vw] sm:max-w-[360px] rounded-xl border border-black transition-all duration-300 overflow-hidden flex flex-col justify-between 
-          h-[530px] bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
+          h-[520px] bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
       >
 
         {product.is_recommended == 1 && (
@@ -412,7 +412,7 @@ const ServiceSection = ({ categories }) => {
               {formatDescription(matchedVariation.description).map((point, i) => (
                 <li key={i} className="flex items-start">
                   <span className="mr-2 text-black">✓</span>
-                  <span className="text-black">{point.trim()}</span>
+                  <span className="text-black text-sm">{point.trim()}</span>
                 </li>
               ))}
             </ul>
@@ -434,7 +434,7 @@ const ServiceSection = ({ categories }) => {
 
             <a
             href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
-            className="text-center mb-2 text-md text-[#0463ac] text-bold text-decoration-line: underline"
+            className="text-center mb-2 text-md text-[#0463ac] text-bold text-decoration-line: underline -mt-4"
           >
             View Details
           </a>
@@ -474,7 +474,7 @@ const ServiceSection = ({ categories }) => {
             </div>
           </div>
 
-          <div className="mt-4">
+          <div className="">
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={(e) => {
