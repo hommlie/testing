@@ -27,13 +27,7 @@ const InspectionFormSection = () => {
   const successNotify = (msg) => notify(msg, "success");
   const errorNotify = (msg) => notify(msg, "error");
 
-  const timeSlots = [
-    "9 to 11 AM",
-    "11 to 1 PM",
-    "1 to 3 PM",
-    "3 to 5 PM",
-    "5 to 7 PM",
-  ];
+  const timeSlots = ["9 to 11 AM", "11 to 1 PM", "1 to 3 PM", "3 to 5 PM", "5 to 7 PM"];
 
   const services = [
     { id: 1, name: "Pest Control" },
@@ -107,11 +101,12 @@ const InspectionFormSection = () => {
   };
 
   return (
-    <div className="w-full sm:max-w-6xl mx-auto px-4 sm:px-0 py-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        {/* Contact Info */}
-        <div className="bg-white p-4 rounded-2xl shadow-md border border-gray-100">
-          <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6">
+    <div className="w-full sm:max-w-6xl mx-auto px-0 md:px-0 lg:px-0 py-0 md:py-4">
+      {/* On mobile, remove gaps and make first card fill viewport */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8">
+        {/* Contact Info (mobile = full-screen panel) */}
+        <div className="bg-white p-4 md:p-6 rounded-none md:rounded-2xl shadow-sm md:shadow-md border border-gray-200 md:border-gray-100 flex">
+          <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 w-full">
             <div className="w-full">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                 Schedule Your Inspection
@@ -119,6 +114,7 @@ const InspectionFormSection = () => {
               <p className="text-sm sm:text-base text-gray-600 mb-4">
                 Get professional help for your home or business
               </p>
+
               <div className="space-y-4 text-sm">
                 <div className="flex items-center gap-3">
                   <MdOutlineLocalPostOffice className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
@@ -127,6 +123,7 @@ const InspectionFormSection = () => {
                     <p className="text-gray-800 font-medium text-sm">reach@hommlie.com</p>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <IoCallOutline className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
                   <div>
@@ -134,28 +131,27 @@ const InspectionFormSection = () => {
                     <p className="text-gray-800 font-medium text-sm">+91-6363865658</p>
                   </div>
                 </div>
+
                 <div className="flex items-start gap-3">
                   <IoBusiness className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
                   <div>
                     <h3 className="text-gray-500 text-xs">Our Offices</h3>
                     <div className="flex flex-wrap gap-2 mt-1">
-                      {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map(
-                        (city) => (
-                          <span
-                            key={city}
-                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
-                          >
-                            {city}
-                          </span>
-                        )
-                      )}
+                      {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city) => (
+                        <span
+                          key={city}
+                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                        >
+                          {city}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Image hidden on mobile */}
+            {/* Image (hidden on mobile) */}
             <div className="hidden md:flex w-full md:w-1/2 justify-center items-center">
               <div className="w-full sm:w-96 md:w-[450px] lg:w-[600px]">
                 <img
@@ -168,22 +164,22 @@ const InspectionFormSection = () => {
           </div>
         </div>
 
-        {/* Booking Form */}
-        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-md border">
+        {/* Booking Form (appears below on mobile, unchanged on desktop) */}
+        <div className="bg-white p-4 sm:p-6 rounded-none md:rounded-2xl shadow-sm md:shadow-md border border-gray-200 md:border-gray-300">
           {/* Step Indicator */}
           <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
             {[1, 2].map((s, i) => (
               <React.Fragment key={s}>
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold ${
-                    step === s
-                      ? "bg-[#0463ac] text-white"
-                      : "bg-gray-200 text-gray-600"
+                    step === s ? "bg-[#0463ac] text-white" : "bg-gray-200 text-gray-600"
                   }`}
                 >
                   {s}
                 </div>
-                {i < 1 && <div className={`h-1 w-6 ${step > s ? "bg-black" : "bg-gray-300"}`} />}
+                {i < 1 && (
+                  <div className={`h-1 w-6 ${step > s ? "bg-black" : "bg-gray-300"}`} />
+                )}
               </React.Fragment>
             ))}
           </div>
@@ -216,9 +212,7 @@ const InspectionFormSection = () => {
                       value={formData.phone}
                       onChange={(e) => {
                         const digits = e.target.value.replace(/\D/g, "");
-                        if (digits.length <= 10) {
-                          setFormData({ ...formData, phone: digits });
-                        }
+                        if (digits.length <= 10) setFormData({ ...formData, phone: digits });
                       }}
                       maxLength={10}
                       className={`flex-1 px-3 py-2 border rounded-r-lg ${
@@ -338,11 +332,7 @@ const InspectionFormSection = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md mx-4">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-8 h-8 text-[#92B775]"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
+              <svg className="w-8 h-8 text-[#92B775]" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -354,8 +344,7 @@ const InspectionFormSection = () => {
               Booking Inspection Confirmed!
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              We've received your request and will contact you shortly to
-              confirm the details.
+              We've received your request and will contact you shortly to confirm the details.
             </p>
             <button
               onClick={() => setSubmitted(false)}
