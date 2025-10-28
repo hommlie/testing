@@ -1442,7 +1442,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                     </div>
                   </div>
               {variations.length > 0 && (
-                <div className="bg-white rounded-lg p-4 space-y-4">
+                <div className="bg-white rounded-lg p-4 space-y-4 border border-gray-200 shadow-sm">
                   <h3 className="text-xl font-semibold">Select Frequency</h3>
                  
                   <div className="space-y-4">
