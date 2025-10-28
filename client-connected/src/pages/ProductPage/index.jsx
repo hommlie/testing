@@ -1021,10 +1021,10 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                         </div>
                         <div className="flex items-center gap-2 mb-4">
                           <span className="text-lg font-bold text-[#249370]">
-                            ₹{selectedVariation.discounted_variation_price}
+                            ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
                           </span>
                           <span className="text-sm line-through text-gray-500">
-                            ₹{selectedVariation.price}
+                            ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 mb-2">
@@ -1141,7 +1141,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                           Discounted Price
                         </p>
                         <p className="text-base font-semibold">
-                          ₹{totalAmount}
+                          ₹{Number(totalAmount ?? 0).toFixed(2)}
                         </p>
                       </div>
                       {couponDiscount ? (
@@ -1153,7 +1153,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                             Coupon Discount
                           </p>
                           <p className="text-base font-semibold">
-                            ₹{couponDiscount}
+                            ₹{Number(couponDiscount ?? 0).toFixed(2)}
                           </p>
                         </div>
                       ) : null}
@@ -1164,7 +1164,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                         >
                          Platform Fee
                         </p>
-                        <p className="text-base font-semibold">₹{taxAmount}</p>
+                        <p className="text-base font-semibold">₹{Number(taxAmount ?? 0).toFixed(2)}</p>
                       </div>
                       <div
                         className="border-t-2 border-dotted border-black"
@@ -1390,7 +1390,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                           Approx. Amount:
                         </label>
                         <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">
-                          ₹{formData.total_amount}
+                          ₹{Number(formData.total_amount ?? 0).toFixed(2)}
                         </span>
                       </div>
                     </form>
@@ -1921,10 +1921,10 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       </div>
                       <div className="flex items-center gap-2 mb-4">
                         <span className="text-lg font-bold text-[#249370]">
-                          ₹{selectedVariation.discounted_variation_price}
+                          ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
                         </span>
                         <span className="text-sm line-through text-gray-500">
-                          ₹{selectedVariation.price}
+                          ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600 mb-2">
@@ -2037,7 +2037,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       >
                         Discounted Price
                       </p>
-                      <p className="text-base font-semibold">₹{totalAmount}</p>
+                      <p className="text-base font-semibold">₹{Number(totalAmount ?? 0).toFixed(2)}</p>
                     </div>
                     {couponDiscount ? (
                       <div className="flex flex-row justify-between">
@@ -2048,7 +2048,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                           Coupon Discount
                         </p>
                         <p className="text-base font-semibold">
-                          ₹{couponDiscount}
+                          ₹{Number(couponDiscount ?? 0).toFixed(2)}
                         </p>
                       </div>
                     ) : null}
@@ -2059,7 +2059,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       >
                         Platform Fee
                       </p>
-                      <p className="text-base font-semibold">₹{taxAmount}</p>
+                      <p className="text-base font-semibold">₹{Number(taxAmount ?? 0).toFixed(2)}</p>
                     </div>
                     <div
                       className="border-t-2 border-dotted border-black"
@@ -2283,7 +2283,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                         Approx. Amount:
                       </label>
                       <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">
-                        ₹{formData.total_amount}
+                        ₹{Number(formData.total_amount ?? 0).toFixed(2)}
                       </span>
                     </div>
                   </form>

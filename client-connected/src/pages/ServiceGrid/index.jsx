@@ -128,7 +128,13 @@ const ServiceGrid = () => {
                   {/* Sub-card underline hover effect */}
                   <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
                 </div>
-                {sub.price && <p className="text-xs text-[#52852d] font-bold">{sub.price}</p>}
+                {sub.price && (
+                  <p className="text-xs text-[#52852d] font-bold">
+                    {typeof sub.price === "number" || !isNaN(Number(sub.price))
+                      ? `₹${Number(sub.price).toFixed(2)}`
+                      : sub.price}
+                  </p>
+                )}
                 {sub.note && <p className="text-[10px] text-gray-500 leading-tight text-center">{sub.note}</p>}
               </a>
             ))}

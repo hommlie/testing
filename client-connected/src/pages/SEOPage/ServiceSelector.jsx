@@ -193,14 +193,14 @@ const ServiceSelector = ({ services, onCallClick }) => {
                   <p className="font-medium text-left">
                     {service.product_name}
                   </p>
-                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-2 mt-1">
                     <span className="text-lg font-bold text-emerald-600">
-                      ₹{service.discounted_price}
+                      ₹{Number(service.discounted_price ?? 0).toFixed(2)}
                     </span>
                     {service.product_price > service.discounted_price && (
                       <>
                         <span className="text-sm line-through text-gray-400">
-                          ₹{service.product_price}
+                          ₹{Number(service.product_price ?? 0).toFixed(2)}
                         </span>
                         <span className="text-sm text-emerald-600">
                           (
@@ -298,15 +298,15 @@ const ServiceSelector = ({ services, onCallClick }) => {
                   >
                     <div className="flex flex-col items-start">
                       <span className="font-medium">{variation.variation}</span>
-                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 mt-1">
                         <span className="font-bold">
-                          ₹{variation.discounted_variation_price}
+                          ₹{Number(variation.discounted_variation_price ?? 0).toFixed(2)}
                         </span>
                         {variation.price >
                           variation.discounted_variation_price && (
                           <>
                             <span className="text-sm line-through opacity-75">
-                              ₹{variation.price}
+                              ₹{Number(variation.price ?? 0).toFixed(2)}
                             </span>
                             <span className="text-sm">
                               (

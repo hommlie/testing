@@ -488,13 +488,13 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                   ref={searchInputRef}
                   type="text"
                   placeholder={`Search ${services[placeholderIndex]}...`}
-                  className="w-full pl-4 pr-20 py-3 text-base border border-black bg-[#f7f7f7] rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-4 pr-20 py-3 text-base border border-black bg-[#f7f7f7] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                   value={searchTerm}
                   onChange={handleSearchChange}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                 />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-gray-700 text-xl">
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-[#0463ac] text-xl">
                   <BiSearchAlt
                     className="cursor-pointer hover:text-emerald-900 transition-colors"
                     onClick={() => {
@@ -585,10 +585,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                             <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
                             <p className="flex gap-2 text-gray-600">
                               <span className="font-semibold text-emerald-700">
-                                ₹{result.discounted_price}
+                                ₹{Number(result.discounted_price ?? 0).toFixed(2)}
                               </span>
                               <span className="line-through text-gray-400">
-                                ₹{result.product_price}
+                                ₹{Number(result.product_price ?? 0).toFixed(2)}
                               </span>
                             </p>
                             {result.rating && (

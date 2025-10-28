@@ -174,7 +174,7 @@ export default function Wallet() {
             <div className="col-span-12 pt-2">
               <p className="text-white/90 text-lg sm:text-xl">Available Balance</p>
               <p className="mt-2 text-white text-4xl sm:text-6xl font-bold leading-none">
-                ₹{wallet?.balance || 0}
+                ₹{Number(wallet?.balance ?? 0).toFixed(2)}
               </p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default function Wallet() {
                             : "text-red-300"
                         }`}
                       >
-                        {t.transaction_type === "credit" ? "+" : "-"}₹{t.amount}
+                        {t.transaction_type === "credit" ? "+" : "-"}₹{Number(t.amount ?? 0).toFixed(2)}
                       </p>
                       <FaChevronRight className="hidden sm:block text-white/40 group-hover:text-white/70 transition-colors" />
                     </div>

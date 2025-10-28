@@ -279,7 +279,7 @@ export default function ScrapPrices() {
                       {item.name}
                     </div>
                     <div className="mt-1 text-green-700 font-semibold text-sm">
-                      ₹{item.price}{" "}
+                      ₹{Number(item.price ?? 0).toFixed(2)}{" "}
                       <span className="font-medium text-gray-600">{item.unit}</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">{item.category}</div>
@@ -347,7 +347,7 @@ export default function ScrapPrices() {
               >
                 <div className="text-sm sm:text-base">
                   <b>{selected.length}</b> item(s) selected ·{" "}
-                  <span className="text-green-700 font-semibold">₹{totalPrice}</span>{" "}
+                  <span className="text-green-700 font-semibold">₹{Number(totalPrice ?? 0).toFixed(2)}</span>{" "}
                   <span className="text-gray-500 text-xs">(est.)</span>
                 </div>
 
@@ -604,7 +604,7 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
 
               <div className="sm:ml-auto rounded-xl border bg-gray-50 px-4 py-2 text-center w-full sm:w-auto">
                 <div className="text-xs text-gray-500">Estimated</div>
-                <div className="text-lg font-bold">₹{it.qty * it.price}</div>
+                <div className="text-lg font-bold">₹{(Number(it.qty) * Number(it.price)).toFixed(2)}</div>
               </div>
             </div>
 
@@ -619,7 +619,7 @@ function Step2Quantities({ items, setItems, total, onBack, onSkip, onContinue })
       <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="rounded-xl border bg-gray-50 px-4 py-2 w-full sm:w-auto text-center sm:text-left">
           <span className="text-xs text-gray-500 mr-2">Total</span>
-          <span className="text-lg font-bold">₹{total}</span>
+          <span className="text-lg font-bold">₹{Number(total ?? 0).toFixed(2)}</span>
         </div>
 
         <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
@@ -748,11 +748,11 @@ function Step4Review({ items, pickup, total, onEdit, onConfirm, submitting = fal
           <Row
             key={it.name}
             label={`${it.name} • ${it.qty} ${it.measure}`}
-            value={`₹${it.qty * it.price}`}
+            value={`₹${(Number(it.qty) * Number(it.price)).toFixed(2)}`}
           />
         ))}
-        <Line />
-        <Row label={<b>Total</b>} value={<b>₹{total}</b>} />
+  <Line />
+  <Row label={<b>Total</b>} value={<b>₹{Number(total ?? 0).toFixed(2)}</b>} />
       </div>
 
       <div className="rounded-xl border border-gray-200 p-4 sm:p-5 mt-4">
@@ -811,13 +811,13 @@ function Step5Success({ items, total, pickup, onBookAnother, onTrack }) {
             <div className="font-medium">
               {it.qty} {it.measure} {it.name}
             </div>
-            <div className="font-semibold">₹{it.qty * it.price}</div>
+            <div className="font-semibold">₹{(Number(it.qty) * Number(it.price)).toFixed(2)}</div>
           </div>
         ))}
         <div className="border-t my-3" />
         <div className="flex items-center justify-between font-semibold">
           <div>Total</div>
-          <div>₹{total}</div>
+          <div>₹{Number(total ?? 0).toFixed(2)}</div>
         </div>
       </div>
 

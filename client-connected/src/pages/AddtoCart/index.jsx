@@ -559,9 +559,9 @@ export default function AddtoCart() {
 
   return (
     <div
-      className="bg-white"
+      className=""
     >
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12"
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 bg-white"
       >
         {cart.length === 0 ? (
           <div className="flex justify-center items-center min-h-[50vh] -mt-5">
@@ -572,7 +572,7 @@ export default function AddtoCart() {
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 <button
                   onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
-                  className="px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
+                 className="px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
                 >
                   Browse Services
                 </button>

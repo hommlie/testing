@@ -317,13 +317,13 @@ export default function ReviewBooking() {
                         <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
                             <h2 className="text-xl font-semibold mb-4">Price Details ({itemCount} items)</h2>
                             <div className="space-y-4">
-                                <div className="flex justify-between text-gray-600">
+                                    <div className="flex justify-between text-gray-600">
                                     <span>Price ({itemCount} items)</span>
-                                    <span>₹{totalItemPrice}</span>
+                                    <span>₹{Number(totalItemPrice ?? 0).toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600">
                                     <span>Tax & Fees</span>
-                                    <span>₹{tax}</span>
+                                    <span>₹{Number(tax ?? 0).toFixed(2)}</span>
                                 </div>
                                 {couponDiscount > 0 && (
                                     <div className="flex justify-between text-green-600">

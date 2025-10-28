@@ -192,13 +192,13 @@ export default function TrackOrder() {
                                 <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.attribute}</p>
                                 <p className="text-xs lg:text-base text-gray-600">{trackingDetails?.variation}</p>
                                 <p className="text-xs lg:text-base">Quantity: {trackingDetails?.qty}</p>
-                                <p className="text-xs lg:text-base">Price: ₹{(trackingDetails?.price)}</p>
+                                <p className="text-xs lg:text-base">Price: ₹{Number(trackingDetails?.price ?? 0).toFixed(2)}</p>
                                 {trackingDetails?.discount_amount !== 0 &&
-                                    <p className="text-xs lg:text-base">Discount: ₹{trackingDetails?.discount_amount}</p>
+                                    <p className="text-xs lg:text-base">Discount: ₹{Number(trackingDetails?.discount_amount ?? 0).toFixed(2)}</p>
                                 }
                             </div>
                             <div className="flex flex-col justify-end h-full text-center">
-                                <p className="text-sm lg:text-xl font-bold">₹{trackingDetails?.grand_total}</p>
+                                <p className="text-sm lg:text-xl font-bold">₹{Number(trackingDetails?.grand_total ?? 0).toFixed(2)}</p>
                                 <span className="text-[10px] font-medium opacity-[50%]">(Including tax)</span>
                             </div>
                         </div>

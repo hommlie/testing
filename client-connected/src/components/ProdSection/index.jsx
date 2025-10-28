@@ -139,13 +139,13 @@ export default function ProdSection({
                   <h5 className="text-[10px] md:text-sm line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
                     {item.product_name}
                   </h5>
-                  <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2 mt-1">
-                    <span>₹{item.discounted_price}</span>
+                    <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2 mt-1">
+                    <span>₹{Number(item.discounted_price ?? 0).toFixed(2)}</span>
                     <span
                       className="line-through font-normal"
                       style={{ color: "#ADB6BB" }}
                     >
-                      ₹{item.product_price}
+                      ₹{Number(item.product_price ?? 0).toFixed(2)}
                     </span>
                   </p>
                 </div>

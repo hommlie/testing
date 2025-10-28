@@ -584,9 +584,7 @@ const handleComplaintSubmit = async () => {
 };
 
   return (
-    <div className="sm:mx-7xl bg-cover bg-center bg-no-repeat" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
+    <div className="sm:mx-7xl bg-cover bg-center bg-no-repeat">
       <section className="px-4 sm:px-6 lg:px-8">
         <h3 className="text-center text-3xl font-bold text-gray-900 mb-8">
           My Bookings
@@ -920,7 +918,7 @@ const handleComplaintSubmit = async () => {
                           </div>
                           <div>
                             <p className="text-gray-500">Price (Including Tax)</p>
-                            <p className="font-medium text-gray-900">₹{od?.price}</p>
+                            <p className="font-medium text-gray-900">₹{Number(od?.price ?? 0).toFixed(2)}</p>
                           </div>
                           <div>
                             <p className="text-gray-500">Scheduled Time</p>
@@ -931,7 +929,7 @@ const handleComplaintSubmit = async () => {
                           {/* Uncomment if you want Total */}
                           {/* <div>
                             <p className="text-gray-500">Total Amount</p>
-                            <p className="font-medium text-gray-900">₹{od?.grand_total}</p>
+                            <p className="font-medium text-gray-900">₹{Number(od?.grand_total ?? 0).toFixed(2)}</p>
                           </div> */}
                         </div>
                       </div>
@@ -978,7 +976,7 @@ const handleComplaintSubmit = async () => {
                         <div>
                           {/* <p className="text-gray-500">Total Discount</p>
                           <p className="font-medium text-gray-900">
-                            ₹{findTotalDiscount(orders)}
+                            ₹{Number(findTotalDiscount(orders) ?? 0).toFixed(2)}
                           </p> */}
                         </div>
                       )}

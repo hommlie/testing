@@ -284,7 +284,7 @@ const InspectionForm = () => {
               Approximate Amount:
             </label>
             <div className="text-xl font-semibold text-green-600">
-              ₹{formData.total_amount}
+              ₹{Number(formData.total_amount ?? 0).toFixed(2)}
             </div>
           </motion.div>
 

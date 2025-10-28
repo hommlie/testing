@@ -471,7 +471,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
       className="w-full sticky top-0 z-20 shadow-sm font-sans  sm:max-w-7xl sm:mx-auto sm:px-1"
     >
       {showMobileBanner && (
-        <div className="w-full top-0 left-0 z-50 bg-green-800 text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
+        <div className="w-full top-0 left-0 z-50 bg-[#0463ac] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
           <a
             href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
             target="_blank"
@@ -932,7 +932,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
             <div className="md:hidden flex items-center gap-4">
               <button
                 onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="relative text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
+                className="relative text-2xl text-[#0463ac] hover:text-emerald-600 transition-colors"
                 aria-label="Go to cart"
               >
                 <FaShoppingCart />
@@ -999,10 +999,10 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                       </h4>
                       <p className="flex gap-2 text-gray-600">
                         <span className="font-semibold text-emerald-700">
-                          ₹{result.discounted_price}
+                          ₹{Number(result.discounted_price ?? 0).toFixed(2)}
                         </span>
                         <span className="line-through text-gray-400">
-                          ₹{result.product_price}
+                          ₹{Number(result.product_price ?? 0).toFixed(2)}
                         </span>
                       </p>
 

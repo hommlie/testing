@@ -175,7 +175,7 @@ const ProductSlider = ({ title, services = [] }) => {
                           <div className="text-sm">
                             From{" "}
                             <span className="font-semibold">
-                              ₹{service.discounted_price || service.price || 0}
+                              ₹{Number(service.discounted_price ?? service.price ?? 0).toFixed(2)}
                             </span>
                           </div>
                         </div>

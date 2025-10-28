@@ -217,7 +217,7 @@ const LandingPage = () => {
 
             {/* Price badge */}
             <div className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm font-medium">
-              From ₹{service.starting_price}/service
+              From ₹{Number(service.starting_price ?? 0).toFixed(2)}/service
             </div>
           </div>
 
