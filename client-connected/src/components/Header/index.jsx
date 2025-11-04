@@ -413,6 +413,20 @@ const MoneyNoteIcon = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
+// Animated underline used under header tabs
+// Animated underline used under header tabs
+const TabUnderline = ({ active = false }) => (
+  <span
+    className={[
+      "pointer-events-none absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240]",
+      "origin-center transform transition-transform duration-300",
+      active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+    ].join(" ")}
+  />
+);
+
+
+
 // Wallet pill styled like the screenshot (amount + overlapping money.png on the right)
 const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
   // format & safe number
@@ -426,6 +440,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
     md: { h: "h-8", text: "text-base", pad: "pl-3 pr-7", img: "w-7 h-7", shift: "-right-2.5" },
     lg: { h: "h-12", text: "text-lg",  pad: "pl-4 pr-8", img: "w-8 h-8", shift: "-right-3" },
   }[size] || {};
+
 
   return (
     <button
@@ -504,7 +519,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
           >
             {/* Centered Offer Line */}
 
-              <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
+              {/* <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
                 <AnimatePresence mode="wait">
                   <motion.p
                     key={offers[current].label}
@@ -519,19 +534,41 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                     </NavLink>
                   </motion.p>
                 </AnimatePresence>
-              </div>
+              </div> */}
             {/* Left: Brand + Message */}
-            <span className=" font-normal text-black z-20">
-              <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
-                <button className="px-3 py-0 pb-1 bg-[#0463ac] text-white">Residential</button>
-                <a
-                  href="https://b2b.hommlie.com"
-                  className="px-3 py-0 pb-1 bg-white text-black hover:bg-[#133215] hover:text-white transition-colors duration-200"
-                >
-                  Commercial
-                </a>
-              </div>
-            </span>
+            <span className="font-normal text-black z-20">
+            <div className="inline-flex rounded text-sm font-semibold relative">
+              {/* Residential */}
+              <button
+                type="button"
+                onClick={() => navigate("/")}
+                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-[#0463ac] text-white"
+              >
+                Residential
+                <TabUnderline active={location.pathname === "/" || location.pathname === "/home"} />
+              </button>
+
+              {/* Commercial (external) */}
+              <a
+                href="https://b2b.hommlie.com"
+                target="_blank" rel="noopener noreferrer"
+                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200 "
+              >
+                Commercial
+                <TabUnderline />
+              </a>
+
+              {/* Waste Management */}
+              <NavLink
+                to="/wastemanagement"
+                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200 "
+              >
+                Waste Management
+                <TabUnderline active={location.pathname.startsWith("/wastemanagement")} />
+              </NavLink>
+            </div>
+          </span>
+
 
             {/* Right: Action Links */}
             <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold z-20">
