@@ -42,6 +42,7 @@ import Scrap from "./pages/Scrap";
 import Business from "./pages/ScrapBusiness";
 import ScrapPrices from "./pages/ScrapPrices";
 import Product from "./pages/Product";
+import WasteManagement from "./pages/WasteManagement";
 
 const ProjectRoutes = () => {
   const notify = useToast();
@@ -266,9 +267,13 @@ const ProjectRoutes = () => {
       path: `${config.VITE_BASE_URL}/product`,
       element: <Product />,
     },
-
+    {
+     path: `${config.VITE_BASE_URL}/wastemanagement`,
+     element: <WasteManagement />,
+   },
   ]);
   return element;
 };
 
 export default ProjectRoutes;
+
