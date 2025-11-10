@@ -349,7 +349,17 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
             <li><b>🆔 Order ID:</b> ${order_number}</li>
             <li><b>🗓 Date:</b> ${orders[0]?.desired_date || "-"}</li>
             <li><b>🕒 Time:</b> ${orders[0]?.desired_time || "-"}</li>
-            <li><b>🛠 Service:</b> ${orders.map(o => o.product_name).join(", ") || firstProduct}</li>
+            <li><b>🛠 Service:</b> ${
+              (() => {
+                const serviceCount = {};
+                orders.forEach(o => {
+                  serviceCount[o.product_name] = (serviceCount[o.product_name] || 0) + 1;
+                });
+                return Object.entries(serviceCount)
+                  .map(([name, count]) => `${name}${count > 1 ? ` (x${count})` : ''}`)
+                  .join(", ") || firstProduct;
+              })()
+            }</li>
             <li><b>💰 Amount:</b> ₹${grand_total}</li>
           </ul>
           <p>Our team is ready to make your home shine!</p>
@@ -482,8 +492,8 @@ exports.orderhistory = async (req, res) => {
           desired_time: desiredTime12,
           attribute: attributeDetails?.attribute || "",
           variation: variationDetails?.variation || "",
-        };
-      })
+        }; 
+      })  
     );
 
     if (updatedData.length > 0) {
