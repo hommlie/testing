@@ -29,6 +29,25 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
+const calculateContractDates = (startDate, warrantyDays = 0) => {
+  if (!startDate) return { contract_start_date: null, contract_end_date: null };
+  
+  // Ensure startDate is a moment object and is valid
+  const start = moment(startDate);
+  if (!start.isValid()) return { contract_start_date: null, contract_end_date: null };
+  
+  // For warranty calculation:
+  // If warrantyDays = 60, and start = 2025-10-10
+  // Then end should be 2025-12-08 (60 days total, inclusive of start date)
+  const addDays = Math.max(0, Number(warrantyDays) - 1); // subtract 1 since start date counts as day 1
+  const end = start.clone().add(addDays, 'days');
+
+  return {
+    contract_start_date: start.format('YYYY-MM-DD'),
+    contract_end_date: end.format('YYYY-MM-DD')
+  };
+};
+
 exports.initiatePayment = async (req, res) => {
   try {
     const instance = new Razorpay({
@@ -231,7 +250,7 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
         .add(i * variation_interval, "days")
         .format("YYYY-MM-DD");
 
-     const { contract_start_date, contract_end_date } = getContractDates(orderDate);
+     const { contract_start_date, contract_end_date } = calculateContractDates(orderDate, warrantyDays);
 
 
       const order = await Order.create({
@@ -271,7 +290,7 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
           orders.push(order);
         }
       } else {
-        const { contract_start_date, contract_end_date } = getContractDates(desired_date);
+        const { contract_start_date, contract_end_date } = calculateContractDates(desired_date, warrantyDays);
 
         const order = await Order.create({
           user_id,
@@ -737,21 +756,20 @@ exports.rescheduleOrder = async (req, res) => {
     const attributeDetails = await Attribute.findByPk(order.attribute);
     const warrantyDays = Number(attributeDetails?.under_warranty_day || 0);
 
-  const start = moment(desired_date, "YYYY-MM-DD");
-  // make warranty inclusive: if warrantyDays = 7, end should be start + 6 days
-  const addDays = Math.max(0, Number(warrantyDays) - 1);
-  const end   = start.clone().add(addDays, "days");
+    const formattedTime = moment(desired_time, 'hh:mm A').format('HH:mm');
+    const { contract_start_date, contract_end_date } = calculateContractDates(desired_date, warrantyDays);
 
-    const formattedTime = moment(desired_time, "hh:mm A").format("HH:mm");
+    if (!contract_start_date || !contract_end_date) {
+      return res.status(400).json({ status: 0, message: "Invalid date format" });
+    }
 
     await Order.update({
       desired_time: formattedTime,
-      desired_date: start.format("YYYY-MM-DD"),
-      contract_start_date: start.format("YYYY-MM-DD"),
-      contract_end_date:   end.format("YYYY-MM-DD"),
+      desired_date,
+      contract_start_date,
+      contract_end_date,
     }, { where: { order_number: order.order_number } });
 
-    // …(email notify unchanged)
     return res.status(200).json({ status: 1, message: "Order rescheduled successfully" });
   } catch (error) {
     console.error("Error rescheduling order:", error);
