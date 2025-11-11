@@ -33,6 +33,11 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    service_number: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    
     product_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -170,3 +175,4 @@ Order.init(
 );
 
 module.exports = Order;
+
