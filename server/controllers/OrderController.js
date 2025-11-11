@@ -227,9 +227,6 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
       // …inside exports.order, after fetching variationDetails & attributeDetails
         const warrantyDays = Number(attributeDetails?.under_warranty_day || 0);
 
-        // helper to compute contract dates from a start date (YYYY-MM-DD)
-        // NOTE: warrantyDays is treated as inclusive number of days. For example,
-        // if warrantyDays = 7 and start = 2025-10-01 then contract_end_date = 2025-10-07.
         const getContractDates = (startYMD) => {
           const start = moment(startYMD, "YYYY-MM-DD");
           // make warranty inclusive: add (warrantyDays - 1) days; if warrantyDays <= 0 keep same day
@@ -241,6 +238,17 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
           };
         };
 
+        // Get MAX service_number inside transaction (prevents race)
+      const maxServiceNumber = await Order.max("service_number", {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+
+      // Choose base start if none exist
+      const SERVICE_BASE = 1000;
+      let nextServiceNumber = (parseInt(maxServiceNumber, 10) || SERVICE_BASE) + 1;
+
+
       if (variationDetails && variationDetails.variation_times && variationDetails.variation_times > 1) {
         const { variation_interval, variation_times } = variationDetails;
         const pricePerOrder = price / variation_times;
@@ -251,7 +259,7 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
         .format("YYYY-MM-DD");
 
      const { contract_start_date, contract_end_date } = calculateContractDates(orderDate, warrantyDays);
-
+    
 
       const order = await Order.create({
         user_id,
@@ -285,7 +293,8 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
         desired_time: formattedTime,
         desired_date: orderDate,                // booking start date (per visit)
         contract_start_date,
-        contract_end_date,                      // <-- NEW
+        contract_end_date,       
+        service_number: nextServiceNumber++,               // <-- NEW
       }, { transaction: t });
           orders.push(order);
         }
@@ -325,6 +334,7 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
           desired_date,
           contract_start_date,
           contract_end_date,
+          service_number: nextServiceNumber++,
         }, { transaction: t });
 
         orders.push(order);
