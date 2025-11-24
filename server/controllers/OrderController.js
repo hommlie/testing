@@ -13,10 +13,10 @@ const {
   Variation,
   Coupons,
   Attribute,
-  Wallet,            
+  Wallet,
   WalletTransaction,
 } = require("../models");
-// const stripe = require('stripe')('your_stripe_secret_key');
+
 const moment = require("moment");
 const crypto = require("crypto");
 const axios = require("axios");
@@ -31,11 +31,11 @@ const path = require("path");
 
 const calculateContractDates = (startDate, warrantyDays = 0) => {
   if (!startDate) return { contract_start_date: null, contract_end_date: null };
-  
+
   // Ensure startDate is a moment object and is valid
   const start = moment(startDate);
   if (!start.isValid()) return { contract_start_date: null, contract_end_date: null };
-  
+
   // For warranty calculation:
   // If warrantyDays = 60, and start = 2025-10-10
   // Then end should be 2025-12-08 (60 days total, inclusive of start date)
@@ -119,8 +119,8 @@ exports.order = async (req, res) => {
   const {
     user_id,
     payment_type,
-    payment_id,            
-    grand_total,           
+    payment_id,
+    grand_total,
     discount_amount,
     coupon_name,
     coupon_id,
@@ -135,7 +135,7 @@ exports.order = async (req, res) => {
     longitude,
     desired_time,
     desired_date,
-    wallet_used = 0,       // ⬅ amount user chose to use from wallet (numeric)
+    wallet_used = 0,
   } = req.body;
 
   if (!user_id) {
@@ -149,72 +149,77 @@ exports.order = async (req, res) => {
   try {
     let formattedTime = desired_time ? moment(desired_time, "hh:mm A").format("HH:mm") : desired_time;
 
-    // // next order number
-    // const lastOrder = await Order.findOne({ order: [["id", "DESC"]] });
-    // const lastOrderNumber = lastOrder ? parseInt(lastOrder.order_number) : 10000;
-    // const order_number = (lastOrderNumber + 1).toString();
-// next order number (based on MAX in DB)
-const maxOrderNumber = await Order.max("order_number", {
-  where: {
-    order_number: { [Op.ne]: null },
-  },
-  transaction: t, // keep inside same transaction
-  lock: t.LOCK.UPDATE, // prevents race conditions
-});
+    const maxOrderNumber = await Order.max("order_number", {
+      where: {
+        order_number: { [Op.ne]: null },
+      },
+      transaction: t, // keep inside same transaction
+      lock: t.LOCK.UPDATE, // prevents race conditions
+    });
 
-const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
+    const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
+
+    const [[{ max_service }]] = await sequelize.query(
+      `SELECT COALESCE(MAX(service_number), 0) AS max_service FROM orders FOR UPDATE`,
+      { transaction: t }
+    );
+
+    // Next service number should be max_service + 1. If no existing value, start at 1.
+    const service_number = parseInt(max_service || 0, 10) + 1;
 
     // cart
-      const cartItems = await Cart.findAll({
-    where: { user_id },
-    order: [["id", "DESC"]],
-    transaction: t,
-    lock: t.LOCK.UPDATE,
-  });
-  if (cartItems.length === 0) {
-    await t.rollback();
-    return res.status(200).json({ status: 0, message: "Your cart is empty" });
-  }
+    const cartItems = await Cart.findAll({
+      where: { user_id },
+      order: [["id", "DESC"]],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+    if (cartItems.length === 0) {
+      await t.rollback();
+      return res.status(200).json({ status: 0, message: "Your cart is empty" });
+    }
 
-  const wantToUse = Number(wallet_used || 0);
-   let walletDebited = 0;
- if (wantToUse > 0) {
-   // Amount due before wallet (derived from cart): sum(price*qty + tax*qty + shipping) - discount
-   const preWalletDue = Math.max(0,
-     cartItems.reduce((sum, it) =>
-       sum
-        + Number(it.price || 0) * Number(it.qty || 0)
-        + Number(it.tax || 0)   * Number(it.qty || 0)
-        + Number(it.shipping_cost || 0),
-     0) - Number(discount_amount || 0)
-   );
+    const wantToUse = Number(wallet_used || 0);
+    let walletDebited = 0;
+    if (wantToUse > 0) {
+      const preWalletDue = Math.max(0,
+        cartItems.reduce((sum, it) =>
+          sum
+           + Number(it.price || 0) * Number(it.qty || 0)
+           + Number(it.tax || 0)   * Number(it.qty || 0)
+           + Number(it.shipping_cost || 0),
+        0) - Number(discount_amount || 0)
+      );
 
-   // find/create wallet and lock
-   const [wallet] = await Wallet.findOrCreate({
-     where: { user_id },
-     defaults: { user_id, balance: 0 },
-     transaction: t,
-    lock: t.LOCK.UPDATE,
-   });
+      // find/create wallet and lock
+      const [wallet] = await Wallet.findOrCreate({
+        where: { user_id },
+        defaults: { user_id, balance: 0 },
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
 
-   const balance = Number(wallet.balance) || 0;
-   walletDebited = Math.max(0, Math.min(wantToUse, balance, preWalletDue));
+      const balance = Number(wallet.balance) || 0;
+      walletDebited = Math.max(0, Math.min(wantToUse, balance, preWalletDue));
 
-   if (walletDebited > 0) {
-     wallet.balance = balance - walletDebited;
-     await wallet.save({ transaction: t });
+      if (walletDebited > 0) {
+        wallet.balance = balance - walletDebited;
+        await wallet.save({ transaction: t });
 
-     await WalletTransaction.create({
-       wallet_id: wallet.id,
-       transaction_type: "debit",
-       amount: walletDebited,
-       payment_id: String(payment_id || `WAL-${order_number}`),
-       description: `Order #${order_number} payment`,
-     }, { transaction: t });
-   }
- }
-    // create orders (your existing logic, with `transaction: t`)
+        await WalletTransaction.create({
+          wallet_id: wallet.id,
+          transaction_type: "debit",
+          amount: walletDebited,
+          payment_id: String(payment_id || `WAL-${order_number}`),
+          description: `Order #${order_number} payment`,
+        }, { transaction: t });
+      }
+    }
     const orders = [];
+
+    // Use a mutable nextServiceNumber for multi-item/multi-visit increments
+    let nextServiceNumber = parseInt(service_number, 10) || 1;
+
     for (const cartItem of cartItems) {
       const {
         vendor_id, product_id, product_name, image, qty, price,
@@ -224,30 +229,9 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
       const discountPerItem = Number(discount_amount || 0) / cartItems.length;
       const variationDetails = await Variation.findOne({ where: { id: variation, product_id }, transaction: t });
       const attributeDetails = await Attribute.findOne({ where: { id: attribute }, transaction: t });
-      // …inside exports.order, after fetching variationDetails & attributeDetails
-        const warrantyDays = Number(attributeDetails?.under_warranty_day || 0);
+      const warrantyDays = Number(attributeDetails?.under_warranty_day || 0);
 
-        const getContractDates = (startYMD) => {
-          const start = moment(startYMD, "YYYY-MM-DD");
-          // make warranty inclusive: add (warrantyDays - 1) days; if warrantyDays <= 0 keep same day
-          const addDays = Math.max(0, Number(warrantyDays) - 1);
-          const end = start.clone().add(addDays, "days");
-          return {
-            contract_start_date: start.format("YYYY-MM-DD"),
-            contract_end_date:   end.format("YYYY-MM-DD"),
-          };
-        };
-
-        // Get MAX service_number inside transaction (prevents race)
-      const maxServiceNumber = await Order.max("service_number", {
-        transaction: t,
-        lock: t.LOCK.UPDATE,
-      });
-
-      // Choose base start if none exist
-      const SERVICE_BASE = 1000;
-      let nextServiceNumber = (parseInt(maxServiceNumber, 10) || SERVICE_BASE) + 1;
-
+      const getContractForDate = (startYMD) => calculateContractDates(startYMD, warrantyDays);
 
       if (variationDetails && variationDetails.variation_times && variationDetails.variation_times > 1) {
         const { variation_interval, variation_times } = variationDetails;
@@ -255,57 +239,58 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
 
         for (let i = 0; i < variation_times; i++) {
           const orderDate = moment(desired_date)
-        .add(i * variation_interval, "days")
-        .format("YYYY-MM-DD");
+            .add(i * variation_interval, "days")
+            .format("YYYY-MM-DD");
 
-     const { contract_start_date, contract_end_date } = calculateContractDates(orderDate, warrantyDays);
-    
+          const { contract_start_date, contract_end_date } = getContractForDate(orderDate);
 
-      const order = await Order.create({
-        user_id,
-        vendor_id,
-        product_id,
-        order_number,
-        payment_id,
-        product_name,
-        image,
-        qty,
-        price: pricePerOrder * qty,
-        attribute,
-        variation,
-        tax: (tax / variation_times) * qty,
-        coupon_name,
-        coupon_id,
-        shipping_cost,
-        order_total: grand_total,
-        order_notes,
-        payment_type,
-        full_name,
-        email,
-        mobile,
-        landmark,
-        street_address,
-        pincode,
-        latitude,
-        longitude,
-        discount_amount: discountPerItem / variation_times,
-        order_status: 1,
-        desired_time: formattedTime,
-        desired_date: orderDate,                // booking start date (per visit)
-        contract_start_date,
-        contract_end_date,       
-        service_number: nextServiceNumber++,               // <-- NEW
-      }, { transaction: t });
+          const order = await Order.create({
+            user_id,
+            vendor_id,
+            product_id,
+            order_number,
+            service_number,
+            payment_id,
+            product_name,
+            image,
+            qty,
+            price: pricePerOrder * qty,
+            attribute,
+            variation,
+            tax: (tax / variation_times) * qty,
+            coupon_name,
+            coupon_id,
+            shipping_cost,
+            order_total: grand_total,
+            order_notes,
+            payment_type,
+            full_name,
+            email,
+            mobile,
+            landmark,
+            street_address,
+            pincode,
+            latitude,
+            longitude,
+            discount_amount: discountPerItem / variation_times,
+            order_status: 1,
+            desired_time: formattedTime,
+            desired_date: orderDate,                // booking start date (per visit)
+            contract_start_date,
+            contract_end_date,
+            service_number: nextServiceNumber++,               // increment per created visit
+          }, { transaction: t });
           orders.push(order);
         }
       } else {
-        const { contract_start_date, contract_end_date } = calculateContractDates(desired_date, warrantyDays);
+        const { contract_start_date, contract_end_date } = getContractForDate(desired_date);
 
         const order = await Order.create({
           user_id,
           vendor_id,
           product_id,
           order_number,
+          service_number,
           payment_id,
           product_name,
           image,
@@ -341,18 +326,26 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
       }
     }
 
-    // clear cart
     await Cart.destroy({ where: { user_id }, transaction: t });
-
-    // commit everything
     await t.commit();
-
-    // non-critical notifications/emails can be sent after commit
     try {
       const currentDate = new Date();
       const currentTime = currentDate.toLocaleTimeString();
       const firstName = userData.name;
       const firstProduct = orders[0]?.product_name || "Service";
+
+      const aggregatedProducts = (() => {
+        const map = {};
+        for (const o of orders) {
+          const name = o.product_name || "Product";
+          const q = Number(o.qty) || 1;
+          if (!map[name]) map[name] = 0;
+          map[name] += q;
+        }
+        return Object.entries(map)
+          .map(([name, q]) => `${name} (x${q})`)
+          .join(", ");
+      })();
 
       sendWhatsAppNotification({
         campaignName: "⁠Booking Service",
@@ -363,7 +356,7 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
           order_number?.toString(),
           currentDate.toLocaleDateString(),
           currentTime?.toString(),
-          orders.map(o => o.product_name).join(", ") || firstProduct,
+          aggregatedProducts || orders.map(o => o.product_name).join(", ") || firstProduct,
           grand_total?.toString(),
         ],
       });
@@ -378,17 +371,7 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
             <li><b>🆔 Order ID:</b> ${order_number}</li>
             <li><b>🗓 Date:</b> ${orders[0]?.desired_date || "-"}</li>
             <li><b>🕒 Time:</b> ${orders[0]?.desired_time || "-"}</li>
-            <li><b>🛠 Service:</b> ${
-              (() => {
-                const serviceCount = {};
-                orders.forEach(o => {
-                  serviceCount[o.product_name] = (serviceCount[o.product_name] || 0) + 1;
-                });
-                return Object.entries(serviceCount)
-                  .map(([name, count]) => `${name}${count > 1 ? ` (x${count})` : ''}`)
-                  .join(", ") || firstProduct;
-              })()
-            }</li>
+            <li><b>🛠 Service:</b> ${aggregatedProducts || orders.map(o => o.product_name).join(", ") || firstProduct}</li>
             <li><b>💰 Amount:</b> ₹${grand_total}</li>
           </ul>
           <p>Our team is ready to make your home shine!</p>
@@ -402,14 +385,15 @@ const order_number = ((parseInt(maxOrderNumber) || 10000) + 1).toString();
       console.error("Post-commit notify error:", e);
     }
 
-   const freshWallet = await Wallet.findOne({ where: { user_id } });
- return res.status(200).json({
-   status: 1,
-   message: "Order has been placed successfully",
-   order_number,
-   wallet_debited: walletDebited,
-   wallet_balance: Number(freshWallet?.balance || 0),
-});
+    const freshWallet = await Wallet.findOne({ where: { user_id } });
+    return res.status(200).json({
+      status: 1,
+      message: "Order has been placed successfully",
+      order_number,
+      service_number,
+      wallet_debited: walletDebited,
+      wallet_balance: Number(freshWallet?.balance || 0),
+    });
   } catch (error) {
     console.error("Error placing order:", error);
     try { await t.rollback(); } catch (e) {}
@@ -433,6 +417,7 @@ exports.orderhistory = async (req, res) => {
         "id",
         "product_id",
         "product_name",
+        "service_number",
         "order_number",
         "qty",
         "price",
@@ -482,6 +467,7 @@ exports.orderhistory = async (req, res) => {
         "id",
         "product_id",
         "product_name",
+        "service_number",
         "order_number",
         "qty",
         "price",
@@ -502,6 +488,7 @@ exports.orderhistory = async (req, res) => {
       ],
       order: [
         ["order_number", "DESC"],
+        ["service_number", "DESC"],
         ["id", "DESC"],
       ],
       // limit: 10
@@ -521,8 +508,8 @@ exports.orderhistory = async (req, res) => {
           desired_time: desiredTime12,
           attribute: attributeDetails?.attribute || "",
           variation: variationDetails?.variation || "",
-        }; 
-      })  
+        };
+      })
     );
 
     if (updatedData.length > 0) {
@@ -558,6 +545,7 @@ exports.orderdetails = async (req, res) => {
     const order_info = await Order.findOne({
       attributes: [
         "order_number",
+        "service_number",
         "order_notes",
         "payment_type",
         "full_name",
@@ -786,7 +774,6 @@ exports.rescheduleOrder = async (req, res) => {
     return res.status(500).json({ status: 0, message: "Failed to reschedule order" });
   }
 };
-
 
 exports.cancelOrder = async (req, res) => {
   const { id } = req.body;

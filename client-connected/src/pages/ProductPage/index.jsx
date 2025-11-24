@@ -704,7 +704,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
             <link rel="canonical" href={generateCanonicalUrl()} />
           </Helmet>
           <section className="flex flex-col-reverse lg:flex-row lg:space-x-10">
-            <div className="flex-1 space-y-6 lg:w-7/12">
+            <div className="flex-1 space-y-6 lg:w-7/12 lg:sticky lg:top-20 lg:self-start">
               <LoginSignup
                 isOpen={isModalOpen}
                 onClose={closeModal}
@@ -718,8 +718,8 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                   className="
                     relative
                     w-full
-                    h-[50vh]           /* makes it almost full-screen on mobile */
-                    md:h-[400px]       /* desktop height fixed */
+                    h-[50vh]           
+                    md:h-[400px]       
                     overflow-hidden
                   "
                 >
@@ -750,6 +750,27 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                     </>
                   )}
                 </div>
+
+                {imageItems.length > 1 && (
+                  <div className="mt-3 flex items-center gap-2 overflow-x-auto">
+                    {imageItems.map((it, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentMediaIndex(i)}
+                        className={`flex-shrink-0 w-14 h-14 md:w-20 md:h-20 rounded-sm overflow-hidden border ${
+                          currentMediaIndex === i ? "border-[#249370]" : "border-gray-200"
+                        }`}
+                      >
+                        <img
+                          src={it.image_url}
+                          alt={it.alt_tag}
+                          title={it.image_title}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </section>
 
               <section className="block md:hidden  space-y-4">
@@ -1271,142 +1292,14 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 )}
               </section>
 
-              <section className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm px-5 py-5 mb-4">
-                <ul
-                  className="flex mb-3"
-                  style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                >
-                  <li
-                    className={`mr-1 ${
-                      activeTab === 1 ? "border-[#035240]" : ""
-                    }`}
-                  >
-                    <button
-                      className={`inline-block py-2 px-4 text-[#035240] ${
-                        activeTab === 1 ? "font-medium" : ""
-                      }`}
-                      onClick={() => setActiveTab(1)}
-                      style={{
-                        borderBottom:
-                          activeTab === 1 ? "2px solid #20B526" : "none",
-                      }}
-                    >
-                      Descriptions
-                    </button>
-                  </li>
-                  <li
-                    className={`mr-1 ${
-                      activeTab === 2 ? "border-[#035240]" : ""
-                    }`}
-                  >
-                  </li>
-                  <li
-                    className={`mr-1 ${
-                      activeTab === 3 ? "border-[#035240]" : ""
-                    }`}
-                  >
-                    {/* <button
-                      className={`inline-block sm:hidden py-2 px-4 text-[#035240] ${
-                        activeTab === 3 ? "font-medium" : ""
-                      }`}
-                      onClick={() => setActiveTab(3)}
-                      style={{
-                        borderBottom:
-                          activeTab === 3 ? "2px solid #20B526" : "none",
-                      }}
-                    >
-                      Reviews
-                    </button> */}
-                  </li>
-                </ul>
-                <div>
-                  <div className="product-description">
-                    {/* Toggle Button */}
-                    <button
-                      className="dropdown-toggle"
-                      onClick={() => setIsDescOpen(!isDescOpen)}
-                    >
-                      {isDescOpen ? "Hide Description ▲" : "Show Description ▼"}
-                    </button>
-
-                    {/* Dropdown Content */}
-                    {isDescOpen && (
-                      <div
-                        className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none lg:max-w-[900px]"
-                        dangerouslySetInnerHTML={{
-                          __html: prodData?.description,
-                        }}
-                      />
-                    )}
-                  </div>
-                  
-                  {activeTab === 3 && (
-                    <div className="p-4 space-y-6">
-                      {prodData?.rattings.map((ratting, index) => (
-                        <div
-                          key={index}
-                          className="bg-gray-50 rounded-lg p-4 shadow-sm"
-                        >
-                          <div className="flex items-start space-x-4">
-                            <div className="flex-grow">
-                              <div className="flex justify-between items-center mb-2">
-                                <span className="font-semibold text-gray-800">
-                                  {user?.name ? user?.name : "Unknown"}
-                                </span>
-                                <span className="text-sm text-gray-500">
-                                  {new Date(
-                                    ratting?.created_at
-                                  ).toLocaleDateString()}
-                                </span>
-                              </div>
-                              <div className="flex items-center mb-2">
-                                {[1].map((star, index) => {
-                                  if (index != ratting?.ratting) {
-                                    return (
-                                      <svg
-                                        key={star}
-                                        className={`w-5 h-5 ${
-                                          star <= ratting?.ratting
-                                            ? "text-yellow-400"
-                                            : "text-gray-300"
-                                        }`}
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                      </svg>
-                                    );
-                                  }
-                                })}
-                                <span className="ml-2 text-sm font-medium text-gray-500">
-                                  {ratting?.ratting} out of 5
-                                </span>
-                              </div>
-                              <p className="text-gray-700 mt-2">
-                                "{ratting?.comment}"
-                              </p>
-                              {ratting?.assigned_to ? (
-                                <p className="text-gray-700 mt-2">
-                                  Technician: {ratting?.assigned_to}
-                                </p>
-                              ) : null}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                      {prodData?.rattings.length === 0 && (
-                        <div className="text-center text-gray-500">
-                          No reviews yet. Be the first to leave a review!
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </section>
+              {/*
+                Descriptions tab removed per request.
+                Previously this section contained the "Descriptions" tab header and reviews block.
+                Kept as a JSX comment so it can be restored easily.
+              */}
             </div>
 
-                <div className="hidden md:block md:sticky top-48 z-10 lg:w-5/12 h-fit space-y-4 mt-[40px] lg:min-w-[420px]">
+                <div className="hidden md:block lg:w-5/12 h-fit space-y-4 mt-[40px] lg:min-w-[420px]">
                   <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200 shadow-sm px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
                     <div className="space-y-1 sm:space-y-3 lg:space-y-4">
                       <p className="text-2xl sm:text-xl font-bold mb-2">
@@ -1894,6 +1787,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
           </section>
 
           <div className="flex flex-col gap-4 mt-4">
+
             <section className="bg-white rounded-lg w-full p-4 border border-gray-200 shadow-sm px-5 py-5 mb-4">
               <ProdSection
                 title="Similar Services"
@@ -1988,6 +1882,31 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 </div>
               )}
             </div>
+            {/* Description toggle moved here (directly above Quick Links) */}
+            <div className="product-description bg-white rounded-lg p-4 border border-gray-200 shadow-sm mb-4">
+              <button
+                className="dropdown-toggle"
+                onClick={() => setIsDescOpen(!isDescOpen)}
+              >
+                {isDescOpen ? "Hide Description ▲" : "Show Description ▼"}
+              </button>
+
+              {isDescOpen && (
+                <div className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none lg:max-w-[900px]">
+                  {/* Prefer selected variation description when available, otherwise use product HTML */}
+                  {selectedVariation?.description ? (
+                    <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed">
+                      {selectedVariation.description}
+                    </p>
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: prodData?.description }}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+
           </section>
 
           </div>

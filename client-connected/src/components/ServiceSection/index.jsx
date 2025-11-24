@@ -43,13 +43,20 @@ const ServiceSection = ({ categories }) => {
     return attr.variations.map((v) => v.variation);
   };
 
-  // Initialize selection on mount
+  // Prefer a cockroach subcategory when available
+  const findPreferredSubcategory = (cat) => {
+    if (!cat?.subcategories?.length) return null;
+    const cock = cat.subcategories.find((s) => /cockroach/i.test(s.subcategory_name || "") || /cockroach/i.test(s.slug || ""));
+    return cock || cat.subcategories[0];
+  };
+
+  // Initialize selection on mount (prefer Cockroach subcategory if present)
   useEffect(() => {
     if (categories?.length && !selectedCategory) {
       const cat = categories[0];
       setSelectedCategory(cat.id);
-      if (cat.subcategories?.length) {
-        const sub = cat.subcategories[0];
+      const sub = findPreferredSubcategory(cat);
+      if (sub) {
         setSelectedSubCategory(sub.id);
         if (sub.products?.length) {
           const prod = sub.products[0];
@@ -66,13 +73,15 @@ const ServiceSection = ({ categories }) => {
     if (selectedCategory) {
       const cat = categories.find((c) => c.id === selectedCategory);
       if (cat?.subcategories?.length) {
-        const sub = cat.subcategories[0];
-        setSelectedSubCategory(sub.id);
-        if (sub?.products?.length) {
-          const prod = sub.products[0];
-          setSelectedProduct(prod.id);
-          if (prod.attributes?.length) {
-            setSelectedAttribute(prod.attributes[0].id);
+        const sub = findPreferredSubcategory(cat);
+        if (sub) {
+          setSelectedSubCategory(sub.id);
+          if (sub?.products?.length) {
+            const prod = sub.products[0];
+            setSelectedProduct(prod.id);
+            if (prod.attributes?.length) {
+              setSelectedAttribute(prod.attributes[0].id);
+            }
           }
         }
       }

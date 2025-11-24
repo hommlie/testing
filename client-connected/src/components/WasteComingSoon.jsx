@@ -14,15 +14,10 @@ export default function WasteComingSoon({
 }) {
   const Container = ({ children }) =>
     asPage ? (
-      // Premium background: soft radial + faint grid
-      <div
-        className="min-h-screen relative overflow-hidden"
-       
-      >
-        {/* faint grid overlay */}
+      <div className="min-h-screen relative overflow-hidden">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.04] "
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
         />
         {children}
       </div>
@@ -42,7 +37,6 @@ export default function WasteComingSoon({
       </AnimatePresence>
     );
 
-  // shared easing
   const ease = { duration: 0.5, ease: "easeOut" };
 
   const Card = (
@@ -59,7 +53,6 @@ export default function WasteComingSoon({
       animate={{ y: 0, opacity: 1, scale: 1, transition: ease }}
       exit={{ y: 24, opacity: 0, transition: ease }}
     >
-      {/* Glow rings */}
       <div
         aria-hidden
         className="absolute -inset-2 sm:-inset-3 rounded-[28px] blur-3xl opacity-30"
@@ -68,7 +61,7 @@ export default function WasteComingSoon({
             "radial-gradient(600px 160px at 50% 0%, rgba(3,82,64,0.25), transparent 60%)",
         }}
       />
-      {/* Close (modal only) */}
+
       {!asPage && (
         <button
           aria-label="Close"
@@ -79,10 +72,14 @@ export default function WasteComingSoon({
         </button>
       )}
 
-      {/* Glass card */}
       <section className="relative rounded-2xl sm:rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-[0_10px_30px_rgba(3,82,64,0.08)]">
-        <div className={`${asPage ? "px-5 sm:px-10 pt-8 sm:pt-12 pb-8 sm:pb-10" : "px-5 pt-8 pb-6 sm:px-10 sm:pt-12 sm:pb-10"}`}>
-          {/* Collab Row */}
+        <div
+          className={`${
+            asPage
+              ? "px-5 sm:px-10 pt-8 sm:pt-12 pb-8 sm:pb-10"
+              : "px-5 pt-8 pb-6 sm:px-10 sm:pt-12 sm:pb-10"
+          }`}
+        >
           <motion.div
             className="flex items-center justify-center gap-4 sm:gap-6"
             initial={{ opacity: 0, y: -8 }}
@@ -94,7 +91,6 @@ export default function WasteComingSoon({
               className="h-8 sm:h-10 md:h-14 w-auto object-contain"
             />
 
-            {/* Collaboration pill with shimmer */}
             <motion.span
               className="relative inline-flex items-center justify-center text-[11px] sm:text-xs md:text-sm font-semibold px-3.5 py-1.5 rounded-full bg-[#035240] text-white shadow-[0_4px_14px_rgba(3,82,64,0.35)]"
               initial={{ scale: 0.96, opacity: 0 }}
@@ -122,9 +118,6 @@ export default function WasteComingSoon({
             />
           </motion.div>
 
-         
-
-          {/* COMING SOON — premium type */}
           <motion.h1
             className="mt-6 sm:mt-8 text-center text-3xl sm:text-5xl font-extrabold
                        bg-gradient-to-r from-[#013a2e] via-[#0a7c63] to-[#013a2e]
@@ -135,7 +128,6 @@ export default function WasteComingSoon({
             COMING SOON
           </motion.h1>
 
-          {/* Underline reveal */}
           <motion.div
             className="mx-auto mt-3 h-1 rounded-full w-28 sm:w-36 origin-center"
             style={{
@@ -146,7 +138,6 @@ export default function WasteComingSoon({
             animate={{ scaleX: 1, transition: { duration: 0.7, delay: 0.35 } }}
           />
 
-          {/* Subcopy */}
           <motion.p
             className="mt-4 sm:mt-6 text-center text-gray-700 text-sm sm:text-base max-w-2xl mx-auto px-2 leading-relaxed"
             initial={{ opacity: 0, y: 8 }}
@@ -156,7 +147,6 @@ export default function WasteComingSoon({
             homes, communities, and businesses. Stay tuned for launch details.
           </motion.p>
 
-          {/* Feature chips */}
           <motion.div
             className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3"
             initial={{ opacity: 0 }}
@@ -174,7 +164,6 @@ export default function WasteComingSoon({
             )}
           </motion.div>
 
-          {/* Disabled CTAs with premium look */}
           <motion.div
             className="mt-6 sm:mt-8 flex items-center justify-center gap-3"
             initial={{ opacity: 0 }}
@@ -183,22 +172,17 @@ export default function WasteComingSoon({
             <button
               disabled
               className="cursor-not-allowed inline-flex items-center rounded-xl border border-black/10 bg-white/80 backdrop-blur px-4 py-2 text-sm font-medium text-gray-700 hover:opacity-90 transition"
-              aria-disabled="true"
-              title="Launching soon"
             >
               Learn More
             </button>
             <button
               disabled
               className="cursor-not-allowed inline-flex items-center rounded-xl px-4 py-2 text-sm font-semibold text-white bg-[#035240] shadow-[0_10px_20px_rgba(3,82,64,0.25)] hover:opacity-90 transition"
-              aria-disabled="true"
-              title="Launching soon"
             >
               Get a Quote
             </button>
           </motion.div>
 
-          {/* Footer hint */}
           <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-600 pb-1">
             Follow our updates — launch date announced soon.
           </div>

@@ -35,9 +35,14 @@ Order.init(
     },
     service_number: {
       type: DataTypes.INTEGER,
+<<<<<<< HEAD
       allowNull: false,
     },
     
+=======
+      allowNull: true,
+    },
+>>>>>>> 8ba427dc (updated)
     product_name: {
       type: DataTypes.STRING,
       allowNull: false,

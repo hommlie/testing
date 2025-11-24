@@ -32,6 +32,11 @@ Attribute.init(
     is_recommended: {
       type: DataTypes.INTEGER,
     },
+    under_warranty_day: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
   },
   {
     sequelize,
