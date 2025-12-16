@@ -237,6 +237,9 @@ exports.order = async (req, res) => {
 
       const getContractForDate = (startYMD) => calculateContractDates(startYMD, warrantyDays);
 
+      const currentServiceNumber = nextServiceNumber++;
+      const { contract_start_date, contract_end_date } = getContractForDate(desired_date);
+
       if (variationDetails && variationDetails.variation_times && variationDetails.variation_times > 1) {
         const { variation_interval, variation_times } = variationDetails;
         const pricePerOrder = price / variation_times;
@@ -246,7 +249,6 @@ exports.order = async (req, res) => {
             .add(i * variation_interval, "days")
             .format("YYYY-MM-DD");
 
-          const { contract_start_date, contract_end_date } = getContractForDate(orderDate);
 
           const order = await Order.create({
             user_id,
@@ -282,7 +284,7 @@ exports.order = async (req, res) => {
             desired_date: orderDate,                // booking start date (per visit)
             contract_start_date,
             contract_end_date,
-            service_number: nextServiceNumber++,               // increment per created visit
+            service_number: currentServiceNumber,               // Same service number for all visits
           }, { transaction: t });
           orders.push(order);
         }
@@ -323,7 +325,7 @@ exports.order = async (req, res) => {
           desired_date,
           contract_start_date,
           contract_end_date,
-          service_number: nextServiceNumber++,
+          service_number: currentServiceNumber,
         }, { transaction: t });
 
         orders.push(order);
