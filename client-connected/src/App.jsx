@@ -16,6 +16,7 @@ import "tailwindcss/tailwind.css";
 import "./App.css";
 // import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
 // import MobileBottomLeftCTA from "./pages/MobileBottomLeftCTA";
+import NewYearPopup from "./components/NewYearPopup";
 
 function SEOHelmet({ settings }) {
   const location = useLocation();
@@ -112,6 +113,8 @@ function App() {
 
               {/* 👇 CTA now only on Home */}
               {/* <HomeOnlyCTA /> */}
+
+              <NewYearPopup />
 
               <Footer
                 logo={settings?.logo}

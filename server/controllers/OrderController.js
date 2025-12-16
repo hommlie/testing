@@ -36,10 +36,14 @@ const calculateContractDates = (startDate, warrantyDays = 0) => {
   const start = moment(startDate);
   if (!start.isValid()) return { contract_start_date: null, contract_end_date: null };
 
-  // For warranty calculation:
-  // If warrantyDays = 60, and start = 2025-10-10
-  // Then end should be 2025-12-08 (60 days total, inclusive of start date)
-  const addDays = Math.max(0, Number(warrantyDays) - 1); // subtract 1 since start date counts as day 1
+  // If warrantyDays is 0 or less, no contract dates
+  if (Number(warrantyDays) <= 0) {
+    return { contract_start_date: null, contract_end_date: null };
+  }
+
+  // logic: Start Date + Warranty Days = End Date
+  // Example: Start Jan 1 + 30 days = End Jan 31
+  const addDays = Number(warrantyDays);
   const end = start.clone().add(addDays, 'days');
 
   return {
@@ -185,10 +189,10 @@ exports.order = async (req, res) => {
       const preWalletDue = Math.max(0,
         cartItems.reduce((sum, it) =>
           sum
-           + Number(it.price || 0) * Number(it.qty || 0)
-           + Number(it.tax || 0)   * Number(it.qty || 0)
-           + Number(it.shipping_cost || 0),
-        0) - Number(discount_amount || 0)
+          + Number(it.price || 0) * Number(it.qty || 0)
+          + Number(it.tax || 0) * Number(it.qty || 0)
+          + Number(it.shipping_cost || 0),
+          0) - Number(discount_amount || 0)
       );
 
       // find/create wallet and lock
@@ -396,7 +400,7 @@ exports.order = async (req, res) => {
     });
   } catch (error) {
     console.error("Error placing order:", error);
-    try { await t.rollback(); } catch (e) {}
+    try { await t.rollback(); } catch (e) { }
     return res.status(500).json({ status: 0, message: "Failed to place order", error: error.message });
   }
 };
@@ -897,11 +901,11 @@ exports.cancelOrder = async (req, res) => {
             "date",
           ],
           [
-  sequelize.literal(
-    "SUM(price * qty + tax + shipping_cost - IFNULL(discount_amount, 0))"
-  ),
-  "grand_total",
-],
+            sequelize.literal(
+              "SUM(price * qty + tax + shipping_cost - IFNULL(discount_amount, 0))"
+            ),
+            "grand_total",
+          ],
 
         ],
         where: { vendor_id },
@@ -1182,11 +1186,11 @@ exports.generateInvoice = async (req, res) => {
     // Fetch logo
     const settings = await Settings.findOne({ attributes: ["logo"] });
 
-  const doc = new PDFDocument({ margin: 40 });
-  const filename = `Hommlie_Invoice_${order.order_number}.pdf`;
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", `attachment; filename=\"${filename}\"`);
-  doc.pipe(res);
+    const doc = new PDFDocument({ margin: 40 });
+    const filename = `Hommlie_Invoice_${order.order_number}.pdf`;
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=\"${filename}\"`);
+    doc.pipe(res);
 
     // ===== HEADER =====
     if (settings && settings.logo) {
@@ -1246,223 +1250,223 @@ exports.generateInvoice = async (req, res) => {
       .text(`House Number : ${order.house_number || ""}`, 40, infoTop + 75)
       .text(`Mobile : ${order.mobile}`, 40, infoTop + 90)
       .text(`Email : ${order.email}`, 40, infoTop + 105)
-      .text(`Contract Start Date: ${order.contract_start_date || order.desired_date}`, 40, infoTop + 120)
+      .text(`Contract Start Date: ${order.contract_start_date || "-"}`, 40, infoTop + 120)
       .text(`Contract End Date: ${order.contract_end_date || "-"}`, 250, infoTop + 120);
 
 
     // ===== ORDER DETAILS TABLE =====
     const tableTop = infoTop + 150;
 
-// Title
-doc
-  .font("Helvetica-Bold")
-  .fontSize(11)
-  .fillColor("#006400")
-  .text("Order Details", 40, tableTop);
+    // Title
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(11)
+      .fillColor("#006400")
+      .text("Order Details", 40, tableTop);
 
-const headers = [
-  "SR-ID",
-  "Name",
-  "Quantity",
-  "Price",
-  "Discount",
-  "Tax",
-  "Desired Date & Time",
-  "Status",
-  "Order Total",
-];
+    const headers = [
+      "SR-ID",
+      "Name",
+      "Quantity",
+      "Price",
+      "Discount",
+      "Tax",
+      "Desired Date & Time",
+      "Status",
+      "Order Total",
+    ];
 
-// Adjusted widths → total = 555 exactly (fits A4 page width neatly)
-const colWidths = [50, 115, 50, 55, 55, 55, 85, 50, 90];
-const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    // Adjusted widths → total = 555 exactly (fits A4 page width neatly)
+    const colWidths = [50, 115, 50, 55, 55, 55, 85, 50, 90];
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
 
-const headerY = tableTop + 30;
-let x = 40;
+    const headerY = tableTop + 30;
+    let x = 40;
 
-// Header background
-doc.rect(x, headerY, tableWidth, 22).fill("#f0f0f0").stroke();
-doc.font("Helvetica-Bold").fillColor("black").fontSize(8);
+    // Header background
+    doc.rect(x, headerY, tableWidth, 22).fill("#f0f0f0").stroke();
+    doc.font("Helvetica-Bold").fillColor("black").fontSize(8);
 
-// Draw headers
-let colX = x;
-headers.forEach((h, i) => {
-  doc.text(h, colX + 4, headerY + 6, {
-    width: colWidths[i] - 8,
-    align: "left",
-  });
-  colX += colWidths[i];
-});
+    // Draw headers
+    let colX = x;
+    headers.forEach((h, i) => {
+      doc.text(h, colX + 4, headerY + 6, {
+        width: colWidths[i] - 8,
+        align: "left",
+      });
+      colX += colWidths[i];
+    });
 
-// Row data
-const rowY = headerY + 22;
-doc.font("Helvetica").fillColor("black").fontSize(8);
+    // Row data
+    const rowY = headerY + 22;
+    doc.font("Helvetica").fillColor("black").fontSize(8);
 
-const row = [
-  `SR-${order.id}`,
-  order.product_name,
-  order.qty.toString(),
-  `₹${order.price}`,
-  order.discount_amount ? `₹${order.discount_amount}` : "0",
-  order.tax ? `₹${order.tax}` : "0",
-  `${order.desired_date} ${order.desired_time}`,
-statusText,
-  `₹${order.order_total}`,
-];
+    const row = [
+      `SR-${order.id}`,
+      order.product_name,
+      order.qty.toString(),
+      `₹${order.price}`,
+      order.discount_amount ? `₹${order.discount_amount}` : "0",
+      order.tax ? `₹${order.tax}` : "0",
+      `${order.desired_date} ${order.desired_time}`,
+      statusText,
+      `₹${order.order_total}`,
+    ];
 
-// Draw row with borders
-colX = x;
-row.forEach((val, i) => {
-  doc.rect(colX, rowY, colWidths[i], 22).stroke();
-  doc.text(val, colX + 4, rowY + 6, {
-    width: colWidths[i] - 8,
-    align: "left",
-  });
-  colX += colWidths[i];
-});
+    // Draw row with borders
+    colX = x;
+    row.forEach((val, i) => {
+      doc.rect(colX, rowY, colWidths[i], 22).stroke();
+      doc.text(val, colX + 4, rowY + 6, {
+        width: colWidths[i] - 8,
+        align: "left",
+      });
+      colX += colWidths[i];
+    });
 
 
     // ===== PAYMENT TYPE =====
-  const payTop = rowY + 40;
+    const payTop = rowY + 40;
 
-// Title
-doc.font("Helvetica-Bold").fontSize(10).text("Payment Type", 40, payTop);
+    // Title
+    doc.font("Helvetica-Bold").fontSize(10).text("Payment Type", 40, payTop);
 
-const methods = ["COD", "Wallet", "RazorPay", "Stripe", "Flutterwave", "Paystack"];
+    const methods = ["COD", "Wallet", "RazorPay", "Stripe", "Flutterwave", "Paystack"];
 
-// Table layout
-const methodWidth = 90; // width of each column
-const methodHeight = 22;
-let payX = 40;
-const payY = payTop + 20;
-const typeMap = {
-  1: "COD",
-  2: "Wallet",
-  3: "RazorPay",
-  4: "Stripe",
-  5: "Flutterwave",
-  6: "Paystack",
-};
-const selectedMethod = typeMap[order.payment_type] || "";
-// Draw each payment method as a table cell
-methods.forEach((m) => {
-  if (m === selectedMethod) {
-    doc.rect(payX, payY, methodWidth, methodHeight).fill("#d1ffd1").stroke();
-    doc.fillColor("black").font("Helvetica-Bold");
-    doc.text(`● ${m}`, payX + 5, payY + 6, { width: methodWidth - 10, align: "center" });
-  } else {
-    doc.rect(payX, payY, methodWidth, methodHeight).stroke();
-    doc.fillColor("black").font("Helvetica");
-    doc.text(`○ ${m}`, payX + 5, payY + 6, { width: methodWidth - 10, align: "center" });
-  }
-  payX += methodWidth;
-});
-
-
-// ===== TOTALS TABLE =====
-const totalsTop = payTop + methodHeight + 40; // keep same spacing below Payment Type
-const boxX = 40;                // align with left side of Payment Type
-const boxWidth = methodWidth * methods.length; // same width as payment type row
-const rowHeight = 22;
-const padding = 8;
-
-// Rows (label, value)
-const totals = [
-  ["Subtotal", order.price],
-  ["Extra Charges", order.extra_charges || 0],
-  ["Discount", order.discount_amount || 0],
-  ["TAX", order.tax || 0],
-];
-
-// Add the "Total" row separately (bold)
-const grandTotal = ["Total", order.order_total];
-
-// Calculate box height
-const boxHeight = (totals.length + 2) * rowHeight;
-
-// Draw outer table box
-doc.rect(boxX, totalsTop, boxWidth, boxHeight).stroke("#ccc");
-
-// Set font
-doc.font("Helvetica").fontSize(9);
-
-// Column positions (2 columns, split box width)
-const labelX = boxX + padding;
-const valueX = boxX + boxWidth - 70;
-
-// Starting y
-let tY = totalsTop + padding;
-
-// Render each row in table
-totals.forEach(([label, val]) => {
-  // Row divider (except for first row)
-  if (tY > totalsTop + padding) {
-    doc.moveTo(boxX, tY - 4).lineTo(boxX + boxWidth, tY - 4).stroke("#eee");
-  }
-
-  // Label
-  doc.text(label, labelX, tY);
-  // Value (right aligned)
-  doc.text(`₹${val}`, valueX, tY, { align: "right", width: 60 });
-
-  tY += rowHeight;
-});
-
-// Divider line before grand total
-doc.moveTo(boxX, tY - 4).lineTo(boxX + boxWidth, tY - 4).stroke("#aaa");
-
-// Grand total row (bold + bigger font)
-doc.font("Helvetica-Bold").fontSize(10);
-doc.text(grandTotal[0], labelX, tY);
-doc.text(`₹${grandTotal[1]}`, valueX, tY, { align: "right", width: 60 });
-
-// Add margin below
-// Add margin below Totals Table
-const afterTableY = totalsTop + boxHeight + 30;
-
-// ===== CUSTOMER ACCEPTANCE =====
-const caTop = afterTableY; // start after totals table with margin
-
-// Heading
-doc
-  .font("Helvetica-Bold")
-  .fontSize(10)
-  .fillColor("#006400") // dark green (like your style) or "black"
-  .text("CUSTOMER ACCEPTANCE", 40, caTop);
-
-// Agreement statement
-doc
-  .font("Helvetica")
-  .fillColor("black")
-  .fontSize(8)
-  .text(
-    "I/We agree that the service contract is based on the information provided above.",
-    40,
-    caTop + 15,
-    { width: 500 }
-  );
-
-// Name of customer with dotted line
-doc.text(
-  "Name of Customer : .................................................................",
-  40,
-  caTop + 35,
-  { width: 500 }
-);
-
-// Preserve note
-doc.text(
-  "Preserve this contract form and payment receipt.",
-  40,
-  caTop + 55,
-  { width: 500 }
-);
-
-// Signature section
-doc.text("Signature of Customer", 40, caTop + 80);
+    // Table layout
+    const methodWidth = 90; // width of each column
+    const methodHeight = 22;
+    let payX = 40;
+    const payY = payTop + 20;
+    const typeMap = {
+      1: "COD",
+      2: "Wallet",
+      3: "RazorPay",
+      4: "Stripe",
+      5: "Flutterwave",
+      6: "Paystack",
+    };
+    const selectedMethod = typeMap[order.payment_type] || "";
+    // Draw each payment method as a table cell
+    methods.forEach((m) => {
+      if (m === selectedMethod) {
+        doc.rect(payX, payY, methodWidth, methodHeight).fill("#d1ffd1").stroke();
+        doc.fillColor("black").font("Helvetica-Bold");
+        doc.text(`● ${m}`, payX + 5, payY + 6, { width: methodWidth - 10, align: "center" });
+      } else {
+        doc.rect(payX, payY, methodWidth, methodHeight).stroke();
+        doc.fillColor("black").font("Helvetica");
+        doc.text(`○ ${m}`, payX + 5, payY + 6, { width: methodWidth - 10, align: "center" });
+      }
+      payX += methodWidth;
+    });
 
 
-  // Finalize and send PDF
-  doc.end();
+    // ===== TOTALS TABLE =====
+    const totalsTop = payTop + methodHeight + 40; // keep same spacing below Payment Type
+    const boxX = 40;                // align with left side of Payment Type
+    const boxWidth = methodWidth * methods.length; // same width as payment type row
+    const rowHeight = 22;
+    const padding = 8;
+
+    // Rows (label, value)
+    const totals = [
+      ["Subtotal", order.price],
+      ["Extra Charges", order.extra_charges || 0],
+      ["Discount", order.discount_amount || 0],
+      ["TAX", order.tax || 0],
+    ];
+
+    // Add the "Total" row separately (bold)
+    const grandTotal = ["Total", order.order_total];
+
+    // Calculate box height
+    const boxHeight = (totals.length + 2) * rowHeight;
+
+    // Draw outer table box
+    doc.rect(boxX, totalsTop, boxWidth, boxHeight).stroke("#ccc");
+
+    // Set font
+    doc.font("Helvetica").fontSize(9);
+
+    // Column positions (2 columns, split box width)
+    const labelX = boxX + padding;
+    const valueX = boxX + boxWidth - 70;
+
+    // Starting y
+    let tY = totalsTop + padding;
+
+    // Render each row in table
+    totals.forEach(([label, val]) => {
+      // Row divider (except for first row)
+      if (tY > totalsTop + padding) {
+        doc.moveTo(boxX, tY - 4).lineTo(boxX + boxWidth, tY - 4).stroke("#eee");
+      }
+
+      // Label
+      doc.text(label, labelX, tY);
+      // Value (right aligned)
+      doc.text(`₹${val}`, valueX, tY, { align: "right", width: 60 });
+
+      tY += rowHeight;
+    });
+
+    // Divider line before grand total
+    doc.moveTo(boxX, tY - 4).lineTo(boxX + boxWidth, tY - 4).stroke("#aaa");
+
+    // Grand total row (bold + bigger font)
+    doc.font("Helvetica-Bold").fontSize(10);
+    doc.text(grandTotal[0], labelX, tY);
+    doc.text(`₹${grandTotal[1]}`, valueX, tY, { align: "right", width: 60 });
+
+    // Add margin below
+    // Add margin below Totals Table
+    const afterTableY = totalsTop + boxHeight + 30;
+
+    // ===== CUSTOMER ACCEPTANCE =====
+    const caTop = afterTableY; // start after totals table with margin
+
+    // Heading
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(10)
+      .fillColor("#006400") // dark green (like your style) or "black"
+      .text("CUSTOMER ACCEPTANCE", 40, caTop);
+
+    // Agreement statement
+    doc
+      .font("Helvetica")
+      .fillColor("black")
+      .fontSize(8)
+      .text(
+        "I/We agree that the service contract is based on the information provided above.",
+        40,
+        caTop + 15,
+        { width: 500 }
+      );
+
+    // Name of customer with dotted line
+    doc.text(
+      "Name of Customer : .................................................................",
+      40,
+      caTop + 35,
+      { width: 500 }
+    );
+
+    // Preserve note
+    doc.text(
+      "Preserve this contract form and payment receipt.",
+      40,
+      caTop + 55,
+      { width: 500 }
+    );
+
+    // Signature section
+    doc.text("Signature of Customer", 40, caTop + 80);
+
+
+    // Finalize and send PDF
+    doc.end();
   } catch (err) {
     console.error("Invoice error:", err);
     return res.status(500).json({ status: 0, message: "Failed", error: err.message });
@@ -1598,7 +1602,7 @@ exports.generateServiceReport = async (req, res) => {
       .text(`Service Date: ${order.desired_date}`, 40, infoTop + 120)
       .text(`Service Time: ${order.desired_time}`, 250, infoTop + 120)
       .text(`Status: ${statusText}`, 40, infoTop + 135) // <- move here
-      .text(`Contract Start Date: ${order.contract_start_date || order.desired_date}`, 40, infoTop + 150)
+      .text(`Contract Start Date: ${order.contract_start_date || "-"}`, 40, infoTop + 150)
       .text(`Contract End Date: ${order.contract_end_date || "-"}`, 250, infoTop + 150)
 
       .text(
@@ -1624,8 +1628,7 @@ exports.generateServiceReport = async (req, res) => {
 
     if (order.attribute) {
       doc.text(
-        `Type: Attribute ID ${order.attribute}${
-          order.variation ? ` (Variation ID: ${order.variation})` : ""
+        `Type: Attribute ID ${order.attribute}${order.variation ? ` (Variation ID: ${order.variation})` : ""
         }`,
         40,
         y + 15

@@ -1,390 +1,242 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 
-const products = [
-  { id: 1, img: "/images/product1.png", title: "Hompure", price: "₹1599", mrp: "₹2746" },
-  { id: 2, img: "/images/product1.png", title: "Hompure", price: "₹1399", mrp: "₹2067" },
-  { id: 3, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹1145" },
-  { id: 4, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹998"  },
-  { id: 5, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹998"  },
-  { id: 6, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹998"  },
+/* ================== DATA ================== */
+
+const PRODUCTS = [
+  {
+    id: 1,
+    title: "Hompure Termite Control",
+    img: "/images/product1.png",
+    price: 1599,
+    mrp: 2746,
+    rating: 4.6,
+    category: "Pest Control",
+    bestseller: true,
+  },
+  {
+    id: 2,
+    title: "Hompure Bed Bug Spray",
+    img: "/images/product1.png",
+    price: 1399,
+    mrp: 2067,
+    rating: 4.4,
+    category: "Pest Control",
+  },
+  {
+    id: 3,
+    title: "Hompure Floor Disinfectant",
+    img: "/images/product1.png",
+    price: 799,
+    mrp: 1145,
+    rating: 4.7,
+    category: "Cleaning",
+  },
+  {
+    id: 4,
+    title: "Hompure Bathroom Cleaner",
+    img: "/images/product1.png",
+    price: 899,
+    mrp: 1299,
+    rating: 4.5,
+    category: "Cleaning",
+  },
 ];
 
-const bestsellers = [
-   { id: 1, img: "/images/product1.png", title: "Hompure", price: "₹1599", mrp: "₹2746" },
-  { id: 2, img: "/images/product1.png", title: "Hompure", price: "₹1399", mrp: "₹2067" },
-  { id: 3, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹1145" },
-  { id: 4, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹998"  },
-  { id: 5, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹998"  },
-  { id: 6, img: "/images/product1.png", title: "Hompure", price: "₹799",  mrp: "₹998"  },
-];
+/* ================== FILTER SIDEBAR ================== */
 
-const ANNOUNCEMENTS = [
-  "NEW GST-REDUCED PRICES FROM 22ND SEPT",
-  "USE CODE: TREAT10 AND ENJOY 10% OFF ON ALL ORDERS",
-];
+const FilterSidebar = ({ filters, setFilters }) => {
+  return (
+    <aside className="bg-white rounded-xl shadow-sm p-5 space-y-6">
+      <h3 className="font-semibold text-lg">Filters</h3>
 
-const AnnouncementBar = () => {
-  const DURATION = 5000;
-  const [idx, setIdx] = useState(0);
-  const [fade, setFade] = useState(true);
-  const [progress, setProgress] = useState(0);
+      {/* Category */}
+      <div>
+        <p className="font-medium mb-2">Category</p>
+        {["All", "Pest Control", "Cleaning"].map((cat) => (
+          <label key={cat} className="flex items-center gap-2 text-sm mb-1">
+            <input
+              type="radio"
+              checked={filters.category === cat}
+              onChange={() => setFilters({ ...filters, category: cat })}
+            />
+            {cat}
+          </label>
+        ))}
+      </div>
 
-  // measure the exact text width so the underline matches each sentence
-  const textRef = useRef(null);
-  const [textWidth, setTextWidth] = useState(0);
-  useEffect(() => {
-    const measure = () => {
-      if (textRef.current) {
-        const w = textRef.current.getBoundingClientRect().width;
-        setTextWidth(w);
-      }
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [idx]);
+      {/* Price */}
+      <div>
+        <p className="font-medium mb-2">Price</p>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={filters.under1000}
+            onChange={(e) =>
+              setFilters({ ...filters, under1000: e.target.checked })
+            }
+          />
+          Under ₹1000
+        </label>
+      </div>
 
-  // autoplay + restart underline animation every sentence
-  useEffect(() => {
-    setProgress(0);
-    const t1 = setTimeout(() => setProgress(100), 50); // kick underline
-    const t2 = setTimeout(() => {
-      setFade(false); // fade out
-      setTimeout(() => {
-        setIdx((p) => (p + 1) % ANNOUNCEMENTS.length);
-        setFade(true); // fade in next
-      }, 250);
-    }, DURATION);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [idx]);
+      {/* Rating */}
+      <div>
+        <p className="font-medium mb-2">Customer Rating</p>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={filters.rating4}
+            onChange={(e) =>
+              setFilters({ ...filters, rating4: e.target.checked })
+            }
+          />
+          4★ & above
+        </label>
+      </div>
+    </aside>
+  );
+};
 
-  const prev = () => {
-    setFade(false);
-    setTimeout(() => {
-      setIdx((p) => (p - 1 + ANNOUNCEMENTS.length) % ANNOUNCEMENTS.length);
-      setFade(true);
-    }, 200);
-  };
-  const next = () => {
-    setFade(false);
-    setTimeout(() => {
-      setIdx((p) => (p + 1) % ANNOUNCEMENTS.length);
-      setFade(true);
-    }, 200);
-  };
+/* ================== PRODUCT CARD ================== */
+
+const ProductCard = ({ p }) => {
+  const discount = Math.round(((p.mrp - p.price) / p.mrp) * 100);
 
   return (
-    <div className="w-full bg-[#1f1f1f] text-white">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-10 sm:h-12 flex items-center">
-        <div className="flex items-center justify-between w-full">
-          {/* Left arrow */}
-          <button
-            type="button"
-            onClick={prev}
-            aria-label="Previous announcement"
-            className="p-1 sm:p-2 opacity-80 hover:opacity-100 transition"
-          >
-            <span className="inline-block text-xl leading-none select-none">‹</span>
-          </button>
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden">
+      <div className="relative">
+        <img
+          src={p.img}
+          alt={p.title}
+          className="h-56 w-full object-cover"
+        />
 
-          {/* Message */}
-          <div className="flex-1 px-3 sm:px-6">
-            <div
-              className={`text-[10px] sm:text-xs md:text-sm tracking-[0.2em] text-center uppercase transition-opacity duration-200 ease-out ${
-                fade ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <span ref={textRef}>{ANNOUNCEMENTS[idx]}</span>
-            </div>
-            {/* Underline progress – sized to the text width, centered */}
-            <div
-              className="mx-auto mt-0.5 h-[2px] bg-white/20"
-              style={{ width: textWidth ? `${textWidth}px` : undefined, maxWidth: 460 }}
-            >
-              <div
-                className="h-full bg-white"
-                style={{
-                  width: `${progress}%`,
-                  transition: `width ${DURATION}ms linear`,
-                }}
-              />
-            </div>
-          </div>
+        {p.bestseller && (
+          <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+            Bestseller
+          </span>
+        )}
 
-          {/* Right arrow */}
-          <button
-            type="button"
-            onClick={next}
-            aria-label="Next announcement"
-            className="p-1 sm:p-2 opacity-80 hover:opacity-100 transition"
-          >
-            <span className="inline-block text-xl leading-none select-none">›</span>
-          </button>
+        <span className="absolute top-3 right-3 bg-green-600 text-white text-xs px-2 py-1 rounded-full">
+          {discount}% OFF
+        </span>
+      </div>
+
+      <div className="p-4">
+        <h3 className="font-semibold text-gray-800">{p.title}</h3>
+
+        <div className="flex items-center gap-1 text-sm text-yellow-500 mt-1">
+          ★★★★☆ <span className="text-gray-500">({p.rating})</span>
         </div>
+
+        <div className="mt-2">
+          <span className="text-lg font-bold text-pink-600">₹{p.price}</span>
+          <span className="ml-2 text-sm line-through text-gray-400">
+            ₹{p.mrp}
+          </span>
+        </div>
+
+        <button className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition">
+          Add to Cart
+        </button>
       </div>
     </div>
   );
 };
-/* ================= End Announcement Bar ===================== */
+
+/* ================== MAIN PAGE ================== */
 
 const Product = () => {
-  /* ===== First section refs/state (unchanged) ===== */
-  const scrollRef = useRef(null);
-  const [activeItem, setActiveItem] = useState(0);
-  const desktopOverflows = useMemo(() => products.length > 4, []);
-  const [desktopPages, setDesktopPages] = useState(1);
-  const [activeDesktopPage, setActiveDesktopPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [filters, setFilters] = useState({
+    category: "All",
+    under1000: false,
+    rating4: false,
+  });
 
-  /* ===== Second section (bestsellers) refs/state (added) ===== */
-  const scrollRef2 = useRef(null);
-  const [activeItem2, setActiveItem2] = useState(0);
-  const desktopOverflows2 = useMemo(() => bestsellers.length > 4, []);
-  const [desktopPages2, setDesktopPages2] = useState(1);
-  const [activeDesktopPage2, setActiveDesktopPage2] = useState(0);
-  const [itemsPerPage2, setItemsPerPage2] = useState(4);
+  const [sort, setSort] = useState("popular");
 
-  const computeCardFullWidth = (el) => {
-    if (!el || !el.children.length) return 0;
-    const first = el.children[0];
-    const childWidth = first.getBoundingClientRect().width;
-    const style = getComputedStyle(el);
-    const gap = parseFloat(style.columnGap || style.gap || "0") || 0;
-    return childWidth + gap;
-  };
+  const filteredProducts = useMemo(() => {
+    let data = [...PRODUCTS];
 
-  const recalc = (el, setPages, setActivePage, setItems, desktopFlag, setActiveDot) => {
-    if (!el) return;
-    const isDesktop = window.innerWidth >= 768;
-    const full = computeCardFullWidth(el);
-    if (full <= 0) return;
-
-    if (isDesktop && desktopFlag) {
-      const ipp = Math.max(1, Math.floor((el.clientWidth + (parseFloat(getComputedStyle(el).gap || "0") || 0)) / full));
-      setItems(ipp);
-      setPages(Math.max(1, Math.ceil(el.children.length / ipp)));
-      const page = Math.round(el.scrollLeft / (full * ipp));
-      setActivePage(Math.max(0, page));
-    } else {
-      const current = el.scrollLeft + el.clientWidth / 2;
-      let bestIdx = 0;
-      let bestDist = Infinity;
-      Array.from(el.children).forEach((node, idx) => {
-        const left = node.offsetLeft + node.clientWidth / 2;
-        const dist = Math.abs(left - current);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIdx = idx;
-        }
-      });
-      setActiveDot(bestIdx);
-      setPages(1);
-      setActivePage(0);
+    if (filters.category !== "All") {
+      data = data.filter((p) => p.category === filters.category);
     }
-  };
 
-  useEffect(() => {
-    const el1 = scrollRef.current;
-    const el2 = scrollRef2.current;
-    if (!el1 && !el2) return;
+    if (filters.under1000) {
+      data = data.filter((p) => p.price < 1000);
+    }
 
-    const doRecalc = () => {
-      recalc(el1, setDesktopPages, setActiveDesktopPage, setItemsPerPage, desktopOverflows, setActiveItem);
-      recalc(el2, setDesktopPages2, setActiveDesktopPage2, setItemsPerPage2, desktopOverflows2, setActiveItem2);
-    };
+    if (filters.rating4) {
+      data = data.filter((p) => p.rating >= 4);
+    }
 
-    doRecalc();
-    window.addEventListener("resize", doRecalc);
-    return () => window.removeEventListener("resize", doRecalc);
-  }, []);
+    if (sort === "priceLow") {
+      data.sort((a, b) => a.price - b.price);
+    }
 
-  const scrollToItem = (idx, ref) => {
-    const el = ref.current;
-    if (!el) return;
-    const target = el.children[idx];
-    if (!target) return;
-    el.scrollTo({
-      left: target.offsetLeft - parseInt(getComputedStyle(el).paddingLeft || "0", 10),
-      behavior: "smooth",
-    });
-  };
+    if (sort === "priceHigh") {
+      data.sort((a, b) => b.price - a.price);
+    }
 
-  const scrollToPage = (pageIdx, ref, ipp) => {
-    const el = ref.current;
-    if (!el) return;
-    const full = computeCardFullWidth(el);
-    if (full <= 0) return;
-    const left = pageIdx * ipp * full;
-    el.scrollTo({ left, behavior: "smooth" });
-  };
+    if (sort === "discount") {
+      data.sort(
+        (a, b) =>
+          (b.mrp - b.price) / b.mrp - (a.mrp - a.price) / a.mrp
+      );
+    }
 
-  const containerClasses = [
-    "pb-4 flex gap-5 overflow-x-auto snap-x snap-mandatory",
-    "[&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]",
-    "md:flex md:gap-6 md:overflow-x-auto md:snap-x md:snap-mandatory",
-  ].join(" ");
-
-  const cardClasses = "min-w-[260px] md:min-w-[280px] flex-shrink-0 snap-start";
+    return data;
+  }, [filters, sort]);
 
   return (
     <>
-      {/* === ADDED: Announcement bar above everything === */}
-      <AnnouncementBar />
-
-      {/* === Top Banner (kept) === */}
-      <section className="w-full overflow-hidden">
-        <div className="mx-auto relative h-[71svh] md:h-[400px] isolate px-3 max-w-[1400px]">
-          <picture className="absolute inset-0 -z-10">
-            <source media="(min-width:768px)" srcSet="/images/productbanner.png" />
-            <img
-              src="/images/scrap-desk.jpg"
-              alt="Hommlie executive receiving scrap from customer"
-              className="w-full h-full object-cover object-center"
-              fetchPriority="high"
-              decoding="async"
-            />
-          </picture>
+      {/* HERO */}
+      <section className="relative h-[380px]">
+        <img
+          src="/images/productbanner.png"
+          className="absolute inset-0 w-full h-full object-cover"
+          alt="Hommlie"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative max-w-[1200px] mx-auto h-full flex flex-col justify-center px-4 text-white">
+          <h1 className="text-4xl font-bold max-w-xl">
+            Premium Home Care Products
+          </h1>
+          <p className="mt-3 max-w-md text-gray-200">
+            Trusted by thousands of Indian homes
+          </p>
         </div>
       </section>
 
-      {/* === HOMMLIE SPECIAL (kept) === */}
-      <section className="w-full md:w-[1210px] mx-auto">
-        <div className="mx-auto px-4 sm:px-5 md:px-4 py-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
-            HOMMLIE SPECIAL
-          </h2>
+      {/* CONTENT */}
+      <section className="max-w-[1200px] mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8">
+        <FilterSidebar filters={filters} setFilters={setFilters} />
 
-          <div ref={scrollRef} className={containerClasses}>
-            {products.map((p) => (
-              <div key={p.id} className={cardClasses}>
-                <div className="bg-white shadow-md overflow-hidden hover:shadow-lg transition mr-6">
-                  <img src={p.img} alt={p.title} className="w-full h-48 sm:h-56 object-cover block" />
-                </div>
-                <div className="mt-4 text-center">
-                  <h3 className="text-base md:text-lg font-semibold tracking-wide break-words leading-tight">
-                    {p.title}
-                  </h3>
-                  <div className="mt-2">
-                    <span className="text-pink-600 font-bold">{p.price}</span>{" "}
-                    <span className="line-through text-gray-500 text-sm">{p.mrp}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div>
+          {/* SORT */}
+          <div className="flex justify-between items-center mb-6">
+            <p className="text-sm text-gray-600">
+              {filteredProducts.length} products
+            </p>
 
-          {/* View All (kept) */}
-          <div className="flex justify-center mt-6">
-            <a
-              href="/product"
-              className="px-10 py-3 bg-[#15803d] hover:bg-[#52852d] text-white text-lg font-semibold transition"
-              aria-label="View all products"
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="border rounded-lg px-3 py-2 text-sm"
             >
-              View All
-            </a>
+              <option value="popular">Sort by Popularity</option>
+              <option value="priceLow">Price: Low to High</option>
+              <option value="priceHigh">Price: High to Low</option>
+              <option value="discount">Biggest Discount</option>
+            </select>
           </div>
 
-          {/* Mobile dots (kept) */}
-          <div className="flex justify-center mt-4 gap-2 md:hidden">
-            {products.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollToItem(i, scrollRef)}
-                aria-label={`Go to product ${i + 1}`}
-                className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                  i === activeItem ? "bg-green-600 scale-110" : "bg-gray-300"
-                }`}
-              />
+          {/* GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((p) => (
+              <ProductCard key={p.id} p={p} />
             ))}
           </div>
-
-          {/* Desktop dots (kept, only if overflow) */}
-          {desktopOverflows && (
-            <div className="hidden md:flex justify-center mt-4 gap-2">
-              {Array.from({ length: desktopPages }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => scrollToPage(i, scrollRef, itemsPerPage)}
-                  aria-label={`Go to page ${i + 1}`}
-                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                    i === activeDesktopPage ? "bg-green-600 scale-110" : "bg-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* === BESTSELLERS Scroll Section (kept added section) === */}
-      <section className="w-full md:w-[1210px] mx-auto -mt-7">
-        <div className="mx-auto px-4 sm:px-5 md:px-4 py-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
-            BESTSELLERS
-          </h2>
-
-          <div ref={scrollRef2} className={containerClasses}>
-            {bestsellers.map((p) => (
-              <div key={p.id} className={cardClasses}>
-                <div className="bg-white shadow-md overflow-hidden hover:shadow-lg transition mr-6">
-                  <img src={p.img} alt={p.title} className="w-full h-48 sm:h-56 object-cover block" />
-                </div>
-                <div className="mt-4 text-center">
-                  <h3 className="text-base md:text-lg font-semibold tracking-wide break-words leading-tight">
-                    {p.title}
-                  </h3>
-                  <div className="mt-2">
-                    <span className="text-pink-600 font-bold">{p.price}</span>{" "}
-                    <span className="line-through text-gray-500 text-sm">{p.mrp}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* View All for Bestsellers */}
-          <div className="flex justify-center mt-6">
-            <a
-              href="/product"
-              className="px-10 py-3 bg-[#15803d] hover:bg-[#52852d] text-white text-lg font-semibold  transition"
-              aria-label="View all bestsellers"
-            >
-              View All
-            </a>
-          </div>
-
-          {/* Mobile dots for Bestsellers */}
-          <div className="flex justify-center mt-4 gap-2 md:hidden">
-            {bestsellers.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollToItem(i, scrollRef2)}
-                aria-label={`Go to bestseller ${i + 1}`}
-                className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                  i === activeItem2 ? "bg-green-600 scale-110" : "bg-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Desktop dots for Bestsellers (only if overflow) */}
-          {desktopOverflows2 && (
-            <div className="hidden md:flex justify-center mt-4 gap-2">
-              {Array.from({ length: desktopPages2 }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => scrollToPage(i, scrollRef2, itemsPerPage2)}
-                  aria-label={`Go to page ${i + 1}`}
-                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                    i === activeDesktopPage2 ? "bg-green-600 scale-110" : "bg-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
-          )}
         </div>
       </section>
     </>

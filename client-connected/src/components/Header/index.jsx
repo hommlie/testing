@@ -595,8 +595,8 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               >
                 <FaShoppingCart className="text-inherit" />
                 Product
-              </button> */}
-              {/* <span className="hidden md:inline-block text-black">|</span> */}
+              </button>
+              <span className="hidden md:inline-block text-black">|</span> */}
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}
