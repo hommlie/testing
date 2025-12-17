@@ -75,7 +75,7 @@ const Header = ({
     bookings,
     prodData,
   } = useCont();
-  
+
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -119,74 +119,74 @@ const Header = ({
   };
 
   const handleMicClick = () => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-    alert("Voice recognition is not supported in this browser.");
-    return;
-  }
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+      alert("Voice recognition is not supported in this browser.");
+      return;
+    }
 
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false; // stop after one phrase
-  recognition.interimResults = false;
-  recognition.lang = "en-IN";
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // stop after one phrase
+    recognition.interimResults = false;
+    recognition.lang = "en-IN";
 
-  recognition.onstart = () => {
-    setIsListening(true);
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchTerm(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      alert("Error occurred during speech recognition.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    setSearchTerm(transcript);
-  };
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setCurrentLocation("Bannerghatta, Bangalore");
+      return;
+    }
 
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    alert("Error occurred during speech recognition.");
-  };
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
+          );
+          const data = await response.json();
 
-  recognition.onend = () => {
-    setIsListening(false);
-  };
-
-  recognition.start();
-};
-
- const getCurrentLocation = () => {
-  if (!navigator.geolocation) {
-    setCurrentLocation("Bannerghatta, Bangalore");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      try {
-        const { latitude, longitude } = position.coords;
-        const response = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
-        );
-        const data = await response.json();
-
-        if (data.results && data.results[0]) {
-          const locationStings = data.results[0]?.formatted_address.split(",");
-          if (locationStings.length > 2) {
-            setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
+          if (data.results && data.results[0]) {
+            const locationStings = data.results[0]?.formatted_address.split(",");
+            if (locationStings.length > 2) {
+              setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
+            } else {
+              setCurrentLocation(data.results[0]?.formatted_address);
+            }
           } else {
-            setCurrentLocation(data.results[0]?.formatted_address);
+            setCurrentLocation("Location could not be fetched");
           }
-        } else {
-          setCurrentLocation("Location could not be fetched");
+        } catch (error) {
+          console.error("Error fetching location details:", error);
+          setCurrentLocation("Bannerghatta, Bangalore");
         }
-      } catch (error) {
-        console.error("Error fetching location details:", error);
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
         setCurrentLocation("Bannerghatta, Bangalore");
       }
-    },
-    (error) => {
-      console.error("Geolocation error:", error);
-      setCurrentLocation("Bannerghatta, Bangalore");
-    }
-  );
-};
+    );
+  };
 
 
   useEffect(() => {
@@ -242,10 +242,10 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-  }
-}, []);
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+    }
+  }, []);
 
 
   useEffect(() => {
@@ -284,52 +284,52 @@ const Header = ({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const trendingSearches = [
-  "Standard Cockroach Control",
-  "Bedbugs",
-  "Termite Control",
-  "Car disinfection",
-  "Rodent Management Service",
-  "Home Disinfection",
-  "6D Prime -Cockroach Control And Ant Control",
-];
+    "Standard Cockroach Control",
+    "Bedbugs",
+    "Termite Control",
+    "Car disinfection",
+    "Rodent Management Service",
+    "Home Disinfection",
+    "6D Prime -Cockroach Control And Ant Control",
+  ];
 
-const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
 
-useEffect(() => {
-  let index = 0;
-  const interval = setInterval(() => {
-    setDisplayedText(fullText.slice(0, index));
-    index++;
-    if (index > fullText.length) {
-      clearInterval(interval);
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(fullText.slice(0, index));
+      index++;
+      if (index > fullText.length) {
+        clearInterval(interval);
+      }
+    }, 80); // typing speed
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const offers = [
+    {
+      label: "RoachX Gel Treatment – ₹399*",
+      link: "/product/roachx-gel-treatment"
+    },
+    {
+      label: "General Pest Control – ₹899*",
+      link: "/subcategory/general-pest-control"
+    },
+    {
+      label: "Standard Cockroach Control – ₹999*",
+      link: "/subcategory/cockroach-control-services-in-bangalore"
+    },
+    {
+      label: "6D Prime Cockroach – ₹1199*",
+      link: "/product/cockroach-control-services-in-bangalore"
+    },
+    {
+      label: "Bedbugs Standard – ₹2499*",
+      link: "/subcategory/bed-bug-control-services-in-bangalore"
     }
-  }, 80); // typing speed
-
-  return () => clearInterval(interval);
-}, []);
-
-const offers = [
-  {
-    label: "RoachX Gel Treatment – ₹399*",
-    link: "/product/roachx-gel-treatment"
-  },
-  {
-    label: "General Pest Control – ₹899*",
-    link: "/subcategory/general-pest-control"
-  },
-  {
-    label: "Standard Cockroach Control – ₹999*",
-    link: "/subcategory/cockroach-control-services-in-bangalore"
-  },
-  {
-    label: "6D Prime Cockroach – ₹1199*",
-    link: "/product/cockroach-control-services-in-bangalore"
-  },
-  {
-    label: "Bedbugs Standard – ₹2499*",
-    link: "/subcategory/bed-bug-control-services-in-bangalore"
-  }
-];
+  ];
 
 
   const [current, setCurrent] = useState(0);
@@ -343,143 +343,143 @@ const offers = [
 
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
-const fetchWalletBalance = async () => {
-  try {
-    const jwtToken = Cookies.get("HommlieUserjwtToken");
-    if (!jwtToken) {
+  const fetchWalletBalance = async () => {
+    try {
+      const jwtToken = Cookies.get("HommlieUserjwtToken");
+      if (!jwtToken) {
+        setWalletBalance(0);
+        return;
+      }
+      const user = jwtDecode(jwtToken);
+      const res = await axios.post(
+        `${config.API_URL}/api/wallet/balance`,
+        { userId: user.id },
+        { headers: { Authorization: `Bearer ${jwtToken}` } }
+      );
+      const bal =
+        (res.data.status === 1 || res.data.status === 0) && res.data.balance !== undefined
+          ? Number(res.data.balance) || 0
+          : 0;
+      setWalletBalance(bal);
+    } catch {
       setWalletBalance(0);
-      return;
     }
-    const user = jwtDecode(jwtToken);
-    const res = await axios.post(
-      `${config.API_URL}/api/wallet/balance`,
-      { userId: user.id },
-      { headers: { Authorization: `Bearer ${jwtToken}` } }
-    );
-    const bal =
-      (res.data.status === 1 || res.data.status === 0) && res.data.balance !== undefined
-        ? Number(res.data.balance) || 0
-        : 0;
-    setWalletBalance(bal);
-  } catch {
-    setWalletBalance(0);
-  }
-};
-// Listen for wallet updates from other parts of the app
-useEffect(() => {
-  const handler = () => fetchWalletBalance();
-  window.addEventListener("hommlie-wallet-updated", handler);
-  return () => window.removeEventListener("hommlie-wallet-updated", handler);
-}, []);
+  };
+  // Listen for wallet updates from other parts of the app
+  useEffect(() => {
+    const handler = () => fetchWalletBalance();
+    window.addEventListener("hommlie-wallet-updated", handler);
+    return () => window.removeEventListener("hommlie-wallet-updated", handler);
+  }, []);
 
-// Fetch once when user logs in / changes
-useEffect(() => {
-  if (user && user.length !== 0) fetchWalletBalance();
-}, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Fetch once when user logs in / changes
+  useEffect(() => {
+    if (user && user.length !== 0) fetchWalletBalance();
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-// Also refresh whenever the wallet modal opens
-useEffect(() => {
-  if (isWalletModalOpen) fetchWalletBalance();
-}, [isWalletModalOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Also refresh whenever the wallet modal opens
+  useEffect(() => {
+    if (isWalletModalOpen) fetchWalletBalance();
+  }, [isWalletModalOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-// Little SVG that looks like your money note
-const MoneyNoteIcon = ({ className = "w-8 h-8" }) => (
-  <svg viewBox="0 0 36 36" className={className} aria-hidden="true">
-    <defs>
-      <linearGradient id="noteGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#22c55e" />   {/* light green */}
-        <stop offset="100%" stopColor="#16a34a" /> {/* darker green */}
-      </linearGradient>
-    </defs>
-    {/* slight tilt like the mock */}
-    <g transform="rotate(8 18 18)">
-      {/* outer card */}
-      <rect x="6" y="7" width="24" height="22" rx="7" fill="url(#noteGrad)" />
-      {/* inner inset */}
-      <rect x="9" y="10" width="18" height="16" rx="6" fill="#19b874" />
-      {/* rupee mark in white (simple text works fine at this size) */}
-      <text
-        x="18"
-        y="22"
-        textAnchor="middle"
-        fontSize="14"
-        fontWeight="800"
-        fill="#fff"
-      >
-        ₹
-      </text>
-    </g>
-  </svg>
-);
-
-// Animated underline used under header tabs
-// Animated underline used under header tabs
-const TabUnderline = ({ active = false }) => (
-  <span
-    className={[
-      "pointer-events-none absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240]",
-      "origin-center transform transition-transform duration-300",
-      active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
-    ].join(" ")}
-  />
-);
-
-
-
-// Wallet pill styled like the screenshot (amount + overlapping money.png on the right)
-const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
-  // format & safe number
-  const fmt = new Intl.NumberFormat("en-IN").format(
-    Math.max(0, Math.floor(Number(amount) || 0))
+  // Little SVG that looks like your money note
+  const MoneyNoteIcon = ({ className = "w-8 h-8" }) => (
+    <svg viewBox="0 0 36 36" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="noteGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#22c55e" />   {/* light green */}
+          <stop offset="100%" stopColor="#16a34a" /> {/* darker green */}
+        </linearGradient>
+      </defs>
+      {/* slight tilt like the mock */}
+      <g transform="rotate(8 18 18)">
+        {/* outer card */}
+        <rect x="6" y="7" width="24" height="22" rx="7" fill="url(#noteGrad)" />
+        {/* inner inset */}
+        <rect x="9" y="10" width="18" height="16" rx="6" fill="#19b874" />
+        {/* rupee mark in white (simple text works fine at this size) */}
+        <text
+          x="18"
+          y="22"
+          textAnchor="middle"
+          fontSize="14"
+          fontWeight="800"
+          fill="#fff"
+        >
+          ₹
+        </text>
+      </g>
+    </svg>
   );
 
-  // size tokens so text/img/padding stay proportionate
-  const S = {
-    sm: { h: "h-8",  text: "text-sm",  pad: "pl-3 pr-10", img: "w-5 h-5", shift: "-right-2" },
-    md: { h: "h-8", text: "text-base", pad: "pl-3 pr-7", img: "w-7 h-7", shift: "-right-2.5" },
-    lg: { h: "h-12", text: "text-lg",  pad: "pl-4 pr-8", img: "w-8 h-8", shift: "-right-3" },
-  }[size] || {};
-
-
-  return (
-    <button
-      onClick={onClick}
+  // Animated underline used under header tabs
+  // Animated underline used under header tabs
+  const TabUnderline = ({ active = false }) => (
+    <span
       className={[
-        "relative inline-flex items-center rounded-full bg-white",
-        "border border-gray-200 shadow-sm hover:shadow-md transition-all",
-        "whitespace-nowrap",
-        S.h,
-        S.pad,
-        className,
+        "pointer-events-none absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240]",
+        "origin-center transform transition-transform duration-300",
+        active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
       ].join(" ")}
-      aria-label={`Wallet balance ${fmt}`}
-      type="button"
-    >
-      {/* amount (no ₹) */}
-      <span className={`text-[#0B1727] font-semibold tracking-tight leading-none tabular-nums ${S.text}`}>
-        ₹{fmt}
-      </span>
-
-      {/* money.png badge overlapping the right edge */}
-      <span
-        aria-hidden
-        className={[
-          "pointer-events-none absolute top-1/2 -translate-y-1/2",
-          S.shift,
-          "rounded-xl ring-2 ring-white shadow-md rotate-6",
-        ].join(" ")}
-      >
-        <img
-          src="/money.png"  // from public/
-          alt=""
-          className={`${S.img} object-contain`}
-          draggable="false"
-        />
-      </span>
-    </button>
+    />
   );
-};
+
+
+
+  // Wallet pill styled like the screenshot (amount + overlapping money.png on the right)
+  const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
+    // format & safe number
+    const fmt = new Intl.NumberFormat("en-IN").format(
+      Math.max(0, Math.floor(Number(amount) || 0))
+    );
+
+    // size tokens so text/img/padding stay proportionate
+    const S = {
+      sm: { h: "h-8", text: "text-sm", pad: "pl-3 pr-10", img: "w-5 h-5", shift: "-right-2" },
+      md: { h: "h-8", text: "text-base", pad: "pl-3 pr-7", img: "w-7 h-7", shift: "-right-2.5" },
+      lg: { h: "h-12", text: "text-lg", pad: "pl-4 pr-8", img: "w-8 h-8", shift: "-right-3" },
+    }[size] || {};
+
+
+    return (
+      <button
+        onClick={onClick}
+        className={[
+          "relative inline-flex items-center rounded-full bg-white",
+          "border border-gray-200 shadow-sm hover:shadow-md transition-all",
+          "whitespace-nowrap",
+          S.h,
+          S.pad,
+          className,
+        ].join(" ")}
+        aria-label={`Wallet balance ${fmt}`}
+        type="button"
+      >
+        {/* amount (no ₹) */}
+        <span className={`text-[#0B1727] font-semibold tracking-tight leading-none tabular-nums ${S.text}`}>
+          ₹{fmt}
+        </span>
+
+        {/* money.png badge overlapping the right edge */}
+        <span
+          aria-hidden
+          className={[
+            "pointer-events-none absolute top-1/2 -translate-y-1/2",
+            S.shift,
+            "rounded-xl ring-2 ring-white shadow-md rotate-6",
+          ].join(" ")}
+        >
+          <img
+            src="/money.png"  // from public/
+            alt=""
+            className={`${S.img} object-contain`}
+            draggable="false"
+          />
+        </span>
+      </button>
+    );
+  };
   return (
     <header
       ref={headerRef}
@@ -495,8 +495,8 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
           >
             📲 Download the Hommlie App for faster booking!
           </a>
-          <button 
-            onClick={() => setShowMobileBanner(false)} 
+          <button
+            onClick={() => setShowMobileBanner(false)}
             className="text-white text-xl hover:text-amber-200 transition-colors"
             aria-label="Close mobile banner"
           >
@@ -510,16 +510,16 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
         <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
           <div
             className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
-            // style={{
-            //   backgroundImage: `url(${bannerBg})`,
-            //   backgroundSize: 'cover',
-            //   backgroundRepeat: 'no-repeat',
-            //   backgroundPosition: 'center',
-            // }}
+          // style={{
+          //   backgroundImage: `url(${bannerBg})`,
+          //   backgroundSize: 'cover',
+          //   backgroundRepeat: 'no-repeat',
+          //   backgroundPosition: 'center',
+          // }}
           >
             {/* Centered Offer Line */}
 
-              {/* <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
+            {/* <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
                 <AnimatePresence mode="wait">
                   <motion.p
                     key={offers[current].label}
@@ -537,39 +537,49 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               </div> */}
             {/* Left: Brand + Message */}
             <span className="font-normal text-black z-20">
-            <div className="inline-flex rounded text-sm font-semibold relative">
-              {/* Residential */}
-              <button
-                type="button"
-                onClick={() => navigate("/")}
-                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-[#0463ac] text-white"
-              >
-                Residential
-                <TabUnderline active={location.pathname === "/" || location.pathname === "/home"} />
-              </button>
+              <div className="inline-flex rounded text-sm font-semibold relative">
+                {/* Residential */}
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-[#0463ac] text-white"
+                >
+                  Residential
+                  <TabUnderline active={location.pathname === "/" || location.pathname === "/home"} />
+                </button>
 
-              {/* Commercial (external) */}
-              <a
-                href="https://b2b.hommlie.com"
-                target="_blank" rel="noopener noreferrer"
-                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200 "
-              >
-                Commercial
-                <TabUnderline />
-              </a>
+                {/* Commercial (external) */}
+                <a
+                  href="https://b2b.hommlie.com"
+                  target="_blank" rel="noopener noreferrer"
+                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200 "
+                >
+                  Commercial
+                  <TabUnderline />
+                </a>
 
-              <a
-                href="https://www.ecospherewm.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200"
-              >
-                Waste Management
-                <TabUnderline active={false} />
-              </a>
+                <a
+                  href="https://www.ecospherewm.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200"
+                >
+                  Waste Management
+                  <TabUnderline active={false} />
+                </a>
 
-            </div>
-          </span>
+                {/* Product */}
+                <button
+                  type="button"
+                  onClick={() => setIsComingSoonOpen(true)}
+                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200"
+                >
+                  Product
+                  <TabUnderline active={false} />
+                </button>
+
+              </div>
+            </span>
 
 
             {/* Right: Action Links */}
@@ -582,7 +592,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                 Get App
               </button>
               <span className="hidden md:inline-block text-black">|</span>
-              
+
               <button
                 onClick={() => setIsOfferModalOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
@@ -657,21 +667,21 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
           </div>
         </div>
       </div>
-          <div className="max-w-7xl mx-auto px-2 lg:px-8">
-            {/* Main Header */}
-            <div className="flex items-center justify-between h-20">
-              <div className="flex items-center space-x-6">
-                {/* Logo Section */}
-                <div className="hidden sm:flex flex-shrink-0">
-                  <NavLink to="/">
-                    <img
-                      src={logo}
-                      alt={logoAlt}
-                      className="h-10 w-auto object-contain"
-                    />
-                  </NavLink>
-                </div>
-                  <div className="flex sm:hidden w-full items-center justify-between px-2">
+      <div className="max-w-7xl mx-auto px-2 lg:px-8">
+        {/* Main Header */}
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center space-x-6">
+            {/* Logo Section */}
+            <div className="hidden sm:flex flex-shrink-0">
+              <NavLink to="/">
+                <img
+                  src={logo}
+                  alt={logoAlt}
+                  className="h-10 w-auto object-contain"
+                />
+              </NavLink>
+            </div>
+            <div className="flex sm:hidden w-full items-center justify-between px-2">
               {/* Logo aligned left */}
               <div className="flex items-center flex-shrink-0 -ml-8">
                 <NavLink to="/">
@@ -769,9 +779,8 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                       }}
                     />
                     <BsMicFill
-                      className={`cursor-pointer transition-colors ${
-                        isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-emerald-900'
-                      }`}
+                      className={`cursor-pointer transition-colors ${isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-emerald-900'
+                        }`}
                       onClick={isSupported ? handleMicClick : () => alert("Voice search is not supported in this browser.")}
                     />
                   </div>
@@ -857,16 +866,16 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
               className="hidden md:flex items-center gap-2 px-5 py-3 bg-[#0463ac] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
             >
-               <span className="font-medium">PARTNER WITH US</span>
-               {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
+              <span className="font-medium">PARTNER WITH US</span>
+              {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
             </NavLink>
-           
+
             <div className="relative">
               {user?.length !== 0 ? (
                 <button
@@ -1051,11 +1060,10 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                             {[1, 2, 3, 4, 5].map((star) => (
                               <svg
                                 key={star}
-                                className={`w-3 h-3 ${
-                                  star <= Math.round(result.rating)
+                                className={`w-3 h-3 ${star <= Math.round(result.rating)
                                     ? "text-amber-400"
                                     : "text-gray-300"
-                                }`}
+                                  }`}
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                               >
@@ -1082,38 +1090,38 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
         )}
       </AnimatePresence>
 
-        {isGetAppModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg">
-              <button
-                onClick={() => setIsGetAppModalOpen(false)}
-                className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-lg"
+      {isGetAppModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg">
+            <button
+              onClick={() => setIsGetAppModalOpen(false)}
+              className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-lg"
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
+            <p className="text-gray-700 text-sm text-center mb-5">
+              Book services faster, track orders, and earn rewards – all from your phone.
+            </p>
+            <div className="flex justify-center gap-4">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                &times;
-              </button>
-              <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
-              <p className="text-gray-700 text-sm text-center mb-5">
-                Book services faster, track orders, and earn rewards – all from your phone.
-              </p>
-              <div className="flex justify-center gap-4">
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
-                </a>
-                <a
-                  href="https://apps.apple.com/in/app/hommile/id6744694127 " 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
-                </a>
-              </div>
+                <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
+              </a>
+              <a
+                href="https://apps.apple.com/in/app/hommile/id6744694127 "
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
+              </a>
             </div>
           </div>
-        )}
+        </div>
+      )}
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
@@ -1158,7 +1166,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
               Community
             </NavLink>
              */}
-             <NavLink
+            <NavLink
               to="/services"
               className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -1204,7 +1212,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
         </div>
       )}
 
-      
+
 
       {isOfferModalOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
@@ -1271,7 +1279,7 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
         isOpen={isReferAndEarnOpen}
         onClose={() => setIsReferAndEarnOpen(false)}
       />
-      
+
       {/* Location Modal */}
       {isLocationModalOpen && (
         <LocationModal
@@ -1280,183 +1288,189 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
         />
       )}
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
-      
+
+      <ComingSoonModal
+        isOpen={isComingSoonOpen}
+        onClose={() => setIsComingSoonOpen(false)}
+        source="Product"
+      />
+
       {isWalletModalOpen && (
-  <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-    <AnimatePresence>
-      <motion.div
-        key="wallet-modal"
-        className="fixed inset-0 z-50 flex items-center justify-center px-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <motion.div
-          className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
-          initial={{ scale: 0.92, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.92, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        >
-          {/* Minimal header accent */}
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
-
-          {/* Card body */}
-          <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
-            {/* Close */}
-            <button
-              onClick={() => setIsWalletModalOpen(false)}
-              className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
-              aria-label="Close"
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <AnimatePresence>
+            <motion.div
+              key="wallet-modal"
+              className="fixed inset-0 z-50 flex items-center justify-center px-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <FaTimes />
-            </button>
-
-            {/* Animated Wallet Icon */}
-            <div className="relative flex items-center justify-center mb-4">
-              {/* Soft pulsing ring */}
-              <motion.span
-                className="absolute h-20 w-20 rounded-full"
-                style={{
-                  background:
-                    "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
-                  filter: "blur(2px)",
-                }}
-                initial={{ scale: 0.9, opacity: 0.5 }}
-                animate={{ scale: 1.1, opacity: 1 }}
-                transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
-              />
-              {/* Icon wrapper with subtle bob + glow */}
               <motion.div
-                className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
-                initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
-                animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
-                transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
+                initial={{ scale: 0.92, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.92, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 260, damping: 22 }}
               >
-                {/* Gentle inner glow */}
-                <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
-                {/* Wallet icon with soft gradient stroke */}
-                <FaWallet
-                  className="text-white drop-shadow-sm"
-                  style={{
-                    fontSize: "28px",
-                    WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
-                  }}
-                />
-                {/* Quick shimmer sweep */}
-                <motion.span
-                  className="absolute -inset-1 rounded-2xl"
-                  style={{
-                    background:
-                      "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
-                    mixBlendMode: "screen",
-                  }}
-                  initial={{ x: "-120%" }}
-                  animate={{ x: "120%" }}
-                  transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
-                />
+                {/* Minimal header accent */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
+
+                {/* Card body */}
+                <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
+                  {/* Close */}
+                  <button
+                    onClick={() => setIsWalletModalOpen(false)}
+                    className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
+                    aria-label="Close"
+                  >
+                    <FaTimes />
+                  </button>
+
+                  {/* Animated Wallet Icon */}
+                  <div className="relative flex items-center justify-center mb-4">
+                    {/* Soft pulsing ring */}
+                    <motion.span
+                      className="absolute h-20 w-20 rounded-full"
+                      style={{
+                        background:
+                          "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
+                        filter: "blur(2px)",
+                      }}
+                      initial={{ scale: 0.9, opacity: 0.5 }}
+                      animate={{ scale: 1.1, opacity: 1 }}
+                      transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
+                    />
+                    {/* Icon wrapper with subtle bob + glow */}
+                    <motion.div
+                      className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
+                      initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
+                      animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
+                      transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                    >
+                      {/* Gentle inner glow */}
+                      <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
+                      {/* Wallet icon with soft gradient stroke */}
+                      <FaWallet
+                        className="text-white drop-shadow-sm"
+                        style={{
+                          fontSize: "28px",
+                          WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
+                        }}
+                      />
+                      {/* Quick shimmer sweep */}
+                      <motion.span
+                        className="absolute -inset-1 rounded-2xl"
+                        style={{
+                          background:
+                            "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
+                          mixBlendMode: "screen",
+                        }}
+                        initial={{ x: "-120%" }}
+                        animate={{ x: "120%" }}
+                        transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
+                      />
+                    </motion.div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
+                    Your Wallet
+                  </h3>
+
+                  {/* Balance label */}
+                  <div className="mt-3 flex items-center justify-center gap-2">
+                    <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
+                      Available Balance
+                    </span>
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
+                      Secured by Razorpay
+                    </span>
+                  </div>
+
+                  {/* Amount */}
+                  <motion.p
+                    key={walletBalance}
+                    className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                  >
+                    ₹{walletBalance}
+                  </motion.p>
+
+                  {/* Micro copy */}
+                  <p className="mt-3 text-white/90 text-center text-sm">
+                    {walletBalance > 0
+                      ? "Use your wallet amount instantly at checkout."
+                      : "Your wallet is empty. Invite friends to earn or add money to start."}
+                  </p>
+
+                  {/* CTAs */}
+                  <div className="mt-6 grid grid-cols-1 gap-3">
+                    {walletBalance > 0 ? (
+                      <>
+                        <button
+                          onClick={() => {
+                            setIsWalletModalOpen(false);
+                            navigate("/quickservice");
+                          }}
+                          className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                        >
+                          Book a Service
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setIsWalletModalOpen(false);
+                            navigate("/my-wallet");
+                          }}
+                          className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                        >
+                          View Transactions
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => {
+                            setIsWalletModalOpen(false);
+                            setIsReferAndEarnOpen(true);
+                          }}
+                          className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                        >
+                          Refer a Friend & Earn
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setIsWalletModalOpen(false);
+                            navigate("/my-wallet");
+                          }}
+                          className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                        >
+                          Add Money
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Subtle trust row */}
+                  <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
+                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
+                    <span>Instant apply at checkout</span>
+                    <span className="mx-1">•</span>
+                    <span>No extra fees</span>
+                  </div>
+                </div>
               </motion.div>
-            </div>
-
-            {/* Title */}
-            <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
-              Your Wallet
-            </h3>
-
-            {/* Balance label */}
-            <div className="mt-3 flex items-center justify-center gap-2">
-              <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
-                Available Balance
-              </span>
-              <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
-                Secured by Razorpay
-              </span>
-            </div>
-
-            {/* Amount */}
-            <motion.p
-              key={walletBalance}
-              className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 220, damping: 18 }}
-            >
-              ₹{walletBalance}
-            </motion.p>
-
-            {/* Micro copy */}
-            <p className="mt-3 text-white/90 text-center text-sm">
-              {walletBalance > 0
-                ? "Use your wallet amount instantly at checkout."
-                : "Your wallet is empty. Invite friends to earn or add money to start."}
-            </p>
-
-            {/* CTAs */}
-            <div className="mt-6 grid grid-cols-1 gap-3">
-              {walletBalance > 0 ? (
-                <>
-                  <button
-                    onClick={() => {
-                      setIsWalletModalOpen(false);
-                      navigate("/quickservice");
-                    }}
-                    className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                  >
-                    Book a Service
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsWalletModalOpen(false);
-                      navigate("/my-wallet");
-                    }}
-                    className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
-                  >
-                    View Transactions
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => {
-                      setIsWalletModalOpen(false);
-                      setIsReferAndEarnOpen(true);
-                    }}
-                    className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                  >
-                    Refer a Friend & Earn
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsWalletModalOpen(false);
-                      navigate("/my-wallet");
-                    }}
-                    className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
-                  >
-                    Add Money
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Subtle trust row */}
-            <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
-              <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
-              <span>Instant apply at checkout</span>
-              <span className="mx-1">•</span>
-              <span>No extra fees</span>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  </div>
-)}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
 
     </header>
   );
-  
+
 };
 
 export default Header;
