@@ -558,14 +558,16 @@ const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
                 <TabUnderline />
               </a>
 
-              {/* Waste Management */}
-              <NavLink
-                to="/wastemanagement"
-                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200 "
+              <a
+                href="https://www.ecospherewm.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200"
               >
                 Waste Management
-                <TabUnderline active={location.pathname.startsWith("/wastemanagement")} />
-              </NavLink>
+                <TabUnderline active={false} />
+              </a>
+
             </div>
           </span>
 

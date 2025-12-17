@@ -30,9 +30,9 @@ const ServiceGrid = () => {
       return;
     }
 
-    // ✅ redirect Waste Management to a dedicated page (no popup)
     if (serviceName === "Waste Management") {
-      navigate("/wastemanagement");
+      window.open("https://www.ecospherewm.com/", "_blank");
+      // or use window.location.href if you want same tab
       return;
     }
 
