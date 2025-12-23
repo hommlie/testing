@@ -221,6 +221,23 @@ exports.order = async (req, res) => {
     }
     const orders = [];
 
+    // Distribute walletDebited among items
+    const totalOrderItemsCount = cartItems.reduce((acc, it) => {
+      // We need to know how many visits/orders will be created in total
+      // This is a bit complex due to variation_times
+      return acc; // placeholder, will calculate below
+    }, 0);
+
+    // Let's actually calculate the total number of visits/rows that will be created
+    let totalVisits = 0;
+    for (const item of cartItems) {
+      const v = await Variation.findOne({ where: { id: item.variation, product_id: item.product_id }, transaction: t });
+      totalVisits += (v && v.variation_times && v.variation_times > 1) ? v.variation_times : 1;
+    }
+
+    const walletPerVisit = totalVisits > 0 ? walletDebited / totalVisits : 0;
+    let remainingWalletToDistribute = walletDebited;
+
     // Use a mutable nextServiceNumber for multi-item/multi-visit increments
     let nextServiceNumber = parseInt(service_number, 10) || 1;
 
@@ -229,6 +246,7 @@ exports.order = async (req, res) => {
         vendor_id, product_id, product_name, image, qty, price,
         attribute, variation, tax, shipping_cost,
       } = cartItem;
+      // Note: we ignore cartItem.wallet_amount because we are using the ACTUAL applied balance (walletDebited)
 
       const discountPerItem = Number(discount_amount || 0) / cartItems.length;
       const variationDetails = await Variation.findOne({ where: { id: variation, product_id }, transaction: t });
@@ -264,6 +282,7 @@ exports.order = async (req, res) => {
             attribute,
             variation,
             tax: (tax / variation_times) * qty,
+            wallet_amount: walletPerVisit, // Store actually applied wallet balance
             coupon_name,
             coupon_id,
             shipping_cost,
@@ -305,6 +324,7 @@ exports.order = async (req, res) => {
           attribute,
           variation,
           tax: tax * qty,
+          wallet_amount: walletPerVisit, // Store actually applied wallet balance
           coupon_name,
           coupon_id,
           shipping_cost,
@@ -430,6 +450,7 @@ exports.orderhistory = async (req, res) => {
         "attribute",
         "variation",
         "discount_amount",
+        "wallet_amount",
         "shipping_cost",
         "order_total",
         "coupon_name",
@@ -454,8 +475,8 @@ exports.orderhistory = async (req, res) => {
         [
           sequelize.literal(`
           CASE 
-            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost)
-            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(discount_amount)
+            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(IFNULL(wallet_amount, 0))
+            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(discount_amount) - SUM(IFNULL(wallet_amount, 0))
           END
         `),
           "grand_total",
@@ -480,6 +501,7 @@ exports.orderhistory = async (req, res) => {
         "attribute",
         "variation",
         "discount_amount",
+        "wallet_amount",
         "shipping_cost",
         "order_total",
         "full_name",
@@ -562,6 +584,7 @@ exports.orderdetails = async (req, res) => {
         "pincode",
         "coupon_name",
         "discount_amount",
+        "wallet_amount",
         "status",
         "order_status",
         "desired_time",
@@ -590,6 +613,7 @@ exports.orderdetails = async (req, res) => {
         "price",
         "tax",
         "shipping_cost",
+        "wallet_amount",
         "discount_amount",
         "order_status",
         "attribute",
@@ -617,10 +641,12 @@ exports.orderdetails = async (req, res) => {
       taxTotal += parseFloat(item.tax);
       shippingTotal += parseFloat(item.shipping_cost);
       discountTotal += parseFloat(item.discount_amount);
+      // wallet_amount is subtracted from the grand total
     }
 
-    // Calculate grand total
-    const grand_total = subtotal + taxTotal + shippingTotal - discountTotal;
+    // Calculate grand total including wallet deduction
+    const walletTotal = order_data.reduce((acc, item) => acc + parseFloat(item.wallet_amount || 0), 0);
+    const grand_total = subtotal + taxTotal + shippingTotal - discountTotal - walletTotal;
 
     const response = {
       status: 1,
@@ -676,6 +702,7 @@ exports.trackOrder = async (req, res) => {
         "attribute",
         "variation",
         "discount_amount",
+        "wallet_amount",
         "shipping_cost",
         "order_total",
         "full_name",
@@ -701,8 +728,8 @@ exports.trackOrder = async (req, res) => {
         [
           sequelize.literal(`
           CASE 
-            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost)
-            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(discount_amount)
+            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(IFNULL(wallet_amount, 0))
+            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(discount_amount) - SUM(IFNULL(wallet_amount, 0))
           END
         `),
           "grand_total",

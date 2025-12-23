@@ -1,4 +1,4 @@
-    const { Model, DataTypes } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 const {
   Category,
@@ -10,7 +10,7 @@ const {
   Wishlist,
 } = require("./index");
 
-class Product extends Model {}
+class Product extends Model { }
 
 Product.init(
   {
@@ -55,7 +55,7 @@ Product.init(
       allowNull: false,
     },
     brand: {
-      type: DataTypes.STRING,  
+      type: DataTypes.STRING,
     },
     description: {
       type: DataTypes.TEXT("long"),
@@ -125,6 +125,9 @@ Product.init(
       type: DataTypes.STRING,
     },
     tax: {
+      type: DataTypes.FLOAT,
+    },
+    wallet_amount: {
       type: DataTypes.FLOAT,
     },
     tax_type: {

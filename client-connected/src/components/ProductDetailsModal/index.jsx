@@ -34,7 +34,7 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
               <Star className="w-3 h-3 text-white" fill="currentColor" />
             </span>
             <div
@@ -446,6 +446,7 @@ const ProductDetailModal = ({
       variation: variation.id,
       tax: taxAmount,
       shipping_cost: product.shipping_cost || 0,
+      wallet_amount: variation.wallet_amount || product.wallet_amount || 0,
     };
     try {
       const response = await axios.post(
@@ -634,8 +635,8 @@ const ProductDetailModal = ({
                 exit={{ y: 100, opacity: 0 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
               >
-              {/* Scoped styles to keep embeds responsive */}
-              <style>{`
+                {/* Scoped styles to keep embeds responsive */}
+                <style>{`
                 .service-details-html { width: 100%; }
                 .service-details-html iframe,
                 .service-details-html video,
@@ -648,199 +649,199 @@ const ProductDetailModal = ({
                   .prose { font-size: 0.95rem; }
                 }
               `}</style>
-              {/* Header */}
-              <div className="sticky -mt-4  bg-white p-4 border-b z-10">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold">{product?.product_name}</h2>
-                  {/* <button
+                {/* Header */}
+                <div className="sticky -mt-4  bg-white p-4 border-b z-10">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-2xl font-bold">{product?.product_name}</h2>
+                    {/* <button
                     onClick={onClose}
                     className="p-2 hover:bg-gray-100 rounded-full "
                   >
                     <X className="h-6 w-6" />
                   </button> */}
-                </div>
-                {(product?.rating || product?.total_reviews) && (
-                  <div className="flex items-center space-x-2">
-                    {product?.rating && <StarRating rating={product.rating} />}
-                    {product?.total_reviews && (
-                      <span className="text-sm text-gray-500">
-                        (
-                        {product.total_reviews >= 1000
-                          ? `${(product.total_reviews / 1000).toFixed(1)}K`
-                          : product.total_reviews}{" "}
-                        reviews)
-                      </span>
-                    )}
                   </div>
-                )}
-                {displayedAttributes?.length === 1 && (
-                  <>
-                    <h3 className="text-lg font-semibold text-gray-800 mt-3">
-                      {displayedAttributes[0].attribute_name}
-                    </h3>
+                  {(product?.rating || product?.total_reviews) && (
+                    <div className="flex items-center space-x-2">
+                      {product?.rating && <StarRating rating={product.rating} />}
+                      {product?.total_reviews && (
+                        <span className="text-sm text-gray-500">
+                          (
+                          {product.total_reviews >= 1000
+                            ? `${(product.total_reviews / 1000).toFixed(1)}K`
+                            : product.total_reviews}{" "}
+                          reviews)
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {displayedAttributes?.length === 1 && (
+                    <>
+                      <h3 className="text-lg font-semibold text-gray-800 mt-3">
+                        {displayedAttributes[0].attribute_name}
+                      </h3>
 
-                    {displayedAttributes[0]?.variations?.[0]?.description && (
-                      <div className="mt-2">
-                        <ul className="space-y-1">
-                          {displayedAttributes[0].variations[0].description
-                            .split("|")
-                            .map((desc) => desc.trim())
-                            .filter((desc) => desc)
-                            .map((desc, index) => (
-                              <li
-                                key={index}
-                                className="flex items-start space-x-2 text-sm text-gray-600"
-                              >
-                                <span className="text-black">•</span>
-                                <span>{desc}</span>
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+                      {displayedAttributes[0]?.variations?.[0]?.description && (
+                        <div className="mt-2">
+                          <ul className="space-y-1">
+                            {displayedAttributes[0].variations[0].description
+                              .split("|")
+                              .map((desc) => desc.trim())
+                              .filter((desc) => desc)
+                              .map((desc, index) => (
+                                <li
+                                  key={index}
+                                  className="flex items-start space-x-2 text-sm text-gray-600"
+                                >
+                                  <span className="text-black">•</span>
+                                  <span>{desc}</span>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
 
-              {/* Main Content */}
-              <div className="p-6">
-                {/* ADD MODE: variations/BHK cards only */}
-                {localMode === "add" && (
-                  <section className="space-y-5 my-0">
-                    {displayedAttributes?.map((attribute) => (
-                      <div key={attribute.attribute_id} className="space-y-4">
-                        <div
-                          className="relative overflow-x-auto hide-scrollbar"
-                          ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
-                        >
-                          <div className="flex gap-3 min-w-max py-0 px-1">
-                            {attribute?.variations?.map((variation) => (
-                              <div
-                                key={variation.id}
-                                className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
-                              >
-                                <div className="p-3 space-y-2">
-                                  <h4 className="font-medium text-sm">{variation.variation}</h4>
+                {/* Main Content */}
+                <div className="p-6">
+                  {/* ADD MODE: variations/BHK cards only */}
+                  {localMode === "add" && (
+                    <section className="space-y-5 my-0">
+                      {displayedAttributes?.map((attribute) => (
+                        <div key={attribute.attribute_id} className="space-y-4">
+                          <div
+                            className="relative overflow-x-auto hide-scrollbar"
+                            ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
+                          >
+                            <div className="flex gap-3 min-w-max py-0 px-1">
+                              {attribute?.variations?.map((variation) => (
+                                <div
+                                  key={variation.id}
+                                  className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                                >
+                                  <div className="p-3 space-y-2">
+                                    <h4 className="font-medium text-sm">{variation.variation}</h4>
 
-                                  {(variation.avg_rating || variation.total_reviews) && (
-                                    <div className="flex items-center space-x-1">
-                                      {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
-                                      {variation.total_reviews && (
-                                        <span className="text-xs text-gray-500">
-                                          ({variation.total_reviews >= 1000
-                                            ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                                            : variation.total_reviews})
-                                        </span>
+                                    {(variation.avg_rating || variation.total_reviews) && (
+                                      <div className="flex items-center space-x-1">
+                                        {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
+                                        {variation.total_reviews && (
+                                          <span className="text-xs text-gray-500">
+                                            ({variation.total_reviews >= 1000
+                                              ? `${(variation.total_reviews / 1000).toFixed(1)}K`
+                                              : variation.total_reviews})
+                                          </span>
+                                        )}
+                                      </div>
+                                    )}
+
+                                    <div className="space-x-1 text-sm">
+                                      <span className="text-emerald-600 font-semibold">
+                                        ₹{variation.discounted_variation_price}
+                                      </span>
+                                      {variation.price !== variation.discounted_variation_price && (
+                                        <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
                                       )}
                                     </div>
-                                  )}
 
-                                  <div className="space-x-1 text-sm">
-                                    <span className="text-emerald-600 font-semibold">
-                                      ₹{variation.discounted_variation_price}
-                                    </span>
-                                    {variation.price !== variation.discounted_variation_price && (
-                                      <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
-                                    )}
+                                    <AddButton variation={variation} />
                                   </div>
-
-                                  <AddButton variation={variation} />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </section>
-                )}
-
-                {/* VIEW MODE: Details then Reviews */}
-                {localMode !== "add" && (
-                  <>
-                    <section className="space-y-5 sm:space-y-4">
-                      <div className="prose max-w-none">
-                        <div className="service-details-html">
-                          <div
-                            className="service-details-content"
-                            dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
-                          />
-                        </div>
-                      </div>
-                    </section>
-
-                    <section className="space-y-6 mt-6">
-                      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
-
-                        <div className="flex flex-col md:flex-row gap-6">
-                          <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
-                            <span className="text-5xl font-bold text-gray-900">
-                              {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
-                            </span>
-                            <div className="flex items-center">
-                              {[1].map((star) => (
-                                <div key={star} className="relative">
-                                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
-                                    <Star className="w-3 h-3 text-white" fill="currentColor" />
-                                  </span>
                                 </div>
                               ))}
                             </div>
-                            <p className="text-sm text-gray-500">
-                              {product?.total_reviews ? product.total_reviews : 128} reviews
-                            </p>
-                          </div>
-
-                          <div className="flex-1 space-y-3">
-                            {[
-                              { star: 5, percent: 90, count: 115 },
-                              { star: 4, percent: 7, count: 9 },
-                              { star: 3, percent: 2, count: 3 },
-                              { star: 2, percent: 1, count: 1 },
-                              { star: 1, percent: 0, count: 0 },
-                            ].map(({ star, percent, count }) => (
-                              <div key={star} className="flex items-center gap-3">
-                                <div className="flex items-center w-10">
-                                  <span className="text-sm font-medium text-gray-700">★{star}</span>
-                                </div>
-                                <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                  <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
-                                </div>
-                                <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
-                              </div>
-                            ))}
                           </div>
                         </div>
-                      </div>
+                      ))}
                     </section>
-                  </>
-                )}
-              </div>
+                  )}
 
-              {/* Sticky bottom: switch to add mode */}
-              {localMode === "view" && displayedAttributes?.length === 1 && (
-                <div className="sticky  bottom-[-22px] left-0 right-0 bg-white border-t p-4 z-10">
-                  <div className="max-w-7xl mx-auto flex justify-end">
-                    <button
-                      className="bg-[#0463ac] text-white px-4 py-2 rounded-md hover:bg-emerald-700 shadow-lg"
-                      onClick={() => {
-                        setLocalMode("add");
-                        const attrId = displayedAttributes[0].attribute_id;
-                        const container = variationRefs.current[attrId];
-                        if (container) {
-                          setTimeout(() => {
-                            container.scrollTo({ left: 0, behavior: "smooth" });
-                          }, 120);
-                        }
-                      }}
-                    >
-                      Add to cart
-                    </button>
-                  </div>
+                  {/* VIEW MODE: Details then Reviews */}
+                  {localMode !== "add" && (
+                    <>
+                      <section className="space-y-5 sm:space-y-4">
+                        <div className="prose max-w-none">
+                          <div className="service-details-html">
+                            <div
+                              className="service-details-content"
+                              dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
+                            />
+                          </div>
+                        </div>
+                      </section>
+
+                      <section className="space-y-6 mt-6">
+                        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
+
+                          <div className="flex flex-col md:flex-row gap-6">
+                            <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
+                              <span className="text-5xl font-bold text-gray-900">
+                                {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
+                              </span>
+                              <div className="flex items-center">
+                                {[1].map((star) => (
+                                  <div key={star} className="relative">
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
+                                      <Star className="w-3 h-3 text-white" fill="currentColor" />
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                              <p className="text-sm text-gray-500">
+                                {product?.total_reviews ? product.total_reviews : 128} reviews
+                              </p>
+                            </div>
+
+                            <div className="flex-1 space-y-3">
+                              {[
+                                { star: 5, percent: 90, count: 115 },
+                                { star: 4, percent: 7, count: 9 },
+                                { star: 3, percent: 2, count: 3 },
+                                { star: 2, percent: 1, count: 1 },
+                                { star: 1, percent: 0, count: 0 },
+                              ].map(({ star, percent, count }) => (
+                                <div key={star} className="flex items-center gap-3">
+                                  <div className="flex items-center w-10">
+                                    <span className="text-sm font-medium text-gray-700">★{star}</span>
+                                  </div>
+                                  <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
+                                  </div>
+                                  <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    </>
+                  )}
                 </div>
-              )}
-            </motion.div>
+
+                {/* Sticky bottom: switch to add mode */}
+                {localMode === "view" && displayedAttributes?.length === 1 && (
+                  <div className="sticky  bottom-[-22px] left-0 right-0 bg-white border-t p-4 z-10">
+                    <div className="max-w-7xl mx-auto flex justify-end">
+                      <button
+                        className="bg-[#0463ac] text-white px-4 py-2 rounded-md hover:bg-emerald-700 shadow-lg"
+                        onClick={() => {
+                          setLocalMode("add");
+                          const attrId = displayedAttributes[0].attribute_id;
+                          const container = variationRefs.current[attrId];
+                          if (container) {
+                            setTimeout(() => {
+                              container.scrollTo({ left: 0, behavior: "smooth" });
+                            }, 120);
+                          }
+                        }}
+                      >
+                        Add to cart
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
             </div>
           </motion.div>
         )}

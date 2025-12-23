@@ -1,7 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Variation extends Model {}
+class Variation extends Model { }
 
 Variation.init({
     product_id: {
@@ -21,6 +21,10 @@ Variation.init({
         allowNull: true
     },
     discounted_variation_price: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    wallet_amount: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
@@ -59,10 +63,10 @@ Variation.init({
 }, {
     sequelize,
     modelName: 'Variation',
-    tableName: 'variations', 
+    tableName: 'variations',
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at' 
+    updatedAt: 'updated_at'
 });
 
 module.exports = Variation;

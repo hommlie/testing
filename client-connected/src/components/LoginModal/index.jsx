@@ -365,7 +365,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-3xl font-bold mb-4"
+              className="text-3xl text-white font-bold mb-4"
             >
               Join Hommlie Today
             </motion.h2>
@@ -373,7 +373,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-sm opacity-90"
+              className="text-sm text-white opacity-90"
             >
               Experience seamless services at your fingertips
             </motion.p>

@@ -15,6 +15,7 @@ exports.addToCart = async (req, res) => {
     variation,
     tax,
     shipping_cost,
+    wallet_amount,
   } = req.body;
 
   try {
@@ -79,6 +80,7 @@ exports.addToCart = async (req, res) => {
         variation_name: variationData && variationData.variation,
         tax,
         shipping_cost,
+        wallet_amount,
       });
 
       if (cartData) {
@@ -89,7 +91,7 @@ exports.addToCart = async (req, res) => {
           .json({ status: 0, message: "Something went wrong" });
       }
     } else {
-      if (existingCart.vendor_id !== vendor_id && existingCart.user_id === user_id){
+      if (existingCart.vendor_id !== vendor_id && existingCart.user_id === user_id) {
         return res.status(400).json({
           status: 0,
           message: "First empty your Cart, Then add new product in Cart",
@@ -104,7 +106,7 @@ exports.addToCart = async (req, res) => {
           attributeData = await Attribute.findOne({
             where: { id: attribute },
           });
-      }
+        }
 
         let variationData = null;
         if (variation) {
@@ -127,6 +129,7 @@ exports.addToCart = async (req, res) => {
           variation_name: variationData && variationData.variation,
           tax,
           shipping_cost,
+          wallet_amount,
         });
 
         if (cartData) {
@@ -172,6 +175,7 @@ exports.getCart = async (req, res) => {
         "variation_name",
         "tax",
         "shipping_cost",
+        "wallet_amount",
         [
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/products/', image)`
@@ -202,9 +206,9 @@ exports.getCart = async (req, res) => {
       const variationPrices =
         variationIds.length > 0
           ? await Variation.findAll({
-              attributes: ["id", "price"],
-              where: { id: variationIds },
-            })
+            attributes: ["id", "price"],
+            where: { id: variationIds },
+          })
           : [];
 
       // Create maps for quick lookup
