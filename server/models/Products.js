@@ -127,9 +127,6 @@ Product.init(
     tax: {
       type: DataTypes.FLOAT,
     },
-    wallet_amount: {
-      type: DataTypes.FLOAT,
-    },
     tax_type: {
       type: DataTypes.STRING,
     },

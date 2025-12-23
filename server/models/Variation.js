@@ -24,10 +24,6 @@ Variation.init({
         type: DataTypes.FLOAT,
         allowNull: true
     },
-    wallet_amount: {
-        type: DataTypes.FLOAT,
-        allowNull: true
-    },
     variation: {
         type: DataTypes.STRING,
         allowNull: false

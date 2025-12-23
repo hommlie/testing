@@ -920,8 +920,8 @@ export default function AddtoCart() {
 
                       <div
                         className={`flex items-center border rounded-lg px-3 py-2 min-w-[70px] ${tipAmount !== 50 && tipAmount !== 75 && tipAmount !== 100 && tipAmount > 0
-                            ? "border-[#249370] bg-[#2493701a]"
-                            : "border-gray-300"
+                          ? "border-[#249370] bg-[#2493701a]"
+                          : "border-gray-300"
                           }`}
                       >
                         <span className="text-sm mr-1">₹</span>
