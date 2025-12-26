@@ -1,7 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Cart extends Model {}
+class Cart extends Model { }
 
 Cart.init({
     user_id: {
@@ -34,19 +34,19 @@ Cart.init({
     },
     variation: {
         type: DataTypes.STRING,
-        allowNull: true 
+        allowNull: true
     },
     variation_name: {
         type: DataTypes.STRING,
-        allowNull: true 
+        allowNull: true
     },
     attribute: {
         type: DataTypes.STRING,
-        allowNull: true 
+        allowNull: true
     },
     attribute_name: {
         type: DataTypes.STRING,
-        allowNull: true 
+        allowNull: true
     },
     shipping_cost: {
         type: DataTypes.STRING,
@@ -54,16 +54,21 @@ Cart.init({
     },
     tax: {
         type: DataTypes.STRING,
-        allowNull: true 
+        allowNull: true
     },
     wallet_amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: true,
         defaultValue: 0.00
     },
+    tip_amount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        defaultValue: 0.00
+    },
     slug: {
         type: DataTypes.STRING,
-        allowNull: true 
+        allowNull: true
     }
 }, {
     sequelize,
@@ -71,7 +76,7 @@ Cart.init({
     tableName: 'carts',
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at' 
+    updatedAt: 'updated_at'
 });
 
 module.exports = Cart;

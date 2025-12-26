@@ -140,6 +140,7 @@ exports.order = async (req, res) => {
     desired_time,
     desired_date,
     wallet_used = 0,
+    tip_amount = 0,
   } = req.body;
 
   if (!user_id) {
@@ -222,12 +223,6 @@ exports.order = async (req, res) => {
     const orders = [];
 
     // Distribute walletDebited among items
-    const totalOrderItemsCount = cartItems.reduce((acc, it) => {
-      // We need to know how many visits/orders will be created in total
-      // This is a bit complex due to variation_times
-      return acc; // placeholder, will calculate below
-    }, 0);
-
     // Let's actually calculate the total number of visits/rows that will be created
     let totalVisits = 0;
     for (const item of cartItems) {
@@ -236,6 +231,7 @@ exports.order = async (req, res) => {
     }
 
     const walletPerVisit = totalVisits > 0 ? walletDebited / totalVisits : 0;
+    const tipPerVisit = totalVisits > 0 ? Number(tip_amount || 0) / totalVisits : 0;
     let remainingWalletToDistribute = walletDebited;
 
     // Use a mutable nextServiceNumber for multi-item/multi-visit increments
@@ -283,6 +279,7 @@ exports.order = async (req, res) => {
             variation,
             tax: (tax / variation_times) * qty,
             wallet_amount: walletPerVisit, // Store actually applied wallet balance
+            tip_amount: tipPerVisit,
             coupon_name,
             coupon_id,
             shipping_cost,
@@ -325,6 +322,7 @@ exports.order = async (req, res) => {
           variation,
           tax: tax * qty,
           wallet_amount: walletPerVisit, // Store actually applied wallet balance
+          tip_amount: tipPerVisit,
           coupon_name,
           coupon_id,
           shipping_cost,
@@ -451,6 +449,7 @@ exports.orderhistory = async (req, res) => {
         "variation",
         "discount_amount",
         "wallet_amount",
+        "tip_amount",
         "shipping_cost",
         "order_total",
         "coupon_name",
@@ -475,8 +474,8 @@ exports.orderhistory = async (req, res) => {
         [
           sequelize.literal(`
           CASE 
-            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(IFNULL(wallet_amount, 0))
-            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) - SUM(discount_amount) - SUM(IFNULL(wallet_amount, 0))
+            WHEN discount_amount IS NULL THEN SUM(price * qty) + SUM(tax) + SUM(shipping_cost) + SUM(IFNULL(tip_amount, 0)) - SUM(IFNULL(wallet_amount, 0))
+            ELSE SUM(price * qty) + SUM(tax) + SUM(shipping_cost) + SUM(IFNULL(tip_amount, 0)) - SUM(discount_amount) - SUM(IFNULL(wallet_amount, 0))
           END
         `),
           "grand_total",
@@ -502,6 +501,7 @@ exports.orderhistory = async (req, res) => {
         "variation",
         "discount_amount",
         "wallet_amount",
+        "tip_amount",
         "shipping_cost",
         "order_total",
         "full_name",
@@ -585,6 +585,7 @@ exports.orderdetails = async (req, res) => {
         "coupon_name",
         "discount_amount",
         "wallet_amount",
+        "tip_amount",
         "status",
         "order_status",
         "desired_time",
@@ -614,6 +615,7 @@ exports.orderdetails = async (req, res) => {
         "tax",
         "shipping_cost",
         "wallet_amount",
+        "tip_amount",
         "discount_amount",
         "order_status",
         "attribute",
@@ -646,7 +648,8 @@ exports.orderdetails = async (req, res) => {
 
     // Calculate grand total including wallet deduction
     const walletTotal = order_data.reduce((acc, item) => acc + parseFloat(item.wallet_amount || 0), 0);
-    const grand_total = subtotal + taxTotal + shippingTotal - discountTotal - walletTotal;
+    const tipTotal = order_data.reduce((acc, item) => acc + parseFloat(item.tip_amount || 0), 0);
+    const grand_total = subtotal + taxTotal + shippingTotal + tipTotal - discountTotal - walletTotal;
 
     const response = {
       status: 1,
@@ -657,6 +660,8 @@ exports.orderdetails = async (req, res) => {
         tax: taxTotal.toFixed(2),
         shipping_cost: shippingTotal.toFixed(2),
         discount_amount: discountTotal.toFixed(2),
+        wallet_amount: walletTotal.toFixed(2),
+        tip_amount: tipTotal.toFixed(2),
         grand_total: grand_total.toFixed(2),
       },
       order_data: order_data.map((item) => item.toJSON()),

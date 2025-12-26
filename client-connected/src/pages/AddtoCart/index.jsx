@@ -441,6 +441,7 @@ export default function AddtoCart() {
           desired_date: selectedDayTime?.date?.formattedDate,
           desired_time: selectedDayTime?.time,
           wallet_used: Number(walletDeducted || 0),
+          tip_amount: Number(tipAmount || 0),
           wallet_amount: cart.reduce((acc, item) => acc + Number(item.wallet_amount || 0) * Number(item.qty || 1), 0),
         },
         { headers: { Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}` } }

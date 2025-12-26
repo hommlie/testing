@@ -368,57 +368,57 @@ export default function MyBookings() {
   };
 
   // inside MyBookings component
-const [isComplaintModalOpen, setIsComplaintModalOpen] = useState(false);
-const [complaintOrder, setComplaintOrder] = useState(null);
-const [complaintText, setComplaintText] = useState("");
-const [isSubmittingComplaint, setIsSubmittingComplaint] = useState(false);
+  const [isComplaintModalOpen, setIsComplaintModalOpen] = useState(false);
+  const [complaintOrder, setComplaintOrder] = useState(null);
+  const [complaintText, setComplaintText] = useState("");
+  const [isSubmittingComplaint, setIsSubmittingComplaint] = useState(false);
 
 
-const openComplaintModal = (order) => {
-  setComplaintOrder(order);
-  setIsComplaintModalOpen(true);
-};
+  const openComplaintModal = (order) => {
+    setComplaintOrder(order);
+    setIsComplaintModalOpen(true);
+  };
 
-const closeComplaintModal = () => {
-  setComplaintOrder(null);
-  setComplaintText("");
-  setIsComplaintModalOpen(false);
-};
+  const closeComplaintModal = () => {
+    setComplaintOrder(null);
+    setComplaintText("");
+    setIsComplaintModalOpen(false);
+  };
 
-// const handleComplaintSubmit = async () => {
-//   if (!complaintText.trim()) {
-//     errorNotify("Please enter a description.");
-//     return;
-//   }
+  // const handleComplaintSubmit = async () => {
+  //   if (!complaintText.trim()) {
+  //     errorNotify("Please enter a description.");
+  //     return;
+  //   }
 
-//   setIsSubmittingComplaint(true);
-//   try {
-//     // Optional auth header if your API needs it:
-//     const jwtToken = Cookies.get("HommlieUserjwtToken");
-//     const headers = { "Content-Type": "application/json" };
-//     if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
+  //   setIsSubmittingComplaint(true);
+  //   try {
+  //     // Optional auth header if your API needs it:
+  //     const jwtToken = Cookies.get("HommlieUserjwtToken");
+  //     const headers = { "Content-Type": "application/json" };
+  //     if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
 
-//    const res = await axios.post(
-//   `${config.API_URL}/api/raisecomplaint`,
-//   {
-//     orderId: complaintOrder?.id,
-//     complaintText,
-//   },
-//   { headers }
-// );
+  //    const res = await axios.post(
+  //   `${config.API_URL}/api/raisecomplaint`,
+  //   {
+  //     orderId: complaintOrder?.id,
+  //     complaintText,
+  //   },
+  //   { headers }
+  // );
 
-//     console.log("Server Response:", res.data);
-//     successNotify("Complaint submitted successfully!");
-//     closeComplaintModal();
-//   } catch (err) {
-//     console.error("Error submitting complaint:", err);
-//     errorNotify(
-//       err?.response?.data?.error || "Failed to submit complaint. Please try again."
-//     );
-//   } finally {
-//     setIsSubmittingComplaint(false);
-//   }
-// };
+  //     console.log("Server Response:", res.data);
+  //     successNotify("Complaint submitted successfully!");
+  //     closeComplaintModal();
+  //   } catch (err) {
+  //     console.error("Error submitting complaint:", err);
+  //     errorNotify(
+  //       err?.response?.data?.error || "Failed to submit complaint. Please try again."
+  //     );
+  //   } finally {
+  //     setIsSubmittingComplaint(false);
+  //   }
+  // };
   // Add New Complaint 
   // const handleComplaintSubmit = async () => {
   //   if (isSubmittingComplaint) return;
@@ -533,55 +533,55 @@ const closeComplaintModal = () => {
   //     setIsSubmittingComplaint(false);
   //   }
   // };
-const handleComplaintSubmit = async () => {
-  if (isSubmittingComplaint) return;
+  const handleComplaintSubmit = async () => {
+    if (isSubmittingComplaint) return;
 
-  const order = complaintOrder; // keep full booking object
-  const text = (complaintText || "").trim();
+    const order = complaintOrder; // keep full booking object
+    const text = (complaintText || "").trim();
 
-  if (!order?.id) {
-    errorNotify("Invalid Order. Please reopen the complaint form.");
-    return;
-  }
-
-  setIsSubmittingComplaint(true);
-  try {
-    const jwtToken = Cookies.get("HommlieUserjwtToken");
-    const headers = { "Content-Type": "application/json" };
-    if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
-
-    // Only send orderId and complaintText as required by backend
-    const payload = {
-      orderId: order.id,
-      complaintText: text,
-    };
-
-    const res = await axios.post(
-      `${config.API_URL}/api/raisecomplaint`,
-      payload,
-      { headers, timeout: 20000 }
-    );
-
-    const result = res?.data || {};
-    if (result?.message) {
-      successNotify("Complaint submitted successfully!");
-      closeComplaintModal();
-    } else {
-      errorNotify(result?.error || "Failed to submit complaint. Please try again.");
+    if (!order?.id) {
+      errorNotify("Invalid Order. Please reopen the complaint form.");
+      return;
     }
-  } catch (err) {
-    console.error("Error submitting complaint:", err);
-    if (err.response?.data?.error) {
-      errorNotify(err.response.data.error);
-    } else if (err.code === "ECONNABORTED") {
-      errorNotify("Request timed out. Please check your connection and try again.");
-    } else {
-      errorNotify("Something went wrong. Please try again.");
+
+    setIsSubmittingComplaint(true);
+    try {
+      const jwtToken = Cookies.get("HommlieUserjwtToken");
+      const headers = { "Content-Type": "application/json" };
+      if (jwtToken) headers.Authorization = `Bearer ${jwtToken}`;
+
+      // Only send orderId and complaintText as required by backend
+      const payload = {
+        orderId: order.id,
+        complaintText: text,
+      };
+
+      const res = await axios.post(
+        `${config.API_URL}/api/raisecomplaint`,
+        payload,
+        { headers, timeout: 20000 }
+      );
+
+      const result = res?.data || {};
+      if (result?.message) {
+        successNotify("Complaint submitted successfully!");
+        closeComplaintModal();
+      } else {
+        errorNotify(result?.error || "Failed to submit complaint. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error submitting complaint:", err);
+      if (err.response?.data?.error) {
+        errorNotify(err.response.data.error);
+      } else if (err.code === "ECONNABORTED") {
+        errorNotify("Request timed out. Please check your connection and try again.");
+      } else {
+        errorNotify("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsSubmittingComplaint(false);
     }
-  } finally {
-    setIsSubmittingComplaint(false);
-  }
-};
+  };
 
   return (
     <div className="sm:mx-7xl bg-cover bg-center bg-no-repeat">
@@ -605,7 +605,7 @@ const handleComplaintSubmit = async () => {
             </div>
           </div>
 
-          
+
           {/* <div className="mt-4 border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
@@ -689,53 +689,53 @@ const handleComplaintSubmit = async () => {
           filters.serviceType !== "all" ||
           filters.dateRange.start ||
           filters.dateRange.end) && (
-          <div className="flex flex-wrap gap-2 mb-6">
-            {filters.status !== "all" && (
-              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                <span>Status: {filters.status}</span>
-                <button
-                  onClick={() => handleFilterChange("status", "all")}
-                  className="ml-1 hover:text-blue-800"
-                >
-                  ×
-                </button>
-              </div>
-            )}
-            {filters.serviceType !== "all" && (
-              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                <span>Service: {filters.serviceType}</span>
-                <button
-                  onClick={() => handleFilterChange("serviceType", "all")}
-                  className="ml-1 hover:text-blue-800"
-                >
-                  ×
-                </button>
-              </div>
-            )}
-            {filters.dateRange.start && (
-              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                <span>From: {filters.dateRange.start}</span>
-                <button
-                  onClick={() => handleFilterChange("dateRange.start", "")}
-                  className="ml-1 hover:text-blue-800"
-                >
-                  ×
-                </button>
-              </div>
-            )}
-            {filters.dateRange.end && (
-              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                <span>To: {filters.dateRange.end}</span>
-                <button
-                  onClick={() => handleFilterChange("dateRange.end", "")}
-                  className="ml-1 hover:text-blue-800"
-                >
-                  ×
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {filters.status !== "all" && (
+                <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                  <span>Status: {filters.status}</span>
+                  <button
+                    onClick={() => handleFilterChange("status", "all")}
+                    className="ml-1 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+              {filters.serviceType !== "all" && (
+                <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                  <span>Service: {filters.serviceType}</span>
+                  <button
+                    onClick={() => handleFilterChange("serviceType", "all")}
+                    className="ml-1 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+              {filters.dateRange.start && (
+                <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                  <span>From: {filters.dateRange.start}</span>
+                  <button
+                    onClick={() => handleFilterChange("dateRange.start", "")}
+                    className="ml-1 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+              {filters.dateRange.end && (
+                <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                  <span>To: {filters.dateRange.end}</span>
+                  <button
+                    onClick={() => handleFilterChange("dateRange.end", "")}
+                    className="ml-1 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
         <div className="space-y-8">
           {Object.keys(groupedBookings).length === 0 ? (
@@ -747,10 +747,10 @@ const handleComplaintSubmit = async () => {
                   className="w-64 md:w-96 transition-transform duration-300 hover:scale-105 mb-6"
                 />
                 {searchQuery ||
-                filters.status !== "all" ||
-                filters.serviceType !== "all" ||
-                filters.dateRange.start ||
-                filters.dateRange.end ? (
+                  filters.status !== "all" ||
+                  filters.serviceType !== "all" ||
+                  filters.dateRange.start ||
+                  filters.dateRange.end ? (
                   <div className="space-y-3">
                     <h4 className="text-xl font-semibold text-gray-800">
                       No results found
@@ -816,13 +816,13 @@ const handleComplaintSubmit = async () => {
 
                 <div className="divide-y divide-gray-100">
                   {orders.map((od, index) => (
-                  <div
-                    key={index}
-                    className="bg-white shadow-md rounded-xl overflow-hidden mb-6 border hover:shadow-lg transition-shadow"
-                  >
-                    <div className="flex flex-col lg:flex-row">
-                      {/* Left side - Product Image (commented out) */}
-                      {/*
+                    <div
+                      key={index}
+                      className="bg-white shadow-md rounded-xl overflow-hidden mb-6 border hover:shadow-lg transition-shadow"
+                    >
+                      <div className="flex flex-col lg:flex-row">
+                        {/* Left side - Product Image (commented out) */}
+                        {/*
                       <div
                         onClick={() => handleProductClick(od)}
                         className="w-full lg:w-1/4 cursor-pointer"
@@ -837,105 +837,105 @@ const handleComplaintSubmit = async () => {
                       </div>
                       */}
 
-                      {/* Right side - Order Details (now full width) */}
-                      <div className="flex-1 p-6 flex flex-col justify-between">
-                        {/* Top Row: Status + Actions */}
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-                          <span
-                            className={`inline-block px-4 py-1.5 rounded-full text-sm border font-medium ${getStatusStyles(
-                              od?.order_status
-                            )}`}
-                          >
-                            {OrderStatuses[od?.order_status]}
-                          </span>
-
-                          <div className="flex gap-4 flex-wrap">
-                            <NavLink
-                              to={`${config.VITE_BASE_URL}/track-order/${od.id}`}
-                              className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 gap-1.5"
+                        {/* Right side - Order Details (now full width) */}
+                        <div className="flex-1 p-6 flex flex-col justify-between">
+                          {/* Top Row: Status + Actions */}
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                            <span
+                              className={`inline-block px-4 py-1.5 rounded-full text-sm border font-medium ${getStatusStyles(
+                                od?.order_status
+                              )}`}
                             >
-                              <LiaShippingFastSolid className="text-xl" />
-                              <span className="font-medium">Track Order</span>
-                            </NavLink>
+                              {OrderStatuses[od?.order_status]}
+                            </span>
 
-                            {od?.order_status === 0 && (
-                              <button
-                                onClick={() => handleCancelOrder(od.id)}
-                                className="text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+                            <div className="flex gap-4 flex-wrap">
+                              <NavLink
+                                to={`${config.VITE_BASE_URL}/track-order/${od.id}`}
+                                className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 gap-1.5"
                               >
-                                Cancel Order
-                              </button>
-                            )}
+                                <LiaShippingFastSolid className="text-xl" />
+                                <span className="font-medium">Track Order</span>
+                              </NavLink>
 
-                            {od?.order_status === 4 && (
-                              <>
+                              {od?.order_status === 0 && (
                                 <button
-                                  onClick={() => openReviewModal(od)}
-                                  className="text-green-600 hover:text-green-800 font-medium transition-colors duration-200"
+                                  onClick={() => handleCancelOrder(od.id)}
+                                  className="text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
                                 >
-                                  Write Review
+                                  Cancel Order
                                 </button>
-                                <button
-                                  onClick={() => generateInvoicePDF(od)}
-                                  disabled={loadingPdf}
-                                  className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200 gap-1.5"
-                                >
-                                  <FaFileInvoice className="text-xl" />
-                                  <span className="font-medium">
-                                    {loadingPdf ? "Generating..." : "Download Invoice"}
-                                  </span>
-                                </button>
-                                <button
-                                  onClick={() => generateServiceReportPDF(od)}
-                                  disabled={loadingPdf}
-                                  className="flex items-center text-purple-600 hover:text-purple-800 transition-colors duration-200 gap-1.5"
-                                >
-                                  <FaFilePdf className="text-xl" />
-                                  <span className="font-medium">
-                                    {loadingPdf ? "Generating..." : "Service Report"}
-                                  </span>
-                                </button>
-                              </>
-                            )}
-                          </div>
-                        </div>
+                              )}
 
-                        {/* Product Info */}
-                        <div className="mt-4">
-                          <h4 className="text-lg font-semibold text-gray-900">
-                            {od?.product_name}
-                          </h4>
-                          <p className="text-gray-600">
-                            {od?.attribute} {od?.variation ? `(${od?.variation})` : null}
-                          </p>
-                        </div>
+                              {od?.order_status === 4 && (
+                                <>
+                                  <button
+                                    onClick={() => openReviewModal(od)}
+                                    className="text-green-600 hover:text-green-800 font-medium transition-colors duration-200"
+                                  >
+                                    Write Review
+                                  </button>
+                                  <button
+                                    onClick={() => generateInvoicePDF(od)}
+                                    disabled={loadingPdf}
+                                    className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200 gap-1.5"
+                                  >
+                                    <FaFileInvoice className="text-xl" />
+                                    <span className="font-medium">
+                                      {loadingPdf ? "Generating..." : "Download Invoice"}
+                                    </span>
+                                  </button>
+                                  <button
+                                    onClick={() => generateServiceReportPDF(od)}
+                                    disabled={loadingPdf}
+                                    className="flex items-center text-purple-600 hover:text-purple-800 transition-colors duration-200 gap-1.5"
+                                  >
+                                    <FaFilePdf className="text-xl" />
+                                    <span className="font-medium">
+                                      {loadingPdf ? "Generating..." : "Service Report"}
+                                    </span>
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </div>
 
-                        {/* Order Info Grid */}
-                        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
-                          <div>
-                            <p className="text-gray-500">Quantity</p>
-                            <p className="font-medium text-gray-900">{od?.qty}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-500">Price (Including Tax)</p>
-                            <p className="font-medium text-gray-900">₹{Number(od?.price ?? 0).toFixed(2)}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-500">Scheduled Time</p>
-                            <p className="font-medium text-gray-900">
-                              {od?.desired_date} at {od?.desired_time}
+                          {/* Product Info */}
+                          <div className="mt-4">
+                            <h4 className="text-lg font-semibold text-gray-900">
+                              {od?.product_name}
+                            </h4>
+                            <p className="text-gray-600">
+                              {od?.attribute} {od?.variation ? `(${od?.variation})` : null}
                             </p>
                           </div>
-                          {/* Uncomment if you want Total */}
-                          {/* <div>
+
+                          {/* Order Info Grid */}
+                          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+                            <div>
+                              <p className="text-gray-500">Quantity</p>
+                              <p className="font-medium text-gray-900">{od?.qty}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500">Price (Including Tax)</p>
+                              <p className="font-medium text-gray-900">₹{Number(od?.price ?? 0).toFixed(2)}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500">Scheduled Time</p>
+                              <p className="font-medium text-gray-900">
+                                {od?.desired_date} at {od?.desired_time}
+                              </p>
+                            </div>
+                            {/* Uncomment if you want Total */}
+                            {/* <div>
                             <p className="text-gray-500">Total Amount</p>
                             <p className="font-medium text-gray-900">₹{Number(od?.grand_total ?? 0).toFixed(2)}</p>
                           </div> */}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                   <div className="bg-gray-50 p-6">
                     <h5 className="font-semibold text-gray-900 mb-4">
                       Order Summary
@@ -980,6 +980,16 @@ const handleComplaintSubmit = async () => {
                           </p> */}
                         </div>
                       )}
+
+                      {/* Tip Amount */}
+                      {orders[0]?.tip_amount && orders[0]?.tip_amount !== 0 && (
+                        <div>
+                          <p className="text-gray-500">Tip Amount</p>
+                          <p className="font-medium text-gray-900">
+                            ₹{Number(orders[0]?.tip_amount ?? 0).toFixed(2)}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1020,37 +1030,37 @@ const handleComplaintSubmit = async () => {
         onReviewSubmitted={handleReviewSubmitted}
       />
       {/* Complaint Modal */}
-        {isComplaintModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-            <div className="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 relative">
-              {/* Close Button */}
-              <button
-                onClick={closeComplaintModal}
-                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
+      {isComplaintModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 relative">
+            {/* Close Button */}
+            <button
+              onClick={closeComplaintModal}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
 
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                Raise a Complaint
-              </h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Raise a Complaint
+            </h3>
 
-              {/* Complaint Description */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Describe your issue
-                </label>
-                <textarea
-                  value={complaintText}
-                  onChange={(e) => setComplaintText(e.target.value)}
-                  rows={4}
-                  placeholder="Write your issue here..."
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-red-500 focus:outline-none"
-                />
-              </div>
+            {/* Complaint Description */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Describe your issue
+              </label>
+              <textarea
+                value={complaintText}
+                onChange={(e) => setComplaintText(e.target.value)}
+                rows={4}
+                placeholder="Write your issue here..."
+                className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-red-500 focus:outline-none"
+              />
+            </div>
 
-              {/* Upload Image */}
-              {/* <div className="mb-4">
+            {/* Upload Image */}
+            {/* <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Add a photo (optional)
                 </label>
@@ -1069,25 +1079,25 @@ const handleComplaintSubmit = async () => {
                 )}
               </div> */}
 
-              {/* Submit Button */}
-              <div className="flex justify-end gap-3">
-                <button
-                  onClick={closeComplaintModal}
-                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleComplaintSubmit}
-                  disabled={isSubmittingComplaint}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
-                >
-                  {isSubmittingComplaint ? "Submitting..." : "Submit Complaint"}
-                </button>
-              </div>
+            {/* Submit Button */}
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={closeComplaintModal}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleComplaintSubmit}
+                disabled={isSubmittingComplaint}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                {isSubmittingComplaint ? "Submitting..." : "Submit Complaint"}
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 }

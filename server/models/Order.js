@@ -80,6 +80,11 @@ Order.init(
       allowNull: false,
       defaultValue: 0.0,
     },
+    tip_amount: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+      defaultValue: 0.00
+    },
     coupon_name: {
       type: DataTypes.STRING,
       allowNull: true,

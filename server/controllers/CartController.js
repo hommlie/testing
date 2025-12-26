@@ -16,6 +16,7 @@ exports.addToCart = async (req, res) => {
     tax,
     shipping_cost,
     wallet_amount,
+    tip_amount,
   } = req.body;
 
   try {
@@ -81,6 +82,7 @@ exports.addToCart = async (req, res) => {
         tax,
         shipping_cost,
         wallet_amount,
+        tip_amount,
       });
 
       if (cartData) {
@@ -130,6 +132,7 @@ exports.addToCart = async (req, res) => {
           tax,
           shipping_cost,
           wallet_amount,
+          tip_amount,
         });
 
         if (cartData) {
@@ -176,6 +179,7 @@ exports.getCart = async (req, res) => {
         "tax",
         "shipping_cost",
         "wallet_amount",
+        "tip_amount",
         [
           sequelize.literal(
             `CONCAT('${apiUrl}/storage/app/public/images/products/', image)`
