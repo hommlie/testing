@@ -3,11 +3,36 @@ import { FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import ComingSoonModal from "../ComingSoonPage";
 import { useNavigate } from "react-router-dom";
+import { useCont } from "../../context/MyContext";
+import config from "../../config/config";
 
-const ServiceGrid = () => {
+import axios from "axios";
+
+const ServiceGrid = ({ categories: propCategories }) => {
   const [showModal, setShowModal] = useState(null);           // category drilldown modal (e.g., Pest Control)
   const [showComingSoon, setShowComingSoon] = useState(false); // "Coming Soon" modal for placeholder services
+  const [fullCategories, setFullCategories] = useState([]);    // Stores rich data from /api/category
+
   const navigate = useNavigate();
+  const { categoryData } = useCont();
+
+  // Fetch full category data (same source as /services) to ensure we have app_icon and correct image URLs
+  useEffect(() => {
+    const fetchFullCategories = async () => {
+      try {
+        const response = await axios.get(`${config.API_URL}/api/category`);
+        if (response.data && response.data.data) {
+          setFullCategories(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching full category data in ServiceGrid:", error);
+      }
+    };
+    fetchFullCategories();
+  }, []);
+
+  // Use categories from props/context for the GRID display
+  const categoriesList = (categoryData?.data && categoryData.data.length > 0) ? categoryData.data : (propCategories || []);
 
   // Lock body scroll when any modal is open on mobile
   useEffect(() => {
@@ -24,24 +49,40 @@ const ServiceGrid = () => {
 
   const comingSoonServices = ["AC Services", "Plumbing", "Painting"];
 
-  const handleServiceClick = (serviceName) => {
+  const handleServiceClick = (service) => {
+    const serviceName = service.category_name || service.name;
+
     if (serviceName === "Scrap") {
-      navigate("/scrap");
+      navigate(`${config.VITE_BASE_URL}/scrap`);
       return;
     }
 
     if (serviceName === "Waste Management") {
       window.open("https://www.ecospherewm.com/", "_blank");
-      // or use window.location.href if you want same tab
       return;
     }
 
     if (comingSoonServices.includes(serviceName) || serviceName === "See More") {
       setShowModal(null);
       setShowComingSoon(serviceName);
-    } else {
+      return;
+    }
+
+    // Check if the dynamic category has subcategories
+    const subcats = service.subcategories || service.Subcategories || [];
+    if (subcats.length > 0) {
       setShowComingSoon(false);
-      setShowModal(serviceName);
+      setShowModal(service);
+    } else {
+      // Fallback for hardcoded or empty dynamic categories
+      const fallbackItems = serviceData[serviceName] || [];
+      if (fallbackItems.length > 0) {
+        setShowComingSoon(false);
+        setShowModal(service);
+      } else {
+        setShowModal(null);
+        setShowComingSoon(serviceName);
+      }
     }
   };
 
@@ -67,17 +108,72 @@ const ServiceGrid = () => {
     ],
   };
 
-  const services = [
-    { id: 1, name: "Pest Control", image: "/images/pestcontrol1nn.png" },
-    { id: 2, name: "Deep Cleaning", image: "/images/deepcleaning1nn.png" },
-    { id: 3, name: "Waste Management", image: "/images/wastemanagement1nn.png" }, // now redirects
-    { id: 4, name: "Bird Control", image: "/images/mosquito1nn.png" },
-    { id: 5, name: "Disinfection", image: "/images/disinfection1nn.png" },
-    { id: 6, name: "Scrap", image: "/images/scrap1nn.png" },
+  const fallbackServices = [
+    { id: 1, category_name: "Pest Control", image_url: "/images/pestcontrol1nn.png" },
+    { id: 2, category_name: "Deep Cleaning", image_url: "/images/deepcleaning1nn.png" },
+    { id: 3, category_name: "Waste Management", image_url: "/images/wastemanagement1nn.png" }, // now redirects
+    { id: 4, category_name: "Bird Control", image_url: "/images/mosquito1nn.png" },
+    { id: 5, category_name: "Disinfection", image_url: "/images/disinfection1nn.png" },
+    { id: 6, category_name: "Scrap", image_url: "/images/scrap1nn.png" },
   ];
 
+  // Display the first 6 Categories dynamically
+  const displayedServices = categoriesList.length > 0
+    ? categoriesList.slice(0, 6)
+    : fallbackServices;
+
   const renderModal = () => {
-    const items = serviceData[showModal] || [];
+    const categoryName = showModal.category_name || showModal;
+    let items = [];
+
+    // Find the rich category data from our full /api/category fetch
+    // This ensures we have the same data as the /services page (which works)
+    const richCategory = fullCategories.find(c =>
+      c.category_name === (showModal.category_name || showModal) ||
+      c.id === showModal.id
+    );
+
+    // Use the rich data if found, otherwise fall back to what was passed in
+    const sourceCategory = richCategory || showModal;
+
+    // Prioritize Subcategories (Capitalized in /api/category) matches CategoryPage logic
+    const subcats = sourceCategory.Subcategories || sourceCategory.subcategories;
+    if (subcats && subcats.length > 0) {
+      items = subcats.map(sub => {
+        // match CategoryPage: prioritize app_icon
+        const rawImage = sub.app_icon || sub.subcategory_icon || sub.icon_url || sub.image_url || sub.image || sub.subcategory_icon_url;
+
+        let finalImage = null;
+
+        if (rawImage) {
+          if (typeof rawImage === 'string' && (rawImage.startsWith('http') || rawImage.startsWith('data:'))) {
+            // Trust the full URL exactly as is, same as CategoryPage
+            finalImage = rawImage;
+          } else {
+            // It's a relative path -> prepend base URL
+            const baseUrl = config.API_URL.replace(/\/hommlieserver\/?$/, '');
+            finalImage = `${baseUrl}${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
+          }
+        } else {
+          // Fallback if no image field is found
+          if (sub.slug) {
+            const prodStorageBase = "https://www.hommlie.com/storage/app/public/images/subcategory/";
+            finalImage = `${prodStorageBase}${sub.slug}.png`;
+          }
+        }
+
+        return {
+          name: sub.subcategory_name || sub.name,
+          image: finalImage || "/assets/images/placeholder.png",
+          url: sub.url || `${config.VITE_BASE_URL}/subcategory/${sub.slug}`
+        };
+      });
+    } else {
+      items = serviceData[categoryName] || [];
+    }
+
+    if (items.length === 0) return null;
+
     return (
       <motion.div
         key="modal"
@@ -103,7 +199,7 @@ const ServiceGrid = () => {
         >
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 id="service-modal-title" className="text-lg font-bold">
-              {showModal} Services
+              {categoryName} Services
             </h2>
             <button onClick={() => setShowModal(null)} className="text-gray-500 hover:text-black" aria-label="Close">
               <FaTimes />
@@ -153,10 +249,10 @@ const ServiceGrid = () => {
 
       <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-2">
         <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
-          {services.map((service) => (
+          {displayedServices.map((service) => (
             <div
               key={service.id}
-              onClick={() => handleServiceClick(service.name)}
+              onClick={() => handleServiceClick(service)}
               className="flex flex-col items-center group transition-all cursor-pointer relative"
             >
               <div
@@ -164,13 +260,20 @@ const ServiceGrid = () => {
                            group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300"
               >
                 <img
-                  src={service.image}
-                  alt={service.name}
+                  src={(() => {
+                    const rawImage = service.icon_url || service.image_url || service.image || service.app_icon || service.category_icon;
+                    if (rawImage && !rawImage.startsWith('http') && !rawImage.startsWith('data:')) {
+                      const baseUrl = config.API_URL.replace(/\/hommlieserver\/?$/, '');
+                      return `${baseUrl}${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
+                    }
+                    return rawImage;
+                  })()}
+                  alt={service.category_name || service.name}
                   className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
               <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
-                {service.name}
+                {service.category_name || service.name}
               </span>
               <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
             </div>

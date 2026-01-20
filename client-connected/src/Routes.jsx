@@ -73,7 +73,7 @@ const ProjectRoutes = () => {
   };
 
 
- 
+
   function HelpPage() {
     const { user } = useCont();
     const [forceLogin, setForceLogin] = useState(false);
@@ -152,11 +152,7 @@ const ProjectRoutes = () => {
 
     {
       path: `${config.VITE_BASE_URL}/add-to-cart`,
-      element: (
-        <ProtectedRoute>
-          <AddtoCart />
-        </ProtectedRoute>
-      ),
+      element: <AddtoCart />,
     },
     {
       path: `${config.VITE_BASE_URL}/review-booking`,
@@ -257,7 +253,7 @@ const ProjectRoutes = () => {
     },
     {
       path: `${config.VITE_BASE_URL}/scrap/:city`,
-      element: <ScrapPrices />,  
+      element: <ScrapPrices />,
     },
     {
       path: `${config.VITE_BASE_URL}/business`,
@@ -268,9 +264,9 @@ const ProjectRoutes = () => {
       element: <Product />,
     },
     {
-     path: `${config.VITE_BASE_URL}/wastemanagement`,
-     element: <WasteManagement />,
-   },
+      path: `${config.VITE_BASE_URL}/wastemanagement`,
+      element: <WasteManagement />,
+    },
   ]);
   return element;
 };

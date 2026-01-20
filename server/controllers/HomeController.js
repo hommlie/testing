@@ -793,7 +793,17 @@ exports.getHomePageData = async (req, res) => {
       include: [
         {
           model: Subcategory,
-          attributes: ["id", "subcategory_name", "slug"],
+          attributes: [
+            "id",
+            "subcategory_name",
+            "slug",
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategories.icon)`
+              ),
+              "icon_url",
+            ],
+          ],
           where: { status: 1 },
           required: false,
           order: [["subcategory_name", "DESC"]],
@@ -802,7 +812,7 @@ exports.getHomePageData = async (req, res) => {
               model: Product,
               where: {
                 status: 1,
-                product_mode: 0, 
+                product_mode: 0,
               },
               attributes: [
                 "id",
@@ -925,6 +935,7 @@ exports.getHomePageData = async (req, res) => {
           id: subcategory.id,
           subcategory_name: subcategory.subcategory_name,
           slug: subcategory.getDataValue("slug"),
+          icon_url: subcategory.getDataValue("icon_url"),
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })).sort((a, b) =>
           a.subcategory_name.localeCompare(b.subcategory_name)

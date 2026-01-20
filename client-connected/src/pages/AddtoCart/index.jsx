@@ -20,6 +20,7 @@ import { MdOutlineSendToMobile } from "react-icons/md";
 import { BsFillCartXFill } from "react-icons/bs";
 import { FaWallet, FaCreditCard } from "react-icons/fa";
 import { CiDeliveryTruck } from "react-icons/ci";
+import LoginSignup from "../../components/LoginModal";
 
 export default function AddtoCart() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ export default function AddtoCart() {
   const [visibleItemsCount, setVisibleItemsCount] = useState(5);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
 
@@ -565,6 +567,10 @@ export default function AddtoCart() {
     >
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 bg-white"
       >
+        <LoginSignup
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+        />
         {cart.length === 0 ? (
           <div className="flex justify-center items-center min-h-[50vh] -mt-5">
             <div className="p-8 flex flex-col items-center">
@@ -579,12 +585,21 @@ export default function AddtoCart() {
                   Browse Services
                 </button>
 
-                <button
-                  onClick={() => navigate(`${config.VITE_BASE_URL}/my-bookings`)}
-                  className="px-12 sm:px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
-                >
-                  My Bookings
-                </button>
+                {user?.id ? (
+                  <button
+                    onClick={() => navigate(`${config.VITE_BASE_URL}/my-bookings`)}
+                    className="px-12 sm:px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
+                  >
+                    My Bookings
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className="px-12 sm:px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
+                  >
+                    Login
+                  </button>
+                )}
               </div>
             </div>
           </div>

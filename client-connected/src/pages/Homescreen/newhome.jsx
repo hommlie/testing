@@ -25,15 +25,15 @@ import ReferEarnImg from "/assets/bg/refer-earn.svg";
 // import discoverImg1 from "../../assets/images/discover-1.png";
 // import discoverImg3 from "../../assets/images/discover-3.png";
 // import discoverImg4 from "../../assets/images/discover-4.png";
-import { 
-  FaBug, 
-  FaBroom, 
-  FaSprayCan, 
-  FaShieldAlt, 
-  FaFan, 
-  FaTools, 
-  FaPaintRoller, 
-  FaEllipsisH 
+import {
+  FaBug,
+  FaBroom,
+  FaSprayCan,
+  FaShieldAlt,
+  FaFan,
+  FaTools,
+  FaPaintRoller,
+  FaEllipsisH
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
 import photo1 from '../../assets/images/photo1.jpeg';
@@ -66,7 +66,7 @@ import BannerImageMobile from "../BannerImageMobile";
 import Offermobile from '../Offermobile'
 import Scrapbanner from '../Scrapbanner'
 import Scrapmobile from '../Scrapmobile'
-import Refermobile  from '../Refermobile'
+import Refermobile from '../Refermobile'
 import Roadmap from "../../components/Roadmap";
 import CityServiceLinks from "../CityServiceLinks";
 import HomeForm from "../HomeForm";
@@ -89,43 +89,43 @@ const HomePage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const searchTimeoutRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const handleMicClick = () => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-    alert("Voice recognition is not supported in this browser.");
-    return;
-  }
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+      alert("Voice recognition is not supported in this browser.");
+      return;
+    }
 
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false; // stop after one phrase
-  recognition.interimResults = false;
-  recognition.lang = "en-IN";
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // stop after one phrase
+    recognition.interimResults = false;
+    recognition.lang = "en-IN";
 
-  recognition.onstart = () => {
-    setIsListening(true);
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchTerm(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      alert("Error occurred during speech recognition.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    setSearchTerm(transcript);
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    alert("Error occurred during speech recognition.");
-  };
-
-  recognition.onend = () => {
-    setIsListening(false);
-  };
-
-  recognition.start();
-};
-  
   const searchInputRef = useRef(null);
 
   // Add states for all dynamic data
@@ -265,10 +265,10 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-  }
-}, []);
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+    }
+  }, []);
 
 
   const handleSearchChange = (e) => {
@@ -307,21 +307,21 @@ const HomePage = () => {
 
   // FAQ Section
   const FaqSection = () => {
-  const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+    const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
+    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
-  let displayedFaqs = isMobile
-    ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
-    : data?.faqs;
+    let displayedFaqs = isMobile
+      ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
+      : data?.faqs;
 
-  // Ensure displayedFaqs is always an array
-  displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
+    // Ensure displayedFaqs is always an array
+    displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
 
-   return (
-    <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
-      <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
-        Frequently Asked Questions
-      </h2>
+    return (
+      <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
+        <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
+          Frequently Asked Questions
+        </h2>
         <div className="space-y-4">
           {displayedFaqs?.map((faq, index) => (
             <motion.div
@@ -360,8 +360,8 @@ const HomePage = () => {
           ))}
         </div>
       </div>
-  );
-};
+    );
+  };
 
 
   // App Download Section
@@ -428,56 +428,56 @@ const HomePage = () => {
   };
 
   const services = [
-  "Pest Control",
-  "Home Cleaning",
-  "Sofa Shampooing",
-  "Kitchen Deep Cleaning",
-  "Mosquito Net Installation",
-  "Sanitization Services",
-];
+    "Pest Control",
+    "Home Cleaning",
+    "Sofa Shampooing",
+    "Kitchen Deep Cleaning",
+    "Mosquito Net Installation",
+    "Sanitization Services",
+  ];
 
-const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setPlaceholderIndex((prev) => (prev + 1) % services.length);
-  }, 4000); // rotates every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % services.length);
+    }, 4000); // rotates every 4 seconds
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
 
-const trendingSearches = [
-  "Standard Cockroach Control",
-  "Bedbugs",
-  "Termite Control",
-  "Car disinfection",
-  "Rodent Management Service",
-  "Home Disinfection",
-  "6D Prime -Cockroach Control And Ant Control",
-];
+  const trendingSearches = [
+    "Standard Cockroach Control",
+    "Bedbugs",
+    "Termite Control",
+    "Car disinfection",
+    "Rodent Management Service",
+    "Home Disinfection",
+    "6D Prime -Cockroach Control And Ant Control",
+  ];
 
-const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 
   return (
     <div
       className="sm:max-w-7xl sm:mx-auto bg-cover bg-center bg-no-repeat font-headerFont bg-white"
-     
+
     >
       <SchemaMarkup />
       <Helmet>
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
       {/* Typewriter Hero Headline - Desktop Only */}
-      
-        <section
-          className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-white bg-center bg-no-repeat h-[450px] md:h-auto"
-          // style={{
-          //   background:
-          //     "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          // }}
-        >
+
+      <section
+        className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-white bg-center bg-no-repeat h-[450px] md:h-auto"
+      // style={{
+      //   background:
+      //     "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      // }}
+      >
         <div className="w-full flex flex-col md:flex-row gap-8">
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">
@@ -503,9 +503,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                     }}
                   />
                   <BsMicFill
-                    className={`cursor-pointer hover:text-emerald-900 transition-colors ${
-                      isListening ? 'text-red-500 animate-pulse' : ''
-                    }`}
+                    className={`cursor-pointer hover:text-emerald-900 transition-colors ${isListening ? 'text-red-500 animate-pulse' : ''
+                      }`}
                     onClick={handleMicClick}
                   />
                 </div>
@@ -518,32 +517,32 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
               {/* Trending Search Dropdown */}
               <div className="relative w-full">
                 {isSearchFocused && searchTerm.length === 0 && (
-                <div className="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-10 md:z-0">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                    <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M13 7H7v6h6V7z" />
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
-                    </svg>
-                    Trending Searches
-                  </h3>
-                  <div className="flex flex-wrap gap-3">
-                    {trendingSearches.map((item, idx) => (
-                          <button
-                            key={idx}
-                            onMouseDown={() => {
-                              setSearchTerm(item); // Show in search bar
-                              fetchSearchResults(item); // Optional: Show matching products
-                              setIsSearchOpen(true); // Show dropdown
-                              searchInputRef.current?.focus(); // Refocus input
-                            }}
-                            className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
-                          >
-                            {item}
-                          </button>
-                        ))}
+                  <div className="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-10 md:z-0">
+                    <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                      <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 7H7v6h6V7z" />
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
+                      </svg>
+                      Trending Searches
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      {trendingSearches.map((item, idx) => (
+                        <button
+                          key={idx}
+                          onMouseDown={() => {
+                            setSearchTerm(item); // Show in search bar
+                            fetchSearchResults(item); // Optional: Show matching products
+                            setIsSearchOpen(true); // Show dropdown
+                            searchInputRef.current?.focus(); // Refocus input
+                          }}
+                          className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
               </div>
             </div>
             <AnimatePresence>
@@ -597,11 +596,10 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                                   {[1, 2, 3, 4, 5].map((star) => (
                                     <svg
                                       key={star}
-                                      className={`w-3 h-3 ${
-                                        star <= Math.round(result.rating)
+                                      className={`w-3 h-3 ${star <= Math.round(result.rating)
                                           ? "text-amber-400"
                                           : "text-gray-300"
-                                      }`}
+                                        }`}
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
                                     >
@@ -630,18 +628,18 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 
             {/* Always show on both desktop and mobile */}
-            <ServiceGrid />
+            <ServiceGrid categories={categories} />
             <div className="hidden md:flex max-w-7xl ml-14 mt-10 mx-auto">
-            <h2 className="text-2xl font-medium text-black -ml-8">
-              <span
-              // style={{
-              //   background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",
-              //   WebkitBackgroundClip: "text",
-              //   WebkitTextFillColor: "transparent",
-              //   display: "inline-block"
-              // }}
-            >
-              {/* <Typewriter
+              <h2 className="text-2xl font-medium text-black -ml-8">
+                <span
+                // style={{
+                //   background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",
+                //   WebkitBackgroundClip: "text",
+                //   WebkitTextFillColor: "transparent",
+                //   display: "inline-block"
+                // }}
+                >
+                  {/* <Typewriter
                 words={[
                   "Trained & Verified Professionals..",
                   "Available All 365 Days..",
@@ -659,25 +657,25 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
                 deleteSpeed={40}
                 delaySpeed={1500}
               /> */}
-              <HomeForm />
-            </span>
-            </h2>
+                  <HomeForm />
+                </span>
+              </h2>
+            </div>
+
+
           </div>
-             
-            
-          </div>
-    
+
           <div className="hidden md:block w-[552px]">
             <div className="h-[525px] rounded-xl overflow-hidden">
-              <img 
+              <img
                 src={photo1} // Replace with your single image
-                alt="Home Service Full View" 
+                alt="Home Service Full View"
                 className="h-full w-full object-cover rounded-xl object-center"
               />
             </div>
           </div>
         </div>
-        
+
         {/* <ServiceSection categories={data.all_categories} />
         <Roadmap />   
         <section className="px-2 sm:px-7">
@@ -698,46 +696,46 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         <section id="inspection-section" className="px-0 py-0 md:py-10">
           <InspectionFormSection />
         </section> */}
-    </section>
-    <ServiceSection categories={data.all_categories} />
-        {/* <Roadmap />    */}
-        <section className="px-2 sm:px-12" style={{
-            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
-          <BannerImageMobile />
-          <BannerImage />
-        </section>
-        
-        <section className="px-10 py-5" style={{
-            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
-          <SnabbitTasksUI />
-        </section> 
-        {/* <section className="px-6 sm:px-10 -mt-10 sm:-mt-0" style={{
+      </section>
+      <ServiceSection categories={data.all_categories} />
+      {/* <Roadmap />    */}
+      <section className="px-2 sm:px-12" style={{
+        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      }}>
+        <BannerImageMobile />
+        <BannerImage />
+      </section>
+
+      <section className="px-10 py-5" style={{
+        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      }}>
+        <SnabbitTasksUI />
+      </section>
+      {/* <section className="px-6 sm:px-10 -mt-10 sm:-mt-0" style={{
             background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
           }}>
           <Testimonials />
         </section> */}
-        <section className="block md:hidden px-2 sm:px-11">
-          <TestimonialCarousel />
-        </section>
-        <section className="px-2 sm:px-11" style={{
-            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
-          <Scrapbanner />
-          <Scrapmobile />
-        </section>
-        <section
-          id="inspection-section"
-          className="px-4 sm:px-10 py-0s sm:py-10"
-          // style={{
-          //   background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          // }}
-        >
-          <div className="max-w-7xl mx-auto mt-7 sm:mt-0">
-            <InspectionFormSection />
-          </div>
-        </section>
+      <section className="block md:hidden px-2 sm:px-11">
+        <TestimonialCarousel />
+      </section>
+      <section className="px-2 sm:px-11" style={{
+        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      }}>
+        <Scrapbanner />
+        <Scrapmobile />
+      </section>
+      <section
+        id="inspection-section"
+        className="px-4 sm:px-10 py-0s sm:py-10"
+      // style={{
+      //   background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      // }}
+      >
+        <div className="max-w-7xl mx-auto mt-7 sm:mt-0">
+          <InspectionFormSection />
+        </div>
+      </section>
 
       {/* Services Section */}
       {/* <ServiceSection categories={data.all_categories} /> */}
@@ -797,8 +795,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       </section> */}
 
       {/* form section */}
-      
-          {/* <FormSection /> */}
+
+      {/* <FormSection /> */}
 
       {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
 
@@ -902,25 +900,25 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 
       {/* Stats Section */}
-      <section className="px-10 py-5 md:py-10"  style={{
+      <section className="px-10 py-5 md:py-10" style={{
         // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
       }}>
         <StatsSection />
       </section>
-        {/* <section className="px-2 sm:px-12">
+      {/* <section className="px-2 sm:px-12">
           <BannerImageMobile />
           <BannerImage />
         </section> */}
-          {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
-        {/* <section className=" px-10 py-5 md:py-10">
+      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
+      {/* <section className=" px-10 py-5 md:py-10">
           <SnabbitTasksUI />
         </section> */}
 
-        {/* <section className="px-10 py-20">
+      {/* <section className="px-10 py-20">
           <HowItWorks />
         </section> */}
-        
-        {/* <section className="px-10">
+
+      {/* <section className="px-10">
           <WhyChooseHommlie />
         </section> */}
 
@@ -929,8 +927,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
         </section> */}
 
       {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
-        
-        {/* <section className="px-2 sm:px-12">
+
+      {/* <section className="px-2 sm:px-12">
           <Scrapbanner />
           <Scrapmobile />
         </section> */}
@@ -945,8 +943,8 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
           <Refermobile />
         </section> */}
       <section className="px-10 py-5 md:py-10 -mt-6 sm:-mt-0" style={{
-            // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
+        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      }}>
         <FaqSection />
       </section>
 
@@ -982,7 +980,7 @@ const [isSearchFocused, setIsSearchFocused] = useState(false);
       <LoginSignup
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        // checkoutPd={checkoutPd}
+      // checkoutPd={checkoutPd}
       />
     </div>
   );
