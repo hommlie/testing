@@ -483,7 +483,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-20 shadow-sm font-sans  sm:max-w-7xl sm:mx-auto sm:px-1"
+      className="w-full relative z-20 shadow-sm font-sans"
     >
       {showMobileBanner && (
         <div className="w-full top-0 left-0 z-50 bg-[#0463ac] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
@@ -686,7 +686,7 @@ const Header = ({
               <div className="flex items-center flex-shrink-0 -ml-8">
                 <NavLink to="/">
                   <img
-                    src="/images/logoh.png"
+                    src={logo}
                     alt="Hommlie Logo"
                     className="h-14 w-auto object-contain"
                   />
@@ -1061,8 +1061,8 @@ const Header = ({
                               <svg
                                 key={star}
                                 className={`w-3 h-3 ${star <= Math.round(result.rating)
-                                    ? "text-amber-400"
-                                    : "text-gray-300"
+                                  ? "text-amber-400"
+                                  : "text-gray-300"
                                   }`}
                                 fill="currentColor"
                                 viewBox="0 0 20 20"

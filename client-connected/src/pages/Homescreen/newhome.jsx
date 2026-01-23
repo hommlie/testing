@@ -597,8 +597,8 @@ const HomePage = () => {
                                     <svg
                                       key={star}
                                       className={`w-3 h-3 ${star <= Math.round(result.rating)
-                                          ? "text-amber-400"
-                                          : "text-gray-300"
+                                        ? "text-amber-400"
+                                        : "text-gray-300"
                                         }`}
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
@@ -699,12 +699,14 @@ const HomePage = () => {
       </section>
       <ServiceSection categories={data.all_categories} />
       {/* <Roadmap />    */}
+      {/* Moved to ServiceSection
       <section className="px-2 sm:px-12" style={{
         // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
       }}>
         <BannerImageMobile />
         <BannerImage />
-      </section>
+      </section> 
+      */}
 
       <section className="px-10 py-5" style={{
         // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",

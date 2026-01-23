@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, Star, ChevronRight, Check } from "lucide-react";
+import { ChevronDown, Star, ChevronRight, Check, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BannerImage from "../../pages/BannerImage";
+import BannerImageMobile from "../../pages/BannerImageMobile";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -11,6 +13,7 @@ import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
 import Requestacallback from "../../pages/Requestacallback";
 import { Suspense } from "react";
+import fetchSettings from "../../config/settings";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
@@ -20,6 +23,18 @@ const ServiceSection = ({ categories }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
   const [selectedBhk, setSelectedBhk] = useState("");
+  const [logo, setLogo] = useState(null);
+
+  useEffect(() => {
+    const getSettings = async () => {
+      const settings = await fetchSettings();
+      if (settings?.logo) {
+        setLogo(settings.logo);
+      }
+    };
+    getSettings();
+  }, []);
+
   // Set default variation (property size) when attribute changes
   useEffect(() => {
     const attr = getCurrentAttributes().find((a) => a.id === selectedAttribute);
@@ -113,7 +128,7 @@ const ServiceSection = ({ categories }) => {
     }
   }, [selectedProduct]);
 
-  
+
   const handleCategorySelect = (category) => {
     // Keep the special redirect for disinfection-services only
     if (category.slug === "disinfection-services") {
@@ -322,14 +337,13 @@ const ServiceSection = ({ categories }) => {
           <span className="truncate">
             {value
               ? options.find((opt) => opt.id === value)?.subcategory_name ||
-                options.find((opt) => opt.id === value)?.product_name ||
-                options.find((opt) => opt.id === value)?.attribute
+              options.find((opt) => opt.id === value)?.product_name ||
+              options.find((opt) => opt.id === value)?.attribute
               : label}
           </span>
           <ChevronDown
-            className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform ${
-              isOpen ? "rotate-180 text-black" : "text-black"
-            }`}
+            className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform ${isOpen ? "rotate-180 text-black" : "text-black"
+              }`}
           />
         </button>
 
@@ -341,16 +355,14 @@ const ServiceSection = ({ categories }) => {
                 <div
                   key={option.id}
                   onClick={() => handleSelect(option.id)}
-                  className={`cursor-pointer p-3 flex items-start justify-between hover:bg-green-700 transition-colors ${
-                    isSelected ? "bg-white text-black" : "text-gray-900"
-                  } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
+                  className={`cursor-pointer p-3 flex items-start justify-between hover:bg-green-700 transition-colors ${isSelected ? "bg-white text-black" : "text-gray-900"
+                    } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
                 >
                   <div className="flex items-start gap-3 w-full">
                     <div className="flex-shrink-0 mt-1">
                       <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          isSelected ? "border-[#493f9e] bg-green-700" : "border-gray-300"
-                        }`}
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? "border-[#493f9e] bg-green-700" : "border-gray-300"
+                          }`}
                       >
                         {isSelected && <Check className="w-3 h-3 text-white" />}
                       </div>
@@ -441,7 +453,7 @@ const ServiceSection = ({ categories }) => {
             )}
           </div>
 
-            <a
+          <a
             href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
             className="text-center mb-2 text-md text-[#0463ac] text-bold text-decoration-line: underline -mt-4"
           >
@@ -501,11 +513,84 @@ const ServiceSection = ({ categories }) => {
     );
   };
 
+  // Sticky Header Scroll Logic
+  // Sticky Header Scroll Logic
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show sticky header after scrolling past the banner area (approx 400px)
+      if (window.scrollY > 400) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
+      {/* Premium Sticky Header */}
+      <div
+        className={`fixed top-0 left-0 w-full bg-white z-[999] shadow-lg transition-transform duration-500 ease-in-out transform ${isSticky ? "translate-y-0" : "-translate-y-full"
+          }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+          {/* Left: Logo */}
+          <div className="flex-shrink-0 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <img src={logo || "/images/logoh.png"} alt="Hommlie" className="h-10 w-auto object-contain" />
+          </div>
+
+          {/* Center: Categories Pills */}
+          <div className="hidden md:flex flex-1 max-w-3xl mx-8 overflow-x-auto scrollbar-hide items-center justify-center">
+            <div className="flex gap-6">
+              {categories?.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => handleCategorySelect(cat)}
+                  className={`relative pb-1 text-sm font-semibold transition-colors duration-200
+                        ${selectedCategory === cat.id
+                      ? "text-[#0463ac]"
+                      : "text-gray-600 hover:text-[#0463ac]"}`}
+                >
+                  {cat.category_name}
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-[#0463ac] transform transition-transform duration-300 origin-left
+                    ${selectedCategory === cat.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Contact & CTA */}
+          <div className="flex items-center gap-6">
+            <a href="tel:919999999999" className="hidden lg:flex items-center gap-2 text-[#071c1f] font-bold text-lg hover:text-[#0463ac] transition-colors">
+              <Phone className="w-5 h-5 text-[#0463ac]" />
+              <span className="tracking-wide">91 XXXXX-XXX00</span>
+            </a>
+            <button
+              onClick={() => setIsCallbackOpen(true)}
+              className="bg-[#0463ac] text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg hover:bg-[#034d85] hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+            >
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica] bg-white">
+
+        {/* Banners Moved Up */}
+        <div className="mb-10 text-center">
+          <BannerImageMobile />
+          <BannerImage />
+        </div>
+
         {/* Request a Callback Button (visible on all devices) */}
-        <div className="block sm:hidden mb-5 -mt-20 sm:-mt-0 flex justify-center">
+        <div className="block sm:hidden mb-5 -mt-4 flex justify-center">
           <button
             className="bg-[#0463ac] text-white px-6 py-2 rounded-md hover:bg-[#52852d] transition"
             onClick={() => setIsCallbackOpen(true)}
@@ -515,6 +600,8 @@ const ServiceSection = ({ categories }) => {
         </div>
         {/* Modal for callback */}
         <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
+
+        {/* Category Filters - COMMENTED OUT AS PER REQUEST
         <div className="mb-0 text-center sm:-mt-6">
           <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Your Service Category</h2>
           <div className="w-full flex justify-center sm:justify-center">
@@ -524,7 +611,10 @@ const ServiceSection = ({ categories }) => {
                   key={category.id}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => handleCategorySelect(category)}
+                  onClick={() => {
+                      handleCategorySelect(category);
+                      window.scrollTo({ top: 400, behavior: 'smooth' });
+                  }}
                   className={`border border-black w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
                     ${
                       selectedCategory === category.id && category.slug !== "disinfection-services"
@@ -541,20 +631,15 @@ const ServiceSection = ({ categories }) => {
             </div>
           </div>
         </div>
+        */}
 
-          <div className="pt-2 mb-8 max-w-4xl mx-auto">
-          {/* Responsive layout:
-              - Desktop (md+): 3 columns: Service Type | Property Size | Service Variant
-              - Mobile (sm): 2 columns: Service Type | Property Size (side-by-side)
-                Variant will appear as a full-width row below occupying both columns
-          */}
+        <div className="pt-2 mb-8 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="col-span-1 md:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
               <Dropdown label="Select Subcategory" value={selectedSubCategory} options={getCurrentSubcategories()} onChange={setSelectedSubCategory} disabled={!selectedCategory} />
             </div>
 
-            {/* Property Size (BHK) - shown beside Service Type on mobile and in second column on desktop */}
             <div className="col-span-1 md:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Property Size</label>
               <Dropdown
@@ -566,14 +651,12 @@ const ServiceSection = ({ categories }) => {
               />
             </div>
 
-            {/* Service Variant - on mobile this will move to the next row and span two columns; on desktop it sits in the third column */}
             <div className="col-span-1 md:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Variant</label>
               <Dropdown label="Select Variant" value={selectedAttribute} options={getCurrentAttributes()} onChange={setSelectedAttribute} disabled={!selectedProduct} showRecommended />
             </div>
           </div>
         </div>
-
         <div className="mb-0">
           <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
             {recommended.length + regular.length === 0
@@ -586,10 +669,9 @@ const ServiceSection = ({ categories }) => {
               <div className="text-center text-gray-500 py-10">Loading service packages...</div>
             ) : (
               <div className={`grid gap-4 sm:gap-6 px-4 w-full 
-                ${
-                  (recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
-                  (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
-                  "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
+                ${(recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
+                (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
+                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
                 }`}>
                 {[...recommended, ...regular].map((product) => (
                   <ProductCard
@@ -599,13 +681,13 @@ const ServiceSection = ({ categories }) => {
                     onClick={() => setSelectedProduct(product.id)}
                   />
                 ))}
-                
+
               </div>
             )}
           </div>
         </div>
       </section>
-  <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLoginSuccess={handlePostLoginAdd} />
+      <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLoginSuccess={handlePostLoginAdd} />
     </>
   );
 };
