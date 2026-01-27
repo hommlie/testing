@@ -5,7 +5,7 @@ const BannerImage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="hidden sm:flex w-full justify-center mb-3 mt-2" >
+    <div className="hidden sm:flex w-full justify-center mb-3 -mt-10" >
       <div className="relative rounded-lg overflow-hidden">
         <img
           src="/images/baner.webp"
@@ -17,9 +17,9 @@ const BannerImage = () => {
             onClick={() =>
               navigate('/product/cockroach-control-services-in-bangalore')
             }
-            className="px-6 py-3 bg-[#0463ac] text-white text-base font-bold rounded-md shadow-lg hover:from-emerald-700 hover:to-lime-700 transform hover:scale-105 transition-all duration-300 ease-in-out"
+            className="group px-6 py-3 bg-[#384c45] text-white text-base font-bold rounded-lg shadow-lg hover:bg-[#2c3e38] transform hover:scale-105 transition-all duration-300 ease-in-out flex items-center gap-2"
           >
-             Book Now
+            Book 6D Prime ₹1399 <span className="text-xl leading-none group-hover:translate-x-1 transition-transform">›</span>
           </button>
         </div>
       </div>

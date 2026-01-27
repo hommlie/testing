@@ -62,6 +62,11 @@ const ServiceGrid = ({ categories: propCategories }) => {
       return;
     }
 
+    if (serviceName === "Product") {
+      navigate(`${config.VITE_BASE_URL}/product`);
+      return;
+    }
+
     if (comingSoonServices.includes(serviceName) || serviceName === "See More") {
       setShowModal(null);
       setShowComingSoon(serviceName);
@@ -118,9 +123,28 @@ const ServiceGrid = ({ categories: propCategories }) => {
   ];
 
   // Display the first 6 Categories dynamically
-  const displayedServices = categoriesList.length > 0
-    ? categoriesList.slice(0, 6)
-    : fallbackServices;
+  // Filter out Waste Management from the top list to avoid overlap
+  const topServices = categoriesList
+    .filter(s => {
+      const name = s.category_name || s.name;
+      return name !== "Waste Management";
+    })
+    .slice(0, 3);
+
+  const bottomServices = [
+    {
+      id: "waste-mgmt-static",
+      category_name: "Waste Management",
+      image_url: "/images/wastemanagement1nn.png",
+      isLocal: true
+    },
+    {
+      id: "product-static",
+      category_name: "Product",
+      image_url: "/images/wastemanagement1nn.png",
+      isLocal: true
+    }
+  ];
 
   const renderModal = () => {
     const categoryName = showModal.category_name || showModal;
@@ -247,9 +271,10 @@ const ServiceGrid = ({ categories: propCategories }) => {
         Home services at your doorstep
       </h1>
 
-      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-2">
+      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-2 -mt-2">
+        {/* Top Grid: 3 Cards */}
         <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
-          {displayedServices.map((service) => (
+          {topServices.map((service) => (
             <div
               key={service.id}
               onClick={() => handleServiceClick(service)}
@@ -268,6 +293,32 @@ const ServiceGrid = ({ categories: propCategories }) => {
                     }
                     return rawImage;
                   })()}
+                  alt={service.category_name || service.name}
+                  className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+              <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
+                {service.category_name || service.name}
+              </span>
+              <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom Grid: 2 Cards (Waste Management & Product) */}
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-5 sm:gap-y-3 mt-4 mb-2">
+          {bottomServices.map((service) => (
+            <div
+              key={service.id}
+              onClick={() => handleServiceClick(service)}
+              className="flex flex-col items-center group transition-all cursor-pointer relative w-full -mt-4"
+            >
+              <div
+                className="mt-4  w-[220px] h-[80px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center border 
+                           group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300 px-4"
+              >
+                <img
+                  src={service.image_url}
                   alt={service.category_name || service.name}
                   className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 group-hover:scale-110"
                 />

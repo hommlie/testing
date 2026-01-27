@@ -114,7 +114,7 @@ function App() {
               {/* 👇 CTA now only on Home */}
               {/* <HomeOnlyCTA /> */}
 
-              <NewYearPopup />
+              {/* <NewYearPopup /> */}
 
               <Footer
                 logo={settings?.logo}

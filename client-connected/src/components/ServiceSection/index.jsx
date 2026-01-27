@@ -290,8 +290,33 @@ const ServiceSection = ({ categories }) => {
 
   const groupProducts = () => {
     const products = getCurrentProducts();
-    const recommended = products.filter((p) => p.is_recommended === 1);
-    const regular = products.filter((p) => p.is_recommended !== 1);
+
+    if (!selectedAttribute) {
+      const recommended = products.filter((p) => p.is_recommended === 1);
+      const regular = products.filter((p) => p.is_recommended !== 1);
+      return { recommended, regular };
+    }
+
+    const currentAttrObj = getCurrentAttributes().find(a => a.id === selectedAttribute);
+    const attrName = currentAttrObj ? currentAttrObj.attribute_name : "";
+
+    // Check keyword
+    const isAMC = /AMC/i.test(attrName);
+    const isOneTime = /One Time/i.test(attrName);
+
+    // Filter products
+    const filtered = products.filter(p => {
+      // A product matches if it has at least one attribute containing the keyword 
+      // corresponding to the user's selection
+      return p.attributes?.some(a => {
+        if (isAMC) return /AMC/i.test(a.attribute_name);
+        if (isOneTime) return /One Time/i.test(a.attribute_name);
+        return true;
+      });
+    });
+
+    const recommended = filtered.filter((p) => p.is_recommended === 1);
+    const regular = filtered.filter((p) => p.is_recommended !== 1);
     return { recommended, regular };
   };
 
@@ -390,122 +415,166 @@ const ServiceSection = ({ categories }) => {
 
   // ProductCard
   const ProductCard = ({ product, isSelected, onClick }) => {
-    // If the globally selectedAttribute belongs to this product, use it.
-    // Otherwise, fall back to this product's first attribute so the card
-    // displays its own data even when not selected.
-    const selectedAttr = product.attributes?.find((attr) => attr.id === selectedAttribute) || product.attributes?.[0];
+    // 1. Identify the global selection type (AMC vs One Time)
+    const globalSelectedAttrObj = getCurrentAttributes().find(a => a.id === selectedAttribute);
+    const globalAttrName = globalSelectedAttrObj ? globalSelectedAttrObj.attribute_name : "";
+    const isGlobalAMC = /AMC/i.test(globalAttrName);
+    const isGlobalOneTime = /One Time/i.test(globalAttrName);
+
+    // 2. Find the best attribute to display for THIS product
+    let displayAttr = product.attributes?.find(attr => attr.id === selectedAttribute);
+
+    if (!displayAttr) {
+      // If the specific selectedAttribute ID isn't in this product (which is expected if it's a different product),
+      // try to find a "matching type" attribute (AMC vs One Time)
+      if (isGlobalAMC) {
+        displayAttr = product.attributes?.find(attr => /AMC/i.test(attr.attribute_name));
+      } else if (isGlobalOneTime) {
+        displayAttr = product.attributes?.find(attr => /One Time/i.test(attr.attribute_name));
+      }
+
+      // Fallback: If still no match (or no global selection type), just take the first one
+      if (!displayAttr) {
+        displayAttr = product.attributes?.[0];
+      }
+    }
 
     const matchedVariation =
-      selectedAttr?.variations?.find((v) => v.variation === selectedBhk) ||
-      selectedAttr?.variations?.[0];
+      displayAttr?.variations?.find((v) => v.variation === selectedBhk) ||
+      displayAttr?.variations?.[0];
 
+    // --- Rest of the card logic ---
     const rating = matchedVariation?.avg_rating || product.avg_rating || 4.9;
     const reviews = matchedVariation?.total_reviews || product.total_reviews || 11540;
+
+    // determine price
+    // determine price with fallbacks
+    const currentPrice = matchedVariation?.discounted_variation_price || matchedVariation?.price || product.discounted_price || product.price || 0;
+    const originalPrice = matchedVariation?.price || product.price || 0;
+    // const savings = currentPrice && originalPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : 0;
+
+    // Description fallback
+    const descriptionText = matchedVariation?.description || product.description || "";
+
+    // Check if recommended/premium
+    const isPremium = product.is_recommended === 1;
 
     return (
       <motion.div
         whileHover={{ y: -5 }}
-        className={`relative w-[94vw] sm:max-w-[360px] rounded-xl border border-black transition-all duration-300 overflow-hidden flex flex-col justify-between 
-          h-[520px] bg-white hover:shadow-md ${isSelected ? "shadow-lg" : ""}`}
+        className={`relative w-full max-w-4xl mx-auto rounded-3xl border transition-all duration-300 overflow-hidden bg-[#faf9f6] flex flex-col sm:flex-row h-full
+          ${isSelected ? "border-[#0463ac] shadow-lg ring-1 ring-[#0463ac]" : "border-gray-200 shadow hover:shadow-lg"}`}
+        onClick={onClick}
       >
+        {/* LEFT SECTION (65%) */}
+        <div className="flex-1 p-5 flex flex-col justify-between relative">
 
-        {product.is_recommended == 1 && (
-          <div className="absolute top-2 right-2">
-            <div className=" relative bg-[#0463ac] text-white text-[11px] font-bold py-0 pl-3 pr-6 rounded-r-md shadow-md flex items-center">
-              <Star className="w-3 h-3 mr-1 fill-current text-white" />
-              RECOMMENDED
-              <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-yellow-400 shadow-sm" />
+          <div>
+            {/* Title & Badge */}
+            <div className="flex flex-col items-start gap-1 mb-2">
+              {isPremium && (
+                <span className="bg-[#fadbac] text-[#9c6f2d] text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 mb-1">
+                  ✓ Most Booked
+                </span>
+              )}
+              <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                {product.product_name}
+              </h3>
             </div>
-          </div>
-        )}
-        <div className="p-4 flex flex-col justify-between h-full cursor-pointer" onClick={onClick}>
-          <div className="flex flex-col items-center text-center mb-4 pt-2">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{product.product_name}</h3>
-            {selectedAttr?.attribute && (
-              <span className="px-3 py-1 rounded-md text-sm font-medium border shadow bg-white text-black">
-                {selectedAttr.attribute}
-              </span>
-            )}
-          </div>
 
-          {matchedVariation?.description && (
-            <ul className="space-y-2 mb-4">
-              {formatDescription(matchedVariation.description).map((point, i) => (
-                <li key={i} className="flex items-start">
-                  <span className="mr-2 text-black">✓</span>
-                  <span className="text-black text-sm">{point.trim()}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className="flex flex-col items-center mb-4">
-            <div className="flex gap-4 justify-center text-2xl font-bold mb-1">
-              <span className="text-black">₹{matchedVariation?.discounted_variation_price || matchedVariation?.price}/-</span>
-              {matchedVariation?.discounted_variation_price && matchedVariation?.price && (
-                <span className="line-through text-gray-500">₹{matchedVariation?.price}/-</span>
+            {/* Price */}
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="text-2xl font-extrabold text-[#1a1a1a]">₹{currentPrice || "N/A"}</span>
+              {originalPrice > currentPrice && (
+                <span className="text-gray-400 line-through text-md font-medium">₹{originalPrice}</span>
               )}
             </div>
-            {matchedVariation?.discounted_variation_price && matchedVariation?.price && (
-              <span className="text-sm bg-white text-black px-2 py-0.5 rounded-full">
-                {Math.round(((matchedVariation.price - matchedVariation.discounted_variation_price) / matchedVariation.price) * 100)}% OFF
-              </span>
-            )}
-          </div>
 
-          <a
-            href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
-            className="text-center mb-2 text-md text-[#0463ac] text-bold text-decoration-line: underline -mt-4"
-          >
-            View Details
-          </a>
-
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center border-b border-dotted border-gray-300 pb-1 w-fit">
-              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac] text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-3.5 h-3.5"
-                >
-                  <path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                </svg>
-              </div>
-
-              <span className="ml-2 text-base font-semibold text-gray-900">
-                {rating.toFixed(1)}
-              </span>
-
-              <span className="ml-1 text-sm text-gray-500">
-                ({reviews >= 1000 ? `${(reviews / 1000).toFixed(0)}K` : reviews} reviews)
-              </span>
-            </div>
-            <div className="text-sm font-medium">
-              For:{" "}
-              <select
-                value={selectedBhk}
-                onChange={(e) => setSelectedBhk(e.target.value)}
-                className="ml-1 p-1 rounded text-sm bg-white text-black border border-black"
-              >
-                {getVariationOptions().map((variation) => (
-                  <option key={variation} value={variation}>{variation}</option>
+            {/* Features List */}
+            {descriptionText && (
+              <ul className="mb-3 space-y-1.5">
+                {formatDescription(descriptionText).slice(0, 4).map((point, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-gray-700 font-medium">
+                    <div className="mt-0.5 min-w-[14px]">
+                      <Check className="w-3.5 h-3.5 text-green-600" />
+                    </div>
+                    <span>{point.trim()}</span>
+                  </li>
                 ))}
-              </select>
+              </ul>
+            )}
+
+            {/* Extra Badges */}
+            <div className="flex flex-wrap gap-2 mt-1">
+              <span className="text-green-700 text-[10px] font-bold flex items-center gap-1">
+                ✓ 90-Day Warranty
+              </span>
+              {isPremium && (
+                <span className="text-[#5a5a5a] text-[10px] font-bold flex items-center gap-1">
+                  ✓ Good for Families
+                </span>
+              )}
             </div>
           </div>
 
-          <div className="">
+          {/* Footer Link */}
+          <div className="mt-3 pt-2">
+            <a
+              href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
+              className="text-xs font-bold text-[#0463ac] underline cursor-pointer hover:text-[#034d85]"
+            >
+              View Details
+            </a>
+          </div>
+        </div>
+
+        {/* RIGHT SECTION (35%) */}
+        <div className="w-full sm:w-[35%] bg-white p-4 flex flex-col items-center justify-between border-l border-gray-100 relative">
+
+          {/* Technician Section */}
+          <div className="flex flex-col items-center mt-1">
+            {/* Image Circle */}
+            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-sm mb-2 bg-gray-100 ring-1 ring-gray-100">
+              <img
+                src={product?.productimage?.image_url || "/images/tech-placeholder.png"}
+                alt="Pro"
+                className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3237/3237472.png" }}
+              />
+            </div>
+            {/* ID Verified */}
+            <div className="flex items-center gap-1 text-green-700 text-[10px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100 mb-2">
+              <div className="w-3 h-3 bg-green-600 rounded-full flex items-center justify-center">
+                <Check className="w-2 h-2 text-white" />
+              </div>
+              ID Verified
+            </div>
+            {/* Quote */}
+            <div className="text-center px-1">
+              <p className="text-[9px] text-gray-400 leading-tight italic">
+                "Amit, vaccinated & trained for pest control"
+              </p>
+            </div>
+          </div>
+
+          {/* Button Section */}
+          <div className="w-full mt-3">
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (matchedVariation) handleAddToCart(matchedVariation, product);
               }}
-              className={`w-full py-3 rounded-lg font-bold transition-colors  bg-[#0463ac] text-white hover:bg-[#52852d] hover:text-white 
-                ${isAddingToCart ? "opacity-75 cursor-not-allowed" : ""}`}
+              disabled={!matchedVariation || isAddingToCart}
+              className={`w-full py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-sm transition-all text-center border
+                  ${(isAddingToCart || !matchedVariation) ? "opacity-75 cursor-not-allowed" : ""}
+                  ${isPremium
+                  ? "bg-[#eebf5e] hover:bg-[#dca63a] text-white border-[#eebf5e]"
+                  : "bg-gray-50 text-gray-800 border-gray-300 hover:bg-gray-100"
+                }
+                `}
             >
-              {isAddingToCart ? "Adding..." : "Book Now"}
+              {isAddingToCart ? "Adding..." : (!matchedVariation ? "Unavailable" : (isPremium ? "Book 6D Prime" : "Book Standard >"))}
             </motion.button>
           </div>
         </div>
@@ -569,7 +638,7 @@ const ServiceSection = ({ categories }) => {
           <div className="flex items-center gap-6">
             <a href="tel:919999999999" className="hidden lg:flex items-center gap-2 text-[#071c1f] font-bold text-lg hover:text-[#0463ac] transition-colors">
               <Phone className="w-5 h-5 text-[#0463ac]" />
-              <span className="tracking-wide">91 XXXXX-XXX00</span>
+              <span className="tracking-wide">91 63638 65658</span>
             </a>
             <button
               onClick={() => setIsCallbackOpen(true)}
@@ -633,27 +702,60 @@ const ServiceSection = ({ categories }) => {
         </div>
         */}
 
-        <div className="pt-2 mb-8 max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-1 md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
-              <Dropdown label="Select Subcategory" value={selectedSubCategory} options={getCurrentSubcategories()} onChange={setSelectedSubCategory} disabled={!selectedCategory} />
-            </div>
+        {/* Overlapping Card for Dropdowns */}
+        <div className="relative z-10 max-w-6xl mx-auto px-4 -mt-8 sm:-mt-20 mb-12">
+          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {/* Service Category (New) */}
+              <div className="col-span-1">
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Service Category</label>
+                <Dropdown
+                  label="Select Category"
+                  value={selectedCategory}
+                  options={categories?.map(c => ({ ...c, subcategory_name: c.category_name })) || []}
+                  onChange={(id) => {
+                    const cat = categories?.find((c) => c.id === id);
+                    if (cat) handleCategorySelect(cat);
+                  }}
+                />
+              </div>
 
-            <div className="col-span-1 md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Property Size</label>
-              <Dropdown
-                label="Select BHK"
-                value={selectedBhk}
-                options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
-                onChange={setSelectedBhk}
-                disabled={!selectedProduct}
-              />
-            </div>
+              {/* Service Type */}
+              <div className="col-span-1">
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Service Type</label>
+                <Dropdown
+                  label="Select Subcategory"
+                  value={selectedSubCategory}
+                  options={getCurrentSubcategories()}
+                  onChange={setSelectedSubCategory}
+                  disabled={!selectedCategory}
+                />
+              </div>
 
-            <div className="col-span-1 md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Service Variant</label>
-              <Dropdown label="Select Variant" value={selectedAttribute} options={getCurrentAttributes()} onChange={setSelectedAttribute} disabled={!selectedProduct} showRecommended />
+              {/* Property Size */}
+              <div className="col-span-1">
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Property Size</label>
+                <Dropdown
+                  label="Select BHK"
+                  value={selectedBhk}
+                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
+                  onChange={setSelectedBhk}
+                  disabled={!selectedProduct}
+                />
+              </div>
+
+              {/* Service Variant */}
+              <div className="col-span-1">
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Service Variant</label>
+                <Dropdown
+                  label="Select Variant"
+                  value={selectedAttribute}
+                  options={getCurrentAttributes()}
+                  onChange={setSelectedAttribute}
+                  disabled={!selectedProduct}
+                  showRecommended
+                />
+              </div>
             </div>
           </div>
         </div>

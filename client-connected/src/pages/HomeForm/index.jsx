@@ -49,13 +49,13 @@ const HomeForm = () => {
   return (
     <div className="relative text-center py-8 -mt-16">
       {/* ✅ Heading */}
-      <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">
-       Book Your Free Callback
+      <h2 className="text-lg sm:text-xl font-medium text-black sm:ml-2 -ml-4 sm:mb-6 mb-2 sm:mb-0 -mt-2 ">
+        Book Your Free Callback
       </h2>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0 bg-white shadow-lg rounded-l p-4 md:p-2 max-w-3xl mx-auto"
+        className=" flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0 bg-white shadow-lg rounded-l p-4 md:p-2 max-w-3xl mx-auto -mt-4"
       >
         {/* Name */}
         <div className="flex-1 md:border-r md:border-gray-300 md:px-3">
