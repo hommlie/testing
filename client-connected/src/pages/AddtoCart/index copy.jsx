@@ -87,17 +87,17 @@ export default function AddtoCart() {
   useEffect(() => {
     setSelectedAddrs(
       localStorage.getItem("HommlieselectedAddrs") == "undefined"
-        ? []
+        ? null
         : JSON.parse(localStorage.getItem("HommlieselectedAddrs"))
     );
     setSelectedDayTime(
       localStorage.getItem("HommlieselectedDayTime") == "undefined"
-        ? []
+        ? null
         : JSON.parse(localStorage.getItem("HommlieselectedDayTime"))
     );
     setSelectedCoupon(
       localStorage.getItem("HommlieselectedCoupon") == "undefined"
-        ? []
+        ? null
         : JSON.parse(localStorage.getItem("HommlieselectedCoupon"))
     );
     setPaymentType(paymentList[0]);
@@ -314,7 +314,7 @@ export default function AddtoCart() {
           isOpen={isDateTimeModalOpen}
           onClose={closeDateTimeModal}
           order_type="AMC"
-          // slotFull
+        // slotFull
         />
         <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} />
         <CouponModal
@@ -333,20 +333,18 @@ export default function AddtoCart() {
                     key={index}
                     className="w-full flex flex-col justify-center items-center gap-4"
                     style={{
-                      color: `${
-                        tracker === "Booking Confirmed" ? "#E5E7EB" : ""
-                      }`,
+                      color: `${tracker === "Booking Confirmed" ? "#E5E7EB" : ""
+                        }`,
                     }}
                   >
                     <span className="text-xs md:text-base font-semibold">
                       {tracker}
                     </span>
                     <div
-                      className={`${
-                        tracker === "Booking Confirmed"
+                      className={`${tracker === "Booking Confirmed"
                           ? "border-[#E5E7EB]"
                           : "border-[#249370]"
-                      } w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}
+                        } w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}
                     ></div>
                   </div>
                 );
@@ -776,15 +774,14 @@ export default function AddtoCart() {
         <div className="sticky bottom-2 z-20 transition-transform duration-300 flex justify-center">
           <button
             onClick={cart.length === 0 ? handleEmptyCartClick : handleProceed}
-            className={`w-full max-w-md py-3 text-white font-semibold transition duration-300 ${
-              cart.length === 0
+            className={`w-full max-w-md py-3 text-white font-semibold transition duration-300 ${cart.length === 0
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-[#249370] hover:bg-green-700"
-            }`}
+              }`}
             style={{
               backgroundColor: cart.length === 0 ? "#cccccc" : "#035240",
             }}
-            // disabled={cart.length === 0}
+          // disabled={cart.length === 0}
           >
             PROCEED TO PAYMENT
           </button>

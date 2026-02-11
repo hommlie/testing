@@ -54,7 +54,7 @@ const Header = ({
   youtube,
 }) => {
   const [isGetAppModalOpen, setIsGetAppModalOpen] = useState(false);
-  const [showMobileBanner, setShowMobileBanner] = useState(true);
+  const [showMobileBanner, setShowMobileBanner] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const searchInputRef = useRef(null);
@@ -73,6 +73,9 @@ const Header = ({
     totalPrice,
     getAddresses,
     bookings,
+    currentLocation,
+    setCurrentLocation,
+    pincode,
     prodData,
   } = useCont();
 
@@ -88,9 +91,6 @@ const Header = ({
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isReferAndEarnOpen, setIsReferAndEarnOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState(
-    "Get Current Location"
-  );
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -151,9 +151,29 @@ const Header = ({
     recognition.start();
   };
 
+  const [isInBangalore, setIsInBangalore] = useState(true);
+
+  const checkIsBangalore = (address) => {
+    if (!address || address === "Get Current Location") return true;
+
+    const addrLower = address.toLowerCase();
+    const isBangalore = addrLower.includes("bangalore") || addrLower.includes("bengaluru") || /\b560\d{3}\b/.test(address);
+
+    if (isBangalore) return true;
+
+    // Detect non-Bangalore pincodes (starting with anything other than 560)
+    const hasOtherPincode = /\b(?![560])\d{6}\b/.test(address);
+    if (hasOtherPincode) return false;
+
+    // If it's explicitly another city or state like Goa, return false
+    return false;
+  };
+
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
-      setCurrentLocation("Bannerghatta, Bangalore");
+      const defaultLoc = "Bannerghatta, Bangalore";
+      setCurrentLocation(defaultLoc);
+      setIsInBangalore(checkIsBangalore(defaultLoc));
       return;
     }
 
@@ -167,27 +187,37 @@ const Header = ({
           const data = await response.json();
 
           if (data.results && data.results[0]) {
-            const locationStings = data.results[0]?.formatted_address.split(",");
+            const fullAddress = data.results[0]?.formatted_address;
+            const locationStings = fullAddress.split(",");
+            let newLocation = "";
             if (locationStings.length > 2) {
-              setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
+              newLocation = locationStings?.slice(0, 3)?.join(",");
             } else {
-              setCurrentLocation(data.results[0]?.formatted_address);
+              newLocation = fullAddress;
             }
+            setCurrentLocation(newLocation);
+            setIsInBangalore(checkIsBangalore(fullAddress));
           } else {
             setCurrentLocation("Location could not be fetched");
           }
         } catch (error) {
           console.error("Error fetching location details:", error);
           setCurrentLocation("Bannerghatta, Bangalore");
+          setIsInBangalore(true);
         }
       },
       (error) => {
         console.error("Geolocation error:", error);
         setCurrentLocation("Bannerghatta, Bangalore");
+        setIsInBangalore(true);
       }
     );
   };
 
+
+  useEffect(() => {
+    setIsInBangalore(checkIsBangalore(currentLocation));
+  }, [currentLocation, pincode]);
 
   useEffect(() => {
     getCurrentLocation();
@@ -244,6 +274,15 @@ const Header = ({
   useEffect(() => {
     if (!SpeechRecognition) {
       setIsSupported(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const show = () => setShowMobileBanner(true);
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(show, { timeout: 2500 });
+    } else {
+      setTimeout(show, 2500);
     }
   }, []);
 
@@ -483,7 +522,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className="w-full relative z-20 shadow-sm font-sans"
+      className="w-full sticky top-0 z-50 shadow-sm font-sans bg-white transition-all duration-300"
     >
       {showMobileBanner && (
         <div className="w-full top-0 left-0 z-50 bg-[#0463ac] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
@@ -686,7 +725,7 @@ const Header = ({
               <div className="flex items-center flex-shrink-0 -ml-8">
                 <NavLink to="/">
                   <img
-                    src={logo}
+                    src="/images/logoh.png"
                     alt="Hommlie Logo"
                     className="h-14 w-auto object-contain"
                   />
@@ -1126,6 +1165,27 @@ const Header = ({
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
           <nav className="space-y-4">
+            <AnimatePresence>
+              {!isInBangalore && currentLocation !== "Get Current Location" && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0, y: -10 }}
+                  animate={{ height: "auto", opacity: 1, y: 0 }}
+                  exit={{ height: 0, opacity: 0, y: -10 }}
+                  className="overflow-hidden mb-3"
+                >
+                  <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl animate-bounce">📍</span>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
+                        <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">We're coming soon to {currentLocation.split(',')[0]}!</p>
+                      </div>
+                    </div>
+                    <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             <div className="relative mb-4">
               <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-emerald-600" />
               <input

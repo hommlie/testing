@@ -5,13 +5,14 @@ import ComingSoonModal from "../ComingSoonPage";
 import { useNavigate } from "react-router-dom";
 import { useCont } from "../../context/MyContext";
 import config from "../../config/config";
-
 import axios from "axios";
+import Requestacallback from "../Requestacallback";
 
 const ServiceGrid = ({ categories: propCategories }) => {
   const [showModal, setShowModal] = useState(null);           // category drilldown modal (e.g., Pest Control)
   const [showComingSoon, setShowComingSoon] = useState(false); // "Coming Soon" modal for placeholder services
   const [fullCategories, setFullCategories] = useState([]);    // Stores rich data from /api/category
+  const [isCallbackOpen, setIsCallbackOpen] = useState(false); // Callback modal state
 
   const navigate = useNavigate();
   const { categoryData } = useCont();
@@ -122,16 +123,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
     { id: 6, category_name: "Scrap", image_url: "/images/scrap1nn.png" },
   ];
 
-  // Display the first 6 Categories dynamically
-  // Filter out Waste Management from the top list to avoid overlap
-  const topServices = categoriesList
-    .filter(s => {
-      const name = s.category_name || s.name;
-      return name !== "Waste Management";
-    })
-    .slice(0, 3);
-
-  const bottomServices = [
+  const staticServices = [
     {
       id: "waste-mgmt-static",
       category_name: "Waste Management",
@@ -145,6 +137,17 @@ const ServiceGrid = ({ categories: propCategories }) => {
       isLocal: true
     }
   ];
+
+  // Create a single list of services to display
+  // We want to combine dynamic services with our static ones
+  const displayServices = [
+    ...categoriesList.filter(s => s.category_name !== "Waste Management" && s.category_name !== "Product").slice(0, 4),
+    ...staticServices
+  ];
+
+  // If the list is empty (loading), show fallback services
+  const finalServices = categoriesList.length > 0 ? displayServices : fallbackServices;
+
 
   const renderModal = () => {
     const categoryName = showModal.category_name || showModal;
@@ -266,22 +269,22 @@ const ServiceGrid = ({ categories: propCategories }) => {
   };
 
   return (
-    <div className="p-4 mb-0 bg-cover bg-center bg-no-repeat">
-      <h1 className="text-lg sm:text-2xl font-medium text-black sm:ml-2 -ml-4 sm:mb-6 -mt-2 mb-2 sm:mb-0 sm:-mt-5">
+    <div className="px-0 sm:px-4 py-0 sm:py-2 bg-cover bg-center bg-no-repeat">
+      <h1 className="text-lg sm:text-2xl font-medium text-black mb-2 sm:mb-6 sm:ml-2">
         Home services at your doorstep
       </h1>
 
-      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md ml-2 -mt-2">
-        {/* Top Grid: 3 Cards */}
-        <div className="grid grid-cols-3 gap-x-16 gap-y-3 sm:gap-x-5 sm:gap-y-3 mb-2">
-          {topServices.map((service) => (
+      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md sm:mx-0 sm:w-full mb-2">
+        {/* Unified Grid: 6 Cards in 3 columns */}
+        <div className="grid grid-cols-3 gap-4 sm:gap-6 mb-0">
+          {finalServices.map((service) => (
             <div
-              key={service.id}
+              key={service.id || service.name}
               onClick={() => handleServiceClick(service)}
               className="flex flex-col items-center group transition-all cursor-pointer relative"
             >
               <div
-                className="mt-4 w-[110px] h-[80px] sm:w-[128px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center border 
+                className="w-full h-[80px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center border 
                            group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300"
               >
                 <img
@@ -297,7 +300,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                   className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
-              <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
+              <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight whitespace-normal">
                 {service.category_name || service.name}
               </span>
               <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
@@ -305,31 +308,8 @@ const ServiceGrid = ({ categories: propCategories }) => {
           ))}
         </div>
 
-        {/* Bottom Grid: 2 Cards (Waste Management & Product) */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-5 sm:gap-y-3 mt-4 mb-2">
-          {bottomServices.map((service) => (
-            <div
-              key={service.id}
-              onClick={() => handleServiceClick(service)}
-              className="flex flex-col items-center group transition-all cursor-pointer relative w-full -mt-4"
-            >
-              <div
-                className="mt-4  w-[220px] h-[80px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center border 
-                           group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300 px-4"
-              >
-                <img
-                  src={service.image_url}
-                  alt={service.category_name || service.name}
-                  className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 group-hover:scale-110"
-                />
-              </div>
-              <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight truncate sm:whitespace-normal max-w-[90px]">
-                {service.category_name || service.name}
-              </span>
-              <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </div>
-          ))}
-        </div>
+
+
       </div>
 
       {/* Category modal */}
@@ -345,6 +325,13 @@ const ServiceGrid = ({ categories: propCategories }) => {
           />
         )}
       </AnimatePresence>
+
+      {/* Callback Modal */}
+      <Requestacallback
+        isOpen={isCallbackOpen}
+        onClose={() => setIsCallbackOpen(false)}
+        source="homepage_grid"
+      />
     </div>
   );
 };

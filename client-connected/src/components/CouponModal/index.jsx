@@ -70,9 +70,14 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
   useEffect(() => {
     if (!isOpen) return;
     setSearchTerm("");
+    if (selectedCoupon && selectedCoupon.coupon_name) {
+      setAppliedCoupon(selectedCoupon);
+    } else {
+      setAppliedCoupon(null);
+    }
     getCoupons(""); // empty query → normal list (defaults only)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [isOpen, selectedCoupon]);
 
   // search: ask server so it can include is_default = 0 when name matches
   const handleSearch = (value) => {
@@ -222,87 +227,87 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
             </div>
           </div>
         ) : (
-            <>
+          <>
             <div className="flex flex-row gap-2 items-center justify-center w-full px-4 my-4">
-          <input
-            type="text"
-            onChange={(e) => handleSearch(e.target.value)}
-            value={searchTerm}
-            className="w-4/5 h-10 rounded-md pl-4"
-            placeholder="Enter Coupon Code"
-          />
-          <button
-            onClick={handleApply}
-            className="w-1/5 font-bold"
-            style={{ color: "#FF3269" }}
-          >
-            APPLY
-          </button>
-        </div>
+              <input
+                type="text"
+                onChange={(e) => handleSearch(e.target.value)}
+                value={searchTerm}
+                className="w-4/5 h-10 rounded-md pl-4"
+                placeholder="Enter Coupon Code"
+              />
+              <button
+                onClick={handleApply}
+                className="w-1/5 font-bold"
+                style={{ color: "#FF3269" }}
+              >
+                APPLY
+              </button>
+            </div>
 
-        {errorMsg && (
-          <div className="px-4">
-            <p className="text-sm text-red-500">{errorMsg}</p>
-          </div>
+            {errorMsg && (
+              <div className="px-4">
+                <p className="text-sm text-red-500">{errorMsg}</p>
+              </div>
+            )}
+
+            {/* List of coupons from server */}
+            <div className="flex flex-col gap-4 justify-center w-full px-4 my-2">
+              <h3 className="font-bold">Available Coupons</h3>
+
+              {(!coupons || coupons.length === 0) && (
+                <div className="p-4">
+                  <img src={NoResultFoundImg} alt="No coupons" />
+                </div>
+              )}
+
+              {coupons?.map((cp, index) => (
+                <div
+                  key={index}
+                  className="relative bg-white rounded-md shadow-md p-2 px-8 space-y-3"
+                >
+                  <div className="flex flex-row justify-between">
+                    <div className="flex flex-col">
+                      <span className="text-xl font-bold">{cp.coupon_name}</span>
+                    </div>
+                    <div className="w-1/5">
+                      <button
+                        onClick={() => validateAndApply(cp.coupon_name)}
+                        className="font-bold"
+                        style={{ color: "#FF3269" }}
+                      >
+                        APPLY
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="" style={{ border: "1px dashed #E5E7EB" }}></div>
+
+                  <div>
+                    {cp?.amount != null && cp.amount !== "" ? (
+                      <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>
+                        ₹{Number(cp.amount)} OFF
+                      </p>
+                    ) : cp?.percentage != null && cp.percentage !== "" ? (
+                      <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>
+                        {cp.percentage}% OFF
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div
+                    className="absolute top-4 -left-4 w-3 h-3 md:w-7 md:h-7 rounded-full"
+                    style={{ backgroundColor: "#F6F1F7" }}
+                  ></div>
+                  <div
+                    className="absolute top-4 -right-4 w-3 h-3 md:w-7 md:h-7 rounded-full"
+                    style={{ backgroundColor: "#F6F1F7" }}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
-
-        {/* List of coupons from server */}
-        <div className="flex flex-col gap-4 justify-center w-full px-4 my-2">
-          <h3 className="font-bold">Available Coupons</h3>
-
-          {(!coupons || coupons.length === 0) && (
-            <div className="p-4">
-              <img src={NoResultFoundImg} alt="No coupons" />
-            </div>
-          )}
-
-      {coupons?.map((cp, index) => (
-            <div
-              key={index}
-              className="relative bg-white rounded-md shadow-md p-2 px-8 space-y-3"
-            >
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold">{cp.coupon_name}</span>
-                </div>
-                <div className="w-1/5">
-                  <button
-                    onClick={() => validateAndApply(cp.coupon_name)}
-                    className="font-bold"
-                    style={{ color: "#FF3269" }}
-                  >
-                    APPLY
-                  </button>
-                </div>
-              </div>
-
-              <div className="" style={{ border: "1px dashed #E5E7EB" }}></div>
-
-              <div>
-                {cp?.amount != null && cp.amount !== "" ? (
-                  <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>
-                    ₹{Number(cp.amount)} OFF
-                  </p>
-                ) : cp?.percentage != null && cp.percentage !== "" ? (
-                  <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>
-                    {cp.percentage}% OFF
-                  </p>
-                ) : null}
-              </div>
-
-              <div
-                className="absolute top-4 -left-4 w-3 h-3 md:w-7 md:h-7 rounded-full"
-                style={{ backgroundColor: "#F6F1F7" }}
-              ></div>
-              <div
-                className="absolute top-4 -right-4 w-3 h-3 md:w-7 md:h-7 rounded-full"
-                style={{ backgroundColor: "#F6F1F7" }}
-              ></div>
-            </div>
-          ))}
-        </div>
-      </>
-    )}
       </div>
     </div>
   );

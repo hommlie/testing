@@ -77,14 +77,11 @@ const HomePage = () => {
   const { location } = useParams();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState(
-    "Get Current Location"
-  );
+  const { cartLength, prodData, currentLocation, setCurrentLocation, pincode } = useCont();
   const [searchResults, setSearchResults] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const { cartLength, prodData } = useCont();
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const searchTimeoutRef = useRef(null);
@@ -213,9 +210,29 @@ const HomePage = () => {
     }
   };
 
+  const [isInBangalore, setIsInBangalore] = useState(true);
+
+  const checkIsBangalore = (address) => {
+    if (!address || address === "Get Current Location") return true;
+
+    const addrLower = address.toLowerCase();
+    const isBangalore = addrLower.includes("bangalore") || addrLower.includes("bengaluru") || /\b560\d{3}\b/.test(address);
+
+    if (isBangalore) return true;
+
+    // Detect non-Bangalore pincodes (starting with anything other than 560)
+    const hasOtherPincode = /\b(?![560])\d{6}\b/.test(address);
+    if (hasOtherPincode) return false;
+
+    // If it's explicitly another city or state like Goa, return false
+    return false;
+  };
+
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
-      setCurrentLocation("Bannerghatta, Bangalore");
+      const defaultLoc = "Bannerghatta, Bangalore";
+      setCurrentLocation(defaultLoc);
+      setIsInBangalore(checkIsBangalore(defaultLoc));
       return;
     }
 
@@ -229,27 +246,36 @@ const HomePage = () => {
           const data = await response.json();
 
           if (data.results && data.results[0]) {
-            const locationStings =
-              data.results[0]?.formatted_address.split(",");
+            const fullAddress = data.results[0]?.formatted_address;
+            const locationStings = fullAddress.split(",");
+            let newLocation = "";
             if (locationStings.length > 2) {
-              setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
+              newLocation = locationStings?.slice(0, 3)?.join(",");
             } else {
-              setCurrentLocation(data.results[0]?.formatted_address);
+              newLocation = fullAddress;
             }
+            setCurrentLocation(newLocation);
+            setIsInBangalore(checkIsBangalore(fullAddress));
           } else {
             setCurrentLocation("Location could not be fetched");
           }
         } catch (error) {
           console.error("Error fetching location details:", error);
           setCurrentLocation("Bannerghatta, Bangalore");
+          setIsInBangalore(true);
         }
       },
       (error) => {
         console.error("Geolocation error:", error);
         setCurrentLocation("Bannerghatta, Bangalore");
+        setIsInBangalore(true);
       }
     );
   };
+
+  useEffect(() => {
+    setIsInBangalore(checkIsBangalore(currentLocation));
+  }, [currentLocation, pincode]);
 
   useEffect(() => {
     getCurrentLocation();
@@ -305,115 +331,7 @@ const HomePage = () => {
     }
   };
 
-  // FAQ Section
-  const FaqSection = () => {
-    const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
-    let displayedFaqs = isMobile
-      ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
-      : data?.faqs;
-
-    // Ensure displayedFaqs is always an array
-    displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
-
-    return (
-      <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
-        <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
-          {displayedFaqs?.map((faq, index) => (
-            <motion.div
-              key={index}
-              className="border rounded-lg overflow-hidden"
-              initial={false}
-            >
-              <button
-                className="w-full flex justify-between items-center p-4 text-left bg-white"
-                onClick={() =>
-                  setOpenFaqIndex(openFaqIndex === index ? null : index)
-                }
-              >
-                <span className="font-medium text-sm sm:text-base">
-                  {faq.question}
-                </span>
-                <span className="text-xl font-bold">
-                  {openFaqIndex === index ? "−" : "+"}
-                </span>
-              </button>
-              <AnimatePresence>
-                {openFaqIndex === index && (
-                  <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: "auto" }}
-                    exit={{ height: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="p-4 bg-gray-50 text-sm sm:text-base">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-
-  // App Download Section
-  const AppDownloadSection = () => (
-    <div className="grid md:grid-cols-2 gap-8 items-center">
-      <div className="hidden md:block">
-        <h2 className="text-3xl font-bold mb-4">Get Things Done Easily.</h2>
-        <h3 className="text-2xl font-bold mb-6">Download The Hommlie App</h3>
-        <p className="text-gray-600 mb-8">
-          Book Appointments, Manage Projects and stay connected with Service
-          Providers - all on the go!
-        </p>
-        <div className="space-y-4 mb-8">
-          <div className="flex items-center">
-            <span className="mr-2">✓</span>
-            Easy Booking and appointment Scheduling
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">✓</span>
-            Secure Online Payments
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">✓</span>
-            Easy Booking Process - Instant online reservations
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">✓</span>
-            Manage Communication with Service Providers
-          </div>
-        </div>
-        <div className="flex space-x-4">
-          <motion.button>
-            <img src={Playstore} alt="App Store" className="h-12" />
-          </motion.button>
-          <motion.button>
-            <img src={Appstore} alt="Play Store" className="h-12" />
-          </motion.button>
-        </div>
-      </div>
-      <div>
-        <img src={DownloadAppImg} alt="App Screenshot" className="mx-auto" />
-      </div>
-      <div className="flex md:hidden space-x-4">
-        <motion.button>
-          <img src={Playstore} alt="App Store" className="h-12" />
-        </motion.button>
-        <motion.button>
-          <img src={Appstore} alt="Play Store" className="h-12" />
-        </motion.button>
-      </div>
-    </div>
-  );
 
   // Generate canonical URL based on the current location
   const generateCanonicalUrl = () => {
@@ -472,7 +390,7 @@ const HomePage = () => {
       {/* Typewriter Hero Headline - Desktop Only */}
 
       <section
-        className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-white bg-center bg-no-repeat h-[450px] md:h-auto"
+        className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-white bg-center bg-no-repeat md:h-auto"
       // style={{
       //   background:
       //     "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
@@ -482,7 +400,30 @@ const HomePage = () => {
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">
             {/* Search Bar - Mobile only */}
-            <div className="sm:block md:hidden">
+            <div className="sm:block md:hidden mb-2">
+              <AnimatePresence>
+                {!isInBangalore && currentLocation !== "Get Current Location" && (
+                  <motion.div
+                    key="bangalore-alert"
+                    initial={{ height: 0, opacity: 0, y: -10 }}
+                    animate={{ height: "auto", opacity: 1, y: 0 }}
+                    exit={{ height: 0, opacity: 0, y: -10 }}
+                    className="overflow-hidden mb-3"
+                  >
+                    <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl animate-bounce">📍</span>
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
+                          <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">We're coming soon to {currentLocation.split(',')[0]}!</p>
+                        </div>
+                      </div>
+                      {/* Subtitle pulse */}
+                      <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -548,6 +489,7 @@ const HomePage = () => {
             <AnimatePresence>
               {isSearchOpen && (
                 <motion.div
+                  key="search-dropdown"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -557,69 +499,83 @@ const HomePage = () => {
                     <div className="flex justify-center items-center py-6">
                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-emerald-600"></div>
                     </div>
-                  ) : searchResults.length > 0 ? (
-                    searchResults.map((result, index) => (
-                      <motion.div
-                        key={result.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                      >
-                        <div
-                          className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
-                          onClick={() => {
-                            setIsSearchOpen(false);
-                            setSearchTerm("");
-                            navigate(`${config.VITE_BASE_URL}/product/${result.slug}`);
-                          }}
+                  ) : pincode && pincode.length === 6 ? (
+                    searchResults.length > 0 ? (
+                      searchResults.map((result, index) => (
+                        <motion.div
+                          key={result.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
                         >
-                          {result.productimage && (
-                            <img
-                              src={result.productimage.image_url}
-                              alt={result.product_name}
-                              className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
-                            />
-                          )}
-                          <div className="flex-1">
-                            <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
-                            <p className="flex gap-2 text-gray-600">
-                              <span className="font-semibold text-emerald-700">
-                                ₹{Number(result.discounted_price ?? 0).toFixed(2)}
-                              </span>
-                              <span className="line-through text-gray-400">
-                                ₹{Number(result.product_price ?? 0).toFixed(2)}
-                              </span>
-                            </p>
-                            {result.rating && (
-                              <div className="flex items-center mt-1">
-                                <div className="flex items-center">
-                                  {[1, 2, 3, 4, 5].map((star) => (
-                                    <svg
-                                      key={star}
-                                      className={`w-3 h-3 ${star <= Math.round(result.rating)
-                                        ? "text-amber-400"
-                                        : "text-gray-300"
-                                        }`}
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                  ))}
-                                </div>
-                                <span className="text-xs text-gray-500 ml-1">
-                                  ({result.total_reviews})
-                                </span>
-                              </div>
+                          <div
+                            className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
+                            onClick={() => {
+                              setIsSearchOpen(false);
+                              setSearchTerm("");
+                              navigate(`${config.VITE_BASE_URL}/product/${result.slug}`);
+                            }}
+                          >
+                            {result.productimage && (
+                              <img
+                                src={result.productimage.image_url}
+                                alt={result.product_name}
+                                className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
+                              />
                             )}
+                            <div className="flex-1">
+                              <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
+                              <p className="flex gap-2 text-gray-600">
+                                <span className="font-semibold text-emerald-700">
+                                  ₹{Number(result.discounted_price ?? 0).toFixed(2)}
+                                </span>
+                                <span className="line-through text-gray-400">
+                                  ₹{Number(result.product_price ?? 0).toFixed(2)}
+                                </span>
+                              </p>
+                              {result.rating && (
+                                <div className="flex items-center mt-1">
+                                  <div className="flex items-center">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                      <svg
+                                        key={star}
+                                        className={`w-3 h-3 ${star <= Math.round(result.rating)
+                                          ? "text-amber-400"
+                                          : "text-gray-300"
+                                          }`}
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                      </svg>
+                                    ))}
+                                  </div>
+                                  <span className="text-xs text-gray-500 ml-1">
+                                    ({result.total_reviews})
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <IoIosArrowForward className="text-gray-400 text-lg" />
                           </div>
-                          <IoIosArrowForward className="text-gray-400 text-lg" />
-                        </div>
-                      </motion.div>
-                    ))
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="py-4 px-6 text-center text-gray-500">
+                        No products found for "{searchTerm}"
+                      </div>
+                    )
                   ) : (
-                    <div className="py-4 px-6 text-center text-gray-500">
-                      No products found for "{searchTerm}"
+                    <div className="p-8 text-center bg-gray-50 flex flex-col items-center gap-3">
+                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+                        <MdLocationOn className="w-6 h-6 text-[#0463ac]" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-[#033053]">Serviceability Required</h4>
+                        <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto leading-relaxed">
+                          Please enter your 6-digit pincode in the service section below to view matching services in your area.
+                        </p>
+                      </div>
                     </div>
                   )}
                 </motion.div>
@@ -708,16 +664,14 @@ const HomePage = () => {
       </section> 
       */}
 
-      <section className="px-10 py-5" style={{
-        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}>
+      <section className="px-10 py-5">
         <SnabbitTasksUI />
       </section>
-      {/* <section className="px-6 sm:px-10 -mt-10 sm:-mt-0" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
-          <Testimonials />
-        </section> */}
+
+      <section className="hidden md:block px-2 sm:px-12">
+        <BannerImage />
+      </section>
+
       <section className="block md:hidden px-2 sm:px-11">
         <TestimonialCarousel />
       </section>
@@ -944,10 +898,14 @@ const HomePage = () => {
           <Offermobile />
           <Refermobile />
         </section> */}
+      <section className="block md:hidden px-5 py-5">
+        <PopularCategorySection data={data?.all_categories} />
+      </section>
+
       <section className="px-10 py-5 md:py-10 -mt-6 sm:-mt-0" style={{
         // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
       }}>
-        <FaqSection />
+        <FaqSection data={data} />
       </section>
 
       {/* <section className="px-10 py-5 md:py-10" style={{
@@ -955,11 +913,6 @@ const HomePage = () => {
           }}>
         <CityServiceLinks />
       </section> */}
-
-      {/* Popular Categories Section with Tabs */}
-      <section className="hidden sm:hidden px-10 py-5 md:py-10">
-        <PopularCategorySection data={data?.all_categories} />
-      </section>
 
       <MobileNavigation />
 
@@ -989,3 +942,116 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// Helper Components
+const FaqSection = ({ data }) => {
+  const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
+  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+
+  let displayedFaqs = isMobile
+    ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
+    : data?.faqs;
+
+  // Ensure displayedFaqs is always an array
+  displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
+
+  return (
+    <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
+      <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
+        Frequently Asked Questions
+      </h2>
+      <div className="space-y-4">
+        {displayedFaqs?.map((faq, index) => {
+          const faqKey = faq.id || `faq-${index}`;
+          return (
+            <motion.div
+              key={faqKey}
+              className="border rounded-lg overflow-hidden"
+              initial={false}
+            >
+              <button
+                className="w-full flex justify-between items-center p-4 text-left bg-white"
+                onClick={() =>
+                  setOpenFaqIndex(openFaqIndex === index ? null : index)
+                }
+              >
+                <span className="font-medium text-sm sm:text-base">
+                  {faq.question}
+                </span>
+                <span className="text-xl font-bold">
+                  {openFaqIndex === index ? "−" : "+"}
+                </span>
+              </button>
+              <AnimatePresence initial={false}>
+                {openFaqIndex === index && (
+                  <motion.div
+                    key={`faq-content-${faqKey}`}
+                    initial={{ height: 0 }}
+                    animate={{ height: "auto" }}
+                    exit={{ height: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <p className="p-4 bg-gray-50 text-sm sm:text-base">
+                      {faq.answer}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const AppDownloadSection = () => (
+  <div className="grid md:grid-cols-2 gap-8 items-center">
+    <div className="hidden md:block">
+      <h2 className="text-3xl font-bold mb-4">Get Things Done Easily.</h2>
+      <h3 className="text-2xl font-bold mb-6">Download The Hommlie App</h3>
+      <p className="text-gray-600 mb-8">
+        Book Appointments, Manage Projects and stay connected with Service
+        Providers - all on the go!
+      </p>
+      <div className="space-y-4 mb-8">
+        <div className="flex items-center">
+          <span className="mr-2">✓</span>
+          Easy Booking and appointment Scheduling
+        </div>
+        <div className="flex items-center">
+          <span className="mr-2">✓</span>
+          Secure Online Payments
+        </div>
+        <div className="flex items-center">
+          <span className="mr-2">✓</span>
+          Easy Booking Process - Instant online reservations
+        </div>
+        <div className="flex items-center">
+          <span className="mr-2">✓</span>
+          Manage Communication with Service Providers
+        </div>
+      </div>
+      <div className="flex space-x-4">
+        <motion.button>
+          <img src={Playstore} alt="App Store" className="h-12" />
+        </motion.button>
+        <motion.button>
+          <img src={Appstore} alt="Play Store" className="h-12" />
+        </motion.button>
+      </div>
+    </div>
+    <div>
+      <img src={DownloadAppImg} alt="App Screenshot" className="mx-auto" />
+    </div>
+    <div className="flex md:hidden space-x-4">
+      <motion.button>
+        <img src={Playstore} alt="App Store" className="h-12" />
+      </motion.button>
+      <motion.button>
+        <img src={Appstore} alt="Play Store" className="h-12" />
+      </motion.button>
+    </div>
+  </div>
+);

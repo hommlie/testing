@@ -117,7 +117,7 @@ export default function AddtoCart() {
       setSelectedAddrs(selected);
       localStorage.setItem("HommlieselectedAddrs", JSON.stringify(selected));
     } else {
-      setSelectedAddrs(selected || []);
+      setSelectedAddrs(selected || null);
     }
 
     setSelectedDayTime(
@@ -127,7 +127,7 @@ export default function AddtoCart() {
     );
     setSelectedCoupon(
       localStorage.getItem("HommlieselectedCoupon") == "undefined"
-        ? []
+        ? null
         : JSON.parse(localStorage.getItem("HommlieselectedCoupon"))
     );
     setPaymentType(paymentList?.[0]);
@@ -162,9 +162,9 @@ export default function AddtoCart() {
           ? Number(response.data.balance) || 0
           : 0;
 
-  setWalletBalance(bal);
-  // Notify header to refresh wallet
-  window.dispatchEvent(new Event("hommlie-wallet-updated"));
+      setWalletBalance(bal);
+      // Notify header to refresh wallet
+      window.dispatchEvent(new Event("hommlie-wallet-updated"));
 
       // If balance is 0, force-clear any stale localStorage toggle
       if (bal <= 0) {
@@ -175,8 +175,8 @@ export default function AddtoCart() {
       }
     } catch (err) {
       console.error("Wallet fetch error:", err);
-  setWalletBalance(0);
-  window.dispatchEvent(new Event("hommlie-wallet-updated"));
+      setWalletBalance(0);
+      window.dispatchEvent(new Event("hommlie-wallet-updated"));
       // Defensive: also clear UI if fetch fails
       setWalletApplied(false);
       setWalletUsed(0);
@@ -471,8 +471,8 @@ export default function AddtoCart() {
     }
 
     const hasAddr = selectedAddrs && typeof selectedAddrs === "object" &&
-                    Object.keys(selectedAddrs).length > 0 &&
-                    selectedAddrs?.address && selectedAddrs?.pincode;
+      Object.keys(selectedAddrs).length > 0 &&
+      selectedAddrs?.address && selectedAddrs?.pincode;
 
     const noSlotChosen = !selectedDayTime?.date?.day || !selectedDayTime?.time;
 
@@ -536,13 +536,13 @@ export default function AddtoCart() {
 
   return (
     <div
-      
+
     >
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12"
-      style={{
-        background:
-          "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}>
+        style={{
+          background:
+            "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+        }}>
         {cart.length === 0 ? (
           <div className="flex justify-center items-center min-h-[50vh] -mt-5">
             <div className="p-8 flex flex-col items-center">
@@ -681,9 +681,8 @@ export default function AddtoCart() {
                       Payment Method
                     </h3>
                     <div
-                      className={`flex flex-col sm:grid sm:grid-cols-2 gap-3 px-4 sm:ml-7 ${
-                        (!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''
-                      }`}
+                      className={`flex flex-col sm:grid sm:grid-cols-2 gap-3 px-4 sm:ml-7 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''
+                        }`}
                     >
                       {paymentList?.map((payment) => (
                         <label key={payment.id}
@@ -731,59 +730,59 @@ export default function AddtoCart() {
 
               {/* Right column */}
               <div className="-mr-7 w-full lg:w-[600px] space-y-5 order-1 lg:order-2">
-              
-              <div className="bg-white rounded-xl shadow-sm p-4 transition-all border border-black">
-                {cart?.map((pd) => (
-                  <div
-                    key={pd.id}
-                    className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 border border-gray-100 rounded-lg p-4 mb-2"
-                  >
-                    {/* Left: title + meta */}
-                    <div className="flex-1">
-                      <h3 className="text-l font-semibold text-gray-900 leading-snug">
-                        {pd.product_name}
-                      </h3>
 
-                      <div className="mt-1 text-sm text-gray-600 flex flex-wrap items-center gap-x-3 gap-y-1">
-                        {/* Combine all meta details in one line */}
-                        {pd?.attribute_name && <span>{pd.attribute_name}</span>}
-                        {pd?.variation_name && <span>{pd.variation_name}</span>}
-                        {pd?.duration && <span>{pd.duration}</span>}
-                        {pd?.bhk && <span>{pd.bhk} BHK</span>}
+                <div className="bg-white rounded-xl shadow-sm p-4 transition-all border border-black">
+                  {cart?.map((pd) => (
+                    <div
+                      key={pd.id}
+                      className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 border border-gray-100 rounded-lg p-4 mb-2"
+                    >
+                      {/* Left: title + meta */}
+                      <div className="flex-1">
+                        <h3 className="text-l font-semibold text-gray-900 leading-snug">
+                          {pd.product_name}
+                        </h3>
+
+                        <div className="mt-1 text-sm text-gray-600 flex flex-wrap items-center gap-x-3 gap-y-1">
+                          {/* Combine all meta details in one line */}
+                          {pd?.attribute_name && <span>{pd.attribute_name}</span>}
+                          {pd?.variation_name && <span>{pd.variation_name}</span>}
+                          {pd?.duration && <span>{pd.duration}</span>}
+                          {pd?.bhk && <span>{pd.bhk} BHK</span>}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Right: price + qty */}
-                    <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center gap-2">
-                      <span className="text-lg font-semibold text-[#249370] whitespace-nowrap">
-                        ₹{pd.price * pd.qty}
-                      </span>
-
-                      <div className="flex items-center border border-[#249370] rounded-lg overflow-hidden">
-                        <button
-                          onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
-                          className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
-                          disabled={isLoading && loadingItemId === pd?.id}
-                          aria-label="Decrease quantity"
-                        >
-                          –
-                        </button>
-                        <span className="px-3 text-sm font-medium min-w-6 text-center">
-                          {pd?.qty}
+                      {/* Right: price + qty */}
+                      <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center gap-2">
+                        <span className="text-lg font-semibold text-[#249370] whitespace-nowrap">
+                          ₹{pd.price * pd.qty}
                         </span>
-                        <button
-                          onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
-                          className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
-                          disabled={isLoading && loadingItemId === pd?.id}
-                          aria-label="Increase quantity"
-                        >
-                          +
-                        </button>
+
+                        <div className="flex items-center border border-[#249370] rounded-lg overflow-hidden">
+                          <button
+                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
+                            className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
+                            disabled={isLoading && loadingItemId === pd?.id}
+                            aria-label="Decrease quantity"
+                          >
+                            –
+                          </button>
+                          <span className="px-3 text-sm font-medium min-w-6 text-center">
+                            {pd?.qty}
+                          </span>
+                          <button
+                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
+                            className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
+                            disabled={isLoading && loadingItemId === pd?.id}
+                            aria-label="Increase quantity"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
                 <div className="sticky top-[100px] space-y-6">
                   {/* Summary */}
@@ -842,9 +841,8 @@ export default function AddtoCart() {
                           Wallet Balance: ₹{(walletBalance - (walletApplied ? effectiveWalletUse : 0)).toFixed(2)}
                         </span>
                         <button
-                          className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                            walletApplied ? "bg-red-500 text-white" : "bg-green-600 text-white"
-                          } ${walletBalance <= 0 || payableBeforeWallet <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+                          className={`px-3 py-1 rounded-lg text-sm font-medium ${walletApplied ? "bg-red-500 text-white" : "bg-green-600 text-white"
+                            } ${walletBalance <= 0 || payableBeforeWallet <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
                           onClick={handleWalletToggle}
                           disabled={walletBalance <= 0 || payableBeforeWallet <= 0}
                         >
@@ -877,9 +875,8 @@ export default function AddtoCart() {
                         <div key={amount} className="relative">
                           <button
                             onClick={() => { setTipAmount(amount); setCustomTipActive(false); setCustomInput(""); }}
-                            className={`border px-4 py-2 rounded-lg font-medium text-sm min-w-[60px] ${
-                              tipAmount === amount ? "bg-[#249370] text-white border-[#249370]" : "border-gray-300 text-black"
-                            }`}
+                            className={`border px-4 py-2 rounded-lg font-medium text-sm min-w-[60px] ${tipAmount === amount ? "bg-[#249370] text-white border-[#249370]" : "border-gray-300 text-black"
+                              }`}
                           >
                             ₹{amount}
                           </button>
@@ -892,11 +889,10 @@ export default function AddtoCart() {
                       ))}
 
                       <div
-                        className={`flex items-center border rounded-lg px-3 py-2 min-w-[70px] ${
-                          tipAmount !== 50 && tipAmount !== 75 && tipAmount !== 100 && tipAmount > 0
+                        className={`flex items-center border rounded-lg px-3 py-2 min-w-[70px] ${tipAmount !== 50 && tipAmount !== 75 && tipAmount !== 100 && tipAmount > 0
                             ? "border-[#249370] bg-[#2493701a]"
                             : "border-gray-300"
-                        }`}
+                          }`}
                       >
                         <span className="text-sm mr-1">₹</span>
                         {customTipActive ? (

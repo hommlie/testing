@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, Star, ChevronRight, Check, Phone } from "lucide-react";
+import { ChevronDown, Star, ChevronRight, Check, Phone, MapPin, Home, Building2, ArrowUp, X } from "lucide-react";
+import { RxCross1 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import BannerImage from "../../pages/BannerImage";
 import BannerImageMobile from "../../pages/BannerImageMobile";
@@ -13,11 +14,26 @@ import { useCont } from "../../context/MyContext";
 import { useToast } from "../../context/ToastProvider";
 import Requestacallback from "../../pages/Requestacallback";
 import { Suspense } from "react";
+import PopularCategorySection from "../PopularCategorySection";
 import fetchSettings from "../../config/settings";
+import InspectionModal from "../InspectionModal";
+import DateTimeModal from "../DateTimeModal";
+import AddressModal from "../AddressModal";
+import CheckoutSummaryModal from "../CheckoutSummaryModal";
 
 const ServiceSection = ({ categories }) => {
   const navigate = useNavigate();
-  const { user, getCart } = useCont();
+  const {
+    user,
+    getCart,
+    selectedAddrs,
+    selectedDayTime,
+    getAddresses,
+    getPaymentList,
+    pincode,
+    setPincode
+  } = useCont();
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -46,16 +62,66 @@ const ServiceSection = ({ categories }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingAdd, setPendingAdd] = useState(null);
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
+  // remove local pincode state since we use global
+  const [premiseType, setPremiseType] = useState("Residential");
+  const [squareFeet, setSquareFeet] = useState(0);
+  const [mbIsInBangalore, setMbIsInBangalore] = useState(true);
+  const [isInspectionOpen, setIsInspectionOpen] = useState(false);
+  const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [orderNumber, setOrderNumber] = useState(null);
+  const [activeFlow, setActiveFlow] = useState(false);
+  const [selectionModal, setSelectionModal] = useState({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
+
+  const checkIsBangaloreMb = (pc) => {
+    if (!pc) return true;
+    return pc.startsWith("560");
+  };
+
+  useEffect(() => {
+    setMbIsInBangalore(checkIsBangaloreMb(pincode));
+  }, [pincode]);
 
   const notify = useToast();
   const successNotify = (success) => notify(success, "success");
   const errorNotify = (error) => notify(error, "error");
 
+  // Orchestrate Quick Checkout Flow
+  useEffect(() => {
+    if (!activeFlow) return;
+
+    // Small delay to allow state to settle
+    const timer = setTimeout(() => {
+      if (!isDateTimeModalOpen && !isAddressModalOpen && !isCheckoutModalOpen) {
+        if (!selectedDayTime?.date) {
+          // They might have just started, or cancelled. 
+          // If no slot chosen, we can't move forward.
+          // But if they just clicked Book Now, we want to open DateTime
+          if (!isAddingToCart) {
+            // If they aren't adding, and no modals are open, and no slot chosen...
+            // This case happens if they close the DateTime modal without choosing.
+            setActiveFlow(false);
+          }
+        } else if (!selectedAddrs?.id) {
+          setIsAddressModalOpen(true);
+        } else {
+          setIsCheckoutModalOpen(true);
+        }
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [activeFlow, isDateTimeModalOpen, isAddressModalOpen, isCheckoutModalOpen, selectedDayTime, selectedAddrs]);
+
   // Dynamically get property size (variation) options from selected attribute
   const getVariationOptions = () => {
     const attr = getCurrentAttributes().find((a) => a.id === selectedAttribute);
     if (!attr || !attr.variations) return [];
-    return attr.variations.map((v) => v.variation);
+
+    // Remove duplicates by using Set
+    const variations = attr.variations.map((v) => v.variation);
+    return Array.from(new Set(variations));
   };
 
   // Prefer a cockroach subcategory when available
@@ -82,7 +148,9 @@ const ServiceSection = ({ categories }) => {
         }
       }
     }
-  }, [categories]);
+  }, [categories, selectedCategory]);
+
+  const currentCategoryData = categories?.find(c => c.id === selectedCategory) || (categories?.length ? categories[0] : null);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -141,10 +209,6 @@ const ServiceSection = ({ categories }) => {
     setSelectedCategory(category.id);
   };
 
-
-  const formatDescription = (desc) =>
-    desc?.split("|").filter((pt) => pt.trim());
-
   const handleAddToCart = async (variation, product) => {
     if (!user || user.length === 0) {
       // store the intended add-to-cart action and open login modal
@@ -183,8 +247,11 @@ const ServiceSection = ({ categories }) => {
         const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
         existingCart.push(cartItem);
         localStorage.setItem("cart", JSON.stringify(existingCart));
-        getCart();
-        navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+        await getCart();
+
+        // Start quick checkout flow
+        setActiveFlow(true);
+        setIsDateTimeModalOpen(true);
       }
     } catch (error) {
       errorNotify(error.message || "Error adding to cart");
@@ -244,7 +311,9 @@ const ServiceSection = ({ categories }) => {
         existingCart.push(cartItem);
         localStorage.setItem("cart", JSON.stringify(existingCart));
         await getCart();
-        navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+        // Start quick checkout flow
+        setActiveFlow(true);
+        setIsDateTimeModalOpen(true);
       } else {
         errorNotify(response.data.message || "Failed to add to cart after login");
       }
@@ -322,475 +391,726 @@ const ServiceSection = ({ categories }) => {
 
   const { recommended, regular } = groupProducts();
 
-  // Dropdown Component
-  const Dropdown = ({
-    label,
-    value,
-    options,
-    onChange,
-    disabled,
-    showRecommended,
-  }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef(null);
-
-    useEffect(() => {
-      const handleClickOutside = (e) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-          setIsOpen(false);
-        }
-      };
-      if (isOpen) document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isOpen]);
-
-    const handleSelect = (optionId) => {
-      onChange(optionId);
-      setIsOpen(false);
-    };
-
-    return (
-      <div className="relative w-full" ref={dropdownRef}>
-        <button
-          type="button"
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          className={`w-full flex items-center justify-between p-3 pr-10 bg-white border rounded-lg text-left truncate transition-all
-            ${disabled ? "cursor-not-allowed bg-gray-50 text-gray-400" : "cursor-pointer text-gray-900"}
-            ${isOpen ? "border-black ring-2 ring-black" : "border-black hover:border-black"}`}
-          disabled={disabled}
-        >
-          <span className="truncate">
-            {value
-              ? options.find((opt) => opt.id === value)?.subcategory_name ||
-              options.find((opt) => opt.id === value)?.product_name ||
-              options.find((opt) => opt.id === value)?.attribute
-              : label}
-          </span>
-          <ChevronDown
-            className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform ${isOpen ? "rotate-180 text-black" : "text-black"
-              }`}
-          />
-        </button>
-
-        {isOpen && (
-          <div className="absolute z-10 mt-1 w-full bg-white border border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
-            {options.map((option) => {
-              const isSelected = value === option.id;
-              return (
-                <div
-                  key={option.id}
-                  onClick={() => handleSelect(option.id)}
-                  className={`cursor-pointer p-3 flex items-start justify-between hover:bg-green-700 transition-colors ${isSelected ? "bg-white text-black" : "text-gray-900"
-                    } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
-                >
-                  <div className="flex items-start gap-3 w-full">
-                    <div className="flex-shrink-0 mt-1">
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? "border-[#493f9e] bg-green-700" : "border-gray-300"
-                          }`}
-                      >
-                        {isSelected && <Check className="w-3 h-3 text-white" />}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col w-full">
-                      {showRecommended && option?.is_recommended === 1 && (
-                        <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full self-start mb-1">
-                          Recommended
-                        </span>
-                      )}
-                      <span className="truncate">
-                        {option.subcategory_name || option.product_name || option.attribute}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  // ProductCard
-  const ProductCard = ({ product, isSelected, onClick }) => {
-    // 1. Identify the global selection type (AMC vs One Time)
-    const globalSelectedAttrObj = getCurrentAttributes().find(a => a.id === selectedAttribute);
-    const globalAttrName = globalSelectedAttrObj ? globalSelectedAttrObj.attribute_name : "";
-    const isGlobalAMC = /AMC/i.test(globalAttrName);
-    const isGlobalOneTime = /One Time/i.test(globalAttrName);
-
-    // 2. Find the best attribute to display for THIS product
-    let displayAttr = product.attributes?.find(attr => attr.id === selectedAttribute);
-
-    if (!displayAttr) {
-      // If the specific selectedAttribute ID isn't in this product (which is expected if it's a different product),
-      // try to find a "matching type" attribute (AMC vs One Time)
-      if (isGlobalAMC) {
-        displayAttr = product.attributes?.find(attr => /AMC/i.test(attr.attribute_name));
-      } else if (isGlobalOneTime) {
-        displayAttr = product.attributes?.find(attr => /One Time/i.test(attr.attribute_name));
-      }
-
-      // Fallback: If still no match (or no global selection type), just take the first one
-      if (!displayAttr) {
-        displayAttr = product.attributes?.[0];
-      }
-    }
-
-    const matchedVariation =
-      displayAttr?.variations?.find((v) => v.variation === selectedBhk) ||
-      displayAttr?.variations?.[0];
-
-    // --- Rest of the card logic ---
-    const rating = matchedVariation?.avg_rating || product.avg_rating || 4.9;
-    const reviews = matchedVariation?.total_reviews || product.total_reviews || 11540;
-
-    // determine price
-    // determine price with fallbacks
-    const currentPrice = matchedVariation?.discounted_variation_price || matchedVariation?.price || product.discounted_price || product.price || 0;
-    const originalPrice = matchedVariation?.price || product.price || 0;
-    // const savings = currentPrice && originalPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : 0;
-
-    // Description fallback
-    const descriptionText = matchedVariation?.description || product.description || "";
-
-    // Check if recommended/premium
-    const isPremium = product.is_recommended === 1;
-
-    return (
-      <motion.div
-        whileHover={{ y: -5 }}
-        className={`relative w-full max-w-4xl mx-auto rounded-3xl border transition-all duration-300 overflow-hidden bg-[#faf9f6] flex flex-col sm:flex-row h-full
-          ${isSelected ? "border-[#0463ac] shadow-lg ring-1 ring-[#0463ac]" : "border-gray-200 shadow hover:shadow-lg"}`}
-        onClick={onClick}
-      >
-        {/* LEFT SECTION (65%) */}
-        <div className="flex-1 p-5 flex flex-col justify-between relative">
-
-          <div>
-            {/* Title & Badge */}
-            <div className="flex flex-col items-start gap-1 mb-2">
-              {isPremium && (
-                <span className="bg-[#fadbac] text-[#9c6f2d] text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 mb-1">
-                  ✓ Most Booked
-                </span>
-              )}
-              <h3 className="text-xl font-bold text-gray-900 leading-tight">
-                {product.product_name}
-              </h3>
-            </div>
-
-            {/* Price */}
-            <div className="flex items-baseline gap-2 mb-3">
-              <span className="text-2xl font-extrabold text-[#1a1a1a]">₹{currentPrice || "N/A"}</span>
-              {originalPrice > currentPrice && (
-                <span className="text-gray-400 line-through text-md font-medium">₹{originalPrice}</span>
-              )}
-            </div>
-
-            {/* Features List */}
-            {descriptionText && (
-              <ul className="mb-3 space-y-1.5">
-                {formatDescription(descriptionText).slice(0, 4).map((point, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-700 font-medium">
-                    <div className="mt-0.5 min-w-[14px]">
-                      <Check className="w-3.5 h-3.5 text-green-600" />
-                    </div>
-                    <span>{point.trim()}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {/* Extra Badges */}
-            <div className="flex flex-wrap gap-2 mt-1">
-              <span className="text-green-700 text-[10px] font-bold flex items-center gap-1">
-                ✓ 90-Day Warranty
-              </span>
-              {isPremium && (
-                <span className="text-[#5a5a5a] text-[10px] font-bold flex items-center gap-1">
-                  ✓ Good for Families
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Footer Link */}
-          <div className="mt-3 pt-2">
-            <a
-              href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
-              className="text-xs font-bold text-[#0463ac] underline cursor-pointer hover:text-[#034d85]"
-            >
-              View Details
-            </a>
-          </div>
-        </div>
-
-        {/* RIGHT SECTION (35%) */}
-        <div className="w-full sm:w-[35%] bg-white p-4 flex flex-col items-center justify-between border-l border-gray-100 relative">
-
-          {/* Technician Section */}
-          <div className="flex flex-col items-center mt-1">
-            {/* Image Circle */}
-            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-sm mb-2 bg-gray-100 ring-1 ring-gray-100">
-              <img
-                src={product?.productimage?.image_url || "/images/tech-placeholder.png"}
-                alt="Pro"
-                className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3237/3237472.png" }}
-              />
-            </div>
-            {/* ID Verified */}
-            <div className="flex items-center gap-1 text-green-700 text-[10px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100 mb-2">
-              <div className="w-3 h-3 bg-green-600 rounded-full flex items-center justify-center">
-                <Check className="w-2 h-2 text-white" />
-              </div>
-              ID Verified
-            </div>
-            {/* Quote */}
-            <div className="text-center px-1">
-              <p className="text-[9px] text-gray-400 leading-tight italic">
-                "Amit, vaccinated & trained for pest control"
-              </p>
-            </div>
-          </div>
-
-          {/* Button Section */}
-          <div className="w-full mt-3">
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (matchedVariation) handleAddToCart(matchedVariation, product);
-              }}
-              disabled={!matchedVariation || isAddingToCart}
-              className={`w-full py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-sm transition-all text-center border
-                  ${(isAddingToCart || !matchedVariation) ? "opacity-75 cursor-not-allowed" : ""}
-                  ${isPremium
-                  ? "bg-[#eebf5e] hover:bg-[#dca63a] text-white border-[#eebf5e]"
-                  : "bg-gray-50 text-gray-800 border-gray-300 hover:bg-gray-100"
-                }
-                `}
-            >
-              {isAddingToCart ? "Adding..." : (!matchedVariation ? "Unavailable" : (isPremium ? "Book 6D Prime" : "Book Standard >"))}
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
   // Sticky Header Scroll Logic
-  // Sticky Header Scroll Logic
-  const [isSticky, setIsSticky] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show sticky header after scrolling past the banner area (approx 400px)
-      if (window.scrollY > 400) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <>
-      {/* Premium Sticky Header */}
-      <div
-        className={`fixed top-0 left-0 w-full bg-white z-[999] shadow-lg transition-transform duration-500 ease-in-out transform ${isSticky ? "translate-y-0" : "-translate-y-full"
-          }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
-          {/* Left: Logo */}
-          <div className="flex-shrink-0 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-            <img src={logo || "/images/logoh.png"} alt="Hommlie" className="h-10 w-auto object-contain" />
-          </div>
 
-          {/* Center: Categories Pills */}
-          <div className="hidden md:flex flex-1 max-w-3xl mx-8 overflow-x-auto scrollbar-hide items-center justify-center">
-            <div className="flex gap-6">
-              {categories?.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => handleCategorySelect(cat)}
-                  className={`relative pb-1 text-sm font-semibold transition-colors duration-200
-                        ${selectedCategory === cat.id
-                      ? "text-[#0463ac]"
-                      : "text-gray-600 hover:text-[#0463ac]"}`}
-                >
-                  {cat.category_name}
-                  <span
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-[#0463ac] transform transition-transform duration-300 origin-left
-                    ${selectedCategory === cat.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
 
-          {/* Right: Contact & CTA */}
-          <div className="flex items-center gap-6">
-            <a href="tel:919999999999" className="hidden lg:flex items-center gap-2 text-[#071c1f] font-bold text-lg hover:text-[#0463ac] transition-colors">
-              <Phone className="w-5 h-5 text-[#0463ac]" />
-              <span className="tracking-wide">91 63638 65658</span>
-            </a>
-            <button
-              onClick={() => setIsCallbackOpen(true)}
-              className="bg-[#0463ac] text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg hover:bg-[#034d85] hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-            >
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-5 md:py-10 font-[Helvetica] bg-white">
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-[Helvetica] bg-white">
-
-        {/* Banners Moved Up */}
-        <div className="mb-10 text-center">
-          <BannerImageMobile />
-          <BannerImage />
-        </div>
-
-        {/* Request a Callback Button (visible on all devices) */}
-        <div className="block sm:hidden mb-5 -mt-4 flex justify-center">
-          <button
-            className="bg-[#0463ac] text-white px-6 py-2 rounded-md hover:bg-[#52852d] transition"
-            onClick={() => setIsCallbackOpen(true)}
-          >
-            Request a Callback
-          </button>
-        </div>
         {/* Modal for callback */}
         <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
 
-        {/* Category Filters - COMMENTED OUT AS PER REQUEST
-        <div className="mb-0 text-center sm:-mt-6">
-          <h2 className="hidden sm:block text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Your Service Category</h2>
-          <div className="w-full flex justify-center sm:justify-center">
-            <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2 px-2 sm:overflow-visible">
-              {categories?.map((category) => (
+        {/* Desktop Header - Only visible on md+ */}
+        <div className="hidden md:block mb-8">
+          <h2 className="text-2xl font-bold text-[#033053] text-center mb-6">
+            Choose Your Service Category
+          </h2>
+
+          {/* Desktop Pincode Check - Mandatory */}
+          <div className="max-w-md mx-auto mb-8">
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#0463ac]" />
+              <input
+                type="text"
+                placeholder="Enter 6-digit Pincode to see services"
+                className="w-full pl-10 pr-4 py-4 bg-white border-2 border-[#0463ac] rounded-xl text-lg font-bold focus:outline-none shadow-sm"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              />
+              {pincode.length === 6 && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-green-600">
+                  <Check className="w-5 h-5" />
+                  <span className="text-xs font-bold uppercase">Ready</span>
+                </div>
+              )}
+            </div>
+            {pincode.length > 0 && pincode.length < 6 && (
+              <p className="mt-2 text-center text-xs text-blue-600 font-bold animate-pulse">
+                Please enter all 6 digits...
+              </p>
+            )}
+          </div>
+
+          {pincode.length === 6 ? (
+            <div className="flex justify-center gap-4">
+              {categories?.filter(c => c.category_name !== "Waste Management" && c.category_name !== "Product").map((category) => (
                 <motion.button
                   key={category.id}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => {
-                      handleCategorySelect(category);
-                      window.scrollTo({ top: 400, behavior: 'smooth' });
-                  }}
-                  className={`border border-black w-[108px] sm:w-[180px] text-center flex flex-col items-center justify-center px-2 py-3 rounded-md transition-all whitespace-normal
-                    ${
-                      selectedCategory === category.id && category.slug !== "disinfection-services"
-                        ? "bg-[#0463ac] text-white shadow-md "
-                        : "bg-white text-gray-800 border border-black hover:border-black"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleCategorySelect(category)}
+                  className={`w-40 h-16 flex items-center justify-center gap-2 rounded-lg transition-all border font-bold text-sm
+                    ${selectedCategory === category.id
+                      ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                      : "bg-white text-[#033053] border-gray-300 hover:border-gray-400"
                     }`}
                 >
-                  {category.icon_url && <img loading="lazy" src={category.icon_url} alt="" className="w-6 h-6 mb-1 flex-shrink-0" />}
-                  <span className="text-xs font-medium sm:text-sm text-center leading-tight break-words">
-                    {category.category_name}
-                  </span>
+                  {category.icon_url && (
+                    <img
+                      loading="lazy"
+                      src={category.icon_url}
+                      alt=""
+                      className={`w-5 h-5 object-contain ${selectedCategory === category.id ? "brightness-0 invert" : ""}`}
+                    />
+                  )}
+                  <span>{category.category_name}</span>
                 </motion.button>
               ))}
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+              <p className="text-gray-500 font-medium">Please enter your pincode above to explore services in your area.</p>
+            </div>
+          )}
         </div>
-        */}
 
-        {/* Overlapping Card for Dropdowns */}
-        <div className="relative z-10 max-w-6xl mx-auto px-4 -mt-8 sm:-mt-20 mb-12">
-          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {/* Service Category (New) */}
-              <div className="col-span-1">
-                <label className="block text-sm font-semibold text-gray-600 mb-2">Service Category</label>
-                <Dropdown
-                  label="Select Category"
-                  value={selectedCategory}
-                  options={categories?.map(c => ({ ...c, subcategory_name: c.category_name })) || []}
-                  onChange={(id) => {
-                    const cat = categories?.find((c) => c.id === id);
-                    if (cat) handleCategorySelect(cat);
-                  }}
-                />
-              </div>
+        {/* Mobile Header - Hidden on md+ */}
+        <div className="md:hidden">
+          {/* Modal for callback triggers here if needed, but keeping original request flow */}
+          {/* Request a Callback Button - Top Centered */}
+          <div className="flex justify-center mb-2">
+            <button
+              onClick={() => setIsCallbackOpen(true)}
+              className="bg-[#0463ac] text-white font-bold py-3.5 px-12 rounded-xl shadow-lg hover:bg-[#034d85] transition-all transform active:scale-95"
+            >
+              Request a Callback
+            </button>
+          </div>
 
-              {/* Service Type */}
-              <div className="col-span-1">
-                <label className="block text-sm font-semibold text-gray-600 mb-2">Service Type</label>
-                <Dropdown
-                  label="Select Subcategory"
-                  value={selectedSubCategory}
-                  options={getCurrentSubcategories()}
-                  onChange={setSelectedSubCategory}
-                  disabled={!selectedCategory}
+          {/* Mobile Booking Form Section */}
+          <div className="bg-white rounded-2xl p-0 mt-4 text-[#033053]">
+            {/* Check Serviceability */}
+            <div className={`mb-4 relative transition-all duration-300 ${!mbIsInBangalore && pincode.length >= 3 ? 'mb-8' : 'mb-4'}`}>
+              <label className="block text-sm font-bold mb-2">Check Serviceability</label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0463ac]" />
+                <input
+                  type="text"
+                  placeholder="Enter Pincode"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium focus:outline-none"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 />
-              </div>
-
-              {/* Property Size */}
-              <div className="col-span-1">
-                <label className="block text-sm font-semibold text-gray-600 mb-2">Property Size</label>
-                <Dropdown
-                  label="Select BHK"
-                  value={selectedBhk}
-                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
-                  onChange={setSelectedBhk}
-                  disabled={!selectedProduct}
-                />
-              </div>
-
-              {/* Service Variant */}
-              <div className="col-span-1">
-                <label className="block text-sm font-semibold text-gray-600 mb-2">Service Variant</label>
-                <Dropdown
-                  label="Select Variant"
-                  value={selectedAttribute}
-                  options={getCurrentAttributes()}
-                  onChange={setSelectedAttribute}
-                  disabled={!selectedProduct}
-                  showRecommended
-                />
+                {!mbIsInBangalore && pincode.length >= 3 && (
+                  <div className="absolute -bottom-5 left-0">
+                    <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider animate-pulse whitespace-nowrap">
+                      📍 Sorry, we are coming soon here!
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        </div>
-        <div className="mb-0">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
-            {recommended.length + regular.length === 0
-              ? "Loading Services..."
-              : "Available Service Packages"}
-          </h3>
 
-          <div className="flex justify-center">
-            {recommended.length + regular.length === 0 ? (
-              <div className="text-center text-gray-500 py-10">Loading service packages...</div>
+            {pincode.length === 6 ? (
+              <>
+                {/* Premise Type */}
+                <div className="mb-4">
+                  <label className="block text-sm font-bold mb-2">Premise Type *</label>
+                  <div className="flex border border-[#0463ac] rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setPremiseType("Residential")}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-colors
+                        ${premiseType === "Residential" ? "bg-[#1d3f8f] text-white" : "bg-white text-[#1d3f8f]"}`}
+                    >
+                      <Home className="w-4 h-4" />
+                      Residential
+                    </button>
+                    <button
+                      onClick={() => setPremiseType("Commercial")}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-colors
+                        ${premiseType === "Commercial" ? "bg-[#1d3f8f] text-white" : "bg-white text-[#1d3f8f]"}`}
+                    >
+                      <Building2 className="w-4 h-4" />
+                      Commercial
+                    </button>
+                  </div>
+                </div>
+
+                {/* Conditional Fields based on Premise Type */}
+                {premiseType === "Residential" ? (
+                  <>
+                    {/* Category Selection for Mobile */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-bold mb-2">Service Category *</label>
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={() => {
+                          if (categories && categories.length > 0) {
+                            setSelectionModal({
+                              isOpen: true,
+                              title: "Select Service Category",
+                              options: categories.map(cat => ({ id: cat.id, name: cat.category_name })),
+                              onSelect: (value) => {
+                                setSelectedCategory(value.id);
+                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
+                              },
+                              selectedValue: categories.find(c => c.id === selectedCategory)
+                            });
+                          }
+                        }}
+                      >
+                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
+                          {categories?.find(c => c.id === selectedCategory)?.category_name || "Select Category"}
+                        </div>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Pest Type / Subcategory */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-bold mb-2">Pest Type *</label>
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={() => {
+                          const subs = getCurrentSubcategories();
+                          if (subs && subs.length > 0) {
+                            setSelectionModal({
+                              isOpen: true,
+                              title: "Select Pest Type",
+                              options: subs.map(sub => ({ id: sub.id, name: sub.subcategory_name })),
+                              onSelect: (value) => {
+                                setSelectedSubCategory(value.id);
+                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
+                              },
+                              selectedValue: subs.find(s => s.id === selectedSubCategory)
+                            });
+                          }
+                        }}
+                      >
+                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
+                          {getCurrentSubcategories().find(s => s.id === selectedSubCategory)?.subcategory_name || "Select Pest Type"}
+                        </div>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Property Size / Premise Size */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-bold mb-2">Property Size *</label>
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={() => {
+                          const options = getVariationOptions();
+                          if (options.length > 0) {
+                            setSelectionModal({
+                              isOpen: true,
+                              title: "Select Property Size",
+                              options: options,
+                              onSelect: (value) => {
+                                setSelectedBhk(value);
+                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
+                              },
+                              selectedValue: selectedBhk
+                            });
+                          }
+                        }}
+                      >
+                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
+                          {selectedBhk || "Select Property Size"}
+                        </div>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Service Variant / Attribute */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-bold mb-2">Service Variant *</label>
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={() => {
+                          const attrs = getCurrentAttributes();
+                          if (attrs && attrs.length > 0) {
+                            setSelectionModal({
+                              isOpen: true,
+                              title: "Select Service Variant",
+                              options: attrs.map(attr => ({ id: attr.id, name: attr.attribute_name || attr.attribute })),
+                              onSelect: (value) => {
+                                setSelectedAttribute(value.id);
+                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
+                              },
+                              selectedValue: attrs.find(a => a.id === selectedAttribute)
+                            });
+                          }
+                        }}
+                      >
+                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
+                          {getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute_name || getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute || "Select Service Variant"}
+                        </div>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Price Display */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-bold text-gray-600">Price (Excluding GST)</label>
+                      <div className="text-3xl font-bold mt-1">₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}</div>
+                    </div>
+
+                    {/* BOOK NOW Button */}
+                    <button
+                      onClick={() => {
+                        const variation = getCurrentVariation();
+                        const product = getCurrentProduct();
+                        if (variation && product) {
+                          handleAddToCart(variation, product);
+                        }
+                      }}
+                      disabled={!getCurrentVariation() || isAddingToCart}
+                      className={`w-full py-4 text-white font-bold text-lg rounded shadow-sm transition-all
+                        ${(!getCurrentVariation() || isAddingToCart) ? "bg-gray-300 cursor-not-allowed" : "bg-[#0463ac] hover:bg-[#034d85]"}`}
+                    >
+                      {isAddingToCart ? "Adding..." : "BOOK NOW"}
+                    </button>
+                  </>
+                ) : (
+                  <div className="mt-8">
+                    <button
+                      onClick={() => setIsInspectionOpen(true)}
+                      className="w-full py-4 bg-[#0463ac] text-white font-bold text-lg rounded shadow-md hover:bg-[#034d85] transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                    >
+                      BOOK INSPECTION
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
-              <div className={`grid gap-4 sm:gap-6 px-4 w-full 
-                ${(recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
-                (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
-                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
-                }`}>
-                {[...recommended, ...regular].map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    isSelected={selectedProduct === product.id}
-                    onClick={() => setSelectedProduct(product.id)}
-                  />
-                ))}
-
+              <div className="mt-6 p-6 bg-blue-50/50 rounded-2xl border border-blue-100 flex flex-col items-center text-center gap-3">
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <MapPin className="w-6 h-6 text-[#0463ac]" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-[#033053]">Serviceability Check Required</h4>
+                  <p className="text-[11px] text-[#033053]/70 font-medium">Please enter your 6-digit pincode above to check availability and see services.</p>
+                </div>
               </div>
             )}
           </div>
         </div>
-      </section>
+
+        {/* Modal for Commercial Inspection */}
+        <InspectionModal isOpen={isInspectionOpen} onClose={() => setIsInspectionOpen(false)} />
+
+        {/* Quick Checkout Flow Modals */}
+        <DateTimeModal
+          isOpen={isDateTimeModalOpen}
+          onClose={() => setIsDateTimeModalOpen(false)}
+        />
+        <AddressModal
+          isOpen={isAddressModalOpen}
+          onClose={() => setIsAddressModalOpen(false)}
+        />
+        <CheckoutSummaryModal
+          isOpen={isCheckoutModalOpen}
+          onClose={() => {
+            setIsCheckoutModalOpen(false);
+            setActiveFlow(false);
+          }}
+          onOrderSuccess={(orderNum) => {
+            setOrderNumber(orderNum);
+            setActiveFlow(false);
+            navigate(`${config.VITE_BASE_URL}/booking-success/${orderNum}`);
+          }}
+        />
+
+        {/* New Mobile Flow - Banners */}
+        <div className="block md:hidden">
+          <section className="px-0 py-4">
+            <BannerImageMobile />
+            <BannerImage />
+          </section>
+        </div>
+
+        {/* Dropdowns Container - Hidden on Mobile */}
+        <div className="hidden md:block">
+          {pincode.length === 6 && (
+            <div className="max-w-4xl mx-auto px-1 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Service Type */}
+                <div className="col-span-1">
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Type</label>
+                  <Dropdown
+                    label="Select Subcategory"
+                    value={selectedSubCategory}
+                    options={getCurrentSubcategories()}
+                    onChange={setSelectedSubCategory}
+                    disabled={!selectedCategory}
+                  />
+                </div>
+
+                {/* Property Size */}
+                <div className="col-span-1">
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Property Size</label>
+                  <Dropdown
+                    label="Select BHK"
+                    value={selectedBhk}
+                    options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
+                    onChange={setSelectedBhk}
+                    disabled={!selectedProduct}
+                  />
+                </div>
+
+                {/* Service Variant */}
+                <div className="col-span-1">
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Variant</label>
+                  <Dropdown
+                    label="Select Variant"
+                    value={selectedAttribute}
+                    options={getCurrentAttributes()}
+                    onChange={setSelectedAttribute}
+                    disabled={!selectedProduct}
+                    showRecommended
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="mb-0">
+            {pincode.length === 6 ? (
+              <>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
+                  {recommended.length + regular.length === 0
+                    ? "Loading Services..."
+                    : "Available Service Packages"}
+                </h3>
+
+                <div className="flex justify-center">
+                  {recommended.length + regular.length === 0 ? (
+                    <div className="text-center text-gray-500 py-10">Loading service packages...</div>
+                  ) : (
+                    <div className={`grid gap-4 sm:gap-6 px-4 w-full 
+                      ${(recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
+                      (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
+                      "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
+                      }`}>
+                      {[...recommended, ...regular].map((product) => (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          isSelected={selectedProduct === product.id}
+                          onClick={() => setSelectedProduct(product.id)}
+                          currentAttributes={getCurrentAttributes()}
+                          selectedAttribute={selectedAttribute}
+                          selectedBhk={selectedBhk}
+                          handleAddToCart={handleAddToCart}
+                          isAddingToCart={isAddingToCart}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              // This is already handles by the desktop header above, but in case we want a placeholder here
+              null
+            )}
+          </div>
+        </div>
+      </section >
+
+      {/* Centered Selection Modal */}
+      {selectionModal.isOpen && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h3 className="text-lg font-bold text-[#033053]">{selectionModal.title}</h3>
+              <button
+                onClick={() => setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null })}
+                className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+              >
+                <RxCross1 className="w-4 h-4 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Options List */}
+            <div className="overflow-y-auto flex-1 p-2">
+              {selectionModal.options.map((option, idx) => {
+                // Handle both string options (Property Size) and object options (Category, Pest Type, etc.)
+                const isStringOption = typeof option === 'string';
+                const optionValue = isStringOption ? option : option.id;
+                const optionLabel = isStringOption ? option : option.name;
+                const isSelected = isStringOption
+                  ? selectionModal.selectedValue === option
+                  : selectionModal.selectedValue?.id === option.id;
+
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => selectionModal.onSelect && selectionModal.onSelect(option)}
+                    className={`flex items-center justify-between p-4 rounded-xl mb-2 cursor-pointer transition-all
+                      ${isSelected
+                        ? 'bg-blue-50 border-2 border-[#0463ac]'
+                        : 'bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                  >
+                    <span className={`text-sm font-medium ${isSelected ? 'text-[#0463ac]' : 'text-gray-700'}`}>
+                      {optionLabel}
+                    </span>
+
+                    {/* Radio Indicator on the Right */}
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
+                      ${isSelected
+                        ? 'border-[#0463ac] bg-[#0463ac]'
+                        : 'border-gray-300'
+                      }`}
+                    >
+                      {isSelected && (
+                        <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLoginSuccess={handlePostLoginAdd} />
     </>
+  );
+};
+
+// Helper Components
+const formatDescription = (desc) =>
+  desc?.split("|").filter((pt) => pt.trim());
+
+const Dropdown = ({
+  label,
+  value,
+  options,
+  onChange,
+  disabled,
+  showRecommended,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  const handleSelect = (optionId) => {
+    onChange(optionId);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        className={`w-full flex items-center justify-between p-3 pr-10 bg-white border rounded-lg text-left truncate transition-all
+          ${disabled ? "cursor-not-allowed bg-gray-50 text-gray-400" : "cursor-pointer text-gray-900"}
+          ${isOpen ? "border-black ring-2 ring-black" : "border-black hover:border-black"}`}
+        disabled={disabled}
+      >
+        <span className="truncate">
+          {value
+            ? options.find((opt) => opt.id === value)?.subcategory_name ||
+            options.find((opt) => opt.id === value)?.product_name ||
+            options.find((opt) => opt.id === value)?.attribute
+            : label}
+        </span>
+        <ChevronDown
+          className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform ${isOpen ? "rotate-180 text-black" : "text-black"
+            }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-10 mt-1 w-full bg-white border border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          {options.map((option) => {
+            const isSelected = value === option.id;
+            return (
+              <div
+                key={option.id}
+                onClick={() => handleSelect(option.id)}
+                className={`cursor-pointer p-3 flex items-start justify-between hover:bg-green-700 transition-colors ${isSelected ? "bg-white text-black" : "text-gray-900"
+                  } ${showRecommended && option?.is_recommended === 1 ? "border-l-4 border-emerald-500" : ""}`}
+              >
+                <div className="flex items-start gap-3 w-full">
+                  <div className="flex-shrink-0 mt-1">
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? "border-[#493f9e] bg-green-700" : "border-gray-300"
+                        }`}
+                    >
+                      {isSelected && <Check className="w-3 h-3 text-white" />}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col w-full">
+                    {showRecommended && option?.is_recommended === 1 && (
+                      <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full self-start mb-1">
+                        Recommended
+                      </span>
+                    )}
+                    <span className="truncate">
+                      {option.subcategory_name || option.product_name || option.attribute}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ProductCard = ({ product, isSelected, onClick, currentAttributes, selectedAttribute, selectedBhk, handleAddToCart, isAddingToCart }) => {
+  // 1. Identify the global selection type (AMC vs One Time)
+  const globalSelectedAttrObj = (currentAttributes || []).find(a => a.id === selectedAttribute);
+  const globalAttrName = globalSelectedAttrObj ? globalSelectedAttrObj.attribute_name : "";
+  const isGlobalAMC = /AMC/i.test(globalAttrName);
+  const isGlobalOneTime = /One Time/i.test(globalAttrName);
+
+  // 2. Find the best attribute to display for THIS product
+  let displayAttr = product.attributes?.find(attr => attr.id === selectedAttribute);
+
+  if (!displayAttr) {
+    if (isGlobalAMC) {
+      displayAttr = product.attributes?.find(attr => /AMC/i.test(attr.attribute_name));
+    } else if (isGlobalOneTime) {
+      displayAttr = product.attributes?.find(attr => /One Time/i.test(attr.attribute_name));
+    }
+
+    if (!displayAttr) {
+      displayAttr = product.attributes?.[0];
+    }
+  }
+
+  const matchedVariation =
+    displayAttr?.variations?.find((v) => v.variation === selectedBhk) ||
+    displayAttr?.variations?.[0];
+
+  const currentPrice = matchedVariation?.discounted_variation_price || matchedVariation?.price || product.discounted_price || product.price || 0;
+  const originalPrice = matchedVariation?.price || product.price || 0;
+
+  const descriptionText = matchedVariation?.description || product.description || "";
+  const isPremium = product.is_recommended === 1;
+
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      className={`relative w-full max-w-4xl mx-auto rounded-3xl border transition-all duration-300 overflow-hidden bg-[#faf9f6] flex flex-col sm:flex-row h-full
+        ${isSelected ? "border-[#0463ac] shadow-lg ring-1 ring-[#0463ac]" : "border-gray-200 shadow hover:shadow-lg"}`}
+      onClick={onClick}
+    >
+      <div className="flex-1 p-5 flex flex-col justify-between relative">
+        <div>
+          <div className="flex flex-col items-start gap-1 mb-2">
+            {isPremium && (
+              <span className="bg-[#fadbac] text-[#9c6f2d] text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 mb-1">
+                ✓ Most Booked
+              </span>
+            )}
+            <h3 className="text-xl font-bold text-gray-900 leading-tight">
+              {product.product_name}
+            </h3>
+          </div>
+
+          <div className="flex items-baseline gap-2 mb-3">
+            <span className="text-2xl font-extrabold text-[#1a1a1a]">₹{currentPrice || "N/A"}</span>
+            {originalPrice > currentPrice && (
+              <span className="text-gray-400 line-through text-md font-medium">₹{originalPrice}</span>
+            )}
+          </div>
+
+          {descriptionText && (
+            <ul className="mb-3 space-y-1.5">
+              {formatDescription(descriptionText).slice(0, 4).map((point, i) => (
+                <li key={i} className="flex items-start gap-2 text-xs text-gray-700 font-medium">
+                  <div className="mt-0.5 min-w-[14px]">
+                    <Check className="w-3.5 h-3.5 text-green-600" />
+                  </div>
+                  <span>{point.trim()}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="flex flex-wrap gap-2 mt-1">
+            <span className="text-green-700 text-[10px] font-bold flex items-center gap-1">
+              ✓ 90-Day Warranty
+            </span>
+            {isPremium && (
+              <span className="text-[#5a5a5a] text-[10px] font-bold flex items-center gap-1">
+                ✓ Good for Families
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-3 pt-2">
+          <a
+            href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
+            className="text-xs font-bold text-[#0463ac] underline cursor-pointer hover:text-[#034d85]"
+          >
+            View Details
+          </a>
+        </div>
+      </div>
+
+      <div className="w-full sm:w-[35%] bg-white p-4 flex flex-col items-center justify-between border-l border-gray-100 relative">
+        <div className="flex flex-col items-center mt-1">
+          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-sm mb-2 bg-gray-100 ring-1 ring-gray-100">
+            <img
+              src={product?.productimage?.image_url || "/images/tech-placeholder.png"}
+              alt="Pro"
+              className="w-full h-full object-cover"
+              onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3237/3237472.png" }}
+            />
+          </div>
+          <div className="flex items-center gap-1 text-green-700 text-[10px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100 mb-2">
+            <div className="w-3 h-3 bg-green-600 rounded-full flex items-center justify-center">
+              <Check className="w-2 h-2 text-white" />
+            </div>
+            ID Verified
+          </div>
+          <div className="text-center px-1">
+            <p className="text-[9px] text-gray-400 leading-tight italic">
+              "Amit, vaccinated & trained for pest control"
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full mt-3">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (matchedVariation) handleAddToCart(matchedVariation, product);
+            }}
+            disabled={!matchedVariation || isAddingToCart}
+            className={`w-full py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-sm transition-all text-center border
+                ${(isAddingToCart || !matchedVariation) ? "opacity-75 cursor-not-allowed" : ""}
+                ${isPremium
+                ? "bg-[#eebf5e] hover:bg-[#dca63a] text-white border-[#eebf5e]"
+                : "bg-gray-50 text-gray-800 border-gray-300 hover:bg-gray-100"
+              }
+              `}
+          >
+            {isAddingToCart ? "Adding..." : (!matchedVariation ? "Unavailable" : (isPremium ? "Book 6D Prime" : "Book Standard >"))}
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

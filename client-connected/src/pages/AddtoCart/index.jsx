@@ -119,7 +119,7 @@ export default function AddtoCart() {
       setSelectedAddrs(selected);
       localStorage.setItem("HommlieselectedAddrs", JSON.stringify(selected));
     } else {
-      setSelectedAddrs(selected || []);
+      setSelectedAddrs(selected || null);
     }
 
     setSelectedDayTime(
@@ -129,7 +129,7 @@ export default function AddtoCart() {
     );
     setSelectedCoupon(
       localStorage.getItem("HommlieselectedCoupon") == "undefined"
-        ? []
+        ? null
         : JSON.parse(localStorage.getItem("HommlieselectedCoupon"))
     );
     setPaymentType(paymentList?.[0]);
@@ -137,13 +137,21 @@ export default function AddtoCart() {
   }, [addresses]);
 
   async function getProductDetails() {
-    if (!cart || cart.length === 0 || !cart[0]?.product_id) return;
-    const id = cart[0].product_id;
+    if (!cart || cart.length === 0) return;
+    const firstItem = cart[0];
+    const id = firstItem?.product_id;
+
+    // Safety check: don't send malformed IDs
+    if (!id || id === "undefined") {
+      console.warn("Skipping product details fetch: Invalid product_id", id);
+      return;
+    }
+
     try {
       const response = await axios.post(`${config.API_URL}/api/productdetails`, { product_id: id });
       setProdRelatedProds(response.data.related_products || []);
     } catch (err) {
-      console.error("error: " + err);
+      console.error("error fetching product details: ", err);
     }
   }
 

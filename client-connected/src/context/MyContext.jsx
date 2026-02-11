@@ -27,7 +27,8 @@ const constructSafeUrl = (base, path, params = {}) => {
 const getLocalStorageItem = (key, defaultValue) => {
   const item = localStorage.getItem(key);
   try {
-    return item ? JSON.parse(item) : defaultValue;
+    if (item === null || item === "undefined") return defaultValue;
+    return JSON.parse(item);
   } catch (error) {
     console.warn(`Error parsing localStorage key "${key}":`, error);
     return defaultValue;
@@ -68,10 +69,10 @@ export function ContProvider({ children }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddrs, setSelectedAddrs] = useState(() =>
-    getLocalStorageItem(`HommlieselectedAddrs`, [])
+    getLocalStorageItem(`HommlieselectedAddrs`, null)
   );
   const [selectedDayTime, setSelectedDayTime] = useState(() =>
-    getLocalStorageItem(`HommlieselectedDayTime`, [])
+    getLocalStorageItem(`HommlieselectedDayTime`, null)
   );
   const [rescheduleDayTime, setRescheduleDayTime] = useState();
   const [paymentList, setPaymentList] = useState(() =>
@@ -80,9 +81,17 @@ export function ContProvider({ children }) {
   const [paymentType, setPaymentType] = useState();
   const [bookings, setBookings] = useState([]);
   const [selectedCoupon, setSelectedCoupon] = useState(() =>
-    getLocalStorageItem(`HommlieselectedCoupon`, {})
+    getLocalStorageItem(`HommlieselectedCoupon`, null)
   );
-  // const [coupons, setCoupons] = useState(() => getLocalStorageItem(`HommlieCoupons`, []));
+  const [currentLocation, setCurrentLocation] = useState("Get Current Location");
+  const [pincode, setPincode] = useState(() =>
+    localStorage.getItem("HommliePincode") || ""
+  );
+
+  const setGlobalPincode = (pc) => {
+    localStorage.setItem("HommliePincode", pc);
+    setPincode(pc);
+  };
 
   const incrementApiCall = useCallback(() => {
     setActiveApiCalls((prev) => prev + 1);
@@ -241,42 +250,42 @@ export function ContProvider({ children }) {
   }
 
   async function getAddresses() {
-  setAddresses([]);
-  const jwtToken = Cookies.get("HommlieUserjwtToken");
-  if (jwtToken) {
-    const id = jwtDecode(jwtToken);
-    try {
-      const response = await axios.post(`${config.API_URL}/api/getaddress`, {
-        user_id: id.id,
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+    setAddresses([]);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (jwtToken) {
+      const id = jwtDecode(jwtToken);
+      try {
+        const response = await axios.post(`${config.API_URL}/api/getaddress`, {
+          user_id: id.id,
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
 
-      if (response.data.status === 1) {
-        const allAddresses = response.data.data;
-        setAddresses(allAddresses);
+        if (response.data.status === 1) {
+          const allAddresses = response.data.data;
+          setAddresses(allAddresses);
 
-        // ✅ Reset selectedAddrs if the address was deleted
-        const storedSelectedAddrs = JSON.parse(localStorage.getItem("HommlieselectedAddrs"));
-        const stillExists = allAddresses.find(addr => addr.id === storedSelectedAddrs?.id);
+          // ✅ Reset selectedAddrs if the address was deleted
+          const storedSelectedAddrs = JSON.parse(localStorage.getItem("HommlieselectedAddrs"));
+          const stillExists = allAddresses.find(addr => addr.id === storedSelectedAddrs?.id);
 
-        if (!stillExists) {
-          localStorage.removeItem("HommlieselectedAddrs");
+          if (!stillExists) {
+            localStorage.removeItem("HommlieselectedAddrs");
+            setSelectedAddrs(null);
+          }
+        } else {
+          console.log(response.data.message);
           setSelectedAddrs(null);
+          localStorage.removeItem("HommlieselectedAddrs");
         }
-      } else {
-        console.log(response.data.message);
-        setSelectedAddrs(null);
-        localStorage.removeItem("HommlieselectedAddrs");
+      } catch (err) {
+        console.log("error: " + err);
       }
-    } catch (err) {
-      console.log("error: " + err);
+    } else {
+      console.log("User hasn't logged in");
     }
-  } else {
-    console.log("User hasn't logged in");
   }
-}
 
 
   // async function getCoupons() {
@@ -435,6 +444,10 @@ export function ContProvider({ children }) {
     getCart,
     getBookings,
     fetchAllData,
+    currentLocation,
+    setCurrentLocation,
+    pincode,
+    setPincode: setGlobalPincode,
     startLoading: () => setIsLoading(true),
     stopLoading: () => setIsLoading(false),
   };

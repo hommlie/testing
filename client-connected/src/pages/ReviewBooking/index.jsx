@@ -14,7 +14,7 @@ import { useToast } from "../../context/ToastProvider";
 export default function ReviewBooking() {
 
     const { getBookings, cart, setCart, getCart, selectedAddrs, setSelectedAddrs, selectedDayTime, setSelectedDayTime, selectedCoupon, setSelectedCoupon, paymentType, setPaymentType } = useCont();
-    
+
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -38,18 +38,18 @@ export default function ReviewBooking() {
             const coupon = getStoredItem('HommlieselectedCoupon');
             const payment = getStoredItem('HommliepaymentType');
 
-            setSelectedAddrs(addrs || {});
-            setSelectedDayTime(dayTime || {});
-            setSelectedCoupon(coupon || {});
-            setPaymentType(payment || {});
+            setSelectedAddrs(addrs || null);
+            setSelectedDayTime(dayTime || null);
+            setSelectedCoupon(coupon || null);
+            setPaymentType(payment || null);
 
             setDataLoaded(true);
         } catch (error) {
             console.error('Error loading stored data:', error);
-            setSelectedAddrs({});
-            setSelectedDayTime({});
-            setSelectedCoupon({});
-            setPaymentType({});
+            setSelectedAddrs(null);
+            setSelectedDayTime(null);
+            setSelectedCoupon(null);
+            setPaymentType(null);
             setDataLoaded(true);
         } finally {
             setIsLoading(false);
@@ -106,7 +106,7 @@ export default function ReviewBooking() {
                         headers: {
                             Authorization: `Bearer ${jwtToken}`,
                         },
-                    });                    
+                    });
 
                     const options = {
                         key: config.RAZORPAY_KEY_ID,
@@ -127,7 +127,7 @@ export default function ReviewBooking() {
                                         Authorization: `Bearer ${jwtToken}`,
                                     },
                                 });
-                                
+
                                 if (verifyResponse.data.status === 1) {
                                     await placeOrder(user, payment_id, response.razorpay_payment_id);
                                 } else {
@@ -168,21 +168,21 @@ export default function ReviewBooking() {
             const contractStartDate = selectedDayTime?.date?.formattedDate;
             // For now, let contract end date be null; backend will calculate if not sent
             const contractEndDate = null;
-            const response = await axios.post(`${config.API_URL}/api/order`, 
+            const response = await axios.post(`${config.API_URL}/api/order`,
                 {
-                    user_id: user.id, 
-                    payment_type: paymentType?.id, 
-                    payment_id: razorpay_payment_id || payment_id, 
+                    user_id: user.id,
+                    payment_type: paymentType?.id,
+                    payment_id: razorpay_payment_id || payment_id,
                     grand_total: totalAmount - couponDiscount,
                     discount_amount: couponDiscount,
-                    coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null, 
-                    coupon_id: selectedCoupon ? selectedCoupon.id : null, 
-                    order_notes: null, 
-                    full_name: selectedAddrs?.name, 
-                    email: selectedAddrs?.email, 
-                    mobile: selectedAddrs?.mobile, 
-                    landmark: selectedAddrs?.landmark, 
-                    street_address: selectedAddrs?.address, 
+                    coupon_name: selectedCoupon ? selectedCoupon.coupon_name : null,
+                    coupon_id: selectedCoupon ? selectedCoupon.id : null,
+                    order_notes: null,
+                    full_name: selectedAddrs?.name,
+                    email: selectedAddrs?.email,
+                    mobile: selectedAddrs?.mobile,
+                    landmark: selectedAddrs?.landmark,
+                    street_address: selectedAddrs?.address,
                     pincode: selectedAddrs.pincode,
                     latitude: selectedAddrs.latitude,
                     longitude: selectedAddrs.longitude,
@@ -196,7 +196,7 @@ export default function ReviewBooking() {
                         Authorization: `Bearer ${Cookies.get("HommlieUserjwtToken")}`,
                     },
                 }
-            );            
+            );
 
             if (response.data.status === 1) {
                 console.log(response.data.message);
@@ -212,7 +212,7 @@ export default function ReviewBooking() {
                 navigate(`${config.VITE_BASE_URL}/booking-success/${response.data.order_number}`);
             } else {
                 errorNotify(response.data.message);
-                console.log("error placing order:",response.data);
+                console.log("error placing order:", response.data);
             }
         } catch (error) {
             console.log("error placing order:", error);
@@ -232,15 +232,15 @@ export default function ReviewBooking() {
                     <div className="w-full lg:w-[80%] p-4 relative">
                         <div className="flex flex-row justify-between my-8">
                             {topTracker.map((tracker, index) => (
-                                <div key={index} className="w-full flex flex-col justify-center items-center gap-4" style={{color: `${tracker === "Booking Confirmed" ? "#E5E7EB" : ""}`}}>
+                                <div key={index} className="w-full flex flex-col justify-center items-center gap-4" style={{ color: `${tracker === "Booking Confirmed" ? "#E5E7EB" : ""}` }}>
                                     <span className={`text-xs md:text-base font-semibold`}>{tracker}</span>
                                     <div className={`${tracker === "Booking Confirmed" ? "border-[#E5E7EB]" : "border-[#249370]"} w-2 h-2 lg:w-5 lg:h-5 border-4 bg-white rounded-full`}></div>
                                 </div>
                             ))}
                         </div>
                         <div className="flex absolute inset-0 top-[35px] md:top-[40px] justify-center items-center px-24 md:px-32 lg:px-32 gap-9">
-                            <div className="w-[255px]" style={{border: "1px solid #249370"}}></div>
-                            <div className="w-[255px]" style={{border: "1px solid #E5E7EB"}}></div>
+                            <div className="w-[255px]" style={{ border: "1px solid #249370" }}></div>
+                            <div className="w-[255px]" style={{ border: "1px solid #E5E7EB" }}></div>
                         </div>
                     </div>
                 </div>
@@ -317,7 +317,7 @@ export default function ReviewBooking() {
                         <div className="bg-white rounded-xl shadow-sm p-6 sticky sticky-header-offset transition-all">
                             <h2 className="text-xl font-semibold mb-4">Price Details ({itemCount} items)</h2>
                             <div className="space-y-4">
-                                    <div className="flex justify-between text-gray-600">
+                                <div className="flex justify-between text-gray-600">
                                     <span>Price ({itemCount} items)</span>
                                     <span>₹{Number(totalItemPrice ?? 0).toFixed(2)}</span>
                                 </div>
@@ -338,7 +338,7 @@ export default function ReviewBooking() {
                                     </div>
                                 </div>
 
-                                <button 
+                                <button
                                     onClick={handleProceed}
                                     className="w-full py-4 bg-[#035240] text-white font-medium rounded-lg hover:bg-[#024535] transition-colors mt-6"
                                     disabled={isLoading}
@@ -356,7 +356,7 @@ export default function ReviewBooking() {
                                     )}
                                 </button>
 
-                                <button 
+                                <button
                                     onClick={() => navigate(-1)}
                                     className="w-full py-4 text-[#249370] font-medium hover:underline transition-colors"
                                 >
