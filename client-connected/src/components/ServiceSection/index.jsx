@@ -325,6 +325,46 @@ const ServiceSection = ({ categories }) => {
     }
   };
 
+  // Direct inspection booking without form popup
+  const handleDirectInspectionBooking = async () => {
+    if (!user || !user.name || !user.mobile) {
+      errorNotify("Please login to book an inspection");
+      return;
+    }
+
+    try {
+      // Create professional service description
+      const categoryName = categories?.find(c => c.id === selectedCategory)?.category_name || "Service";
+      const serviceDescription = `Book Inspection - ${premiseType} - ${categoryName}`;
+      const addressDescription = `${serviceDescription} request from homepage`;
+
+      const inspectionData = {
+        fullName: user.name,
+        mobile: user.mobile,
+        email: user.email || "",
+        address: addressDescription,
+        date: new Date().toISOString(),
+        time: "N/A",
+        service: serviceDescription,
+      };
+
+      const response = await axios.post(`${config.API_URL}/api/createInspection`, inspectionData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.data.status === 1) {
+        successNotify("Inspection request submitted successfully! Our team will contact you soon.");
+      } else {
+        errorNotify("Failed to submit inspection request. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error booking inspection:", error);
+      errorNotify("An error occurred while booking inspection.");
+    }
+  };
+
   const getCurrentSubcategories = () => {
     return categories?.find((c) => c.id === selectedCategory)?.subcategories || [];
   };
@@ -587,6 +627,34 @@ const ServiceSection = ({ categories }) => {
                       </div>
                     </div>
 
+                    {/* Product Selection */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-bold mb-2">Product *</label>
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={() => {
+                          const prods = getCurrentProducts();
+                          if (prods && prods.length > 0) {
+                            setSelectionModal({
+                              isOpen: true,
+                              title: "Select Product",
+                              options: prods.map(prod => ({ id: prod.id, name: prod.product_name })),
+                              onSelect: (value) => {
+                                setSelectedProduct(value.id);
+                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
+                              },
+                              selectedValue: prods.find(p => p.id === selectedProduct)
+                            });
+                          }
+                        }}
+                      >
+                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
+                          {getCurrentProducts().find(p => p.id === selectedProduct)?.product_name || "Select Product"}
+                        </div>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                      </div>
+                    </div>
+
                     {/* Property Size / Premise Size */}
                     <div className="mb-4">
                       <label className="block text-sm font-bold mb-2">Property Size *</label>
@@ -646,7 +714,17 @@ const ServiceSection = ({ categories }) => {
                     {/* Price Display */}
                     <div className="mb-4">
                       <label className="block text-sm font-bold text-gray-600">Price (Excluding GST)</label>
-                      <div className="text-3xl font-bold mt-1">₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}</div>
+                      <div className="flex items-center justify-between mt-1">
+                        <div className="text-3xl font-bold">₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}</div>
+                        {getCurrentProduct()?.slug && (
+                          <button
+                            onClick={() => navigate(`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`)}
+                            className="text-xs font-bold text-[#0463ac] underline hover:text-[#034d85] transition-colors whitespace-nowrap bg-transparent border-0 p-0 cursor-pointer"
+                          >
+                            View Details
+                          </button>
+                        )}
+                      </div>
                     </div>
 
                     {/* BOOK NOW Button */}
@@ -668,7 +746,7 @@ const ServiceSection = ({ categories }) => {
                 ) : (
                   <div className="mt-8">
                     <button
-                      onClick={() => setIsInspectionOpen(true)}
+                      onClick={handleDirectInspectionBooking}
                       className="w-full py-4 bg-[#0463ac] text-white font-bold text-lg rounded shadow-md hover:bg-[#034d85] transition-all transform active:scale-95 flex items-center justify-center gap-2"
                     >
                       BOOK INSPECTION
@@ -691,7 +769,13 @@ const ServiceSection = ({ categories }) => {
         </div>
 
         {/* Modal for Commercial Inspection */}
-        <InspectionModal isOpen={isInspectionOpen} onClose={() => setIsInspectionOpen(false)} />
+        <InspectionModal
+          isOpen={isInspectionOpen}
+          onClose={() => setIsInspectionOpen(false)}
+          source="homepage"
+          premiseType={premiseType}
+          categoryName={categories?.find(c => c.id === selectedCategory)?.category_name || ""}
+        />
 
         {/* Quick Checkout Flow Modals */}
         <DateTimeModal

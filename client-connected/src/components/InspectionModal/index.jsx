@@ -7,7 +7,7 @@ import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
 import LocationSuggestion from "../LocationSuggestion";
 
-const InspectionModal = ({ isOpen, onClose }) => {
+const InspectionModal = ({ isOpen, onClose, source = "homepage", premiseType = "Commercial", categoryName = "" }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     address: "",
@@ -76,9 +76,20 @@ const InspectionModal = ({ isOpen, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Create professional service description
+    const serviceDescription = categoryName
+      ? `Book Inspection - ${premiseType} - ${categoryName}`
+      : `Book Inspection - ${premiseType}`;
+
+    const addressDescription = source === "homepage"
+      ? `${serviceDescription} request from ${source}`
+      : `${serviceDescription} request from service page`;
+
     const dataToSend = {
       ...formData,
       date: formData.date.toISOString(),
+      service: serviceDescription,
+      address: formData.address || addressDescription,
     };
 
     try {
@@ -183,10 +194,10 @@ const InspectionModal = ({ isOpen, onClose }) => {
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                   Address
                 </label>
-                <LocationSuggestion 
-                  value={formData.address} 
-                  onChange={handleInputChange} 
-                  name="address" 
+                <LocationSuggestion
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  name="address"
                 />
               </div>
               <div>
