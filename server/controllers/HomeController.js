@@ -799,9 +799,27 @@ exports.getHomePageData = async (req, res) => {
             "slug",
             [
               sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategories.icon)`
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+              ),
+              "app_icon",
+            ],
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`
+              ),
+              "banner",
+            ],
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
               ),
               "icon_url",
+            ],
+            [
+              sequelize.literal(
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`
+              ),
+              "image_url",
             ],
           ],
           where: { status: 1 },
@@ -935,7 +953,10 @@ exports.getHomePageData = async (req, res) => {
           id: subcategory.id,
           subcategory_name: subcategory.subcategory_name,
           slug: subcategory.getDataValue("slug"),
-          icon_url: subcategory.getDataValue("icon_url"),
+          icon_url: subcategory.getDataValue("icon_url") || subcategory.getDataValue("app_icon"),
+          app_icon: subcategory.getDataValue("app_icon"),
+          banner: subcategory.getDataValue("banner"),
+          image_url: subcategory.getDataValue("image_url") || subcategory.getDataValue("banner") || subcategory.getDataValue("app_icon"),
           products: groupVariationsByAttribute(subcategory.Products ?? []),
         })).sort((a, b) =>
           a.subcategory_name.localeCompare(b.subcategory_name)
