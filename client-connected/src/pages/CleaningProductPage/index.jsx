@@ -9,8 +9,9 @@ import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import ProductDetailModal from "../../components/ProductDetailsModal";
 import NoImage from "../../assets/bg/no-image.svg";
+import Breadcrumb from "../../components/Breadcrumb";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import ShareButton from "../ShareButtonsubcat.jsx";
@@ -30,14 +31,14 @@ const StarRating = ({ rating }) => {
 
         return (
           <div key={star} className="relative">
-           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
-             <Star className="w-3 h-3 text-white" fill="currentColor" />
-           </span>
-           <div
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
+              <Star className="w-3 h-3 text-white" fill="currentColor" />
+            </span>
+            <div
               className="absolute inset-0 overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
             >
-              
+
             </div>
           </div>
         );
@@ -58,9 +59,8 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
       >
         <h2 className="text-lg md:text-2xl font-semibold text-left">{title}</h2>
         <ChevronDown
-          className={`w-6 h-6 transition-transform duration-300 ${
-            isOpen ? "transform rotate-180" : ""
-          }`}
+          className={`w-6 h-6 transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
+            }`}
         />
       </button>
       <AnimatePresence>
@@ -75,6 +75,7 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
               {isHtml ? (
                 <div
                   className="prose max-w-none"
+                  translate="no"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
               ) : (
@@ -97,9 +98,8 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
       >
         <span className="font-medium">{title}</span>
         <ChevronDown
-          className={`w-5 h-5 transition-transform duration-300 ${
-            isOpen ? "transform rotate-180" : ""
-          }`}
+          className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
+            }`}
         />
       </button>
       <AnimatePresence>
@@ -280,17 +280,7 @@ const CleaningProductPage = () => {
       if (response.data.status === 1) {
         setInnerSubCategoryData(response.data.data);
 
-        // Update meta tags
-        document.title = response.data.data?.meta_title;
-        const metaDescription = document.querySelector(
-          'meta[name="description"]'
-        );
-        if (metaDescription) {
-          metaDescription.setAttribute(
-            "content",
-            response.data.data?.meta_description
-          );
-        }
+        // Meta tags are handled by <Helmet> component automatically
         setIsLoading(false);
       }
     } catch (error) {
@@ -302,10 +292,6 @@ const CleaningProductPage = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    const proceedBtn = document.getElementById("proceed-btn")?.onClick;
-    if (typeof proceedBtn == undefined) {
-      navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-    }
   };
 
   const handleProductClick = (index) => {
@@ -444,20 +430,15 @@ const CleaningProductPage = () => {
       </Helmet>
       <div className="container px-4 mt-5">
         <div className="mt-5">
-          <nav className="hidden sm:block flex space-x-1 text-gray-500 text-xs">
-            <a href="/" className="text-blue-500">
-              Home
-            </a>
-            <span>/</span>
-            <a
-              href={`${config.VITE_BASE_URL}/category/${innerSubCategoryData?.category?.slug}`}
-              className="text-blue-500"
-            >
-              {innerSubCategoryData?.category?.category_name}
-            </a>
-            <span>/</span>
-            {/* <span>{innerSubCategoryData?.subcategory_name}</span> */}
-          </nav>
+          <Breadcrumb
+            items={[
+              {
+                label: innerSubCategoryData?.category?.category_name,
+                link: `${config.VITE_BASE_URL}/category/${innerSubCategoryData?.category?.slug}`
+              },
+              { label: innerSubCategoryData?.subcategory_name }
+            ]}
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-8">
             {/* Left Sidebar */}
@@ -492,11 +473,10 @@ const CleaningProductPage = () => {
                     {innerSubCategoryData?.products?.map((product, index) => (
                       <div
                         key={product.id}
-                        className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
-                          index === currentProductIndex
-                            ? "glow-border bg-blue-50"
-                            : "hover:bg-gray-50"
-                        }`}
+                        className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${index === currentProductIndex
+                          ? "glow-border bg-blue-50"
+                          : "hover:bg-gray-50"
+                          }`}
                         onClick={() => handleProductClick(index)}
                       >
                         {product.productimages && product.productimages.length > 0 ? (
@@ -561,169 +541,168 @@ const CleaningProductPage = () => {
                           return 0;
                         })
                         .map((attribute, attrIndex) => (
-                        <div
-                          key={attrIndex}
-                          className={`py-4 md:py-6 ${
-                            attrIndex === product.attributes.length - 1
+                          <div
+                            key={attrIndex}
+                            className={`py-4 md:py-6 ${attrIndex === product.attributes.length - 1
                               ? ""
                               : "border-gray-200"
-                          }`}
-                        >
-                          <div className="md:flex md:items-start md:gap-10">
-                            {/* LEFT */}
-                            <div className="md:w-72 w-full md:shrink-0">
-                              <div className="relative w-full h-46 md:h-48 sm:-mt-2">
-                                <img
-                                  src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
-                                  alt={product.product_name}
-                                  className="w-full h-full rounded-lg object-cover border"
-                                />
-                              </div>
-                            </div>
-
-                            {/* RIGHT */}
-                            <div className="flex-1 mt-4 md:mt-0">
-                              <div className="space-y-3">
-                                <h3 className="text-l sm:text-xs md:text-xl flex gap-2 items-center font-bold">
-                                  {attribute.attribute_name}
-                                </h3>
-
-                                {(attribute?.avg_rating || attribute?.total_reviews) && (
-                                  <div className="flex items-center gap-2 border-b border-dotted border-gray-400 w-fit pb-[2px]">
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
-                                      <Star className="w-3 h-3 text-white" fill="currentColor" />
-                                    </span>
-                                    <span className="text-sm md:text-base font-semibold text-gray-800">
-                                      {(Number(attribute?.avg_rating) || 0).toFixed(1)}
-                                    </span>
-                                    {attribute?.total_reviews && (
-                                      <span className="text-xs md:text-sm text-gray-500">
-                                        (
-                                        {attribute.total_reviews >= 1000
-                                          ? `${(attribute.total_reviews / 1000).toFixed(0)}K`
-                                          : attribute.total_reviews}{" "}
-                                        reviews)
-                                      </span>
-                                    )}
-                                  </div>
-                                )}
-                                {attribute.variations?.length > 0 && (
-                                  <p className="font-bold text-l sm:text-xs md:text-base flex gap-2 items-center">
-                                    Starts from
-                                    <span className="text-black-600 font-bold">
-                                      ₹{attribute?.starting_price}
-                                    </span>
-                                  </p>
-                                )}
-                              </div>
-
-                              {/* MOBILE specs */}
-                              {attribute.specifications && (
-                                <div className="space-y-2 mt-4 md:hidden">
-                                  <h4 className="text-sm md:text-base font-bold text-gray-700">
-                                    Specifications:
-                                  </h4>
-                                  <ul className="space-y-2 md:space-y-2">
-                                    {attribute.specifications
-                                      .split("|")
-                                      .map((s) => s.trim())
-                                      .filter(Boolean)
-                                      .map((spec, i) => (
-                                        <li key={i} className="text-base">
-                                          <div className="flex items-start gap-2">
-                                            <span className="mt-1 leading-6 text-black">•</span>
-                                            <span className="text-gray-700 leading-6 whitespace-normal break-words">
-                                              {spec.replace(/^"|"$/g, "")}
-                                            </span>
-                                          </div>
-                                        </li>
-                                      ))}
-                                  </ul>
+                              }`}
+                          >
+                            <div className="md:flex md:items-start md:gap-10">
+                              {/* LEFT */}
+                              <div className="md:w-72 w-full md:shrink-0">
+                                <div className="relative w-full h-46 md:h-48 sm:-mt-2">
+                                  <img
+                                    src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
+                                    alt={product.product_name}
+                                    className="w-full h-full rounded-lg object-cover border"
+                                  />
                                 </div>
-                              )}
+                              </div>
 
-                              <div className="flex items-start justify-between mt-4 md:hidden">
-                                <div className="relative inline-block group">
-                              <button
-                                className="text-base text-[#0463ac] hover:text-blue-700 font-bold mt-2 group-hover:scale-105 transition-all duration-300 ease-in-out"
-                                onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
-                              >
-                                View Details
-                              </button>
-                              <div
-                                className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#0463ac] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
-                              />
-                            </div>
+                              {/* RIGHT */}
+                              <div className="flex-1 mt-4 md:mt-0">
+                                <div className="space-y-3">
+                                  <h3 className="text-l sm:text-xs md:text-xl flex gap-2 items-center font-bold">
+                                    {attribute.attribute_name}
+                                  </h3>
 
-                                <div className="flex flex-col items-center">
-                                  <button
-                                className="bg-[#0463ac] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg shadow-md border transition-colors"
-                                onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                              >
-                                Add to cart
-                              </button>
-
-                                  {attribute?.variations?.length > 0 && (
-                                    <p className="mt-1 text-center text-xs text-gray-600">
-                                      {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                  {(attribute?.avg_rating || attribute?.total_reviews) && (
+                                    <div className="flex items-center gap-2 border-b border-dotted border-gray-400 w-fit pb-[2px]">
+                                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
+                                        <Star className="w-3 h-3 text-white" fill="currentColor" />
+                                      </span>
+                                      <span className="text-sm md:text-base font-semibold text-gray-800">
+                                        {(Number(attribute?.avg_rating) || 0).toFixed(1)}
+                                      </span>
+                                      {attribute?.total_reviews && (
+                                        <span className="text-xs md:text-sm text-gray-500">
+                                          (
+                                          {attribute.total_reviews >= 1000
+                                            ? `${(attribute.total_reviews / 1000).toFixed(0)}K`
+                                            : attribute.total_reviews}{" "}
+                                          reviews)
+                                        </span>
+                                      )}
+                                    </div>
+                                  )}
+                                  {attribute.variations?.length > 0 && (
+                                    <p className="font-bold text-l sm:text-xs md:text-base flex gap-2 items-center">
+                                      Starts from
+                                      <span className="text-black-600 font-bold">
+                                        ₹{attribute?.starting_price}
+                                      </span>
                                     </p>
                                   )}
                                 </div>
+
+                                {/* MOBILE specs */}
+                                {attribute.specifications && (
+                                  <div className="space-y-2 mt-4 md:hidden">
+                                    <h4 className="text-sm md:text-base font-bold text-gray-700">
+                                      Specifications:
+                                    </h4>
+                                    <ul className="space-y-2 md:space-y-2">
+                                      {attribute.specifications
+                                        .split("|")
+                                        .map((s) => s.trim())
+                                        .filter(Boolean)
+                                        .map((spec, i) => (
+                                          <li key={i} className="text-base">
+                                            <div className="flex items-start gap-2">
+                                              <span className="mt-1 leading-6 text-black">•</span>
+                                              <span className="text-gray-700 leading-6 whitespace-normal break-words">
+                                                {spec.replace(/^"|"$/g, "")}
+                                              </span>
+                                            </div>
+                                          </li>
+                                        ))}
+                                    </ul>
+                                  </div>
+                                )}
+
+                                <div className="flex items-start justify-between mt-4 md:hidden">
+                                  <div className="relative inline-block group">
+                                    <button
+                                      className="text-base text-[#0463ac] hover:text-blue-700 font-bold mt-2 group-hover:scale-105 transition-all duration-300 ease-in-out"
+                                      onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                                    >
+                                      View Details
+                                    </button>
+                                    <div
+                                      className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#0463ac] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
+                                    />
+                                  </div>
+
+                                  <div className="flex flex-col items-center">
+                                    <button
+                                      className="bg-[#0463ac] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg shadow-md border transition-colors"
+                                      onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                                    >
+                                      Add to cart
+                                    </button>
+
+                                    {attribute?.variations?.length > 0 && (
+                                      <p className="mt-1 text-center text-xs text-gray-600">
+                                        {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* DESKTOP specs */}
+                            {attribute.specifications && (
+                              <div className="hidden md:block mt-4">
+                                <h4 className="text-base font-bold text-gray-700 mb-2">Specifications:</h4>
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                                  {attribute.specifications
+                                    .split("|")
+                                    .map((s) => s.trim())
+                                    .filter(Boolean)
+                                    .map((spec, i) => (
+                                      <div key={i} className="flex items-center">
+                                        <span className="text-black mr-2">•</span>
+                                        <span className="text-gray-700 text-sm whitespace-normal break-words">
+                                          {spec.replace(/^"|"$/g, "")}
+                                        </span>
+                                      </div>
+                                    ))}
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="hidden md:flex items-start justify-between mt-4 group transition-all relative cursor-pointer">
+                              <div className="relative inline-block group">
+                                <button
+                                  className="text-base text-[#0463ac] hover:text-blue-700 font-bold mt-2 group-hover:scale-105 transition-all duration-300 ease-in-out"
+                                  onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                                >
+                                  View Details
+                                </button>
+                                <div
+                                  className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#0463ac] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
+                                />
+                              </div>
+
+                              <div className="flex flex-col items-start">
+                                <button
+                                  className="bg-[#0463ac] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg shadow-md border transition-colors"
+                                  onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                                >
+                                  Add to cart
+                                </button>
+
+                                {attribute?.variations?.length > 0 && (
+                                  <p className="mt-1 text-xs text-gray-600 ml-10">
+                                    {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
+                                  </p>
+                                )}
                               </div>
                             </div>
                           </div>
-
-                          {/* DESKTOP specs */}
-                          {attribute.specifications && (
-                            <div className="hidden md:block mt-4">
-                              <h4 className="text-base font-bold text-gray-700 mb-2">Specifications:</h4>
-                              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                                {attribute.specifications
-                                  .split("|")
-                                  .map((s) => s.trim())
-                                  .filter(Boolean)
-                                  .map((spec, i) => (
-                                    <div key={i} className="flex items-center">
-                                      <span className="text-black mr-2">•</span>
-                                      <span className="text-gray-700 text-sm whitespace-normal break-words">
-                                        {spec.replace(/^"|"$/g, "")}
-                                      </span>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="hidden md:flex items-start justify-between mt-4 group transition-all relative cursor-pointer">
-                           <div className="relative inline-block group">
-                              <button
-                                className="text-base text-[#0463ac] hover:text-blue-700 font-bold mt-2 group-hover:scale-105 transition-all duration-300 ease-in-out"
-                                onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
-                              >
-                                View Details
-                              </button>
-                              <div
-                                className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#0463ac] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
-                              />
-                            </div>
-
-                            <div className="flex flex-col items-start">
-                              <button
-                                className="bg-[#0463ac] hover:bg-[#52852d] text-white font-semibold px-6 py-2 rounded-lg shadow-md border transition-colors"
-                                onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                              >
-                                Add to cart
-                              </button>
-
-                              {attribute?.variations?.length > 0 && (
-                                <p className="mt-1 text-xs text-gray-600 ml-10">
-                                  {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </section>
                 ))}

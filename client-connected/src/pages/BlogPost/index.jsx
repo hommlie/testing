@@ -7,7 +7,7 @@ import axios from "axios";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../../components/LoginModal";
 import RelatedBlogs from "./RelatedBlogs";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import BlogForm from "../BlogForm/BlogForm";
 
 // ================= Comment Component =================

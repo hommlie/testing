@@ -5,6 +5,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import config from "../../config/config";
 import LoadingWrapper from "../../components/Loading/LoadingWrapper";
+import Breadcrumb from "../../components/Breadcrumb";
 
 const ProductListPage = () => {
   const { subcategorySlug, location } = useParams();
@@ -75,6 +76,15 @@ const ProductListPage = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-8">
+          <Breadcrumb
+            items={[
+              {
+                label: subcategoryData?.category?.category_name,
+                link: `${config.VITE_BASE_URL}/category/${subcategoryData?.category?.slug}`
+              },
+              { label: subcategoryData?.subcategory_name }
+            ]}
+          />
           <motion.div
             variants={container}
             initial="hidden"
@@ -125,8 +135,25 @@ const ProductListPage = () => {
                         <div className="absolute bottom-0 w-full h-8 bg-gradient-to-t from-white to-transparent" />
                       </div>
 
-                      <div className="flex items-center justify-center">
-                        <span className="text-sm text-gray-500 group-hover:text-[#10847E] transition-colors duration-300">
+                      {/* Price / Location Info */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex flex-col items-start">
+                          <span className="text-xl font-bold text-[#035240]">
+                            ₹{product.discounted_price}
+                          </span>
+                          {discountPercentage > 0 && (
+                            <span className="text-xs text-gray-400 line-through">
+                              ₹{product.price}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                          Service in Bangalore
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-center pt-2 border-t">
+                        <span className="text-sm font-semibold text-[#0463ac] group-hover:text-[#249370] transition-colors duration-300">
                           Explore Details
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

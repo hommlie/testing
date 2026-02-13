@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../../components/Loading";
 import axios from "axios";
 import config from "../../config/config";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import ShareButton from "../ShareButtoncat";
+import Breadcrumb from "../../components/Breadcrumb";
 
 const StarRating = ({ rating, reviews }) => {
   return (
@@ -15,11 +16,10 @@ const StarRating = ({ rating, reviews }) => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-2 md:w-4 h-2 md:h-4 ${
-              star <= Math.round(rating)
-                ? "text-yellow-400 fill-current"
-                : "text-gray-300"
-            }`}
+            className={`w-2 md:w-4 h-2 md:h-4 ${star <= Math.round(rating)
+              ? "text-yellow-400 fill-current"
+              : "text-gray-300"
+              }`}
           />
         ))}
       </div>
@@ -42,9 +42,8 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
       >
         <h2 className="text-lg md:text-2xl font-semibold text-left">{title}</h2>
         <ChevronDown
-          className={`w-6 h-6 transition-transform duration-300 ${
-            isOpen ? "transform rotate-180" : ""
-          }`}
+          className={`w-6 h-6 transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
+            }`}
         />
       </button>
       <AnimatePresence>
@@ -139,9 +138,8 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
       >
         <span className="font-medium">{title}</span>
         <ChevronDown
-          className={`w-5 h-5 transition-transform duration-300 ${
-            isOpen ? "transform rotate-180" : ""
-          }`}
+          className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
+            }`}
         />
       </button>
       <AnimatePresence>
@@ -320,7 +318,7 @@ const SubCategoryPage = () => {
 
   return (
     <main className="md:max-w-7xl w-full bg-white">
-            <ShareButton />
+      <ShareButton />
       <Helmet>
         <title>{data?.categoryData?.meta_title || "Category Page"}</title>
         <meta
@@ -330,16 +328,15 @@ const SubCategoryPage = () => {
         <link rel="canonical" href={generateCanonicalUrl()} />
       </Helmet>
       <div className="container px-4 mt-5">
-        {/* Breadcrumb */}
-        {/* <nav className="flex items-center space-x-2 text-sm mb-6">
-          <a href="/" className="text-emerald-600 hover:text-emerald-700">
-            Home
-          </a>
-          <span className="text-gray-500">/</span>
-          <span className="text-gray-500">
-            {data?.categoryData?.category_name}
-          </span>
-        </nav> */}
+        <Breadcrumb
+          items={[
+            {
+              label: data?.categoryData?.category_name,
+              link: `${config.VITE_BASE_URL}/category/${data?.categoryData?.slug}`
+            },
+            { label: location ? location : data?.categoryData?.category_name }
+          ]}
+        />
 
         {/* Banner Section */}
         <div className="relative w-full h-[150px] md:h-[300px] rounded-xl overflow-hidden mb-8">
@@ -405,7 +402,7 @@ const SubCategoryPage = () => {
                 container.scrollLeft > 0 ? "block" : "none";
               rightArrow.style.display =
                 container.scrollLeft <
-                container.scrollWidth - container.clientWidth
+                  container.scrollWidth - container.clientWidth
                   ? "block"
                   : "none";
             }}
@@ -414,11 +411,10 @@ const SubCategoryPage = () => {
               <div
                 key={cat.subcat_id}
                 onClick={() => scrollToSection(cat.subcat_id)}
-                className={`w-32 flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${
-                  activeSection === cat.subcat_id
-                    ? "bg-emerald-600 text-white"
-                    : "hover:bg-gray-100"
-                }`}
+                className={`w-32 flex flex-col items-center p-2 rounded-md cursor-pointer transition-all duration-200 ${activeSection === cat.subcat_id
+                  ? "bg-emerald-600 text-white"
+                  : "hover:bg-gray-100"
+                  }`}
               >
                 <img
                   src={cat.subcategory_icon}

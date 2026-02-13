@@ -5,6 +5,7 @@ import axios from "axios";
 import config from "../../config/config";
 import ServiceSelector from "./ServiceSelector";
 import InspectionModal from "../../components/InspectionModal";
+import Breadcrumb from "../../components/Breadcrumb";
 
 const SEOPage = () => {
   const { slug } = useParams();
@@ -29,35 +30,36 @@ const SEOPage = () => {
 
   return (
     <main className="max-w-[1200px] mx-auto px-4 py-8">
+      <Breadcrumb items={[{ label: pageData?.title || slug }]} />
       <section
-  className="relative w-full h-[40vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden"
->
-  <img
-    src={pageData?.banner_url || "/og/fallback-hero.jpg"}
-    alt={pageData?.title || "Hommlie Services"}
-    className="w-full h-full object-cover object-center"
-    loading="lazy"
-    decoding="async"
-  />
+        className="relative w-full h-[40vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden"
+      >
+        <img
+          src={pageData?.banner_url || "/og/fallback-hero.jpg"}
+          alt={pageData?.title || "Hommlie Services"}
+          className="w-full h-full object-cover object-center"
+          loading="lazy"
+          decoding="async"
+        />
 
-  {/* Dark overlay for text readability */}
-  <div className="absolute inset-0 bg-black/50 flex flex-col justify-center px-4 sm:px-6">
-    <h1 className="text-white text-xl sm:text-3xl md:text-4xl font-bold mb-2 leading-tight">
-      {pageData?.title || "Hommlie Services"}
-    </h1>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center px-4 sm:px-6">
+          <h1 className="text-white text-xl sm:text-3xl md:text-4xl font-bold mb-2 leading-tight">
+            {pageData?.title || "Hommlie Services"}
+          </h1>
 
-    {pageData?.sub_title && (
-      <p className="text-gray-200 text-sm sm:text-base md:text-lg max-w-xl">
-        {pageData.sub_title}
-      </p>
-    )}
-  </div>
-</section>
+          {pageData?.sub_title && (
+            <p className="text-gray-200 text-sm sm:text-base md:text-lg max-w-xl">
+              {pageData.sub_title}
+            </p>
+          )}
+        </div>
+      </section>
 
-      
+
       <section
         className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 mt-6 sm:mt-8 px-0 sm:px-6 lg:px-0" >
-        
+
         <aside className="lg:col-span-2 space-y-6 order-1 lg:order-2">
           <ServiceSelector
             services={services}

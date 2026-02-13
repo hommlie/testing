@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Star, ChevronRight, Check, Phone, MapPin, Home, Building2, ArrowUp, X } from "lucide-react";
 import { RxCross1 } from "react-icons/rx";
+import { FaBug, FaShieldAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import BannerImage from "../../pages/BannerImage";
 import BannerImageMobile from "../../pages/BannerImageMobile";
@@ -511,57 +512,114 @@ const ServiceSection = ({ categories }) => {
         <div className="md:hidden">
           {/* Modal for callback triggers here if needed, but keeping original request flow */}
           {/* Request a Callback Button - Top Centered */}
-          <div className="flex justify-center mb-2">
-            <button
-              onClick={() => setIsCallbackOpen(true)}
-              className="bg-[#0463ac] text-white font-bold py-3.5 px-12 rounded-xl shadow-lg hover:bg-[#034d85] transition-all transform active:scale-95"
-            >
-              Request a Callback
-            </button>
-          </div>
+
 
           {/* Mobile Booking Form Section */}
-          <div className="bg-white rounded-2xl p-0 mt-4 text-[#033053]">
+          {/* Premium Mobile Booking Form Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="rounded-3xl px-0 py-2 mt-2 relative overflow-hidden"
+          >
+
+            <div className="flex justify-center mb-6 relative z-10">
+              <motion.h3
+                className="text-2xl font-bold text-center relative inline-block"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <motion.span
+                  className="bg-clip-text text-transparent bg-gradient-to-r from-[#033053] via-[#0463ac] to-[#033053] bg-[length:200%_auto] block pb-1"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      backgroundPosition: ["0% 50%", "200% 50%"],
+                      transition: {
+                        opacity: { duration: 0.5 },
+                        y: { duration: 0.5 },
+                        backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear", repeatType: "loop" }
+                      }
+                    }
+                  }}
+                >
+                  Book a Service
+                </motion.span>
+                <motion.div
+                  className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: 64 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                />
+              </motion.h3>
+            </div>
+
             {/* Check Serviceability */}
-            <div className={`mb-4 relative transition-all duration-300 ${!mbIsInBangalore && pincode.length >= 3 ? 'mb-8' : 'mb-4'}`}>
-              <label className="block text-sm font-bold mb-2">Check Serviceability</label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0463ac]" />
+            <div className={`mb-4 relative transition-all duration-300 z-10 ${!mbIsInBangalore && pincode.length >= 3 ? 'mb-8' : ''}`}>
+              <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                <MapPin className="w-4 h-4 text-[#0463ac]" />
+                Check Serviceability
+              </label>
+              <div className="relative group">
                 <input
                   type="text"
                   placeholder="Enter Pincode"
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium focus:outline-none"
+                  className="w-full pl-4 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all shadow-sm group-hover:shadow-md"
                   value={pincode}
                   onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  {pincode.length === 6 ? (
+                    <Check className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <MapPin className="w-5 h-5 text-gray-400" />
+                  )}
+                </div>
+
                 {!mbIsInBangalore && pincode.length >= 3 && (
-                  <div className="absolute -bottom-5 left-0">
-                    <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider animate-pulse whitespace-nowrap">
-                      📍 Sorry, we are coming soon here!
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute -bottom-6 left-0 flex items-center gap-1"
+                  >
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                    <p className="text-xs text-red-500 font-bold uppercase tracking-wide">
+                      Sorry, we are coming soon here!
                     </p>
-                  </div>
+                  </motion.div>
                 )}
               </div>
             </div>
 
             {pincode.length === 6 ? (
-              <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-5 relative z-10"
+              >
                 {/* Premise Type */}
-                <div className="mb-4">
-                  <label className="block text-sm font-bold mb-2">Premise Type *</label>
-                  <div className="flex border border-[#0463ac] rounded-lg overflow-hidden">
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                    <Building2 className="w-4 h-4 text-[#0463ac]" />
+                    Premise Type *
+                  </label>
+                  <div className="flex bg-gray-100 p-1 rounded-xl">
                     <button
                       onClick={() => setPremiseType("Residential")}
-                      className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-colors
-                        ${premiseType === "Residential" ? "bg-[#1d3f8f] text-white" : "bg-white text-[#1d3f8f]"}`}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all shadow-sm
+                        ${premiseType === "Residential" ? "bg-white text-[#0463ac] shadow-md ring-1 ring-black/5" : "text-gray-500 hover:text-gray-700"}`}
                     >
                       <Home className="w-4 h-4" />
                       Residential
                     </button>
                     <button
                       onClick={() => setPremiseType("Commercial")}
-                      className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-colors
-                        ${premiseType === "Commercial" ? "bg-[#1d3f8f] text-white" : "bg-white text-[#1d3f8f]"}`}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all shadow-sm
+                        ${premiseType === "Commercial" ? "bg-white text-[#0463ac] shadow-md ring-1 ring-black/5" : "text-gray-500 hover:text-gray-700"}`}
                     >
                       <Building2 className="w-4 h-4" />
                       Commercial
@@ -572,11 +630,14 @@ const ServiceSection = ({ categories }) => {
                 {/* Conditional Fields based on Premise Type */}
                 {premiseType === "Residential" ? (
                   <>
-                    {/* Category Selection for Mobile */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-bold mb-2">Service Category *</label>
+                    {/* Category Selection */}
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                        <RxCross1 className="w-4 h-4 text-[#0463ac] rotate-45" /> {/* Using generic icon representation */}
+                        Service Category *
+                      </label>
                       <div
-                        className="relative cursor-pointer"
+                        className="relative cursor-pointer group"
                         onClick={() => {
                           if (categories && categories.length > 0) {
                             setSelectionModal({
@@ -592,18 +653,21 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
-                          {categories?.find(c => c.id === selectedCategory)?.category_name || "Select Category"}
+                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                          <span className="truncate">{categories?.find(c => c.id === selectedCategory)?.category_name || "Select Category"}</span>
+                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
                       </div>
                     </div>
 
                     {/* Pest Type / Subcategory */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-bold mb-2">Pest Type *</label>
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                        <FaBug className="w-4 h-4 text-[#0463ac]" />
+                        Pest Type *
+                      </label>
                       <div
-                        className="relative cursor-pointer"
+                        className="relative cursor-pointer group"
                         onClick={() => {
                           const subs = getCurrentSubcategories();
                           if (subs && subs.length > 0) {
@@ -620,18 +684,21 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
-                          {getCurrentSubcategories().find(s => s.id === selectedSubCategory)?.subcategory_name || "Select Pest Type"}
+                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                          <span className="truncate">{getCurrentSubcategories().find(s => s.id === selectedSubCategory)?.subcategory_name || "Select Pest Type"}</span>
+                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
                       </div>
                     </div>
 
                     {/* Product Selection */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-bold mb-2">Product *</label>
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                        <Star className="w-4 h-4 text-[#0463ac]" />
+                        Product *
+                      </label>
                       <div
-                        className="relative cursor-pointer"
+                        className="relative cursor-pointer group"
                         onClick={() => {
                           const prods = getCurrentProducts();
                           if (prods && prods.length > 0) {
@@ -648,18 +715,21 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
-                          {getCurrentProducts().find(p => p.id === selectedProduct)?.product_name || "Select Product"}
+                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                          <span className="truncate">{getCurrentProducts().find(p => p.id === selectedProduct)?.product_name || "Select Product"}</span>
+                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
                       </div>
                     </div>
 
-                    {/* Property Size / Premise Size */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-bold mb-2">Property Size *</label>
+                    {/* Property Size */}
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                        <Home className="w-4 h-4 text-[#0463ac]" />
+                        Property Size *
+                      </label>
                       <div
-                        className="relative cursor-pointer"
+                        className="relative cursor-pointer group"
                         onClick={() => {
                           const options = getVariationOptions();
                           if (options.length > 0) {
@@ -676,18 +746,21 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
-                          {selectedBhk || "Select Property Size"}
+                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                          <span className="truncate">{selectedBhk || "Select Property Size"}</span>
+                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
                       </div>
                     </div>
 
-                    {/* Service Variant / Attribute */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-bold mb-2">Service Variant *</label>
+                    {/* Service Variant */}
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
+                        <FaShieldAlt className="w-4 h-4 text-[#0463ac]" />
+                        Service Variant *
+                      </label>
                       <div
-                        className="relative cursor-pointer"
+                        className="relative cursor-pointer group"
                         onClick={() => {
                           const attrs = getCurrentAttributes();
                           if (attrs && attrs.length > 0) {
@@ -704,31 +777,39 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3 bg-white border border-[#0463ac] rounded-lg text-sm font-medium">
-                          {getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute_name || getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute || "Select Service Variant"}
+                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                          <span className="truncate">
+                            {getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute_name ||
+                              getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute ||
+                              "Select Service Variant"}
+                          </span>
+                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
                       </div>
                     </div>
 
-                    {/* Price Display */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-bold text-gray-600">Price (Excluding GST)</label>
-                      <div className="flex items-center justify-between mt-1">
-                        <div className="text-3xl font-bold">₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}</div>
+                    {/* Optimized Price Display */}
+                    <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-100/50 flex flex-col gap-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">Total Estimate</span>
                         {getCurrentProduct()?.slug && (
                           <button
                             onClick={() => navigate(`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`)}
-                            className="text-xs font-bold text-[#0463ac] underline hover:text-[#034d85] transition-colors whitespace-nowrap bg-transparent border-0 p-0 cursor-pointer"
+                            className="text-xs font-bold text-[#0463ac] hover:text-[#034d85] flex items-center gap-1 group/link"
                           >
-                            View Details
+                            View Details <ChevronRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
                           </button>
                         )}
+                      </div>
+                      <div className="text-3xl font-extrabold text-[#033053]">
+                        ₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}<span className="text-lg text-gray-400 font-medium ml-1">+ GST</span>
                       </div>
                     </div>
 
                     {/* BOOK NOW Button */}
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => {
                         const variation = getCurrentVariation();
                         const product = getCurrentProduct();
@@ -737,34 +818,87 @@ const ServiceSection = ({ categories }) => {
                         }
                       }}
                       disabled={!getCurrentVariation() || isAddingToCart}
-                      className={`w-full py-4 text-white font-bold text-lg rounded shadow-sm transition-all
-                        ${(!getCurrentVariation() || isAddingToCart) ? "bg-gray-300 cursor-not-allowed" : "bg-[#0463ac] hover:bg-[#034d85]"}`}
+                      className={`w-full py-4 relative overflow-hidden text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group
+                        ${(!getCurrentVariation() || isAddingToCart)
+                          ? "bg-gray-300 cursor-not-allowed"
+                          : "bg-gradient-to-r from-[#0463ac] to-[#034d85]"}`}
                     >
-                      {isAddingToCart ? "Adding..." : "BOOK NOW"}
-                    </button>
+                      {(!getCurrentVariation() || isAddingToCart) ? null : (
+                        <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out skew-x-12" />
+                      )}
+
+                      {isAddingToCart ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <span className="tracking-wide z-10">BOOK NOW</span>
+                          <ChevronRight className="w-5 h-5 z-10" />
+                        </>
+                      )}
+                    </motion.button>
                   </>
                 ) : (
-                  <div className="mt-8">
-                    <button
+                  <div className="pt-4">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={handleDirectInspectionBooking}
-                      className="w-full py-4 bg-[#0463ac] text-white font-bold text-lg rounded shadow-md hover:bg-[#034d85] transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                      className="w-full py-4 bg-[#0463ac] text-white font-bold text-lg rounded-2xl shadow-lg hover:bg-[#034d85] transition-all flex items-center justify-center gap-2"
                     >
-                      BOOK INSPECTION
-                    </button>
+                      BOOK INSPECTION <ChevronRight className="w-5 h-5" />
+                    </motion.button>
                   </div>
                 )}
-              </>
+              </motion.div>
             ) : (
-              <div className="mt-6 p-6 bg-blue-50/50 rounded-2xl border border-blue-100 flex flex-col items-center text-center gap-3">
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                  <MapPin className="w-6 h-6 text-[#0463ac]" />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mt-6 py-8 px-6 bg-gray-50/80 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center text-center gap-3"
+              >
+                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md mb-2">
+                  <MapPin className="w-7 h-7 text-gray-300" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#033053]">Serviceability Check Required</h4>
-                  <p className="text-[11px] text-[#033053]/70 font-medium">Please enter your 6-digit pincode above to check availability and see services.</p>
+                  <h4 className="text-base font-bold text-gray-600">Enter Pincode</h4>
+                  <p className="text-xs text-gray-400 font-medium">Please enter your 6-digit pincode above to unlock customized services for your location.</p>
                 </div>
-              </div>
+              </motion.div>
             )}
+          </motion.div>
+
+          {/* Request a Callback Button - Mobile View Bottom */}
+          {/* Request a Callback Button - Mobile View Bottom */}
+          <div className="flex justify-center my-4">
+            <motion.a
+              href="tel:6363865658"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full relative overflow-hidden bg-gradient-to-r from-[#0463ac] to-[#034d85] text-white font-bold py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 cursor-pointer"
+            >
+              <div
+                className="absolute inset-0 bg-white/20 skew-x-12"
+                style={{
+                  animation: 'shimmer 2.5s infinite linear'
+                }}
+              />
+              <style>{`
+                @keyframes shimmer {
+                  0% { transform: translateX(-150%) skewX(-12deg); }
+                  50% { transform: translateX(150%) skewX(-12deg); }
+                  100% { transform: translateX(150%) skewX(-12deg); }
+                }
+              `}</style>
+
+              <Phone className="w-6 h-6 animate-pulse" />
+              <div className="flex flex-col items-start leading-tight z-10">
+                <span className="text-sm font-medium opacity-90">Talk with an Agent</span>
+                <span className="text-lg font-extrabold tracking-wide">6363865658</span>
+              </div>
+            </motion.a>
           </div>
         </div>
 
@@ -801,7 +935,7 @@ const ServiceSection = ({ categories }) => {
 
         {/* New Mobile Flow - Banners */}
         <div className="block md:hidden">
-          <section className="px-0 py-4">
+          <section className="px-0 py-0">
             <BannerImageMobile />
             <BannerImage />
           </section>
@@ -895,68 +1029,115 @@ const ServiceSection = ({ categories }) => {
         </div>
       </section >
 
-      {/* Centered Selection Modal */}
-      {selectionModal.isOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h3 className="text-lg font-bold text-[#033053]">{selectionModal.title}</h3>
-              <button
-                onClick={() => setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null })}
-                className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
-              >
-                <RxCross1 className="w-4 h-4 text-gray-600" />
-              </button>
-            </div>
+      {/* Premium Selection Modal */}
+      <AnimatePresence>
+        {selectionModal.isOpen && (
+          <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null })}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
 
-            {/* Options List */}
-            <div className="overflow-y-auto flex-1 p-2">
-              {selectionModal.options.map((option, idx) => {
-                // Handle both string options (Property Size) and object options (Category, Pest Type, etc.)
-                const isStringOption = typeof option === 'string';
-                const optionValue = isStringOption ? option : option.id;
-                const optionLabel = isStringOption ? option : option.name;
-                const isSelected = isStringOption
-                  ? selectionModal.selectedValue === option
-                  : selectionModal.selectedValue?.id === option.id;
+            {/* Modal Content */}
+            <motion.div
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-white w-full sm:max-w-lg rounded-t-[40px] sm:rounded-[32px] relative z-10 overflow-hidden shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.2)]"
+              style={{ maxHeight: "85vh" }}
+            >
+              {/* Decorative Header Background */}
+              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-[#0463ac]/10 to-transparent pointer-events-none" />
 
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => selectionModal.onSelect && selectionModal.onSelect(option)}
-                    className={`flex items-center justify-between p-4 rounded-xl mb-2 cursor-pointer transition-all
-                      ${isSelected
-                        ? 'bg-blue-50 border-2 border-[#0463ac]'
-                        : 'bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                      }`}
-                  >
-                    <span className={`text-sm font-medium ${isSelected ? 'text-[#0463ac]' : 'text-gray-700'}`}>
-                      {optionLabel}
-                    </span>
+              {/* Header */}
+              <div className="relative px-6 pt-8 pb-4 flex items-center justify-between z-20">
+                <div>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: 40 }}
+                    className="h-1 bg-[#0463ac] rounded-full mb-2"
+                  />
+                  <h3 className="text-2xl font-bold text-[#033053] tracking-tight">
+                    {selectionModal.title}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null })}
+                  className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors shadow-sm"
+                >
+                  <RxCross1 className="w-5 h-5 font-bold" />
+                </button>
+              </div>
 
-                    {/* Radio Indicator on the Right */}
-                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
-                      ${isSelected
-                        ? 'border-[#0463ac] bg-[#0463ac]'
-                        : 'border-gray-300'
-                      }`}
+              {/* Scrollable list */}
+              <div className="px-6 pb-8 overflow-y-auto max-h-[60vh] sm:max-h-[50vh] space-y-3 custom-scrollbar">
+                {selectionModal.options.map((option, idx) => {
+                  const isStringOption = typeof option === 'string';
+                  const optionValue = isStringOption ? option : option.id;
+                  const optionLabel = isStringOption ? option : option.name;
+                  const isSelected = isStringOption
+                    ? selectionModal.selectedValue === option
+                    : selectionModal.selectedValue?.id === option.id;
+
+                  return (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      onClick={() => selectionModal.onSelect && selectionModal.onSelect(option)}
+                      className={`relative p-4 rounded-2xl border-2 cursor-pointer group transition-all duration-300 flex items-center justify-between
+                        ${isSelected
+                          ? 'bg-[#eff6ff] border-[#0463ac] shadow-md scale-[1.01]'
+                          : 'bg-white border-gray-100 hover:border-[#0463ac]/30 hover:shadow-lg hover:scale-[1.01]'
+                        }`}
                     >
+                      {/* Selection Glow Effect */}
                       {isSelected && (
-                        <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                        <div className="absolute inset-0 bg-[#0463ac]/5 rounded-2xl blur-sm" />
                       )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        </div>
-      )}
+
+                      <div className="flex items-center gap-4 relative z-10">
+                        {/* Radio Circle */}
+                        <div className={`w-6 h-6 rounded-full border-[1.5px] flex items-center justify-center transition-all duration-300
+                          ${isSelected ? 'border-[#0463ac] bg-[#0463ac]' : 'border-gray-300 group-hover:border-[#0463ac]'}`}>
+                          {isSelected && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="w-2.5 h-2.5 bg-white rounded-full shadow-sm"
+                            />
+                          )}
+                        </div>
+
+                        <span className={`text-base font-semibold tracking-wide ${isSelected ? 'text-[#033053]' : 'text-gray-600'}`}>
+                          {optionLabel}
+                        </span>
+                      </div>
+
+                      {/* Check Icon for Selected */}
+                      {isSelected && (
+                        <motion.div
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-[#0463ac] relative z-10"
+                        >
+                          <Check className="w-5 h-5" />
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLoginSuccess={handlePostLoginAdd} />
     </>

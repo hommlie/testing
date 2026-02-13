@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { FaStar, FaUsers, FaMoneyBillWave } from "react-icons/fa";
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
@@ -311,9 +311,8 @@ const HomePageFirstSection = () => {
           {bannerData?.sliders?.map((slide, index) => (
             <div
               key={index}
-              className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${
-                index === currentIndexTopSlider ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentIndexTopSlider ? "opacity-100" : "opacity-0"
+                }`}
             >
               <a href={slide?.link}>
                 <img
@@ -347,11 +346,10 @@ const HomePageFirstSection = () => {
             <div
               key={index}
               onClick={() => goToSlideTopSlider(index)}
-              className={`text-2xl cursor-pointer ${
-                index === currentIndexTopSlider
+              className={`text-2xl cursor-pointer ${index === currentIndexTopSlider
                   ? "text-gray-800"
                   : "text-gray-400"
-              }`}
+                }`}
             >
               <RxDotFilled />
             </div>

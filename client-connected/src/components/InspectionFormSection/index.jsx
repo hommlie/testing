@@ -1,360 +1,442 @@
-import React, { useState } from "react";
-import { IoBusiness, IoCallOutline } from "react-icons/io5";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import config from "../../config/config";
 import { useToast } from "../../context/ToastProvider";
-import { MdOutlineLocalPostOffice } from "react-icons/md";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { motion, AnimatePresence } from "framer-motion";
+import { useCont } from "../../context/MyContext";
+import {
+  CheckCircle2,
+  Mail,
+  Phone,
+  Building2,
+  User,
+  Smartphone,
+  Sparkles,
+  ArrowRight,
+  MapPin,
+  Clock,
+  ShieldCheck
+} from "lucide-react";
 
 const InspectionFormSection = () => {
+  const { categoryData } = useCont();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    address: "",
     service: "",
-    date: new Date(),
-    time: "",
   });
 
-  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [managerName, setManagerName] = useState("");
+  const [activeStatIndex, setActiveStatIndex] = useState(0);
 
   const notify = useToast();
-  const successNotify = (msg) => notify(msg, "success");
   const errorNotify = (msg) => notify(msg, "error");
 
-  const timeSlots = ["9 to 11 AM", "11 to 1 PM", "1 to 3 PM", "3 to 5 PM", "5 to 7 PM"];
-
-  const services = [
-    { id: 1, name: "Pest Control" },
-    { id: 2, name: "Cleaning" },
-    { id: 3, name: "Bird Control" },
-    { id: 4, name: "Disinfection" },
+  const stats = [
+    {
+      id: 1,
+      count: "10,000+",
+      title: "Happy Customers",
+      icon: "https://cdn-icons-png.flaticon.com/512/3481/3481061.png",
+      color: "text-[#035240]"
+    },
+    {
+      id: 2,
+      count: "4.9/5",
+      title: "Customer Rating",
+      icon: "https://cdn-icons-png.flaticon.com/512/1828/1828884.png",
+      color: "text-[#035240]"
+    },
+    {
+      id: 3,
+      count: "290+",
+      title: "Pin-Codes",
+      icon: "https://cdn-icons-png.flaticon.com/512/235/235861.png",
+      color: "text-[#035240]"
+    },
+    {
+      id: 4,
+      count: "100%",
+      title: "Warranty Service",
+      icon: "https://cdn-icons-png.flaticon.com/512/3502/3502601.png",
+      color: "text-[#035240]"
+    },
+    {
+      id: 5,
+      count: "ISO",
+      title: "Certified Company",
+      icon: "https://cdn-icons-png.flaticon.com/512/2873/2873133.png",
+      color: "text-[#035240]"
+    }
   ];
 
-  const validateStepOne = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+  useEffect(() => {
+    const names = ["Anglin Malar", "Sharvista", "Ranjith", "Kiran", "Rahul"];
+    // Randomize name once per session
+    setManagerName(names[Math.floor(Math.random() * names.length)]);
+  }, []);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Required";
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone is required";
+      newErrors.phone = "Required";
     } else if (!/^[0-9]{10}$/.test(formData.phone.trim())) {
-      newErrors.phone = "Phone number must be exactly 10 digits";
+      newErrors.phone = "Invalid";
     }
-
-    if (!formData.service) newErrors.service = "Service is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateStepTwo = () => {
-    const newErrors = {};
-    if (!formData.address.trim()) newErrors.address = "Address is required";
-    if (!formData.time) newErrors.time = "Time slot is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateStepTwo()) return;
+    if (e) e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
 
     try {
       const response = await axios.post(`${config.API_URL}/api/createInspection`, {
         fullName: formData.name,
-        address: formData.address,
         mobile: formData.phone,
-        email: formData.email,
-        date: formData.date.toISOString(),
-        time: formData.time,
-        service: formData.service,
+        email: formData.email || "reach@hommlie.com",
+        service: "Free Inspection Request",
+        address: "Home Service Request",
+        date: new Date().toISOString(),
+        time: "ASAP",
       });
 
       if (response.data.status === 1) {
-        successNotify("Service request submitted successfully!");
         setSubmitted(true);
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          address: "",
-          service: "",
-          date: new Date(),
-          time: "",
-        });
-        setStep(1);
-        setTimeout(() => setSubmitted(false), 5000);
+        setFormData({ name: "", email: "", phone: "", service: "" });
       } else {
-        errorNotify("Failed to submit service request. Try again.");
+        errorNotify("Booking failed.");
       }
     } catch (err) {
-      console.error(err);
-      errorNotify("Something went wrong. Try again.");
+      errorNotify("Network error.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full sm:max-w-6xl mx-auto px-0 md:px-0 lg:px-0 py-0 md:py-4">
-      {/* On mobile, remove gaps and make first card fill viewport */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8">
-        {/* Contact Info (mobile = full-screen panel) */}
-        <div className="bg-white p-4 md:p-6 rounded-none md:rounded-2xl shadow-sm md:shadow-md border border-gray-200 md:border-gray-100 flex">
-          <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 w-full">
-            <div className="w-full">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
-                Schedule Your Inspection
-              </h2>
-              <p className="text-sm sm:text-base text-gray-600 mb-4">
-                Get professional help for your home or business
-              </p>
+    <div className="relative w-full mx-auto px-4 md:px-8 py-4 md:py-10 overflow-hidden">
+      <div className="relative z-10">
+        {/* Header Section */}
+        <div className="text-center mb-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-blue-50 text-[#0463ac] text-[10px] font-black uppercase tracking-[0.3em] mb-4"
+          >
+            <ShieldCheck size={14} className="group-hover:rotate-12 transition-transform" />
+            Certified Inspections
+          </motion.div>
 
-              <div className="space-y-4 text-sm">
-                <div className="flex items-center gap-3">
-                  <MdOutlineLocalPostOffice className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
-                  <div>
-                    <h3 className="text-gray-500 text-xs">Email</h3>
-                    <p className="text-gray-800 font-medium text-sm">reach@hommlie.com</p>
-                  </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="flex flex-col items-center mb-2"
+          >
+            <h3 className="text-[#033053]/80 text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-2">Quick Booking</h3>
+            <div className="w-12 h-1 bg-[#0463ac] rounded-full" />
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-bold text-[#033053] tracking-tight leading-[1.1] mb-6"
+          >
+            Schedule Your <span className="text-[#0463ac]">Inspection</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-gray-600 font-medium text-base max-w-xl mx-auto leading-relaxed"
+          >
+            Experience premium service standards with a dedicated expert assigned to your home within minutes.
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+          {/* Left Side: Contact Group */}
+          <div className="space-y-4 order-2 lg:order-1">
+            <div className="grid grid-cols-1">
+              <motion.a
+                href="mailto:reach@hommlie.com"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-4 group py-3 border-b border-gray-50"
+              >
+                <div className="w-12 h-12 flex items-center justify-center text-[#0463ac] rounded-xl group-hover:bg-blue-50 transition-all duration-300">
+                  <Mail size={22} />
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <IoCallOutline className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
-                  <div>
-                    <h3 className="text-gray-500 text-xs">Phone</h3>
-                    <p className="text-gray-800 font-medium text-sm">+91-6363865658</p>
-                  </div>
+                <div>
+                  <h3 className="text-[#033053]/50 text-[10px] uppercase font-bold tracking-[0.2em] mb-0.5">Email Concierge</h3>
+                  <p className="text-[#033053] font-bold text-lg group-hover:text-[#0463ac] transition-colors tracking-tight">reach@hommlie.com</p>
                 </div>
+              </motion.a>
 
-                <div className="flex items-start gap-3">
-                  <IoBusiness className="text-xl bg-[#0463ac] text-white rounded-full p-2 w-8 h-8" />
-                  <div>
-                    <h3 className="text-gray-500 text-xs">Our Offices</h3>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city) => (
-                        <span
-                          key={city}
-                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
-                        >
-                          {city}
+              <motion.a
+                href="tel:+916363865658"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="flex items-center gap-4 group py-3 border-b border-gray-50"
+              >
+                <div className="w-12 h-12 flex items-center justify-center text-[#0463ac] rounded-xl group-hover:bg-blue-50 transition-all duration-300">
+                  <Phone size={22} />
+                </div>
+                <div>
+                  <h3 className="text-[#033053]/50 text-[10px] uppercase font-bold tracking-[0.2em] mb-0.5">Priority Hotline</h3>
+                  <p className="text-[#033053] font-bold text-lg group-hover:text-[#0463ac] transition-colors tracking-tight">+91-6363865658</p>
+                </div>
+              </motion.a>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="p-0 relative overflow-hidden group"
+            >
+              <div className="relative z-10 py-2">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 flex items-center justify-center text-[#0463ac]">
+                    <MapPin size={18} />
+                  </div>
+                  <h3 className="text-[#033053] text-[10px] uppercase font-bold tracking-[0.2em]">Our Premium Network</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city, i) => (
+                    <motion.span
+                      key={city}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.4 + (i * 0.1) }}
+                      className="px-3 py-1.5 text-[#033053] font-bold text-[11px] border border-gray-100 rounded-md flex items-center gap-2 hover:border-[#0463ac] transition-colors cursor-default"
+                    >
+                      <div className="w-1.5 h-1.5 bg-[#0463ac] rounded-full" />
+                      {city}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+              <Building2 size={120} className="absolute -bottom-6 -right-6 text-[#033053] opacity-[0.03] rotate-12" />
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="order-1 lg:order-2 w-full"
+          >
+            <div className="relative overflow-hidden w-full">
+              <div className="mb-8">
+                <h3 className="text-[#033053] text-2xl font-black tracking-tight mb-2">Request callback</h3>
+                <p className="text-gray-400 text-sm font-medium">Takes less than 30 seconds to book.</p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-6">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#033053]/40 ml-4 block">Full Name</label>
+                    <div className="relative group">
+                      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#0463ac] transition-colors">
+                        <User size={20} />
+                      </div>
+                      <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full pl-14 pr-4 py-4 bg-transparent border-b-2 border-gray-100 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    {errors.name && <p className="text-[10px] text-red-500 ml-4 font-bold uppercase tracking-wider mt-1">{errors.name}</p>}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#033053]/40 ml-4 block">Phone Number</label>
+                    <div className="relative group">
+                      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#0463ac] transition-colors">
+                        <Smartphone size={20} />
+                      </div>
+                      <div className="absolute left-14 top-1/2 -translate-y-1/2 text-[#033053]/20 font-black text-sm border-r border-gray-100 pr-3">IN</div>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, "").slice(0, 10) })}
+                        className="w-full pl-24 pr-4 py-4 bg-transparent border-b-2 border-gray-100 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
+                        placeholder="Mobile number"
+                      />
+                    </div>
+                    {errors.phone && <p className="text-[10px] text-red-500 ml-4 font-bold uppercase tracking-wider mt-1">{errors.phone}</p>}
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    disabled={loading}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-gradient-to-r from-[#0463ac] to-[#033053] text-white py-6 rounded-[24px] font-black uppercase tracking-[0.2em] text-[13px] shadow-2xl hover:shadow-[#0463ac]/30 transition-all flex items-center justify-center gap-3 group/btn cursor-pointer overflow-hidden relative"
+                  >
+                    {/* Infinite Shimmer Animation - Matches Brand Standard */}
+                    <motion.div
+                      animate={{
+                        x: ['-200%', '200%']
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear",
+                        repeatDelay: 1
+                      }}
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-20 pointer-events-none"
+                    />
+
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <span className="relative z-10">Secure Inspection Now</span>
+                        <ArrowRight size={18} className="relative z-10 group-hover/btn:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </motion.button>
+
+                  <div className="pt-6 text-center border-t border-gray-50">
+                    <p className="text-[#033053]/60 text-[10px] font-black uppercase tracking-[0.4em] mb-3">Personal Concierge Assigned</p>
+                    <div className="flex flex-col items-center">
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-3 px-5 py-2.5 border border-gray-100 rounded-2xl"
+                      >
+                        <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
+                          <User size={14} className="text-[#0463ac]" />
+                        </div>
+                        <span className="text-[#033053] font-black text-lg tracking-tight italic flex items-center gap-2">
+                          {managerName}
+                          <Sparkles size={14} className="text-amber-400" />
                         </span>
-                      ))}
+                      </motion.div>
+                      <div className="flex items-center gap-5 mt-2.5">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#033053]/70">
+                          <Clock size={12} className="text-[#0463ac]" /> 5 Min Response
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#033053]/70">
+                          <ShieldCheck size={12} className="text-[#0463ac]" /> Verified Pro
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
-
-            {/* Image (hidden on mobile) */}
-            <div className="hidden md:flex w-full md:w-1/2 justify-center items-center">
-              <div className="w-full sm:w-96 md:w-[450px] lg:w-[600px]">
-                <img
-                  src="/images/jeani.webp"
-                  alt="Jeani"
-                  className="-mt-12 -mb-12 w-full h-auto object-cover rounded-2xl"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Booking Form (appears below on mobile, unchanged on desktop) */}
-        <div className="bg-white p-4 sm:p-6 rounded-none md:rounded-2xl shadow-sm md:shadow-md border border-gray-200 md:border-gray-300">
-          {/* Step Indicator */}
-          <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
-            {[1, 2].map((s, i) => (
-              <React.Fragment key={s}>
-                <div
-                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold ${
-                    step === s ? "bg-[#0463ac] text-white" : "bg-gray-200 text-gray-600"
-                  }`}
-                >
-                  {s}
-                </div>
-                {i < 1 && (
-                  <div className={`h-1 w-6 ${step > s ? "bg-black" : "bg-gray-300"}`} />
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4 text-sm">
-            {step === 1 && (
-              <>
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Full Name *</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      errors.name ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter Your Name"
-                  />
-                  {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
-                </div>
-
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Phone Number *</label>
-                  <div className="flex">
-                    <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-100 text-gray-600">
-                      +91
-                    </span>
-                    <input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => {
-                        const digits = e.target.value.replace(/\D/g, "");
-                        if (digits.length <= 10) setFormData({ ...formData, phone: digits });
-                      }}
-                      maxLength={10}
-                      className={`flex-1 px-3 py-2 border rounded-r-lg ${
-                        errors.phone ? "border-red-500" : "border-gray-300"
-                      }`}
-                      placeholder="9876543210"
-                    />
-                  </div>
-                  {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="service" className="block mb-1 text-sm font-medium">
-                    Select Service *
-                  </label>
-                  <select
-                    id="service"
-                    value={formData.service}
-                    onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      errors.service ? "border-red-500" : "border-gray-300"
-                    }`}
-                  >
-                    <option value="">Choose a service</option>
-                    {services.map((s) => (
-                      <option key={s.id} value={s.name}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.service && <p className="text-xs text-red-500 mt-1">{errors.service}</p>}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => validateStepOne() && setStep(2)}
-                  className="w-full bg-[#0463ac] text-white py-3 rounded-lg text-sm font-medium"
-                >
-                  Continue to Schedule
-                </button>
-              </>
-            )}
-
-            {step === 2 && (
-              <>
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Address *</label>
-                  <textarea
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      errors.address ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter your full address with landmark"
-                    rows={3}
-                  />
-                  {errors.address && <p className="text-xs text-red-500 mt-1">{errors.address}</p>}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block mb-1 text-sm font-medium">Date *</label>
-                    <DatePicker
-                      selected={formData.date}
-                      onChange={(date) => setFormData({ ...formData, date })}
-                      minDate={new Date()}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="timeSlot" className="block mb-1 text-sm font-medium">
-                      Time Slot *
-                    </label>
-                    <select
-                      id="timeSlot"
-                      value={formData.time}
-                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      className={`w-full px-3 py-2 border rounded-lg ${
-                        errors.time ? "border-red-500" : "border-gray-300"
-                      }`}
-                    >
-                      <option value="">Select preferred time</option>
-                      {timeSlots.map((slot, idx) => (
-                        <option key={idx} value={slot}>
-                          {slot}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.time && <p className="text-xs text-red-500 mt-1">{errors.time}</p>}
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setStep(1)}
-                    className="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium"
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[#0463ac] text-white py-3 rounded-lg text-sm font-medium disabled:opacity-70"
-                  >
-                    {loading ? "Processing..." : "Confirm Inspection"}
-                  </button>
-                </div>
-              </>
-            )}
-          </form>
+          </motion.div>
         </div>
       </div>
 
-      {/* Success Modal */}
-      {submitted && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md mx-4">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-[#92B775]" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Booking Inspection Confirmed!
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              We've received your request and will contact you shortly to confirm the details.
-            </p>
-            <button
-              onClick={() => setSubmitted(false)}
-              className="w-full bg-[#92B775] text-black py-3 rounded-lg text-sm font-medium"
-            >
-              Close
-            </button>
+      {/* Stats Carousel with Heading */}
+      <div className="mt-6 pt-6 border-t border-gray-100">
+        <div className="text-center mb-4">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-[10px] font-black uppercase text-[#033053]/60 tracking-[0.4em] mb-1"
+          >
+            Our Impact
+          </motion.h2>
+          <h2 className="text-2xl md:text-3xl font-black uppercase text-[#033053] tracking-tighter">
+            WHY TRUST <span className="text-[#0463ac]">HOMMLIE</span>
+          </h2>
+        </div>
+
+        <div className="relative w-full">
+          <div
+            className="overflow-x-auto pb-10 scrollbar-hide snap-x flex flex-nowrap gap-6 px-4 scroll-smooth"
+            onScroll={(e) => {
+              const scrollLeft = e.target.scrollLeft;
+              const cardWidth = 180 + 24;
+              const newIndex = Math.round(scrollLeft / cardWidth);
+              setActiveStatIndex(newIndex);
+            }}
+          >
+            {stats.map((stat, idx) => (
+              <motion.div
+                key={stat.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="flex-shrink-0 w-[200px] snap-center bg-transparent p-6 flex flex-col items-center text-center group cursor-default"
+              >
+                <div className="w-16 h-16 mb-4 p-4 bg-blue-50/50 rounded-full group-hover:scale-110 transition-transform duration-500">
+                  <img src={stat.icon} alt={stat.title} className="w-full h-full object-contain" />
+                </div>
+                <h3 className={`text-2xl font-black ${stat.color} mb-1 tracking-tighter italic`}>{stat.count}</h3>
+                <p className="text-gray-700 text-[10px] font-bold uppercase tracking-widest">{stat.title}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Scroll Indicator for Mobile */}
+          <div className="flex justify-center gap-2 -mt-4 md:hidden">
+            {stats.map((_, i) => (
+              <div
+                key={i}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === activeStatIndex ? 'bg-[#0463ac] w-6' : 'bg-gray-200 w-1.5'
+                  }`}
+              />
+            ))}
           </div>
         </div>
-      )}
+      </div>
+
+      <AnimatePresence>
+        {submitted && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-[48px] p-10 md:p-14 shadow-2xl text-center w-full max-w-md relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400" />
+              <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <CheckCircle2 size={48} className="text-emerald-500" />
+              </div>
+              <h3 className="text-3xl font-black text-[#033053] mb-4 tracking-tighter">Request Received!</h3>
+              <p className="text-gray-500 mb-10 font-medium leading-relaxed">
+                Thank you for choosing luxury. <span className="font-bold text-[#033053]">{managerName}</span> will be your personal concierge and will connect with you within minutes.
+              </p>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="w-full bg-[#033053] text-white py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-[11px] hover:bg-[#0463ac] transition-all shadow-xl active:scale-[0.98]"
+              >
+                Continue Exploring
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

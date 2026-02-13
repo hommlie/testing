@@ -5,7 +5,7 @@ const BannerImageMobile = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="sm:hidden pt-6 mb-6" >
+    <div className="sm:hidden pt-2 mb-2" >
       <div className="relative w-full rounded-lg overflow-hidden">
         <img
           src="/images/banner-bg-mobile.jpeg"
@@ -15,12 +15,12 @@ const BannerImageMobile = () => {
         <div className="absolute bottom-4 left-4">
           <button
             onClick={() =>
-                navigate('/product/cockroach-control-services-in-bangalore')
+              navigate('/product/cockroach-control-services-in-bangalore')
             }
             className="px-4 py-2  bg-green-700 text-white text-sm font-semibold rounded-md shadow-md hover:from-emerald-700 hover:to-lime-700 transform hover:scale-105 transition-all duration-300 ease-in-out"
-            >
+          >
             Book Now
-            </button>
+          </button>
         </div>
       </div>
     </div>

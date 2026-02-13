@@ -1,9 +1,17 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
-Allow: /page/
-Allow: /services/
-Allow: /blogs/
-Allow: /subcategory/
-Allow: /category/
+Host: www.hommlie.com
 
-Sitemap: https://www.hommlie.com/sitemap.xml
+# Block access to unnecessary directories
+Disallow:
+
+# Explicitly allow important directories
+Allow:  /
+Allow:  /page/
+Allow:  /services/
+Allow:  /blogs/
+Allow:  /subcategory/
+Allow:  /category/
+
+# Sitemap files
+Sitemap: https://www.hommlie.com/sitemap.xml 

@@ -16,8 +16,7 @@ import {
 } from "react-icons/io";
 import LocationModal from "../../components/LocationModal";
 import { useCont } from "../../context/MyContext";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Star, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Users, Plus, Minus, HelpCircle } from "lucide-react";
 import DownloadAppImg from "/assets/bg/download-app.png";
 import Playstore from "/assets/icons/playstore.svg";
 import Appstore from "/assets/icons/appstore.svg";
@@ -49,7 +48,7 @@ import ReferAndEarn from "../../components/ReferAndEarnModal";
 import InspectionModal from "../../components/InspectionModal";
 import MobileNavigation from "../../components/MobileNavigation";
 import LoginSignup from "../../components/LoginModal";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Typewriter } from 'react-simple-typewriter';
 import SchemaMarkup from "../../components/SchemaMarkup";
 // import FormSection from "../FormSection/index"
@@ -70,6 +69,7 @@ import Refermobile from '../Refermobile'
 import Roadmap from "../../components/Roadmap";
 import CityServiceLinks from "../CityServiceLinks";
 import HomeForm from "../HomeForm";
+import PestControlCarousel from "../../components/PestControlCarousel";
 
 
 const HomePage = () => {
@@ -77,7 +77,7 @@ const HomePage = () => {
   const { location } = useParams();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const { cartLength, prodData, currentLocation, setCurrentLocation, pincode } = useCont();
+  const { cartLength, prodData, currentLocation, setCurrentLocation, pincode, setGlobalPincode } = useCont();
   const [searchResults, setSearchResults] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -216,16 +216,27 @@ const HomePage = () => {
     if (!address || address === "Get Current Location") return true;
 
     const addrLower = address.toLowerCase();
-    const isBangalore = addrLower.includes("bangalore") || addrLower.includes("bengaluru") || /\b560\d{3}\b/.test(address);
+
+    // Explicit positive matches for Bangalore/Bengaluru or its pincodes
+    const isBangalore = addrLower.includes("bangalore") ||
+      addrLower.includes("bengaluru") ||
+      /\b560\d{3}\b/.test(address);
 
     if (isBangalore) return true;
 
-    // Detect non-Bangalore pincodes (starting with anything other than 560)
-    const hasOtherPincode = /\b(?![560])\d{6}\b/.test(address);
-    if (hasOtherPincode) return false;
+    // If the address is short (like a street name) and doesn't mention another city, 
+    // it's likely a local search in Bangalore. We should only return false if it's 
+    // CLEARLY somewhere else.
+    const otherCities = ["delhi", "mumbai", "chennai", "hyderabad", "pune", "kolkata", "mysore", "goa"];
+    const isExplicitlyOtherCity = otherCities.some(city => addrLower.includes(city));
 
-    // If it's explicitly another city or state like Goa, return false
-    return false;
+    // Detect non-Bangalore pincodes (starting with anything other than 560)
+    const hasOtherPincode = /\b(?!560)\d{6}\b/.test(address);
+
+    if (isExplicitlyOtherCity || hasOtherPincode) return false;
+
+    // Default to true for local/ambiguous street addresses to avoid annoying false alerts
+    return true;
   };
 
   const getCurrentLocation = () => {
@@ -247,6 +258,13 @@ const HomePage = () => {
 
           if (data.results && data.results[0]) {
             const fullAddress = data.results[0]?.formatted_address;
+
+            // Extract pincode from fullAddress if possible
+            const pincodeMatch = fullAddress.match(/\b\d{6}\b/);
+            if (pincodeMatch && typeof setGlobalPincode === 'function') {
+              setGlobalPincode(pincodeMatch[0]);
+            }
+
             const locationStings = fullAddress.split(",");
             let newLocation = "";
             if (locationStings.length > 2) {
@@ -369,10 +387,8 @@ const HomePage = () => {
     "Standard Cockroach Control",
     "Bedbugs",
     "Termite Control",
-    "Car disinfection",
     "Rodent Management Service",
     "Home Disinfection",
-    "6D Prime -Cockroach Control And Ant Control",
   ];
 
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -400,7 +416,7 @@ const HomePage = () => {
           {/* Left Container - Services */}
           <div className="w-full md:w-1/2">
             {/* Search Bar - Mobile only */}
-            <div className="sm:block md:hidden mb-2">
+            <div className="sm:block md:hidden mb-3">
               <AnimatePresence>
                 {!isInBangalore && currentLocation !== "Get Current Location" && (
                   <motion.div
@@ -415,7 +431,12 @@ const HomePage = () => {
                         <span className="text-xl animate-bounce">📍</span>
                         <div>
                           <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
-                          <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">We're coming soon to {currentLocation.split(',')[0]}!</p>
+                          <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">
+                            We're coming soon to {
+                              currentLocation.split(',').find(part => !/^\d+$/.test(part.trim()))?.trim() ||
+                              currentLocation.split(',')[0]
+                            }!
+                          </p>
                         </div>
                       </div>
                       {/* Subtitle pulse */}
@@ -664,12 +685,17 @@ const HomePage = () => {
       </section> 
       */}
 
-      <section className="px-10 py-5">
+      <section className="px-10 py-1">
         <SnabbitTasksUI />
       </section>
 
-      <section className="hidden md:block px-2 sm:px-12">
+      <section className="hidden md:block px-2 sm:px-12 py-1">
         <BannerImage />
+      </section>
+
+      {/* Pest Control Carousel */}
+      <section className="px-0 py-0 sm:px-11">
+        <PestControlCarousel />
       </section>
 
       <section className="block md:hidden px-2 sm:px-11">
@@ -683,12 +709,9 @@ const HomePage = () => {
       </section>
       <section
         id="inspection-section"
-        className="px-4 sm:px-10 py-0s sm:py-10"
-      // style={{
-      //   background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      // }}
+        className="px-4 sm:px-10 py-5 sm:py-8"
       >
-        <div className="max-w-7xl mx-auto mt-7 sm:mt-0">
+        <div className="max-w-7xl mx-auto mt-2 sm:mt-0">
           <InspectionFormSection />
         </div>
       </section>
@@ -855,66 +878,11 @@ const HomePage = () => {
       {/* <QuickHero /> */}
 
 
-      {/* Stats Section */}
-      <section className="px-10 py-5 md:py-10" style={{
-        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}>
-        <StatsSection />
-      </section>
-      {/* <section className="px-2 sm:px-12">
-          <BannerImageMobile />
-          <BannerImage />
-        </section> */}
-      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
-      {/* <section className=" px-10 py-5 md:py-10">
-          <SnabbitTasksUI />
-        </section> */}
 
-      {/* <section className="px-10 py-20">
-          <HowItWorks />
-        </section> */}
-
-      {/* <section className="px-10">
-          <WhyChooseHommlie />
-        </section> */}
-
-      {/* <section className="px-11 sm:px-12">
-          <Testimonials />
-        </section> */}
-
-      {/* <div className="block md:hidden h-2 bg-gray-200"></div> */}
-
-      {/* <section className="px-2 sm:px-12">
-          <Scrapbanner />
-          <Scrapmobile />
-        </section> */}
-
-      {/* inspection form section */}
-      {/* <section id="inspection-section" className="px-4 py-5 md:py-10">
-        <InspectionFormSection />
-      </section> */}
-
-      {/* <section className="px-2 sm:px-12">
-          <Offermobile />
-          <Refermobile />
-        </section> */}
-      <section className="block md:hidden px-5 py-5">
-        <PopularCategorySection data={data?.all_categories} />
-      </section>
-
-      <section className="px-10 py-5 md:py-10 -mt-6 sm:-mt-0" style={{
-        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}>
+      <section className="bg-white py-12 md:py-20 -mt-6 sm:-mt-0 border-t border-gray-50">
         <FaqSection data={data} />
       </section>
 
-      {/* <section className="px-10 py-5 md:py-10" style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}>
-        <CityServiceLinks />
-      </section> */}
-
-      <MobileNavigation />
 
       {/* Location Modal */}
       {isLocationModalOpen && (
@@ -932,10 +900,10 @@ const HomePage = () => {
         isOpen={isReferModalOpen}
         onClose={() => setIsReferModalOpen(false)}
       />
+
       <LoginSignup
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-      // checkoutPd={checkoutPd}
       />
     </div>
   );
@@ -952,49 +920,82 @@ const FaqSection = ({ data }) => {
     ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
     : data?.faqs;
 
-  // Ensure displayedFaqs is always an array
   displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
 
   return (
-    <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
-      <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
-        Frequently Asked Questions
-      </h2>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="text-center mb-12">
+
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-3xl sm:text-5xl font-black text-[#033053] tracking-tighter"
+        >
+          Frequently Asked <span className="text-[#0463ac]">Questions</span>
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-gray-500 mt-4 text-sm sm:text-base max-w-lg mx-auto font-medium"
+        >
+          Find answers to common questions about our services and booking process.
+        </motion.p>
+      </div>
+
       <div className="space-y-4">
         {displayedFaqs?.map((faq, index) => {
-          const faqKey = faq.id || `faq-${index}`;
+          const isOpen = openFaqIndex === index;
           return (
             <motion.div
-              key={faqKey}
-              className="border rounded-lg overflow-hidden"
-              initial={false}
+              layout
+              key={index}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+              className={`group overflow-hidden rounded-[24px] transition-all duration-500 border ${isOpen
+                ? "bg-white border-blue-100 shadow-[0_20px_40px_rgba(3,48,83,0.06)] scale-[1.01]"
+                : "bg-white/60 border-gray-100 hover:border-blue-100 hover:bg-white hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)]"
+                }`}
             >
               <button
-                className="w-full flex justify-between items-center p-4 text-left bg-white"
-                onClick={() =>
-                  setOpenFaqIndex(openFaqIndex === index ? null : index)
-                }
+                className="w-full flex justify-between items-center p-6 sm:p-7 text-left transition-colors relative"
+                onClick={() => setOpenFaqIndex(isOpen ? null : index)}
               >
-                <span className="font-medium text-sm sm:text-base">
+                {/* Left accent bar for active state */}
+                <motion.div
+                  initial={false}
+                  animate={{ height: isOpen ? '100%' : '0%' }}
+                  className="absolute left-0 top-0 w-1.5 bg-[#0463ac]"
+                />
+
+                <span className={`font-bold text-base sm:text-lg transition-colors pr-8 ${isOpen ? "text-[#033053]" : "text-[#4A5568] group-hover:text-[#033053]"
+                  }`}>
                   {faq.question}
                 </span>
-                <span className="text-xl font-bold">
-                  {openFaqIndex === index ? "−" : "+"}
-                </span>
+
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? "bg-[#033053] text-white rotate-180" : "bg-blue-50 text-[#0463ac]"
+                  }`}>
+                  {isOpen ? <Minus size={18} strokeWidth={3} /> : <Plus size={18} strokeWidth={3} />}
+                </div>
               </button>
-              <AnimatePresence initial={false}>
-                {openFaqIndex === index && (
+
+              <AnimatePresence>
+                {isOpen && (
                   <motion.div
-                    key={`faq-content-${faqKey}`}
-                    initial={{ height: 0 }}
-                    animate={{ height: "auto" }}
-                    exit={{ height: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                   >
-                    <p className="p-4 bg-gray-50 text-sm sm:text-base">
-                      {faq.answer}
-                    </p>
+                    <div className="px-7 pb-7 -mt-1">
+                      <div className="h-[1px] w-full bg-blue-50 mb-6" />
+                      <p className="text-[#64748b] text-sm sm:text-base leading-relaxed font-medium">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

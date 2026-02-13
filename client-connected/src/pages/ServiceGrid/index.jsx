@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import ComingSoonModal from "../ComingSoonPage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useCont } from "../../context/MyContext";
 import config from "../../config/config";
 import axios from "axios";
 import Requestacallback from "../Requestacallback";
+import { ChevronRight, Zap } from "lucide-react";
 
 const ServiceGrid = ({ categories: propCategories }) => {
   const [showModal, setShowModal] = useState(null);           // category drilldown modal (e.g., Pest Control)
@@ -35,6 +36,14 @@ const ServiceGrid = ({ categories: propCategories }) => {
   // Use categories from props/context for the GRID display
   const categoriesList = (categoryData?.data && categoryData.data.length > 0) ? categoryData.data : (propCategories || []);
 
+  const locationSearch = useLocation();
+
+  // Close modal on route change
+  useEffect(() => {
+    setShowModal(null);
+    setShowComingSoon(false);
+  }, [locationSearch.pathname]);
+
   // Lock body scroll when any modal is open on mobile
   useEffect(() => {
     const isMobile = window.innerWidth < 640;
@@ -60,6 +69,11 @@ const ServiceGrid = ({ categories: propCategories }) => {
 
     if (serviceName === "Waste Management") {
       window.open("https://www.ecospherewm.com/", "_blank");
+      return;
+    }
+
+    if (serviceName.toLowerCase() === "commercial pest control") {
+      window.open("https://b2b.hommlie.com/", "_blank");
       return;
     }
 
@@ -125,17 +139,23 @@ const ServiceGrid = ({ categories: propCategories }) => {
 
   const staticServices = [
     {
+      id: "commercial-static",
+      category_name: "Commercial Pest Control",
+      image_url: "/images/wastemanagement1nn.png",
+      isLocal: true
+    },
+    {
       id: "waste-mgmt-static",
       category_name: "Waste Management",
       image_url: "/images/wastemanagement1nn.png",
       isLocal: true
     },
     {
-      id: "product-static",
-      category_name: "Product",
+      id: "store-static",
+      category_name: "Hommlie Store",
       image_url: "/images/wastemanagement1nn.png",
       isLocal: true
-    }
+    },
   ];
 
   // Create a single list of services to display
@@ -189,15 +209,28 @@ const ServiceGrid = ({ categories: propCategories }) => {
           }
         }
 
+        const isPage = sub.is_page ?? (sub.category?.is_page) ?? (sourceCategory?.is_page) ?? 1;
+        const routePrefix = isPage === 1 ? "/subcategory" : "/products";
+
         return {
           name: sub.subcategory_name || sub.name,
           image: finalImage || "/assets/images/placeholder.png",
-          url: sub.url || `${config.VITE_BASE_URL}/subcategory/${sub.slug}`
+          slug: sub.slug,
+          is_page: isPage,
+          // Prioritize dynamic slug path over any weird API url
+          url: sub.slug ? `${config.VITE_BASE_URL}${routePrefix}/${sub.slug}` : sub.url
         };
       });
     } else {
       items = serviceData[categoryName] || [];
     }
+
+    // Alphabetical Sorting A to Z
+    items.sort((a, b) => {
+      const nameA = (a.name || "").toLowerCase();
+      const nameB = (b.name || "").toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
 
     if (items.length === 0) return null;
 
@@ -224,43 +257,70 @@ const ServiceGrid = ({ categories: propCategories }) => {
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
         >
-          <div className="flex justify-between items-center mb-4 sm:mb-6">
-            <h2 id="service-modal-title" className="text-lg font-bold">
-              {categoryName} Services
-            </h2>
-            <button onClick={() => setShowModal(null)} className="text-gray-500 hover:text-black" aria-label="Close">
-              <FaTimes />
+          <div className="flex justify-between items-center mb-6 px-2">
+            <div>
+              <h2 id="service-modal-title" className="text-xl font-black text-[#033053] tracking-tight">
+                {categoryName}
+              </h2>
+              <div className="h-1 w-8 bg-[#0463ac] rounded-full mt-1" />
+            </div>
+            <button
+              onClick={() => setShowModal(null)}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:text-[#0463ac] hover:bg-blue-50 transition-all shadow-sm"
+              aria-label="Close"
+            >
+              <FaTimes size={18} />
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-6">
             {items.map((sub, index) => (
-              <a key={index} href={sub.url || "#"} className="flex flex-col items-center text-center p-2">
-                <div className="flex flex-col items-center group transition-all relative cursor-pointer">
-                  <div
-                    className="border bg-[#f8f1dd] w-24 h-24 sm:w-28 sm:h-28 rounded-xl shadow-xl flex items-center justify-center
-                               group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300"
-                  >
-                    <img
-                      src={sub.image}
-                      alt={sub.name}
-                      className="w-20 h-20 sm:w-24 sm:h-24 object-contain transition-transform duration-300 group-hover:scale-110"
-                    />
-                  </div>
-                  <h3 className="text-xs mb-1 sm:text-sm font-medium mt-2 text-center">{sub.name}</h3>
-                  <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                onClick={() => {
+                  setShowModal(null);
+                  if (sub.url) {
+                    if (sub.url.startsWith('http')) {
+                      window.open(sub.url, "_blank");
+                    } else {
+                      const target = sub.url.startsWith('/') ? sub.url : `/${sub.url}`;
+                      navigate(target);
+                    }
+                  }
+                }}
+                whileHover={{ y: -5 }}
+                className="flex flex-col items-center group cursor-pointer"
+              >
+                <div className="relative mb-1 w-full aspect-square flex items-center justify-center p-0 transition-all duration-500">
+                  <img
+                    src={sub.image}
+                    alt={sub.name}
+                    className="w-24 h-24 sm:w-32 sm:h-32 object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-md"
+                  />
                 </div>
+
+                <div className="flex flex-col items-center text-center px-0.5">
+                  <h3 className="text-[11px] sm:text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors leading-tight uppercase tracking-tight">
+                    {sub.name}
+                  </h3>
+                  <div className="h-0.5 w-0 group-hover:w-6 bg-[#0463ac]/40 rounded-full mt-1.5 transition-all duration-500" />
+                </div>
+
                 {sub.price && (
-                  <p className="text-xs text-[#52852d] font-bold">
+                  <p className="text-[11px] text-[#0463ac] font-bold mt-1">
                     {typeof sub.price === "number" || !isNaN(Number(sub.price))
-                      ? `₹${Number(sub.price).toFixed(2)}`
+                      ? `₹${Number(sub.price).toFixed(0)}`
                       : sub.price}
                   </p>
                 )}
+
                 {sub.note && (
-                  <p className="text-[10px] text-gray-500 leading-tight text-center">{sub.note}</p>
+                  <p className="text-[9px] text-gray-400 leading-tight text-center mt-1 scale-90 opacity-80">{sub.note}</p>
                 )}
-              </a>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -269,43 +329,125 @@ const ServiceGrid = ({ categories: propCategories }) => {
   };
 
   return (
-    <div className="px-0 sm:px-4 py-0 sm:py-2 bg-cover bg-center bg-no-repeat">
-      <h1 className="text-lg sm:text-2xl font-medium text-black mb-2 sm:mb-6 sm:ml-2">
-        Home services at your doorstep
-      </h1>
+    <div className="px-2 sm:px-4 py-0 sm:py-4 mt-0 sm:mt-0 bg-cover bg-center bg-no-repeat">
+      <motion.h1
+        className="text-lg sm:text-2xl mb-3 sm:mb-0 font-medium text-black sm:mb-6 sm:ml-2 flex items-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 1 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1,
+              delayChildren: 0.2,
+            },
+          },
+        }}
+      >
+        {"Home services at your doorstep - ".split("").map((char, index) => (
+          <motion.span
+            key={index}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
+            }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+        <motion.span
+          className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#035240] via-[#25D366] to-[#035240] bg-[length:200%_auto] inline-block"
+          variants={{
+            hidden: { clipPath: "inset(0 100% 0 0)", backgroundPosition: "0% 50%" },
+            visible: {
+              clipPath: "inset(0 0 0 0)",
+              backgroundPosition: ["0% 50%", "200% 50%"],
+              transition: {
+                clipPath: { duration: 0.8, ease: "linear" },
+                backgroundPosition: { duration: 2, repeat: Infinity, ease: "linear", repeatType: "loop" },
+              },
+            },
+          }}
+        >
+          Hommlie
+        </motion.span>
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+          className="inline-block w-[2px] h-[20px] sm:h-[28px] bg-[#035240] ml-1 align-middle"
+        />
+      </motion.h1>
 
-      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md sm:mx-0 sm:w-full mb-2">
-        {/* Unified Grid: 6 Cards in 3 columns */}
-        <div className="grid grid-cols-3 gap-4 sm:gap-6 mb-0">
-          {finalServices.map((service) => (
-            <div
-              key={service.id || service.name}
-              onClick={() => handleServiceClick(service)}
-              className="flex flex-col items-center group transition-all cursor-pointer relative"
-            >
-              <div
-                className="w-full h-[80px] sm:h-[96px] bg-[#f8f1dd] rounded-xl shadow-xl flex items-center justify-center border 
-                           group-hover:shadow-lg group-hover:border-[#035240] group-hover:scale-105 transition-all duration-300"
+      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md sm:mx-0 sm:w-full mb-0">
+        {/* Premium Super-Compact Grid */}
+        <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-0">
+          {finalServices.map((service, index) => {
+            const name = service.category_name || service.name;
+
+            return (
+              <motion.div
+                key={service.id || service.name}
+                onClick={() => handleServiceClick(service)}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                whileHover={{ y: -3 }}
+                className="relative flex flex-col items-center py-4 px-2 sm:p-5 cursor-pointer group transition-all duration-300"
               >
-                <img
-                  src={(() => {
-                    const rawImage = service.icon_url || service.image_url || service.image || service.app_icon || service.category_icon;
-                    if (rawImage && !rawImage.startsWith('http') && !rawImage.startsWith('data:')) {
-                      const baseUrl = config.API_URL.replace(/\/hommlieserver\/?$/, '');
-                      return `${baseUrl}${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
-                    }
-                    return rawImage;
-                  })()}
-                  alt={service.category_name || service.name}
-                  className="w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-contain transition-transform duration-300 group-hover:scale-110"
-                />
-              </div>
-              <span className="mt-3 mb-2 text-[13px] sm:text-l font-medium text-gray-800 text-center leading-tight whitespace-normal">
-                {service.category_name || service.name}
-              </span>
-              <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-[#035240] scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </div>
-          ))}
+                {/* Minimalist Hover Background */}
+                <div className="absolute inset-0 bg-gray-50/40 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                <div className="relative mb-3 z-10">
+                  <motion.div
+                    animate={{
+                      y: [0, -2, 0],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: index * 0.1
+                    }}
+                    className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50/50 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:shadow-lg group-hover:shadow-[#0463ac]/5 border border-transparent group-hover:border-gray-100"
+                  >
+                    <img
+                      src={(() => {
+                        const rawImage = service.icon_url || service.image_url || service.image || service.app_icon || service.category_icon;
+                        if (rawImage && !rawImage.startsWith('http') && !rawImage.startsWith('data:')) {
+                          const baseUrl = config.API_URL.replace(/\/hommlieserver\/?$/, '');
+                          return `${baseUrl}${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
+                        }
+                        return rawImage;
+                      })()}
+                      alt={name}
+                      className="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </motion.div>
+                </div>
+
+                <div className="flex flex-col items-center text-center z-10 w-full px-1">
+                  <span className="text-[12px] sm:text-[15px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors leading-[1.2] uppercase tracking-normal">
+                    {name}
+                  </span>
+
+                  {name.toLowerCase().includes("home pest control") && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-1 mt-1 bg-blue-50/80 backdrop-blur-sm px-2 py-0.5 rounded-full border border-blue-100"
+                    >
+                      <Zap size={10} className="text-[#0463ac] fill-[#0463ac]" />
+                      <span className="text-[9px] font-black text-[#0463ac] uppercase tracking-tighter">Insta Service</span>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
 
@@ -332,7 +474,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
         onClose={() => setIsCallbackOpen(false)}
         source="homepage_grid"
       />
-    </div>
+    </div >
   );
 };
 

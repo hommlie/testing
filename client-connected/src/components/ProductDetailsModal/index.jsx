@@ -764,6 +764,7 @@ const ProductDetailModal = ({
                           <div className="service-details-html">
                             <div
                               className="service-details-content"
+                              translate="no"
                               dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
                             />
                           </div>

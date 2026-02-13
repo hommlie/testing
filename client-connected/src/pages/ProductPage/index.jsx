@@ -30,6 +30,7 @@ import LocationSuggestion from "../../components/LocationSuggestion";
 import { BiSolidOffer } from "react-icons/bi";
 import Rating from "../../components/Rating";
 import ShareButton from "../ShareButtonservcies";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function ProductPage() {
   const {
@@ -108,10 +109,6 @@ export default function ProductPage() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    const proceedBtn = document.getElementById("proceed-btn")?.onClick;
-    if (typeof proceedBtn == undefined) {
-      navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-    }
   };
   const openCouponModal = () => setIsCouponModalOpen(true);
   const closeCouponModal = () => {
@@ -371,27 +368,27 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (prodData && prodData.variations) {
-  const attrs = [...new Set(prodData.variations.map(v => v.attribute_name))];
-  setAttributes(attrs);
-  setVariations(prodData.variations);
+      const attrs = [...new Set(prodData.variations.map(v => v.attribute_name))];
+      setAttributes(attrs);
+      setVariations(prodData.variations);
 
-  if (attrs.length > 0) {
-const defaultAttr = attrs.includes("One Time Service") ? "One Time Service" : attrs[0];
-setSelectedAttribute(defaultAttr);
+      if (attrs.length > 0) {
+        const defaultAttr = attrs.includes("One Time Service") ? "One Time Service" : attrs[0];
+        setSelectedAttribute(defaultAttr);
 
-const related = prodData.variations.filter(v => v.attribute_name === defaultAttr);
+        const related = prodData.variations.filter(v => v.attribute_name === defaultAttr);
 
-    const sorted = [...related].sort((a, b) => {
-      const num = v => {
-        const m = String(v?.data?.variation).match(/\d+/);
-        return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
-      };
-      return num(a) - num(b);
-    });
+        const sorted = [...related].sort((a, b) => {
+          const num = v => {
+            const m = String(v?.data?.variation).match(/\d+/);
+            return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
+          };
+          return num(a) - num(b);
+        });
 
-    if (sorted.length) setSelectedVariation(sorted[0].data); // -> 1 BHK
-  }
-}
+        if (sorted.length) setSelectedVariation(sorted[0].data); // -> 1 BHK
+      }
+    }
 
   }, [prodData]);
 
@@ -429,23 +426,23 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
   }, [selectedVariation, prodData]);
 
   const handleAttributeSelect = (attr) => {
-  setSelectedAttribute(attr);
+    setSelectedAttribute(attr);
 
-  const related = variations.filter(v => v.attribute_name === attr);
-  if (related.length) {
-    const sorted = [...related].sort((a, b) => {
-      const num = v => {
-        const m = String(v?.data?.variation).match(/\d+/);
-        return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
-      };
-      return num(a) - num(b);
-    });
+    const related = variations.filter(v => v.attribute_name === attr);
+    if (related.length) {
+      const sorted = [...related].sort((a, b) => {
+        const num = v => {
+          const m = String(v?.data?.variation).match(/\d+/);
+          return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
+        };
+        return num(a) - num(b);
+      });
 
-    setSelectedVariation(sorted[0].data); // -> resets to 1 BHK
-  } else {
-    setSelectedVariation(null);
-  }
-};
+      setSelectedVariation(sorted[0].data); // -> resets to 1 BHK
+    } else {
+      setSelectedVariation(null);
+    }
+  };
 
 
   const handleVariationSelect = (variation) => {
@@ -687,7 +684,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
 
   return (
     <main className="bg-white container mx-auto px-4 sm:px-5 lg:px-14 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth"
-   >
+    >
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <Loading />
@@ -703,6 +700,20 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
             />
             <link rel="canonical" href={generateCanonicalUrl()} />
           </Helmet>
+
+          <Breadcrumb
+            items={[
+              {
+                label: prodData?.category?.category_name,
+                link: `${config.VITE_BASE_URL}/category/${prodData?.category?.slug}`
+              },
+              {
+                label: prodData?.subcategory?.subcategory_name,
+                link: `${config.VITE_BASE_URL}/subcategory/${prodData?.subcategory?.slug}`
+              },
+              { label: prodData?.product_name }
+            ]}
+          />
           <section className="flex flex-col-reverse lg:flex-row lg:space-x-10">
             <div className="flex-1 space-y-6 lg:w-7/12 lg:sticky lg:top-20 lg:self-start">
               <LoginSignup
@@ -757,9 +768,8 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       <button
                         key={i}
                         onClick={() => setCurrentMediaIndex(i)}
-                        className={`flex-shrink-0 w-14 h-14 md:w-20 md:h-20 rounded-sm overflow-hidden border ${
-                          currentMediaIndex === i ? "border-[#249370]" : "border-gray-200"
-                        }`}
+                        className={`flex-shrink-0 w-14 h-14 md:w-20 md:h-20 rounded-sm overflow-hidden border ${currentMediaIndex === i ? "border-[#249370]" : "border-gray-200"
+                          }`}
                       >
                         <img
                           src={it.image_url}
@@ -795,8 +805,8 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                         <div className="flex items-center gap-2 whitespace-nowrap shrink-0">
                           <span className="text-xl font-bold">
                             ₹{selectedVariation
-                                ? selectedVariation.discounted_variation_price
-                                : prodData?.discounted_price}
+                              ? selectedVariation.discounted_variation_price
+                              : prodData?.discounted_price}
                           </span>
                           <span className="line-through text-base font-light text-[#545454]">
                             ₹{selectedVariation ? selectedVariation.price : prodData?.product_price}
@@ -814,7 +824,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                     </div>
 
                     <h3 className="text-xl font-semibold">Select Frequency</h3>
-                    
+
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 gap-2">
                         {[...attributes]
@@ -832,17 +842,16 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                                 (selectedAttribute || attributes[0]) === attr
                                   ? "bg-[#0463ac] text-white"
                                   : "border-gray-300"
-                              }`}
+                                }`}
                               onClick={() => handleAttributeSelect(attr)}
                             >
                               <div className="flex items-center justify-between">
                                 <span>{attr}</span>
                                 <IoCheckmarkCircleSharp
-                                  className={`text-xl ${
-                                    (selectedAttribute || attributes[0]) === attr
-                                      ? "text-white"
-                                      : "text-gray-300"
-                                  }`}
+                                  className={`text-xl ${(selectedAttribute || attributes[0]) === attr
+                                    ? "text-white"
+                                    : "text-gray-300"
+                                    }`}
                                 />
                               </div>
                             </button>
@@ -875,22 +884,21 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                                       )?.data.id) === variation.data.id
                                       ? "bg-[#0463ac] text-white"
                                       : "border-gray-300"
-                                  }`}
+                                    }`}
                                   onClick={() => handleVariationSelect(variation)}
                                 >
                                   <div className="flex items-center justify-between">
                                     <span className="font-medium">{variation.data.variation}</span>
                                     <IoCheckmarkCircleSharp
-                                      className={`text-xl ${
-                                        (selectedVariation?.id ||
-                                          variations.find(
-                                            (v) =>
-                                              v.attribute_name ===
-                                              (selectedAttribute || attributes[0])
-                                          )?.data.id) === variation.data.id
-                                          ? "text-white"
-                                          : "text-gray-300"
-                                      }`}
+                                      className={`text-xl ${(selectedVariation?.id ||
+                                        variations.find(
+                                          (v) =>
+                                            v.attribute_name ===
+                                            (selectedAttribute || attributes[0])
+                                        )?.data.id) === variation.data.id
+                                        ? "text-white"
+                                        : "text-gray-300"
+                                        }`}
                                     />
                                   </div>
                                 </button>
@@ -900,51 +908,51 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       )}
                     </div>
                     {selectedVariation && (
-                    <div className="mt-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
-                      {/* Header */}
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                        <h4 className="text-[17px] sm:text-lg font-semibold text-gray-800 leading-tight">
-                          {selectedAttribute}{" "}
-                          <span className="text-gray-600 font-normal">
-                            ({selectedVariation.variation})
-                          </span>
-                        </h4>
-                        <div className="flex items-baseline gap-2 mt-1 sm:mt-0">
-                          <span className="text-[20px] sm:text-xl font-bold text-[#10847E]">
-                            ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
-                          </span>
-                          <span className="text-sm sm:text-base line-through text-gray-500">
-                            ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
-                          </span>
+                      <div className="mt-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                        {/* Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                          <h4 className="text-[17px] sm:text-lg font-semibold text-gray-800 leading-tight">
+                            {selectedAttribute}{" "}
+                            <span className="text-gray-600 font-normal">
+                              ({selectedVariation.variation})
+                            </span>
+                          </h4>
+                          <div className="flex items-baseline gap-2 mt-1 sm:mt-0">
+                            <span className="text-[20px] sm:text-xl font-bold text-[#10847E]">
+                              ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
+                            </span>
+                            <span className="text-sm sm:text-base line-through text-gray-500">
+                              ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
+                            </span>
+                          </div>
                         </div>
+
+                        {/* Description */}
+                        {selectedVariation.description && (
+                          <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed border-t border-dashed border-gray-300 pt-3">
+                            {selectedVariation.description}
+                          </p>
+                        )}
+
+                        {/* Service Info */}
+                        {(selectedVariation.variation_times || selectedVariation.variation_interval) && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 text-sm text-gray-700">
+                            {selectedVariation.variation_times && (
+                              <p>
+                                <span className="font-medium text-gray-800">No. of Services:</span>{" "}
+                                {selectedVariation.variation_times} Times
+                              </p>
+                            )}
+                            {selectedVariation.variation_interval && (
+                              <p>
+                                <span className="font-medium text-gray-800">Scheduled every:</span>{" "}
+                                {selectedVariation.variation_interval} Days
+                              </p>
+                            )}
+                          </div>
+                        )}
                       </div>
-
-                      {/* Description */}
-                      {selectedVariation.description && (
-                        <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed border-t border-dashed border-gray-300 pt-3">
-                          {selectedVariation.description}
-                        </p>
-                      )}
-
-                      {/* Service Info */}
-                      {(selectedVariation.variation_times || selectedVariation.variation_interval) && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 text-sm text-gray-700">
-                          {selectedVariation.variation_times && (
-                            <p>
-                              <span className="font-medium text-gray-800">No. of Services:</span>{" "}
-                              {selectedVariation.variation_times} Times
-                            </p>
-                          )}
-                          {selectedVariation.variation_interval && (
-                            <p>
-                              <span className="font-medium text-gray-800">Scheduled every:</span>{" "}
-                              {selectedVariation.variation_interval} Days
-                            </p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    )}
 
                   </div>
                 )}
@@ -1225,7 +1233,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                             value={formData.width}
                             onChange={handleFormChange}
                             className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
-                            // required
+                          // required
                           >
                             <option value="" hidden>
                               Select Width
@@ -1256,7 +1264,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                             min="1"
                             // max="3000"
                             className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                            // required
+                          // required
                           />
                         </div>
 
@@ -1272,7 +1280,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                             id="sqft"
                             value={formData.sqft ? `${formData.sqft} sqft` : ""}
                             className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                            // readOnly
+                          // readOnly
                           />
                         </div>
                       </div>
@@ -1299,45 +1307,45 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               */}
             </div>
 
-                <div className="hidden md:block lg:w-5/12 h-fit space-y-4 mt-[40px] lg:min-w-[420px]">
-                  <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200 shadow-sm px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
-                    <div className="space-y-1 sm:space-y-3 lg:space-y-4">
-                      <p className="text-2xl sm:text-xl font-bold mb-2">
-                        {prodData?.product_name}
-                      </p>
-                      <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? "1.4k"} />
-                      <p className="flex items-center">
-                        <span className="text-xl md:text-3xl font-bold">
-                          ₹
-                          {selectedVariation
-                            ? selectedVariation.discounted_variation_price
-                            : prodData?.discounted_price}
-                        </span>
-                        <span
-                          className="line-through text-lg md:text-2xl sm:text-3xl font-light ml-4"
-                          style={{ color: "#545454" }}
-                        >
-                          ₹
-                          {selectedVariation
-                            ? selectedVariation.price
-                            : prodData?.product_price}
-                        </span>
-                        {prodData?.est_shipping_days != 0 ? (
-                          <span
-                            className="flex flex-row items-center gap-2 text-base sm:text-2xl font-normal ml-8"
-                            style={{ color: "#545454" }}
-                          >
-                            <CiClock1 />
-                            {prodData?.est_shipping_days}
-                          </span>
-                        ) : null}
-                      </p>
-                    </div>
-                  </div>
+            <div className="hidden md:block lg:w-5/12 h-fit space-y-4 mt-[40px] lg:min-w-[420px]">
+              <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200 shadow-sm px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
+                <div className="space-y-1 sm:space-y-3 lg:space-y-4">
+                  <p className="text-2xl sm:text-xl font-bold mb-2">
+                    {prodData?.product_name}
+                  </p>
+                  <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? "1.4k"} />
+                  <p className="flex items-center">
+                    <span className="text-xl md:text-3xl font-bold">
+                      ₹
+                      {selectedVariation
+                        ? selectedVariation.discounted_variation_price
+                        : prodData?.discounted_price}
+                    </span>
+                    <span
+                      className="line-through text-lg md:text-2xl sm:text-3xl font-light ml-4"
+                      style={{ color: "#545454" }}
+                    >
+                      ₹
+                      {selectedVariation
+                        ? selectedVariation.price
+                        : prodData?.product_price}
+                    </span>
+                    {prodData?.est_shipping_days != 0 ? (
+                      <span
+                        className="flex flex-row items-center gap-2 text-base sm:text-2xl font-normal ml-8"
+                        style={{ color: "#545454" }}
+                      >
+                        <CiClock1 />
+                        {prodData?.est_shipping_days}
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
+              </div>
               {variations.length > 0 && (
                 <div className="bg-white rounded-lg p-4 space-y-4 border border-gray-200 shadow-sm">
                   <h3 className="text-xl font-semibold">Select Frequency</h3>
-                 
+
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-2">
                       {[...attributes].sort((a, b) => {
@@ -1348,19 +1356,17 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                       }).map((attr) => (
                         <button
                           key={attr}
-                          className={`w-full p-3 rounded-lg border ${
-                            selectedAttribute === attr
-                              ? "bg-[#0463ac] text-white"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full p-3 rounded-lg border ${selectedAttribute === attr
+                            ? "bg-[#0463ac] text-white"
+                            : "border-gray-300"
+                            }`}
                           onClick={() => handleAttributeSelect(attr)}
                         >
                           <div className="flex items-center justify-between">
                             <span>{attr}</span>
                             <IoCheckmarkCircleSharp
-                              className={`text-xl ${
-                                selectedAttribute === attr ? "text-white" : "text-gray-300"
-                              }`}
+                              className={`text-xl ${selectedAttribute === attr ? "text-white" : "text-gray-300"
+                                }`}
                             />
                           </div>
                         </button>
@@ -1382,21 +1388,19 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                             .map((variation) => (
                               <button
                                 key={variation.data.id}
-                                className={`w-full p-3 rounded-lg border ${
-                                  selectedVariation?.id === variation.data.id
-                                    ? "bg-[#0463ac] text-white"
-                                    : "border-gray-300"
-                                }`}
+                                className={`w-full p-3 rounded-lg border ${selectedVariation?.id === variation.data.id
+                                  ? "bg-[#0463ac] text-white"
+                                  : "border-gray-300"
+                                  }`}
                                 onClick={() => handleVariationSelect(variation)}
                               >
                                 <div className="flex items-center justify-between">
                                   <span className="font-medium">{variation.data.variation}</span>
                                   <IoCheckmarkCircleSharp
-                                    className={`text-xl ${
-                                      selectedVariation?.id === variation.data.id
-                                        ? "text-white"
-                                        : "text-gray-300"
-                                    }`}
+                                    className={`text-xl ${selectedVariation?.id === variation.data.id
+                                      ? "text-white"
+                                      : "text-gray-300"
+                                      }`}
                                   />
                                 </div>
                               </button>
@@ -1520,7 +1524,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                             ? selectedVariation.price
                             : prodData?.product_price) *
                             discountPercentage) /
-                            100
+                          100
                         )} (${discountPercentage}%)`}</p>
                       </div>
                     ) : null}
@@ -1574,7 +1578,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                     </div>
                     <button
                       className="bg-[#0463ac] hover:bg-[#52852d] uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold"
-                     
+
                       onClick={handleProceed}
                       id="proceed-btn"
                     >
@@ -1718,7 +1722,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                           value={formData.width}
                           onChange={handleFormChange}
                           className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          // required
+                        // required
                         >
                           <option value="" hidden>
                             Select Width
@@ -1749,7 +1753,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                           min="1"
                           // max="3000"
                           className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          // required
+                        // required
                         />
                       </div>
 
@@ -1765,7 +1769,7 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                           id="sqft"
                           value={formData.sqft ? `${formData.sqft} sqft` : ""}
                           className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          // readOnly
+                        // readOnly
                         />
                       </div>
                     </div>
@@ -1796,23 +1800,70 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
               />
             </section>
 
-           <section className="w-full bg-white rounded-lg p-6 space-y-6 border border-gray-200 shadow-sm px-5 py-5 mb-4">
-            {/* Locations Section */}
-            {locations && locations?.length ? (
-              <div>
+            <section className="w-full bg-white rounded-lg p-6 space-y-6 border border-gray-200 shadow-sm px-5 py-5 mb-4">
+              {/* Locations Section */}
+              {locations && locations?.length ? (
+                <div>
+                  {/* Heading */}
+                  <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
+                    Quick Links
+                  </h2>
+                  <hr className="border-t-2 border-[#10847E] w-40 mb-4" />
+
+                  {/* Accordion Button */}
+                  <div
+                    className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
+                    onClick={toggleLocationsExpansion}
+                  >
+                    <span className="font-medium text-black">Available Locations</span>
+                    {isLocationsExpanded ? (
+                      <IoIosArrowUp className="text-black" />
+                    ) : (
+                      <IoIosArrowDown className="text-black" />
+                    )}
+                  </div>
+
+                  {/* Accordion Content */}
+                  {isLocationsExpanded && (
+                    <div className="mt-4 transition-all duration-300 ease-in-out">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {locations?.map((loc, index) => {
+                          const formattedLoc = loc.trim();
+                          const capitalizedLoc =
+                            formattedLoc.charAt(0).toUpperCase() +
+                            formattedLoc.slice(1);
+                          return (
+                            <a
+                              key={index}
+                              href={`${config.VITE_BASE_URL}/product/${prodData.slug
+                                }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
+                              className="text-[#10847E] hover:underline transition-colors"
+                            >
+                              {prodData.product_name} in {capitalizedLoc}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {/* Keywords Section */}
+              <div className="">
                 {/* Heading */}
-                <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
-                  Quick Links
-                </h2>
-                <hr className="border-t-2 border-[#10847E] w-40 mb-4" />
+                {/* <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
+                Keywords
+              </h2>
+              <hr className="border-t-2 border-[#10847E] w-28 mb-4" /> */}
 
                 {/* Accordion Button */}
                 <div
                   className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
-                  onClick={toggleLocationsExpansion}
+                  onClick={toggleKeywordsExpansion}
                 >
-                  <span className="font-medium text-black">Available Locations</span>
-                  {isLocationsExpanded ? (
+                  <span className="font-medium text-black">Keywords</span>
+                  {isKeywordsExpanded ? (
                     <IoIosArrowUp className="text-black" />
                   ) : (
                     <IoIosArrowDown className="text-black" />
@@ -1820,94 +1871,47 @@ const related = prodData.variations.filter(v => v.attribute_name === defaultAttr
                 </div>
 
                 {/* Accordion Content */}
-                {isLocationsExpanded && (
-                  <div className="mt-4 transition-all duration-300 ease-in-out">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {locations?.map((loc, index) => {
-                        const formattedLoc = loc.trim();
-                        const capitalizedLoc =
-                          formattedLoc.charAt(0).toUpperCase() +
-                          formattedLoc.slice(1);
-                        return (
-                          <a
-                            key={index}
-                            href={`${config.VITE_BASE_URL}/product/${
-                              prodData.slug
-                            }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
-                            className="text-[#10847E] hover:underline transition-colors"
-                          >
-                            {prodData.product_name} in {capitalizedLoc}
-                          </a>
-                        );
-                      })}
-                    </div>
+                {isKeywordsExpanded && prodData?.tags && (
+                  <div className="mt-4 flex flex-wrap gap-3 transition-all duration-300 ease-in-out">
+                    {prodData.tags.split(",").map((tag, index) => (
+                      <a
+                        key={index}
+                        onClick={() => handleTagClick(tag)}
+                        className="px-3 py-1 text-sm rounded-md bg-[#E6F6F5] text-[#10847E] hover:bg-[#10847E] hover:text-white transition-colors cursor-pointer"
+                      >
+                        #{tag.trim()}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>
-            ) : null}
+              {/* Description toggle moved here (directly above Quick Links) */}
+              <div className="product-description bg-white rounded-lg p-4 border border-gray-200 shadow-sm mb-4">
+                <button
+                  className="dropdown-toggle"
+                  onClick={() => setIsDescOpen(!isDescOpen)}
+                >
+                  {isDescOpen ? "Hide Description ▲" : "Show Description ▼"}
+                </button>
 
-            {/* Keywords Section */}
-            <div className="">
-              {/* Heading */}
-              {/* <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
-                Keywords
-              </h2>
-              <hr className="border-t-2 border-[#10847E] w-28 mb-4" /> */}
-
-              {/* Accordion Button */}
-              <div
-                className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
-                onClick={toggleKeywordsExpansion}
-              >
-                <span className="font-medium text-black">Keywords</span>
-                {isKeywordsExpanded ? (
-                  <IoIosArrowUp className="text-black" />
-                ) : (
-                  <IoIosArrowDown className="text-black" />
+                {isDescOpen && (
+                  <div className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none lg:max-w-[900px]">
+                    {/* Prefer selected variation description when available, otherwise use product HTML */}
+                    {selectedVariation?.description ? (
+                      <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed">
+                        {selectedVariation.description}
+                      </p>
+                    ) : (
+                      <div
+                        translate="no"
+                        dangerouslySetInnerHTML={{ __html: prodData?.description }}
+                      />
+                    )}
+                  </div>
                 )}
               </div>
 
-              {/* Accordion Content */}
-              {isKeywordsExpanded && prodData?.tags && (
-                <div className="mt-4 flex flex-wrap gap-3 transition-all duration-300 ease-in-out">
-                  {prodData.tags.split(",").map((tag, index) => (
-                    <a
-                      key={index}
-                      onClick={() => handleTagClick(tag)}
-                      className="px-3 py-1 text-sm rounded-md bg-[#E6F6F5] text-[#10847E] hover:bg-[#10847E] hover:text-white transition-colors cursor-pointer"
-                    >
-                      #{tag.trim()}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-            {/* Description toggle moved here (directly above Quick Links) */}
-            <div className="product-description bg-white rounded-lg p-4 border border-gray-200 shadow-sm mb-4">
-              <button
-                className="dropdown-toggle"
-                onClick={() => setIsDescOpen(!isDescOpen)}
-              >
-                {isDescOpen ? "Hide Description ▲" : "Show Description ▼"}
-              </button>
-
-              {isDescOpen && (
-                <div className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none lg:max-w-[900px]">
-                  {/* Prefer selected variation description when available, otherwise use product HTML */}
-                  {selectedVariation?.description ? (
-                    <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed">
-                      {selectedVariation.description}
-                    </p>
-                  ) : (
-                    <div
-                      dangerouslySetInnerHTML={{ __html: prodData?.description }}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-
-          </section>
+            </section>
 
           </div>
         </>

@@ -73,7 +73,7 @@ const Header = ({
     bookings,
     prodData,
   } = useCont();
-  
+
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -117,88 +117,88 @@ const Header = ({
   };
 
   const handleMicClick = () => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-    alert("Voice recognition is not supported in this browser.");
-    return;
-  }
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+      alert("Voice recognition is not supported in this browser.");
+      return;
+    }
 
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false; // stop after one phrase
-  recognition.interimResults = false;
-  recognition.lang = "en-IN";
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // stop after one phrase
+    recognition.interimResults = false;
+    recognition.lang = "en-IN";
 
-  recognition.onstart = () => {
-    setIsListening(true);
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchTerm(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      alert("Error occurred during speech recognition.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    setSearchTerm(transcript);
-  };
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setCurrentLocation("Bannerghatta, Bangalore");
+      return;
+    }
 
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    alert("Error occurred during speech recognition.");
-  };
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
+          );
+          const data = await response.json();
 
-  recognition.onend = () => {
-    setIsListening(false);
-  };
-
-  recognition.start();
-};
-
- const getCurrentLocation = () => {
-  if (!navigator.geolocation) {
-    setCurrentLocation("Bannerghatta, Bangalore");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      try {
-        const { latitude, longitude } = position.coords;
-        const response = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${config.GMAP_KEY}`
-        );
-        const data = await response.json();
-
-        if (data.results && data.results[0]) {
-          const locationStings = data.results[0]?.formatted_address.split(",");
-          if (locationStings.length > 2) {
-            setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
+          if (data.results && data.results[0]) {
+            const locationStings = data.results[0]?.formatted_address.split(",");
+            if (locationStings.length > 2) {
+              setCurrentLocation(locationStings?.slice(0, 3)?.join(","));
+            } else {
+              setCurrentLocation(data.results[0]?.formatted_address);
+            }
           } else {
-            setCurrentLocation(data.results[0]?.formatted_address);
+            setCurrentLocation("Location could not be fetched");
           }
-        } else {
-          setCurrentLocation("Location could not be fetched");
+        } catch (error) {
+          console.error("Error fetching location details:", error);
+          setCurrentLocation("Bannerghatta, Bangalore");
         }
-      } catch (error) {
-        console.error("Error fetching location details:", error);
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
         setCurrentLocation("Bannerghatta, Bangalore");
       }
-    },
-    (error) => {
-      console.error("Geolocation error:", error);
-      setCurrentLocation("Bannerghatta, Bangalore");
-    }
-  );
-};
+    );
+  };
 
 
   // useEffect(() => {
   //   getCurrentLocation();
   // }, []);
 
-   useEffect(() => {
-   const run = () => getCurrentLocation();
-   if ('requestIdleCallback' in window) {
-     requestIdleCallback(run, { timeout: 4000 });
-   } else {
-     setTimeout(run, 4000);
-   }
-}, []);
+  useEffect(() => {
+    const run = () => getCurrentLocation();
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(run, { timeout: 4000 });
+    } else {
+      setTimeout(run, 4000);
+    }
+  }, []);
 
   const fetchSearchResults = async (term) => {
     if (!term || term.trim() === "") {
@@ -249,21 +249,21 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-  }
-}, []);
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+    }
+  }, []);
 
 
 
-useEffect(() => {
-  const show = () => setShowMobileBanner(true);
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(show, { timeout: 2500 });
-  } else {
-    setTimeout(show, 2500);
-  }
-}, []);
+  useEffect(() => {
+    const show = () => setShowMobileBanner(true);
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(show, { timeout: 2500 });
+    } else {
+      setTimeout(show, 2500);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -301,52 +301,50 @@ useEffect(() => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const trendingSearches = [
-  "Standard Cockroach Control",
-  "Bedbugs",
-  "Termite Control",
-  "Car disinfection",
-  "Rodent Management Service",
-  "Home Disinfection",
-  "6D Prime -Cockroach Control And Ant Control",
-];
+    "Standard Cockroach Control",
+    "Bedbugs",
+    "Termite Control",
+    "Rodent Management Service",
+    "Home Disinfection",
+  ];
 
-const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
 
-useEffect(() => {
-  let index = 0;
-  const interval = setInterval(() => {
-    setDisplayedText(fullText.slice(0, index));
-    index++;
-    if (index > fullText.length) {
-      clearInterval(interval);
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(fullText.slice(0, index));
+      index++;
+      if (index > fullText.length) {
+        clearInterval(interval);
+      }
+    }, 80); // typing speed
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const offers = [
+    {
+      label: "RoachX Gel Treatment – ₹399*",
+      link: "/product/roachx-gel-treatment"
+    },
+    {
+      label: "General Pest Control – ₹899*",
+      link: "/subcategory/general-pest-control"
+    },
+    {
+      label: "Standard Cockroach Control – ₹999*",
+      link: "/subcategory/cockroach-control-services-in-bangalore"
+    },
+    {
+      label: "6D Prime Cockroach – ₹1199*",
+      link: "/product/cockroach-control-services-in-bangalore"
+    },
+    {
+      label: "Bedbugs Standard – ₹2499*",
+      link: "/subcategory/bed-bug-control-services-in-bangalore"
     }
-  }, 80); // typing speed
-
-  return () => clearInterval(interval);
-}, []);
-
-const offers = [
-  {
-    label: "RoachX Gel Treatment – ₹399*",
-    link: "/product/roachx-gel-treatment"
-  },
-  {
-    label: "General Pest Control – ₹899*",
-    link: "/subcategory/general-pest-control"
-  },
-  {
-    label: "Standard Cockroach Control – ₹999*",
-    link: "/subcategory/cockroach-control-services-in-bangalore"
-  },
-  {
-    label: "6D Prime Cockroach – ₹1199*",
-    link: "/product/cockroach-control-services-in-bangalore"
-  },
-  {
-    label: "Bedbugs Standard – ₹2499*",
-    link: "/subcategory/bed-bug-control-services-in-bangalore"
-  }
-];
+  ];
 
 
   const [current, setCurrent] = useState(0);
@@ -363,8 +361,8 @@ const offers = [
       ref={headerRef}
       className="w-full sticky top-0 z-20 shadow-sm font-sans bg-gradient-to-r from-[#e6f6f1] via-[#fdf4f4] via-40% via-[#f0e6f9] via-60% to-[#e6faec] sm:max-w-7xl sm:mx-auto sm:px-1"
       style={{
-            background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+        background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+      }}
     >
       {showMobileBanner && (
         <div className="w-full top-0 left-0 z-50 bg-green-800 text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
@@ -376,8 +374,8 @@ const offers = [
           >
             📲 Download the Hommlie App for faster booking!
           </a>
-          <button 
-            onClick={() => setShowMobileBanner(false)} 
+          <button
+            onClick={() => setShowMobileBanner(false)}
             className="text-white text-xl hover:text-amber-200 transition-colors"
             aria-label="Close mobile banner"
           >
@@ -391,31 +389,31 @@ const offers = [
         <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
           <div
             className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
-            // style={{
-            //   backgroundImage: `url(${bannerBg})`,
-            //   backgroundSize: 'cover',
-            //   backgroundRepeat: 'no-repeat',
-            //   backgroundPosition: 'center',
-            // }}
+          // style={{
+          //   backgroundImage: `url(${bannerBg})`,
+          //   backgroundSize: 'cover',
+          //   backgroundRepeat: 'no-repeat',
+          //   backgroundPosition: 'center',
+          // }}
           >
             {/* Centered Offer Line */}
 
-              <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={offers[current].label}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
-                  >
-                    <NavLink to={offers[current].link} className=" pointer-events-auto">
-                      🛡️ {offers[current].label}
-                    </NavLink>
-                  </motion.p>
-                </AnimatePresence>
-              </div>
+            <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={offers[current].label}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-20"
+                >
+                  <NavLink to={offers[current].link} className=" pointer-events-auto">
+                    🛡️ {offers[current].label}
+                  </NavLink>
+                </motion.p>
+              </AnimatePresence>
+            </div>
             {/* Left: Brand + Message */}
             <span className=" font-normal text-black z-20">
               <div className="inline-flex rounded overflow-hidden text-sm font-semibold">
@@ -439,7 +437,7 @@ const offers = [
                 Get App
               </button>
               <span className="hidden md:inline-block text-black">|</span>
-              
+
               <button
                 onClick={() => setIsOfferModalOpen(true)}
                 className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
@@ -500,21 +498,21 @@ const offers = [
           </div>
         </div>
       </div>
-          <div className="max-w-7xl mx-auto px-2 lg:px-8">
-            {/* Main Header */}
-            <div className="flex items-center justify-between h-20">
-              <div className="flex items-center space-x-6">
-                {/* Logo Section */}
-                <div className="hidden sm:flex flex-shrink-0">
-                  <NavLink to="/">
-                    <img
-                      src={logo}
-                      alt={logoAlt}
-                      className="h-10 w-auto object-contain"
-                    />
-                  </NavLink>
-                </div>
-                  <div className="flex sm:hidden w-full items-center justify-between px-2">
+      <div className="max-w-7xl mx-auto px-2 lg:px-8">
+        {/* Main Header */}
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center space-x-6">
+            {/* Logo Section */}
+            <div className="hidden sm:flex flex-shrink-0">
+              <NavLink to="/">
+                <img
+                  src={logo}
+                  alt={logoAlt}
+                  className="h-10 w-auto object-contain"
+                />
+              </NavLink>
+            </div>
+            <div className="flex sm:hidden w-full items-center justify-between px-2">
               {/* Logo aligned left */}
               <div className="flex items-center flex-shrink-0 -ml-8">
                 <NavLink to="/">
@@ -612,9 +610,8 @@ const offers = [
                       }}
                     />
                     <BsMicFill
-                      className={`cursor-pointer transition-colors ${
-                        isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-emerald-900'
-                      }`}
+                      className={`cursor-pointer transition-colors ${isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-emerald-900'
+                        }`}
                       onClick={isSupported ? handleMicClick : () => alert("Voice search is not supported in this browser.")}
                     />
                   </div>
@@ -700,16 +697,16 @@ const offers = [
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
               className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#92B775] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
             >
-               <span className="font-medium">Join ONDC</span>
-               <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" />
+              <span className="font-medium">Join ONDC</span>
+              <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" />
             </NavLink>
-           
+
             <div className="relative">
               {user?.length !== 0 ? (
                 <button
@@ -894,11 +891,10 @@ const offers = [
                             {[1, 2, 3, 4, 5].map((star) => (
                               <svg
                                 key={star}
-                                className={`w-3 h-3 ${
-                                  star <= Math.round(result.rating)
+                                className={`w-3 h-3 ${star <= Math.round(result.rating)
                                     ? "text-amber-400"
                                     : "text-gray-300"
-                                }`}
+                                  }`}
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                               >
@@ -925,38 +921,38 @@ const offers = [
         )}
       </AnimatePresence>
 
-        {isGetAppModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg">
-              <button
-                onClick={() => setIsGetAppModalOpen(false)}
-                className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-lg"
+      {isGetAppModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg">
+            <button
+              onClick={() => setIsGetAppModalOpen(false)}
+              className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-lg"
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
+            <p className="text-gray-700 text-sm text-center mb-5">
+              Book services faster, track orders, and earn rewards – all from your phone.
+            </p>
+            <div className="flex justify-center gap-4">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                &times;
-              </button>
-              <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
-              <p className="text-gray-700 text-sm text-center mb-5">
-                Book services faster, track orders, and earn rewards – all from your phone.
-              </p>
-              <div className="flex justify-center gap-4">
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
-                </a>
-                <a
-                  href="https://apps.apple.com/in/app/hommile/id6744694127 " 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
-                </a>
-              </div>
+                <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
+              </a>
+              <a
+                href="https://apps.apple.com/in/app/hommile/id6744694127 "
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
+              </a>
             </div>
           </div>
-        )}
+        </div>
+      )}
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
@@ -1000,7 +996,7 @@ const offers = [
             >
               Community
             </NavLink>
-            
+
             <NavLink
               to="/register-free-listing"
               className="block py-2 px-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg text-center font-medium shadow hover:from-emerald-700 hover:to-emerald-800 transition-all"
@@ -1103,7 +1099,7 @@ const offers = [
         isOpen={isReferAndEarnOpen}
         onClose={() => setIsReferAndEarnOpen(false)}
       />
-      
+
       {/* Location Modal */}
       {isLocationModalOpen && (
         <LocationModal
@@ -1112,7 +1108,7 @@ const offers = [
         />
       )}
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
-      
+
     </header>
   );
 };

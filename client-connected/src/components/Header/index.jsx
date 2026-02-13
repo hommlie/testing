@@ -300,6 +300,13 @@ const Header = ({
     };
   }, [headerRef]);
 
+  // Clear mobile overlays on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsSearchOpen(false);
+    setIsLoginOpen(false);
+  }, [location.pathname]);
+
   const services = [
     "Pest Control",
     "Home Cleaning",
@@ -745,7 +752,7 @@ const Header = ({
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
                       <MdLocationOn className="text-white mr-1 text-lg" />
-                      Delivery in 60 min
+                      Current Location
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
                       <span className="truncate">{currentLocation}</span>
@@ -786,7 +793,7 @@ const Header = ({
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
                       <MdLocationOn className="text-red mr-1 text-lg" />
-                      Delivery in 60 min
+                      Current Location
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
                       <span className="truncate">{currentLocation}</span>
@@ -915,22 +922,13 @@ const Header = ({
               {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
             </NavLink>
 
-            <div className="relative">
+            {/* Desktop Account Section */}
+            <div className="hidden md:block relative">
               {user?.length !== 0 ? (
                 <button
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
                   className="flex items-center space-x-2"
                 >
-                  {/* <div className="block md:hidden relative">
-                    <img
-                      src={user?.profileImage || userIcon}
-                      alt="Profile"
-                      className="h-9 w-9"
-                    />
-                    {isLoginOpen && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
-                    )}
-                  </div> */}
                 </button>
               ) : null}
 
@@ -1017,24 +1015,126 @@ const Header = ({
             </div>
 
             <div className="md:hidden flex items-center gap-4">
+              {/* Cart Button - Uniform Color */}
               <button
                 onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="relative text-2xl text-[#0463ac] hover:text-emerald-600 transition-colors"
+                className="relative text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
                 aria-label="Go to cart"
               >
-                <FaShoppingCart />
+                <FaShoppingCart size={22} />
                 {cart?.length > 0 && (
-                  <span className="absolute -top-1 -right-2 bg-amber-300 text-emerald-900 text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  <span className="absolute -top-1.5 -right-2 bg-amber-300 text-emerald-900 text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
                     {cart?.length}
                   </span>
                 )}
               </button>
+
+              {/* Account/Profile Button - Uniform Color */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    if (user?.length === 0) {
+                      setIsModalOpen(true);
+                    } else {
+                      setIsLoginOpen(!isLoginOpen);
+                    }
+                  }}
+                  className={`text-2xl transition-colors ${isLoginOpen ? 'text-[#0463ac]' : 'text-[#033053] hover:text-[#0463ac]'}`}
+                  aria-label="Account profile"
+                >
+                  <FaUser size={22} />
+                </button>
+
+                {/* Account Dropdown for Mobile */}
+                {isLoginOpen && (
+                  <div
+                    ref={loginDropdownRef}
+                    className="absolute right-0 top-12 w-56 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] py-1 z-50 border border-gray-100 overflow-hidden"
+                  >
+                    <NavLink
+                      to="/add-to-cart"
+                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
+                      onClick={() => setIsLoginOpen(false)}
+                    >
+                      <div className="flex items-center">
+                        <IoCartOutline className="mr-2 text-[#0463ac]" />
+                        My Cart
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/my-bookings"
+                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
+                      onClick={() => setIsLoginOpen(false)}
+                    >
+                      <div className="flex items-center">
+                        <MdEmail className="mr-2 text-[#0463ac]" />
+                        My Bookings
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/edit-profile"
+                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
+                      onClick={() => setIsLoginOpen(false)}
+                    >
+                      <div className="flex items-center">
+                        <FaUser className="mr-2 text-[#0463ac]" />
+                        Edit Profile
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/my-wallet"
+                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
+                      onClick={() => setIsLoginOpen(false)}
+                    >
+                      <div className="flex items-center">
+                        <FaWallet className="mr-2 text-[#0463ac]" />
+                        My Wallet
+                      </div>
+                    </NavLink>
+                    <button
+                      onClick={() => {
+                        setIsAddressModalOpen(true);
+                        setIsLoginOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
+                    >
+                      <div className="flex items-center">
+                        <MdLocationOn className="mr-2 text-[#0463ac]" />
+                        Your Addresses
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsReferAndEarnOpen(true);
+                        setIsLoginOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
+                    >
+                      <div className="flex items-center">
+                        <FaGift className="mr-2 text-[#0463ac]" />
+                        Refer & Earn
+                      </div>
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <div className="flex items-center">
+                        <FaSignOutAlt className="mr-2" />
+                        Log out
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Three Lines (Hamburger) - Uniform Color */}
               <button
-                className="text-2xl text-emerald-800 hover:text-emerald-600 transition-colors"
+                className="text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               >
-                {isMobileMenuOpen ? <RxCross1 /> : <AiOutlineMenu />}
+                {isMobileMenuOpen ? <RxCross1 size={22} /> : <AiOutlineMenu size={22} />}
               </button>
             </div>
 
@@ -1212,19 +1312,19 @@ const Header = ({
               Services
             </NavLink>
             <NavLink
-              to="/register-free-listing"
-              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            to="/register-free-listing"
+            className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
             >
-              Service Hub
-            </NavLink>
-            <NavLink
-              to="/community"
-              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Community
-            </NavLink>
+            Service Hub
+          </NavLink>
+          <NavLink
+            to="/community"
+            className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Community
+          </NavLink>
              */}
             <NavLink
               to="/services"
@@ -1270,63 +1370,66 @@ const Header = ({
             </div>
           </nav>
         </div>
-      )}
+      )
+      }
 
 
 
-      {isOfferModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-            className="relative bg-white w-full max-w-xl rounded-xl shadow-xl border border-gray-200 overflow-hidden"
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setIsOfferModalOpen(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
-              aria-label="Close offer modal"
+      {
+        isOfferModalOpen && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="relative bg-white w-full max-w-xl rounded-xl shadow-xl border border-gray-200 overflow-hidden"
             >
-              &times;
-            </button>
+              {/* Close Button */}
+              <button
+                onClick={() => setIsOfferModalOpen(false)}
+                className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
+                aria-label="Close offer modal"
+              >
+                &times;
+              </button>
 
-            {/* Header */}
-            <div className="px-6 pt-6 pb-2 border-b border-gray-100">
-              <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 text-center">
-                🎉 Limited-Time Offers Just for You!
-              </h2>
-              <p className="text-center text-sm text-gray-500 mt-1">
-                Book now before they expire!
-              </p>
-            </div>
+              {/* Header */}
+              <div className="px-6 pt-6 pb-2 border-b border-gray-100">
+                <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 text-center">
+                  🎉 Limited-Time Offers Just for You!
+                </h2>
+                <p className="text-center text-sm text-gray-500 mt-1">
+                  Book now before they expire!
+                </p>
+              </div>
 
-            {/* Offer List */}
-            <ul className="px-6 py-4 max-h-[60vh] overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
-              {offers.map((offer, index) => (
-                <li key={index} className="py-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">LIMITED</span>
-                      <p className="text-sm text-gray-800 font-medium">🛡️ {offer.label}</p>
+              {/* Offer List */}
+              <ul className="px-6 py-4 max-h-[60vh] overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
+                {offers.map((offer, index) => (
+                  <li key={index} className="py-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">LIMITED</span>
+                        <p className="text-sm text-gray-800 font-medium">🛡️ {offer.label}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsOfferModalOpen(false);
+                          navigate(offer.link); // now it redirects to specific offer link
+                        }}
+                        className="mt-1 sm:mt-0 text-sm font-semibold text-white bg-[#52852d] hover:bg-[#406a23] px-4 py-1.5 rounded transition-all"
+                      >
+                        Book Now
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        setIsOfferModalOpen(false);
-                        navigate(offer.link); // now it redirects to specific offer link
-                      }}
-                      className="mt-1 sm:mt-0 text-sm font-semibold text-white bg-[#52852d] hover:bg-[#406a23] px-4 py-1.5 rounded transition-all"
-                    >
-                      Book Now
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-      )}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+        )
+      }
 
 
       {/* Modals */}
@@ -1341,12 +1444,14 @@ const Header = ({
       />
 
       {/* Location Modal */}
-      {isLocationModalOpen && (
-        <LocationModal
-          onClose={() => setIsLocationModalOpen(false)}
-          setCurrentLocation={setCurrentLocation}
-        />
-      )}
+      {
+        isLocationModalOpen && (
+          <LocationModal
+            onClose={() => setIsLocationModalOpen(false)}
+            setCurrentLocation={setCurrentLocation}
+          />
+        )
+      }
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
 
       <ComingSoonModal
@@ -1355,180 +1460,182 @@ const Header = ({
         source="Product"
       />
 
-      {isWalletModalOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <AnimatePresence>
-            <motion.div
-              key="wallet-modal"
-              className="fixed inset-0 z-50 flex items-center justify-center px-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
+      {
+        isWalletModalOpen && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <AnimatePresence>
               <motion.div
-                className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
-                initial={{ scale: 0.92, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.92, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                key="wallet-modal"
+                className="fixed inset-0 z-50 flex items-center justify-center px-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                {/* Minimal header accent */}
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
+                <motion.div
+                  className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
+                  initial={{ scale: 0.92, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.92, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                >
+                  {/* Minimal header accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
 
-                {/* Card body */}
-                <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
-                  {/* Close */}
-                  <button
-                    onClick={() => setIsWalletModalOpen(false)}
-                    className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
-                    aria-label="Close"
-                  >
-                    <FaTimes />
-                  </button>
-
-                  {/* Animated Wallet Icon */}
-                  <div className="relative flex items-center justify-center mb-4">
-                    {/* Soft pulsing ring */}
-                    <motion.span
-                      className="absolute h-20 w-20 rounded-full"
-                      style={{
-                        background:
-                          "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
-                        filter: "blur(2px)",
-                      }}
-                      initial={{ scale: 0.9, opacity: 0.5 }}
-                      animate={{ scale: 1.1, opacity: 1 }}
-                      transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
-                    />
-                    {/* Icon wrapper with subtle bob + glow */}
-                    <motion.div
-                      className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
-                      initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
-                      animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
-                      transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                  {/* Card body */}
+                  <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
+                    {/* Close */}
+                    <button
+                      onClick={() => setIsWalletModalOpen(false)}
+                      className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
+                      aria-label="Close"
                     >
-                      {/* Gentle inner glow */}
-                      <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
-                      {/* Wallet icon with soft gradient stroke */}
-                      <FaWallet
-                        className="text-white drop-shadow-sm"
-                        style={{
-                          fontSize: "28px",
-                          WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
-                        }}
-                      />
-                      {/* Quick shimmer sweep */}
+                      <FaTimes />
+                    </button>
+
+                    {/* Animated Wallet Icon */}
+                    <div className="relative flex items-center justify-center mb-4">
+                      {/* Soft pulsing ring */}
                       <motion.span
-                        className="absolute -inset-1 rounded-2xl"
+                        className="absolute h-20 w-20 rounded-full"
                         style={{
                           background:
-                            "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
-                          mixBlendMode: "screen",
+                            "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
+                          filter: "blur(2px)",
                         }}
-                        initial={{ x: "-120%" }}
-                        animate={{ x: "120%" }}
-                        transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
+                        initial={{ scale: 0.9, opacity: 0.5 }}
+                        animate={{ scale: 1.1, opacity: 1 }}
+                        transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
                       />
-                    </motion.div>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
-                    Your Wallet
-                  </h3>
-
-                  {/* Balance label */}
-                  <div className="mt-3 flex items-center justify-center gap-2">
-                    <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
-                      Available Balance
-                    </span>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
-                      Secured by Razorpay
-                    </span>
-                  </div>
-
-                  {/* Amount */}
-                  <motion.p
-                    key={walletBalance}
-                    className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
-                    initial={{ y: -10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 220, damping: 18 }}
-                  >
-                    ₹{walletBalance}
-                  </motion.p>
-
-                  {/* Micro copy */}
-                  <p className="mt-3 text-white/90 text-center text-sm">
-                    {walletBalance > 0
-                      ? "Use your wallet amount instantly at checkout."
-                      : "Your wallet is empty. Invite friends to earn or add money to start."}
-                  </p>
-
-                  {/* CTAs */}
-                  <div className="mt-6 grid grid-cols-1 gap-3">
-                    {walletBalance > 0 ? (
-                      <>
-                        <button
-                          onClick={() => {
-                            setIsWalletModalOpen(false);
-                            navigate("/quickservice");
+                      {/* Icon wrapper with subtle bob + glow */}
+                      <motion.div
+                        className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
+                        initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
+                        animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
+                        transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                      >
+                        {/* Gentle inner glow */}
+                        <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
+                        {/* Wallet icon with soft gradient stroke */}
+                        <FaWallet
+                          className="text-white drop-shadow-sm"
+                          style={{
+                            fontSize: "28px",
+                            WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
                           }}
-                          className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                        >
-                          Book a Service
-                        </button>
+                        />
+                        {/* Quick shimmer sweep */}
+                        <motion.span
+                          className="absolute -inset-1 rounded-2xl"
+                          style={{
+                            background:
+                              "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
+                            mixBlendMode: "screen",
+                          }}
+                          initial={{ x: "-120%" }}
+                          animate={{ x: "120%" }}
+                          transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
+                        />
+                      </motion.div>
+                    </div>
 
-                        <button
-                          onClick={() => {
-                            setIsWalletModalOpen(false);
-                            navigate("/my-wallet");
-                          }}
-                          className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
-                        >
-                          View Transactions
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => {
-                            setIsWalletModalOpen(false);
-                            setIsReferAndEarnOpen(true);
-                          }}
-                          className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                        >
-                          Refer a Friend & Earn
-                        </button>
+                    {/* Title */}
+                    <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
+                      Your Wallet
+                    </h3>
 
-                        <button
-                          onClick={() => {
-                            setIsWalletModalOpen(false);
-                            navigate("/my-wallet");
-                          }}
-                          className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
-                        >
-                          Add Money
-                        </button>
-                      </>
-                    )}
+                    {/* Balance label */}
+                    <div className="mt-3 flex items-center justify-center gap-2">
+                      <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
+                        Available Balance
+                      </span>
+                      <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
+                        Secured by Razorpay
+                      </span>
+                    </div>
+
+                    {/* Amount */}
+                    <motion.p
+                      key={walletBalance}
+                      className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
+                      initial={{ y: -10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                    >
+                      ₹{walletBalance}
+                    </motion.p>
+
+                    {/* Micro copy */}
+                    <p className="mt-3 text-white/90 text-center text-sm">
+                      {walletBalance > 0
+                        ? "Use your wallet amount instantly at checkout."
+                        : "Your wallet is empty. Invite friends to earn or add money to start."}
+                    </p>
+
+                    {/* CTAs */}
+                    <div className="mt-6 grid grid-cols-1 gap-3">
+                      {walletBalance > 0 ? (
+                        <>
+                          <button
+                            onClick={() => {
+                              setIsWalletModalOpen(false);
+                              navigate("/quickservice");
+                            }}
+                            className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                          >
+                            Book a Service
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setIsWalletModalOpen(false);
+                              navigate("/my-wallet");
+                            }}
+                            className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                          >
+                            View Transactions
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => {
+                              setIsWalletModalOpen(false);
+                              setIsReferAndEarnOpen(true);
+                            }}
+                            className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                          >
+                            Refer a Friend & Earn
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setIsWalletModalOpen(false);
+                              navigate("/my-wallet");
+                            }}
+                            className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                          >
+                            Add Money
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Subtle trust row */}
+                    <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
+                      <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
+                      <span>Instant apply at checkout</span>
+                      <span className="mx-1">•</span>
+                      <span>No extra fees</span>
+                    </div>
                   </div>
-
-                  {/* Subtle trust row */}
-                  <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
-                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
-                    <span>Instant apply at checkout</span>
-                    <span className="mx-1">•</span>
-                    <span>No extra fees</span>
-                  </div>
-                </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      )}
+            </AnimatePresence>
+          </div>
+        )
+      }
 
-    </header>
+    </header >
   );
 
 };

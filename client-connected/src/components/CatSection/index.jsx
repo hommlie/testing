@@ -114,23 +114,21 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
               key={index}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="p-2 w-28 sm:w-36 md:w-44 lg:w-48 flex-shrink-0 scroll-snap-align-start cursor-pointer"
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="p-1.5 w-24 sm:w-36 md:w-44 lg:w-48 flex-shrink-0 scroll-snap-align-start cursor-pointer"
               onClick={() => handleSubCategoryClick(category)}
             >
               <motion.div
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ y: -5 }}
                 className="flex flex-col items-center group"
               >
-                <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-lg overflow-hidden shadow-md transition-shadow duration-300 hover:shadow-xl">
-                  <img
-                    className="w-full h-full object-cover"
-                    src={category?.image_url}
-                    alt={category?.subcategory_name}
-                    loading="lazy"
-                  />
-                </div>
-                <h5 className="text-sm md:text-base font-medium text-gray-700 text-center mt-2 line-clamp-2 transition-colors duration-300 group-hover:text-[#10847E]">
+                <img
+                  className="w-full aspect-square object-contain transition-transform duration-500 group-hover:scale-105"
+                  src={category?.image_url}
+                  alt={category?.subcategory_name}
+                  loading="lazy"
+                />
+                <h5 className="text-[11px] md:text-sm font-bold text-[#033053] text-center mt-3 line-clamp-2 transition-colors duration-300 group-hover:text-[#0463ac] leading-tight px-1">
                   {category?.subcategory_name}
                 </h5>
               </motion.div>
