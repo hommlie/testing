@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { createPortal } from "react-dom";
 import {
   FaTimes,
   FaWhatsapp,
@@ -17,7 +18,7 @@ import config from "../../config/config";
 import { NavLink } from "react-router-dom";
 import ReferAndEarn from "../ReferAndEarnModal";
 import AddressModal from "../AddressModal";
-import ContactForm from "../../pages/Requestacallback"; 
+import ContactForm from "../../pages/Requestacallback";
 import OffersModal from "../OffersModal";
 
 
@@ -47,20 +48,20 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
   };
 
   const topics = [
-  { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
-  { title: "Request a Call", icon: "📞",},
-  { title: "Book Services", icon: "🛠️", route: "/quickservice" },
-  { title: "Refer and Earn", icon: "🎁",},
-  { title: "View Offers", icon: "🏷️",},
-  { title: "Order Related", icon: "🛒", route: "/my-bookings" },
-  {
-    title: "Give Feedback",
-    icon: "⭐",
-    external: "https://www.google.com/maps/place/Hommlie+-+Best+Pest+Control+%26+Home+Services+in+Bangalore/@12.9434865,77.5528263,15.71z/data=!4m6!3m5!1s0x3bae3ffd65961b83:0x1a2fbd7cafae966c!8m2!3d12.9419479!4d77.5517609!16s%2Fg%2F11ldwmwf4t"
-  },
-  { title: "Account", icon: "👤" },
-  { title: "Payments", icon: "💳", route: "/my-wallet" },
-];
+    { title: "Raise a Complaint", icon: "📢", route: "/my-bookings" },
+    { title: "Request a Call", icon: "📞", },
+    { title: "Book Services", icon: "🛠️", route: "/quickservice" },
+    { title: "Refer and Earn", icon: "🎁", },
+    { title: "View Offers", icon: "🏷️", },
+    { title: "Order Related", icon: "🛒", route: "/my-bookings" },
+    {
+      title: "Give Feedback",
+      icon: "⭐",
+      external: "https://www.google.com/maps/place/Hommlie+-+Best+Pest+Control+%26+Home+Services+in+Bangalore/@12.9434865,77.5528263,15.71z/data=!4m6!3m5!1s0x3bae3ffd65961b83:0x1a2fbd7cafae966c!8m2!3d12.9419479!4d77.5517609!16s%2Fg%2F11ldwmwf4t"
+    },
+    { title: "Account", icon: "👤" },
+    { title: "Payments", icon: "💳", route: "/my-wallet" },
+  ];
 
 
   const contactMethods = [
@@ -95,99 +96,101 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
 
 
   const renderAccountContent = () => (
-  <div className="p-4">
-    <button
-      onClick={() => setSelectedTopic(null)}
-      className="mb-4 text-sm text-blue-600 hover:underline"
-    >
-      ← Back to Help Topics
-    </button>
-    <h3 className="text-2xl font-bold text-gray-800 mb-6">
-      Manage Your Account
-    </h3>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <NavLink
-        to="/add-to-cart"
-        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
-        onClick={onClose}
+    <div className="p-4">
+      <button
+        onClick={() => setSelectedTopic(null)}
+        className="mb-4 text-sm text-blue-600 hover:underline"
       >
-        <svg
-          className="w-6 h-6 text-emerald-600"
-          fill="currentColor"
-          viewBox="0 0 20 20"
+        ← Back to Help Topics
+      </button>
+      <h3 className="text-2xl font-bold text-gray-800 mb-6">
+        Manage Your Account
+      </h3>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <NavLink
+          to="/add-to-cart"
+          className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+          onClick={onClose}
         >
-          <path d="M16 6H4V4h12v2zM3 8h14v8H3V8zm2 2v4h10v-4H5z" />
-        </svg>
-        <span className="text-sm font-medium text-gray-800">My Cart</span>
-      </NavLink>
+          <svg
+            className="w-6 h-6 text-emerald-600"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M16 6H4V4h12v2zM3 8h14v8H3V8zm2 2v4h10v-4H5z" />
+          </svg>
+          <span className="text-sm font-medium text-gray-800">My Cart</span>
+        </NavLink>
 
-      <NavLink
-        to="/my-bookings"
-        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
-        onClick={onClose}
-      >
-        <MdEmail className="text-emerald-600 w-6 h-6" />
-        <span className="text-sm font-medium text-gray-800">My Bookings</span>
-      </NavLink>
+        <NavLink
+          to="/my-bookings"
+          className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+          onClick={onClose}
+        >
+          <MdEmail className="text-emerald-600 w-6 h-6" />
+          <span className="text-sm font-medium text-gray-800">My Bookings</span>
+        </NavLink>
 
-      <NavLink
-        to="/edit-profile"
-        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
-        onClick={onClose}
-      >
-        <FaUser className="text-emerald-600 w-6 h-6" />
-        <span className="text-sm font-medium text-gray-800">Edit Profile</span>
-      </NavLink>
+        <NavLink
+          to="/edit-profile"
+          className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+          onClick={onClose}
+        >
+          <FaUser className="text-emerald-600 w-6 h-6" />
+          <span className="text-sm font-medium text-gray-800">Edit Profile</span>
+        </NavLink>
 
-      <NavLink
-        to="/my-wallet"
-        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
-        onClick={onClose}
-      >
-        <FaWallet className="text-emerald-600 w-6 h-6" />
-        <span className="text-sm font-medium text-gray-800">My Wallet</span>
-      </NavLink>
+        <NavLink
+          to="/my-wallet"
+          className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all"
+          onClick={onClose}
+        >
+          <FaWallet className="text-emerald-600 w-6 h-6" />
+          <span className="text-sm font-medium text-gray-800">My Wallet</span>
+        </NavLink>
 
-      <button
-        onClick={() => {
-          setSelectedTopic(null);
-          setIsAddressModalOpen(true);
-        }}
-        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
-      >
-        <MdLocationOn className="text-emerald-600 w-6 h-6" />
-        <span className="text-sm font-medium text-gray-800">
-          Your Addresses
-        </span>
-      </button>
+        <button
+          onClick={() => {
+            setSelectedTopic(null);
+            setIsAddressModalOpen(true);
+          }}
+          className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
+        >
+          <MdLocationOn className="text-emerald-600 w-6 h-6" />
+          <span className="text-sm font-medium text-gray-800">
+            Your Addresses
+          </span>
+        </button>
 
-      <button
-        onClick={() => {
-          setSelectedTopic(null);
-          setIsReferAndEarnOpen(true);
-        }}
-        className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
-      >
-        <FaGift className="text-emerald-600 w-6 h-6" />
-        <span className="text-sm font-medium text-gray-800">Refer & Earn</span>
-      </button>
+        <button
+          onClick={() => {
+            setSelectedTopic(null);
+            setIsReferAndEarnOpen(true);
+          }}
+          className="flex items-center gap-3 px-4 py-3 bg-white hover:bg-emerald-50 rounded-lg border border-gray-200 shadow-sm transition-all w-full text-left"
+        >
+          <FaGift className="text-emerald-600 w-6 h-6" />
+          <span className="text-sm font-medium text-gray-800">Refer & Earn</span>
+        </button>
 
-          </div>
-        </div>
-      );
+      </div>
+    </div>
+  );
 
 
   if (!isOpen && !asPage) return null;
 
   // If asPage, remove modal overlay and centering, use responsive container
-  return (
+  if (typeof document === 'undefined') return null;
+
+  const modalContent = (
     <>
       <div
         className={
           asPage
             ? "-mt-7 sm:-mt-0 w-full min-h-screen flex justify-center items-start bg-gray-50 py-8 px-2"
-            : "fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-center items-center p-4"
+            : "fixed inset-0 z-[9999] bg-black bg-opacity-40 flex justify-center items-center p-4"
         }
       >
         <div
@@ -388,7 +391,7 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
 
 
       {/* Login Modal */}
-            <LoginSignup
+      <LoginSignup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onLoginSuccess={() => {
@@ -412,8 +415,9 @@ const HelpModal = ({ isOpen = true, onClose, forceLogin, asPage = false }) => {
         onClose={() => setIsAddressModalOpen(false)}
       />
     </>
-
   );
+
+  return asPage ? modalContent : createPortal(modalContent, document.body);
 };
 
 export default HelpModal;

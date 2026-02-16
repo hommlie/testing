@@ -17,9 +17,11 @@ import {
   FaGift,
   FaSignOutAlt,
   FaMoneyBillWave,
+  FaBars,
 } from "react-icons/fa";
 import { MdLocationOn, MdEmail, MdKeyboardArrowDown } from "react-icons/md";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import userIcon from "../../assets/images/user-icon.svg";
 import cartIcon from "../../assets/images/cart-icon.svg";
 import { jwtDecode } from "jwt-decode";
@@ -529,7 +531,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-50 shadow-sm font-sans bg-white transition-all duration-300"
+      className="w-full sticky top-0 z-50 font-sans bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50/30 lg:backdrop-blur-sm lg:shadow-lg lg:border-b lg:border-gray-100/50 transition-all duration-300"
     >
       {showMobileBanner && (
         <div className="w-full top-0 left-0 z-50 bg-[#0463ac] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
@@ -555,7 +557,7 @@ const Header = ({
       <div className="">
         <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
           <div
-            className="text-black text-sm w-full px-4 md:px-10 py-3 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
+            className="text-gray-700 text-sm w-full px-2 lg:px-10 py-2.5 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
           // style={{
           //   backgroundImage: `url(${bannerBg})`,
           //   backgroundSize: 'cover',
@@ -582,127 +584,118 @@ const Header = ({
                 </AnimatePresence>
               </div> */}
             {/* Left: Brand + Message */}
-            <span className="font-normal text-black z-20">
-              <div className="inline-flex rounded text-sm font-semibold relative">
+            <span className="font-normal text-gray-800 z-20">
+              <div className="inline-flex rounded-full bg-gray-100/50 p-1 text-xs font-semibold relative shadow-inner">
                 {/* Residential */}
                 <button
                   type="button"
                   onClick={() => navigate("/")}
-                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-[#0463ac] text-white"
+                  className={`relative group inline-flex items-center px-5 py-2 rounded-full transition-all duration-300 ${isHomePage ? 'bg-[#0463ac] text-white shadow-md' : 'text-gray-600 hover:bg-white hover:text-[#0463ac]'}`}
                 >
                   Residential
-                  <TabUnderline active={location.pathname === "/" || location.pathname === "/home"} />
                 </button>
 
                 {/* Commercial (external) */}
                 <a
                   href="https://b2b.hommlie.com"
                   target="_blank" rel="noopener noreferrer"
-                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200 "
+                  className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
                 >
                   Commercial
-                  <TabUnderline />
                 </a>
 
                 <a
                   href="https://www.ecospherewm.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200"
+                  className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
                 >
                   Waste Management
-                  <TabUnderline active={false} />
                 </a>
 
                 {/* Product */}
                 <button
                   type="button"
                   onClick={() => setIsComingSoonOpen(true)}
-                  className="relative group inline-flex items-center px-3 pt-1 pb-2 bg-white text-black transition-colors duration-200"
+                  className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
                 >
                   Product
-                  <TabUnderline active={false} />
                 </button>
 
               </div>
             </span>
 
 
-            {/* Right: Action Links */}
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold z-20">
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-5 text-[13px] text-gray-600 font-medium z-20">
               <button
                 onClick={() => setIsGetAppModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
               >
-                <FaMobileAlt className="text-inherit" />
+                <FaMobileAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
                 Get App
               </button>
-              <span className="hidden md:inline-block text-black">|</span>
+              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               <button
                 onClick={() => setIsOfferModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
               >
-                <FaTag className="text-inherit" />
+                <FaTag className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
                 Offer
               </button>
-              <span className="hidden md:inline-block text-black">|</span>
-              {/* <button
-                onClick={() => navigate("/product")}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-              >
-                <FaShoppingCart className="text-inherit" />
-                Product
-              </button>
-              <span className="hidden md:inline-block text-black">|</span> */}
+              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
+
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
                 >
-                  <FaSignInAlt className="text-inherit" />
+                  <FaSignInAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
                   Login
                 </button>
               ) : (
                 <button
                   onClick={() => setIsLoginOpen(!isLoginOpen)}
-                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
                 >
-                  <FaUser className="text-black text-base" />
-                  <span className="text-black">Account</span>
+                  <FaUser className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
+                  <span>Account</span>
                 </button>
               )}
-              <span className="hidden md:inline-block text-black">|</span>
+              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               <button
                 onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
               >
-                <FaShoppingCart className="text-inherit" />
+                <div className="relative">
+                  <FaShoppingCart className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
+                  {cart?.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
+                      {cart?.length}
+                    </span>
+                  )}
+                </div>
                 Cart
-                {cart?.length > 0 && (
-                  <span className="ml-1 bg-amber-200 text-emerald-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-                    {cart?.length}
-                  </span>
-                )}
               </button>
-              <span className="hidden md:inline-block text-black">|</span>
+              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               <button
                 onClick={() => setIsHelpModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
               >
-                <FaQuestionCircle className="text-inherit" />
+                <FaQuestionCircle className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
                 Help
               </button>
-              <span className="hidden md:inline-block text-black">|</span>
+              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
+
               {user?.length === 0 ? (
                 // Not signed in: show normal button that opens login
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
                 >
-                  <FaWallet className="text-inherit" />
+                  <FaWallet className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
                   Wallet
                 </button>
               ) : (
@@ -713,17 +706,17 @@ const Header = ({
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-2 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 lg:px-10">
         {/* Main Header */}
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-[74px]">
           <div className="flex items-center space-x-6">
             {/* Logo Section */}
             <div className="hidden sm:flex flex-shrink-0">
-              <NavLink to="/">
+              <NavLink to="/" className="group">
                 <img
                   src={logo}
                   alt={logoAlt}
-                  className="h-10 w-auto object-contain"
+                  className="h-11 w-auto object-contain transition-all duration-300 group-hover:scale-105"
                 />
               </NavLink>
             </div>
@@ -763,7 +756,7 @@ const Header = ({
               </div>
             </div>
 
-            <div className="hidden sm:block h-10 w-px bg-gray-200 mx-3"></div>
+            <div className="hidden sm:block h-8 w-px bg-gray-200 mx-4"></div>
 
             {/* Location and Search Section */}
             <div className="hidden sm:flex pl-2 items-center gap-6 w-full justify-between">
@@ -785,47 +778,47 @@ const Header = ({
                   </div>
                 </button>
               </div> */}
-              <div className="flex-1 max-w-md">
+              <div className="flex-shrink-0 mr-auto">
                 <button
                   onClick={() => setIsLocationModalOpen(true)}
-                  className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 rounded-full hover:bg-gray-50 px-2 py-1.5 pr-4 transition-all duration-300 group border border-transparent hover:border-gray-100"
                 >
+                  <div className="w-9 h-9 rounded-full bg-blue-50 text-[#0463ac] flex items-center justify-center text-lg group-hover:bg-[#0463ac] group-hover:text-white transition-colors shadow-sm">
+                    <MdLocationOn />
+                  </div>
                   <div className="flex flex-col text-left">
-                    <div className="text-sm font-medium text-black flex items-center">
-                      <MdLocationOn className="text-red mr-1 text-lg" />
-                      Current Location
-                    </div>
-                    <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate">{currentLocation}</span>
-                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 ml-0.5">Location</span>
+                    <div className="flex items-center text-sm font-bold text-gray-800">
+                      <span className="max-w-[140px] truncate leading-none">{currentLocation}</span>
+                      <MdKeyboardArrowDown className="text-gray-400" />
                     </div>
                   </div>
                 </button>
               </div>
 
               {/* Search Bar */}
-              <div className="w-[590px] hidden lg:block">
-                <div className="relative">
+              <div className="w-[480px] hidden lg:block mx-auto">
+                <div className="relative group">
                   <input
                     ref={searchInputRef}
                     type="text"
                     placeholder={`Search ${services[placeholderIndex]}...`}
-                    className="w-full pl-4 pr-20 py-3 text-base border border-gray-200 bg-[#f7f7f7] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-6 pr-24 py-3 text-sm border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white rounded-full shadow-sm hover:shadow-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all duration-300 placeholder:text-gray-400"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                   />
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-black text-xl">
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-gray-400 text-xl">
                     <BiSearchAlt
-                      className="cursor-pointer hover:text-emerald-900 transition-colors"
+                      className="cursor-pointer hover:text-[#0463ac] transition-all duration-300 hover:scale-110"
                       onClick={() => {
                         setIsSearchFocused(true);
                         searchInputRef.current?.focus();
                       }}
                     />
                     <BsMicFill
-                      className={`cursor-pointer transition-colors ${isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-emerald-900'
+                      className={`cursor-pointer transition-all duration-300 ${isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-[#0463ac] hover:scale-110'
                         }`}
                       onClick={isSupported ? handleMicClick : () => alert("Voice search is not supported in this browser.")}
                     />
@@ -916,9 +909,9 @@ const Header = ({
           <div className="flex items-center space-x-4">
             <NavLink
               to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-5 py-3 bg-[#0463ac] hover:bg-[#52852d] text-white rounded-lg hover:from-emerald-800 hover:to-emerald-900 transition-all shadow-md hover:shadow-lg"
+              className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-full font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
             >
-              <span className="font-medium">PARTNER WITH US</span>
+              <span>PARTNER WITH US</span>
               {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
             </NavLink>
 
@@ -1230,36 +1223,41 @@ const Header = ({
       </AnimatePresence>
 
       {isGetAppModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg">
-            <button
-              onClick={() => setIsGetAppModalOpen(false)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-lg"
-            >
-              &times;
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
-            <p className="text-gray-700 text-sm text-center mb-5">
-              Book services faster, track orders, and earn rewards – all from your phone.
-            </p>
-            <div className="flex justify-center gap-4">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
-                target="_blank"
-                rel="noopener noreferrer"
+        typeof document !== 'undefined' && createPortal(
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+            <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg animate-fadeIn scale-100">
+              <button
+                onClick={() => setIsGetAppModalOpen(false)}
+                className="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
               >
-                <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
-              </a>
-              <a
-                href="https://apps.apple.com/in/app/hommile/id6744694127 "
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
-              </a>
+                &times;
+              </button>
+              <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
+              <p className="text-gray-600 text-sm text-center mb-6 leading-relaxed">
+                Book services faster, track orders, and earn rewards – all from your phone.
+              </p>
+              <div className="flex justify-center gap-4">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-90 transition-opacity"
+                >
+                  <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
+                </a>
+                <a
+                  href="https://apps.apple.com/in/app/hommile/id6744694127 "
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-90 transition-opacity"
+                >
+                  <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
+                </a>
+              </div>
             </div>
-          </div>
-        </div>
+          </div>,
+          document.body
+        )
       )}
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
@@ -1377,57 +1375,60 @@ const Header = ({
 
       {
         isOfferModalOpen && (
-          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              className="relative bg-white w-full max-w-xl rounded-xl shadow-xl border border-gray-200 overflow-hidden"
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setIsOfferModalOpen(false)}
-                className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
-                aria-label="Close offer modal"
+          typeof document !== 'undefined' && createPortal(
+            <div className="fixed inset-0 z-[9999] bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center px-4 py-6 sm:px-6">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="relative bg-white w-full max-w-xl rounded-xl shadow-xl border border-gray-200 overflow-hidden"
               >
-                &times;
-              </button>
+                {/* Close Button */}
+                <button
+                  onClick={() => setIsOfferModalOpen(false)}
+                  className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
+                  aria-label="Close offer modal"
+                >
+                  &times;
+                </button>
 
-              {/* Header */}
-              <div className="px-6 pt-6 pb-2 border-b border-gray-100">
-                <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 text-center">
-                  🎉 Limited-Time Offers Just for You!
-                </h2>
-                <p className="text-center text-sm text-gray-500 mt-1">
-                  Book now before they expire!
-                </p>
-              </div>
+                {/* Header */}
+                <div className="px-6 pt-6 pb-2 border-b border-gray-100">
+                  <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 text-center">
+                    🎉 Limited-Time Offers Just for You!
+                  </h2>
+                  <p className="text-center text-sm text-gray-500 mt-1">
+                    Book now before they expire!
+                  </p>
+                </div>
 
-              {/* Offer List */}
-              <ul className="px-6 py-4 max-h-[60vh] overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
-                {offers.map((offer, index) => (
-                  <li key={index} className="py-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">LIMITED</span>
-                        <p className="text-sm text-gray-800 font-medium">🛡️ {offer.label}</p>
+                {/* Offer List */}
+                <ul className="px-6 py-4 max-h-[60vh] overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
+                  {offers.map((offer, index) => (
+                    <li key={index} className="py-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">LIMITED</span>
+                          <p className="text-sm text-gray-800 font-medium">🛡️ {offer.label}</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setIsOfferModalOpen(false);
+                            navigate(offer.link); // now it redirects to specific offer link
+                          }}
+                          className="mt-1 sm:mt-0 text-sm font-semibold text-white bg-[#52852d] hover:bg-[#406a23] px-4 py-1.5 rounded transition-all"
+                        >
+                          Book Now
+                        </button>
                       </div>
-                      <button
-                        onClick={() => {
-                          setIsOfferModalOpen(false);
-                          navigate(offer.link); // now it redirects to specific offer link
-                        }}
-                        className="mt-1 sm:mt-0 text-sm font-semibold text-white bg-[#52852d] hover:bg-[#406a23] px-4 py-1.5 rounded transition-all"
-                      >
-                        Book Now
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </div>,
+            document.body
+          )
         )
       }
 
@@ -1462,176 +1463,179 @@ const Header = ({
 
       {
         isWalletModalOpen && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <AnimatePresence>
-              <motion.div
-                key="wallet-modal"
-                className="fixed inset-0 z-50 flex items-center justify-center px-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
+          typeof document !== 'undefined' && createPortal(
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
+              <AnimatePresence>
                 <motion.div
-                  className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
-                  initial={{ scale: 0.92, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.92, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                  key="wallet-modal"
+                  className="fixed inset-0 z-50 flex items-center justify-center px-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                 >
-                  {/* Minimal header accent */}
-                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
+                  <motion.div
+                    className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
+                    initial={{ scale: 0.92, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.92, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                  >
+                    {/* Minimal header accent */}
+                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-lime-300 to-sky-400" />
 
-                  {/* Card body */}
-                  <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
-                    {/* Close */}
-                    <button
-                      onClick={() => setIsWalletModalOpen(false)}
-                      className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
-                      aria-label="Close"
-                    >
-                      <FaTimes />
-                    </button>
-
-                    {/* Animated Wallet Icon */}
-                    <div className="relative flex items-center justify-center mb-4">
-                      {/* Soft pulsing ring */}
-                      <motion.span
-                        className="absolute h-20 w-20 rounded-full"
-                        style={{
-                          background:
-                            "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
-                          filter: "blur(2px)",
-                        }}
-                        initial={{ scale: 0.9, opacity: 0.5 }}
-                        animate={{ scale: 1.1, opacity: 1 }}
-                        transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
-                      />
-                      {/* Icon wrapper with subtle bob + glow */}
-                      <motion.div
-                        className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
-                        initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
-                        animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
-                        transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                    {/* Card body */}
+                    <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
+                      {/* Close */}
+                      <button
+                        onClick={() => setIsWalletModalOpen(false)}
+                        className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
+                        aria-label="Close"
                       >
-                        {/* Gentle inner glow */}
-                        <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
-                        {/* Wallet icon with soft gradient stroke */}
-                        <FaWallet
-                          className="text-white drop-shadow-sm"
-                          style={{
-                            fontSize: "28px",
-                            WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
-                          }}
-                        />
-                        {/* Quick shimmer sweep */}
+                        <FaTimes />
+                      </button>
+
+                      {/* Animated Wallet Icon */}
+                      <div className="relative flex items-center justify-center mb-4">
+                        {/* Soft pulsing ring */}
                         <motion.span
-                          className="absolute -inset-1 rounded-2xl"
+                          className="absolute h-20 w-20 rounded-full"
                           style={{
                             background:
-                              "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
-                            mixBlendMode: "screen",
+                              "radial-gradient(closest-side, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)",
+                            filter: "blur(2px)",
                           }}
-                          initial={{ x: "-120%" }}
-                          animate={{ x: "120%" }}
-                          transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
+                          initial={{ scale: 0.9, opacity: 0.5 }}
+                          animate={{ scale: 1.1, opacity: 1 }}
+                          transition={{ repeat: Infinity, repeatType: "mirror", duration: 1.8, ease: "easeInOut" }}
                         />
-                      </motion.div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
-                      Your Wallet
-                    </h3>
-
-                    {/* Balance label */}
-                    <div className="mt-3 flex items-center justify-center gap-2">
-                      <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
-                        Available Balance
-                      </span>
-                      <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
-                        Secured by Razorpay
-                      </span>
-                    </div>
-
-                    {/* Amount */}
-                    <motion.p
-                      key={walletBalance}
-                      className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
-                      initial={{ y: -10, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 220, damping: 18 }}
-                    >
-                      ₹{walletBalance}
-                    </motion.p>
-
-                    {/* Micro copy */}
-                    <p className="mt-3 text-white/90 text-center text-sm">
-                      {walletBalance > 0
-                        ? "Use your wallet amount instantly at checkout."
-                        : "Your wallet is empty. Invite friends to earn or add money to start."}
-                    </p>
-
-                    {/* CTAs */}
-                    <div className="mt-6 grid grid-cols-1 gap-3">
-                      {walletBalance > 0 ? (
-                        <>
-                          <button
-                            onClick={() => {
-                              setIsWalletModalOpen(false);
-                              navigate("/quickservice");
+                        {/* Icon wrapper with subtle bob + glow */}
+                        <motion.div
+                          className="relative h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-[1.5px] shadow-inner flex items-center justify-center"
+                          initial={{ y: 0, boxShadow: "0 10px 24px rgba(0,0,0,0.15)" }}
+                          animate={{ y: [-2, 2, -2], boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
+                          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                        >
+                          {/* Gentle inner glow */}
+                          <span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10" />
+                          {/* Wallet icon with soft gradient stroke */}
+                          <FaWallet
+                            className="text-white drop-shadow-sm"
+                            style={{
+                              fontSize: "28px",
+                              WebkitTextStroke: "0.5px rgba(255,255,255,0.35)",
                             }}
-                            className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                          >
-                            Book a Service
-                          </button>
+                          />
+                          {/* Quick shimmer sweep */}
+                          <motion.span
+                            className="absolute -inset-1 rounded-2xl"
+                            style={{
+                              background:
+                                "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%)",
+                              mixBlendMode: "screen",
+                            }}
+                            initial={{ x: "-120%" }}
+                            animate={{ x: "120%" }}
+                            transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut", delay: 0.3 }}
+                          />
+                        </motion.div>
+                      </div>
 
-                          <button
-                            onClick={() => {
-                              setIsWalletModalOpen(false);
-                              navigate("/my-wallet");
-                            }}
-                            className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
-                          >
-                            View Transactions
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => {
-                              setIsWalletModalOpen(false);
-                              setIsReferAndEarnOpen(true);
-                            }}
-                            className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                          >
-                            Refer a Friend & Earn
-                          </button>
+                      {/* Title */}
+                      <h3 className="text-white text-2xl sm:text-3xl font-bold text-center">
+                        Your Wallet
+                      </h3>
 
-                          <button
-                            onClick={() => {
-                              setIsWalletModalOpen(false);
-                              navigate("/my-wallet");
-                            }}
-                            className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
-                          >
-                            Add Money
-                          </button>
-                        </>
-                      )}
+                      {/* Balance label */}
+                      <div className="mt-3 flex items-center justify-center gap-2">
+                        <span className="rounded-full bg-white/15 px-3 py-1 text-white/90 text-xs font-medium tracking-wide">
+                          Available Balance
+                        </span>
+                        <span className="rounded-full bg-white/10 px-3 py-1 text-white/80 text-[11px] font-medium">
+                          Secured by Razorpay
+                        </span>
+                      </div>
+
+                      {/* Amount */}
+                      <motion.p
+                        key={walletBalance}
+                        className="text-white text-5xl sm:text-6xl font-extrabold mt-3 text-center leading-none"
+                        initial={{ y: -10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                      >
+                        ₹{walletBalance}
+                      </motion.p>
+
+                      {/* Micro copy */}
+                      <p className="mt-3 text-white/90 text-center text-sm">
+                        {walletBalance > 0
+                          ? "Use your wallet amount instantly at checkout."
+                          : "Your wallet is empty. Invite friends to earn or add money to start."}
+                      </p>
+
+                      {/* CTAs */}
+                      <div className="mt-6 grid grid-cols-1 gap-3">
+                        {walletBalance > 0 ? (
+                          <>
+                            <button
+                              onClick={() => {
+                                setIsWalletModalOpen(false);
+                                navigate("/quickservice");
+                              }}
+                              className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                            >
+                              Book a Service
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setIsWalletModalOpen(false);
+                                navigate("/my-wallet");
+                              }}
+                              className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                            >
+                              View Transactions
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => {
+                                setIsWalletModalOpen(false);
+                                setIsReferAndEarnOpen(true);
+                              }}
+                              className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                            >
+                              Refer a Friend & Earn
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setIsWalletModalOpen(false);
+                                navigate("/my-wallet");
+                              }}
+                              className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                            >
+                              Add Money
+                            </button>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Subtle trust row */}
+                      <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
+                        <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
+                        <span>Instant apply at checkout</span>
+                        <span className="mx-1">•</span>
+                        <span>No extra fees</span>
+                      </div>
                     </div>
-
-                    {/* Subtle trust row */}
-                    <div className="mt-5 flex items-center justify-center gap-2 text-white/80 text-xs">
-                      <span className="inline-block h-2 w-2 rounded-full bg-emerald-300" />
-                      <span>Instant apply at checkout</span>
-                      <span className="mx-1">•</span>
-                      <span>No extra fees</span>
-                    </div>
-                  </div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+              </AnimatePresence>
+            </div>,
+            document.body
+          )
         )
       }
 
