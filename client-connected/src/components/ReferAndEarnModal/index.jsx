@@ -53,26 +53,31 @@ const ReferAndEarn = ({ isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999]">
           {/* Backdrop with premium blur */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             onClick={onClose}
           />
 
-          {/* Modal Container */}
+          {/* Bottom Sheet Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 40 }}
-            transition={{ type: "spring", damping: 25, stiffness: 350 }}
-            className="relative bg-white w-[90%] sm:w-full max-w-sm rounded-[32px] shadow-2xl z-[101] flex flex-col border border-gray-100 overflow-hidden max-h-[70vh]"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[28px] shadow-2xl flex flex-col max-h-[85vh] border-t border-gray-100"
           >
-            {/* Header - Fixed & Sticky */}
-            <div className="p-6 pb-2 flex justify-between items-start bg-white z-20 flex-shrink-0">
+            {/* Drag Handle */}
+            <div className="flex justify-center pt-3 pb-2">
+              <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+            </div>
+
+            {/* Header */}
+            <div className="px-6 py-4 flex justify-between items-start flex-shrink-0">
               <div className="flex flex-col">
                 <h2 className="text-2xl font-black text-[#033053] tracking-tight leading-none">
                   Refer & Earn
@@ -81,7 +86,7 @@ const ReferAndEarn = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-full bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-black transition-colors"
+                className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-all"
                 aria-label="Close"
               >
                 <IoMdClose size={20} />
@@ -89,12 +94,12 @@ const ReferAndEarn = ({ isOpen, onClose }) => {
             </div>
 
             {/* Content Area - Scrollable */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 overscroll-contain">
-              <p className="text-gray-500 text-[13px] font-medium leading-relaxed mb-8 text-center sm:text-left">
+            <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-hide">
+              <p className="text-gray-500 text-sm font-medium leading-relaxed mb-8 text-center sm:text-left">
                 Spread the joy of Hommlie! Invite your friends and family to join and get <span className="text-[#0463ac] font-bold">instant rewards</span>.
               </p>
 
-              {/* Steps Gid */}
+              {/* Steps Grid */}
               <div className="grid grid-cols-3 gap-4 mb-8">
                 {steps.map((step, idx) => (
                   <div key={idx} className="flex flex-col items-center text-center group">
@@ -108,7 +113,7 @@ const ReferAndEarn = ({ isOpen, onClose }) => {
               </div>
 
               {/* Referral Box - Enhanced Visuals */}
-              <div className="bg-gradient-to-br from-[#f8faff] to-white rounded-[24px] p-5 border border-dashed border-[#0463ac]/30 shadow-sm">
+              <div className="bg-gradient-to-br from-[#f8faff] to-white rounded-[24px] p-5 border border-dashed border-[#0463ac]/30 shadow-sm mb-4">
                 <p className="text-[10px] font-extrabold text-[#033053]/70 uppercase tracking-[0.2em] text-center mb-3">Your Unique Code</p>
 
                 <div className="flex items-center gap-2.5">

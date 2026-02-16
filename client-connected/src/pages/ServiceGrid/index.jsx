@@ -251,7 +251,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
         aria-labelledby="service-modal-title"
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl p-4 sm:p-6 h-[60vh] sm:h-[74vh] overflow-y-auto shadow-2xl"
+          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl p-4 sm:p-6 h-[65vh] sm:h-[74vh] overflow-y-auto shadow-2xl"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}

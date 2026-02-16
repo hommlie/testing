@@ -15,6 +15,7 @@ export default function Wallet() {
   const [amount, setAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   const notify = useToast();
   const successNotify = (m) => notify(m, "success");
@@ -147,101 +148,106 @@ export default function Wallet() {
   };
 
   return (
-   <main className="sm:bg-[linear-gradient(135deg,#e6f6f1_0%,#fdf4f4_25%,#f0e6f9_50%,#e8f3fd_75%,#e6faec_100%)]">
-      <div className="mt-10 mb-10" >
-        {/* Wallet Card */}
-        <section className="relative mx-auto sm:-ml-0 -ml-10 w-[130%] sm:w-[95%] md:w-full rounded-[20px] sm:rounded-[28px] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]">
-          <div className="absolute inset-0 rounded-[20px] sm:rounded-[28px] bg-white/10 opacity-10 pointer-events-none" />
-          <div className="relative grid grid-cols-1 md:grid-cols-12 items-center gap-6 sm:gap-8 rounded-[20px] sm:rounded-[28px] bg-gradient-to-r from-[#0CA87B] to-[#0A6FA1] px-6 sm:px-10 py-8 sm:py-10">
-            <div className="col-span-12 md:col-span-7 lg:col-span-8 flex items-center gap-4">
-              <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-white/15 backdrop-blur-[1px] flex items-center justify-center">
-                <FaWallet className="text-white text-xl sm:text-2xl" />
+    <main className="min-h-screen bg-gray-50 pb-20 sm:pb-12">
+      <div className="w-full mx-auto px-3 sm:px-6 pt-6 sm:pt-10">
+        {/* Wallet Section */}
+        <section className="w-full mb-6 sm:mb-8">
+          <div className="w-[350px] sm:w-[0px] bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-10 w-10 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                <FaWallet className="text-[#0CA87B] text-lg" />
               </div>
-              <h2 className="text-white text-2xl sm:text-3xl font-semibold tracking-tight">
+              <h2 className="text-xl font-bold text-gray-900 tracking-tight">
                 Digital Wallet
               </h2>
             </div>
 
-            <div className="col-span-12 md:col-span-5 lg:col-span-4 flex md:justify-end">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+              <div>
+                <p className="text-gray-500 text-sm font-medium mb-1">Available Balance</p>
+                <h3 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
+                  ₹{Number(wallet?.balance ?? 0).toFixed(2)}
+                </h3>
+              </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="w-full md:w-auto inline-flex items-center justify-center rounded-xl bg-[#92B775] px-6 sm:px-8 py-3 text-white text-base sm:text-lg font-semibold shadow-[0_8px_16px_rgba(255,106,92,0.35)] transition-transform hover:scale-[1.03] active:scale-[0.98] focus:outline-none"
+                className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white px-6 py-3.5 rounded-xl font-bold shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
               >
+                <FaWallet className="text-white/80" />
                 Add Money
               </button>
-            </div>
-
-            <div className="col-span-12 pt-2">
-              <p className="text-white/90 text-lg sm:text-xl">Available Balance</p>
-              <p className="mt-2 text-white text-4xl sm:text-6xl font-bold leading-none">
-                ₹{Number(wallet?.balance ?? 0).toFixed(2)}
-              </p>
             </div>
           </div>
         </section>
 
-        {/* Transactions Card */}
-        <section className="sm:-ml-0 -ml-10 w-[130%] sm:w-[100%] mt-8 sm:mt-10 rounded-[20px] sm:rounded-[28px] bg-[rgba(7,20,45,0.65)] backdrop-blur-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] ring-1 ring-white/5">
-          <div className="px-6 sm:px-10 py-6 sm:py-8">
-            <h3 className="text-white text-2xl sm:text-3xl font-semibold">
+        {/* Transactions Section */}
+        <section className="w-full mt-6">
+          <div className="w-full flex items-center justify-between mb-4 px-1">
+            <h3 className="text-gray-900 text-lg sm:text-xl font-bold tracking-tight">
               Transaction History
             </h3>
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="text-[#0A6FA1] hover:text-[#085d85] font-semibold text-sm flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-[#0A6FA1]/5"
+            >
+              {showAll ? "See Less" : "See More"}
+              <FaChevronRight className={`text-[10px] transition-transform ${showAll ? "rotate-90" : ""}`} />
+            </button>
+          </div>
 
+          <div>
             {isLoading ? (
-              <div className="flex items-center justify-center py-12 sm:py-16">
-                <div className="h-10 w-10 sm:h-12 sm:w-12 animate-spin rounded-full border-4 border-white/30 border-t-transparent" />
+              <div className="flex items-center justify-center py-12">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#0CA87B]/30 border-t-[#0CA87B]" />
               </div>
             ) : transactions.length > 0 ? (
-              <div className="mt-4 sm:mt-6 divide-y divide-white/5">
-                {transactions.map((t) => (
+              <div className="flex flex-col gap-3">
+                {transactions.slice(0, showAll ? undefined : 5).map((t) => (
                   <div
                     key={t.id}
-                    className="group flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 py-4 sm:py-5 transition-colors hover:bg-white/5 rounded-xl px-3 sm:px-4"
+                    className="bg-white rounded-2xl p-4 flex items-center justify-between gap-4 border border-gray-200 shadow-sm transition-all hover:bg-gray-50"
                   >
                     <div className="flex items-center gap-4">
                       <div
-                        className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full ${
-                          t.transaction_type === "credit"
-                            ? "bg-emerald-400/15"
-                            : "bg-red-400/15"
-                        }`}
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${t.transaction_type === "credit"
+                          ? "bg-emerald-50 text-emerald-600"
+                          : "bg-red-50 text-red-500"
+                          }`}
                       >
                         {t.transaction_type === "credit" ? (
-                          <BsArrowUpCircleFill className="text-emerald-400 text-xl sm:text-2xl" />
+                          <BsArrowUpCircleFill className="text-2xl" />
                         ) : (
-                          <BsArrowDownCircleFill className="text-red-400 text-xl sm:text-2xl" />
+                          <BsArrowDownCircleFill className="text-2xl" />
                         )}
                       </div>
                       <div>
-                        <p className="text-white/95 font-medium text-sm sm:text-base">
+                        <p className="text-gray-900 font-bold text-sm sm:text-base leading-tight mb-0.5">
                           {t.description}
                         </p>
-                        <p className="text-white/60 text-xs sm:text-sm">
-                          {format(new Date(t.created_at || t.createdAt), "MMM dd, yyyy HH:mm")}
+                        <p className="text-gray-400 text-xs font-medium">
+                          {format(new Date(t.created_at || t.createdAt), "MMM dd, yyyy • HH:mm")}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="text-right shrink-0">
                       <p
-                        className={`text-base sm:text-lg font-semibold ${
-                          t.transaction_type === "credit"
-                            ? "text-emerald-300"
-                            : "text-red-300"
-                        }`}
+                        className={`text-base sm:text-lg font-bold ${t.transaction_type === "credit"
+                          ? "text-emerald-600"
+                          : "text-gray-900"
+                          }`}
                       >
                         {t.transaction_type === "credit" ? "+" : "-"}₹{Number(t.amount ?? 0).toFixed(2)}
                       </p>
-                      <FaChevronRight className="hidden sm:block text-white/40 group-hover:text-white/70 transition-colors" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="py-12 sm:py-16 text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white/5">
-                  <FaWallet className="text-white/60 text-xl sm:text-2xl" />
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                  <FaWallet className="text-3xl" />
                 </div>
-                <p className="text-white/70 text-base sm:text-lg">
+                <p className="text-gray-400 font-medium">
                   No transactions found
                 </p>
               </div>

@@ -124,11 +124,10 @@ const AddressModal = ({ isOpen, onClose }) => {
           placeholder="Search location..."
           autoComplete="off"
           disabled={isLoading}
-          className={`pl-10 pr-4 py-2 w-full rounded-full border shadow-sm text-sm transition focus:outline-none focus:ring-2 ${
-            errors.address
-              ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500'
-              : 'border-black focus:border-green-500 focus:ring-green-500'
-          } ${isLoading ? 'bg-gray-100' : 'bg-white'}`}
+          className={`pl-10 pr-4 py-2 w-full rounded-full border shadow-sm text-sm transition focus:outline-none focus:ring-2 ${errors.address
+            ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500'
+            : 'border-black focus:border-green-500 focus:ring-green-500'
+            } ${isLoading ? 'bg-gray-100' : 'bg-white'}`}
         />
         <BiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
         {isLoading && (
@@ -534,207 +533,293 @@ const AddressModal = ({ isOpen, onClose }) => {
   };
 
   /* ---------------------------
-     Render
+     Render - Bottom Sheet Style
   ---------------------------- */
   return (
-    <div className={`fixed inset-0 z-50 ${isOpen ? 'flex' : 'hidden'} items-center justify-center bg-black bg-opacity-50`}>
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+    <div className={`fixed inset-0 z-[9999] ${isOpen ? 'block' : 'hidden'}`}>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        onClick={onClose}
+      />
+
+      {/* Bottom Sheet Modal */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-[28px] shadow-2xl flex flex-col max-h-[85vh] transition-transform duration-500 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'
+          }`}
+        style={{ animation: isOpen ? 'slideUp 0.4s ease-out' : 'none' }}
+      >
+        {/* Drag Handle */}
+        <div className="flex justify-center pt-3 pb-2">
+          <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+        </div>
+
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-2xl font-semibold text-gray-800">Manage Addresses</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-            <IoMdClose size={24} />
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+              {formClicked ? (editId ? 'Update Address' : 'Add New Address') : 'My Addresses'}
+            </h2>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {formClicked ? 'Enter your delivery details below' : 'Manage your delivery locations'}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all"
+          >
+            <IoMdClose size={20} />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="flex-1 overflow-y-auto p-6 sm:p-8 scrollbar-hide">
           {formClicked ? (
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Map */}
-              <div className="w-full lg:w-1/2 h-[300px] lg:h-auto">
-                <div ref={mapRef} className="w-full h-full rounded-lg border shadow border-gray-300" />
+            <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto">
+              {/* Map Section */}
+              <div className="w-full lg:w-[45%] h-[300px] lg:h-auto min-h-[300px] rounded-2xl overflow-hidden shadow-inner border border-gray-200 relative">
+                <div ref={mapRef} className="w-full h-full" />
+                {/* Search Overlay on Map */}
+                <div className="absolute top-4 left-4 right-4 z-10">
+                  {renderAddressInput()}
+                </div>
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleFormSubmit} className="space-y-4 w-full lg:w-1/2">
-                <button
-                  type="button"
-                  onClick={() => setFormClicked(false)}
-                  className="mb-4 flex items-center text-[#249370] hover:text-green-700"
-                >
-                  <FaCircleArrowLeft className="mr-2" /> Back to Addresses
-                </button>
-
-                {renderAddressInput()}
-
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name *</label>
-                  <input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.name ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                  />
-                  {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name}</p>}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Form Section */}
+              <form onSubmit={handleFormSubmit} className="w-full lg:w-[55%] space-y-5">
+                <div className="grid grid-cols-1 gap-5">
                   <div>
-                    <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Receiver's Name</label>
                     <input
-                      id="landmark"
-                      name="landmark"
-                      value={formData.landmark}
+                      name="name"
+                      value={formData.name}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
-                      placeholder="e.g., Near SBI ATM"
+                      placeholder="e.g. John Doe"
+                      className={`w-full px-4 py-3 rounded-xl border bg-gray-50 focus:bg-white text-gray-900 placeholder:text-gray-400 transition-all outline-none focus:ring-2 focus:ring-[#0463ac]/20 ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#0463ac]'}`}
                     />
+                    {errors.name && <span className="text-xs text-red-500 mt-1">{errors.name}</span>}
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Mobile Number</label>
+                      <input
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={handleChange}
+                        maxLength={10}
+                        placeholder="10-digit number"
+                        className={`w-full px-4 py-3 rounded-xl border bg-gray-50 focus:bg-white text-gray-900 placeholder:text-gray-400 transition-all outline-none focus:ring-2 focus:ring-[#0463ac]/20 ${errors.mobile ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#0463ac]'}`}
+                      />
+                      {errors.mobile && <span className="text-xs text-red-500 mt-1">{errors.mobile}</span>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+                      <input
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="john@example.com"
+                        className={`w-full px-4 py-3 rounded-xl border bg-gray-50 focus:bg-white text-gray-900 placeholder:text-gray-400 transition-all outline-none focus:ring-2 focus:ring-[#0463ac]/20 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#0463ac]'}`}
+                      />
+                      {errors.email && <span className="text-xs text-red-500 mt-1">{errors.email}</span>}
+                    </div>
+                  </div>
+
                   <div>
-                    <label htmlFor="house_number" className="block text-sm font-medium text-gray-700">House / Flat Number</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Flat, House no., Building</label>
                     <input
-                      id="house_number"
                       name="house_number"
                       value={formData.house_number}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 p-2 border shadow focus:border-green-500 focus:ring-green-500"
-                      placeholder="e.g., #101"
+                      placeholder="e.g. Flat 101, Galaxy Apts"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#0463ac] focus:ring-2 focus:ring-[#0463ac]/20 text-gray-900 placeholder:text-gray-400 transition-all outline-none"
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">Pincode *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Area / Street / Sector</label>
                     <input
-                      id="pincode"
-                      name="pincode"
-                      value={formData.pincode}
+                      name="address"
+                      value={formData.address}
                       onChange={handleChange}
-                      className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.pincode ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
+                      placeholder="Start typing to search..."
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#0463ac] focus:ring-2 focus:ring-[#0463ac]/20 text-gray-900 placeholder:text-gray-400 transition-all outline-none"
                     />
-                    {errors.pincode && <p className="mt-2 text-sm text-red-600">{errors.pincode}</p>}
+                    {errors.address && <span className="text-xs text-red-500 mt-1">{errors.address}</span>}
                   </div>
-                  <div>
-                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile *</label>
-                    <input
-                      id="mobile"
-                      name="mobile"
-                      minLength={10}
-                      maxLength={10}
-                      value={formData.mobile}
-                      onChange={handleChange}
-                      className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.mobile ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                    />
-                    {errors.mobile && <p className="mt-2 text-sm text-red-600">{errors.mobile}</p>}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Pincode</label>
+                      <input
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 rounded-xl border bg-gray-50 focus:bg-white text-gray-900 placeholder:text-gray-400 transition-all outline-none focus:ring-2 focus:ring-[#0463ac]/20 ${errors.pincode ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#0463ac]'}`}
+                      />
+                      {errors.pincode && <span className="text-xs text-red-500 mt-1">{errors.pincode}</span>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Landmark (Optional)</label>
+                      <input
+                        name="landmark"
+                        value={formData.landmark}
+                        onChange={handleChange}
+                        placeholder="e.g. Near City Park"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#0463ac] focus:ring-2 focus:ring-[#0463ac]/20 text-gray-900 placeholder:text-gray-400 transition-all outline-none"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email *</label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md p-2 border shadow ${errors.email ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-green-500 focus:ring-green-500'}`}
-                  />
-                  {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
-                </div>
-
-                <div className="flex justify-end mt-6">
+                <div className="flex items-center gap-4 pt-4 mt-4 border-t border-gray-100">
+                  <button
+                    type="button"
+                    onClick={() => setFormClicked(false)}
+                    className="flex-1 px-6 py-3.5 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all"
+                  >
+                    Cancel
+                  </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#249370] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="flex-1 px-6 py-3.5 rounded-xl bg-[#0463ac] text-white font-semibold shadow-lg shadow-[#0463ac]/20 hover:shadow-xl hover:bg-[#0351a0] hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
-                    {editId ? 'Update Address' : 'Save Address'}
+                    {editId ? 'Update & Save' : 'Save Address'}
                   </button>
                 </div>
               </form>
             </div>
           ) : (
-            <>
-              {addresses.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {addresses.map((a) => (
-                    <div
-                      key={a.id}
-                      onClick={() => handleSetDefault(a)}
-                      className={`relative p-4 rounded-lg cursor-pointer transition-all duration-200 ${
-                        a.default
-                          ? 'border-2 border-green-500 bg-green-50'
-                          : 'border border-gray-200 hover:border-green-300 hover:bg-green-50'
-                      }`}
-                    >
-                      <div className="absolute top-2 right-2 flex space-x-2">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleEditAdd(a.id); }}
-                          className="text-gray-500 hover:text-[#249370]"
-                        >
-                          <MdEdit size={20} />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleDeleteAdd(a.id); }}
-                          className="text-gray-500 hover:text-red-600"
-                        >
-                          <RiDeleteBin5Line size={20} />
-                        </button>
-                      </div>
+            <div className="space-y-6 max-w-6xl mx-auto">
+              {/* Action Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  onClick={handleAddNew}
+                  className="group flex items-center justify-center gap-3 w-full py-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-[#0463ac] hover:bg-[#0463ac]/5 transition-all duration-300"
+                >
+                  <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[#0463ac]/10 text-[#0463ac] group-hover:scale-110 transition-transform">
+                    <FaPlus size={18} />
+                  </div>
+                  <span className="font-semibold text-gray-700 group-hover:text-[#0463ac]">Add New Address</span>
+                </button>
 
-                      <h3 className="font-semibold text-lg mb-1">{a.name}</h3>
-                      {a.house_number && <p className="text-sm text-gray-600 mb-1">{a.house_number}</p>}
-                      <p className="text-sm text-gray-600 mb-1">{a.address}</p>
-                      {a.landmark && <p className="text-sm text-gray-600 mb-1">{a.landmark}</p>}
-                      <p className="text-sm text-gray-600 mb-1">{a.pincode}</p>
-                      <p className="text-sm text-gray-600 mb-1 flex items-center">
-                        <MdCall className="mr-1" /> {a.mobile}
-                      </p>
-                      <p className="text-sm text-gray-600">{a.email}</p>
-                      {a.default && (
-                        <span className="absolute bottom-2 right-2 text-xs font-semibold text-[#249370]">
-                          Default
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                <button
+                  onClick={getCurrentLocation}
+                  className="group flex items-center justify-center gap-3 w-full py-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-[#0463ac] hover:bg-[#0463ac]/5 transition-all duration-300"
+                >
+                  <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[#0463ac]/10 text-[#0463ac] group-hover:scale-110 transition-transform">
+                    <GrLocation size={18} />
+                  </div>
+                  <span className="font-semibold text-gray-700 group-hover:text-[#0463ac]">Use Current Location</span>
+                </button>
+              </div>
+
+              {/* Address List */}
+              {addresses.length > 0 ? (
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Saved Addresses</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {addresses.map((a) => (
+                      <div
+                        key={a.id}
+                        onClick={() => handleSetDefault(a)}
+                        className={`group relative p-5 rounded-2xl border transition-all duration-300 cursor-pointer ${a.default
+                          ? 'border-[#0463ac] bg-[#0463ac]/5 shadow-md shadow-[#0463ac]/10 ring-1 ring-[#0463ac]'
+                          : 'border-gray-200 bg-white hover:border-[#0463ac]/50 hover:shadow-lg'
+                          }`}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`h-8 w-8 flex items-center justify-center rounded-full ${a.default ? 'bg-[#0463ac] text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-[#0463ac] group-hover:text-white transition-colors'}`}>
+                              <GrLocation size={14} />
+                            </span>
+                            <h4 className="font-bold text-gray-900 text-lg">{a.name}</h4>
+                            {a.default && (
+                              <span className="px-2 py-0.5 rounded-full bg-[#0463ac] text-white text-[10px] font-bold uppercase tracking-wide">
+                                Default
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleEditAdd(a.id); }}
+                              className="p-2 rounded-full text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                              title="Edit"
+                            >
+                              <MdEdit size={18} />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDeleteAdd(a.id); }}
+                              className="p-2 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                              title="Delete"
+                            >
+                              <RiDeleteBin5Line size={18} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="pl-10 space-y-1">
+                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                            {a.house_number ? `${a.house_number}, ` : ''}{a.address}
+                          </p>
+                          {a.landmark && <p className="text-gray-500 text-xs">Landmark: {a.landmark}</p>}
+                          <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100/50">
+                            <span className="text-sm font-medium text-gray-700">{a.pincode}</span>
+                            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                              <MdCall className="text-gray-400" /> {a.mobile}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Selection Indicator */}
+                        <div className={`absolute top-5 right-5 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all ${a.default ? 'border-[#0463ac]' : 'border-gray-300'}`}>
+                          {a.default && <div className="h-2.5 w-2.5 rounded-full bg-[#0463ac]" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
-                <p className="text-center text-gray-500 my-8">No addresses found. Add a new address.</p>
+                <div className="flex flex-col items-center justify-center py-16 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                  <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
+                    <GrLocation className="text-gray-300 text-3xl" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">No addresses found</h3>
+                  <p className="text-gray-500 text-sm max-w-xs mx-auto">
+                    Add a new address to manage your deliveries efficiently.
+                  </p>
+                </div>
               )}
-
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <button
-                  className="px-4 py-2 bg-[#0463ac] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center"
-                  onClick={getCurrentLocation}
-                >
-                  <GrLocation className="mr-2" />
-                  Use Current Location
-                </button>
-
-                <button
-                  className="px-4 py-2 border border-[#249370] text-[#249370] rounded-md hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center"
-                  onClick={handleAddNew}
-                >
-                  <FaPlus className="mr-2" />
-                  Add New Address
-                </button>
-
-                {selected && (
-                  <button
-                    className="px-4 py-2 bg-[#0463ac] text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                    onClick={handleProceed}
-                  >
-                    Proceed with Selected Address
-                  </button>
-                )}
-              </div>
-            </>
+            </div>
           )}
         </div>
+
+        {/* Footer Actions (Only when list view) */}
+        {!formClicked && selected && addresses.length > 0 && (
+          <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end">
+            <button
+              onClick={handleProceed}
+              className="px-8 py-3.5 rounded-xl bg-[#0463ac] text-white font-bold shadow-lg shadow-[#0463ac]/20 hover:shadow-xl hover:bg-[#0351a0] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+            >
+              <span>Confirm Selection</span>
+              <FaCircleArrowLeft className="rotate-180" />
+            </button>
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        @keyframes slideUp {
+          from {
+            transform: translateY(100%);
+          }
+          to {
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };

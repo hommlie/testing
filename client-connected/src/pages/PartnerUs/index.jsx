@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaCheckCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../config/config';
 import { useToast } from '../../context/ToastProvider';
+import { motion } from "framer-motion";
 
 const PartnerWithUs = () => {
     const navigate = useNavigate();
@@ -55,175 +56,202 @@ const PartnerWithUs = () => {
         formRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    const categories = [
+        { title: "AC & appliance technicians", description: "Installation, repairs, maintenance, servicing, cleaning" },
+        { title: "Electricians, plumbers & carpenters", description: "Furniture installation, plumbing repairs, wiring or rewiring" },
+        { title: "Cleaners", description: "House cleaning, kitchen cleaning, bathroom cleaning" },
+        { title: "Female beauticians", description: "Facials, waxing, haircuts, massage for women" },
+        { title: "Male stylists & barbers", description: "Facials, haircuts, massage for men, beard trimming" },
+    ];
+
+    const steps = [
+        { title: "Use the app", description: "Tell us when and where you want to work" },
+        { title: "Delight your customers", description: "Work your magic in a 1:1 setting with your clients" },
+        { title: "Get paid weekly", description: "We ensure your peace of mind with automated weekly payouts" },
+    ];
+
     return (
-        <div className="min-h-screen font-sans"
-        style={{background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)"}}
-        >
-        <main className="container mx-auto px-4 py-16">
-            <section className=" text-center space-y-12">
-            <h1 className="text-2xl font-extrabold mb-6 text-gray-800">
-                Earn up to <span style={{color: "#249370"}}>3 times</span> your current income
-            </h1>
-            <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-                Join a thriving community of over 50,000 service professionals and transform your life
-            </p>
-            <button onClick={scrollToForm} style={{backgroundColor: "#249370"}} className="text-white px-10 py-2 rounded-full text-lg font-semibold hover:bg-purple-700 transition-colors duration-300 shadow-xl transform hover:scale-105">
-                Join Us Today
-            </button>
-            </section>
-
-            <section className="mb-24 flex flex-wrap gap-10 justify-center mt-10 px-5 text-center text-black capitalize">
-            {[
-                { number: "50,000+", label: "Professionals worldwide" },
-                { number: "1500 Cr+", label: "Paid to partners in 2022" },
-                { number: "12 Lakh+", label: "Services delivered last month globally" },
-            ].map((item, index) => (
-                <div key={index} className="flex flex-col gap-2">
-                <div className="text-3xl font-black">{item.number}</div>
-                <div className="text-lg">{item.label}</div>
+        <div className="min-h-screen font-sans bg-gray-50">
+            {/* Hero Section */}
+            <section className="bg-white pt-16 pb-12 px-4 shadow-sm relative overflow-hidden">
+                <div className="container mx-auto text-center max-w-4xl relative z-10">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+                    >
+                        Earn up to <span className="text-hommlie">3 times</span> your current income
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto"
+                    >
+                        Join a thriving community of over 50,000 service professionals and transform your life
+                    </motion.p>
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={scrollToForm}
+                        className="bg-hommlie text-white px-8 py-3 rounded-md text-lg font-medium hover:bg-hommlie/90 transition-all shadow-sm"
+                    >
+                        Join Us Today
+                    </motion.button>
                 </div>
-            ))}
             </section>
 
-            <section className="mb-24">
-            <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Join us in these categories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:ml-8 sm:mr-10">
-                {[
-                { title: "AC & appliance technicians", description: "Installation, repairs, maintenance, servicing, cleaning" },
-                { title: "Electricians, plumbers & carpenters", description: "Furniture installation, plumbing repairs, wiring or rewiring" },
-                { title: "Cleaners", description: "House cleaning, kitchen cleaning, bathroom cleaning" },
-                { title: "Female beauticians", description: "Facials, waxing, haircuts, massage for women" },
-                { title: "Male stylists & barbers", description: "Facials, haircuts, massage for men, beard trimming" },
-                ].map((category, index) => (
-                <div key={index} className="bg-white px-4 py-8 rounded shadow hover:shadow-xl transition-shadow duration-300 glow-border">
-                    <h3 className="text-2xl font-semibold mb-4 text-green-700">{category.title}</h3>
-                    <p className="text-gray-600 mb-6">{category.description}</p>
-                    <button onClick={scrollToForm} className="flex flex-row items-center gap-2 font-semibold hover:text-purple-700 transition-colors duration-300" style={{color: "#249370"}}>
-                    Apply Now <FaArrowRight size={14} />
+            {/* Stats Section */}
+            <section className="bg-white border-b border-gray-100 py-8">
+                <div className="container mx-auto px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                        {[
+                            { number: "50,000+", label: "Professionals worldwide" },
+                            { number: "1500 Cr+", label: "Paid to partners in 2022" },
+                            { number: "12 Lakh+", label: "Services delivered globally" },
+                        ].map((item, index) => (
+                            <div key={index} className="px-4 py-2">
+                                <div className="text-3xl font-bold text-gray-900 mb-1">{item.number}</div>
+                                <div className="text-sm font-medium text-gray-500 uppercase tracking-wide">{item.label}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <main className="container mx-auto px-4 py-12 space-y-16 max-w-6xl">
+
+                {/* Categories */}
+                <section>
+                    <div className="text-center mb-10">
+                        <span className="text-hommlie font-semibold uppercase tracking-wider text-xs mb-2 block">Opportunities</span>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Join us in these categories</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                        {categories.map((category, index) => (
+                            <div key={index} className="bg-white p-6 rounded-xl border border-gray-100 hover:border-hommlie/30 hover:shadow-lg transition-all duration-300 group">
+                                <h3 className="text-lg font-bold mb-3 text-gray-800 group-hover:text-hommlie transition-colors">{category.title}</h3>
+                                <p className="text-sm text-gray-500 mb-4 leading-relaxed">{category.description}</p>
+                                <button onClick={scrollToForm} className="text-sm font-semibold text-hommlie flex items-center gap-2 group-hover:gap-3 transition-all">
+                                    Apply Now <FaArrowRight size={12} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* How It Works */}
+                <section>
+                    <div className="text-center mb-10">
+                        <span className="text-hommlie font-semibold uppercase tracking-wider text-xs mb-2 block">Process</span>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">How Hommlie Works</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                        {steps.map((step, index) => (
+                            <div key={index} className="bg-white p-8 rounded-xl border border-gray-100 text-center hover:shadow-md transition-all">
+                                <div className="w-12 h-12 bg-hommlie/10 rounded-full flex items-center justify-center mx-auto mb-4 text-hommlie font-bold text-xl">
+                                    {index + 1}
+                                </div>
+                                <h3 className="text-lg font-bold mb-3 text-gray-800">{step.title}</h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Form & CTA Combined */}
+                <section id='form' ref={formRef} className="max-w-5xl mx-auto grid md:grid-cols-2 gap-0 overflow-hidden rounded-2xl bg-white shadow-xl border border-gray-100">
+                    <div className="p-8 md:p-12 bg-gray-50 flex flex-col justify-center">
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Why Partner With Us?</h2>
+                        <ul className="space-y-4 mb-8">
+                            <li className="flex items-center text-gray-700">
+                                <FaCheckCircle className="text-hommlie mr-3 flex-shrink-0" /> Guaranteed weekly payouts
+                            </li>
+                            <li className="flex items-center text-gray-700">
+                                <FaCheckCircle className="text-hommlie mr-3 flex-shrink-0" /> Be your own boss
+                            </li>
+                            <li className="flex items-center text-gray-700">
+                                <FaCheckCircle className="text-hommlie mr-3 flex-shrink-0" /> Extensive training & support
+                            </li>
+                            <li className="flex items-center text-gray-700">
+                                <FaCheckCircle className="text-hommlie mr-3 flex-shrink-0" /> Join 50,000+ happy partners
+                            </li>
+                        </ul>
+                        <div className="mt-auto pt-6 border-t border-gray-200">
+                            <p className="text-sm text-gray-500 italic leading-relaxed">
+                                "Hommlie has transformed the way I work. The consistent income and flexibility are unmatched."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="p-8 md:p-12">
+                        <h3 className="text-xl font-bold text-gray-900 mb-6">Get Started Today</h3>
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div>
+                                <label htmlFor="name" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Full Name</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-hommlie focus:border-hommlie block p-3 transition-colors outline-none"
+                                    placeholder="Enter your name"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="mobile" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Mobile Number</label>
+                                <input
+                                    type="tel"
+                                    id="mobile"
+                                    minLength={10}
+                                    maxLength={10}
+                                    value={formData.mobile}
+                                    onChange={handleChange}
+                                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-hommlie focus:border-hommlie block p-3 transition-colors outline-none"
+                                    placeholder="Enter 10-digit mobile number"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="message" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Message (Optional)</label>
+                                <textarea
+                                    id="message"
+                                    rows="3"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-hommlie focus:border-hommlie block p-3 transition-colors outline-none"
+                                    placeholder="Tell us about yourself"
+                                ></textarea>
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full text-white bg-hommlie hover:bg-hommlie/90 font-bold rounded-lg text-sm px-5 py-3 text-center transition-all shadow-md hover:shadow-lg"
+                            >
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </main>
+
+            {/* Bottom CTA Banner */}
+            <section className="bg-hommlie py-16 px-4 text-center relative overflow-hidden">
+                {/* Decorative circles */}
+                <div className="absolute top-0 left-0 -ml-20 -mt-20 w-60 h-60 bg-white/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-60 h-60 bg-white/5 rounded-full blur-3xl"></div>
+
+                <div className="relative z-10 max-w-3xl mx-auto">
+                    <h2 className="text-2xl md:text-4xl font-bold text-white mb-6">Ready to transform your career?</h2>
+                    <p className="text-white/80 mb-8 text-lg">Join thousands of service professionals who trust Hommlie for their livelihood.</p>
+                    <button
+                        onClick={scrollToForm}
+                        className="bg-white text-hommlie px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all shadow-lg transform hover:-translate-y-1"
+                    >
+                        Join 50,000+ other partners
                     </button>
                 </div>
-                ))}
-            </div>
             </section>
-
-            <section className="mb-24">
-            <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">How Hommlie Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:ml-8 sm:mr-10">
-                {[
-                { title: "Use the app", description: "Tell us when and where you want to work" },
-                { title: "Delight your customers", description: "Work your magic in a 1:1 setting with your clients" },
-                { title: "Get paid weekly", description: "We ensure your peace of mind with automated weekly payouts" },
-                ].map((step, index) => (
-                <div key={index} className="text-center bg-white p-8 rounded shadow hover:shadow-xl transition-shadow duration-300 glow-border">
-                    <h3 className="text-2xl font-semibold mb-4 text-green-700">{step.title}</h3>
-                    <p className="text-gray-600">{step.description}</p>
-                </div>
-                ))}
-            </div>
-            </section>
-
-            {/* <section className="mb-24">
-                <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Join Hommlie in 3 easy steps</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 sm:ml-8">
-                    {[
-                    {
-                        number: 1,
-                        title: "Apply online",
-                        description: "Book an interview slot with your team in a few simple steps."
-                    },
-                    {
-                        number: 2,
-                        title: "Meet our trainer",
-                        description: "Keep your identity documents and a police check. We can help you get one as well."
-                    },
-                    {
-                        number: 3,
-                        title: "Practical training",
-                        description: "Successful candidates will be invited to our office so that they can complete the process."
-                    },
-                    {
-                        icon: "check",
-                        title: "Go live & start earning",
-                        description: "It's showtime! You start receiving leads as soon as you create your profile on our partner app."
-                    }
-                    ].map((step, index) => (
-                    <div key={index} className="flex flex-col items-center text-center">
-                        <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4 bg-[#249370] text-white`}>
-                        {step.icon ? '✓' : step.number}
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                        <p className="text-gray-600">{step.description}</p>
-                        {index < 3 && (
-                        <div className="hidden md:block w-full h-0.5 bg-green-400 mt-8"></div>
-                        )}
-                    </div>
-                    ))}
-                </div>
-            </section> */}
-
-            <section id='form' ref={formRef} className="flex flex-col items-center px-5 w-full max-w-4xl mx-auto max-md:py-16 sm:-mt-16">
-                <h2 className="text-4xl font-black tracking-tighter text-black capitalize bg-clip-text bg-white mb-8">
-                Why work with us?
-                </h2>
-                <div className="text-lg text-black capitalize mb-12 text-center">
-                Join 50,000+ other partners
-                </div>
-                
-                <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 glow-border">
-                    <div className="mb-6">
-                        <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                            required 
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="mobile" className="block text-gray-700 text-sm font-bold mb-2">Mobile</label>
-                        <input 
-                            type="tel" 
-                            id="mobile" 
-                            minLength={10}
-                            maxLength={10}
-                            value={formData.mobile}
-                            onChange={handleChange}
-                            className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                            required 
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">Message</label>
-                        <textarea 
-                            id="message" 
-                            rows="4" 
-                            value={formData.message}
-                            onChange={handleChange}
-                            className="shadow appearance-none shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                            required
-                        ></textarea>
-                    </div>
-                    <div className="flex items-center justify-center">
-                        <button 
-                            type="submit" 
-                            style={{backgroundColor: "#249370"}} 
-                            className="text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline transition duration-300"
-                        >
-                            Send Message
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <section className="ml-8 mr-10 text-center text-white py-16 shadow-2xl sm:mt-10" style={{backgroundColor: "#249370"}}>
-                <h2 className="text-4xl font-bold mb-8">Ready to transform your career?</h2>
-                <button onClick={scrollToForm} style={{color: "#249370"}} className="bg-white px-10 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-xl transform hover:scale-105">
-                    Join 50,000+ other partners
-                </button>
-            </section>
-        </main>
         </div>
     );
 };
