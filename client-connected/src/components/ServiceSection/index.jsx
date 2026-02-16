@@ -695,7 +695,7 @@ const ServiceSection = ({ categories }) => {
                     <div>
                       <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
                         <Star className="w-4 h-4 text-[#0463ac]" />
-                        Product *
+                        Select Your Services *
                       </label>
                       <div
                         className="relative cursor-pointer group"
@@ -726,7 +726,7 @@ const ServiceSection = ({ categories }) => {
                     <div>
                       <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
                         <Home className="w-4 h-4 text-[#0463ac]" />
-                        Property Size *
+                        Select Your BHK *
                       </label>
                       <div
                         className="relative cursor-pointer group"

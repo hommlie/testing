@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
-import { RiDeleteBin5Line } from "react-icons/ri";
+import { RiDeleteBin5Line, RiRobot2Line } from "react-icons/ri";
 import {
   FaWhatsapp,
   FaPhoneAlt,
@@ -18,8 +18,12 @@ import {
   FaSignOutAlt,
   FaMoneyBillWave,
   FaBars,
+  FaGooglePlay,
+  FaAppStore,
+  FaHeadset,
+  FaInfoCircle,
 } from "react-icons/fa";
-import { MdLocationOn, MdEmail, MdKeyboardArrowDown } from "react-icons/md";
+import { MdLocationOn, MdEmail, MdKeyboardArrowDown, MdMyLocation, MdMap } from "react-icons/md";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import userIcon from "../../assets/images/user-icon.svg";
@@ -41,7 +45,8 @@ import bannerBg from '../../assets/images/navbarimage4.png';
 import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
 import HelpModal from "../HelpModal";
-import { FaTag } from 'react-icons/fa';
+import { FaTag, FaFire } from 'react-icons/fa';
+import { HiFire, HiBadgeCheck, HiLightningBolt } from "react-icons/hi";
 import ComingSoonModal from "../../pages/ComingSoonPage";
 
 
@@ -58,6 +63,11 @@ const Header = ({
   const [isGetAppModalOpen, setIsGetAppModalOpen] = useState(false);
   const [showMobileBanner, setShowMobileBanner] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isGetAppOpen, setIsGetAppOpen] = useState(false);
+  const [isOfferOpen, setIsOfferOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
+  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const searchInputRef = useRef(null);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
@@ -100,6 +110,11 @@ const Header = ({
   const headerRef = useRef(null);
   const loginDropdownRef = useRef(null);
   const cartDropdownRef = useRef(null);
+  const getAppDropdownRef = useRef(null);
+  const offerDropdownRef = useRef(null);
+  const helpDropdownRef = useRef(null);
+  const locationDropdownRef = useRef(null);
+  const aiChatDropdownRef = useRef(null);
   const searchTimeoutRef = useRef(null);
 
   const isHomePage = ["/", "/home"].includes(location.pathname);
@@ -291,8 +306,36 @@ const Header = ({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close search if clicking outside header
       if (headerRef.current && !headerRef.current.contains(event.target)) {
         setIsSearchOpen(false);
+      }
+
+      // Close account dropdown if clicking outside
+      if (loginDropdownRef.current && !loginDropdownRef.current.contains(event.target)) {
+        setIsLoginOpen(false);
+      }
+
+      // Close cart dropdown if clicking outside
+      if (cartDropdownRef.current && !cartDropdownRef.current.contains(event.target)) {
+        setIsCartOpen(false);
+      }
+
+      // Close other dropdowns
+      if (getAppDropdownRef.current && !getAppDropdownRef.current.contains(event.target)) {
+        setIsGetAppOpen(false);
+      }
+      if (offerDropdownRef.current && !offerDropdownRef.current.contains(event.target)) {
+        setIsOfferOpen(false);
+      }
+      if (helpDropdownRef.current && !helpDropdownRef.current.contains(event.target)) {
+        setIsHelpOpen(false);
+      }
+      if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+        setIsLocationOpen(false);
+      }
+      if (aiChatDropdownRef.current && !aiChatDropdownRef.current.contains(event.target)) {
+        setIsAiChatOpen(false);
       }
     };
 
@@ -300,13 +343,19 @@ const Header = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [headerRef]);
+  }, []);
 
-  // Clear mobile overlays on route change
+  // Clear overlays and dropdowns on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsSearchOpen(false);
     setIsLoginOpen(false);
+    setIsCartOpen(false);
+    setIsGetAppOpen(false);
+    setIsOfferOpen(false);
+    setIsHelpOpen(false);
+    setIsLocationOpen(false);
+    setIsAiChatOpen(false);
   }, [location.pathname]);
 
   const services = [
@@ -614,35 +663,191 @@ const Header = ({
                 </a>
 
                 {/* Product */}
-                <button
-                  type="button"
-                  onClick={() => setIsComingSoonOpen(true)}
+                <a
+                  href="https://hommlie.store"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
                 >
                   Product
-                </button>
+                </a>
 
               </div>
             </span>
 
 
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-5 text-[13px] text-gray-600 font-medium z-20">
-              <button
-                onClick={() => setIsGetAppModalOpen(true)}
-                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-              >
-                <FaMobileAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                Get App
-              </button>
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-[13px] text-gray-600 font-medium z-20">
+              <div className="relative" ref={getAppDropdownRef}>
+                <button
+                  onClick={() => setIsGetAppOpen(!isGetAppOpen)}
+                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isGetAppOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                >
+                  <FaMobileAlt className={`text-lg transition-colors duration-300 ${isGetAppOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                  Get App
+                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isGetAppOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                </button>
+
+                <AnimatePresence>
+                  {isGetAppOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute -left-5 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
+                    >
+                      <div className="absolute -top-2 left-10 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
+                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
+                            <FaMobileAlt className="text-white text-sm" />
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold text-sm">Download App</p>
+                            <p className="text-white/70 text-xs">For faster booking</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="py-2">
+                        <a href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share" target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          onClick={() => setIsGetAppOpen(false)}>
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                            <FaGooglePlay className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                          </div>
+                          <span className="font-medium">Google Play</span>
+                        </a>
+                        <a href="https://apps.apple.com/in/app/hommile/id6744694127" target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          onClick={() => setIsGetAppOpen(false)}>
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                            <FaAppStore className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                          </div>
+                          <span className="font-medium">App Store</span>
+                        </a>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
-              <button
-                onClick={() => setIsOfferModalOpen(true)}
-                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-              >
-                <FaTag className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                Offer
-              </button>
+              <div className="relative" ref={offerDropdownRef}>
+                <motion.button
+                  onClick={() => setIsOfferOpen(!isOfferOpen)}
+                  animate={!isOfferOpen ? {
+                    backgroundColor: ["rgba(255, 255, 255, 0)", "rgba(239, 68, 68, 0.05)", "rgba(255, 255, 255, 0)"],
+                    scale: [1, 1.02, 1],
+                  } : {}}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className={`flex items-center gap-2 transition-all duration-300 px-3 py-1.5 rounded-full relative ${isOfferOpen ? 'text-[#0463ac] bg-blue-50/50' : 'hover:text-[#0463ac] hover:bg-gray-50'}`}
+                >
+                  <div className="relative">
+                    <FaTag className={`text-lg transition-colors duration-300 ${isOfferOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                    {!isOfferOpen && (
+                      <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                      </span>
+                    )}
+                  </div>
+                  <span className="flex items-center gap-1.5">
+                    Offer
+                    {!isOfferOpen && (
+                      <span className="bg-red-500 text-white text-[8px] px-1.5 py-0.5 rounded-full font-extrabold uppercase animate-bounce tracking-tighter">Hot</span>
+                    )}
+                  </span>
+                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isOfferOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                </motion.button>
+
+                <AnimatePresence>
+                  {isOfferOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute -left-10 top-full mt-3 w-80 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
+                    >
+                      <div className="absolute -top-2 left-14 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
+                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
+                            <FaGift className="text-white text-sm" />
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold text-sm">Special Offers</p>
+                            <p className="text-white/70 text-xs">Grab them before they expire</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="py-2 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+                        {offers.map((offer, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="px-4 py-2"
+                          >
+                            <button
+                              onClick={() => {
+                                setIsOfferOpen(false);
+                                navigate(offer.link);
+                              }}
+                              className="w-full text-left flex flex-col gap-2 p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/80 hover:to-white border border-transparent hover:border-blue-100 transition-all duration-300 group/item relative overflow-hidden"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform duration-300 shadow-sm font-bold text-orange-600">
+                                    {index === 0 || index === 3 ? <HiFire className="text-xl" /> : <FaTag className="text-lg" />}
+                                  </div>
+                                  <div>
+                                    <span className="font-bold text-gray-800 block text-[13px] leading-tight group-hover/item:text-[#0463ac] transition-colors">{offer.label.split('–')[0]}</span>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <span className="text-[10px] items-center gap-1 flex px-2 py-0.5 rounded-full bg-blue-50 text-[#0463ac] font-bold uppercase tracking-tighter border border-blue-100/50 whitespace-nowrap">
+                                        <HiBadgeCheck className="text-xs" /> Verified Deal
+                                      </span>
+                                      {(index === 0 || index === 2) && (
+                                        <span className="text-[10px] items-center gap-1 flex px-2 py-0.5 rounded-full bg-red-50 text-red-500 font-bold uppercase tracking-tighter border border-red-100/50 animate-pulse">
+                                          <HiFire className="text-xs" /> Hot
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <span className="text-sm font-extrabold text-[#0463ac] block">
+                                    {offer.label.split('–')[1] || 'T&C Apply'}
+                                  </span>
+                                  <span className="text-[9px] text-gray-400 line-through">₹{(parseInt(offer.label.split('–')[1]?.replace(/[^\d]/g, '') || '0') * 1.5).toFixed(0)}*</span>
+                                </div>
+                              </div>
+
+                              <div className="mt-2 w-full flex items-center justify-between">
+                                <div className="flex-1 mr-4">
+                                  <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden">
+                                    <motion.div
+                                      initial={{ width: 0 }}
+                                      animate={{ width: index % 2 === 0 ? "85%" : "60%" }}
+                                      transition={{ duration: 1, delay: 0.5 }}
+                                      className={`h-full rounded-full ${index % 2 === 0 ? 'bg-orange-500' : 'bg-blue-500'}`}
+                                    />
+                                  </div>
+                                  <span className="text-[8px] text-gray-500 mt-1 block uppercase tracking-wide font-medium">Limited Time Offer • {index % 2 === 0 ? '85%' : '60%'} Claimed</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-[#0463ac] font-bold text-[11px] group-hover/item:translate-x-1 transition-transform">
+                                  Book <IoIosArrowForward />
+                                </div>
+                              </div>
+                            </button>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               {user?.length === 0 ? (
@@ -654,39 +859,349 @@ const Header = ({
                   Login
                 </button>
               ) : (
-                <button
-                  onClick={() => setIsLoginOpen(!isLoginOpen)}
-                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-                >
-                  <FaUser className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                  <span>Account</span>
-                </button>
+                <div className="relative" ref={loginDropdownRef}>
+                  <button
+                    onClick={() => setIsLoginOpen(!isLoginOpen)}
+                    className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isLoginOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                  >
+                    <FaUser className={`text-lg transition-colors duration-300 ${isLoginOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                    <span className="whitespace-nowrap">Account</span>
+                    <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isLoginOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                  </button>
+
+                  {/* Premium Account Dropdown */}
+                  <AnimatePresence>
+                    {isLoginOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
+                      >
+                        {/* Top arrow */}
+                        <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
+
+                        {/* User greeting header */}
+                        <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
+                              <FaUser className="text-white text-sm" />
+                            </div>
+                            <div>
+                              <p className="text-white font-semibold text-sm">Welcome back!</p>
+                              <p className="text-white/70 text-xs">Manage your account</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Menu items */}
+                        <div className="py-2">
+                          <NavLink
+                            to="/add-to-cart"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <IoCartOutline className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">My Cart</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/my-bookings"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <MdEmail className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">My Bookings</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/edit-profile"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <FaUser className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Edit Profile</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/my-wallet"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <FaWallet className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">My Wallet</span>
+                          </NavLink>
+
+                          <button
+                            onClick={() => {
+                              setIsAddressModalOpen(true);
+                              setIsLoginOpen(false);
+                            }}
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 w-full group/item"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <MdLocationOn className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Your Addresses</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setIsReferAndEarnOpen(true);
+                              setIsLoginOpen(false);
+                            }}
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 w-full group/item"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <FaGift className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Refer & Earn</span>
+                          </button>
+                        </div>
+
+                        {/* Logout section */}
+                        <div className="border-t border-gray-100 py-2">
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-red-500 hover:bg-red-50/60 transition-all duration-200 w-full group/item"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center group-hover/item:bg-red-500 transition-colors duration-200">
+                              <FaSignOutAlt className="text-red-500 text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Log out</span>
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               )}
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
-              <button
-                onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-              >
-                <div className="relative">
-                  <FaShoppingCart className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                  {cart?.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
-                      {cart?.length}
-                    </span>
+              <div className="relative" ref={cartDropdownRef}>
+                <button
+                  onClick={() => setIsCartOpen(!isCartOpen)}
+                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isCartOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                >
+                  <div className="relative">
+                    <FaShoppingCart className={`text-lg transition-colors duration-300 ${isCartOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                    {cart?.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
+                        {cart?.length}
+                      </span>
+                    )}
+                  </div>
+                  <span className="whitespace-nowrap">Cart</span>
+                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isCartOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                </button>
+
+                {/* Premium Cart Dropdown */}
+                <AnimatePresence>
+                  {isCartOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute right-0 top-full mt-3 w-80 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
+                    >
+                      {/* Top arrow */}
+                      <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
+
+                      {/* Cart header */}
+                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
+                            <FaShoppingCart className="text-white text-sm" />
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold text-sm">
+                              {cart?.length > 0 ? `${cart.length} Service${cart.length > 1 ? 's' : ''} Added` : 'Your Cart'}
+                            </p>
+                            <p className="text-white/70 text-xs">
+                              {cart?.length > 0 ? `Total: ₹${totalPrice?.toFixed(2)}` : 'No items yet'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Cart items */}
+                      {cart?.length > 0 ? (
+                        <>
+                          <div className="max-h-[280px] overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-200">
+                            {cart.map((item, index) => (
+                              <div
+                                key={item.id}
+                                className={`flex items-center gap-3 px-5 py-3 hover:bg-blue-50/40 transition-all duration-200 ${index !== cart.length - 1 ? 'border-b border-gray-50' : ''}`}
+                              >
+                                {/* Service icon */}
+                                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                  <IoCartOutline className="text-[#0463ac] text-lg" />
+                                </div>
+
+                                {/* Service details */}
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-800 truncate">{item.product_name}</p>
+                                  <div className="flex items-center gap-2 mt-0.5">
+                                    <span className="text-xs text-gray-500">Qty: {item.qty}</span>
+                                    <span className="text-xs text-gray-300">•</span>
+                                    <span className="text-xs font-semibold text-[#0463ac]">₹{(item.price * item.qty).toFixed(2)}</span>
+                                  </div>
+                                </div>
+
+                                {/* Remove button */}
+                                <button
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
+                                    const jwtToken = Cookies.get("HommlieUserjwtToken");
+                                    if (!jwtToken) return;
+                                    const user_id = jwtDecode(jwtToken);
+                                    try {
+                                      const response = await axios.post(
+                                        `${config.API_URL}/api/deleteproduct`,
+                                        { user_id: user_id.id, cart_id: item.id },
+                                        { headers: { Authorization: `Bearer ${jwtToken}` } }
+                                      );
+                                      if (response.data.status === 1) {
+                                        await getCart();
+                                      }
+                                    } catch (error) {
+                                      console.log("error removing from cart:", error);
+                                    }
+                                  }}
+                                  className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center hover:bg-red-500 transition-colors duration-200 group/del flex-shrink-0"
+                                  title="Remove item"
+                                >
+                                  <RiDeleteBin5Line className="text-red-500 text-xs group-hover/del:text-white transition-colors duration-200" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Total & Go to Cart */}
+                          <div className="border-t border-gray-100 px-5 py-4 bg-gray-50/50">
+                            <div className="flex justify-between items-center mb-3">
+                              <span className="text-sm text-gray-600 font-medium">Subtotal</span>
+                              <span className="text-base font-bold text-gray-900">₹{totalPrice?.toFixed(2)}</span>
+                            </div>
+                            <button
+                              onClick={() => {
+                                setIsCartOpen(false);
+                                navigate(`${config.VITE_BASE_URL}/add-to-cart`);
+                              }}
+                              className="w-full py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-xl font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                            >
+                              Go to Cart →
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        /* Empty cart state */
+                        <div className="px-5 py-8 text-center">
+                          <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-3">
+                            <FaShoppingCart className="text-[#0463ac] text-xl" />
+                          </div>
+                          <p className="text-sm font-semibold text-gray-700 mb-1">Your cart is empty</p>
+                          <p className="text-xs text-gray-400 mb-4">Browse services and add them to your cart</p>
+                          <button
+                            onClick={() => {
+                              setIsCartOpen(false);
+                              navigate(`${config.VITE_BASE_URL}/`);
+                            }}
+                            className="px-6 py-2 bg-gradient-to-r from-[#0463ac] to-[#0580ca] text-white rounded-xl font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                          >
+                            Browse Services
+                          </button>
+                        </div>
+                      )}
+                    </motion.div>
                   )}
-                </div>
-                Cart
-              </button>
+                </AnimatePresence>
+              </div>
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
-              <button
-                onClick={() => setIsHelpModalOpen(true)}
-                className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-              >
-                <FaQuestionCircle className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                Help
-              </button>
+              <div className="relative" ref={helpDropdownRef}>
+                <button
+                  onClick={() => setIsHelpOpen(!isHelpOpen)}
+                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isHelpOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                >
+                  <FaQuestionCircle className={`text-lg transition-colors duration-300 ${isHelpOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                  <span className="whitespace-nowrap">Help</span>
+                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isHelpOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
+                </button>
+
+                <AnimatePresence>
+                  {isHelpOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
+                    >
+                      <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
+                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
+                            <FaHeadset className="text-white text-sm" />
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold text-sm">Help & Support</p>
+                            <p className="text-white/70 text-xs">We are here to help</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="py-2">
+                        <a href="https://wa.me/917483860408" target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          onClick={() => setIsHelpOpen(false)}>
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                            <FaWhatsapp className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                          </div>
+                          <span className="font-medium">WhatsApp Us</span>
+                        </a>
+                        <a href="tel:6363865658"
+                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          onClick={() => setIsHelpOpen(false)}>
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                            <FaPhoneAlt className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                          </div>
+                          <span className="font-medium">Call Us</span>
+                        </a>
+                        <NavLink to="/contact-us"
+                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          onClick={() => setIsHelpOpen(false)}>
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                            <MdEmail className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                          </div>
+                          <span className="font-medium">Contact Form</span>
+                        </NavLink>
+                        <button
+                          onClick={() => {
+                            setIsHelpOpen(false);
+                            setIsHelpModalOpen(true);
+                          }}
+                          className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item border-t border-gray-50"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                            <FaInfoCircle className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                          </div>
+                          <span className="font-medium">More Help Options</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               {user?.length === 0 ? (
@@ -778,22 +1293,97 @@ const Header = ({
                   </div>
                 </button>
               </div> */}
-              <div className="flex-shrink-0 mr-auto">
-                <button
-                  onClick={() => setIsLocationModalOpen(true)}
-                  className="flex items-center gap-3 rounded-full hover:bg-gray-50 px-2 py-1.5 pr-4 transition-all duration-300 group border border-transparent hover:border-gray-100"
-                >
-                  <div className="w-9 h-9 rounded-full bg-blue-50 text-[#0463ac] flex items-center justify-center text-lg group-hover:bg-[#0463ac] group-hover:text-white transition-colors shadow-sm">
-                    <MdLocationOn />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 ml-0.5">Location</span>
-                    <div className="flex items-center text-sm font-bold text-gray-800">
-                      <span className="max-w-[140px] truncate leading-none">{currentLocation}</span>
-                      <MdKeyboardArrowDown className="text-gray-400" />
+              <div className="flex-shrink-0 mr-auto" ref={locationDropdownRef}>
+                <div className="relative">
+                  <button
+                    onClick={() => setIsLocationOpen(!isLocationOpen)}
+                    className={`flex items-center gap-3 rounded-full hover:bg-gray-50 px-2 py-1.5 pr-4 transition-all duration-300 group border ${isLocationOpen ? 'border-blue-200 bg-blue-50/50' : 'border-transparent hover:border-gray-100'}`}
+                  >
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-lg transition-colors shadow-sm ${isLocationOpen ? 'bg-[#0463ac] text-white' : 'bg-blue-50 text-[#0463ac] group-hover:bg-[#0463ac] group-hover:text-white'}`}>
+                      <MdLocationOn />
                     </div>
-                  </div>
-                </button>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 ml-0.5">Location</span>
+                      <div className="flex items-center text-sm font-bold text-gray-800">
+                        <span className="max-w-[140px] truncate leading-none">{currentLocation}</span>
+                        <MdKeyboardArrowDown className={`transition-transform duration-300 ${isLocationOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400'}`} />
+                      </div>
+                    </div>
+                  </button>
+
+                  <AnimatePresence>
+                    {isLocationOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute left-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
+                      >
+                        <div className="absolute -top-2 left-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
+                        <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
+                              <MdLocationOn className="text-white text-sm" />
+                            </div>
+                            <div>
+                              <p className="text-white font-semibold text-sm">Location Settings</p>
+                              <p className="text-white/70 text-xs text-ellipsis overflow-hidden whitespace-nowrap max-w-[180px]">{currentLocation}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="py-2">
+                          <button
+                            onClick={() => {
+                              setIsLocationOpen(false);
+                              getCurrentLocation();
+                            }}
+                            className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <MdMyLocation className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <div>
+                              <span className="font-medium block">Use Current Location</span>
+                              <span className="text-xs text-gray-500">Using GPS</span>
+                            </div>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setIsLocationOpen(false);
+                              setIsLocationModalOpen(true);
+                            }}
+                            className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <MdMap className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <div>
+                              <span className="font-medium block">Change Location</span>
+                              <span className="text-xs text-gray-500">Select on Map</span>
+                            </div>
+                          </button>
+
+                          {user?.length !== 0 && (
+                            <button
+                              onClick={() => {
+                                setIsLocationOpen(false);
+                                setIsAddressModalOpen(true);
+                              }}
+                              className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item border-t border-gray-50"
+                            >
+                              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                                <MdLocationOn className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                              </div>
+                              <span className="font-medium">Manage Addresses</span>
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               {/* Search Bar */}
@@ -906,106 +1496,54 @@ const Header = ({
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <div className="relative hidden md:block" ref={aiChatDropdownRef}>
+              <button
+                onClick={() => setIsAiChatOpen(!isAiChatOpen)}
+                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-[#0463ac] to-[#0693e3] text-white shadow-lg hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
+              >
+                <RiRobot2Line className="text-xl group-hover:rotate-12 transition-transform duration-300" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+              </button>
+
+              <AnimatePresence>
+                {isAiChatOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] z-50 border border-gray-100 overflow-hidden"
+                  >
+                    <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-10" />
+
+                    <div className="p-6 text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-tr from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center shadow-inner">
+                        <RiRobot2Line className="text-3xl text-[#0463ac]" />
+                      </div>
+
+                      <h3 className="text-lg font-bold text-gray-800 mb-2">AI Assistant</h3>
+                      <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                        Our intelligent AI support is currently under development. Stay tuned for a smarter experience!
+                      </p>
+                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-[#0463ac] text-xs font-bold uppercase tracking-wider border border-blue-100">
+                        Coming Soon 🚀
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <NavLink
               to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-full font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
+              className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
             >
               <span>PARTNER WITH US</span>
               {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
             </NavLink>
 
-            {/* Desktop Account Section */}
-            <div className="hidden md:block relative">
-              {user?.length !== 0 ? (
-                <button
-                  onClick={() => setIsLoginOpen(!isLoginOpen)}
-                  className="flex items-center space-x-2"
-                >
-                </button>
-              ) : null}
 
-              {isLoginOpen && (
-                <div
-                  ref={loginDropdownRef}
-                  className="absolute right-0 -mt-10 w-56 bg-white rounded-lg shadow-xl py-1 z-30 border border-gray-100 overflow-hidden"
-                >
-                  <NavLink
-                    to="/add-to-cart"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b border-gray-100"
-                    onClick={() => setIsLoginOpen(false)}
-                  >
-                    <div className="flex items-center">
-                      <IoCartOutline className="mr-2 text-emerald-600" />
-                      My Cart
-                    </div>
-                  </NavLink>
-                  <NavLink
-                    to="/my-bookings"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b border-gray-100"
-                    onClick={() => setIsLoginOpen(false)}
-                  >
-                    <div className="flex items-center">
-                      <MdEmail className="mr-2 text-emerald-600" />
-                      My Bookings
-                    </div>
-                  </NavLink>
-                  <NavLink
-                    to="/edit-profile"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b border-gray-100"
-                    onClick={() => setIsLoginOpen(false)}
-                  >
-                    <div className="flex items-center">
-                      <FaUser className="mr-2 text-emerald-600" />
-                      Edit Profile
-                    </div>
-                  </NavLink>
-                  <NavLink
-                    to="/my-wallet"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b border-gray-100"
-                    onClick={() => setIsLoginOpen(false)}
-                  >
-                    <div className="flex items-center">
-                      <FaWallet className="mr-2 text-emerald-600" />
-                      My Wallet
-                    </div>
-                  </NavLink>
-                  <button
-                    onClick={() => {
-                      setIsAddressModalOpen(true);
-                      setIsLoginOpen(false);
-                    }}
-                    className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b border-gray-100"
-                  >
-                    <div className="flex items-center">
-                      <MdLocationOn className="mr-2 text-emerald-600" />
-                      Your Addresses
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsReferAndEarnOpen(true);
-                      setIsLoginOpen(false);
-                    }}
-                    className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition-colors border-b border-gray-100"
-                  >
-                    <div className="flex items-center">
-                      <FaGift className="mr-2 text-emerald-600" />
-                      Refer & Earn
-                    </div>
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                  >
-                    <div className="flex items-center">
-                      <FaSignOutAlt className="mr-2" />
-                      Log out
-                    </div>
-                  </button>
-                </div>
-              )}
-            </div>
+
 
             <div className="md:hidden flex items-center gap-4">
               {/* Cart Button - Uniform Color */}
@@ -1447,10 +1985,13 @@ const Header = ({
       {/* Location Modal */}
       {
         isLocationModalOpen && (
-          <LocationModal
-            onClose={() => setIsLocationModalOpen(false)}
-            setCurrentLocation={setCurrentLocation}
-          />
+          typeof document !== 'undefined' && createPortal(
+            <LocationModal
+              onClose={() => setIsLocationModalOpen(false)}
+              setCurrentLocation={setCurrentLocation}
+            />,
+            document.body
+          )
         )
       }
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />

@@ -209,7 +209,7 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-20 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[9999] bg-black bg-opacity-50 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-md rounded-lg overflow-hidden">
         <div className="bg-white flex justify-between items-center p-4 border-b">
           <h2 className="text-lg font-semibold">Select Location</h2>
