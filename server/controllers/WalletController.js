@@ -92,20 +92,20 @@ exports.getWalletTransactions = async (req, res) => {
       return res.status(200).json({ status: 0, message: 'Wallet not found' });
     }
 
-   const transactions = await WalletTransaction.findAll({
-     where: { wallet_id: wallet.id },
-     attributes: [
-       "id",
-     "transaction_type",
-       "amount",
-       "description",
-       "payment_id",
-       // Normalize the timestamp name for the UI:
-       [WalletTransaction.sequelize.col("createdAt"), "created_at"],
-     ],
-     order: [[WalletTransaction.sequelize.col("createdAt"), "DESC"]],
-     raw: true,
-  });
+    const transactions = await WalletTransaction.findAll({
+      where: { wallet_id: wallet.id },
+      attributes: [
+        "id",
+        "transaction_type",
+        "amount",
+        "description",
+        "payment_id",
+        // Normalize the timestamp name for the UI:
+        [WalletTransaction.sequelize.col("created_at"), "created_at"],
+      ],
+      order: [[WalletTransaction.sequelize.col("created_at"), "DESC"]],
+      raw: true,
+    });
 
 
     return res.status(200).json({ status: 1, transactions, wallet });
