@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { GrLocation } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { MdEdit, MdCall } from "react-icons/md";
@@ -535,24 +536,21 @@ const AddressModal = ({ isOpen, onClose }) => {
   /* ---------------------------
      Render - Bottom Sheet Style
   ---------------------------- */
-  return (
-    <div className={`fixed inset-0 z-[9999] ${isOpen ? 'block' : 'hidden'}`}>
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div className={`fixed inset-0 z-[10001] flex items-center justify-center p-4 sm:p-6 transition-all duration-300 ${isOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-500 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
         onClick={onClose}
       />
 
-      {/* Bottom Sheet Modal */}
+      {/* Centered Modal Content */}
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-[28px] shadow-2xl flex flex-col max-h-[85vh] transition-transform duration-500 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'
+        className={`relative w-full max-w-5xl bg-white rounded-[32px] shadow-[0_32px_80px_-12px_rgba(0,0,0,0.3)] flex flex-col max-h-[90vh] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-10'
           }`}
-        style={{ animation: isOpen ? 'slideUp 0.4s ease-out' : 'none' }}
       >
-        {/* Drag Handle */}
-        <div className="flex justify-center pt-3 pb-2">
-          <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
-        </div>
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -809,18 +807,8 @@ const AddressModal = ({ isOpen, onClose }) => {
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        @keyframes slideUp {
-          from {
-            transform: translateY(100%);
-          }
-          to {
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-    </div>
+    </div>,
+    document.body
   );
 };
 
