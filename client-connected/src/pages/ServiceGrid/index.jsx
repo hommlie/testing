@@ -329,9 +329,9 @@ const ServiceGrid = ({ categories: propCategories }) => {
   };
 
   return (
-    <div className="px-2 sm:px-4 py-0 sm:py-4 mt-0 sm:mt-0 bg-cover bg-center bg-no-repeat">
+    <div className="ml-0 sm:ml-8 px-2 py-0 mt-0 sm:px-0 sm:py-4 sm:mt-0 sm:w-fit bg-cover bg-center bg-no-repeat">
       <motion.h1
-        className="text-lg sm:text-2xl mb-3 sm:mb-0 font-medium text-black sm:mb-6 sm:ml-2 flex items-center"
+        className="text-lg sm:text-2xl mb-3 sm:mb-0 font-medium text-black sm:mb-6 flex items-center whitespace-nowrap"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -381,9 +381,9 @@ const ServiceGrid = ({ categories: propCategories }) => {
         />
       </motion.h1>
 
-      <div className="sm:border sm:border-gray-300 sm:rounded-xl sm:p-4 sm:shadow-md sm:mx-0 sm:w-full mb-0">
+      <div className="sm:border sm:border-gray-200 sm:rounded-xl sm:p-2 sm:shadow-sm sm:w-full mb-0">
         {/* Premium Super-Compact Grid */}
-        <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-0">
+        <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mb-0">
           {finalServices.map((service, index) => {
             const name = service.category_name || service.name;
 
@@ -396,7 +396,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 whileHover={{ y: -3 }}
-                className="relative flex flex-col items-center py-4 px-2 sm:p-5 cursor-pointer group transition-all duration-300"
+                className="relative flex flex-col items-center py-4 px-2 sm:py-5 sm:px-1 cursor-pointer group transition-all duration-300"
               >
                 {/* Minimalist Hover Background */}
                 <div className="absolute inset-0 bg-gray-50/40 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -429,8 +429,8 @@ const ServiceGrid = ({ categories: propCategories }) => {
                   </motion.div>
                 </div>
 
-                <div className="flex flex-col items-center text-center z-10 w-full px-1">
-                  <span className="text-[12px] sm:text-[15px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors leading-[1.2] uppercase tracking-normal">
+                <div className="flex flex-col items-center text-center z-10 w-full px-1 max-w-[180px]">
+                  <span className="text-[12px] sm:text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors leading-[1.2] uppercase tracking-tight block">
                     {name}
                   </span>
 

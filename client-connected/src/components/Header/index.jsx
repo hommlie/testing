@@ -115,6 +115,7 @@ const Header = ({
   const helpDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
   const aiChatDropdownRef = useRef(null);
+  const referAndEarnDropdownRef = useRef(null);
   const searchTimeoutRef = useRef(null);
 
   const isHomePage = ["/", "/home"].includes(location.pathname);
@@ -336,6 +337,9 @@ const Header = ({
       }
       if (aiChatDropdownRef.current && !aiChatDropdownRef.current.contains(event.target)) {
         setIsAiChatOpen(false);
+      }
+      if (referAndEarnDropdownRef.current && !referAndEarnDropdownRef.current.contains(event.target)) {
+        setIsReferAndEarnOpen(false);
       }
     };
 
@@ -983,6 +987,13 @@ const Header = ({
                       </motion.div>
                     )}
                   </AnimatePresence>
+
+                  <div ref={referAndEarnDropdownRef} className="hidden md:block">
+                    <ReferAndEarn
+                      isOpen={isReferAndEarnOpen}
+                      onClose={() => setIsReferAndEarnOpen(false)}
+                    />
+                  </div>
                 </div>
               )}
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
@@ -1164,18 +1175,24 @@ const Header = ({
                         <a href="https://wa.me/917483860408" target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
                           onClick={() => setIsHelpOpen(false)}>
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200 flex-shrink-0">
                             <FaWhatsapp className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
                           </div>
-                          <span className="font-medium">WhatsApp Us</span>
+                          <div className="flex flex-col">
+                            <span className="font-bold text-gray-800">WhatsApp Us</span>
+                            <span className="text-[11px] text-[#0463ac] font-bold">+91 74838 60408</span>
+                          </div>
                         </a>
                         <a href="tel:6363865658"
                           className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
                           onClick={() => setIsHelpOpen(false)}>
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200 flex-shrink-0">
                             <FaPhoneAlt className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
                           </div>
-                          <span className="font-medium">Call Us</span>
+                          <div className="flex flex-col">
+                            <span className="font-bold text-gray-800">Call Us</span>
+                            <span className="text-[11px] text-[#0463ac] font-bold">63638 65658</span>
+                          </div>
                         </a>
                         <NavLink to="/contact-us"
                           className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
@@ -1224,7 +1241,7 @@ const Header = ({
       <div className="max-w-7xl mx-auto px-2 lg:px-10">
         {/* Main Header */}
         <div className="flex items-center justify-between h-[74px]">
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center gap-3">
             {/* Logo Section */}
             <div className="hidden sm:flex flex-shrink-0">
               <NavLink to="/" className="group">
@@ -1235,9 +1252,9 @@ const Header = ({
                 />
               </NavLink>
             </div>
-            <div className="flex sm:hidden w-full items-center justify-between px-2">
+            <div className="flex sm:hidden items-center gap-3 px-1">
               {/* Logo aligned left */}
-              <div className="flex items-center flex-shrink-0 -ml-8">
+              <div className="flex items-center flex-shrink-0">
                 <NavLink to="/">
                   <img
                     src="/images/logoh.png"
@@ -1255,11 +1272,11 @@ const Header = ({
                 {/* Location aligned right */}
                 <button
                   onClick={() => setIsLocationModalOpen(true)}
-                  className="flex items-start rounded-md hover:bg-gray-50 transition-colors"
+                  className="flex items-center rounded-md hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
-                      <MdLocationOn className="text-white mr-1 text-lg" />
+                      <MdLocationOn className="text-[#0463ac] mr-1 text-lg" />
                       Current Location
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
@@ -1271,10 +1288,10 @@ const Header = ({
               </div>
             </div>
 
-            <div className="hidden sm:block h-8 w-px bg-gray-200 mx-4"></div>
+            <div className="hidden sm:block h-8 w-px bg-gray-200 mx-1"></div>
 
             {/* Location and Search Section */}
-            <div className="hidden sm:flex pl-2 items-center gap-6 w-full justify-between">
+            <div className="hidden sm:flex items-center w-full gap-3">
               {/* Location Button */}
               {/* <div className="flex-1 max-w-md">
                 <button
@@ -1293,7 +1310,7 @@ const Header = ({
                   </div>
                 </button>
               </div> */}
-              <div className="flex-shrink-0 mr-auto" ref={locationDropdownRef}>
+              <div className="flex-shrink-0" ref={locationDropdownRef}>
                 <div className="relative">
                   <button
                     onClick={() => setIsLocationOpen(!isLocationOpen)}
@@ -1386,8 +1403,10 @@ const Header = ({
                 </div>
               </div>
 
+              <div className="hidden lg:block h-8 w-px bg-gray-200 mx-1"></div>
+
               {/* Search Bar */}
-              <div className="w-[480px] hidden lg:block mx-auto">
+              <div className="w-[480px] hidden lg:block">
                 <div className="relative group">
                   <input
                     ref={searchInputRef}
@@ -1445,102 +1464,58 @@ const Header = ({
                       </div>
                     </div>
                   )}
-                  {/* {isSearchFocused && searchTerm.length === 0 && (
-                    <div className="absolute top-full left-0 mt-3 w-full bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 px-5 py-4 max-h-96 overflow-y-auto transition-all duration-300 ease-in-out">
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-[15px] font-semibold text-gray-800 tracking-wide flex items-center gap-2">
-                          <svg
-                            className="w-5 h-5 text-emerald-600"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M13 7H7v6h6V7z" />
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Trending Searches
-                        </h3>
-                      </div>
 
-                      <ul className="space-y-2">
-                        {trendingSearches.map((item, idx) => (
-                          <li key={idx}>
-                            <button
-                              onMouseDown={() => setSearchTerm(item)}
-                              className="w-full flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-emerald-50 text-sm text-gray-700 rounded-lg border border-transparent hover:border-emerald-200 transition-all duration-200 group"
-                            >
-                              <span className="group-hover:text-emerald-700 transition">{item}</span>
-                              <svg
-                                className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )} */}
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="flex items-center space-x-2">
-            <div className="relative hidden md:block" ref={aiChatDropdownRef}>
-              <button
-                onClick={() => setIsAiChatOpen(!isAiChatOpen)}
-                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-[#0463ac] to-[#0693e3] text-white shadow-lg hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
-              >
-                <RiRobot2Line className="text-xl group-hover:rotate-12 transition-transform duration-300" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
-              </button>
-
-              <AnimatePresence>
-                {isAiChatOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] z-50 border border-gray-100 overflow-hidden"
+              {/* Actions Group: AI Bot & Partner */}
+              <div className="flex-1 flex items-center justify-end gap-6">
+                <div className="relative hidden md:block" ref={aiChatDropdownRef}>
+                  <button
+                    onClick={() => setIsAiChatOpen(!isAiChatOpen)}
+                    className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-[#0463ac] to-[#0693e3] text-white shadow-lg hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
                   >
-                    <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-10" />
+                    <RiRobot2Line className="text-xl group-hover:rotate-12 transition-transform duration-300" />
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+                  </button>
 
-                    <div className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-tr from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center shadow-inner">
-                        <RiRobot2Line className="text-3xl text-[#0463ac]" />
-                      </div>
+                  <AnimatePresence>
+                    {isAiChatOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] z-50 border border-gray-100 overflow-hidden"
+                      >
+                        <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-10" />
 
-                      <h3 className="text-lg font-bold text-gray-800 mb-2">AI Assistant</h3>
-                      <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                        Our intelligent AI support is currently under development. Stay tuned for a smarter experience!
-                      </p>
-                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-[#0463ac] text-xs font-bold uppercase tracking-wider border border-blue-100">
-                        Coming Soon 🚀
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                        <div className="p-6 text-center">
+                          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-tr from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center shadow-inner">
+                            <RiRobot2Line className="text-3xl text-[#0463ac]" />
+                          </div>
+
+                          <h3 className="text-lg font-bold text-gray-800 mb-2">AI Assistant</h3>
+                          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                            Our intelligent AI support is currently under development. Stay tuned for a smarter experience!
+                          </p>
+                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-[#0463ac] text-xs font-bold uppercase tracking-wider border border-blue-100">
+                            Coming Soon 🚀
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <NavLink
+                  to="/register-free-listing"
+                  className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
+                >
+                  <span>PARTNER WITH US</span>
+                </NavLink>
+              </div>
             </div>
-            <NavLink
-              to="/register-free-listing"
-              className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
-            >
-              <span>PARTNER WITH US</span>
-              {/* <img src={ondc} alt="ONDC Logo" className="h-7 w-7 object-contain" /> */}
-            </NavLink>
 
 
 
@@ -1668,7 +1643,6 @@ const Header = ({
                 {isMobileMenuOpen ? <RxCross1 size={22} /> : <AiOutlineMenu size={22} />}
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -1760,80 +1734,83 @@ const Header = ({
         )}
       </AnimatePresence>
 
-      {isGetAppModalOpen && (
-        typeof document !== 'undefined' && createPortal(
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-            <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg animate-fadeIn scale-100">
-              <button
-                onClick={() => setIsGetAppModalOpen(false)}
-                className="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
-              >
-                &times;
-              </button>
-              <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
-              <p className="text-gray-600 text-sm text-center mb-6 leading-relaxed">
-                Book services faster, track orders, and earn rewards – all from your phone.
-              </p>
-              <div className="flex justify-center gap-4">
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-90 transition-opacity"
+      {
+        isGetAppModalOpen && (
+          typeof document !== 'undefined' && createPortal(
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full relative shadow-lg animate-fadeIn scale-100">
+                <button
+                  onClick={() => setIsGetAppModalOpen(false)}
+                  className="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
                 >
-                  <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
-                </a>
-                <a
-                  href="https://apps.apple.com/in/app/hommile/id6744694127 "
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-90 transition-opacity"
-                >
-                  <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
-                </a>
+                  &times;
+                </button>
+                <h2 className="text-xl font-bold mb-4 text-center text-emerald-700">Download the Hommlie App</h2>
+                <p className="text-gray-600 text-sm text-center mb-6 leading-relaxed">
+                  Book services faster, track orders, and earn rewards – all from your phone.
+                </p>
+                <div className="flex justify-center gap-4">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:opacity-90 transition-opacity"
+                  >
+                    <img src="/assets/icons/playstore.svg" alt="Google Play Badge" className="h-10" />
+                  </a>
+                  <a
+                    href="https://apps.apple.com/in/app/hommile/id6744694127 "
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:opacity-90 transition-opacity"
+                  >
+                    <img src="/assets/icons/appstore.svg" alt="App Store Badge" className="h-10" />
+                  </a>
+                </div>
               </div>
-            </div>
-          </div>,
-          document.body
+            </div>,
+            document.body
+          )
         )
-      )}
+      }
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
-          <nav className="space-y-4">
-            <AnimatePresence>
-              {!isInBangalore && currentLocation !== "Get Current Location" && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0, y: -10 }}
-                  animate={{ height: "auto", opacity: 1, y: 0 }}
-                  exit={{ height: 0, opacity: 0, y: -10 }}
-                  className="overflow-hidden mb-3"
-                >
-                  <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl animate-bounce">📍</span>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
-                        <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">We're coming soon to {currentLocation.split(',')[0]}!</p>
+      {
+        isMobileMenuOpen && (
+          <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
+            <nav className="space-y-4">
+              <AnimatePresence>
+                {!isInBangalore && currentLocation !== "Get Current Location" && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0, y: -10 }}
+                    animate={{ height: "auto", opacity: 1, y: 0 }}
+                    exit={{ height: 0, opacity: 0, y: -10 }}
+                    className="overflow-hidden mb-3"
+                  >
+                    <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl animate-bounce">📍</span>
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
+                          <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">We're coming soon to {currentLocation.split(',')[0]}!</p>
+                        </div>
                       </div>
+                      <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
                     </div>
-                    <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div className="relative mb-4">
-              <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-emerald-600" />
-              <input
-                type="text"
-                placeholder="What Service do you Need?"
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <div className="relative mb-4">
+                <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-emerald-600" />
+                <input
+                  type="text"
+                  placeholder="What Service do you Need?"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
 
-            {/* <NavLink
+              {/* <NavLink
               to="https://b2b.hommlie.com/"
               className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -1862,51 +1839,51 @@ const Header = ({
             Community
           </NavLink>
              */}
-            <NavLink
-              to="/services"
-              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Services
-            </NavLink>
-            <NavLink
-              to="/help"
-              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Help
-            </NavLink>
-            <NavLink
-              to="/register-free-listing"
-              className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Join ONDC
-            </NavLink>
+              <NavLink
+                to="/services"
+                className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Services
+              </NavLink>
+              <NavLink
+                to="/help"
+                className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Help
+              </NavLink>
+              <NavLink
+                to="/register-free-listing"
+                className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Join ONDC
+              </NavLink>
 
-            <div className="pt-4 border-t border-gray-200">
-              {user?.length === 0 ? (
-                <button
-                  onClick={() => {
-                    setIsModalOpen(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="w-full py-2 px-3 bg-amber-100 text-emerald-800 rounded-lg text-center font-medium hover:bg-amber-200 transition-colors"
-                >
-                  Login / Register
-                </button>
-              ) : (
-                <button
-                  onClick={handleLogout}
-                  className="w-full py-2 px-3 bg-red-50 text-red-600 rounded-lg text-center font-medium hover:bg-red-100 transition-colors"
-                >
-                  Logout
-                </button>
-              )}
-            </div>
-          </nav>
-        </div>
-      )
+              <div className="pt-4 border-t border-gray-200">
+                {user?.length === 0 ? (
+                  <button
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2 px-3 bg-amber-100 text-emerald-800 rounded-lg text-center font-medium hover:bg-amber-200 transition-colors"
+                  >
+                    Login / Register
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full py-2 px-3 bg-red-50 text-red-600 rounded-lg text-center font-medium hover:bg-red-100 transition-colors"
+                  >
+                    Logout
+                  </button>
+                )}
+              </div>
+            </nav>
+          </div>
+        )
       }
 
 
@@ -1977,10 +1954,14 @@ const Header = ({
         isOpen={isAddressModalOpen}
         onClose={() => setIsAddressModalOpen(false)}
       />
-      <ReferAndEarn
-        isOpen={isReferAndEarnOpen}
-        onClose={() => setIsReferAndEarnOpen(false)}
-      />
+
+      {/* Mobile only global rendering for Refer & Earn */}
+      <div className="md:hidden">
+        <ReferAndEarn
+          isOpen={isReferAndEarnOpen}
+          onClose={() => setIsReferAndEarnOpen(false)}
+        />
+      </div>
 
       {/* Location Modal */}
       {
@@ -2180,9 +2161,8 @@ const Header = ({
         )
       }
 
-    </header >
+    </header>
   );
-
 };
 
 export default Header;

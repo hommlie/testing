@@ -412,9 +412,9 @@ const HomePage = () => {
       //     "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
       // }}
       >
-        <div className="w-full flex flex-col md:flex-row gap-8">
+        <div className="w-full flex flex-col md:flex-row gap-12 items-start">
           {/* Left Container - Services */}
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-[460px] flex-shrink-0">
             {/* Search Bar - Mobile only */}
             <div className="sm:block md:hidden mb-3">
               <AnimatePresence>
@@ -606,50 +606,15 @@ const HomePage = () => {
 
             {/* Always show on both desktop and mobile */}
             <ServiceGrid categories={categories} />
-            <div className="hidden md:flex max-w-7xl ml-14 mt-10 mx-auto">
-              <h2 className="text-2xl font-medium text-black -ml-8">
-                <span
-                // style={{
-                //   background: "linear-gradient(135deg, #36859bff 0%, #92b876 15%, #48841cff 50%, #23400eff 75%, #92b876 100%)",
-                //   WebkitBackgroundClip: "text",
-                //   WebkitTextFillColor: "transparent",
-                //   display: "inline-block"
-                // }}
-                >
-                  {/* <Typewriter
-                words={[
-                  "Trained & Verified Professionals..",
-                  "Available All 365 Days..",
-                  "Warranty-Backed Services..",
-                  "Easy to Book, Easy to Use..",
-                  "Friendly Customer Support..",
-                  "Rated by People Like You (4.9 +)..",
-                  "India’s Most Trusted Home Service App..",
-                  "Transparent Prices. No Surprises.."
-                ]}
-                loop={true}
-                cursor
-                cursorStyle="|"
-                typeSpeed={50}
-                deleteSpeed={40}
-                delaySpeed={1500}
-              /> */}
-                  <HomeForm />
-                </span>
-              </h2>
+
+            {/* HomeForm in flow (Desktop Only as per request) */}
+            <div className="hidden md:block mt-10">
+              <HomeForm />
             </div>
-
-
           </div>
 
-          <div className="hidden md:block w-[552px]">
-            <div className="h-[525px] rounded-xl overflow-hidden">
-              <img
-                src={photo1} // Replace with your single image
-                alt="Home Service Full View"
-                className="h-full w-full object-cover rounded-xl object-center"
-              />
-            </div>
+          <div className="w-full md:flex-1">
+            <ServiceSection categories={data.all_categories} />
           </div>
         </div>
 
@@ -674,7 +639,6 @@ const HomePage = () => {
           <InspectionFormSection />
         </section> */}
       </section>
-      <ServiceSection categories={data.all_categories} />
       {/* <Roadmap />    */}
       {/* Moved to ServiceSection
       <section className="px-2 sm:px-12" style={{

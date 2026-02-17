@@ -439,7 +439,7 @@ const ServiceSection = ({ categories }) => {
     <>
 
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-5 md:py-10 font-[Helvetica] bg-white">
+      <section className="w-full pt-0 pb-5 md:py-8 font-[Helvetica]">
 
         {/* Modal for callback */}
         <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
@@ -447,36 +447,17 @@ const ServiceSection = ({ categories }) => {
         {/* Desktop Header - Only visible on md+ */}
         <div className="hidden md:block mb-8">
           <h2 className="text-2xl font-bold text-[#033053] text-center mb-6">
-            Choose Your Service Category
+            Quick Booking Pest Control
           </h2>
 
-          {/* Desktop Pincode Check - Mandatory */}
-          <div className="max-w-md mx-auto mb-8">
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#0463ac]" />
-              <input
-                type="text"
-                placeholder="Enter 6-digit Pincode to see services"
-                className="w-full pl-10 pr-4 py-4 bg-white border-2 border-[#0463ac] rounded-xl text-lg font-bold focus:outline-none shadow-sm"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              />
-              {pincode.length === 6 && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-green-600">
-                  <Check className="w-5 h-5" />
-                  <span className="text-xs font-bold uppercase">Ready</span>
-                </div>
-              )}
-            </div>
-            {pincode.length > 0 && pincode.length < 6 && (
-              <p className="mt-2 text-center text-xs text-blue-600 font-bold animate-pulse">
-                Please enter all 6 digits...
-              </p>
-            )}
+          {/* Desktop Pincode Check - Mandatory (Hidden on Desktop UI as per request) */}
+          <div className="max-w-md mx-auto mb-8 hidden">
+            {/* ... pincode input ... */}
           </div>
 
-          {pincode.length === 6 ? (
-            <div className="flex justify-center gap-4">
+          {/* Hidden category selection buttons on desktop as requested */}
+          <div className="hidden">
+            <div className="flex flex-wrap justify-center gap-4">
               {categories?.filter(c => c.category_name !== "Waste Management" && c.category_name !== "Product").map((category) => (
                 <motion.button
                   key={category.id}
@@ -501,11 +482,7 @@ const ServiceSection = ({ categories }) => {
                 </motion.button>
               ))}
             </div>
-          ) : (
-            <div className="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-              <p className="text-gray-500 font-medium">Please enter your pincode above to explore services in your area.</p>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Mobile Header - Hidden on md+ */}
@@ -944,7 +921,7 @@ const ServiceSection = ({ categories }) => {
         {/* Dropdowns Container - Hidden on Mobile */}
         <div className="hidden md:block">
           {pincode.length === 6 && (
-            <div className="max-w-4xl mx-auto px-1 mb-8">
+            <div className="max-w-3xl mb-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Service Type */}
                 <div className="col-span-1">
@@ -989,21 +966,17 @@ const ServiceSection = ({ categories }) => {
           <div className="mb-0">
             {pincode.length === 6 ? (
               <>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                   {recommended.length + regular.length === 0
                     ? "Loading Services..."
                     : "Available Service Packages"}
                 </h3>
 
-                <div className="flex justify-center">
+                <div className="flex justify-start">
                   {recommended.length + regular.length === 0 ? (
                     <div className="text-center text-gray-500 py-10">Loading service packages...</div>
                   ) : (
-                    <div className={`grid gap-4 sm:gap-6 px-4 w-full 
-                      ${(recommended.length + regular.length === 1 && "grid-cols-1 place-items-center max-w-[400px] ") ||
-                      (recommended.length + regular.length === 2 && "grid-cols-1 sm:grid-cols-2 place-items-center max-w-[800px]") ||
-                      "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-stretch max-w-7xl"
-                      }`}>
+                    <div className={`grid gap-6 px-0 max-w-3xl grid-cols-1 place-items-stretch`}>
                       {[...recommended, ...regular].map((product) => (
                         <ProductCard
                           key={product.id}
@@ -1273,7 +1246,7 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className={`relative w-full max-w-4xl mx-auto rounded-3xl border transition-all duration-300 overflow-hidden bg-[#faf9f6] flex flex-col sm:flex-row h-full
+      className={`relative w-full max-w-3xl rounded-3xl border transition-all duration-300 overflow-hidden bg-[#faf9f6] flex flex-col sm:flex-row h-full
         ${isSelected ? "border-[#0463ac] shadow-lg ring-1 ring-[#0463ac]" : "border-gray-200 shadow hover:shadow-lg"}`}
       onClick={onClick}
     >

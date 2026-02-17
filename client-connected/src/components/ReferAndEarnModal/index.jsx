@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { useToast } from '../../context/ToastProvider';
 import { Copy, Share2, Smartphone, Users, Gift, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoMdClose } from 'react-icons/io';
+import { FaGift } from 'react-icons/fa';
 
 const ReferAndEarn = ({ isOpen, onClose }) => {
   const [referralCode, setReferralCode] = useState('');
-  const [userName, setUserName] = useState('');
   const [copied, setCopied] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const notify = useToast();
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 640;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -18,8 +27,7 @@ const ReferAndEarn = ({ isOpen, onClose }) => {
     if (jwtToken) {
       try {
         const user = jwtDecode(jwtToken);
-        setReferralCode(user.referral_code || 'REFERRAL_CODE_NOT_FOUND');
-        setUserName(user.name || 'Friend');
+        setReferralCode(user.referral_code || 'REFERRAL_CODE');
       } catch (error) {
         console.error('Error decoding JWT:', error);
         onClose();
@@ -30,124 +38,146 @@ const ReferAndEarn = ({ isOpen, onClose }) => {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralCode).then(() => {
       setCopied(true);
-      notify('Referral code copied to clipboard!', 'success');
+      notify('Referral code copied!', 'success');
       setTimeout(() => setCopied(false), 2000);
     }, (err) => {
-      console.error('Could not copy text: ', err);
-      notify('Failed to copy referral code', 'error');
+      notify('Failed to copy code', 'error');
     });
   };
 
   const shareOnWhatsApp = () => {
-    const message = encodeURIComponent(`Hey! 👋 I'm using Hommlie for my home services and it's amazing. Use my referral code ${referralCode} to sign up and get rewards! 🎉`);
-    const whatsappUrl = `https://wa.me/?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    const message = encodeURIComponent(`Hey! 👋 Use my referral code ${referralCode} to sign up on Hommlie and get rewards! 🎉`);
+    window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
   const steps = [
-    { icon: <Smartphone className="w-5 h-5 text-[#0463ac]" />, title: "INVITE", desc: "Share code" },
-    { icon: <Users className="w-5 h-5 text-[#0463ac]" />, title: "JOIN", desc: "Friends join" },
-    { icon: <Gift className="w-5 h-5 text-[#0463ac]" />, title: "REWARD", desc: "Get rewards" }
+    { icon: <Smartphone size={18} className="text-[#0463ac]" />, title: "INVITE", desc: "Share code" },
+    { icon: <Users size={18} className="text-[#0463ac]" />, title: "JOIN", desc: "Friends join" },
+    { icon: <Gift size={18} className="text-[#0463ac]" />, title: "REWARD", desc: "Get rewards" }
   ];
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999]">
-          {/* Backdrop with premium blur */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={onClose}
-          />
+        <>
+          {/* Backdrop - Mobile Only (Already handled by fixed inset-0 on container) */}
 
-          {/* Bottom Sheet Modal */}
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[28px] shadow-2xl flex flex-col max-h-[85vh] border-t border-gray-100"
-          >
-            {/* Drag Handle */}
-            <div className="flex justify-center pt-3 pb-2">
-              <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
-            </div>
+          {/* Modal / Dropdown Container */}
+          <div className={`${isMobile ? "fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" : ""}`} onClick={isMobile ? onClose : undefined}>
+            <motion.div
+              initial={isMobile ? { scale: 0.9, opacity: 0 } : { opacity: 0, y: 8, scale: 0.96 }}
+              animate={isMobile ? { scale: 1, opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+              exit={isMobile ? { scale: 0.9, opacity: 0 } : { opacity: 0, y: 8, scale: 0.96 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`
+                bg-white shadow-2xl flex flex-col overflow-hidden
+                ${isMobile
+                  ? "relative w-full max-w-sm rounded-[2rem] max-h-[90vh]"
+                  : "absolute right-0 top-full mt-3 w-[340px] rounded-2xl border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50"
+                }
+              `}
+            >
+              {/* Desktop Top Arrow */}
+              {!isMobile && (
+                <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-10" />
+              )}
 
-            {/* Header */}
-            <div className="px-6 py-4 flex justify-between items-start flex-shrink-0">
-              <div className="flex flex-col">
-                <h2 className="text-2xl font-black text-[#033053] tracking-tight leading-none">
-                  Refer & Earn
-                </h2>
-                <div className="w-12 h-1.5 bg-[#0463ac] mt-2 rounded-full" />
-              </div>
-              <button
-                onClick={onClose}
-                className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-all"
-                aria-label="Close"
-              >
-                <IoMdClose size={20} />
-              </button>
-            </div>
+              {/* Header Accent */}
+              <div className={`h-1 w-full bg-gradient-to-r from-[#0463ac] via-[#0580ca] to-[#0463ac] flex-shrink-0 ${isMobile ? 'hidden' : 'block'}`} />
 
-            {/* Content Area - Scrollable */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-hide">
-              <p className="text-gray-500 text-sm font-medium leading-relaxed mb-8 text-center sm:text-left">
-                Spread the joy of Hommlie! Invite your friends and family to join and get <span className="text-[#0463ac] font-bold">instant rewards</span>.
-              </p>
+              {/* Mobile Drag Handle */}
+              {isMobile && (
+                <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+                  <div className="w-10 h-1 bg-gray-200 rounded-full" />
+                </div>
+              )}
 
-              {/* Steps Grid */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                {steps.map((step, idx) => (
-                  <div key={idx} className="flex flex-col items-center text-center group">
-                    <div className="w-14 h-14 rounded-2xl bg-[#f0f9ff] flex items-center justify-center mb-3 shadow-[0_4px_10px_rgba(4,99,172,0.1)] group-hover:scale-105 transition-transform border border-blue-50">
-                      {step.icon}
+              {/* Top Branding Section - Compact */}
+              <div className="relative bg-gradient-to-br from-[#0463ac] to-[#0580ca] py-4 px-6 flex-shrink-0">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center ring-2 ring-white/30">
+                      <FaGift className="text-white text-xs" />
                     </div>
-                    <h4 className="text-[10px] font-black text-[#033053] tracking-widest uppercase mb-1">{step.title}</h4>
-                    <p className="text-[9px] text-gray-400 font-bold leading-none">{step.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Referral Box - Enhanced Visuals */}
-              <div className="bg-gradient-to-br from-[#f8faff] to-white rounded-[24px] p-5 border border-dashed border-[#0463ac]/30 shadow-sm mb-4">
-                <p className="text-[10px] font-extrabold text-[#033053]/70 uppercase tracking-[0.2em] text-center mb-3">Your Unique Code</p>
-
-                <div className="flex items-center gap-2.5">
-                  <div
-                    onClick={copyToClipboard}
-                    className="flex-1 bg-white cursor-pointer hover:border-[#0463ac]/50 transition-colors rounded-xl h-12 px-4 flex items-center justify-between border border-gray-200 shadow-sm active:scale-[0.98]"
-                  >
-                    <span className="text-lg font-black text-[#033053] tracking-widest font-mono">
-                      {referralCode}
-                    </span>
-                    <div className="text-[#0463ac]">
-                      {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
+                    <div>
+                      <h2 className="text-white font-bold text-base leading-tight">Refer & Earn</h2>
+                      <p className="text-white/70 text-[10px] uppercase font-bold tracking-wider">Invite & Get Rewards</p>
                     </div>
                   </div>
-
                   <button
-                    onClick={shareOnWhatsApp}
-                    className="h-12 w-12 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl shadow-lg shadow-green-100 flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                    onClick={onClose}
+                    className="h-7 w-7 flex items-center justify-center rounded-full bg-black/10 text-white hover:bg-black/20 transition-all font-bold"
                   >
-                    <Share2 size={20} />
+                    <IoMdClose size={16} />
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* Bottom Decorative Bar */}
-            <div className="h-2 bg-gradient-to-r from-[#0463ac] via-[#035240] to-[#033053] flex-shrink-0" />
-          </motion.div>
-        </div>
+              {/* Body Content - Compact */}
+              <div className="px-6 py-4 overflow-y-auto scrollbar-hide flex-1 bg-white">
+                <div className="flex flex-col items-center">
+                  <div className="w-11 h-11 rounded-xl bg-blue-50/50 flex items-center justify-center mb-3 relative">
+                    <div className="absolute inset-0 bg-[#0463ac]/5 rounded-xl animate-pulse" />
+                    <Gift size={22} className="text-[#0463ac] relative z-10" />
+                  </div>
+
+                  <h3 className="text-[15px] font-bold text-gray-900 mb-1">Spread the Joy!</h3>
+                  <p className="text-gray-500 text-[12px] font-semibold text-center leading-tight mb-4 max-w-[220px]">
+                    Share your code and get rewards on <span className="text-[#0463ac]">Hommlie</span>.
+                  </p>
+
+                  {/* Steps Section - Mini */}
+                  <div className="grid grid-cols-3 gap-2 w-full mb-5">
+                    {steps.map((step, idx) => (
+                      <div key={idx} className="flex flex-col items-center text-center">
+                        <div className="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center mb-1.5 border border-gray-100 shadow-sm">
+                          {step.icon}
+                        </div>
+                        <span className="text-[8px] font-bold text-[#033053] uppercase tracking-wide">{step.title}</span>
+                        <span className="text-[7px] text-gray-400 font-bold">{step.desc}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Referral Box - Low Profile */}
+                  <div className="w-full bg-gray-50/80 rounded-xl p-3 border border-gray-100">
+                    <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">Your Personal Code</p>
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={copyToClipboard}
+                        className="flex-1 h-10 bg-white border border-gray-100 rounded-lg flex items-center justify-between px-3 transition-all active:scale-[0.98] group hover:border-[#0463ac]/30 shadow-sm"
+                      >
+                        <span className="text-[13px] font-bold text-[#033053] tracking-widest font-mono">
+                          {referralCode}
+                        </span>
+                        <div className="text-[#0463ac]">
+                          {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={shareOnWhatsApp}
+                        className="h-10 w-10 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-lg shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95 flex-shrink-0"
+                      >
+                        <Share2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer - Slim */}
+              <div className="px-6 py-2.5 bg-gray-50/50 border-t border-gray-50 flex items-center justify-center text-center flex-shrink-0">
+                <p className="text-[8px] font-bold text-[#0463ac]/60 uppercase tracking-[0.2em]">Rewards await you</p>
+              </div>
+            </motion.div>
+          </div>
+        </>
       )}
     </AnimatePresence>
   );
 };
 
 export default ReferAndEarn;
-
-
