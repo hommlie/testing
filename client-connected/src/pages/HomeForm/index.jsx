@@ -52,12 +52,15 @@ const HomeForm = () => {
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
       >
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 bg-white/70 backdrop-blur-xl shadow-[0_30px_60px_-15px_rgba(4,99,172,0.12)] rounded-[2.5rem] p-8 border border-white/50 ring-1 ring-[#0463ac]/5"
+          className="flex flex-col gap-6 bg-white/60 backdrop-blur-2xl shadow-[0_40px_100px_-20px_rgba(4,99,172,0.1)] rounded-[3rem] p-10 border border-white/80 ring-1 ring-[#0463ac]/5 relative overflow-hidden"
         >
+          {/* Subtle Form Background Decoration */}
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#0463ac]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-green-500/5 rounded-full blur-3xl pointer-events-none" />
           {/* Name Field */}
           <motion.div
             className="flex flex-col gap-2"
@@ -105,7 +108,7 @@ const HomeForm = () => {
                 value={formData.mobile}
                 onChange={handleChange}
                 required
-                className="w-full pl-12 pr-4 py-4 bg-gray-50/50 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#0463ac]/5 focus:bg-white text-[#033053] text-[15px] placeholder:text-gray-300 font-semibold transition-all duration-500 border border-transparent focus:border-[#0463ac]/10"
+                className="w-full pl-12 pr-4 py-4.5 bg-gray-50/30 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#0463ac]/10 focus:bg-white text-[#033053] text-[15px] placeholder:text-gray-300 font-semibold transition-all duration-500 border border-gray-100/50 focus:border-[#0463ac]/20"
               />
             </div>
           </motion.div>
@@ -119,9 +122,9 @@ const HomeForm = () => {
           >
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02, y: -2 }}
+              whileHover={{ scale: 1.02, y: -4, shadow: "0 25px 50px -12px rgba(4,99,172,0.5)" }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-[#0463ac] hover:bg-[#03528b] text-white font-bold text-[13px] uppercase tracking-widest py-5 rounded-2xl transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(4,99,172,0.4)] flex items-center justify-center gap-3 group overflow-hidden relative"
+              className="w-full bg-gradient-to-r from-[#0463ac] to-[#03528b] text-white font-extrabold text-[15px] uppercase tracking-wide py-4.5 rounded-2xl transition-all duration-500 shadow-[0_20px_45px_-10px_rgba(4,99,172,0.4)] flex items-center justify-center gap-3 group overflow-hidden relative"
             >
               <span className="relative z-10">CALL BACK</span>
               <motion.div

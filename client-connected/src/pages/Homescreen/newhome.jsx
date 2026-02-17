@@ -406,15 +406,11 @@ const HomePage = () => {
       {/* Typewriter Hero Headline - Desktop Only */}
 
       <section
-        className="max-w-7xl mx-auto px-5 py-5 bg-cover bg-white bg-center bg-no-repeat md:h-auto"
-      // style={{
-      //   background:
-      //     "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      // }}
+        className="max-w-[1440px] mx-auto px-6 pt-4 pb-12 md:py-12 bg-[#ffffff] min-h-screen"
       >
-        <div className="w-full flex flex-col md:flex-row gap-12 items-start">
-          {/* Left Container - Services */}
-          <div className="w-full md:w-[460px] flex-shrink-0">
+        <div className="w-full flex flex-col md:flex-row gap-4 md:gap-16 items-start">
+          {/* Left Container - Services & Form (Sticky) */}
+          <div className="w-full md:w-[460px] md:sticky md:top-32 flex-shrink-0">
             {/* Search Bar - Mobile only */}
             <div className="sm:block md:hidden mb-3">
               <AnimatePresence>

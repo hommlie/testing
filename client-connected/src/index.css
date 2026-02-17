@@ -3,77 +3,25 @@
 @tailwind utilities;
 
 .glow-border {
-    border: 1px solid transparent;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    border-color: rgba(23, 203, 89, 0.5);
-    /* box-shadow: 0 0 10px rgba(66, 225, 137, 0.2); */
+  border: 1px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  border-color: rgba(23, 203, 89, 0.5);
+  /* box-shadow: 0 0 10px rgba(66, 225, 137, 0.2); */
 }
 
-/* Global base typography using the Helvetica stack to keep the whole site consistent */
 @layer base {
-  html, body {
-    font-family: "\"Helvetica Neue\"", Helvetica, Arial, sans-serif;
-    color: #0f172a; /* neutral dark for readability */
+
+  html,
+  body {
+    color: #0f172a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Headings: neat, modern and clear */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: "\"Helvetica Neue\"", Helvetica, Arial, sans-serif;
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    color: #0b2f2a; /* subtle deep green-ish tone to match brand accents */
-  }
-
-  /* Slightly larger sizes for primary headings for a cleaner hierarchy. These are safe defaults; Tailwind classes can still override them. */
-  h1 { font-size: 2.25rem; }
-  h2 { font-size: 1.875rem; }
-  h3 { font-size: 1.5rem; }
-  h4 { font-size: 1.25rem; }
-
-  /* Paragraphs and list text: comfortable reading rhythm */
-  p, li {
-    font-size: 1rem;
-    font-weight: 400;
-    color: #374151; /* neutral slate for body text */
-  }
-
-  /* Small captions and meta text */
-  small, .muted {
-    font-size: 0.875rem;
-    color: #6b7280;
-  }
-}
-
-/* Force the Helvetica stack where other styles or utility classes try to pull in different fonts.
-   We intentionally avoid changing monospace elements (code, pre) so dev tooling and code blocks stay readable. */
-@layer base {
-  :root { --site-sans: "\"Helvetica Neue\"", Helvetica, Arial, sans-serif; }
-
-  /* Apply the site font to common UI elements and form controls */
-  html, body, main, section, header, footer, button, input, textarea, select, a, span, div {
-    font-family: var(--site-sans);
-  }
-
-  /* Neutralize utility classes compiled by Tailwind that reference other font families */
-  .font-poppins, .font-headerFont, .font-roboto, .font-inter, .font-montserrat,
-  .poppins, .roboto, .inter, .montserrat {
-    font-family: var(--site-sans) !important;
-  }
-
-  /* Preserve monospace for code-related elements */
-  code, pre, kbd, samp, .mono, .font-mono {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   }
 }
 
 /* header height variables */
 :root {
-  --header-height: 160px; 
+  --header-height: 160px;
 }
 
 /* Mobile header height adjustment */
@@ -81,6 +29,38 @@
   :root {
     --header-height: 200px;
   }
+}
+
+/* Custom Scrollbar for a cleaner premium look */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+.animate-shine {
+  animation: shine 3s infinite ease-in-out;
 }
 
 /* utility classes for sticky positioning */

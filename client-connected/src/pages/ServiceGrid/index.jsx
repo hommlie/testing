@@ -237,7 +237,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
     return (
       <motion.div
         key="modal"
-        className="fixed inset-0 bg-black/50 z-[999] sm:z-50 flex items-end sm:items-center justify-center"
+        className="fixed inset-0 bg-black/60 z-[1050] flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -251,7 +251,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
         aria-labelledby="service-modal-title"
       >
         <motion.div
-          className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl p-4 sm:p-6 h-[65vh] sm:h-[74vh] overflow-y-auto shadow-2xl"
+          className="bg-white w-full max-w-lg rounded-2xl p-4 sm:p-6 h-[74vh] overflow-y-auto shadow-2xl z-[1100] flex flex-col"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
@@ -329,9 +329,9 @@ const ServiceGrid = ({ categories: propCategories }) => {
   };
 
   return (
-    <div className="ml-0 sm:ml-8 px-2 py-0 mt-0 sm:px-0 sm:py-4 sm:mt-0 sm:w-fit bg-cover bg-center bg-no-repeat">
+    <div className="ml-0 sm:ml-8 px-2 py-0 -mt-1.5 sm:px-0 sm:py-4 sm:-mt-1.5 sm:w-fit bg-cover bg-center bg-no-repeat">
       <motion.h1
-        className="text-lg sm:text-2xl mb-3 sm:mb-0 font-medium text-black sm:mb-6 flex items-center whitespace-nowrap"
+        className="text-[12px] md:text-[12px] font-black text-[#033053]/40 tracking-[0.2em] uppercase mb-1 md:mb-3 sm:ml-2 flex items-center whitespace-nowrap"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -340,13 +340,13 @@ const ServiceGrid = ({ categories: propCategories }) => {
           visible: {
             opacity: 1,
             transition: {
-              staggerChildren: 0.1,
-              delayChildren: 0.2,
+              staggerChildren: 0.05,
+              delayChildren: 0.1,
             },
           },
         }}
       >
-        {"Home services at your doorstep - ".split("").map((char, index) => (
+        {"Premium Home Services - ".split("").map((char, index) => (
           <motion.span
             key={index}
             variants={{
@@ -358,32 +358,15 @@ const ServiceGrid = ({ categories: propCategories }) => {
           </motion.span>
         ))}
         <motion.span
-          className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#035240] via-[#25D366] to-[#035240] bg-[length:200%_auto] inline-block"
-          variants={{
-            hidden: { clipPath: "inset(0 100% 0 0)", backgroundPosition: "0% 50%" },
-            visible: {
-              clipPath: "inset(0 0 0 0)",
-              backgroundPosition: ["0% 50%", "200% 50%"],
-              transition: {
-                clipPath: { duration: 0.8, ease: "linear" },
-                backgroundPosition: { duration: 2, repeat: Infinity, ease: "linear", repeatType: "loop" },
-              },
-            },
-          }}
+          className="font-black text-transparent bg-clip-text bg-gradient-to-r from-[#0463ac] to-[#03528b] inline-block"
         >
           Hommlie
         </motion.span>
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
-          className="inline-block w-[2px] h-[20px] sm:h-[28px] bg-[#035240] ml-1 align-middle"
-        />
       </motion.h1>
 
-      <div className="sm:border sm:border-gray-200 sm:rounded-xl sm:p-2 sm:shadow-sm sm:w-full mb-0">
+      <div className="md:bg-gray-50/30 md:backdrop-blur-xl md:border md:border-white/50 md:rounded-[2.5rem] md:p-4 md:shadow-[0_20px_50px_-15px_rgba(3,48,83,0.05)] mb-0 sm:w-full">
         {/* Premium Super-Compact Grid */}
-        <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mb-0">
+        <div className="grid grid-cols-2 gap-2 md:gap-4 mb-0">
           {finalServices.map((service, index) => {
             const name = service.category_name || service.name;
 
@@ -396,7 +379,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 whileHover={{ y: -3 }}
-                className="relative flex flex-col items-center py-4 px-2 sm:py-5 sm:px-1 cursor-pointer group transition-all duration-300"
+                className="relative flex flex-col items-center py-2 px-2 sm:py-5 sm:px-1 cursor-pointer group transition-all duration-300"
               >
                 {/* Minimalist Hover Background */}
                 <div className="absolute inset-0 bg-gray-50/40 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -430,7 +413,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                 </div>
 
                 <div className="flex flex-col items-center text-center z-10 w-full px-1 max-w-[180px]">
-                  <span className="text-[12px] sm:text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors leading-[1.2] uppercase tracking-tight block">
+                  <span className="text-[11px] md:text-[13px] font-bold text-[#033053]/80 group-hover:text-[#0463ac] transition-all duration-300 leading-[1.3] uppercase tracking-wider block">
                     {name}
                   </span>
 
@@ -438,10 +421,10 @@ const ServiceGrid = ({ categories: propCategories }) => {
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-1 mt-1 bg-blue-50/80 backdrop-blur-sm px-2 py-0.5 rounded-full border border-blue-100"
+                      className="flex items-center gap-1 mt-2 bg-gradient-to-r from-[#0463ac] to-[#03528b] px-2.5 py-1 rounded-full shadow-lg shadow-[#0463ac]/20"
                     >
-                      <Zap size={10} className="text-[#0463ac] fill-[#0463ac]" />
-                      <span className="text-[9px] font-black text-[#0463ac] uppercase tracking-tighter">Insta Service</span>
+                      <Zap size={10} className="text-white fill-white animate-pulse" />
+                      <span className="text-[8px] font-black text-white uppercase tracking-widest whitespace-nowrap">Insta Service</span>
                     </motion.div>
                   )}
                 </div>
