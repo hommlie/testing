@@ -124,7 +124,7 @@ const HomeForm = () => {
               type="submit"
               whileHover={{ scale: 1.02, y: -4, shadow: "0 25px 50px -12px rgba(4,99,172,0.5)" }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-[#0463ac] to-[#03528b] text-white font-extrabold text-[15px] uppercase tracking-wide py-4.5 rounded-2xl transition-all duration-500 shadow-[0_20px_45px_-10px_rgba(4,99,172,0.4)] flex items-center justify-center gap-3 group overflow-hidden relative"
+              className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
             >
               <span className="relative z-10">CALL BACK</span>
               <motion.div

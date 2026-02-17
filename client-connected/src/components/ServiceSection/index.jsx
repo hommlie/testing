@@ -929,7 +929,7 @@ const ServiceSection = ({ categories }) => {
         {/* Dropdowns Container - Hidden on Mobile */}
         <div className="hidden md:block">
           {pincode.length === 6 && (
-            <div className="max-w-3xl mb-8">
+            <div className="max-w-3xl mb-8 mt-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Service Type */}
                 <div className="col-span-1">
