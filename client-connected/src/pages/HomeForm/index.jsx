@@ -48,7 +48,7 @@ const HomeForm = () => {
   };
 
   return (
-    <div className="relative ml-0 sm:ml-8 -mt-10 sm:w-[460px]">
+    <div className="relative ml-0 sm:ml-8 mt-0 sm:max-w-md">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -56,24 +56,21 @@ const HomeForm = () => {
       >
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6 bg-white/60 backdrop-blur-2xl shadow-[0_40px_100px_-20px_rgba(4,99,172,0.1)] rounded-[3rem] p-10 border border-white/80 ring-1 ring-[#0463ac]/5 relative overflow-hidden"
+          className="flex flex-col gap-4 bg-white rounded-3xl p-5 border border-gray-100 shadow-sm relative overflow-hidden"
         >
-          {/* Subtle Form Background Decoration */}
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#0463ac]/5 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-green-500/5 rounded-full blur-3xl pointer-events-none" />
           {/* Name Field */}
           <motion.div
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-1.5"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <label className="text-[11px] font-bold uppercase tracking-wider text-[#033053]/60 ml-1">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-[#033053]/60 ml-1">
               Full Name
             </label>
             <div className="relative group">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#0463ac] transition-all duration-300">
-                <User size={18} strokeWidth={2.5} />
+                <User size={16} strokeWidth={2.5} />
               </div>
               <input
                 type="text"
@@ -82,24 +79,24 @@ const HomeForm = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full pl-12 pr-4 py-4 bg-gray-50/50 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#0463ac]/5 focus:bg-white text-[#033053] text-[15px] placeholder:text-gray-300 font-semibold transition-all duration-500 border border-transparent focus:border-[#0463ac]/10"
+                className="w-full pl-10 pr-3 py-3 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 focus:bg-white text-[#033053] text-[13px] placeholder:text-gray-300 font-semibold transition-all duration-300 border border-transparent focus:border-[#0463ac]/20"
               />
             </div>
           </motion.div>
 
           {/* Mobile Field */}
           <motion.div
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-1.5"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <label className="text-[11px] font-bold uppercase tracking-wider text-[#033053]/60 ml-1">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-[#033053]/60 ml-1">
               Mobile Number
             </label>
             <div className="relative group">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#0463ac] transition-all duration-300">
-                <Phone size={18} strokeWidth={2.5} />
+                <Phone size={16} strokeWidth={2.5} />
               </div>
               <input
                 type="tel"
@@ -108,7 +105,7 @@ const HomeForm = () => {
                 value={formData.mobile}
                 onChange={handleChange}
                 required
-                className="w-full pl-12 pr-4 py-4.5 bg-gray-50/30 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#0463ac]/10 focus:bg-white text-[#033053] text-[15px] placeholder:text-gray-300 font-semibold transition-all duration-500 border border-gray-100/50 focus:border-[#0463ac]/20"
+                className="w-full pl-10 pr-3 py-3 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 focus:bg-white text-[#033053] text-[13px] placeholder:text-gray-300 font-semibold transition-all duration-300 border border-transparent focus:border-[#0463ac]/20"
               />
             </div>
           </motion.div>
@@ -118,25 +115,16 @@ const HomeForm = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="pt-2"
+            className="pt-1"
           >
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02, y: -4, shadow: "0 25px 50px -12px rgba(4,99,172,0.5)" }}
+              whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
-              className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#0463ac] hover:bg-[#03528b] text-white rounded-xl font-bold transition-all duration-300 shadow-sm text-[12px] tracking-wider"
             >
-              <span className="relative z-10">CALL BACK</span>
-              <motion.div
-                className="relative z-10"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-              >
-                <Phone size={14} className="fill-current" />
-              </motion.div>
-
-              {/* Premium Button Shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shine" />
+              <span>CALL BACK</span>
+              <Phone size={14} className="fill-current" />
             </motion.button>
           </motion.div>
         </form>

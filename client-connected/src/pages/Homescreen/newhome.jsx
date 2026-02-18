@@ -408,7 +408,7 @@ const HomePage = () => {
       <section
         className="max-w-[1440px] mx-auto px-6 pt-4 pb-12 md:py-12 bg-[#ffffff] min-h-screen"
       >
-        <div className="w-full flex flex-col md:flex-row gap-4 md:gap-16 items-start">
+        <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start">
           {/* Left Container - Services & Form (Sticky) */}
           <div className="w-full md:w-[460px] md:sticky md:top-32 flex-shrink-0">
             {/* Search Bar - Mobile only */}
@@ -604,12 +604,12 @@ const HomePage = () => {
             <ServiceGrid categories={categories} />
 
             {/* HomeForm in flow (Desktop Only as per request) */}
-            <div className="hidden md:block mt-10">
+            <div className="hidden md:block mt-3">
               <HomeForm />
             </div>
           </div>
 
-          <div className="w-full md:flex-1">
+          <div className="w-full md:flex-1 md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8">
             <ServiceSection categories={data.all_categories} />
           </div>
         </div>
