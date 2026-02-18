@@ -39,7 +39,7 @@ const InspectionFormSection = () => {
   const stats = [
     {
       id: 1,
-      count: "10,000+",
+      count: "15,000+",
       title: "Happy Customers",
       icon: "https://cdn-icons-png.flaticon.com/512/3481/3481061.png",
       color: "text-[#035240]"
@@ -122,7 +122,7 @@ const InspectionFormSection = () => {
   };
 
   return (
-    <div className="relative w-full mx-auto px-4 md:px-8 py-4 md:py-10 overflow-hidden">
+    <div className="relative w-full mx-auto px-0 md:px-8 py-0 md:py-10 overflow-hidden">
       <div className="relative z-10">
         {/* Header Section */}
         <div className="text-center mb-6">
@@ -134,16 +134,6 @@ const InspectionFormSection = () => {
           >
             <ShieldCheck size={14} className="group-hover:rotate-12 transition-transform" />
             Certified Inspections
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="flex flex-col items-center mb-2"
-          >
-            <h3 className="text-[#033053]/80 text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-2">Quick Booking</h3>
-            <div className="w-12 h-1 bg-[#0463ac] rounded-full" />
           </motion.div>
 
           <motion.h2
@@ -165,86 +155,16 @@ const InspectionFormSection = () => {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-          {/* Left Side: Contact Group */}
-          <div className="space-y-4 order-2 lg:order-1">
-            <div className="grid grid-cols-1">
-              <motion.a
-                href="mailto:reach@hommlie.com"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-4 group py-3 border-b border-gray-50"
-              >
-                <div className="w-12 h-12 flex items-center justify-center text-[#0463ac] rounded-xl group-hover:bg-blue-50 transition-all duration-300">
-                  <Mail size={22} />
-                </div>
-                <div>
-                  <h3 className="text-[#033053]/50 text-[10px] uppercase font-bold tracking-[0.2em] mb-0.5">Email Concierge</h3>
-                  <p className="text-[#033053] font-bold text-lg group-hover:text-[#0463ac] transition-colors tracking-tight">reach@hommlie.com</p>
-                </div>
-              </motion.a>
-
-              <motion.a
-                href="tel:+916363865658"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="flex items-center gap-4 group py-3 border-b border-gray-50"
-              >
-                <div className="w-12 h-12 flex items-center justify-center text-[#0463ac] rounded-xl group-hover:bg-blue-50 transition-all duration-300">
-                  <Phone size={22} />
-                </div>
-                <div>
-                  <h3 className="text-[#033053]/50 text-[10px] uppercase font-bold tracking-[0.2em] mb-0.5">Priority Hotline</h3>
-                  <p className="text-[#033053] font-bold text-lg group-hover:text-[#0463ac] transition-colors tracking-tight">+91-6363865658</p>
-                </div>
-              </motion.a>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="p-0 relative overflow-hidden group"
-            >
-              <div className="relative z-10 py-2">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 flex items-center justify-center text-[#0463ac]">
-                    <MapPin size={18} />
-                  </div>
-                  <h3 className="text-[#033053] text-[10px] uppercase font-bold tracking-[0.2em]">Our Premium Network</h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {["Bangalore", "Hyderabad", "Chennai", "Delhi"].map((city, i) => (
-                    <motion.span
-                      key={city}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.4 + (i * 0.1) }}
-                      className="px-3 py-1.5 text-[#033053] font-bold text-[11px] border border-gray-100 rounded-md flex items-center gap-2 hover:border-[#0463ac] transition-colors cursor-default"
-                    >
-                      <div className="w-1.5 h-1.5 bg-[#0463ac] rounded-full" />
-                      {city}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-              <Building2 size={120} className="absolute -bottom-6 -right-6 text-[#033053] opacity-[0.03] rotate-12" />
-            </motion.div>
-          </div>
-
+        <div className="flex justify-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="order-1 lg:order-2 w-full"
+            className="w-full max-w-3xl"
           >
-            <div className="relative overflow-hidden w-full">
-              <div className="mb-8">
-                <h3 className="text-[#033053] text-2xl font-black tracking-tight mb-2">Request callback</h3>
+            <div className="bg-white rounded-none md:rounded-[28px] p-6 md:p-10 shadow-none md:shadow-[0_20px_60px_rgba(3,48,83,0.06)] border-none md:border border-gray-50">
+              <div className="mb-8 text-center md:text-left">
+                <h3 className="text-[#033053] text-2xl md:text-3xl font-black tracking-tight mb-2">Request callback</h3>
                 <p className="text-gray-400 text-sm font-medium">Takes less than 30 seconds to book.</p>
               </div>
 
@@ -260,7 +180,7 @@ const InspectionFormSection = () => {
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full pl-14 pr-4 py-4 bg-transparent border-b-2 border-gray-100 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
+                        className="w-full pl-14 pr-4 py-4 bg-transparent md:bg-white md:border md:border-gray-100 md:rounded-lg md:py-4 md:px-4 md:pl-14 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
                         placeholder="John Doe"
                       />
                     </div>
@@ -278,7 +198,7 @@ const InspectionFormSection = () => {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, "").slice(0, 10) })}
-                        className="w-full pl-24 pr-4 py-4 bg-transparent border-b-2 border-gray-100 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
+                        className="w-full pl-24 pr-4 py-4 bg-transparent md:bg-white md:border md:border-gray-100 md:rounded-lg md:py-4 md:px-4 md:pl-24 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
                         placeholder="Mobile number"
                       />
                     </div>
@@ -290,7 +210,7 @@ const InspectionFormSection = () => {
                     disabled={loading}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-gradient-to-r from-[#0463ac] to-[#033053] text-white py-6 rounded-[24px] font-black uppercase tracking-[0.2em] text-[13px] shadow-2xl hover:shadow-[#0463ac]/30 transition-all flex items-center justify-center gap-3 group/btn cursor-pointer overflow-hidden relative"
+                    className="w-full bg-gradient-to-r from-[#0463ac] to-[#033053] text-white py-4 md:py-6 rounded-[16px] md:rounded-[24px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-[13px] shadow-xl md:shadow-2xl hover:shadow-[#0463ac]/30 transition-all flex items-center justify-center gap-2 md:gap-3 group/btn cursor-pointer overflow-hidden relative"
                   >
                     {/* Infinite Shimmer Animation - Matches Brand Standard */}
                     <motion.div
@@ -310,7 +230,8 @@ const InspectionFormSection = () => {
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        <span className="relative z-10">Secure Inspection Now</span>
+                        <span className="relative z-10 hidden md:inline">Secure Inspection Now</span>
+                        <span className="relative z-10 md:hidden">Book Inspection</span>
                         <ArrowRight size={18} className="relative z-10 group-hover/btn:translate-x-1 transition-transform" />
                       </>
                     )}

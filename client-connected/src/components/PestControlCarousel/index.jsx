@@ -66,15 +66,7 @@ const PestControlCarousel = () => {
                 {/* Header Section */}
                 <div className="text-center -mt-1 mb-8">
                     <div className="flex justify-center mb-0 relative z-10">
-                        <motion.h3
-                            className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-1 flex items-center whitespace-nowrap"
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            Professional Care
-                        </motion.h3>
+                        
                     </div>
                     <motion.h2
                         initial={{ opacity: 0, y: 10 }}
@@ -154,7 +146,7 @@ const PestControlCarousel = () => {
                 </div>
 
                 {/* Scroll Indicators / Dots */}
-                <div className="flex justify-center gap-2 -mt-20">
+                <div className="flex justify-center gap-2 mt-0 md:-mt-8 lg:-mt-10 relative z-30">
                     {subcategories.map((_, i) => (
                         <button
                             key={i}

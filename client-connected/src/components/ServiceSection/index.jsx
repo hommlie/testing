@@ -1296,14 +1296,12 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
         </div>
 
         <div className="text-left w-full space-y-3">
-          <p className="text-[11px] text-[#033053]/40 leading-relaxed font-bold italic">
-            "Dedicated professional trained for specialized {categoryName} management"
-          </p>
+
           <a
             href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
             className="flex items-center gap-2 text-xs font-black text-[#0463ac] uppercase tracking-widest group/link hover:gap-3 transition-all duration-300"
           >
-            Explore Product Details <ChevronRight size={14} className="group-hover/link:text-[#03528b]" />
+            View Service Details <ChevronRight size={14} className="group-hover/link:text-[#03528b]" />
           </a>
         </div>
       </div>

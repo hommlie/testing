@@ -314,48 +314,48 @@ const HomePage = () => {
     : data?.faqs;
 
    return (
-    <div className="w-[115%] sm:w-full mx-auto sm:-ml-0 -ml-6">
-      <h2 className="text-1xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
-        Frequently Asked Questions
+    <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-10">
+      <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 md:mb-8 text-center leading-tight">
+        Frequently Asked <span className="text-[#0463ac]">Questions</span>
       </h2>
-        <div className="space-y-4">
-          {displayedFaqs?.map((faq, index) => (
-            <motion.div
-              key={index}
-              className="border rounded-lg overflow-hidden"
-              initial={false}
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {displayedFaqs?.map((faq, index) => (
+          <motion.div
+            key={index}
+            className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
+            initial={false}
+          >
+            <button
+              className="w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-gray-50 transition-colors"
+              onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
             >
-              <button
-                className="w-full flex justify-between items-center p-4 text-left bg-white"
-                onClick={() =>
-                  setOpenFaqIndex(openFaqIndex === index ? null : index)
-                }
-              >
-                <span className="font-medium text-sm sm:text-base">
-                  {faq.question}
-                </span>
-                <span className="text-xl font-bold">
-                  {openFaqIndex === index ? "−" : "+"}
-                </span>
-              </button>
-              <AnimatePresence>
-                {openFaqIndex === index && (
-                  <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: "auto" }}
-                    exit={{ height: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="p-4 bg-gray-50 text-sm sm:text-base">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
+              <span className="font-semibold text-base md:text-lg text-[#033053]">
+                {faq.question}
+              </span>
+              <span className="text-2xl font-extrabold text-[#0463ac]">
+                {openFaqIndex === index ? "−" : "+"}
+              </span>
+            </button>
+
+            <AnimatePresence>
+              {openFaqIndex === index && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="p-5 md:p-6 bg-gray-50 text-sm md:text-base text-gray-700 leading-relaxed">
+                    {faq.answer}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
       </div>
+    </div>
   );
 };
 

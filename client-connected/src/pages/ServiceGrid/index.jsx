@@ -88,12 +88,20 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
     return nameA.localeCompare(nameB);
   });
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (items.length === 0) return null;
 
   return (
     <motion.div
       key="modal-backdrop"
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]"
+      className="fixed inset-0 bg-black/60 flex items-end sm:items-center justify-center z-[9999]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -104,10 +112,10 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
     >
       <motion.div
         key="modal-content"
-        className="bg-white w-full max-w-lg rounded-2xl p-4 sm:p-6 h-[74vh] overflow-y-auto shadow-2xl flex flex-col relative"
-        initial={{ y: 50, opacity: 0, scale: 0.95 }}
+        className="bg-white w-full max-w-lg rounded-t-[2rem] rounded-b-none sm:rounded-2xl p-4 sm:p-6 h-[50vh] sm:h-[74vh] overflow-y-auto shadow-2xl flex flex-col relative"
+        initial={isMobile ? { y: "100%" } : { y: 50, opacity: 0, scale: 0.95 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
-        exit={{ y: 50, opacity: 0, scale: 0.95 }}
+        exit={isMobile ? { y: "100%" } : { y: 50, opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking content
       >
@@ -299,9 +307,9 @@ const ServiceGrid = ({ categories: propCategories }) => {
 
 
   return (
-    <div className="ml-0 sm:ml-4 px-2 py-0 -mt-1.5 sm:px-0 sm:py-4 sm:-mt-3 sm:w-fit bg-cover bg-center bg-no-repeat">
+    <div className="ml-0 sm:ml-4 px-2 py-0 sm:px-0 sm:py-4 sm:-mt-3 sm:w-fit bg-cover bg-center bg-no-repeat">
       <motion.h1
-        className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-1 md:mb-4 sm:ml-2 flex items-center whitespace-nowrap sm:-mt-6"
+        className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-3 md:mb-4 sm:ml-2 flex items-center whitespace-nowrap sm:-mt-6"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}

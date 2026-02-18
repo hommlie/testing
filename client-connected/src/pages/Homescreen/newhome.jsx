@@ -839,7 +839,7 @@ const HomePage = () => {
 
 
 
-      <section className="bg-white py-12 md:py-20 -mt-6 sm:-mt-0 border-t border-gray-50">
+      <section className="bg-white py-6 md:py-10 -mt-4 sm:-mt-2">
         <FaqSection data={data} />
       </section>
 
@@ -883,14 +883,15 @@ const FaqSection = ({ data }) => {
   displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6">
-      <div className="text-center mb-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-2 md:py-4 sm:-mt-28">
+      <div className="text-center mb-6 md:mb-8">
+        <div className="w-full border-t border-gray-100 mb-6" />
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-5xl font-black text-[#033053] tracking-tighter"
+          className="text-3xl sm:text-5xl font-black text-[#033053] tracking-tighter leading-tight"
         >
           Frequently Asked <span className="text-[#0463ac]">Questions</span>
         </motion.h2>
@@ -898,13 +899,13 @@ const FaqSection = ({ data }) => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-gray-500 mt-4 text-sm sm:text-base max-w-lg mx-auto font-medium"
+          className="text-gray-500 mt-3 text-sm sm:text-base max-w-2xl mx-auto font-medium"
         >
           Find answers to common questions about our services and booking process.
         </motion.p>
       </div>
 
-      <div className="space-y-4">
+      <div className="grid gap-6 md:grid-cols-2">
         {displayedFaqs?.map((faq, index) => {
           const isOpen = openFaqIndex === index;
           return (

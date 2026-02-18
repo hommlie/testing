@@ -47,8 +47,8 @@ export default function Footer({
             </div>
           </div>
 
-          <div className="flex gap-2 md:gap-10">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+          <div className="flex gap-2 md:gap-10 items-start">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
               <FooterSection
                 title="Company Info"
                 links={[
@@ -76,10 +76,12 @@ export default function Footer({
                 title="Our Brands"
                 links={[
                   { title: "Hommlie", link: "https://www.hommlie.com/" },
-                  { title: "Hompure", link: "https://hompure.in/" },
+                  { title: "Hommlie B2B", link: "https://www.b2b.hommlie.com/" },
+                  { title: "Hommlie Shop", link: "https://www.hommlie.shop/" },
+                  // { title: "Hompure", link: "https://hompure.in/" },
                   { title: "Hoy Smart", link: "https://hoysmart.in/" },
                   { title: "RoachX", link: "https://roachx.in/" },
-                  { title: "Pink Store", link: "https://pinkstore.co.in/" },
+                  // { title: "Pink Store", link: "https://pinkstore.co.in/" },
                 ]}
                 hideinMobile
               />
@@ -113,10 +115,26 @@ export default function Footer({
                   },
                 ]}
               />
+
+              <div className="hidden md:block">
+                <p className="capitalize text-sm lg:text-[19px] font-medium text-[#033053] mb-4 whitespace-nowrap">Locations & Contact</p>
+                <div className="flex flex-col gap-3">
+                  <div className="grid grid-cols-2 gap-2 w-max">
+                    {['Bangalore', 'Hyderabad', 'Chennai', 'Delhi'].map((city) => (
+                      <a key={city} href={`${config.VITE_BASE_URL}/locations/${city.toLowerCase()}`} className="px-3 py-1.5 text-xs bg-gray-50 border border-gray-100 rounded-full text-[#033053] hover:bg-white hover:border-[#0463ac] text-center">{city}</a>
+                    ))}
+                  </div>
+
+                  <div className="pt-2 flex flex-col gap-1">
+                    <a href="mailto:reach@hommlie.com" className="text-sm text-[#0463ac] hover:underline hover:text-blue-700 block transition-colors">reach@hommlie.com</a>
+                    <a href="tel:+916363865658" className="text-sm text-[#0463ac] hover:underline hover:text-blue-700 block transition-colors">+91-6363865658</a>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="block">
-              <div className="flex flex-col gap-4 -mt-4 text-white">
+              <div className="flex flex-col gap-4 mt-0 text-white">
                 <img
                   src="/assets/logo/qr.png"
                   alt="Download QR"
@@ -194,7 +212,7 @@ export default function Footer({
             <LocationDropdown locationArray={locationArray} />
           </div>
         </div>
-        </div>
+      </div>
     </footer>
   );
 }
