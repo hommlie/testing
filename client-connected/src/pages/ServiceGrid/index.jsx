@@ -250,8 +250,8 @@ const ServiceGrid = ({ categories: propCategories }) => {
       return;
     }
 
-    if (serviceName.toLowerCase() === "product" || serviceName.toLowerCase() === "hommlie store") {
-      navigate(`${config.VITE_BASE_URL}/product`);
+    if (serviceName.toLowerCase() === "product" || serviceName.toLowerCase() === "hommlie store" || serviceName.toLowerCase() === "hommlie shop" || serviceName.toLowerCase() === "hommlie.shop") {
+      window.open("https://hommlie.shop/", "_blank");
       return;
     }
 
@@ -299,39 +299,15 @@ const ServiceGrid = ({ categories: propCategories }) => {
 
 
   return (
-    <div className="ml-0 sm:ml-8 px-2 py-0 -mt-1.5 sm:px-0 sm:py-4 sm:-mt-1.5 sm:w-fit bg-cover bg-center bg-no-repeat">
+    <div className="ml-0 sm:ml-4 px-2 py-0 -mt-1.5 sm:px-0 sm:py-4 sm:-mt-3 sm:w-fit bg-cover bg-center bg-no-repeat">
       <motion.h1
-        className="text-[12px] md:text-[12px] font-black text-[#033053]/40 tracking-[0.2em] uppercase mb-1 md:mb-3 sm:ml-2 flex items-center whitespace-nowrap"
-        initial="hidden"
-        whileInView="visible"
+        className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-1 md:mb-4 sm:ml-2 flex items-center whitespace-nowrap sm:-mt-6"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        variants={{
-          hidden: { opacity: 1 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.05,
-              delayChildren: 0.1,
-            },
-          },
-        }}
+        transition={{ duration: 0.5 }}
       >
-        {"Premium Home Services - ".split("").map((char, index) => (
-          <motion.span
-            key={index}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1 },
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        ))}
-        <motion.span
-          className="font-black text-transparent bg-clip-text bg-gradient-to-r from-[#0463ac] to-[#03528b] inline-block"
-        >
-          Hommlie
-        </motion.span>
+        Premium Home PestControl Services
       </motion.h1>
 
       <div className="bg-white border border-gray-100 rounded-3xl p-4 shadow-sm mb-0 sm:w-full">
@@ -376,7 +352,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                         return rawImage;
                       })()}
                       alt={name}
-                      className="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-500 group-hover:scale-110"
+                      className="w-22 h-22 sm:w-20 sm:h-20 object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </motion.div>
                 </div>

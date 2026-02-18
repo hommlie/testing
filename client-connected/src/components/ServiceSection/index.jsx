@@ -453,7 +453,7 @@ const ServiceSection = ({ categories }) => {
           >
             <span className="text-[12px] font-black text-[#0463ac] tracking-[0.2em] uppercase opacity-70">Expert Solutions</span>
             <h2 className="text-3xl font-bold text-[#033053] tracking-tight">
-              Quick Booking Pest Control
+              Quick Booking - Pest Control
             </h2>
             <div className="h-1.5 w-16 bg-gradient-to-r from-[#0463ac] to-green-400 rounded-full mt-1" />
           </motion.div>
@@ -933,7 +933,7 @@ const ServiceSection = ({ categories }) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Service Type */}
                 <div className="col-span-1">
-                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Type</label>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your Services</label>
                   <Dropdown
                     label="Select Subcategory"
                     value={selectedSubCategory}
@@ -945,7 +945,7 @@ const ServiceSection = ({ categories }) => {
 
                 {/* Property Size */}
                 <div className="col-span-1">
-                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Property Size</label>
+                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your BHK</label>
                   <Dropdown
                     label="Select BHK"
                     value={selectedBhk}
@@ -974,7 +974,7 @@ const ServiceSection = ({ categories }) => {
           <div className="mb-0">
             {pincode.length === 6 ? (
               <>
-                <h3 className="text-sm font-black text-[#033053]/30 uppercase tracking-[0.25em] mb-4">
+                <h3 className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-4 flex items-center whitespace-nowrap">
                   Available Service Packages
                 </h3>
 
@@ -1352,7 +1352,7 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
               `}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              {isAddingToCart ? "Adding..." : (matchedVariation ? (isPremium ? "Book 6D Prime" : "Select Service") : "Unavailable")}
+              {isAddingToCart ? "Adding..." : (matchedVariation ? (isPremium ? "Book 6D Prime" : "Book Service") : "Unavailable")}
               {!isAddingToCart && matchedVariation && <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />}
             </span>
           </motion.button>

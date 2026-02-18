@@ -64,38 +64,16 @@ const PestControlCarousel = () => {
         <div className="pt-0 pb-10 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4">
                 {/* Header Section */}
-                <div className="text-center -mt-1">
+                <div className="text-center -mt-1 mb-8">
                     <div className="flex justify-center mb-0 relative z-10">
                         <motion.h3
-                            className="text-2xl font-bold text-center relative inline-block"
-                            initial="hidden"
-                            whileInView="visible"
+                            className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-1 flex items-center whitespace-nowrap"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
                             viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
                         >
-                            <motion.span
-                                className="bg-clip-text text-transparent bg-gradient-to-r from-[#033053] via-[#0463ac] to-[#033053] bg-[length:200%_auto] block pb-1"
-                                variants={{
-                                    hidden: { opacity: 0, y: 10 },
-                                    visible: {
-                                        opacity: 1,
-                                        y: 0,
-                                        backgroundPosition: ["0% 50%", "200% 50%"],
-                                        transition: {
-                                            opacity: { duration: 0.5 },
-                                            y: { duration: 0.5 },
-                                            backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear", repeatType: "loop" }
-                                        }
-                                    }
-                                }}
-                            >
-                                Professional Care
-                            </motion.span>
-                            <motion.div
-                                className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"
-                                initial={{ width: 0 }}
-                                whileInView={{ width: 64 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                            />
+                            Professional Care
                         </motion.h3>
                     </div>
                     <motion.h2
@@ -103,7 +81,7 @@ const PestControlCarousel = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-xl mt-2 md:text-5xl font-bold text-[#033053] leading-tight"
+                        className="text-lg md:text-3xl font-bold text-[#033053] leading-tight"
                     >
                         Expert Solutions For Every<br className="hidden md:block" /> Pest Problem
                     </motion.h2>
@@ -128,7 +106,7 @@ const PestControlCarousel = () => {
                                     viewport={{ once: true }}
                                 >
                                     {/* Circular Image wrapper */}
-                                    <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-8 border-white shadow-xl bg-[#f8f1dd]/50 flex items-center justify-center relative z-20 -mb-20 transition-transform duration-500 group-hover:scale-110">
+                                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg bg-[#f8f1dd]/50 flex items-center justify-center relative z-20 -mb-14 transition-transform duration-500 group-hover:scale-105">
                                         <img
                                             src={subImage}
                                             alt={item.subcategory_name}
@@ -138,7 +116,7 @@ const PestControlCarousel = () => {
                                     </div>
 
                                     {/* Content Card below */}
-                                    <div className="w-full bg-white rounded-[40px] shadow-[0_20px_60px_rgba(0,0,0,0.06)] border border-gray-50 flex flex-col items-center p-8 pt-24 min-h-[300px]">
+                                    <div className="w-full bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col items-center p-6 pt-20 min-h-[280px]">
                                         <h3 className="text-xl md:text-2xl font-bold text-[#033053] mb-4 text-center leading-tight group-hover:text-[#0463ac] transition-colors">
                                             {item.subcategory_name}
                                         </h3>
