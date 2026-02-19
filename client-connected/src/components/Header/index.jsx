@@ -61,7 +61,6 @@ const Header = ({
   youtube,
 }) => {
   const [isGetAppModalOpen, setIsGetAppModalOpen] = useState(false);
-  const [showMobileBanner, setShowMobileBanner] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isGetAppOpen, setIsGetAppOpen] = useState(false);
   const [isOfferOpen, setIsOfferOpen] = useState(false);
@@ -169,21 +168,45 @@ const Header = ({
     recognition.start();
   };
 
+  const scrollToBooking = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const targetId = "book-service";
+    // If we're on the home page already, smooth scroll
+    const homePaths = [
+      `${config.VITE_BASE_URL}/`,
+      `${config.VITE_BASE_URL}/home`,
+    ];
+    if (homePaths.includes(location.pathname) || location.pathname === `${config.VITE_BASE_URL}`) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        // small offset if header is sticky
+        window.setTimeout(() => window.scrollBy(0, -80), 300);
+      }
+    } else {
+      // navigate to home with hash (fallback to full-load anchor)
+      window.location.href = `${config.VITE_BASE_URL}/#${targetId}`;
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   const [isInBangalore, setIsInBangalore] = useState(true);
 
   const checkIsBangalore = (address) => {
     if (!address || address === "Get Current Location") return true;
 
     const addrLower = address.toLowerCase();
-    const isBangalore = addrLower.includes("bangalore") || addrLower.includes("bengaluru") || /\b560\d{3}\b/.test(address);
+    // direct city match
+    if (addrLower.includes("bangalore") || addrLower.includes("bengaluru") || addrLower.includes("blr")) return true;
 
-    if (isBangalore) return true;
+    // If a 6-digit pincode exists in the string, treat it as Bangalore when it starts with '56'
+    const pincodeMatch = address.match(/\b(\d{6})\b/);
+    if (pincodeMatch) {
+      const pin = pincodeMatch[1];
+      return pin.startsWith("56");
+    }
 
-    // Detect non-Bangalore pincodes (starting with anything other than 560)
-    const hasOtherPincode = /\b(?![560])\d{6}\b/.test(address);
-    if (hasOtherPincode) return false;
-
-    // If it's explicitly another city or state like Goa, return false
+    // If address explicitly mentions another state/city, return false
     return false;
   };
 
@@ -234,7 +257,9 @@ const Header = ({
 
 
   useEffect(() => {
-    setIsInBangalore(checkIsBangalore(currentLocation));
+    // Consider explicit pincode prefix as a reliable indicator too (many Bangalore pincodes start with 56)
+    const byPincode = pincode && String(pincode).startsWith("56");
+    setIsInBangalore(checkIsBangalore(currentLocation) || !!byPincode);
   }, [currentLocation, pincode]);
 
   useEffect(() => {
@@ -295,14 +320,7 @@ const Header = ({
     }
   }, []);
 
-  useEffect(() => {
-    const show = () => setShowMobileBanner(true);
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(show, { timeout: 2500 });
-    } else {
-      setTimeout(show, 2500);
-    }
-  }, []);
+  
 
 
   useEffect(() => {
@@ -586,25 +604,33 @@ const Header = ({
       ref={headerRef}
       className="w-full sticky top-0 z-50 font-sans bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50/30 lg:backdrop-blur-sm lg:shadow-lg lg:border-b lg:border-gray-100/50 transition-all duration-300"
     >
-      {showMobileBanner && (
-        <div className="w-full top-0 left-0 z-50 bg-[#0463ac] text-white text-sm px-4 py-2 flex justify-between items-center sm:hidden">
-          <a
-            href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2"
-          >
-            📲 Download the Hommlie App for faster booking!
+      
+
+      {/* Mobile Contact Info Bar - updated for premium look */}
+      <div
+        className="w-full py-2 px-3 sm:hidden shadow-sm border-b border-white/10"
+        style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}
+      >
+        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-0 items-center text-center">
+          <a href="tel:6363865658" className="flex flex-col items-center justify-center py-2 px-2">
+            <FaPhoneAlt className="text-white text-xl mb-1" />
+            <span className="text-[11px] text-white/90">Call us</span>
+            <span className="text-sm font-semibold text-white">6363865658</span>
           </a>
-          <button
-            onClick={() => setShowMobileBanner(false)}
-            className="text-white text-xl hover:text-amber-200 transition-colors"
-            aria-label="Close mobile banner"
-          >
-            <RxCross1 />
+
+          <a href="/about-us" className="flex flex-col items-center justify-center py-2 px-2">
+            <FaUser className="text-white text-xl mb-1" />
+            <span className="text-[11px] text-white/90">Learn More</span>
+            <span className="text-sm font-semibold text-white">About Service</span>
+          </a>
+
+          <button onClick={scrollToBooking} className="flex flex-col items-center justify-center py-2 px-2 w-full">
+            <MdEmail className="text-white text-xl mb-1" />
+            <span className="text-[11px] text-white/90">Schedule Service</span>
+            <span className="text-sm font-semibold text-white">Book Online</span>
           </button>
         </div>
-      )}
+      </div>
 
       {/* Top Header with contact and social info */}
       <div className="">
@@ -1256,11 +1282,11 @@ const Header = ({
               {/* Logo aligned left */}
               <div className="flex items-center flex-shrink-0">
                 <NavLink to="/">
-                  <img
-                    src="/images/logoh.png"
-                    alt="Hommlie Logo"
-                    className="h-14 w-auto object-contain"
-                  />
+                      <img
+                        src="/images/logoh.png"
+                        alt="Hommlie Logo"
+                        className="h-12 w-auto object-contain"
+                      />
                 </NavLink>
               </div>
 
@@ -1778,27 +1804,7 @@ const Header = ({
         isMobileMenuOpen && (
           <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
             <nav className="space-y-4">
-              <AnimatePresence>
-                {!isInBangalore && currentLocation !== "Get Current Location" && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0, y: -10 }}
-                    animate={{ height: "auto", opacity: 1, y: 0 }}
-                    exit={{ height: 0, opacity: 0, y: -10 }}
-                    className="overflow-hidden mb-3"
-                  >
-                    <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl animate-bounce">📍</span>
-                        <div>
-                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
-                          <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">We're coming soon to {currentLocation.split(',')[0]}!</p>
-                        </div>
-                      </div>
-                      <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Mobile 'Coming Soon' banner removed */}
               <div className="relative mb-4">
                 <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-emerald-600" />
                 <input

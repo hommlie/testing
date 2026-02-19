@@ -93,6 +93,23 @@ export function ContProvider({ children }) {
     setPincode(pc);
   };
 
+  // If currentLocation contains a 6-digit pincode, populate global pincode.
+  useEffect(() => {
+    try {
+      if (currentLocation) {
+        const matches = String(currentLocation).match(/\b(\d{6})\b/);
+        if (matches && matches[1]) {
+          const found = matches[1];
+          if (found !== pincode) {
+            setGlobalPincode(found);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Error extracting pincode from currentLocation:", err);
+    }
+  }, [currentLocation]);
+
   const incrementApiCall = useCallback(() => {
     setActiveApiCalls((prev) => prev + 1);
     setIsLoading(true);

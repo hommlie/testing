@@ -563,19 +563,7 @@ const ServiceSection = ({ categories }) => {
                     <MapPin className="w-5 h-5 text-gray-400" />
                   )}
                 </div>
-
-                {!mbIsInBangalore && pincode.length >= 3 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute -bottom-6 left-0 flex items-center gap-1"
-                  >
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                    <p className="text-xs text-red-500 font-bold uppercase tracking-wide">
-                      Sorry, we are coming soon here!
-                    </p>
-                  </motion.div>
-                )}
+                {/* Mobile 'coming soon' banner removed as per request */}
               </div>
             </div>
 
@@ -928,7 +916,6 @@ const ServiceSection = ({ categories }) => {
 
         {/* Dropdowns Container - Hidden on Mobile */}
         <div className="hidden md:block">
-          {pincode.length === 6 && (
             <div className="max-w-3xl mb-8 mt-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Service Type */}
@@ -969,42 +956,37 @@ const ServiceSection = ({ categories }) => {
                 </div>
               </div>
             </div>
-          )}
+        
 
           <div className="mb-0">
-            {pincode.length === 6 ? (
-              <>
-                <h3 className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-4 flex items-center whitespace-nowrap">
-                  Available Service Packages
-                </h3>
+            <>
+              <h3 className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-4 flex items-center whitespace-nowrap">
+                Available Service Packages
+              </h3>
 
-                <div className="flex justify-start">
-                  {recommended.length + regular.length === 0 ? (
-                    <div className="text-center text-gray-500 py-10">Loading service packages...</div>
-                  ) : (
-                    <div className={`grid gap-6 px-0 max-w-3xl grid-cols-1 place-items-stretch`}>
-                      {[...recommended, ...regular].map((product) => (
-                        <ProductCard
-                          key={product.id}
-                          product={product}
-                          isSelected={selectedProduct === product.id}
-                          onClick={() => setSelectedProduct(product.id)}
-                          currentAttributes={getCurrentAttributes()}
-                          selectedAttribute={selectedAttribute}
-                          selectedBhk={selectedBhk}
-                          handleAddToCart={handleAddToCart}
-                          isAddingToCart={isAddingToCart}
-                          categoryName={categories?.find(c => c.id === selectedCategory)?.category_name || "pest"}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              // This is already handles by the desktop header above, but in case we want a placeholder here
-              null
-            )}
+              <div className="flex justify-start">
+                {recommended.length + regular.length === 0 ? (
+                  <div className="text-center text-gray-500 py-10">Loading service packages...</div>
+                ) : (
+                  <div className={`grid gap-6 px-0 max-w-3xl grid-cols-1 place-items-stretch`}>
+                    {[...recommended, ...regular].map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        isSelected={selectedProduct === product.id}
+                        onClick={() => setSelectedProduct(product.id)}
+                        currentAttributes={getCurrentAttributes()}
+                        selectedAttribute={selectedAttribute}
+                        selectedBhk={selectedBhk}
+                        handleAddToCart={handleAddToCart}
+                        isAddingToCart={isAddingToCart}
+                        categoryName={categories?.find(c => c.id === selectedCategory)?.category_name || "pest"}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
           </div>
         </div>
       </section >
