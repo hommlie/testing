@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -401,6 +401,7 @@ const Header = ({
   const [displayedText, setDisplayedText] = useState("");
   const fullText = "Premium Home Services at Your Doorstep";
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [searchPanelStyle, setSearchPanelStyle] = useState(null);
 
   const trendingSearches = [
     "Standard Cockroach Control",
@@ -426,6 +427,33 @@ const Header = ({
 
     return () => clearInterval(interval);
   }, []);
+
+  // compute and track search dropdown position when input focused
+  const updateSearchPanelPos = () => {
+    const el = searchInputRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    // Use viewport coordinates so the dropdown stays visually
+    // attached to the search bar even when the header is sticky/fixed.
+    setSearchPanelStyle({
+      left: rect.left,
+      top: rect.bottom + 8,
+      width: rect.width,
+    });
+  };
+
+  useEffect(() => {
+    if (isSearchFocused) updateSearchPanelPos();
+    const handler = () => {
+      if (isSearchFocused) updateSearchPanelPos();
+    };
+    window.addEventListener("resize", handler);
+    window.addEventListener("scroll", handler, true);
+    return () => {
+      window.removeEventListener("resize", handler);
+      window.removeEventListener("scroll", handler, true);
+    };
+  }, [isSearchFocused]);
 
   const offers = [
     {
@@ -631,6 +659,35 @@ const Header = ({
           </button>
         </div>
       </div>
+
+          {/* Desktop Contact Bar - visible on md+ (matches mobile contact items) */}
+          <div className="hidden md:block w-full py-2 px-3 shadow-sm border-t border-white/5" style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}>
+            <div className="max-w-7xl mx-auto flex items-center justify-center text-white space-x-24">
+              <a href="tel:6363865658" className="flex items-center gap-4">
+                <FaPhoneAlt className="text-white text-2xl" />
+                <div className="text-left">
+                  <div className="text-sm opacity-90">Call us</div>
+                  <div className="text-lg font-semibold">6363865658</div>
+                </div>
+              </a>
+
+              <a href="/about-us" className="flex items-center gap-4">
+                <FaUser className="text-white text-2xl" />
+                <div className="text-left">
+                  <div className="text-sm opacity-90">Learn More</div>
+                  <div className="text-lg font-semibold">About Service</div>
+                </div>
+              </a>
+
+              <button onClick={scrollToBooking} className="flex items-center gap-4">
+                <MdEmail className="text-white text-2xl" />
+                <div className="text-left">
+                  <div className="text-sm opacity-90">Schedule Service</div>
+                  <div className="text-lg font-semibold">Book Online</div>
+                </div>
+              </button>
+            </div>
+          </div>
 
       {/* Top Header with contact and social info */}
       <div className="">
@@ -1463,8 +1520,18 @@ const Header = ({
                       Your browser does not support voice search. Please try using Chrome on desktop or Android.
                     </p>
                   )}
-                  {isSearchFocused && searchTerm.length === 0 && (
-                    <div className="absolute top-full left-0 mt-3 w-full bg-white rounded-2xl shadow-xl border border-gray-200 z-50 p-5 max-h-96 overflow-y-auto transition-all duration-200">
+                  {isSearchFocused && searchTerm.length === 0 && createPortal(
+                    <div
+                      style={{
+                          position: 'fixed',
+                          left: searchPanelStyle?.left ?? 0,
+                          top: searchPanelStyle?.top ?? 0,
+                          width: searchPanelStyle?.width ?? 'auto',
+                          zIndex: 2147483647,
+                          pointerEvents: 'auto',
+                        }}
+                      className="bg-white rounded-2xl shadow-xl border border-gray-200 p-5 max-h-96 overflow-y-auto transition-all duration-200"
+                    >
                       <h3 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
                         <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M13 7H7v6h6V7z" />
@@ -1477,10 +1544,10 @@ const Header = ({
                           <button
                             key={idx}
                             onMouseDown={() => {
-                              setSearchTerm(item); // Show in search bar
-                              fetchSearchResults(item); // Optional: Show matching products
-                              setIsSearchOpen(true); // Show dropdown
-                              searchInputRef.current?.focus(); // Refocus input
+                              setSearchTerm(item);
+                              fetchSearchResults(item);
+                              setIsSearchOpen(true);
+                              searchInputRef.current?.focus();
                             }}
                             className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
                           >
@@ -1488,7 +1555,8 @@ const Header = ({
                           </button>
                         ))}
                       </div>
-                    </div>
+                    </div>,
+                    document.body
                   )}
 
                 </div>

@@ -475,7 +475,7 @@ const HomePage = () => {
               {/* Trending Search Dropdown */}
               <div className="relative w-full">
                 {isSearchFocused && searchTerm.length === 0 && (
-                  <div className="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-10 md:z-0">
+                  <div className="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-40 md:z-0">
                     <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
                       <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M13 7H7v6h6V7z" />
