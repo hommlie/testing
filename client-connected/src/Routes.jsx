@@ -248,6 +248,10 @@ const ProjectRoutes = () => {
       element: <HelpPage />,
     },
     {
+      path: `${config.VITE_BASE_URL}/help-us`,
+      element: <HelpPage />,
+    },
+    {
       path: `${config.VITE_BASE_URL}/scrap`,
       element: <Scrap />,
     },

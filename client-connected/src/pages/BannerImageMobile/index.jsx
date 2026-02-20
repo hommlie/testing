@@ -12,7 +12,7 @@ const BannerImageMobile = () => {
           alt="Banner Mobile"
           className="w-full h-auto object-cover"
         />
-        <div className="absolute bottom-4 left-4">
+        <div className="absolute bottom-4 right-4">
           <button
             onClick={() =>
               navigate('/product/cockroach-control-services-in-bangalore')

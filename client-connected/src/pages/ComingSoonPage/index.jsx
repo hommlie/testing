@@ -54,7 +54,7 @@ const ComingSoonModal = ({ isOpen, onClose, source }) => {
               </div>
 
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">
-                {source === "See More" ? "More Services!" : source === "Product" ? "Product Store" : "Coming Soon"}
+                {source === "See More" ? "More Services!" : source === "Product" ? "Product Store" : source === "Hommlie Chat" ? "Hommlie AI Chat" : "Coming Soon"}
               </h2>
 
               <div className="text-gray-500 leading-relaxed mb-8 text-[13px]">
@@ -69,6 +69,12 @@ const ComingSoonModal = ({ isOpen, onClose, source }) => {
                     We are building an exclusive store for premium home products.
                     <br className="hidden sm:block" />
                     <span className="font-semibold text-emerald-600 mt-1 block">Something amazing is in the works!</span>
+                  </>
+                ) : source === "Hommlie Chat" ? (
+                  <>
+                    Our <strong className="text-[#0463ac]">AI-powered Hommlie Chat</strong> is currently in the final stages of development.
+                    <br className="hidden sm:block" />
+                    <span className="block mt-2">Get ready for a smarter, faster way to manage your home services. We are perfecting the experience to ensure it's nothing short of excellent.</span>
                   </>
                 ) : (
                   <>

@@ -171,38 +171,38 @@ const InspectionFormSection = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-6">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#033053]/40 ml-4 block">Full Name</label>
+                    <label className="text-[12px] font-semibold uppercase tracking-wider text-[#033053] ml-2 block">Full Name</label>
                     <div className="relative group">
-                      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#0463ac] transition-colors">
-                        <User size={20} />
+                      <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#033053]/60 group-focus-within:text-[#0463ac] transition-colors">
+                        <User size={18} />
                       </div>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full pl-14 pr-4 py-4 bg-transparent md:bg-white md:border md:border-gray-100 md:rounded-lg md:py-4 md:px-4 md:pl-14 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
+                        className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:border-[#0463ac] focus:bg-white transition-all outline-none text-[#033053] font-semibold text-base placeholder:text-[#033053]/30"
                         placeholder="John Doe"
                       />
                     </div>
-                    {errors.name && <p className="text-[10px] text-red-500 ml-4 font-bold uppercase tracking-wider mt-1">{errors.name}</p>}
+                    {errors.name && <p className="text-[10px] text-red-500 ml-2 font-bold uppercase tracking-wider mt-1">{errors.name}</p>}
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#033053]/40 ml-4 block">Phone Number</label>
+                    <label className="text-[12px] font-semibold uppercase tracking-wider text-[#033053] ml-2 block">Phone Number</label>
                     <div className="relative group">
-                      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#0463ac] transition-colors">
-                        <Smartphone size={20} />
+                      <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#033053]/60 group-focus-within:text-[#0463ac] transition-colors">
+                        <Smartphone size={18} />
                       </div>
-                      <div className="absolute left-14 top-1/2 -translate-y-1/2 text-[#033053]/20 font-black text-sm border-r border-gray-100 pr-3">IN</div>
+                      <div className="absolute left-12 top-1/2 -translate-y-1/2 text-[#033053]/60 font-bold text-sm border-r border-gray-200 pr-3">IN</div>
                       <input
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, "").slice(0, 10) })}
-                        className="w-full pl-24 pr-4 py-4 bg-transparent md:bg-white md:border md:border-gray-100 md:rounded-lg md:py-4 md:px-4 md:pl-24 focus:border-[#0463ac] transition-all outline-none text-[#033053] font-bold text-lg placeholder:text-gray-300"
+                        className="w-full pl-20 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:border-[#0463ac] focus:bg-white transition-all outline-none text-[#033053] font-semibold text-base placeholder:text-[#033053]/30"
                         placeholder="Mobile number"
                       />
                     </div>
-                    {errors.phone && <p className="text-[10px] text-red-500 ml-4 font-bold uppercase tracking-wider mt-1">{errors.phone}</p>}
+                    {errors.phone && <p className="text-[10px] text-red-500 ml-2 font-bold uppercase tracking-wider mt-1">{errors.phone}</p>}
                   </div>
 
                   <motion.button
@@ -237,13 +237,13 @@ const InspectionFormSection = () => {
                     )}
                   </motion.button>
 
-                  <div className="pt-6 text-center border-t border-gray-50">
-                    <p className="text-[#033053]/60 text-[10px] font-black uppercase tracking-[0.4em] mb-3">Personal Concierge Assigned</p>
+                  <div className="pt-4 text-center border-t border-gray-50">
+                    <p className="text-[#033053]/80 text-[10px] font-semibold uppercase tracking-[0.3em] mb-2">Personal Concierge Assigned</p>
                     <div className="flex flex-col items-center">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center gap-3 px-5 py-2.5 border border-gray-100 rounded-2xl"
+                        className="flex items-center gap-3 px-5 py-2 border border-gray-100 rounded-2xl bg-white shadow-sm"
                       >
                         <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
                           <User size={14} className="text-[#0463ac]" />
@@ -253,12 +253,12 @@ const InspectionFormSection = () => {
                           <Sparkles size={14} className="text-amber-400" />
                         </span>
                       </motion.div>
-                      <div className="flex items-center gap-5 mt-2.5">
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#033053]/70">
-                          <Clock size={12} className="text-[#0463ac]" /> 5 Min Response
+                      <div className="flex items-center gap-5 mt-2">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#033053]">
+                          <Clock size={12} className="text-emerald-500" /> 5 Min Response
                         </div>
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#033053]/70">
-                          <ShieldCheck size={12} className="text-[#0463ac]" /> Verified Pro
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#033053]">
+                          <ShieldCheck size={12} className="text-emerald-500" /> Verified Pro
                         </div>
                       </div>
                     </div>
@@ -276,7 +276,7 @@ const InspectionFormSection = () => {
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-[10px] font-black uppercase text-[#033053]/60 tracking-[0.4em] mb-1"
+            className="text-[15px] font-black uppercase text-[#033053]/60 tracking-[0.4em] mb-1 font-semibold"
           >
             Our Impact
           </motion.h2>

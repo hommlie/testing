@@ -22,6 +22,8 @@ import {
   FaAppStore,
   FaHeadset,
   FaInfoCircle,
+  FaTools,
+  FaHandshake,
 } from "react-icons/fa";
 import { MdLocationOn, MdEmail, MdKeyboardArrowDown, MdMyLocation, MdMap } from "react-icons/md";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -70,6 +72,7 @@ const Header = ({
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const searchInputRef = useRef(null);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+  const [comingSoonSource, setComingSoonSource] = useState("Product");
 
   const {
     user,
@@ -320,7 +323,7 @@ const Header = ({
     }
   }, []);
 
-  
+
 
 
   useEffect(() => {
@@ -632,62 +635,9 @@ const Header = ({
       ref={headerRef}
       className="w-full sticky top-0 z-50 font-sans bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50/30 lg:backdrop-blur-sm lg:shadow-lg lg:border-b lg:border-gray-100/50 transition-all duration-300"
     >
-      
 
-      {/* Mobile Contact Info Bar - updated for premium look */}
-      <div
-        className="w-full py-2 px-3 sm:hidden shadow-sm border-b border-white/10"
-        style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}
-      >
-        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-0 items-center text-center">
-          <a href="tel:6363865658" className="flex flex-col items-center justify-center py-2 px-2">
-            <FaPhoneAlt className="text-white text-xl mb-1" />
-            <span className="text-[11px] text-white/90">Call us</span>
-            <span className="text-sm font-semibold text-white">6363865658</span>
-          </a>
 
-          <a href="/about-us" className="flex flex-col items-center justify-center py-2 px-2">
-            <FaUser className="text-white text-xl mb-1" />
-            <span className="text-[11px] text-white/90">Learn More</span>
-            <span className="text-sm font-semibold text-white">About Service</span>
-          </a>
 
-          <button onClick={scrollToBooking} className="flex flex-col items-center justify-center py-2 px-2 w-full">
-            <MdEmail className="text-white text-xl mb-1" />
-            <span className="text-[11px] text-white/90">Schedule Service</span>
-            <span className="text-sm font-semibold text-white">Book Online</span>
-          </button>
-        </div>
-      </div>
-
-          {/* Desktop Contact Bar - visible on md+ (matches mobile contact items) */}
-          <div className="hidden md:block w-full py-2 px-3 shadow-sm border-t border-white/5" style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}>
-            <div className="max-w-7xl mx-auto flex items-center justify-center text-white space-x-24">
-              <a href="tel:6363865658" className="flex items-center gap-4">
-                <FaPhoneAlt className="text-white text-2xl" />
-                <div className="text-left">
-                  <div className="text-sm opacity-90">Call us</div>
-                  <div className="text-lg font-semibold">6363865658</div>
-                </div>
-              </a>
-
-              <a href="/about-us" className="flex items-center gap-4">
-                <FaUser className="text-white text-2xl" />
-                <div className="text-left">
-                  <div className="text-sm opacity-90">Learn More</div>
-                  <div className="text-lg font-semibold">About Service</div>
-                </div>
-              </a>
-
-              <button onClick={scrollToBooking} className="flex items-center gap-4">
-                <MdEmail className="text-white text-2xl" />
-                <div className="text-left">
-                  <div className="text-sm opacity-90">Schedule Service</div>
-                  <div className="text-lg font-semibold">Book Online</div>
-                </div>
-              </button>
-            </div>
-          </div>
 
       {/* Top Header with contact and social info */}
       <div className="">
@@ -1041,6 +991,39 @@ const Header = ({
                             <span className="font-medium">Your Addresses</span>
                           </button>
 
+                          <NavLink
+                            to="/services"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <FaTools className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Services</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/register-free-listing"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <FaHandshake className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Join ONDC</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/help-us"
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
+                              <FaHeadset className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
+                            </div>
+                            <span className="font-medium">Help</span>
+                          </NavLink>
+
                           <button
                             onClick={() => {
                               setIsReferAndEarnOpen(true);
@@ -1321,7 +1304,7 @@ const Header = ({
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-2 lg:px-10">
+      <div className="max-w-7xl mx-auto px-4 lg:px-10">
         {/* Main Header */}
         <div className="flex items-center justify-between h-[74px]">
           <div className="flex items-center gap-3">
@@ -1339,11 +1322,11 @@ const Header = ({
               {/* Logo aligned left */}
               <div className="flex items-center flex-shrink-0">
                 <NavLink to="/">
-                      <img
-                        src="/images/logoh.png"
-                        alt="Hommlie Logo"
-                        className="h-12 w-auto object-contain"
-                      />
+                  <img
+                    src="/images/logoh.png"
+                    alt="Hommlie Logo"
+                    className="h-12 w-auto object-contain"
+                  />
                 </NavLink>
               </div>
 
@@ -1360,7 +1343,7 @@ const Header = ({
                   <div className="flex flex-col text-left">
                     <div className="text-sm font-medium text-black flex items-center">
                       <MdLocationOn className="text-[#0463ac] mr-1 text-lg" />
-                      Current Location
+                      Location
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
                       <span className="truncate">{currentLocation}</span>
@@ -1523,13 +1506,13 @@ const Header = ({
                   {isSearchFocused && searchTerm.length === 0 && createPortal(
                     <div
                       style={{
-                          position: 'fixed',
-                          left: searchPanelStyle?.left ?? 0,
-                          top: searchPanelStyle?.top ?? 0,
-                          width: searchPanelStyle?.width ?? 'auto',
-                          zIndex: 2147483647,
-                          pointerEvents: 'auto',
-                        }}
+                        position: 'fixed',
+                        left: searchPanelStyle?.left ?? 0,
+                        top: searchPanelStyle?.top ?? 0,
+                        width: searchPanelStyle?.width ?? 'auto',
+                        zIndex: 2147483647,
+                        pointerEvents: 'auto',
+                      }}
                       className="bg-white rounded-2xl shadow-xl border border-gray-200 p-5 max-h-96 overflow-y-auto transition-all duration-200"
                     >
                       <h3 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -1614,130 +1597,291 @@ const Header = ({
 
 
 
-            <div className="md:hidden flex items-center gap-4">
-              {/* Cart Button - Uniform Color */}
+          </div><div className="md:hidden flex items-center gap-4">
+            {/* Cart Button - Uniform Color */}
+            <button
+              onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
+              className="relative text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
+              aria-label="Go to cart"
+            >
+              <FaShoppingCart size={22} />
+              {cart?.length > 0 && (
+                <span className="absolute -top-1.5 -right-2 bg-amber-300 text-emerald-900 text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
+                  {cart?.length}
+                </span>
+              )}
+            </button>
+
+            {/* Account/Profile Button - Uniform Color */}
+            <div className="relative">
               <button
-                onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="relative text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
-                aria-label="Go to cart"
+                onClick={() => {
+                  if (user?.length === 0) {
+                    setIsModalOpen(true);
+                  } else {
+                    setIsLoginOpen(!isLoginOpen);
+                  }
+                }}
+                className={`text-2xl transition-colors ${isLoginOpen ? 'text-[#0463ac]' : 'text-[#033053] hover:text-[#0463ac]'}`}
+                aria-label="Account profile"
               >
-                <FaShoppingCart size={22} />
-                {cart?.length > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-amber-300 text-emerald-900 text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
-                    {cart?.length}
-                  </span>
-                )}
+                <FaUser size={22} />
               </button>
 
-              {/* Account/Profile Button - Uniform Color */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    if (user?.length === 0) {
-                      setIsModalOpen(true);
-                    } else {
-                      setIsLoginOpen(!isLoginOpen);
-                    }
-                  }}
-                  className={`text-2xl transition-colors ${isLoginOpen ? 'text-[#0463ac]' : 'text-[#033053] hover:text-[#0463ac]'}`}
-                  aria-label="Account profile"
-                >
-                  <FaUser size={22} />
-                </button>
+              {/* Account Dropdown for Mobile */}
+              <div className="md:hidden">
+                {/* Mobile Drawer Portal */}
+                {createPortal(
+                  <AnimatePresence>
+                    {isLoginOpen && (
+                      <>
+                        {/* Backdrop */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          onClick={() => setIsLoginOpen(false)}
+                          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] md:hidden"
+                        />
 
-                {/* Account Dropdown for Mobile */}
-                {isLoginOpen && (
-                  <div
-                    ref={loginDropdownRef}
-                    className="absolute right-0 top-12 w-56 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] py-1 z-50 border border-gray-100 overflow-hidden"
-                  >
-                    <NavLink
-                      to="/add-to-cart"
-                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="flex items-center">
-                        <IoCartOutline className="mr-2 text-[#0463ac]" />
-                        My Cart
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      to="/my-bookings"
-                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="flex items-center">
-                        <MdEmail className="mr-2 text-[#0463ac]" />
-                        My Bookings
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      to="/edit-profile"
-                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="flex items-center">
-                        <FaUser className="mr-2 text-[#0463ac]" />
-                        Edit Profile
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      to="/my-wallet"
-                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="flex items-center">
-                        <FaWallet className="mr-2 text-[#0463ac]" />
-                        My Wallet
-                      </div>
-                    </NavLink>
-                    <button
-                      onClick={() => {
-                        setIsAddressModalOpen(true);
-                        setIsLoginOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
-                    >
-                      <div className="flex items-center">
-                        <MdLocationOn className="mr-2 text-[#0463ac]" />
-                        Your Addresses
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIsReferAndEarnOpen(true);
-                        setIsLoginOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors border-b border-gray-50"
-                    >
-                      <div className="flex items-center">
-                        <FaGift className="mr-2 text-[#0463ac]" />
-                        Refer & Earn
-                      </div>
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      <div className="flex items-center">
-                        <FaSignOutAlt className="mr-2" />
-                        Log out
-                      </div>
-                    </button>
-                  </div>
+                        {/* Drawer */}
+                        <motion.div
+                          ref={loginDropdownRef}
+                          initial={{ x: "-100%" }}
+                          animate={{ x: 0 }}
+                          exit={{ x: "-100%" }}
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          className="fixed top-0 left-0 h-full w-[75%] max-w-sm bg-white z-[9999] shadow-2xl overflow-hidden flex flex-col md:hidden"
+                        >
+                          {/* Close Button */}
+                          <div className="absolute top-4 right-4 z-20">
+                            <button
+                              onClick={() => setIsLoginOpen(false)}
+                              className="w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+                            >
+                              <FaTimes />
+                            </button>
+                          </div>
+
+                          {/* Premium Header */}
+                          <div className="relative bg-gradient-to-br from-[#0463ac] to-[#0580ca] px-6 py-8 flex-shrink-0">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                            <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full -ml-10 -mb-5 blur-xl"></div>
+
+                            <div className="relative flex flex-col gap-4">
+                              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center ring-4 ring-white/10 shadow-lg">
+                                <FaUser className="text-white text-2xl" />
+                              </div>
+                              <div>
+                                <h3 className="text-white font-bold text-xl tracking-tight">Hello, {user?.name || user?.[0]?.name || "User"}!</h3>
+                                <p className="text-blue-100 text-sm font-medium opacity-90">Welcome back to Hommlie</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Scrollable Content */}
+                          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 py-2">
+                            <div className="grid grid-cols-1 gap-1 p-2">
+                              <NavLink
+                                to="/edit-profile"
+                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                                onClick={() => setIsLoginOpen(false)}
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">Edit Profile</span>
+                              </NavLink>
+
+                              <NavLink
+                                to="/my-bookings"
+                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                                onClick={() => setIsLoginOpen(false)}
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <MdEmail className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">My Bookings</span>
+                              </NavLink>
+
+                              <NavLink
+                                to="/my-wallet"
+                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                                onClick={() => setIsLoginOpen(false)}
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <FaWallet className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="font-semibold text-sm">My Wallet</span>
+                                  <span className="text-[10px] text-gray-400 font-medium">Balance & Transactions</span>
+                                </div>
+                              </NavLink>
+
+                              <button
+                                onClick={() => {
+                                  setIsAddressModalOpen(true);
+                                  setIsLoginOpen(false);
+                                }}
+                                className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <MdLocationOn className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">Your Addresses</span>
+                              </button>
+
+                              <div className="my-3 px-4">
+                                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Explore</p>
+                              </div>
+
+                              <NavLink
+                                to="/services"
+                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                                onClick={() => setIsLoginOpen(false)}
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <FaTools className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">Services</span>
+                              </NavLink>
+
+                              <NavLink
+                                to="/register-free-listing"
+                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                                onClick={() => setIsLoginOpen(false)}
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <FaHandshake className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">Join ONDC</span>
+                              </NavLink>
+
+                              <NavLink
+                                to="/help-us"
+                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                                onClick={() => setIsLoginOpen(false)}
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <FaHeadset className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">Help & Support</span>
+                              </NavLink>
+
+                              <button
+                                onClick={() => {
+                                  setIsReferAndEarnOpen(true);
+                                  setIsLoginOpen(false);
+                                }}
+                                className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                                  <FaGift className="text-[#0463ac] group-hover:text-white transition-colors" />
+                                </div>
+                                <span className="font-semibold text-sm">Refer & Earn</span>
+                              </button>
+                            </div>
+
+                            <div className="p-4 mt-2">
+                              <button
+                                onClick={handleLogout}
+                                className="flex w-full items-center justify-center gap-3 px-4 py-3.5 text-sm text-white bg-red-500 hover:bg-red-600 rounded-xl shadow-lg shadow-red-500/30 transition-all duration-200"
+                              >
+                                <FaSignOutAlt className="text-lg" />
+                                <span className="font-bold">Log out</span>
+                              </button>
+                              <p className="text-center text-[10px] text-gray-400 mt-4">v1.2.0 • Made with ❤️ in India</p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>,
+                  document.body
                 )}
               </div>
-
-              {/* Three Lines (Hamburger) - Uniform Color */}
-              <button
-                className="text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              >
-                {isMobileMenuOpen ? <RxCross1 size={22} /> : <AiOutlineMenu size={22} />}
-              </button>
             </div>
+
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Contact Info Bar - updated for premium look */}
+      <div
+        className="w-full py-1 sm:hidden shadow-sm border-b border-white/10"
+        style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}
+      >
+        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-0 px-1">
+          <a href="tel:6363865658" className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full">
+            <FaPhoneAlt className="text-white text-sm flex-shrink-0" />
+            <div className="flex flex-col text-left">
+              <span className="text-[9px] text-white/80 leading-tight">Call us</span>
+              <span className="text-[11px] font-bold text-white leading-none">6363865658</span>
+            </div>
+          </a>
+
+          <button
+            onClick={() => {
+              setComingSoonSource("Hommlie Chat");
+              setIsComingSoonOpen(true);
+            }}
+            className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full"
+          >
+            <RiRobot2Line className="text-white text-sm flex-shrink-0" />
+            <div className="flex flex-col text-left">
+              <span className="text-[9px] text-white/80 leading-tight">Hommlie Chat</span>
+              <span className="text-[11px] font-bold text-white leading-none">With Us</span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => navigate(`${config.VITE_BASE_URL}/quickservice`)}
+            className="flex items-center justify-center gap-2 py-1 px-1 w-full"
+          >
+            <MdEmail className="text-white text-sm flex-shrink-0" />
+            <div className="flex flex-col text-left">
+              <span className="text-[9px] text-white/80 leading-tight">Schedule Service</span>
+              <span className="text-[11px] font-bold text-white leading-none">Book Online</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Contact Bar - visible on md+ (matches mobile contact items) */}
+      <div className="hidden md:block w-full py-2 px-3 shadow-sm border-t border-white/5" style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}>
+        <div className="max-w-7xl mx-auto flex items-center justify-center text-white space-x-24">
+          <a href="tel:6363865658" className="flex items-center gap-4">
+            <FaPhoneAlt className="text-white text-2xl" />
+            <div className="text-left">
+              <div className="text-sm opacity-90">Call us</div>
+              <div className="text-lg font-semibold">6363865658</div>
+            </div>
+          </a>
+
+          <button
+            onClick={() => {
+              setComingSoonSource("Hommlie Chat");
+              setIsComingSoonOpen(true);
+            }}
+            className="flex items-center gap-4"
+          >
+            <RiRobot2Line className="text-white text-2xl" />
+            <div className="text-left">
+              <div className="text-sm opacity-90">Hommlie Chat</div>
+              <div className="text-lg font-semibold">With Us</div>
+            </div>
+          </button>
+
+          <button
+            onClick={() => navigate(`${config.VITE_BASE_URL}/quickservice`)}
+            className="flex items-center gap-4"
+          >
+            <MdEmail className="text-white text-2xl" />
+            <div className="text-left">
+              <div className="text-sm opacity-90">Schedule Service</div>
+              <div className="text-lg font-semibold">Book Online</div>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -2051,11 +2195,14 @@ const Header = ({
       }
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
 
-      <ComingSoonModal
-        isOpen={isComingSoonOpen}
-        onClose={() => setIsComingSoonOpen(false)}
-        source="Product"
-      />
+      {createPortal(
+        <ComingSoonModal
+          isOpen={isComingSoonOpen}
+          onClose={() => setIsComingSoonOpen(false)}
+          source={comingSoonSource}
+        />,
+        document.body
+      )}
 
       {
         isWalletModalOpen && (

@@ -406,7 +406,7 @@ const HomePage = () => {
       {/* Typewriter Hero Headline - Desktop Only */}
 
       <section
-        className="max-w-[1440px] mx-auto px-6 pt-4 pb-12 md:py-12 bg-[#ffffff] min-h-screen"
+        className="max-w-[1440px] mx-auto px-1 md:px-6 pt-4 pb-4 md:py-12 bg-[#ffffff] min-h-screen"
       >
         <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start">
           {/* Left Container - Services & Form (Sticky) */}

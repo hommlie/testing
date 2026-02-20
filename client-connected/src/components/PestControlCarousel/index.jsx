@@ -64,19 +64,35 @@ const PestControlCarousel = () => {
         <div className="pt-0 pb-10 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4">
                 {/* Header Section */}
-                <div className="text-center -mt-1 mb-8">
+                <div className="text-center -mt-1 mb-10">
                     <div className="flex justify-center mb-0 relative z-10">
-                        
+                        <motion.h3
+                            className="text-2xl font-bold text-center relative inline-block px-4"
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                        >
+                            <motion.span
+                                className="bg-clip-text text-transparent bg-gradient-to-r from-[#033053] via-[#0463ac] to-[#033053] bg-[length:200%_auto] block pb-1 uppercase tracking-tight whitespace-nowrap text-[15px] md:text-2xl"
+                                animate={{
+                                    backgroundPosition: ["0% 50%", "200% 50%"],
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    ease: "linear",
+                                }}
+                            >
+                                Expert Solutions For Every Pest Problem
+                            </motion.span>
+                            <motion.div
+                                className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 64 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                            />
+                        </motion.h3>
                     </div>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-lg md:text-3xl font-bold text-[#033053] leading-tight"
-                    >
-                        Expert Solutions For Every<br className="hidden md:block" /> Pest Problem
-                    </motion.h2>
                 </div>
 
                 {/* Carousel wrapper */}

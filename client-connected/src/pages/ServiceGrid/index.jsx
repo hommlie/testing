@@ -112,7 +112,7 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
     >
       <motion.div
         key="modal-content"
-        className="bg-white w-full max-w-lg rounded-t-[2rem] rounded-b-none sm:rounded-2xl p-4 sm:p-6 h-[50vh] sm:h-[74vh] overflow-y-auto shadow-2xl flex flex-col relative"
+        className="bg-white w-full max-w-lg rounded-t-[2rem] rounded-b-none sm:rounded-2xl p-4 sm:p-6 h-[70vh] sm:h-[74vh] overflow-y-auto shadow-2xl flex flex-col relative"
         initial={isMobile ? { y: "100%" } : { y: 50, opacity: 0, scale: 0.95 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         exit={isMobile ? { y: "100%" } : { y: 50, opacity: 0, scale: 0.95 }}
@@ -307,20 +307,44 @@ const ServiceGrid = ({ categories: propCategories }) => {
 
 
   return (
-    <div className="ml-0 sm:ml-4 px-2 py-0 sm:px-0 sm:py-4 sm:-mt-3 sm:w-fit bg-cover bg-center bg-no-repeat">
-      <motion.h1
-        className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-3 md:mb-4 sm:ml-2 flex items-center whitespace-nowrap sm:-mt-6"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        Premium Home PestControl Services
-      </motion.h1>
+    <div className="w-full sm:w-fit ml-0 sm:ml-4 px-0 py-0 sm:px-0 sm:py-4 sm:-mt-3 bg-cover bg-center bg-no-repeat">
+      <div className="flex justify-center mb-4 relative z-10 sm:-mt-6">
+        <motion.h1
+          className="text-[17px] sm:text-xl font-bold text-center relative inline-block whitespace-nowrap"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <motion.span
+            className="mt-2 sm:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-[#033053] via-[#0463ac] to-[#033053] bg-[length:200%_auto] block pb-1"
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                backgroundPosition: ["0% 50%", "200% 50%"],
+                transition: {
+                  opacity: { duration: 0.5 },
+                  y: { duration: 0.5 },
+                  backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear", repeatType: "loop" }
+                }
+              }
+            }}
+          >
+            Premium Home PestControl Services
+          </motion.span>
+          <motion.div
+            className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"
+            initial={{ width: 0 }}
+            whileInView={{ width: 64 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          />
+        </motion.h1>
+      </div>
 
-      <div className="bg-white border border-gray-100 rounded-3xl p-4 shadow-sm mb-0 sm:w-full">
+      <div className="bg-transparent sm:bg-white border-0 sm:border border-gray-100 rounded-none sm:rounded-3xl p-0.5 sm:p-4 shadow-none sm:shadow-sm mb-0 w-full sm:w-full">
         {/* Premium Super-Compact Grid */}
-        <div className="grid grid-cols-2 gap-2 md:gap-4 mb-0">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-0">
           {finalServices.map((service, index) => {
             const name = service.category_name || service.name;
 
@@ -333,11 +357,11 @@ const ServiceGrid = ({ categories: propCategories }) => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 whileHover={{ y: -3 }}
-                className="relative flex flex-col items-center py-2 px-2 sm:py-5 sm:px-1 cursor-pointer group transition-all duration-300"
+                className="relative flex flex-col items-center py-2 px-0.5 sm:py-5 sm:px-1 cursor-pointer group transition-all duration-300"
               >
 
 
-                <div className="relative mb-3 z-10">
+                <div className="relative mb-2 z-10 w-full px-1 sm:px-2">
                   <motion.div
                     animate={{
                       y: [0, -2, 0],
@@ -348,7 +372,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                       ease: "easeInOut",
                       delay: index * 0.1
                     }}
-                    className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:bg-blue-50 group-hover:shadow-md group-hover:shadow-[#0463ac]/10"
+                    className="w-full aspect-[1.7/1] sm:aspect-[2/1] bg-[#f5f5f5] sm:bg-gray-50 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:bg-blue-50 group-hover:shadow-md group-hover:shadow-[#0463ac]/10"
                   >
                     <img
                       src={(() => {
@@ -360,13 +384,13 @@ const ServiceGrid = ({ categories: propCategories }) => {
                         return rawImage;
                       })()}
                       alt={name}
-                      className="w-22 h-22 sm:w-20 sm:h-20 object-contain transition-transform duration-500 group-hover:scale-110"
+                      className="w-20 h-20 sm:w-24 sm:h-24 object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </motion.div>
                 </div>
 
-                <div className="flex flex-col items-center text-center z-10 w-full px-1 max-w-[180px]">
-                  <span className="text-[11px] md:text-[13px] font-bold text-[#033053]/80 group-hover:text-[#0463ac] transition-all duration-300 leading-[1.3] uppercase tracking-wider block">
+                <div className="flex flex-col items-center text-center z-10 w-full px-1">
+                  <span className="text-[10px] sm:text-[13px] font-bold text-[#033053]/90 group-hover:text-[#0463ac] transition-all duration-300 leading-tight uppercase tracking-tight whitespace-nowrap overflow-hidden text-ellipsis w-full">
                     {name}
                   </span>
 
@@ -374,10 +398,10 @@ const ServiceGrid = ({ categories: propCategories }) => {
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-1 mt-2 bg-gradient-to-r from-[#0463ac] to-[#03528b] px-2.5 py-1 rounded-full shadow-lg shadow-[#0463ac]/20"
+                      className="flex items-center gap-1 mt-1.5 bg-gradient-to-r from-[#0463ac] to-[#03528b] px-2 py-0.5 rounded-full shadow-lg shadow-[#0463ac]/20"
                     >
-                      <Zap size={10} className="text-white fill-white animate-pulse" />
-                      <span className="text-[8px] font-black text-white uppercase tracking-widest whitespace-nowrap">Insta Service</span>
+                      <Zap size={8} className="text-white fill-white animate-pulse" />
+                      <span className="text-[7px] font-black text-white uppercase tracking-widest whitespace-nowrap">Insta Service</span>
                     </motion.div>
                   )}
                 </div>
@@ -401,15 +425,18 @@ const ServiceGrid = ({ categories: propCategories }) => {
       )}
 
       {/* Coming soon modal */}
-      <AnimatePresence>
-        {showComingSoon && (
-          <ComingSoonModal
-            isOpen={!!showComingSoon}
-            onClose={() => setShowComingSoon(false)}
-            source={showComingSoon}
-          />
-        )}
-      </AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
+          {showComingSoon && (
+            <ComingSoonModal
+              isOpen={!!showComingSoon}
+              onClose={() => setShowComingSoon(false)}
+              source={showComingSoon}
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       {/* Callback Modal */}
       <Requestacallback

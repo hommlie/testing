@@ -12,15 +12,15 @@ const BannerImageMobile = () => {
           alt="Banner Mobile"
           className="w-full h-auto object-cover"
         />
-        <div className="absolute bottom-4 left-4">
+        <div className="absolute bottom-4 right-4">
           <button
             onClick={() =>
-                navigate('/product/cockroach-control-services-in-bangalore')
+              navigate('/product/cockroach-control-services-in-bangalore')
             }
             className="-ml-1 px-4 py-2 bg-green-700 text-white text-sm font-semibold rounded-md shadow-md hover:from-emerald-700 hover:to-lime-700 transform hover:scale-105 transition-all duration-300 ease-in-out"
-            >
+          >
             Book Now
-            </button>
+          </button>
         </div>
       </div>
     </div>
