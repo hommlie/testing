@@ -210,7 +210,7 @@ const InspectionFormSection = () => {
                     disabled={loading}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-gradient-to-r from-[#0463ac] to-[#033053] text-white py-4 md:py-6 rounded-[16px] md:rounded-[24px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-[13px] shadow-xl md:shadow-2xl hover:shadow-[#0463ac]/30 transition-all flex items-center justify-center gap-2 md:gap-3 group/btn cursor-pointer overflow-hidden relative"
+                    className="w-full md:w-max md:mx-auto md:px-16 bg-gradient-to-r from-[#0463ac] to-[#033053] text-white py-4 md:py-6 rounded-[16px] md:rounded-[24px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-[13px] shadow-xl md:shadow-2xl hover:shadow-[#0463ac]/30 transition-all flex items-center justify-center gap-2 md:gap-3 group/btn cursor-pointer overflow-hidden relative"
                   >
                     {/* Infinite Shimmer Animation - Matches Brand Standard */}
                     <motion.div
