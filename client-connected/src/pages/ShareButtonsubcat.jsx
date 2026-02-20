@@ -1,6 +1,5 @@
-// components/ShareButton.jsx
 import React from "react";
-import { FaShareAlt, FaArrowLeft } from "react-icons/fa";
+import { FaShareAlt } from "react-icons/fa";
 
 export default function ShareButton() {
   const handleShare = async () => {
@@ -22,27 +21,13 @@ export default function ShareButton() {
     }
   };
 
-  const handleBack = () => {
-    window.location.href = "/"; // 👈 always go to home
-  };
-
   return (
-    <>
-      {/* Back Button (Top-Left) */}
-      {/* <button
-        onClick={handleBack}
-        className="absolute top-36 left-5 text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
-      >
-        <FaArrowLeft size={20} />
-      </button> */}
-
-      {/* Share Button (Top-Right) */}
-      {/* <button
-        onClick={handleShare}
-        className="absolute top-36 right-2 right-5 text-black p-3 rounded-full shadow-lg transition z-10 md:hidden"
-      >
-        <FaShareAlt size={20} />
-      </button> */}
-    </>
+    <button
+      onClick={handleShare}
+      className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
+      aria-label="Share"
+    >
+      <FaShareAlt className="w-5 h-5 text-black" />
+    </button>
   );
 }

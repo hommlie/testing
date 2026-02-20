@@ -6,6 +6,10 @@ import {
   Star,
   Calendar,
   Clock,
+  ShoppingBag,
+  Info,
+  CheckCircle2,
+  ArrowRight
 } from "lucide-react";
 import axios from "axios";
 import config from "../../config/config";
@@ -19,7 +23,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { motion, AnimatePresence } from "framer-motion";
 
-const StarRating = ({ rating }) => {
+const StarRating = ({ rating, hideText = false }) => {
   return (
     <div className="flex items-center">
       {[1].map((star) => {
@@ -37,15 +41,10 @@ const StarRating = ({ rating }) => {
             <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0463ac]">
               <Star className="w-3 h-3 text-white" fill="currentColor" />
             </span>
-            <div
-              className="absolute inset-0 overflow-hidden"
-              style={{ width: `${fillPercentage}%` }}
-            >
-            </div>
           </div>
         );
       })}
-      <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+      {!hideText && <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>}
     </div>
   );
 };
@@ -607,33 +606,24 @@ const ProductDetailModal = ({
         {isOpen && (
           <motion.div
             key="pdm-overlay"
-            className="fixed inset-0 bg-black bg-opacity-50 z-[999] sm:z-50 flex items-end sm:items-center justify-center"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] sm:z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            transition={{ duration: 0.4 }}
           >
             {/* WRAPPER (relative) */}
-            <div className="relative w-full max-w-xl sm:mb-0 mb-0">
-              {/* Floating Close Button – sits ABOVE the card */}
-              <button
-                onClick={onClose}
-                className="absolute sm:-top-12 sm:-right-0 -top-12 right-2 z-[1001]
-                          w-10 h-10 rounded-full bg-white shadow-lg ring-1 ring-black/10
-                          hover:bg-gray-100 flex items-center justify-center transition"
-                aria-label="Close"
-              >
-                <X className="w-5 h-5 text-black" />
-              </button>
+            <div className="relative w-full max-w-xl h-full sm:h-auto flex flex-col justify-end">
+
 
               {/* CARD (actual scrolling area) */}
               <motion.div
                 key="pdm-card"
-                className="bg-white w-full rounded-t-2xl sm:rounded-lg p-4 sm:p-6 h-[90vh] sm:h-[74vh] overflow-y-auto"
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 100, opacity: 0 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="bg-white w-full rounded-t-[2.5rem] sm:rounded-3xl p-0 overflow-hidden h-[92vh] sm:h-auto sm:max-h-[85vh] flex flex-col relative shadow-2xl"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100%" }}
+                transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
               >
                 {/* Scoped styles to keep embeds responsive */}
                 <style>{`
@@ -650,21 +640,23 @@ const ProductDetailModal = ({
                 }
               `}</style>
                 {/* Header */}
-                <div className="sticky -mt-4  bg-white p-4 border-b z-10">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-bold">{product?.product_name}</h2>
-                    {/* <button
-                    onClick={onClose}
-                    className="p-2 hover:bg-gray-100 rounded-full "
-                  >
-                    <X className="h-6 w-6" />
-                  </button> */}
+                <div className="sticky top-0 bg-white/90 backdrop-blur-md px-6 py-4 border-b border-gray-100 z-20 flex flex-col gap-2">
+                  <div className="flex justify-between items-start gap-4">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
+                      {product?.product_name}
+                    </h2>
+                    <button
+                      onClick={onClose}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors shrink-0 -mr-2 -mt-2"
+                    >
+                      <X className="h-6 w-6 text-gray-500" />
+                    </button>
                   </div>
                   {(product?.rating || product?.total_reviews) && (
                     <div className="flex items-center space-x-2">
                       {product?.rating && <StarRating rating={product.rating} />}
                       {product?.total_reviews && (
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs font-semibold text-gray-400">
                           (
                           {product.total_reviews >= 1000
                             ? `${(product.total_reviews / 1000).toFixed(1)}K`
@@ -675,14 +667,14 @@ const ProductDetailModal = ({
                     </div>
                   )}
                   {displayedAttributes?.length === 1 && (
-                    <>
-                      <h3 className="text-lg font-semibold text-gray-800 mt-3">
+                    <div className="mt-1">
+                      <h3 className="text-base font-bold text-[#0463ac]">
                         {displayedAttributes[0].attribute_name}
                       </h3>
 
                       {displayedAttributes[0]?.variations?.[0]?.description && (
-                        <div className="mt-2">
-                          <ul className="space-y-1">
+                        <div className="mt-3">
+                          <ul className="flex flex-wrap gap-x-4 gap-y-1">
                             {displayedAttributes[0].variations[0].description
                               .split("|")
                               .map((desc) => desc.trim())
@@ -690,142 +682,138 @@ const ProductDetailModal = ({
                               .map((desc, index) => (
                                 <li
                                   key={index}
-                                  className="flex items-start space-x-2 text-sm text-gray-600"
+                                  className="flex items-center gap-1.5 text-xs font-semibold text-gray-500"
                                 >
-                                  <span className="text-black">•</span>
+                                  <div className="w-1 h-1 rounded-full bg-gray-300"></div>
                                   <span>{desc}</span>
                                 </li>
                               ))}
                           </ul>
                         </div>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
 
-                {/* Main Content */}
-                <div className="p-6">
-                  {/* ADD MODE: variations/BHK cards only */}
-                  {localMode === "add" && (
-                    <section className="space-y-5 my-0">
-                      {displayedAttributes?.map((attribute) => (
-                        <div key={attribute.attribute_id} className="space-y-4">
-                          <div
-                            className="relative overflow-x-auto hide-scrollbar"
-                            ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
-                          >
-                            <div className="flex gap-3 min-w-max py-0 px-1">
-                              {attribute?.variations?.map((variation) => (
-                                <div
-                                  key={variation.id}
-                                  className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
-                                >
-                                  <div className="p-3 space-y-2">
-                                    <h4 className="font-medium text-sm">{variation.variation}</h4>
+                {/* Main Content - Scrollable area */}
+                <div className="flex-1 overflow-y-auto">
+                  <div className="p-6">
+                    {/* ADD MODE: variations/BHK cards only */}
+                    {localMode === "add" && (
+                      <section className="space-y-5 my-0">
+                        {displayedAttributes?.map((attribute) => (
+                          <div key={attribute.attribute_id} className="space-y-4">
+                            <div
+                              className="relative overflow-x-auto hide-scrollbar"
+                              ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
+                            >
+                              <div className="flex gap-3 min-w-max py-0 px-1">
+                                {attribute?.variations?.map((variation) => (
+                                  <div
+                                    key={variation.id}
+                                    className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                                  >
+                                    <div className="p-3 space-y-2">
+                                      <h4 className="font-medium text-sm">{variation.variation}</h4>
 
-                                    {(variation.avg_rating || variation.total_reviews) && (
-                                      <div className="flex items-center space-x-1">
-                                        {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
-                                        {variation.total_reviews && (
-                                          <span className="text-xs text-gray-500">
-                                            ({variation.total_reviews >= 1000
-                                              ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                                              : variation.total_reviews})
-                                          </span>
+                                      {(variation.avg_rating || variation.total_reviews) && (
+                                        <div className="flex items-center space-x-1">
+                                          {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
+                                          {variation.total_reviews && (
+                                            <span className="text-xs text-gray-500">
+                                              ({variation.total_reviews >= 1000
+                                                ? `${(variation.total_reviews / 1000).toFixed(1)}K`
+                                                : variation.total_reviews})
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+
+                                      <div className="space-x-1 text-sm">
+                                        <span className="text-emerald-600 font-semibold">
+                                          ₹{variation.discounted_variation_price}
+                                        </span>
+                                        {variation.price !== variation.discounted_variation_price && (
+                                          <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
                                         )}
                                       </div>
-                                    )}
 
-                                    <div className="space-x-1 text-sm">
-                                      <span className="text-emerald-600 font-semibold">
-                                        ₹{variation.discounted_variation_price}
-                                      </span>
-                                      {variation.price !== variation.discounted_variation_price && (
-                                        <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
-                                      )}
+                                      <AddButton variation={variation} />
                                     </div>
-
-                                    <AddButton variation={variation} />
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </section>
-                  )}
-
-                  {/* VIEW MODE: Details then Reviews */}
-                  {localMode !== "add" && (
-                    <>
-                      <section className="space-y-5 sm:space-y-4">
-                        <div className="prose max-w-none">
-                          <div className="service-details-html">
-                            <div
-                              className="service-details-content"
-                              translate="no"
-                              dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
-                            />
-                          </div>
-                        </div>
-                      </section>
-
-                      <section className="space-y-6 mt-6">
-                        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
-
-                          <div className="flex flex-col md:flex-row gap-6">
-                            <div className="flex flex-col items-center md:items-start space-y-2 min-w-[120px]">
-                              <span className="text-5xl font-bold text-gray-900">
-                                {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
-                              </span>
-                              <div className="flex items-center">
-                                {[1].map((star) => (
-                                  <div key={star} className="relative">
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#6C43F3]">
-                                      <Star className="w-3 h-3 text-white" fill="currentColor" />
-                                    </span>
                                   </div>
                                 ))}
                               </div>
-                              <p className="text-sm text-gray-500">
-                                {product?.total_reviews ? product.total_reviews : 128} reviews
-                              </p>
-                            </div>
-
-                            <div className="flex-1 space-y-3">
-                              {[
-                                { star: 5, percent: 90, count: 115 },
-                                { star: 4, percent: 7, count: 9 },
-                                { star: 3, percent: 2, count: 3 },
-                                { star: 2, percent: 1, count: 1 },
-                                { star: 1, percent: 0, count: 0 },
-                              ].map(({ star, percent, count }) => (
-                                <div key={star} className="flex items-center gap-3">
-                                  <div className="flex items-center w-10">
-                                    <span className="text-sm font-medium text-gray-700">★{star}</span>
-                                  </div>
-                                  <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
-                                  </div>
-                                  <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
-                                </div>
-                              ))}
                             </div>
                           </div>
-                        </div>
+                        ))}
                       </section>
-                    </>
-                  )}
+                    )}
+
+                    {/* VIEW MODE: Details then Reviews */}
+                    {localMode !== "add" && (
+                      <>
+                        <section className="space-y-5 sm:space-y-4">
+                          <div className="prose max-w-none">
+                            <div className="service-details-html">
+                              <div
+                                className="service-details-content"
+                                translate="no"
+                                dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
+                              />
+                            </div>
+                          </div>
+                        </section>
+
+                        <section className="space-y-6 mt-6">
+                          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Reviews</h3>
+
+                            <div className="flex flex-col md:flex-row gap-6">
+                              <div className="flex flex-col items-center md:items-start space-y-1 min-w-[120px]">
+                                <span className="text-5xl font-black text-gray-900">
+                                  {product?.rating ? Number(product.rating).toFixed(1) : "4.9"}
+                                </span>
+                                <div className="flex items-center text-yellow-400">
+                                  <StarRating rating={Number(product?.rating) || 4.9} hideText />
+                                </div>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                  {product?.total_reviews ? product.total_reviews : 128} reviews
+                                </p>
+                              </div>
+
+                              <div className="flex-1 space-y-3">
+                                {[
+                                  { star: 5, percent: 90, count: 115 },
+                                  { star: 4, percent: 7, count: 9 },
+                                  { star: 3, percent: 2, count: 3 },
+                                  { star: 2, percent: 1, count: 1 },
+                                  { star: 1, percent: 0, count: 0 },
+                                ].map(({ star, percent, count }) => (
+                                  <div key={star} className="flex items-center gap-3">
+                                    <div className="flex items-center w-10">
+                                      <span className="text-sm font-medium text-gray-700">★{star}</span>
+                                    </div>
+                                    <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                      <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${percent}%` }} />
+                                    </div>
+                                    <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 {/* Sticky bottom: switch to add mode */}
                 {localMode === "view" && displayedAttributes?.length === 1 && (
-                  <div className="sticky  bottom-[-22px] left-0 right-0 bg-white border-t p-4 z-10">
-                    <div className="max-w-7xl mx-auto flex justify-end">
+                  <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-6 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+                    <div className="max-w-7xl mx-auto flex justify-center sm:justify-end">
                       <button
-                        className="bg-[#0463ac] text-white px-4 py-2 rounded-md hover:bg-emerald-700 shadow-lg"
+                        className="w-full sm:w-auto bg-[#0463ac] hover:bg-[#03528b] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
                         onClick={() => {
                           setLocalMode("add");
                           const attrId = displayedAttributes[0].attribute_id;
@@ -837,6 +825,7 @@ const ProductDetailModal = ({
                           }
                         }}
                       >
+                        <ShoppingBag className="w-5 h-5" />
                         Add to cart
                       </button>
                     </div>

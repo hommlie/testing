@@ -1847,44 +1847,6 @@ const Header = ({
         </div>
       </div>
 
-      {/* Desktop Contact Bar - visible on md+ (matches mobile contact items) */}
-      <div className="hidden md:block w-full py-2 px-3 shadow-sm border-t border-white/5" style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}>
-        <div className="max-w-7xl mx-auto flex items-center justify-center text-white space-x-24">
-          <a href="tel:6363865658" className="flex items-center gap-4">
-            <FaPhoneAlt className="text-white text-2xl" />
-            <div className="text-left">
-              <div className="text-sm opacity-90">Call us</div>
-              <div className="text-lg font-semibold">6363865658</div>
-            </div>
-          </a>
-
-          <button
-            onClick={() => {
-              setComingSoonSource("Hommlie Chat");
-              setIsComingSoonOpen(true);
-            }}
-            className="flex items-center gap-4"
-          >
-            <RiRobot2Line className="text-white text-2xl" />
-            <div className="text-left">
-              <div className="text-sm opacity-90">Hommlie Chat</div>
-              <div className="text-lg font-semibold">With Us</div>
-            </div>
-          </button>
-
-          <button
-            onClick={() => navigate(`${config.VITE_BASE_URL}/quickservice`)}
-            className="flex items-center gap-4"
-          >
-            <MdEmail className="text-white text-2xl" />
-            <div className="text-left">
-              <div className="text-sm opacity-90">Schedule Service</div>
-              <div className="text-lg font-semibold">Book Online</div>
-            </div>
-          </button>
-        </div>
-      </div>
-
       {/* Search Results */}
       <AnimatePresence>
         {isSearchOpen && (
