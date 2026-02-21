@@ -18,13 +18,13 @@ import ShareButton from "../ShareButtonsubcat.jsx";
 
 const StarRating = ({ rating, reviews }) => {
   return (
-    <div className="flex items-center gap-1.5 flex-wrap">
-      <div className="flex items-center bg-[#fef3c7] px-2 py-0.5 rounded-md border border-[#f59e0b]/20">
+    <div className="flex items-center gap-2 group/rating">
+      <div className="flex items-center bg-[#fff8e6] px-2 py-1 rounded-lg border border-[#f59e0b]/10 shadow-sm transition-all">
         <Star className="w-3.5 h-3.5 text-[#f59e0b] fill-[#f59e0b] mr-1" />
-        <span className="text-sm font-bold text-[#b45309]">{rating.toFixed(1)}</span>
+        <span className="text-sm font-extrabold text-black leading-none">{rating.toFixed(1)}</span>
       </div>
       {reviews && (
-        <span className="text-xs font-medium text-gray-500">
+        <span className="text-[11px] md:text-xs font-semibold text-gray-400">
           ({reviews >= 1000 ? `${(reviews / 1000).toFixed(1)}K` : reviews} reviews)
         </span>
       )}
@@ -36,13 +36,13 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-gray-100 first:border-t-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-5 px-4 md:px-0 flex justify-between items-center transition-colors group"
+        className="w-full py-6 px-4 md:px-6 flex justify-between items-center transition-all hover:bg-gray-50/50 group"
       >
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900 text-left group-hover:text-[#0463ac] transition-colors">{title}</h2>
-        <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 text-left group-hover:text-[#0463ac] transition-colors tracking-tight">{title}</h2>
+        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-[#0463ac]/10 transition-colors">
           <ChevronDown
             className={`w-6 h-6 text-gray-400 group-hover:text-[#0463ac] transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
               }`}
@@ -57,7 +57,7 @@ const CollapsibleSection = ({ title, content, isHtml = false }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <div className="px-4 md:px-0 pb-6">
+            <div className="px-4 md:px-6 pb-8">
               {isHtml ? (
                 <div
                   className="prose max-w-none text-gray-600"
@@ -80,13 +80,15 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
     <div className="border-t border-gray-100">
       <button
         onClick={onToggle}
-        className="w-full py-5 px-4 md:px-0 flex justify-between items-center hover:bg-gray-50/50 transition-colors"
+        className="w-full py-6 px-4 md:px-6 flex justify-between items-center hover:bg-gray-50/50 transition-all group"
       >
-        <span className="text-lg font-semibold text-gray-900">{title}</span>
-        <ChevronDown
-          className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
-            }`}
-        />
+        <span className="text-lg font-bold text-gray-900 group-hover:text-[#0463ac] transition-colors tracking-tight">{title}</span>
+        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-[#0463ac]/10 transition-colors">
+          <ChevronDown
+            className={`w-6 h-6 text-gray-400 group-hover:text-[#0463ac] transition-transform duration-300 ${isOpen ? "transform rotate-180" : ""
+              }`}
+          />
+        </div>
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -97,7 +99,7 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-4 md:px-0 pb-6">{children}</div>
+            <div className="px-4 md:px-6 pb-8">{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -124,12 +126,12 @@ const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
                   className="flex items-center justify-between py-4 border-b border-gray-200"
                 >
                   {/* Product info */}
-                  <div className="flex flex-col flex-1 pr-4">
-                    <span className="text-sm font-semibold text-gray-900">
+                  <div className="flex flex-col flex-1 pr-4 min-w-0">
+                    <span className="text-sm font-bold text-gray-900 line-clamp-2 uppercase tracking-tight leading-snug">
                       {item.product_name}
                     </span>
                     {item.variation_name && (
-                      <span className="text-xs text-gray-500 mt-0.5">
+                      <span className="text-[11px] font-bold text-[#0463ac] mt-1 uppercase tracking-wider">
                         {item.variation_name}
                       </span>
                     )}
@@ -198,29 +200,30 @@ const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
           )}
         </section>
 
-        <section className="bg-gradient-to-br from-[#0463ac] to-[#03528b] rounded-2xl p-6 space-y-4 shadow-lg text-white relative overflow-hidden group">
-          <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors"></div>
-          <h2 className="text-lg font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#4ade80]" />
+        <section className="bg-white md:bg-white rounded-none md:rounded-2xl p-6 space-y-5 shadow-none md:shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-t md:border border-gray-100 mt-0 md:mt-4 relative overflow-hidden group">
+          <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#0463ac]/5 rounded-full blur-3xl group-hover:bg-[#0463ac]/10 transition-colors"></div>
+
+          <h2 className="text-lg font-bold flex items-center gap-2 text-gray-900">
+            <div className="bg-[#4ade80]/10 p-1.5 rounded-lg">
+              <CheckCircle2 className="w-5 h-5 text-[#05a357]" />
+            </div>
             Hommlie Promise
           </h2>
-          <ul className="text-xs space-y-3 font-medium opacity-90">
-            <li className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></div>
-              Verified Professionals
-            </li>
-            <li className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></div>
-              Safe & Non-Toxic Chemicals
-            </li>
-            <li className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></div>
-              Fast Service in 4 Hours
-            </li>
-            <li className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></div>
-              Premium Quality Guarantee
-            </li>
+
+          <ul className="grid grid-cols-1 gap-3.5">
+            {[
+              "Verified Professionals",
+              "Safe & Non-Toxic Chemicals",
+              "Fast Service in 4 Hours",
+              "Premium Quality Guarantee"
+            ].map((text, idx) => (
+              <li key={idx} className="flex items-start gap-3 group/item">
+                <div className="mt-1 w-1.5 h-1.5 rounded-full bg-[#0463ac] group-hover/item:scale-125 transition-transform shrink-0"></div>
+                <span className="text-xs md:text-[13px] font-semibold text-gray-600 group-hover/item:text-gray-900 transition-colors">
+                  {text}
+                </span>
+              </li>
+            ))}
           </ul>
         </section>
       </div>
@@ -422,7 +425,7 @@ const CleaningProductPage = () => {
       </Helmet>
       <div className="w-full md:container md:px-4 mt-0 md:mt-5 bg-white">
         <div className="mt-0 md:mt-5">
-          <div className="px-4 md:px-0">
+          <div className="px-4 md:px-6">
             <Breadcrumb
               items={[
                 {
@@ -434,45 +437,121 @@ const CleaningProductPage = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 gap-y-2 md:gap-y-8">
-            {/* Left Sidebar */}
-            <div className="lg:col-span-1 lg:row-span-2">
-              <div className="sticky top-44 transition-all duration-300 ease-in-out">
-                <div className="px-4 md:px-0 mt-0 md:mt-0 flex justify-between items-start gap-4">
-                  <div className="space-y-2 flex-1">
-                    <h1 className="text-2xl md:text-4xl font-semibold text-gray-900 tracking-tight leading-tight">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 gap-y-2 lg:gap-8">
+            <div className="lg:col-start-4 lg:col-span-9 lg:row-start-1 space-y-4">
+              {/* Header Card (Internalized for Desktop) */}
+              <div className="px-4 md:px-6 mt-1 md:mt-2 mb-2 md:mb-0 md:bg-white md:border md:border-gray-100 md:rounded-2xl md:shadow-sm py-2 md:py-5">
+                <div className="flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start gap-4 md:gap-5">
+                  <div className="space-y-2 md:space-y-4 flex-1 w-full">
+                    <h1 className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
                       {location ? location : innerSubCategoryData?.subcategory_name}
                     </h1>
-                    {(innerSubCategoryData.avg_rating || innerSubCategoryData.total_reviews) && (
-                      <div className="flex items-center space-x-2">
-                        <StarRating
-                          rating={innerSubCategoryData.avg_rating}
-                          reviews={innerSubCategoryData.total_reviews}
-                        />
-                      </div>
-                    )}
-                  </div>
 
-                  <div className="flex items-start gap-2 shrink-0">
-                    <div className="mt-1">
-                      <ShareButton />
+                    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
+                      <div className="flex items-center">
+                        {(innerSubCategoryData.avg_rating || innerSubCategoryData.total_reviews) && (
+                          <StarRating
+                            rating={innerSubCategoryData.avg_rating}
+                            reviews={innerSubCategoryData.total_reviews}
+                          />
+                        )}
+                      </div>
+
+                      {/* Desktop Only Actions Row (Reviews + Instant + Share) */}
+                      <div className="hidden md:flex items-center gap-6">
+                        <div className="w-px h-5 bg-gray-100"></div>
+
+                        {/* New Separated Instant Design */}
+                        <div className="flex items-center gap-3 group/instant">
+                          <div className="flex items-center gap-1.5 bg-[#05a357] text-white px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <Zap className="w-3.5 h-3.5 fill-white" />
+                            <span className="text-[10px] font-black uppercase tracking-wider">Instant</span>
+                          </div>
+                          <span className="text-[13px] font-bold text-gray-500">In 4 hrs</span>
+                        </div>
+
+                        <div className="w-px h-5 bg-gray-100"></div>
+
+                        <div className="transition-transform hover:scale-110">
+                          <ShareButton className="md:w-9 md:h-9" />
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Instant Badge */}
-                    <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden flex flex-col items-center w-24 shrink-0 transition-transform hover:scale-[1.02]">
-                      <div className="bg-[#05a357] w-full py-1 flex items-center justify-center gap-1">
-                        <Zap className="w-3 h-3 text-white fill-white" />
-                        <span className="text-[10px] font-black text-white uppercase tracking-tighter">Instant</span>
+                    {/* Desktop Promotional Offers - Grid Layout (No Scrolling) */}
+                    <div className="hidden md:block pt-3 border-t border-gray-100/50">
+                      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+                        {[
+                          { title: "Up to ₹150 cashback", subtitle: "Via Paytm UPI only" },
+                          { title: "Up to ₹100 cashback", subtitle: "Valid for BHIM app only" },
+                          { title: "Up to ₹100 cashback", subtitle: "Via POP UPI" },
+                          { title: "Amazon cashback upto ₹100", subtitle: "Via Amazon Pay balance" },
+                        ].map((offer, idx) => (
+                          <div
+                            key={idx}
+                            className="w-full border border-gray-100/50 rounded-xl p-2.5 bg-gray-50/30 flex items-start gap-2.5 transition-all hover:bg-gray-50/80 hover:shadow-sm cursor-default"
+                          >
+                            <div className="bg-[#05a357]/10 rounded-lg p-1.5 shrink-0">
+                              <Tag className="w-3.5 h-3.5 text-[#05a357]" />
+                            </div>
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-[11px] lg:text-[12px] font-bold text-gray-800 leading-tight truncate">
+                                {offer.title}
+                              </span>
+                              <span className="text-[9px] lg:text-[10px] font-medium text-gray-400 mt-0.5 truncate">
+                                {offer.subtitle}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="py-1 px-2 pb-1.5">
-                        <span className="text-[11px] font-bold text-gray-800 whitespace-nowrap">In 4 hrs</span>
+                    </div>
+                  </div>
+
+                  {/* Mobile Only Actions (Next to Title) stays untouched */}
+                  <div className="flex flex-row items-center gap-2 shrink-0 md:hidden">
+                    <div className="bg-white border border-gray-100 rounded-lg shadow-sm overflow-hidden flex flex-col items-center w-20 shrink-0 border-b-2 border-b-[#05a357]/10">
+                      <div className="bg-[#05a357] w-full py-0.5 flex items-center justify-center gap-1">
+                        <Zap className="w-2 text-white fill-white" />
+                        <span className="text-[8px] font-black text-white uppercase tracking-tighter">Instant</span>
                       </div>
+                      <div className="py-1 px-2">
+                        <span className="text-[9px] font-bold text-gray-700 whitespace-nowrap">In 4 hrs</span>
+                      </div>
+                    </div>
+
+                    <div className="transition-all hover:opacity-80">
+                      <ShareButton className="w-10 h-10" />
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Banner (Moved below internalized header) */}
+              {/* <div className="hidden sm:block">
+                {innerSubCategoryData?.subcategory_banner ? (
+                  <div className="w-full h-[180px] md:h-[320px] rounded-2xl md:-mt-2 shadow-sm border border-gray-100 overflow-hidden bg-gray-50 flex items-center justify-center">
+                    <img
+                      src={innerSubCategoryData?.subcategory_banner}
+                      alt={innerSubCategoryData?.innersubcategory_name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={NoImage}
+                    alt=""
+                    className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
+                  />
+                )}
+              </div> */}
+            </div>
+            {/* Left Sidebar */}
+            <div className="lg:col-span-3 lg:row-span-2">
+              <div className="sticky top-44 transition-all duration-300 ease-in-out">
 
                 {/* Promotional Offers Section */}
-                <div className="mt-6 md:hidden border-b border-gray-200 pb-2">
+                <div className="mt-1 md:hidden border-b border-gray-200 pb-2">
                   <div className="flex overflow-x-auto pb-4 px-4 gap-3 no-scrollbar snap-x snap-mandatory">
                     {[
                       { title: "Up to ₹150 cashback", subtitle: "Via Paytm UPI only" },
@@ -500,37 +579,39 @@ const CleaningProductPage = () => {
                   </div>
                 </div>
 
-                <section className="bg-white md:bg-white rounded-none md:rounded-2xl p-4 md:p-4 space-y-4 shadow-none md:shadow-md mt-0 md:mt-4 border-none md:border md:border-gray-100 mx-0 md:mx-0 border-b border-gray-200 pb-2 md:pb-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Services</span>
-                    <span className="text-[10px] bg-[#0463ac]/10 text-[#0463ac] px-2 py-0.5 rounded-full font-bold">
-                      {innerSubCategoryData?.products?.length} Available
+                <section className="bg-white md:bg-white rounded-none md:rounded-2xl p-4 md:p-6 space-y-4 shadow-none md:shadow-[0_4px_20px_rgba(0,0,0,0.03)] mt-0 md:mt-0 border-none md:border md:border-gray-100 mx-0 md:mx-0 border-b border-gray-200 pb-2 md:pb-6">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] text-gray-900">Services</span>
+                    <span className="text-[9px] md:text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-bold">
+                      {innerSubCategoryData?.products?.length} Items
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 max-h-[calc(100vh-18.5rem)] overflow-y-auto custom-scrollbar pr-1">
+                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 max-h-[calc(100vh-22rem)] overflow-y-auto custom-scrollbar pr-1.5">
                     {innerSubCategoryData?.products?.map((product, index) => (
                       <motion.div
                         key={product.id}
-                        whileTap={{ scale: 0.95 }}
-                        className={`flex flex-col md:flex-row items-center gap-2 p-1.5 rounded-xl cursor-pointer transition-all duration-300 ${index === currentProductIndex
-                          ? "md:bg-white md:shadow-[0_4px_12px_rgba(4,99,172,0.15)] md:ring-1 md:ring-[#0463ac]/20 bg-white shadow-md"
-                          : "hover:bg-white/50"
+                        whileHover={{
+                          x: index === currentProductIndex ? 0 : 6,
+                        }}
+                        className={`group flex flex-col md:flex-row items-center gap-2.5 md:gap-4 p-1.5 md:p-3 rounded-xl cursor-pointer transition-all duration-300 border ${index === currentProductIndex
+                          ? "bg-white border-[#0463ac]/30 shadow-sm"
+                          : "border-transparent hover:bg-gray-50/50"
                           }`}
                         onClick={() => handleProductClick(index)}
                       >
-                        <div className={`w-full md:w-16 md:h-16 aspect-square rounded-xl flex items-center justify-center overflow-hidden shrink-0 transition-transform duration-300 bg-gray-50 md:bg-gray-50 ${index === currentProductIndex ? "scale-105" : "border border-gray-100"}`}>
+                        <div className={`w-full md:w-20 md:h-20 aspect-square rounded-lg md:rounded-xl flex items-center justify-center overflow-hidden shrink-0 transition-all duration-300 bg-gray-50 ${index === currentProductIndex ? "shadow-sm" : ""}`}>
                           {product.productimages && product.productimages.length > 0 ? (
                             <img
                               src={product.productimages[0]?.image_url}
                               alt={product.product_name}
-                              className="w-full h-full object-contain p-1"
+                              className="w-full h-full object-contain p-1 md:p-1.5 transition-transform duration-500 md:group-hover:scale-110"
                             />
                           ) : (
-                            <ShoppingBag className="w-8 h-8 text-gray-300" />
+                            <ShoppingBag className="w-6 h-6 md:w-8 md:h-8 text-gray-200" />
                           )}
                         </div>
-                        <p className={`w-full text-[13px] md:text-xs font-medium md:font-bold text-center md:text-left break-words px-1 ${index === currentProductIndex ? "text-[#0463ac] md:text-[#0463ac]" : "text-black md:text-gray-600"}`}>
+                        <p className={`w-full text-[12px] md:text-[13px] font-semibold text-center md:text-left break-words px-1 leading-tight transition-all duration-300 ${index === currentProductIndex ? "text-black scale-[1.02] origin-left" : "text-gray-900 group-hover:text-black group-hover:translate-x-1"}`}>
                           {product.product_name}
                         </p>
                       </motion.div>
@@ -540,27 +621,9 @@ const CleaningProductPage = () => {
               </div>
             </div>
 
-            {/* Banner */}
-            <div className="hidden sm:block lg:col-start-2 lg:col-span-3 lg:row-start-1">
-              {innerSubCategoryData?.subcategory_banner ? (
-                <div className="w-full h-[180px] md:h-[320px] rounded-2xl -mt-4 shadow-lg border border-gray-100 overflow-hidden bg-gray-50 flex items-center justify-center">
-                  <img
-                    src={innerSubCategoryData?.subcategory_banner}
-                    alt={innerSubCategoryData?.innersubcategory_name}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              ) : (
-                <img
-                  src={NoImage}
-                  alt=""
-                  className="w-full h-[150px] md:h-[300px] rounded-lg opacity-40"
-                />
-              )}
-            </div>
 
             {/* Main Content */}
-            <div className="lg:col-start-2 lg:col-span-2 lg:row-start-2 mt-1 md:mt-0">
+            <div className="lg:col-start-4 lg:col-span-5 lg:row-start-2 mt-1 md:mt-0 lg:max-w-[620px]">
               <div className="space-y-8 md:space-y-12">
                 {innerSubCategoryData?.products?.map((product, productIndex) => (
                   <motion.section
@@ -571,12 +634,42 @@ const CleaningProductPage = () => {
                     transition={{ duration: 0.5, delay: productIndex * 0.1 }}
                     className="scroll-mt-44"
                   >
-                    <div className="flex items-center gap-3 mb-4 px-4 md:px-0 border-t border-gray-200 pt-4 md:border-none md:pt-0">
-                      <div className="h-8 w-1.5 bg-[#0463ac] rounded-full"></div>
-                      <h3 className="text-xl md:text-3xl font-semibold text-gray-900 tracking-tight">
+                    <div className="flex items-start gap-4 mb-5 px-4 md:px-6 border-t border-gray-100 pt-6 md:border-none md:pt-0">
+                      <div className="h-7 w-1.5 bg-[#0463ac] rounded-full mt-1 shrink-0"></div>
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 tracking-tight leading-tight flex flex-wrap items-center gap-x-3 gap-y-2">
                         {product.product_name}
+
+                        {/* Animated Best Seller Tag beside End Text */}
+                        {product.attributes?.some(attr => attr.attribute_name.toLowerCase().includes("one time")) && (
+                          <motion.span
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#0463ac]/10 to-[#0463ac]/5 px-2.5 py-0.5 rounded-full border border-[#0463ac]/20 shadow-sm"
+                          >
+                            <motion.span
+                              className="flex items-center"
+                              animate={{
+                                rotate: [0, 20, -20, 0],
+                                scale: [1, 1.25, 1.25, 1]
+                              }}
+                              transition={{
+                                duration: 2.5,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            >
+                              <Star className="w-3 h-3 fill-[#0463ac] text-[#0463ac]" />
+                            </motion.span>
+                            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider text-[#0463ac]">
+                              Best Seller
+                            </span>
+                          </motion.span>
+                        )}
                       </h3>
                     </div>
+
+
+
 
                     <div className="space-y-6 md:space-y-8 px-0 md:px-0">
                       {[...(product?.attributes || [])]
@@ -593,71 +686,130 @@ const CleaningProductPage = () => {
                             whileHover={{ y: -4 }}
                             className="bg-white rounded-none md:rounded-2xl p-0 shadow-sm md:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] transition-all duration-300 border-y md:border border-gray-100 overflow-hidden group mb-4 md:mb-0"
                           >
-                            <div className="md:flex md:items-stretch">
+                            <div className="md:flex md:flex-col">
                               {/* IMAGE SECTION */}
-                              <div className="md:w-[280px] w-full md:shrink-0 relative overflow-hidden bg-gray-50 flex items-center justify-center min-h-[192px] md:min-h-0">
+                              <div className="md:w-full w-full md:shrink-0 relative overflow-hidden bg-white/50 flex items-center justify-center border-r-0 md:border-b border-gray-100">
                                 <img
                                   src={attribute.image || product?.productimages?.[0]?.image_url || NoImage}
                                   alt={product.product_name}
-                                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                                  className="w-full h-auto min-h-[220px] object-cover transition-all duration-700 group-hover:scale-105"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 md:opacity-100 transition-opacity duration-300"></div>
 
-                                {/* Popular Tag for first attribute if it's 'one time' */}
-                                {attribute.attribute_name.toLowerCase().includes("one time") && (
-                                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#0463ac] shadow-sm z-10 border border-[#0463ac]/10">
-                                    Best Seller
-                                  </div>
-                                )}
+
                               </div>
 
                               {/* CONTENT SECTION */}
                               <div className="flex-1 p-5 md:p-6 flex flex-col">
                                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                                  <div className="space-y-2">
-                                    <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-[#0463ac] transition-colors">
+                                  <div className="flex-1 flex flex-col space-y-3 md:space-y-4">
+                                    <h3 className="text-xl md:text-xl font-bold text-gray-900 group-hover:text-black transition-colors leading-tight">
                                       {attribute.attribute_name}
                                     </h3>
 
-                                    {(attribute?.avg_rating || attribute?.total_reviews) && (
-                                      <StarRating
-                                        rating={Number(attribute?.avg_rating) || 0}
-                                        reviews={attribute?.total_reviews}
-                                      />
+                                    {/* Rating Row */}
+                                    <div className="flex items-center justify-between md:justify-start gap-4">
+                                      {(attribute?.avg_rating || attribute?.total_reviews) ? (
+                                        <StarRating
+                                          rating={Number(attribute?.avg_rating) || 0}
+                                          reviews={attribute?.total_reviews}
+                                        />
+                                      ) : (
+                                        <div className="h-6 md:hidden"></div>
+                                      )}
+
+                                      {/* Mobile View Details */}
+                                      <button
+                                        className="md:hidden flex items-center gap-1 text-[#0463ac] font-bold text-[13px] active:scale-95 transition-all py-1"
+                                        onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                                      >
+                                        View Details
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+
+                                    {/* Price Row */}
+                                    {attribute.variations?.length > 0 && (
+                                      <div className="flex items-end justify-between md:justify-start gap-4 pt-1 md:pt-4">
+                                        <div className="flex flex-col">
+                                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">
+                                            Starts from
+                                          </span>
+                                          <div className="flex items-baseline gap-0.5">
+                                            <span className="text-2xl font-black text-gray-900">
+                                              ₹{attribute?.starting_price}
+                                            </span>
+                                          </div>
+                                        </div>
+
+                                        {/* Mobile Add to Cart */}
+                                        <div className="md:hidden flex flex-col items-center">
+                                          <motion.button
+                                            whileTap={{ scale: 0.95 }}
+                                            className="bg-[#0463ac] hover:bg-[#03528b] text-white font-bold px-5 py-2.5 rounded-[12px] flex items-center gap-2 shadow-[0_4px_12px_rgba(4,99,172,0.2)] active:shadow-inner text-sm whitespace-nowrap transition-all"
+                                            onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                                          >
+                                            <ShoppingBag className="w-3.5 h-3.5" />
+                                            Add to cart
+                                          </motion.button>
+                                          {attribute?.variations?.length > 0 && (
+                                            <span className="mt-1 text-[10px] font-black text-[#0463ac] uppercase tracking-tighter">
+                                              {attribute.variations.length} Options
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
                                     )}
                                   </div>
 
-                                  {attribute.variations?.length > 0 && (
-                                    <div className="flex flex-col items-start md:items-end">
-                                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                        Starts from
-                                      </span>
-                                      <span className="text-2xl font-black text-gray-900">
-                                        ₹{attribute?.starting_price}
-                                      </span>
+                                  {/* Desktop Actions Column (Stacked on Right) */}
+                                  <div className="hidden md:flex flex-col items-end gap-5 self-end pb-1 pr-1">
+                                    {/* Desktop View Details - Above Add to Cart */}
+                                    <button
+                                      className="flex items-center gap-2 text-[#0463ac] font-bold text-sm hover:translate-x-1 transition-transform group/btn"
+                                      onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
+                                    >
+                                      View Details
+                                      <ArrowRight className="w-4 h-4" />
+                                    </button>
+
+                                    <div className="flex flex-col items-center">
+                                      <motion.button
+                                        whileTap={{ scale: 0.95 }}
+                                        className="bg-[#0463ac] hover:bg-[#03528b] text-white font-bold px-8 py-3 rounded-xl flex items-center gap-2 shadow-[0_4px_15px_rgba(4,99,172,0.2)] transition-all"
+                                        onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
+                                      >
+                                        <ShoppingBag className="w-4 h-4" />
+                                        Add to cart
+                                      </motion.button>
+                                      {attribute?.variations?.length > 0 && (
+                                        <span className="mt-1.5 text-[11px] font-black text-[#0463ac] uppercase tracking-wider">
+                                          {attribute.variations.length} Option{attribute.variations.length > 1 ? "s" : ""}
+                                        </span>
+                                      )}
                                     </div>
-                                  )}
+                                  </div>
                                 </div>
 
                                 {/* Desktop Specifications - Horizontal scroll style for more premium feel */}
                                 {attribute.specifications && (
-                                  <div className="mt-6 mb-6">
+                                  <div className="mt-5 md:mt-6 mb-4 md:mb-6 p-4 md:p-0 bg-gray-50/50 md:bg-transparent rounded-xl md:rounded-none border border-gray-100 md:border-none">
                                     <div className="flex items-center gap-2 mb-3 text-[#0463ac]">
-                                      <Info className="w-4 h-4" />
-                                      <span className="text-sm font-bold uppercase tracking-wide">Included in this service:</span>
+                                      <Info className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                                      <span className="text-[11px] md:text-sm font-bold uppercase tracking-widest">Included in this service:</span>
                                     </div>
-                                    <div className="space-y-2.5">
+                                    <div className="space-y-2 md:space-y-2.5">
                                       {attribute.specifications
                                         .split("|")
                                         .map((s) => s.trim())
                                         .filter(Boolean)
-                                        .slice(0, 3) // Show first 3 for cleanliness
+                                        .slice(0, 3)
                                         .map((spec, i) => (
-                                          <div key={i} className="flex items-start gap-3">
-                                            <div className="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-[#0463ac]/10 flex items-center justify-center">
-                                              <CheckCircle2 className="w-3 h-3 text-[#0463ac]" />
+                                          <div key={i} className="flex items-start gap-2.5">
+                                            <div className="mt-1 flex-shrink-0 w-3.5 h-3.5 rounded-full bg-[#0463ac]/10 flex items-center justify-center">
+                                              <CheckCircle2 className="w-2.5 h-2.5 text-[#0463ac]" />
                                             </div>
-                                            <span className="text-sm text-gray-600 leading-tight">
+                                            <span className="text-xs md:text-sm text-gray-600 leading-tight">
                                               {spec.replace(/^"|"$/g, "")}
                                             </span>
                                           </div>
@@ -666,46 +818,7 @@ const CleaningProductPage = () => {
                                   </div>
                                 )}
 
-                                <div className="mt-auto pt-6 flex flex-wrap items-center justify-between gap-4 border-t border-gray-50">
-                                  <button
-                                    className="flex items-center gap-2 text-[#0463ac] font-bold text-sm hover:translate-x-1 transition-transform group/btn"
-                                    onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
-                                  >
-                                    View Details
-                                    <ArrowRight className="w-4 h-4" />
-                                  </button>
 
-                                  <div className="flex flex-col items-center">
-                                    <motion.button
-                                      whileTap={{ scale: 0.95 }}
-                                      animate={{
-                                        scale: [1, 1.02, 1],
-                                        boxShadow: [
-                                          "0 4px 15px rgba(4,99,172,0.2)",
-                                          "0 4px 25px rgba(4,99,172,0.4)",
-                                          "0 4px 15px rgba(4,99,172,0.2)"
-                                        ]
-                                      }}
-                                      transition={{
-                                        duration: 2,
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                      }}
-                                      className="relative overflow-hidden bg-[#0463ac] hover:bg-[#03528b] text-white font-bold px-8 py-3 rounded-xl flex items-center gap-2 transition-all group/atc"
-                                      onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                                    >
-                                      <ShoppingBag className="w-4 h-4" />
-                                      Add to cart
-                                      {/* Shine effect */}
-                                      <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover/atc:animate-shine transition-transform duration-700"></div>
-                                    </motion.button>
-                                    {attribute?.variations?.length > 0 && (
-                                      <span className="mt-1.5 text-xs font-black text-[#0463ac] uppercase tracking-wider">
-                                        {attribute.variations.length} option{attribute.variations.length > 1 ? "s" : ""}
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
                               </div>
                             </div>
                           </motion.div>
@@ -717,7 +830,7 @@ const CleaningProductPage = () => {
             </div>
 
             {/* Right Cart */}
-            <div className="lg:col-start-4 lg:col-span-1 lg:row-start-2 px-0 md:px-0">
+            <div className="lg:col-start-9 lg:col-span-4 lg:row-start-2 px-0 md:px-0">
               <div className="sticky h-fit top-8 transition-all duration-300 ease-in-out mt-1 lg:mt-0">
                 <CartSection
                   cart={cart}
@@ -730,88 +843,97 @@ const CleaningProductPage = () => {
           </div>
         </div>
 
-        {/* About Section */}
-        {innerSubCategoryData?.about && (
-          <div className="mt-12 px-0 md:px-0">
-            <CollapsibleSection
-              title={`About ${innerSubCategoryData?.subcategory_name}`}
-              content={innerSubCategoryData.about}
-              isHtml={true}
-            />
-          </div>
-        )}
-
-        {/* FAQs Section */}
-        {innerSubCategoryData?.faqs && (
-          <div className="px-0 md:px-0">
-            <CollapsibleSection
-              title="Frequently Asked Questions"
-              content={innerSubCategoryData.faqs}
-              isHtml={true}
-            />
-          </div>
-        )}
-
-        {/* Quick Links */}
-        <section className="mt-4 bg-transparent md:bg-white rounded-none md:rounded-2xl shadow-none md:shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-t md:border border-gray-200 overflow-hidden">
-
-          <div className="py-5 px-4 md:p-6 md:border-b md:border-gray-50">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
-              Quick Links
-            </h2>
-          </div>
-
-          <QuickLinkSection
-            title="Also available in"
-            isOpen={openSection === "locations"}
-            onToggle={() =>
-              setOpenSection(openSection === "locations" ? "" : "locations")
-            }
-          >
-            <div className="flex flex-col space-y-2 text-sm md:text-base leading-relaxed">
-              {getLocations()?.map((location, index) => (
-                <div key={index} className="flex items-center">
-                  {index > 0 && <span className="text-gray-400 mr-2">•</span>}
-                  <a
-                    href={`${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(
-                        `${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`,
-                        { state: { location: location?.title?.trim() } }
-                      );
-                    }}
-                    className="text-grey hover:text-blue-400 transition-colors duration-200"
-                  >
-                    {location?.title?.trim()}
-                  </a>
-                </div>
-              ))}
+        {/* Unified Bottom Info Card */}
+        {(innerSubCategoryData?.about || innerSubCategoryData?.faqs || innerSubCategoryData?.other_services?.length > 0) && (
+          <section className="mt-12 mb-12 bg-white md:bg-white rounded-none md:rounded-2xl shadow-none md:shadow-[0_8px_30px_rgba(0,0,0,0.04)] border-y md:border border-gray-200 overflow-hidden">
+            {/* Header */}
+            <div className="py-6 px-4 md:px-6 border-b border-gray-100 bg-gray-50/30">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
+                Information & More
+              </h2>
             </div>
-          </QuickLinkSection>
 
-          <QuickLinkSection
-            title="Other services we provide"
-            isOpen={openSection === "services"}
-            onToggle={() =>
-              setOpenSection(openSection === "services" ? "" : "services")
-            }
-          >
-            <div className="text-sm md:text-base leading-relaxed">
-              {innerSubCategoryData?.other_services?.map((service, index) => (
-                <React.Fragment key={service.id}>
-                  {index > 0 && <span className="mx-2 text-gray-400">•</span>}
-                  <a
-                    href={`/subcategory/${service.slug}`}
-                    className="text-gray-500 hover:text-blue-600 hover:underline inline-block transition-colors duration-200"
-                  >
-                    {service.subcategory_name}
-                  </a>
-                </React.Fragment>
-              ))}
+            {/* About Section */}
+            {innerSubCategoryData?.about && (
+              <CollapsibleSection
+                title={`About ${innerSubCategoryData?.subcategory_name}`}
+                content={innerSubCategoryData.about}
+                isHtml={true}
+              />
+            )}
+
+            {/* FAQs Section */}
+            {innerSubCategoryData?.faqs && (
+              <CollapsibleSection
+                title="Frequently Asked Questions"
+                content={innerSubCategoryData.faqs}
+                isHtml={true}
+              />
+            )}
+
+            {/* Quick Links Header */}
+            <div className="py-6 px-4 md:px-6 border-t border-gray-100 bg-gray-50/30">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
+                Quick Links
+              </h2>
             </div>
-          </QuickLinkSection>
-        </section>
+
+            <QuickLinkSection
+              title="Also available in"
+              isOpen={openSection === "locations"}
+              onToggle={() =>
+                setOpenSection(openSection === "locations" ? "" : "locations")
+              }
+            >
+              <div className="flex flex-wrap gap-x-6 gap-y-4 text-sm md:text-base">
+                {getLocations()?.map((location, index) => (
+                  <div key={index} className="flex items-center group/link">
+                    <a
+                      href={`${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(
+                          `${config.VITE_BASE_URL}/subcategory/${location?.slug?.trim()}`,
+                          { state: { location: location?.title?.trim() } }
+                        );
+                      }}
+                      className="text-gray-900 hover:text-black font-semibold transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/link:bg-[#0463ac] transition-colors"></span>
+                      {location?.title?.trim()}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </QuickLinkSection>
+
+            <QuickLinkSection
+              title="Other services we provide"
+              isOpen={openSection === "services"}
+              onToggle={() =>
+                setOpenSection(openSection === "services" ? "" : "services")
+              }
+            >
+              <div className="flex flex-wrap gap-x-6 gap-y-4 text-sm md:text-base">
+                {innerSubCategoryData?.other_services?.map((service, index) => (
+                  <motion.div
+                    key={service.id}
+                    className="flex items-center group/link"
+                    whileHover={{ x: 5 }}
+                  >
+                    <a
+                      href={`/subcategory/${service.slug}`}
+                      className="text-gray-900 hover:text-black font-semibold transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/link:bg-[#0463ac] transition-colors"></span>
+                      {service.subcategory_name}
+                    </a>
+                  </motion.div>
+                ))}
+              </div>
+            </QuickLinkSection>
+          </section>
+        )}
 
         <LoginSignup
           isOpen={isModalOpen}
@@ -833,7 +955,7 @@ const CleaningProductPage = () => {
         />
       </div>
 
-    </main>
+    </main >
   );
 };
 

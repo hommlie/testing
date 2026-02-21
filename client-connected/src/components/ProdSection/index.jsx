@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { BsArrowRightCircle } from "react-icons/bs";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import config from "../../config/config";
@@ -18,6 +18,7 @@ export default function ProdSection({
   const [scrollLeft, setScrollLeft] = useState(0);
   const sliderRef = useRef(null);
   const navigate = useNavigate();
+  const { location } = useParams();
 
   useEffect(() => {
     const updateVisibleItemsCount = () => {
@@ -115,9 +116,28 @@ export default function ProdSection({
                 className="p-2 lg:px-4 w-28 md:w-40 lg:w-72 flex-shrink-0 scroll-snap-align-start"
               >
                 <div
-                  onClick={() =>
-                    navigate(`${config.VITE_BASE_URL}/product/${item.slug}`)
-                  }
+                  onClick={() => {
+                    const productSlug =
+                      item?.slug ||
+                      item?.product_slug ||
+                      item?.prod_slug ||
+                      item?.product_name?.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+                    if (productSlug) {
+                      const url = location
+                        ? `${config.VITE_BASE_URL}/product/${productSlug}/${location}`
+                        : `${config.VITE_BASE_URL}/product/${productSlug}`;
+
+                      navigate(url);
+                      window.scrollTo(0, 0);
+                      // If on the same page, reload to fetch new product data
+                      if (window.location.pathname.includes(`/product/${productSlug}`)) {
+                        window.location.reload();
+                      }
+                    } else {
+                      console.warn("ProdSection: no slug found for item", item);
+                    }
+                  }}
                   className="block cursor-pointer"
                 >
                   <div className="relative">
@@ -139,7 +159,7 @@ export default function ProdSection({
                   <h5 className="text-[10px] md:text-sm line-clamp-2 lg:text-sm lg:font-semibold text-gray-500 text-wrap mt-2">
                     {item.product_name}
                   </h5>
-                    <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2 mt-1">
+                  <p className="text-[10px] md:text-[12px] lg:text-sm lg:font-semibold flex flex-row gap-2 mt-1">
                     <span>₹{Number(item.discounted_price ?? 0).toFixed(2)}</span>
                     <span
                       className="line-through font-normal"
@@ -155,21 +175,19 @@ export default function ProdSection({
         </div>
         <button
           onClick={handlePrevClick}
-          className={`${
-            items?.length > 4
-              ? "bg-white shadow-md hidden lg:group-hover:block"
-              : "hidden"
-          } absolute top-1/2 -translate-x-0 translate-y-[-50%] left-2 lg:left-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
+          className={`${items?.length > 4
+            ? "bg-white shadow-md hidden lg:group-hover:block"
+            : "hidden"
+            } absolute top-1/2 -translate-x-0 translate-y-[-50%] left-2 lg:left-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
         >
           <IoIosArrowBack color="grey" />
         </button>
         <button
           onClick={handleNextClick}
-          className={`${
-            items?.length > 4
-              ? "bg-white shadow-md hidden lg:group-hover:block"
-              : "hidden"
-          } absolute top-1/2 -translate-x-0 translate-y-[-50%] right-2 lg:right-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
+          className={`${items?.length > 4
+            ? "bg-white shadow-md hidden lg:group-hover:block"
+            : "hidden"
+            } absolute top-1/2 -translate-x-0 translate-y-[-50%] right-2 lg:right-3 text-xl lg:text-xl rounded-full p-1 cursor-pointer`}
         >
           <IoIosArrowForward color="grey" />
         </button>

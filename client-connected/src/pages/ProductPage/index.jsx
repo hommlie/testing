@@ -683,7 +683,7 @@ export default function ProductPage() {
   const [isDescOpen, setIsDescOpen] = useState(false);
 
   return (
-    <main className="bg-white container mx-auto px-4 sm:px-5 lg:px-14 max-w-7xl flex flex-col md:p-4 lg:space-x-4 mb-2 scroll-smooth"
+    <main className="bg-white container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex flex-col lg:space-x-8 mb-12 scroll-smooth"
     >
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -693,10 +693,10 @@ export default function ProductPage() {
         <>
           {/* Dynamic Meta Tags */}
           <Helmet>
-            <title>{prodData.meta_title || "Hommlie services"}</title>
+            <title>{prodData?.meta_title || "Hommlie services"}</title>
             <meta
               name="description"
-              content={prodData.meta_description || "Hommlie services"}
+              content={prodData?.meta_description || "Hommlie services"}
             />
             <link rel="canonical" href={generateCanonicalUrl()} />
           </Helmet>
@@ -722,16 +722,18 @@ export default function ProductPage() {
                 checkoutPd={checkoutPd}
               />
               <section
-                className="
-                  bg-transparent mt-2 md:bg-white md:rounded-lg md:p-4 md:mb-6 md:border md:border-gray-50 md:shadow-sm md:mt-10"
+                className="bg-transparent mt-0 md:mt-10 p-0 mb-6 border-none shadow-none"
               >
                 <div
                   className="
                     relative
                     w-full
-                    h-[50vh]           
-                    md:h-[400px]       
+                    aspect-square
+                    md:aspect-video
+                    max-h-[500px]
                     overflow-hidden
+                    rounded-2xl
+                    bg-gray-50/50
                   "
                 >
                   {imageItems.length > 0 && (
@@ -740,7 +742,7 @@ export default function ProductPage() {
                         src={imageItems[currentMediaIndex]?.image_url}
                         alt={imageItems[currentMediaIndex]?.alt_tag}
                         title={imageItems[currentMediaIndex]?.image_title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     </div>
                   )}
@@ -783,6 +785,61 @@ export default function ProductPage() {
                 )}
               </section>
 
+              {/* Desktop-only: selected variation detail card below the image */}
+              {selectedVariation && (
+                <div className="hidden md:block mt-4 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative group">
+                  <div className="absolute right-0 top-0 w-32 h-32 bg-[#0463ac]/5 rounded-full -mr-12 -mt-12 blur-3xl group-hover:bg-[#0463ac]/10 transition-colors"></div>
+
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="text-lg font-bold text-gray-900 leading-tight">
+                        {selectedAttribute} <span className="text-gray-500 font-medium">({selectedVariation.variation})</span>
+                      </h4>
+                      <div className="flex items-baseline gap-2.5">
+                        <span className="text-2xl font-black text-[#0463ac]">
+                          ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
+                        </span>
+                        <span className="text-sm font-medium text-gray-400 line-through">
+                          ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {selectedVariation.description && (
+                      <div className="border-t border-dashed border-gray-200 pt-5 mt-2">
+                        <ul className="grid grid-cols-1 gap-y-3">
+                          {selectedVariation.description.split("|").map((desc, i) => (
+                            <li key={i} className="flex items-start gap-3 group/item">
+                              <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#0463ac]/30 group-hover/item:bg-[#0463ac] transition-colors shrink-0"></div>
+                              <span className="text-sm font-medium text-gray-600 leading-relaxed group-hover/item:text-gray-900 transition-colors">
+                                {desc.trim()}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {(selectedVariation.variation_times || selectedVariation.variation_interval) && (
+                      <div className="flex flex-wrap gap-4 mt-6 py-4 border-t border-gray-100 text-sm font-bold text-gray-700">
+                        {selectedVariation.variation_times && (
+                          <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-gray-100 shadow-sm">
+                            <span className="text-gray-400">Total Services:</span>
+                            <span>{selectedVariation.variation_times} Times</span>
+                          </div>
+                        )}
+                        {selectedVariation.variation_interval && (
+                          <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-gray-100 shadow-sm">
+                            <span className="text-gray-400">Repeats every:</span>
+                            <span>{selectedVariation.variation_interval} Days</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <section className="block md:hidden  space-y-4">
                 {variations.length > 0 && (
                   <div className="space-y-4">
@@ -792,30 +849,30 @@ export default function ProductPage() {
                       </p>
 
                       {/* one single row: rating | price | time */}
-                      <div className="flex items-center gap-3 overflow-x-auto">
+                      <div className="flex flex-wrap items-center gap-4 py-1">
+                        {/* Price */}
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl font-bold text-gray-900">
+                            ₹{selectedVariation
+                              ? selectedVariation.discounted_variation_price
+                              : prodData?.discounted_price}
+                          </span>
+                          <span className="text-sm font-medium text-gray-400 line-through">
+                            ₹{selectedVariation ? selectedVariation.price : prodData?.product_price}
+                          </span>
+                        </div>
+
                         {/* Rating */}
-                        <div className="shrink-0">
+                        <div className="flex items-center bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">
                           <Rating
                             value={reviewData?.avg_ratting ?? 4.9}
                             count={reviewData?.total ?? "1.4k"}
                           />
                         </div>
 
-                        {/* Price */}
-                        <div className="flex items-center gap-2 whitespace-nowrap shrink-0">
-                          <span className="text-xl font-bold">
-                            ₹{selectedVariation
-                              ? selectedVariation.discounted_variation_price
-                              : prodData?.discounted_price}
-                          </span>
-                          <span className="line-through text-base font-light text-[#545454]">
-                            ₹{selectedVariation ? selectedVariation.price : prodData?.product_price}
-                          </span>
-                        </div>
-
                         {/* Time */}
                         {prodData?.est_shipping_days != 0 && (
-                          <div className="flex items-center gap-1 text-sm text-[#545454] whitespace-nowrap shrink-0">
+                          <div className="flex items-center gap-1.5 text-sm font-medium text-gray-500 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">
                             <CiClock1 className="text-base" />
                             <span>{prodData?.est_shipping_days}</span>
                           </div>
@@ -823,105 +880,90 @@ export default function ProductPage() {
                       </div>
                     </div>
 
-                    <h3 className="text-xl font-semibold">Select Frequency</h3>
+                    <h3 className="text-lg font-bold text-gray-900 tracking-tight">Select Frequency</h3>
 
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 gap-2">
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-2 gap-3">
                         {[...attributes]
                           .sort((a, b) => {
-                            // Ensure "One Time Service" or first attribute always comes first
                             if (a === "One Time Service") return -1;
                             if (b === "One Time Service") return 1;
                             return 0;
                           })
-                          .map((attr, index) => (
-                            <button
-                              key={attr}
-                              className={`w-full p-3 rounded-lg border ${
-                                // if no selection yet, auto-pick first attribute
-                                (selectedAttribute || attributes[0]) === attr
-                                  ? "bg-[#0463ac] text-white"
-                                  : "border-gray-300"
-                                }`}
-                              onClick={() => handleAttributeSelect(attr)}
-                            >
-                              <div className="flex items-center justify-between">
-                                <span>{attr}</span>
-                                <IoCheckmarkCircleSharp
-                                  className={`text-xl ${(selectedAttribute || attributes[0]) === attr
-                                    ? "text-white"
-                                    : "text-gray-300"
-                                    }`}
-                                />
-                              </div>
-                            </button>
-                          ))}
+                          .map((attr, index) => {
+                            const isSelected = (selectedAttribute || attributes[0]) === attr;
+                            return (
+                              <button
+                                key={attr}
+                                className={`group relative w-full p-4 rounded-xl border-2 transition-all duration-300 ${isSelected
+                                  ? "border-[#0463ac] bg-[#0463ac]/5 shadow-[0_0_0_1px_rgba(4,99,172,0.1)]"
+                                  : "border-gray-100 bg-white hover:border-gray-300 hover:shadow-sm"
+                                  }`}
+                                onClick={() => handleAttributeSelect(attr)}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span className={`text-[15px] font-bold ${isSelected ? "text-[#0463ac]" : "text-gray-700"}`}>{attr}</span>
+                                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#0463ac] border-[#0463ac]" : "border-gray-200"
+                                    }`}>
+                                    {isSelected && <IoCheckmark className="text-white text-xs font-bold" />}
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
                       </div>
 
                       {(selectedAttribute || attributes[0]) && (
-                        <div>
-                          <h3 className="text-xl font-semibold mb-2">Select BHK</h3>
-                          <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-3">
+                          <h3 className="text-lg font-bold text-gray-900 tracking-tight">Select BHK</h3>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             {variations
                               .filter(
                                 (v) => v.attribute_name === (selectedAttribute || attributes[0])
                               )
-                              .sort((a, b) => {
-                                // Extract number from "X BHK" and sort ascending
-                                const numA = parseInt(a.data.variation);
-                                const numB = parseInt(b.data.variation);
-                                return numA - numB;
-                              })
-                              .map((variation, index) => (
-                                <button
-                                  key={variation.data.id}
-                                  className={`w-full p-3 rounded-lg border ${
-                                    // if no selection yet, auto-pick first variation (1 BHK)
-                                    (selectedVariation?.id ||
-                                      variations.find(
-                                        (v) =>
-                                          v.attribute_name === (selectedAttribute || attributes[0])
-                                      )?.data.id) === variation.data.id
-                                      ? "bg-[#0463ac] text-white"
-                                      : "border-gray-300"
-                                    }`}
-                                  onClick={() => handleVariationSelect(variation)}
-                                >
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-medium">{variation.data.variation}</span>
-                                    <IoCheckmarkCircleSharp
-                                      className={`text-xl ${(selectedVariation?.id ||
-                                        variations.find(
-                                          (v) =>
-                                            v.attribute_name ===
-                                            (selectedAttribute || attributes[0])
-                                        )?.data.id) === variation.data.id
-                                        ? "text-white"
-                                        : "text-gray-300"
-                                        }`}
-                                    />
-                                  </div>
-                                </button>
-                              ))}
+                              .sort((a, b) => parseInt(a.data.variation) - parseInt(b.data.variation))
+                              .map((variation) => {
+                                const isSelected = (selectedVariation?.id || variations.find(v => v.attribute_name === (selectedAttribute || attributes[0]))?.data.id) === variation.data.id;
+                                return (
+                                  <button
+                                    key={variation.data.id}
+                                    className={`w-full p-4 rounded-xl border-2 transition-all duration-300 ${isSelected
+                                      ? "border-[#0463ac] bg-[#0463ac]/5"
+                                      : "border-gray-100 bg-white hover:border-gray-300 hover:shadow-sm"
+                                      }`}
+                                    onClick={() => handleVariationSelect(variation)}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span className={`text-[15px] font-bold ${isSelected ? "text-[#0463ac]" : "text-gray-700"}`}>
+                                        {variation.data.variation}
+                                      </span>
+                                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#0463ac] border-[#0463ac]" : "border-gray-200"
+                                        }`}>
+                                        {isSelected && <IoCheckmark className="text-white text-[10px] font-bold" />}
+                                      </div>
+                                    </div>
+                                  </button>
+                                );
+                              })}
                           </div>
                         </div>
                       )}
                     </div>
                     {selectedVariation && (
-                      <div className="mt-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                      <div className="mt-6 p-5 bg-gray-50/50 rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative group">
+                        <div className="absolute right-0 top-0 w-24 h-24 bg-[#0463ac]/5 rounded-full -mr-8 -mt-8 blur-2xl group-hover:bg-[#0463ac]/10 transition-colors"></div>
+
                         {/* Header */}
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                          <h4 className="text-[17px] sm:text-lg font-semibold text-gray-800 leading-tight">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 relative z-10">
+                          <h4 className="text-[16px] sm:text-[17px] font-bold text-gray-900 leading-tight">
                             {selectedAttribute}{" "}
-                            <span className="text-gray-600 font-normal">
-                              ({selectedVariation.variation})
-                            </span>
+                            <span className="text-gray-500 font-medium">({selectedVariation.variation})</span>
                           </h4>
                           <div className="flex items-baseline gap-2 mt-1 sm:mt-0">
-                            <span className="text-[20px] sm:text-xl font-bold text-[#10847E]">
+                            <span className="text-[20px] font-bold text-[#0463ac]">
                               ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
                             </span>
-                            <span className="text-sm sm:text-base line-through text-gray-500">
+                            <span className="text-xs font-medium text-gray-400 line-through">
                               ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
                             </span>
                           </div>
@@ -929,25 +971,34 @@ export default function ProductPage() {
 
                         {/* Description */}
                         {selectedVariation.description && (
-                          <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed border-t border-dashed border-gray-300 pt-3">
-                            {selectedVariation.description}
-                          </p>
+                          <div className="relative z-10 border-t border-dashed border-gray-200 pt-4">
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                              {selectedVariation.description.split("|").map((desc, i) => (
+                                <li key={i} className="flex items-start gap-2.5 group/item">
+                                  <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#0463ac]/40 group-hover/item:bg-[#0463ac] transition-colors shrink-0"></div>
+                                  <span className="text-[13px] font-medium text-gray-600 leading-relaxed group-hover/item:text-gray-900 transition-colors">
+                                    {desc.trim()}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         )}
 
                         {/* Service Info */}
                         {(selectedVariation.variation_times || selectedVariation.variation_interval) && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 text-sm text-gray-700">
+                          <div className="flex flex-wrap gap-4 mt-4 py-3 border-t border-gray-100 text-[13px] font-bold text-gray-700 relative z-10">
                             {selectedVariation.variation_times && (
-                              <p>
-                                <span className="font-medium text-gray-800">No. of Services:</span>{" "}
-                                {selectedVariation.variation_times} Times
-                              </p>
+                              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-gray-100">
+                                <span className="text-gray-400">Services:</span>
+                                <span>{selectedVariation.variation_times} Times</span>
+                              </div>
                             )}
                             {selectedVariation.variation_interval && (
-                              <p>
-                                <span className="font-medium text-gray-800">Scheduled every:</span>{" "}
-                                {selectedVariation.variation_interval} Days
-                              </p>
+                              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-gray-100">
+                                <span className="text-gray-400">Scheduled every:</span>
+                                <span>{selectedVariation.variation_interval} Days</span>
+                              </div>
                             )}
                           </div>
                         )}
@@ -958,303 +1009,209 @@ export default function ProductPage() {
                 )}
 
                 {prodData?.is_form === 0 && (
-                  <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-4 py-4 md:px-6 md:py-5 mb-4">
-                    {/* Header */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <BiSolidOffer className="text-2xl text-[#249370]" />
-                        <h2 className="text-lg font-semibold text-gray-900">Coupons</h2>
+                  <div className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between group cursor-pointer hover:border-gray-200 hover:shadow-sm transition-all" onClick={openCouponModal}>
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-[#0463ac]/10 flex items-center justify-center">
+                        <BiSolidOffer className="text-xl text-[#0463ac]" />
                       </div>
-                      <button
-                        onClick={openCouponModal}
-                        className="text-sm px-3 py-2 rounded-md border border-[#249370] text-[#249370] hover:bg-[#249370] hover:text-white transition"
-                      >
-                        Explore Now
-                      </button>
+                      <div>
+                        <h2 className="text-[15px] font-bold text-gray-900">Apply Coupon</h2>
+                        <p className="text-xs font-medium text-gray-500">Save more on your service</p>
+                      </div>
                     </div>
 
-                    {/* Divider */}
-                    <div className="my-3 border-t border-dashed border-gray-300" />
-
-                    {/* Content */}
-                    <div className="text-gray-700">
+                    <div className="flex items-center gap-2">
                       {selectedCoupon && Object.keys(selectedCoupon).length ? (
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <span className="grid h-8 w-8 place-items-center rounded-full bg-emerald-50">
-                              <IoCheckmarkCircle className="text-[#249370] text-xl" />
-                            </span>
-                            <div>
-                              <p className="text-sm font-semibold text-gray-900">
-                                {selectedCoupon?.coupon_name}
-                              </p>
-                              <p className="text-xs text-gray-500">Applied</p>
-                            </div>
-                          </div>
-                          <button
-                            onClick={handleRemoveCoupon}
-                            className="text-sm font-medium text-red-600 hover:underline"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ) : coupons?.length ? (
-                        <p className="text-sm">
-                          You have unlocked{" "}
-                          <span className="font-semibold text-[#249370]">
-                            {coupons?.length} new coupon{coupons?.length > 1 ? "s" : ""}
-                          </span>
-                          .{" "}
-                          <button
-                            onClick={openCouponModal}
-                            className="underline text-[#249370] font-medium"
-                          >
-                            View offers
-                          </button>
-                        </p>
+                        <span className="text-[13px] font-bold text-[#249370] bg-[#249370]/10 px-3 py-1 rounded-lg">
+                          {selectedCoupon?.coupon_name}
+                        </span>
                       ) : (
-                        <div className="rounded-lg border border-dashed border-gray-300 p-3 text-sm text-gray-500">
-                          Coupons are available now...!Checkout..
+                        <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center group-hover:border-[#0463ac] transition-colors">
+                          <IoIosArrowForward className="text-gray-400 group-hover:text-[#0463ac]" />
                         </div>
                       )}
                     </div>
                   </div>
                 )}
                 {prodData?.is_form === 0 && (
-                  <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-5 py-5 mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Payment Summary</h3>
+                  <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] px-6 py-6 mb-8 mt-10">
+                    <h3 className="text-xl font-bold text-gray-900 tracking-tight mb-6">Payment Summary</h3>
 
-                    <ul className="mt-3 space-y-2">
-                      {/* Service Price */}
-                      <li className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Service Price</span>
-                        <span className="text-sm font-semibold text-gray-900">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between group/row">
+                        <span className="text-[15px] font-semibold text-black">Service Price</span>
+                        <span className="text-[15px] font-bold text-gray-900">
                           ₹{selectedVariation ? selectedVariation.price : prodData?.product_price}
                         </span>
-                      </li>
+                      </div>
 
-                      {/* Service Discount */}
                       {discountPercentage ? (
-                        <li className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Service Discount</span>
-                          <span className="text-sm font-semibold text-emerald-600">
-                            ₹{Math.floor(
-                              ((selectedVariation ? selectedVariation.price : prodData?.product_price) *
-                                discountPercentage) / 100
-                            )} ({discountPercentage}%)
+                        <div className="flex items-center justify-between group/row">
+                          <span className="text-[15px] font-semibold text-black">Service Discount</span>
+                          <span className="text-[15px] font-bold text-[#05a357]">
+                            - ₹{Math.floor(((selectedVariation ? selectedVariation.price : prodData?.product_price) * discountPercentage) / 100)}
                           </span>
-                        </li>
+                        </div>
                       ) : null}
 
-                      {/* Discounted Price */}
-                      <li className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Discounted Price</span>
-                        <span className="text-sm font-semibold text-gray-900">
-                          ₹{Number(totalAmount ?? 0).toFixed(2)}
-                        </span>
-                      </li>
-
-                      {/* Coupon Discount */}
                       {couponDiscount ? (
-                        <li className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Coupon Discount</span>
-                          <span className="text-sm font-semibold text-emerald-600">
-                            -₹{Number(couponDiscount ?? 0).toFixed(2)}
+                        <div className="flex items-center justify-between group/row">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[15px] font-semibold text-black">Coupon Applied</span>
+                            <span className="text-[10px] font-black tracking-widest uppercase bg-[#249370]/10 text-[#249370] px-1.5 py-0.5 rounded">NEW</span>
+                          </div>
+                          <span className="text-[15px] font-bold text-[#05a357]">
+                            - ₹{Number(couponDiscount ?? 0).toFixed(2)}
                           </span>
-                        </li>
+                        </div>
                       ) : null}
 
-                      {/* Platform Fee */}
-                      <li className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Platform Fee</span>
-                        <span className="text-sm font-semibold text-gray-900">
+                      <div className="flex items-center justify-between group/row">
+                        <span className="text-[15px] font-semibold text-black">Platform Fee</span>
+                        <span className="text-[15px] font-bold text-gray-900">
                           ₹{Number(taxAmount ?? 0).toFixed(2)}
                         </span>
-                      </li>
-                    </ul>
-
-                    {/* Divider */}
-                    <div className="my-3 border-t border-dashed border-gray-300" />
-
-                    {/* Total */}
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-base font-semibold text-gray-900">Total Amount</span>
-                      <div className="text-right">
-                        <p className="text-xl font-bold text-gray-900">
-                          ₹{Number(totalAmount + taxAmount - couponDiscount).toFixed(2)}
-                        </p>
-                        <p className="text-[11px] text-gray-500">Inclusive of fees</p>
                       </div>
                     </div>
 
-                    {/* CTA */}
+                    <div className="my-6 border-t-2 border-dashed border-gray-100" />
+
+                    <div className="flex items-center justify-between mb-8">
+                      <div>
+                        <p className="text-[15px] font-bold text-black uppercase tracking-wider">Total amount</p>
+                        <p className="text-[12px] font-medium text-black">Inclusive of all taxes</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-3xl font-black text-gray-900">
+                          ₹{Number(totalAmount + taxAmount - couponDiscount).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+
                     <button
-                      className="mt-4 w-full h-[52px] rounded-md font-bold uppercase text-white bg-[#0463ac] hover:bg-[#035392] active:bg-[#02437a] transition"
+                      className="w-full h-14 rounded-2xl font-black text-base transition-all duration-300 bg-[#0463ac] text-white shadow-[0_8px_25px_rgba(4,99,172,0.25)] hover:shadow-[0_12px_30px_rgba(4,99,172,0.3)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-3 group"
                       onClick={handleProceed}
                       id="proceed-btn"
                     >
-                      Proceed to Checkout
+                      PROCEED TO CHECKOUT
+                      <IoIosArrowForward className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </button>
                   </div>
                 )}
                 {prodData?.is_form === 1 && (
-                  <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
-                    <h3 className="text-xl font-semibold">
-                      Book an Inspection
-                    </h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <label
-                          htmlFor="fullName"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          id="fullName"
-                          name="fullName"
-                          value={formData.fullName}
-                          onChange={handleFormChange}
-                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          required
-                        />
+                  <div className="bg-white rounded-[32px] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] px-8 py-8 md:px-10 md:py-10 mb-8">
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="w-12 h-12 rounded-2xl bg-[#0463ac]/10 flex items-center justify-center">
+                        <CiClock1 className="text-2xl text-[#0463ac]" />
                       </div>
-
                       <div>
-                        <label
-                          htmlFor="address"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Address
-                        </label>
-                        <LocationSuggestion
-                          value={formData.address}
-                          onChange={handleFormChange}
-                          name="address"
-                        />
+                        <h3 className="text-2xl font-black text-gray-900 tracking-tight">Book an Inspection</h3>
+                        <p className="text-sm font-medium text-gray-400">Schedule a professional visit today</p>
                       </div>
+                    </div>
 
-                      <div>
-                        <label
-                          htmlFor="mobile"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Mobile
-                        </label>
-                        <input
-                          type="tel"
-                          id="mobile"
-                          name="mobile"
-                          value={formData.mobile}
-                          onChange={handleFormChange}
-                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          required
-                          minLength={10}
-                          maxLength={10}
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="email"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleFormChange}
-                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          required
-                        />
-                      </div>
-
-                      <div className="flex space-x-4">
-                        <div className="w-1/2">
-                          <label
-                            htmlFor="date"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Date
-                          </label>
-                          <DatePicker
-                            selected={formData.date}
-                            onChange={handleDateChange}
-                            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label htmlFor="fullName" className="text-sm font-bold text-gray-700 ml-1">Full Name</label>
+                          <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleFormChange}
+                            placeholder="e.g. John Doe"
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] focus:ring-4 focus:ring-[#0463ac]/5 transition-all outline-none text-gray-900 font-medium"
                             required
                           />
                         </div>
-                        <div className="w-1/2">
-                          <label
-                            htmlFor="time"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Time
-                          </label>
+
+                        <div className="space-y-2">
+                          <label htmlFor="mobile" className="text-sm font-bold text-gray-700 ml-1">Mobile Number</label>
+                          <input
+                            type="tel"
+                            id="mobile"
+                            name="mobile"
+                            value={formData.mobile}
+                            onChange={handleFormChange}
+                            placeholder="10-digit number"
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] focus:ring-4 focus:ring-[#0463ac]/5 transition-all outline-none text-gray-900 font-medium"
+                            required
+                            minLength={10}
+                            maxLength={10}
+                          />
+                        </div>
+
+                        <div className="md:col-span-2 space-y-2">
+                          <label htmlFor="email" className="text-sm font-bold text-gray-700 ml-1">Email Address</label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleFormChange}
+                            placeholder="your@email.com"
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] focus:ring-4 focus:ring-[#0463ac]/5 transition-all outline-none text-gray-900 font-medium"
+                            required
+                          />
+                        </div>
+
+                        <div className="md:col-span-2 space-y-2">
+                          <label htmlFor="address" className="text-sm font-bold text-gray-700 ml-1">Service Address</label>
+                          <LocationSuggestion
+                            value={formData.address}
+                            onChange={handleFormChange}
+                            name="address"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label htmlFor="date" className="text-sm font-bold text-gray-700 ml-1">Preferred Date</label>
+                          <DatePicker
+                            selected={formData.date}
+                            onChange={handleDateChange}
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] transition-all outline-none text-gray-900 font-medium cursor-pointer"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label htmlFor="time" className="text-sm font-bold text-gray-700 ml-1">Preferred Time</label>
                           <select
                             id="time"
                             name="time"
                             value={formData.time}
                             onChange={handleFormChange}
-                            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] transition-all outline-none text-gray-900 font-medium cursor-pointer"
                             required
                           >
-                            <option value="">Select a time slot</option>
+                            <option value="">Select Time</option>
                             {timeSlots.map((slot, index) => (
-                              <option key={index} value={slot}>
-                                {slot}
-                              </option>
+                              <option key={index} value={slot}>{slot}</option>
                             ))}
                           </select>
                         </div>
                       </div>
 
-                      <button
-                        type="submit"
-                        className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
-                      >
-                        Schedule for Inspection
-                      </button>
-                      <div className="flex gap-2">
-                        <div>
-                          <label
-                            htmlFor="width"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Width (ft)
-                          </label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-4 border-t border-dashed border-gray-100">
+                        <div className="space-y-2">
+                          <label htmlFor="width" className="text-sm font-bold text-gray-700 ml-1">Width (ft)</label>
                           <select
                             id="width"
                             name="width"
                             value={formData.width}
                             onChange={handleFormChange}
-                            className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          // required
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] transition-all outline-none text-gray-900 font-medium"
                           >
-                            <option value="" hidden>
-                              Select Width
-                            </option>
-                            {[...Array(120 - 1)]?.map((_, index) => {
-                              const value = 1 + index;
-                              return (
-                                <option key={value} value={value}>
-                                  {value} sqft
-                                </option>
-                              );
-                            })}
+                            <option value="" hidden>Width</option>
+                            {[...Array(120)].map((_, index) => (
+                              <option key={index + 1} value={index + 1}>{index + 1} ft</option>
+                            ))}
                           </select>
                         </div>
-                        <div>
-                          <label
-                            htmlFor="lengthMm"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Length (ft)
-                          </label>
+                        <div className="space-y-2">
+                          <label htmlFor="length" className="text-sm font-bold text-gray-700 ml-1">Length (ft)</label>
                           <input
                             type="number"
                             id="length"
@@ -1262,39 +1219,36 @@ export default function ProductPage() {
                             value={formData.length}
                             onChange={handleFormChange}
                             min="1"
-                            // max="3000"
-                            className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          // required
+                            placeholder="Length"
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:border-[#0463ac] transition-all outline-none text-gray-900 font-medium"
                           />
                         </div>
 
-                        <div>
-                          <label
-                            htmlFor="sqft"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Sqft
-                          </label>
-                          <input
-                            type="text"
-                            id="sqft"
-                            value={formData.sqft ? `${formData.sqft} sqft` : ""}
-                            className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                          // readOnly
-                          />
+                        <div className="col-span-2 md:col-span-1 space-y-2">
+                          <label htmlFor="sqft" className="text-sm font-bold text-gray-700 ml-1">Total Sqft</label>
+                          <div className="w-full px-5 py-4 bg-gray-100/50 border border-gray-100 rounded-2xl text-gray-900 font-black flex items-center">
+                            {formData.sqft ? `${formData.sqft} sqft` : "—"}
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <label
-                          htmlFor="mobile"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Approx. Amount:
-                        </label>
-                        <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">
-                          ₹{Number(formData.total_amount ?? 0).toFixed(2)}
-                        </span>
+
+                      <div className="bg-[#0463ac]/5 p-6 rounded-3xl border border-[#0463ac]/10 flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Approx. Amount</p>
+                          <p className="text-3xl font-black text-[#0463ac]">
+                            ₹{Number(formData.total_amount ?? 0).toFixed(2)}
+                          </p>
+                        </div>
+                        <p className="text-[10px] font-bold text-gray-400 max-w-[100px] text-right">Final pricing after physical survey</p>
                       </div>
+
+                      <button
+                        type="submit"
+                        className="w-full h-16 rounded-2xl font-black text-base tracking-wide transition-all duration-300 bg-[#249370] text-white shadow-[0_12px_40px_rgba(36,147,112,0.25)] hover:shadow-[0_15px_45px_rgba(36,147,112,0.35)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-3 uppercase group"
+                      >
+                        Schedule Inspection
+                        <IoIosArrowForward className="text-xl transition-transform group-hover:translate-x-1" />
+                      </button>
                     </form>
                   </div>
                 )}
@@ -1307,602 +1261,254 @@ export default function ProductPage() {
               */}
             </div>
 
-            <div className="hidden md:block lg:w-5/12 h-fit space-y-4 mt-[40px] lg:min-w-[420px]">
-              <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200 shadow-sm px-4 md:px-3 hidden md:flex flex-col md:flex-row gap-4 justify-between">
-                <div className="space-y-1 sm:space-y-3 lg:space-y-4">
-                  <p className="text-2xl sm:text-xl font-bold mb-2">
+            <div className="hidden md:block lg:w-5/12 h-fit space-y-8 mt-10 lg:min-w-[420px]">
+              <div className="bg-transparent p-0 mb-4 border-none shadow-none hidden md:block">
+                <div className="space-y-4">
+                  <h1 className="text-3xl font-bold text-gray-900 leading-tight tracking-tight">
                     {prodData?.product_name}
-                  </p>
-                  <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? "1.4k"} />
-                  <p className="flex items-center">
-                    <span className="text-xl md:text-3xl font-bold">
-                      ₹
-                      {selectedVariation
-                        ? selectedVariation.discounted_variation_price
-                        : prodData?.discounted_price}
-                    </span>
-                    <span
-                      className="line-through text-lg md:text-2xl sm:text-3xl font-light ml-4"
-                      style={{ color: "#545454" }}
-                    >
-                      ₹
-                      {selectedVariation
-                        ? selectedVariation.price
-                        : prodData?.product_price}
-                    </span>
-                    {prodData?.est_shipping_days != 0 ? (
-                      <span
-                        className="flex flex-row items-center gap-2 text-base sm:text-2xl font-normal ml-8"
-                        style={{ color: "#545454" }}
-                      >
-                        <CiClock1 />
-                        {prodData?.est_shipping_days}
+                  </h1>
+
+                  <div className="flex flex-wrap items-center gap-5">
+                    <div className="flex items-baseline gap-2.5">
+                      <span className="text-4xl font-black text-gray-900">
+                        ₹{selectedVariation
+                          ? selectedVariation.discounted_variation_price
+                          : prodData?.discounted_price}
                       </span>
-                    ) : null}
-                  </p>
+                      <span className="text-lg font-medium text-gray-400 line-through">
+                        ₹{selectedVariation ? selectedVariation.price : prodData?.product_price}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-xl shadow-sm">
+                        <Rating value={reviewData?.avg_ratting ?? 4.9} count={reviewData?.total ?? "1.4k"} />
+                      </div>
+
+                      {prodData?.est_shipping_days != 0 && (
+                        <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-xl shadow-sm text-gray-600 font-bold text-sm">
+                          <CiClock1 className="text-lg" />
+                          <span>{prodData?.est_shipping_days}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
               {variations.length > 0 && (
-                <div className="bg-white rounded-lg p-4 space-y-4 border border-gray-200 shadow-sm">
-                  <h3 className="text-xl font-semibold">Select Frequency</h3>
+                <div className="bg-transparent p-0 space-y-6 border-none shadow-none">
+                  <h3 className="text-xl font-bold text-gray-900 tracking-tight">Select Frequency</h3>
 
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-8">
+                    <div className="grid grid-cols-2 gap-3">
                       {[...attributes].sort((a, b) => {
-                        // Ensure "One Time Service" comes first
                         if (a === "One Time Service") return -1;
                         if (b === "One Time Service") return 1;
                         return 0;
-                      }).map((attr) => (
-                        <button
-                          key={attr}
-                          className={`w-full p-3 rounded-lg border ${selectedAttribute === attr
-                            ? "bg-[#0463ac] text-white"
-                            : "border-gray-300"
-                            }`}
-                          onClick={() => handleAttributeSelect(attr)}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span>{attr}</span>
-                            <IoCheckmarkCircleSharp
-                              className={`text-xl ${selectedAttribute === attr ? "text-white" : "text-gray-300"
-                                }`}
-                            />
-                          </div>
-                        </button>
-                      ))}
+                      }).map((attr) => {
+                        const isSelected = selectedAttribute === attr;
+                        return (
+                          <button
+                            key={attr}
+                            className={`group relative w-full p-4 rounded-xl border-2 transition-all duration-300 ${isSelected
+                              ? "border-[#0463ac] bg-[#0463ac]/5 shadow-[0_4px_12px_rgba(4,99,172,0.08)]"
+                              : "border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm"
+                              }`}
+                            onClick={() => handleAttributeSelect(attr)}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className={`text-base font-bold ${isSelected ? "text-[#0463ac]" : "text-gray-700"}`}>
+                                {attr}
+                              </span>
+                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#0463ac] border-[#0463ac]" : "border-gray-200"
+                                }`}>
+                                {isSelected && <IoCheckmark className="text-white text-xs font-bold" />}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {selectedAttribute && (
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2">Select BHK</h3>
-                        <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-bold text-gray-900 tracking-tight">Select BHK</h3>
+                        <div className="grid grid-cols-3 gap-3">
                           {variations
                             .filter((v) => v.attribute_name === selectedAttribute)
-                            .sort((a, b) => {
-                              // Extract number from "X BHK" and sort ascending
-                              const numA = parseInt(a.data.variation);
-                              const numB = parseInt(b.data.variation);
-                              return numA - numB;
-                            })
-                            .map((variation) => (
-                              <button
-                                key={variation.data.id}
-                                className={`w-full p-3 rounded-lg border ${selectedVariation?.id === variation.data.id
-                                  ? "bg-[#0463ac] text-white"
-                                  : "border-gray-300"
-                                  }`}
-                                onClick={() => handleVariationSelect(variation)}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <span className="font-medium">{variation.data.variation}</span>
-                                  <IoCheckmarkCircleSharp
-                                    className={`text-xl ${selectedVariation?.id === variation.data.id
-                                      ? "text-white"
-                                      : "text-gray-300"
-                                      }`}
-                                  />
-                                </div>
-                              </button>
-                            ))}
+                            .sort((a, b) => parseInt(a.data.variation) - parseInt(b.data.variation))
+                            .map((variation) => {
+                              const isSelected = selectedVariation?.id === variation.data.id;
+                              return (
+                                <button
+                                  key={variation.data.id}
+                                  className={`w-full p-4 rounded-xl border-2 transition-all duration-300 ${isSelected
+                                    ? "border-[#0463ac] bg-[#0463ac]/5 shadow-[0_4px_12px_rgba(4,99,172,0.08)]"
+                                    : "border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm"
+                                    }`}
+                                  onClick={() => handleVariationSelect(variation)}
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span className={`text-[15px] font-bold ${isSelected ? "text-[#0463ac]" : "text-gray-700"}`}>
+                                      {variation.data.variation}
+                                    </span>
+                                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#0463ac] border-[#0463ac]" : "border-gray-200"
+                                      }`}>
+                                      {isSelected && <IoCheckmark className="text-white text-[10px] font-bold" />}
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {selectedVariation && (
-                    <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-semibold mb-2">
-                          {selectedAttribute} ({selectedVariation.variation})
-                        </h4>
-                      </div>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="text-lg font-bold text-[#249370]">
-                          ₹{Number(selectedVariation.discounted_variation_price ?? 0).toFixed(2)}
-                        </span>
-                        <span className="text-sm line-through text-gray-500">
-                          ₹{Number(selectedVariation.price ?? 0).toFixed(2)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {selectedVariation.description}
-                      </p>
-                      {selectedVariation.variation_times &&
-                        selectedVariation.variation_interval && (
-                          <>
-                            <p className="text-sm text-gray-600">
-                              No. of Services :{" "}
-                              {selectedVariation.variation_times} Times
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Scheduled every :{" "}
-                              {selectedVariation.variation_interval} Days
-                            </p>
-                          </>
-                        )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {prodData?.is_form === 0 && (
-                <div className="bg-white rounded-lg px-5 py-2 space-y-4 border border-gray-200 shadow-sm">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <BiSolidOffer className="text-2xl text-[#249370] mr-2" />
-                      <h2 className="text-lg font-semibold">Coupons</h2>
-                    </div>
-                    <button
-                      onClick={openCouponModal}
-                      style={{ border: "1px solid #249370", color: "#249370" }}
-                      className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                    >
-                      Explore Now
-                    </button>
-                  </div>
-                  <div
-                    className="mb-2"
-                    style={{ border: "1px dotted #E5E7EB" }}
-                  ></div>
-                  <div style={{ color: "rgba(0,0,0,0.4)" }}>
-                    {selectedCoupon && Object.keys(selectedCoupon).length ? (
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <IoCheckmarkCircle className="text-[#249370] mr-2" />
-                          <span className="font-semibold">
-                            {selectedCoupon?.coupon_name}
-                          </span>
+                  <div className="space-y-6 pt-4">
+                    {/* Coupons Section */}
+                    {prodData?.is_form === 0 && (
+                      <div
+                        className="bg-white p-5 rounded-2xl border border-gray-100 flex items-center justify-between group cursor-pointer hover:border-gray-200 hover:shadow-sm transition-all active:scale-[0.99]"
+                        onClick={openCouponModal}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-[#0463ac]/10 flex items-center justify-center shadow-inner">
+                            <BiSolidOffer className="text-2xl text-[#0463ac]" />
+                          </div>
+                          <div>
+                            <h2 className="text-base font-bold text-gray-900">Apply Coupon</h2>
+                            <p className="text-xs font-semibold text-gray-400">Save more on this order</p>
+                          </div>
                         </div>
+
+                        <div className="flex items-center gap-2">
+                          {selectedCoupon && Object.keys(selectedCoupon).length ? (
+                            <div className="flex items-center gap-2 bg-[#249370]/10 px-3 py-1.5 rounded-lg border border-[#249370]/20">
+                              <IoCheckmarkCircle className="text-[#249370] text-sm" />
+                              <span className="text-[13px] font-black text-[#249370]">
+                                {selectedCoupon?.coupon_name}
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center group-hover:border-[#0463ac] shadow-sm transition-all">
+                              <IoIosArrowForward className="text-gray-400 group-hover:text-[#0463ac]" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Payment Summary */}
+                    {prodData?.is_form === 0 && (
+                      <div className="bg-white rounded-[32px] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] px-8 py-8 mt-4 overflow-hidden relative">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full -mr-16 -mt-16 opacity-50"></div>
+
+                        <h3 className="text-xl font-bold text-gray-900 tracking-tight mb-8 relative z-10">Payment Summary</h3>
+
+                        <div className="space-y-5 relative z-10">
+                          <div className="flex items-center justify-between group/row">
+                            <span className="text-base font-semibold text-black">Service Price</span>
+                            <span className="text-base font-bold text-gray-800">
+                              ₹{selectedVariation ? selectedVariation.price : prodData?.product_price}
+                            </span>
+                          </div>
+
+                          {discountPercentage ? (
+                            <div className="flex items-center justify-between group/row">
+                              <span className="text-base font-semibold text-black">Service Discount</span>
+                              <span className="text-base font-bold text-[#05a357]">
+                                - ₹{Math.floor(((selectedVariation ? selectedVariation.price : prodData?.product_price) * discountPercentage) / 100)}
+                              </span>
+                            </div>
+                          ) : null}
+
+                          {couponDiscount ? (
+                            <div className="flex items-center justify-between group/row">
+                              <div className="flex items-center gap-2">
+                                <span className="text-base font-semibold text-black">Coupon Applied</span>
+                                <span className="text-[10px] font-black tracking-widest uppercase bg-[#249370]/10 text-[#249370] px-2 py-0.5 rounded-full">SAVED</span>
+                              </div>
+                              <span className="text-base font-bold text-[#05a357]">
+                                - ₹{Number(couponDiscount ?? 0).toFixed(2)}
+                              </span>
+                            </div>
+                          ) : null}
+
+                          <div className="flex items-center justify-between group/row">
+                            <span className="text-base font-semibold text-black">Platform Fee</span>
+                            <span className="text-base font-bold text-gray-800">
+                              ₹{Number(taxAmount ?? 0).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="my-8 border-t-2 border-dashed border-gray-50 relative z-10" />
+
+                        <div className="flex items-end justify-between mb-10 relative z-10">
+                          <div className="space-y-1">
+                            <p className="text-xs font-black text-black uppercase tracking-widest">Amount Payable</p>
+                            <p className="text-[11px] font-bold text-black flex items-center gap-1">
+                              <IoCheckmarkCircle className="text-[#05a357] text-[10px]" />
+                              Secure checkout enabled
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-4xl font-black text-gray-900 tracking-tighter">
+                              ₹{Number(totalAmount + taxAmount - couponDiscount).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+
                         <button
-                          onClick={handleRemoveCoupon}
-                          className="text-red-500"
+                          className="w-full h-16 rounded-2xl font-black text-base tracking-wide transition-all duration-300 bg-[#0463ac] text-white shadow-[0_12px_40px_rgba(4,99,172,0.3)] hover:shadow-[0_15px_45px_rgba(4,99,172,0.4)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-3 group relative z-10"
+                          onClick={handleProceed}
+                          id="proceed-btn"
                         >
-                          Remove
+                          PROCEED TO CHECKOUT
+                          <IoIosArrowForward className="text-xl transition-transform group-hover:translate-x-1" />
                         </button>
                       </div>
-                    ) : coupons?.length ? (
-                      <p className="font-semibold">
-                        You have unlocked{" "}
-                        <span className="text-[#249370]">
-                          {coupons?.length} new coupons
-                        </span>
-                      </p>
-                    ) : null}
+                    )}
                   </div>
-                </div>
-              )}
-
-              {prodData?.is_form === 0 && (
-                <div className="bg-white rounded-lg px-5 py-2 space-y-4 border border-gray-200 shadow-sm">
-                  <h3 className="text-xl font-semibold">Payment Summary</h3>
-                  <div className="space-y-2">
-                    <div className="flex flex-row justify-between">
-                      <p
-                        className="text-base font-normal"
-                        style={{ color: "#606571" }}
-                      >
-                        Service Price
-                      </p>
-                      <p className="text-base font-semibold">
-                        ₹
-                        {selectedVariation
-                          ? selectedVariation.price
-                          : prodData?.product_price}
-                      </p>
-                    </div>
-                    {discountPercentage ? (
-                      <div className="flex flex-row justify-between">
-                        <p
-                          className="text-base font-normal"
-                          style={{ color: "#606571" }}
-                        >
-                          Service Discount
-                        </p>
-                        <p className="text-base font-semibold">{`₹${Math.floor(
-                          ((selectedVariation
-                            ? selectedVariation.price
-                            : prodData?.product_price) *
-                            discountPercentage) /
-                          100
-                        )} (${discountPercentage}%)`}</p>
-                      </div>
-                    ) : null}
-                    <div className="flex flex-row justify-between">
-                      <p
-                        className="text-base font-normal"
-                        style={{ color: "#606571" }}
-                      >
-                        Discounted Price
-                      </p>
-                      <p className="text-base font-semibold">₹{Number(totalAmount ?? 0).toFixed(2)}</p>
-                    </div>
-                    {couponDiscount ? (
-                      <div className="flex flex-row justify-between">
-                        <p
-                          className="text-base font-normal"
-                          style={{ color: "#606571" }}
-                        >
-                          Coupon Discount
-                        </p>
-                        <p className="text-base font-semibold">
-                          ₹{Number(couponDiscount ?? 0).toFixed(2)}
-                        </p>
-                      </div>
-                    ) : null}
-                    <div className="flex flex-row justify-between">
-                      <p
-                        className="text-base font-normal"
-                        style={{ color: "#606571" }}
-                      >
-                        Platform Fee
-                      </p>
-                      <p className="text-base font-semibold">₹{Number(taxAmount ?? 0).toFixed(2)}</p>
-                    </div>
-                    <div
-                      className="border-t-2 border-dotted border-black"
-                      style={{ opacity: 0.22 }}
-                    ></div>
-                    <div className="flex flex-row justify-between">
-                      <p className="text-base font-normal text-xl font-semibold">
-                        Total Amount
-                      </p>
-                      <div className="text-right">
-                        <p className="text-base font-semibold">
-                          ₹
-                          {Number(
-                            totalAmount + taxAmount - couponDiscount
-                          )?.toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      className="bg-[#0463ac] hover:bg-[#52852d] uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold"
-
-                      onClick={handleProceed}
-                      id="proceed-btn"
-                    >
-                      PROCEED TO CHECKOUT
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {prodData?.is_form === 1 && (
-                <div className="bg-white rounded-lg px-10 py-4 space-y-4 mb-4 border border-black">
-                  <h3 className="text-xl font-semibold">Book an Inspection</h3>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="fullName"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleFormChange}
-                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="address"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Address
-                      </label>
-                      <LocationSuggestion
-                        value={formData.address}
-                        onChange={handleFormChange}
-                        name="address"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="mobile"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Mobile
-                      </label>
-                      <input
-                        type="tel"
-                        id="mobile"
-                        name="mobile"
-                        value={formData.mobile}
-                        onChange={handleFormChange}
-                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                        required
-                        minLength={10}
-                        maxLength={10}
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleFormChange}
-                        className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                        required
-                      />
-                    </div>
-
-                    <div className="flex space-x-4">
-                      <div className="w-1/2">
-                        <label
-                          htmlFor="date"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Date
-                        </label>
-                        <DatePicker
-                          selected={formData.date}
-                          onChange={handleDateChange}
-                          className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                          required
-                        />
-                      </div>
-                      <div className="w-1/2">
-                        <label
-                          htmlFor="time"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Time
-                        </label>
-                        <select
-                          id="time"
-                          name="time"
-                          value={formData.time}
-                          onChange={handleFormChange}
-                          className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                          required
-                        >
-                          <option value="">Select a time slot</option>
-                          {timeSlots.map((slot, index) => (
-                            <option key={index} value={slot}>
-                              {slot}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="uppercase w-full text-center h-[52px] text-white rounded-md text-base font-bold bg-[#249370] hover:bg-[#1e7a5c]"
-                    >
-                      Schedule for Inspection
-                    </button>
-                    <div className="flex gap-2">
-                      <div>
-                        <label
-                          htmlFor="width"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Width (ft)
-                        </label>
-                        <select
-                          id="width"
-                          name="width"
-                          value={formData.width}
-                          onChange={handleFormChange}
-                          className="mt-1 p-2.5 mr-10 border border-[#10847E] block w-full rounded-md shadow-sm"
-                        // required
-                        >
-                          <option value="" hidden>
-                            Select Width
-                          </option>
-                          {[...Array(120 - 1)]?.map((_, index) => {
-                            const value = 1 + index;
-                            return (
-                              <option key={value} value={value}>
-                                {value} sqft
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="lengthMm"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Length (ft)
-                        </label>
-                        <input
-                          type="number"
-                          id="length"
-                          name="length"
-                          value={formData.length}
-                          onChange={handleFormChange}
-                          min="1"
-                          // max="3000"
-                          className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                        // required
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="sqft"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Sqft
-                        </label>
-                        <input
-                          type="text"
-                          id="sqft"
-                          value={formData.sqft ? `${formData.sqft} sqft` : ""}
-                          className="bg-[#eee] mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm"
-                        // readOnly
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="mobile"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Approx. Amount:
-                      </label>
-                      <span className="mt-1 p-2 border border-[#10847E] block w-full rounded-md shadow-sm">
-                        ₹{Number(formData.total_amount ?? 0).toFixed(2)}
-                      </span>
-                    </div>
-                  </form>
                 </div>
               )}
             </div>
           </section>
 
-          <div className="flex flex-col gap-4 mt-4">
-
-            <section className="bg-white rounded-lg w-full p-4 border border-gray-200 shadow-sm px-5 py-5 mb-4">
+          <div className="flex flex-col gap-10 mt-16 md:px-0">
+            {/* Similar Services */}
+            <section className="w-full">
               <ProdSection
-                title="Similar Services"
+                title="Similar Services You Might Like"
                 items={visibleItems ? visibleItems : []}
                 btnHidden
               />
             </section>
 
-            <section className="w-full bg-white rounded-lg p-6 space-y-6 border border-gray-200 shadow-sm px-5 py-5 mb-4">
-              {/* Locations Section */}
-              {locations && locations?.length ? (
-                <div>
-                  {/* Heading */}
-                  <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
-                    Quick Links
-                  </h2>
-                  <hr className="border-t-2 border-[#10847E] w-40 mb-4" />
-
-                  {/* Accordion Button */}
-                  <div
-                    className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
-                    onClick={toggleLocationsExpansion}
+            {/* Product Info & Links */}
+            <section className="w-full bg-white rounded-[24px] md:rounded-[40px] border border-gray-100 shadow-[0_30px_60px_rgba(0,0,0,0.03)] px-4 py-8 md:px-12 md:py-16 space-y-10 md:space-y-12 mb-16">
+              {/* Description Section */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl md:text-2xl font-semibold text-black tracking-tight">Service Details</h2>
+                  <button
+                    className="text-sm font-semibold text-[#0463ac] bg-[#0463ac]/5 px-4 py-2 rounded-xl hover:bg-[#0463ac]/10 transition-colors"
+                    onClick={() => setIsDescOpen(!isDescOpen)}
                   >
-                    <span className="font-medium text-black">Available Locations</span>
-                    {isLocationsExpanded ? (
-                      <IoIosArrowUp className="text-black" />
-                    ) : (
-                      <IoIosArrowDown className="text-black" />
-                    )}
-                  </div>
-
-                  {/* Accordion Content */}
-                  {isLocationsExpanded && (
-                    <div className="mt-4 transition-all duration-300 ease-in-out">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {locations?.map((loc, index) => {
-                          const formattedLoc = loc.trim();
-                          const capitalizedLoc =
-                            formattedLoc.charAt(0).toUpperCase() +
-                            formattedLoc.slice(1);
-                          return (
-                            <a
-                              key={index}
-                              href={`${config.VITE_BASE_URL}/product/${prodData.slug
-                                }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
-                              className="text-[#10847E] hover:underline transition-colors"
-                            >
-                              {prodData.product_name} in {capitalizedLoc}
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                    {isDescOpen ? "Less Info" : "More Info"}
+                  </button>
                 </div>
-              ) : null}
-
-              {/* Keywords Section */}
-              <div className="">
-                {/* Heading */}
-                {/* <h2 className="text-lg lg:text-2xl font-semibold text-[#10847E] mb-1">
-                Keywords
-              </h2>
-              <hr className="border-t-2 border-[#10847E] w-28 mb-4" /> */}
-
-                {/* Accordion Button */}
-                <div
-                  className="bg-gray-100 rounded-md px-4 py-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
-                  onClick={toggleKeywordsExpansion}
-                >
-                  <span className="font-medium text-black">Keywords</span>
-                  {isKeywordsExpanded ? (
-                    <IoIosArrowUp className="text-black" />
-                  ) : (
-                    <IoIosArrowDown className="text-black" />
-                  )}
-                </div>
-
-                {/* Accordion Content */}
-                {isKeywordsExpanded && prodData?.tags && (
-                  <div className="mt-4 flex flex-wrap gap-3 transition-all duration-300 ease-in-out">
-                    {prodData.tags.split(",").map((tag, index) => (
-                      <a
-                        key={index}
-                        onClick={() => handleTagClick(tag)}
-                        className="px-3 py-1 text-sm rounded-md bg-[#E6F6F5] text-[#10847E] hover:bg-[#10847E] hover:text-white transition-colors cursor-pointer"
-                      >
-                        #{tag.trim()}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-              {/* Description toggle moved here (directly above Quick Links) */}
-              <div className="product-description bg-white rounded-lg p-4 border border-gray-200 shadow-sm mb-4">
-                <button
-                  className="dropdown-toggle"
-                  onClick={() => setIsDescOpen(!isDescOpen)}
-                >
-                  {isDescOpen ? "Hide Description ▲" : "Show Description ▼"}
-                </button>
 
                 {isDescOpen && (
-                  <div className="dropdown-content space-y-4 prose prose-sm sm:prose lg:prose-base max-w-none lg:max-w-[900px]">
-                    {/* Prefer selected variation description when available, otherwise use product HTML */}
+                  <div className="prose prose-blue max-w-none animate-in fade-in slide-in-from-top-4 duration-500">
                     {selectedVariation?.description ? (
-                      <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed">
+                      <p className="text-base text-gray-600 leading-loose bg-gray-50 p-6 rounded-3xl border border-gray-100">
                         {selectedVariation.description}
                       </p>
                     ) : (
                       <div
+                        className="text-base text-gray-600 leading-loose"
                         translate="no"
                         dangerouslySetInnerHTML={{ __html: prodData?.description }}
                       />
@@ -1911,8 +1517,74 @@ export default function ProductPage() {
                 )}
               </div>
 
-            </section>
+              {/* Locations Section */}
+              {locations && locations?.length ? (
+                <div className="pt-10 border-t border-gray-100">
+                  <div
+                    className="flex items-center justify-between cursor-pointer group mb-8"
+                    onClick={toggleLocationsExpansion}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-1 h-6 bg-[#0463ac] rounded-full"></div>
+                      <h2 className="text-xl md:text-2xl font-semibold text-black tracking-tight">Available Locations</h2>
+                    </div>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-[#0463ac]/10 transition-all duration-300 ${isLocationsExpanded ? 'rotate-180' : ''}`}>
+                      <IoIosArrowDown className="text-xl text-gray-400 group-hover:text-[#0463ac]" />
+                    </div>
+                  </div>
 
+                  {isLocationsExpanded && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 animate-in fade-in slide-in-from-top-4 duration-500">
+                      {locations?.map((loc, index) => {
+                        const formattedLoc = loc.trim();
+                        const capitalizedLoc = formattedLoc.charAt(0).toUpperCase() + formattedLoc.slice(1);
+                        return (
+                          <a
+                            key={index}
+                            href={`${config.VITE_BASE_URL}/product/${prodData.slug}-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
+                            className="px-4 py-3 text-xs font-bold text-gray-500 bg-gray-50 rounded-xl border border-gray-100 hover:border-[#0463ac] hover:text-[#0463ac] hover:bg-white transition-all text-center"
+                          >
+                            {capitalizedLoc}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {/* Keywords Section */}
+              {prodData?.tags && (
+                <div className="pt-10 border-t border-gray-100">
+                  <div
+                    className="flex items-center justify-between cursor-pointer group mb-6 md:mb-8"
+                    onClick={toggleKeywordsExpansion}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-1 h-6 bg-black rounded-full"></div>
+                      <h2 className="text-xl md:text-2xl font-semibold text-black tracking-tight">Popular Search Keywords</h2>
+                    </div>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-all duration-300 ${isKeywordsExpanded ? 'rotate-180' : ''}`}>
+                      <IoIosArrowDown className="text-xl text-black group-hover:text-gray-900" />
+                    </div>
+                  </div>
+
+                  {isKeywordsExpanded && (
+                    <div className="flex flex-wrap justify-center gap-2 animate-in fade-in slide-in-from-top-4 duration-500">
+                      {prodData.tags.split(",").map((tag, index) => (
+                        <a
+                          key={index}
+                          onClick={() => handleTagClick(tag)}
+                          className="px-4 py-2 text-xs font-bold rounded-full bg-white border border-gray-100 text-black hover:border-[#249370] hover:text-[#249370] transition-all cursor-pointer shadow-sm"
+                        >
+                          #{tag.trim()}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
           </div>
         </>
       )}
@@ -1930,3 +1602,4 @@ export default function ProductPage() {
     </main>
   );
 }
+

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaShareAlt } from "react-icons/fa";
 
-export default function ShareButton() {
+export default function ShareButton({ className = "" }) {
   const handleShare = async () => {
     const shareData = {
       title: document.title,
@@ -24,10 +24,10 @@ export default function ShareButton() {
   return (
     <button
       onClick={handleShare}
-      className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
+      className={`rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors ${className || "w-10 h-10"}`}
       aria-label="Share"
     >
-      <FaShareAlt className="w-5 h-5 text-black" />
+      <FaShareAlt className={`${className.includes('w-') ? 'w-full h-full p-2.5' : 'w-5 h-5'} text-black`} />
     </button>
   );
 }
