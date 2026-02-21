@@ -708,40 +708,42 @@ const ProductDetailModal = ({
                               ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
                             >
                               <div className="flex gap-3 min-w-max py-0 px-1">
-                                {attribute?.variations?.map((variation) => (
-                                  <div
-                                    key={variation.id}
-                                    className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
-                                  >
-                                    <div className="p-3 space-y-2">
-                                      <h4 className="font-medium text-sm">{variation.variation}</h4>
+                                {attribute?.variations && [...attribute.variations]
+                                  .sort((a, b) => (parseInt(a.variation) || 0) - (parseInt(b.variation) || 0))
+                                  .map((variation) => (
+                                    <div
+                                      key={variation.id}
+                                      className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                                    >
+                                      <div className="p-3 space-y-2">
+                                        <h4 className="font-medium text-sm">{variation.variation}</h4>
 
-                                      {(variation.avg_rating || variation.total_reviews) && (
-                                        <div className="flex items-center space-x-1">
-                                          {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
-                                          {variation.total_reviews && (
-                                            <span className="text-xs text-gray-500">
-                                              ({variation.total_reviews >= 1000
-                                                ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                                                : variation.total_reviews})
-                                            </span>
+                                        {(variation.avg_rating || variation.total_reviews) && (
+                                          <div className="flex items-center space-x-1">
+                                            {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
+                                            {variation.total_reviews && (
+                                              <span className="text-xs text-gray-500">
+                                                ({variation.total_reviews >= 1000
+                                                  ? `${(variation.total_reviews / 1000).toFixed(1)}K`
+                                                  : variation.total_reviews})
+                                              </span>
+                                            )}
+                                          </div>
+                                        )}
+
+                                        <div className="space-x-1 text-sm">
+                                          <span className="text-emerald-600 font-semibold">
+                                            ₹{variation.discounted_variation_price}
+                                          </span>
+                                          {variation.price !== variation.discounted_variation_price && (
+                                            <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
                                           )}
                                         </div>
-                                      )}
 
-                                      <div className="space-x-1 text-sm">
-                                        <span className="text-emerald-600 font-semibold">
-                                          ₹{variation.discounted_variation_price}
-                                        </span>
-                                        {variation.price !== variation.discounted_variation_price && (
-                                          <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
-                                        )}
+                                        <AddButton variation={variation} />
                                       </div>
-
-                                      <AddButton variation={variation} />
                                     </div>
-                                  </div>
-                                ))}
+                                  ))}
                               </div>
                             </div>
                           </div>

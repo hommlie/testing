@@ -1336,7 +1336,7 @@ export default function ProductPage() {
                         <div className="grid grid-cols-3 gap-3">
                           {variations
                             .filter((v) => v.attribute_name === selectedAttribute)
-                            .sort((a, b) => parseInt(a.data.variation) - parseInt(b.data.variation))
+                            .sort((a, b) => (parseInt(a.data.variation) || 0) - (parseInt(b.data.variation) || 0))
                             .map((variation) => {
                               const isSelected = selectedVariation?.id === variation.data.id;
                               return (

@@ -122,7 +122,14 @@ const ServiceSection = ({ categories }) => {
 
     // Remove duplicates by using Set
     const variations = attr.variations.map((v) => v.variation);
-    return Array.from(new Set(variations));
+    const uniqueVariations = Array.from(new Set(variations));
+
+    // Sort in ascending order based on numeric value (e.g., "1 BHK", "2 BHK")
+    return uniqueVariations.sort((a, b) => {
+      const numA = parseInt(a) || 0;
+      const numB = parseInt(b) || 0;
+      return numA - numB;
+    });
   };
 
   // Prefer a cockroach subcategory when available
@@ -916,47 +923,47 @@ const ServiceSection = ({ categories }) => {
 
         {/* Dropdowns Container - Hidden on Mobile */}
         <div className="hidden md:block">
-            <div className="max-w-3xl mb-8 mt-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Service Type */}
-                <div className="col-span-1">
-                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your Services</label>
-                  <Dropdown
-                    label="Select Subcategory"
-                    value={selectedSubCategory}
-                    options={getCurrentSubcategories()}
-                    onChange={setSelectedSubCategory}
-                    disabled={!selectedCategory}
-                  />
-                </div>
+          <div className="max-w-3xl mb-8 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Service Type */}
+              <div className="col-span-1">
+                <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your Services</label>
+                <Dropdown
+                  label="Select Subcategory"
+                  value={selectedSubCategory}
+                  options={getCurrentSubcategories()}
+                  onChange={setSelectedSubCategory}
+                  disabled={!selectedCategory}
+                />
+              </div>
 
-                {/* Property Size */}
-                <div className="col-span-1">
-                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your BHK</label>
-                  <Dropdown
-                    label="Select BHK"
-                    value={selectedBhk}
-                    options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
-                    onChange={setSelectedBhk}
-                    disabled={!selectedProduct}
-                  />
-                </div>
+              {/* Property Size */}
+              <div className="col-span-1">
+                <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your BHK</label>
+                <Dropdown
+                  label="Select BHK"
+                  value={selectedBhk}
+                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
+                  onChange={setSelectedBhk}
+                  disabled={!selectedProduct}
+                />
+              </div>
 
-                {/* Service Variant */}
-                <div className="col-span-1">
-                  <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Variant</label>
-                  <Dropdown
-                    label="Select Variant"
-                    value={selectedAttribute}
-                    options={getCurrentAttributes()}
-                    onChange={setSelectedAttribute}
-                    disabled={!selectedProduct}
-                    showRecommended
-                  />
-                </div>
+              {/* Service Variant */}
+              <div className="col-span-1">
+                <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Variant</label>
+                <Dropdown
+                  label="Select Variant"
+                  value={selectedAttribute}
+                  options={getCurrentAttributes()}
+                  onChange={setSelectedAttribute}
+                  disabled={!selectedProduct}
+                  showRecommended
+                />
               </div>
             </div>
-        
+          </div>
+
 
           <div className="mb-0">
             <>
