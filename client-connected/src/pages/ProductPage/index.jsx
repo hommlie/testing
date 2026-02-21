@@ -321,8 +321,9 @@ export default function ProductPage() {
   async function getProductDetails() {
     try {
       setIsLoading(true);
+      const baseSlug = location ? slug.replace(`-in-${location.toLowerCase()}`, "") : slug;
       await axios
-        .post(`${config.API_URL}/api/productdetails`, { slug: slug })
+        .post(`${config.API_URL}/api/productdetails`, { slug: baseSlug })
         .then((response) => {
           handleRemoveCoupon();
           setProdData(response.data.data);
