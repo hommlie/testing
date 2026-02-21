@@ -1541,10 +1541,11 @@ export default function ProductPage() {
                         return (
                           <a
                             key={index}
-                            href={`${config.VITE_BASE_URL}/product/${prodData.slug}-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
-                            className="px-4 py-3 text-xs font-bold text-gray-500 bg-gray-50 rounded-xl border border-gray-100 hover:border-[#0463ac] hover:text-[#0463ac] hover:bg-white transition-all text-center"
+                            href={`${config.VITE_BASE_URL}/product/${prodData.slug
+                              }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
+                            className="text-[#10847E] hover:underline transition-colors"
                           >
-                            {capitalizedLoc}
+                            {prodData.product_name} in {capitalizedLoc}
                           </a>
                         );
                       })}

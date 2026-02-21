@@ -39,7 +39,7 @@ const ServiceSection = ({ categories }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
-  const [selectedBhk, setSelectedBhk] = useState("");
+  const [selectedBhk, setSelectedBhk] = useState("1 BHK");
   const [logo, setLogo] = useState(null);
 
   useEffect(() => {
@@ -54,9 +54,9 @@ const ServiceSection = ({ categories }) => {
 
   // Set default variation (property size) when attribute changes
   useEffect(() => {
-    const attr = getCurrentAttributes().find((a) => a.id === selectedAttribute);
-    if (attr && attr.variations && attr.variations.length > 0) {
-      setSelectedBhk(attr.variations[0].variation);
+    const options = getVariationOptions();
+    if (options.length > 0) {
+      setSelectedBhk(options[0]);
     }
   }, [selectedAttribute]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
