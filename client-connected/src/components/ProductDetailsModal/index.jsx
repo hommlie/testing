@@ -362,6 +362,13 @@ const ProductDetailModal = ({
     setLocalMode(mode);
   }, [mode]);
 
+  // When opened in "add" mode, always land on BHK (add) view directly
+  useEffect(() => {
+    if (isOpen && mode === "add") {
+      setLocalMode("add");
+    }
+  }, [isOpen, mode]);
+
   const notify = useToast();
   const successNotify = (success) => notify(success, "success");
   const errorNotify = (error) => notify(error, "error");
@@ -703,48 +710,79 @@ const ProductDetailModal = ({
                       <section className="space-y-5 my-0">
                         {displayedAttributes?.map((attribute) => (
                           <div key={attribute.attribute_id} className="space-y-4">
-                            <div
-                              className="relative overflow-x-auto hide-scrollbar"
-                              ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
-                            >
-                              <div className="flex gap-3 min-w-max py-0 px-1">
-                                {attribute?.variations && [...attribute.variations]
-                                  .sort((a, b) => (parseInt(a.variation) || 0) - (parseInt(b.variation) || 0))
-                                  .map((variation) => (
-                                    <div
-                                      key={variation.id}
-                                      className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
-                                    >
-                                      <div className="p-3 space-y-2">
-                                        <h4 className="font-medium text-sm">{variation.variation}</h4>
+                            <div className="relative">
+                              {/* Scrollable container for BHK / variation cards */}
+                              <div
+                                className="overflow-x-auto hide-scrollbar scroll-smooth"
+                                ref={(el) => (variationRefs.current[attribute.attribute_id] = el)}
+                              >
+                                <div className="flex gap-3 min-w-max py-0 px-1">
+                                  {attribute?.variations &&
+                                    [...attribute.variations]
+                                      .sort(
+                                        (a, b) =>
+                                          (parseInt(a.variation) || 0) - (parseInt(b.variation) || 0)
+                                      )
+                                      .map((variation) => (
+                                        <div
+                                          key={variation.id}
+                                          className="w-[180px] flex-shrink-0 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+                                        >
+                                          <div className="p-3 space-y-2">
+                                            <h4 className="font-medium text-sm">{variation.variation}</h4>
 
-                                        {(variation.avg_rating || variation.total_reviews) && (
-                                          <div className="flex items-center space-x-1">
-                                            {variation.avg_rating && <StarRating rating={variation.avg_rating} />}
-                                            {variation.total_reviews && (
-                                              <span className="text-xs text-gray-500">
-                                                ({variation.total_reviews >= 1000
-                                                  ? `${(variation.total_reviews / 1000).toFixed(1)}K`
-                                                  : variation.total_reviews})
-                                              </span>
+                                            {(variation.avg_rating || variation.total_reviews) && (
+                                              <div className="flex items-center space-x-1">
+                                                {variation.avg_rating && (
+                                                  <StarRating rating={variation.avg_rating} />
+                                                )}
+                                                {variation.total_reviews && (
+                                                  <span className="text-xs text-gray-500">
+                                                    {variation.total_reviews >= 1000
+                                                      ? `(${(variation.total_reviews / 1000).toFixed(1)}K)`
+                                                      : `(${variation.total_reviews})`}
+                                                  </span>
+                                                )}
+                                              </div>
                                             )}
+
+                                            <div className="space-x-1 text-sm">
+                                              <span className="text-emerald-600 font-semibold">
+                                                ₹{variation.discounted_variation_price}
+                                              </span>
+                                              {variation.price !== variation.discounted_variation_price && (
+                                                <span className="text-gray-500 line-through text-xs">
+                                                  ₹{variation.price}
+                                                </span>
+                                              )}
+                                            </div>
+
+                                            <AddButton variation={variation} />
                                           </div>
-                                        )}
-
-                                        <div className="space-x-1 text-sm">
-                                          <span className="text-emerald-600 font-semibold">
-                                            ₹{variation.discounted_variation_price}
-                                          </span>
-                                          {variation.price !== variation.discounted_variation_price && (
-                                            <span className="text-gray-500 line-through text-xs">₹{variation.price}</span>
-                                          )}
                                         </div>
-
-                                        <AddButton variation={variation} />
-                                      </div>
-                                    </div>
-                                  ))}
+                                      ))}
+                                </div>
                               </div>
+
+                              {/* Desktop scroll buttons so users can see more than 3 BHKs */}
+                              {attribute?.variations?.length > 3 && (
+                                <>
+                                  <button
+                                    type="button"
+                                    onClick={() => scroll(attribute.attribute_id, "left")}
+                                    className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white shadow-md border border-gray-200 text-gray-700 hover:bg-gray-50"
+                                  >
+                                    <ChevronLeft className="h-5 w-5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => scroll(attribute.attribute_id, "right")}
+                                    className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white shadow-md border border-gray-200 text-gray-700 hover:bg-gray-50"
+                                  >
+                                    <ChevronRight className="h-5 w-5" />
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -810,25 +848,20 @@ const ProductDetailModal = ({
                   </div>
                 </div>
 
-                {/* Sticky bottom: switch to add mode */}
-                {localMode === "view" && displayedAttributes?.length === 1 && (
-                  <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-6 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
-                    <div className="max-w-7xl mx-auto flex justify-center sm:justify-end">
+                {/* Sticky bottom: helper text + discard option (no extra Add button) */}
+                {displayedAttributes?.length === 1 && (
+                  <div className="sticky bottom-0 left-0 right-0 bg-white/90 backdrop-blur border-t border-gray-100 px-4 sm:px-6 py-3 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+                    <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+                      <p className="text-[11px] sm:text-xs text-gray-500 text-center sm:text-left">
+                        Swipe sideways on the BHK cards above to pick your option and tap&nbsp;
+                        <span className="font-semibold text-[#0463ac]">Add</span>.
+                      </p>
                       <button
-                        className="w-full sm:w-auto bg-[#0463ac] hover:bg-[#03528b] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
-                        onClick={() => {
-                          setLocalMode("add");
-                          const attrId = displayedAttributes[0].attribute_id;
-                          const container = variationRefs.current[attrId];
-                          if (container) {
-                            setTimeout(() => {
-                              container.scrollTo({ left: 0, behavior: "smooth" });
-                            }, 120);
-                          }
-                        }}
+                        type="button"
+                        onClick={onClose}
+                        className="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
                       >
-                        <ShoppingBag className="w-5 h-5" />
-                        Add to cart
+                        Discard
                       </button>
                     </div>
                   </div>

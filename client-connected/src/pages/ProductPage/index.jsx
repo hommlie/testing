@@ -1488,13 +1488,13 @@ export default function ProductPage() {
             </section>
 
             {/* Product Info & Links */}
-            <section className="w-full bg-white rounded-[24px] md:rounded-[40px] border border-gray-100 shadow-[0_30px_60px_rgba(0,0,0,0.03)] px-4 py-8 md:px-12 md:py-16 space-y-10 md:space-y-12 mb-16">
+            <section className="w-full bg-white rounded-[20px] md:rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.02)] px-4 py-6 md:px-10 md:py-10 space-y-6 md:space-y-8 mb-16">
               {/* Description Section */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl md:text-2xl font-semibold text-black tracking-tight">Service Details</h2>
+                  <h2 className="text-lg md:text-xl font-semibold text-black tracking-tight">Service Details</h2>
                   <button
-                    className="text-sm font-semibold text-[#0463ac] bg-[#0463ac]/5 px-4 py-2 rounded-xl hover:bg-[#0463ac]/10 transition-colors"
+                    className="text-xs font-bold text-[#0463ac] bg-[#0463ac]/5 px-3 py-1.5 rounded-lg hover:bg-[#0463ac]/10 transition-colors"
                     onClick={() => setIsDescOpen(!isDescOpen)}
                   >
                     {isDescOpen ? "Less Info" : "More Info"}
@@ -1502,14 +1502,14 @@ export default function ProductPage() {
                 </div>
 
                 {isDescOpen && (
-                  <div className="prose prose-blue max-w-none animate-in fade-in slide-in-from-top-4 duration-500">
+                  <div className="prose prose-blue max-w-none animate-in fade-in slide-in-from-top-2 duration-300">
                     {selectedVariation?.description ? (
-                      <p className="text-base text-gray-600 leading-loose bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                      <p className="text-[15px] text-gray-600 leading-relaxed bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
                         {selectedVariation.description}
                       </p>
                     ) : (
                       <div
-                        className="text-base text-gray-600 leading-loose"
+                        className="text-[15px] text-gray-600 leading-relaxed"
                         translate="no"
                         dangerouslySetInnerHTML={{ __html: prodData?.description }}
                       />
@@ -1520,22 +1520,22 @@ export default function ProductPage() {
 
               {/* Locations Section */}
               {locations && locations?.length ? (
-                <div className="pt-10 border-t border-gray-100">
+                <div className="pt-6 border-t border-gray-50">
                   <div
-                    className="flex items-center justify-between cursor-pointer group mb-8"
+                    className="flex items-center justify-between cursor-pointer group mb-4"
                     onClick={toggleLocationsExpansion}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-1 h-6 bg-[#0463ac] rounded-full"></div>
-                      <h2 className="text-xl md:text-2xl font-semibold text-black tracking-tight">Available Locations</h2>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-0.5 h-4 bg-[#0463ac] rounded-full"></div>
+                      <h2 className="text-[17px] md:text-[19px] font-semibold text-black tracking-tight">Available Locations</h2>
                     </div>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-[#0463ac]/10 transition-all duration-300 ${isLocationsExpanded ? 'rotate-180' : ''}`}>
-                      <IoIosArrowDown className="text-xl text-gray-400 group-hover:text-[#0463ac]" />
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-[#0463ac]/10 transition-all duration-300 ${isLocationsExpanded ? 'rotate-180' : ''}`}>
+                      <IoIosArrowDown className="text-lg text-gray-400 group-hover:text-[#0463ac]" />
                     </div>
                   </div>
 
                   {isLocationsExpanded && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 animate-in fade-in slide-in-from-top-4 duration-500">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       {locations?.map((loc, index) => {
                         const formattedLoc = loc.trim();
                         const capitalizedLoc = formattedLoc.charAt(0).toUpperCase() + formattedLoc.slice(1);
@@ -1544,7 +1544,7 @@ export default function ProductPage() {
                             key={index}
                             href={`${config.VITE_BASE_URL}/product/${prodData.slug
                               }-in-${formattedLoc.toLowerCase()}/${formattedLoc.toLowerCase()}`}
-                            className="text-[#10847E] hover:underline transition-colors"
+                            className="text-[13px] text-[#10847E] hover:underline transition-colors font-medium"
                           >
                             {prodData.product_name} in {capitalizedLoc}
                           </a>
@@ -1557,27 +1557,27 @@ export default function ProductPage() {
 
               {/* Keywords Section */}
               {prodData?.tags && (
-                <div className="pt-10 border-t border-gray-100">
+                <div className="pt-6 border-t border-gray-50">
                   <div
-                    className="flex items-center justify-between cursor-pointer group mb-6 md:mb-8"
+                    className="flex items-center justify-between cursor-pointer group mb-4"
                     onClick={toggleKeywordsExpansion}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-1 h-6 bg-black rounded-full"></div>
-                      <h2 className="text-xl md:text-2xl font-semibold text-black tracking-tight">Popular Search Keywords</h2>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-0.5 h-4 bg-black rounded-full"></div>
+                      <h2 className="text-[17px] md:text-[19px] font-semibold text-black tracking-tight">Popular Search Keywords</h2>
                     </div>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-all duration-300 ${isKeywordsExpanded ? 'rotate-180' : ''}`}>
-                      <IoIosArrowDown className="text-xl text-black group-hover:text-gray-900" />
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-all duration-300 ${isKeywordsExpanded ? 'rotate-180' : ''}`}>
+                      <IoIosArrowDown className="text-lg text-black group-hover:text-gray-900" />
                     </div>
                   </div>
 
                   {isKeywordsExpanded && (
-                    <div className="flex flex-wrap justify-center gap-2 animate-in fade-in slide-in-from-top-4 duration-500">
+                    <div className="flex flex-wrap gap-1.5 animate-in fade-in slide-in-from-top-2 duration-300">
                       {prodData.tags.split(",").map((tag, index) => (
                         <a
                           key={index}
                           onClick={() => handleTagClick(tag)}
-                          className="px-4 py-2 text-xs font-bold rounded-full bg-white border border-gray-100 text-black hover:border-[#249370] hover:text-[#249370] transition-all cursor-pointer shadow-sm"
+                          className="px-3 py-1.5 text-[11px] font-bold rounded-full bg-white border border-gray-100 text-black hover:border-[#249370] hover:text-[#249370] transition-all cursor-pointer shadow-sm"
                         >
                           #{tag.trim()}
                         </a>

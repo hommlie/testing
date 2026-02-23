@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { ChevronDown, Star, CheckCircle2, ShoppingBag, Info, ArrowRight, Tag, Search, Zap } from "lucide-react";
+import { ChevronDown, Star, CheckCircle2, ShoppingBag, Info, ArrowRight, Tag, Search, Zap, Plus } from "lucide-react";
 import axios from "axios";
 import config from "../../config/config";
 import Loading from "../../components/Loading";
@@ -15,6 +15,7 @@ import { Helmet } from "react-helmet-async";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import ShareButton from "../ShareButtonsubcat.jsx";
+import { useToast } from "../../context/ToastProvider";
 
 const StarRating = ({ rating, reviews }) => {
   return (
@@ -107,6 +108,135 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
   );
 };
 
+const VariationScroller = ({ attribute, product, cart, onUpdateQty, onAddToCart, onViewDetails, isQtyLoading, loadingItemId }) => {
+  const containerRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (containerRef.current) {
+      const scrollAmount = 181; // card width (165) + gap (16)
+      containerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const sortedVariations = [...(attribute?.variations || [])].sort((a, b) => {
+    const aVal = parseInt(a.variation) || 0;
+    const bVal = parseInt(b.variation) || 0;
+    return aVal - bVal;
+  });
+
+  return (
+    <div className="relative group/scroller w-full mt-6 pb-2">
+      <div className="flex items-center justify-between mb-4 px-1">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-black text-[#0463ac] uppercase tracking-widest mb-1">
+            Choose Option
+          </span>
+          <span className="text-[11px] font-bold text-gray-400">
+            {attribute.variations.length} {attribute.variations.length > 1 ? "variations" : "variation"} available
+          </span>
+        </div>
+      </div>
+
+      <div className="relative overflow-visible">
+        {/* Left Scroll Button - Desktop Only */}
+        <button
+          onClick={() => scroll('left')}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.12)] border border-gray-100 flex items-center justify-center text-gray-600 hover:text-[#0463ac] hover:scale-110 transition-all opacity-0 group-hover/scroller:opacity-100 hidden md:flex active:scale-95"
+          aria-label="Scroll left"
+        >
+          <IoIosArrowBack className="w-5 h-5" />
+        </button>
+
+        {/* Right Scroll Button - Desktop Only */}
+        <button
+          onClick={() => scroll('right')}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.12)] border border-gray-100 flex items-center justify-center text-gray-600 hover:text-[#0463ac] hover:scale-110 transition-all opacity-0 group-hover/scroller:opacity-100 hidden md:flex active:scale-95"
+          aria-label="Scroll right"
+        >
+          <IoIosArrowForward className="w-5 h-5" />
+        </button>
+
+        {/* Right Fade Effect */}
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 opacity-0 group-hover/scroller:opacity-100 transition-opacity duration-300 hidden md:block" />
+
+        <div
+          ref={containerRef}
+          className="flex gap-4 overflow-x-auto no-scrollbar pb-3 snap-x scroll-smooth relative px-1"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {sortedVariations.map((variation) => {
+            const cartItem = cart?.find(c => c.variation == variation.id && c.product_id === product.id);
+            const inCart = !!cartItem;
+
+            return (
+              <motion.div
+                key={variation.id}
+                viewport={{ once: true }}
+                className={`flex-shrink-0 w-[165px] bg-white border rounded-2xl p-4 snap-start transition-all duration-300 ${inCart ? 'border-[#0463ac] ring-1 ring-[#0463ac]/10 shadow-[0_8px_20px_rgba(4,99,172,0.15)]' : 'border-gray-100 hover:border-[#0463ac]/30 hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)]'}`}
+              >
+                <h4 className="text-[15px] font-bold text-gray-900 mb-2 truncate leading-tight tracking-tight">{variation.variation}</h4>
+
+                <div className="flex flex-col mb-4 bg-gray-50/50 p-2 rounded-xl border border-gray-100/50">
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <span className="text-lg font-black text-gray-900 leading-none">₹{variation.discounted_variation_price}</span>
+                    {variation.price !== variation.discounted_variation_price && (
+                      <span className="text-[11px] text-gray-400 line-through font-medium">₹{variation.price}</span>
+                    )}
+                  </div>
+                </div>
+
+                {inCart ? (
+                  <div className="flex items-center justify-between bg-gray-50/80 rounded-xl p-1 shadow-inner border border-gray-100">
+                    <button
+                      onClick={() => onUpdateQty(cartItem.id, cartItem.qty - 1)}
+                      className="w-8 h-8 flex items-center justify-center text-[#0463ac] font-black hover:bg-white hover:shadow-sm rounded-lg transition-all"
+                      disabled={isQtyLoading && loadingItemId === cartItem.id}
+                    >
+                      -
+                    </button>
+                    <span className="text-[14px] font-black text-[#0463ac] tabular-nums">{cartItem.qty}</span>
+                    <button
+                      onClick={() => onUpdateQty(cartItem.id, cartItem.qty + 1)}
+                      className="w-8 h-8 flex items-center justify-center text-[#0463ac] font-black hover:bg-white hover:shadow-sm rounded-lg transition-all"
+                      disabled={isQtyLoading && loadingItemId === cartItem.id}
+                    >
+                      +
+                    </button>
+                  </div>
+                ) : (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => onAddToCart(variation, attribute, product)}
+                    className="w-full py-2.5 bg-[#0463ac] text-white text-[13px] font-bold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,99,172,0.15)] hover:shadow-[0_8px_20px_rgba(4,99,172,0.25)] hover:bg-[#03528b] flex items-center justify-center gap-2 group/addbtn relative overflow-hidden"
+                  >
+                    <motion.div
+                      initial={{ x: 0 }}
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-2"
+                    >
+                      <span>Add</span>
+                      <Plus className="w-3.5 h-3.5 transition-transform duration-300 group-hover/addbtn:rotate-90" />
+                    </motion.div>
+
+                    {/* Subtle shine animation */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/addbtn:animate-[shimmer_1.5s_infinite]" />
+                  </motion.button>
+                )}
+              </motion.div>
+            );
+          })}
+          {/* Invisible spacer at the end for padding */}
+          <div className="flex-shrink-0 w-2" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
   const calculateCartTotal = () => {
     return cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0);
@@ -126,12 +256,12 @@ const CartSection = ({ cart, onUpdateQty, isQtyLoading, loadingItemId }) => {
                   className="flex items-center justify-between py-4 border-b border-gray-200"
                 >
                   {/* Product info */}
-                  <div className="flex flex-col flex-1 pr-4 min-w-0">
-                    <span className="text-sm font-bold text-gray-900 line-clamp-2 uppercase tracking-tight leading-snug">
+                  <div className="flex flex-col flex-1 pr-2 min-w-0">
+                    <span className="text-[15px] font-bold text-gray-900 uppercase tracking-tight leading-snug">
                       {item.product_name}
                     </span>
                     {item.variation_name && (
-                      <span className="text-[11px] font-bold text-[#0463ac] mt-1 uppercase tracking-wider">
+                      <span className="text-[12px] font-bold text-[#0463ac] mt-1.5 uppercase tracking-wider">
                         {item.variation_name}
                       </span>
                     )}
@@ -256,6 +386,11 @@ const CleaningProductPage = () => {
 
   const [isQtyLoading, setIsQtyLoading] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
+  const [pendingVariation, setPendingVariation] = useState(null);
+
+  const notify = useToast();
+  const successNotify = (msg) => notify(msg, "success");
+  const errorNotify = (msg) => notify(msg, "error");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -413,6 +548,65 @@ const CleaningProductPage = () => {
     }
   };
 
+  const handleAddToCart = async (variation, attribute, product) => {
+    setIsAddingToCart(true);
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+
+    if (!jwtToken) {
+      setPendingVariation({ variation, attribute, product });
+      setIsModalOpen(true);
+      setIsAddingToCart(false);
+      return;
+    }
+
+    const user = jwtDecode(jwtToken);
+    const productImagesArray = product?.productimages?.filter((item) => item.media === "Image") || [];
+
+    const taxAmount =
+      innerSubCategoryData.tax_type === "amount"
+        ? Number(innerSubCategoryData.tax)
+        : (Number(innerSubCategoryData.tax) / 100) * variation.discounted_variation_price;
+
+    const cartItem = {
+      user_id: user.id,
+      product_id: product.id,
+      vendor_id: product.vendor_id,
+      product_name: product.product_name,
+      image: productImagesArray?.[0]?.image_url,
+      qty: 1,
+      price: variation.discounted_variation_price,
+      attribute: attribute.attribute_id,
+      variation: variation.id,
+      tax: taxAmount,
+      shipping_cost: product.shipping_cost || 0,
+      wallet_amount: variation.wallet_amount || product.wallet_amount || 0,
+    };
+
+    try {
+      const response = await axios.post(
+        `${config.API_URL}/api/addtocart`,
+        cartItem,
+        { headers: { Authorization: `Bearer ${jwtToken}` } }
+      );
+
+      if (response.data.status === 1) {
+        successNotify("Successfully added to Cart");
+        await getCart();
+      }
+    } catch (error) {
+      errorNotify(error.message || "Failed to add to cart");
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
+  const handlePostLoginAdd = async () => {
+    if (!pendingVariation) return;
+    const { variation, attribute, product } = pendingVariation;
+    await handleAddToCart(variation, attribute, product);
+    setPendingVariation(null);
+  };
+
   return (
     <main className="w-full md:max-w-7xl mx-auto bg-white min-h-screen">
       <Helmet>
@@ -437,7 +631,7 @@ const CleaningProductPage = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 gap-y-2 lg:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 gap-y-2 lg:gap-8 overflow-visible">
             <div className="lg:col-start-4 lg:col-span-9 lg:row-start-1 space-y-4">
               {/* Header Card (Internalized for Desktop) */}
               <div className="px-4 md:px-6 mt-1 md:mt-2 mb-2 md:mb-0 md:bg-white md:border md:border-gray-100 md:rounded-2xl md:shadow-sm py-2 md:py-5">
@@ -480,7 +674,7 @@ const CleaningProductPage = () => {
 
                     {/* Desktop Promotional Offers - Grid Layout (No Scrolling) */}
                     <div className="hidden md:block pt-3 border-t border-gray-100/50">
-                      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         {[
                           { title: "Up to ₹150 cashback", subtitle: "Via Paytm UPI only" },
                           { title: "Up to ₹100 cashback", subtitle: "Valid for BHIM app only" },
@@ -495,10 +689,10 @@ const CleaningProductPage = () => {
                               <Tag className="w-3.5 h-3.5 text-[#05a357]" />
                             </div>
                             <div className="flex flex-col min-w-0">
-                              <span className="text-[11px] lg:text-[12px] font-bold text-gray-800 leading-tight truncate">
+                              <span className="text-[11px] lg:text-[12px] font-bold text-gray-900 leading-tight">
                                 {offer.title}
                               </span>
-                              <span className="text-[9px] lg:text-[10px] font-medium text-gray-400 mt-0.5 truncate">
+                              <span className="text-[9px] lg:text-[10px] font-medium text-gray-500 mt-0.5">
                                 {offer.subtitle}
                               </span>
                             </div>
@@ -623,7 +817,7 @@ const CleaningProductPage = () => {
 
 
             {/* Main Content */}
-            <div className="lg:col-start-4 lg:col-span-5 lg:row-start-2 mt-1 md:mt-0 lg:max-w-[620px]">
+            <div className="lg:col-start-4 lg:col-span-5 lg:row-start-2 mt-1 md:mt-0">
               <div className="space-y-8 md:space-y-12">
                 {innerSubCategoryData?.products?.map((product, productIndex) => (
                   <motion.section
@@ -700,95 +894,50 @@ const CleaningProductPage = () => {
                               </div>
 
                               {/* CONTENT SECTION */}
-                              <div className="flex-1 p-5 md:p-6 flex flex-col">
-                                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                                  <div className="flex-1 flex flex-col space-y-3 md:space-y-4">
-                                    <h3 className="text-xl md:text-xl font-bold text-gray-900 group-hover:text-black transition-colors leading-tight">
-                                      {attribute.attribute_name}
-                                    </h3>
+                              <div className="flex-1 p-5 md:p-6 flex flex-col min-w-0">
+                                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 min-w-0">
+                                  <div className="flex-1 flex flex-col space-y-3 md:space-y-4 min-w-0">
+                                    <div className="flex items-center justify-between gap-2">
+                                      <h3 className="text-xl md:text-xl font-bold text-gray-900 group-hover:text-black transition-colors leading-tight">
+                                        {attribute.attribute_name}
+                                      </h3>
+                                    </div>
 
-                                    {/* Rating Row */}
-                                    <div className="flex items-center justify-between md:justify-start gap-4">
-                                      {(attribute?.avg_rating || attribute?.total_reviews) ? (
-                                        <StarRating
-                                          rating={Number(attribute?.avg_rating) || 0}
-                                          reviews={attribute?.total_reviews}
-                                        />
-                                      ) : (
-                                        <div className="h-6 md:hidden"></div>
+                                    <div className="mt-1 flex items-center gap-3">
+                                      {(attribute?.avg_rating || attribute?.total_reviews) && (
+                                        <div className="flex items-center gap-2">
+                                          <StarRating
+                                            rating={Number(attribute?.avg_rating) || 0}
+                                            reviews={attribute?.total_reviews}
+                                          />
+                                          <div className="w-[1.5px] h-3 bg-gray-300 mx-1"></div>
+                                        </div>
                                       )}
-
-                                      {/* Mobile View Details */}
                                       <button
-                                        className="md:hidden flex items-center gap-1 text-[#0463ac] font-bold text-[13px] active:scale-95 transition-all py-1"
+                                        className="flex items-center gap-1 text-[#0463ac] font-bold text-sm hover:underline transition-all group/det"
                                         onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
                                       >
-                                        View Details
-                                        <ArrowRight className="w-3.5 h-3.5" />
+                                        View details
+                                        <ArrowRight className="w-4 h-4" />
                                       </button>
                                     </div>
 
-                                    {/* Price Row */}
+                                    {/* Variation Scroller (Inline BHK Selection) */}
                                     {attribute.variations?.length > 0 && (
-                                      <div className="flex items-end justify-between md:justify-start gap-4 pt-1 md:pt-4">
-                                        <div className="flex flex-col">
-                                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">
-                                            Starts from
-                                          </span>
-                                          <div className="flex items-baseline gap-0.5">
-                                            <span className="text-2xl font-black text-gray-900">
-                                              ₹{attribute?.starting_price}
-                                            </span>
-                                          </div>
-                                        </div>
-
-                                        {/* Mobile Add to Cart */}
-                                        <div className="md:hidden flex flex-col items-center">
-                                          <motion.button
-                                            whileTap={{ scale: 0.95 }}
-                                            className="bg-[#0463ac] hover:bg-[#03528b] text-white font-bold px-5 py-2.5 rounded-[12px] flex items-center gap-2 shadow-[0_4px_12px_rgba(4,99,172,0.2)] active:shadow-inner text-sm whitespace-nowrap transition-all"
-                                            onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                                          >
-                                            <ShoppingBag className="w-3.5 h-3.5" />
-                                            Add to cart
-                                          </motion.button>
-                                          {attribute?.variations?.length > 0 && (
-                                            <span className="mt-1 text-[10px] font-black text-[#0463ac] uppercase tracking-tighter">
-                                              {attribute.variations.length} Options
-                                            </span>
-                                          )}
-                                        </div>
-                                      </div>
+                                      <VariationScroller
+                                        attribute={attribute}
+                                        product={product}
+                                        cart={cart}
+                                        onUpdateQty={handleQtyUpdate}
+                                        onAddToCart={handleAddToCart}
+                                        onViewDetails={handleViewDetails}
+                                        isQtyLoading={isQtyLoading}
+                                        loadingItemId={loadingItemId}
+                                      />
                                     )}
                                   </div>
 
-                                  {/* Desktop Actions Column (Stacked on Right) */}
-                                  <div className="hidden md:flex flex-col items-end gap-5 self-end pb-1 pr-1">
-                                    {/* Desktop View Details - Above Add to Cart */}
-                                    <button
-                                      className="flex items-center gap-2 text-[#0463ac] font-bold text-sm hover:translate-x-1 transition-transform group/btn"
-                                      onClick={() => handleViewDetails(product, attribute.attribute_id, "view")}
-                                    >
-                                      View Details
-                                      <ArrowRight className="w-4 h-4" />
-                                    </button>
 
-                                    <div className="flex flex-col items-center">
-                                      <motion.button
-                                        whileTap={{ scale: 0.95 }}
-                                        className="bg-[#0463ac] hover:bg-[#03528b] text-white font-bold px-8 py-3 rounded-xl flex items-center gap-2 shadow-[0_4px_15px_rgba(4,99,172,0.2)] transition-all"
-                                        onClick={() => handleViewDetails(product, attribute.attribute_id, "add")}
-                                      >
-                                        <ShoppingBag className="w-4 h-4" />
-                                        Add to cart
-                                      </motion.button>
-                                      {attribute?.variations?.length > 0 && (
-                                        <span className="mt-1.5 text-[11px] font-black text-[#0463ac] uppercase tracking-wider">
-                                          {attribute.variations.length} Option{attribute.variations.length > 1 ? "s" : ""}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
                                 </div>
 
                                 {/* Desktop Specifications - Horizontal scroll style for more premium feel */}
@@ -938,7 +1087,7 @@ const CleaningProductPage = () => {
         <LoginSignup
           isOpen={isModalOpen}
           onClose={closeModal}
-          checkoutPd={checkoutPd}
+          onLoginSuccess={handlePostLoginAdd}
         />
 
         {/* Render the modal always and let the modal's internal AnimatePresence
