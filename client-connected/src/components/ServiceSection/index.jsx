@@ -559,7 +559,7 @@ const ServiceSection = ({ categories }) => {
                 <input
                   type="text"
                   placeholder="Enter Pincode"
-                  className="w-full pl-4 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all shadow-sm group-hover:shadow-md"
+                  className="w-full pl-4 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all shadow-sm group-hover:shadow-md"
                   value={pincode}
                   onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 />
@@ -633,7 +633,7 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
                           <span className="truncate">{categories?.find(c => c.id === selectedCategory)?.category_name || "Select Category"}</span>
                           <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
@@ -664,7 +664,7 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
                           <span className="truncate">{getCurrentSubcategories().find(s => s.id === selectedSubCategory)?.subcategory_name || "Select Pest Type"}</span>
                           <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
@@ -695,7 +695,7 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
                           <span className="truncate">{getCurrentProducts().find(p => p.id === selectedProduct)?.product_name || "Select Product"}</span>
                           <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
@@ -726,7 +726,7 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
                           <span className="truncate">{selectedBhk || "Select Property Size"}</span>
                           <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
                         </div>
@@ -757,7 +757,7 @@ const ServiceSection = ({ categories }) => {
                           }
                         }}
                       >
-                        <div className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
+                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
                           <span className="truncate">
                             {getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute_name ||
                               getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute ||

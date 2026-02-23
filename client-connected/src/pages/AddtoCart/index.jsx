@@ -20,6 +20,7 @@ import { MdOutlineSendToMobile } from "react-icons/md";
 import { BsFillCartXFill } from "react-icons/bs";
 import { FaWallet, FaCreditCard } from "react-icons/fa";
 import { CiDeliveryTruck } from "react-icons/ci";
+import { motion, AnimatePresence } from "framer-motion";
 import LoginSignup from "../../components/LoginModal";
 
 export default function AddtoCart() {
@@ -369,7 +370,12 @@ export default function AddtoCart() {
 
     setIsLoading(true);
     const jwtToken = Cookies.get("HommlieUserjwtToken");
-    if (!jwtToken) { notify("Please login before proceeding to checkout.", "warning"); setIsLoading(false); return; }
+    if (!jwtToken) {
+      setIsLoginModalOpen(true);
+      notify("Please login before proceeding to checkout.", "warning");
+      setIsLoading(false);
+      return;
+    }
 
     const u = jwtDecode(jwtToken);
     const clientPaymentId = Math.random().toString(36).substring(2, 12);
@@ -570,508 +576,352 @@ export default function AddtoCart() {
   }, [cart?.length, setSelectedDayTime]);
 
   return (
-    <div
-      className=""
-    >
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 bg-white"
-      >
-        <LoginSignup
-          isOpen={isLoginModalOpen}
-          onClose={() => setIsLoginModalOpen(false)}
-        />
-        {cart.length === 0 ? (
-          <div className="flex justify-center items-center min-h-[50vh] -mt-5">
-            <div className="p-8 flex flex-col items-center">
-              <BsFillCartXFill className="text-6xl text-[#035240] mb-4" />
-              <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
-              <p className="text-gray-600 mb-4">Add items to start a purchase</p>
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                <button
-                  onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
-                  className="px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
-                >
-                  Browse Services
-                </button>
+    <div className="bg-white min-h-screen font-sans text-[#212121]">
 
-                {user?.id ? (
-                  <button
-                    onClick={() => navigate(`${config.VITE_BASE_URL}/my-bookings`)}
-                    className="px-12 sm:px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
-                  >
-                    My Bookings
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setIsLoginModalOpen(true)}
-                    className="px-12 sm:px-8 py-3 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#1e7a5c] transition duration-300"
-                  >
-                    Login
-                  </button>
-                )}
-              </div>
-            </div>
+      <div className="max-w-[1100px] mx-auto px-4 py-8 pb-32 lg:pb-8">
+        <LoginSignup isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+
+        {cart.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-gray-200 shadow-sm">
+            <BsFillCartXFill className="text-6xl text-gray-200 mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Cart is empty</h2>
+            <p className="text-gray-500 mb-6">Add services to checkout</p>
+            <button
+              onClick={() => navigate(`${config.VITE_BASE_URL}/`)}
+              className="px-8 py-3 bg-[#6759ff] text-white font-bold rounded-lg hover:bg-[#5446e5] transition-all"
+            >
+              Browse Services
+            </button>
           </div>
         ) : (
-          <>
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Main */}
-              <div className="w-full lg:w-[700px] order-2 lg:order-1 sm:ml-8">
-                <div className="bg-white rounded-xl shadow-sm p-6 order-3 lg:order-none space-y-10 border border-black">
-                  {/* Account */}
-                  <div>
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold flex items-center gap-2">
-                        <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                          <MdOutlineSendToMobile className="text-xl text-[#0463ac]" />
-                        </div>
-                        Send Your Booking Details To
-                      </h2>
-                    </div>
-                    <div className="-mt-3 ml-7">
-                      <div className="space-y-2 text-gray-600">
-                        <p className="text-gray-500 mb-3 ml-2">
-                          {user?.name}{" ( "}{user?.mobile}{" ) "}, {user?.email}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="border-t border-gray-100"></div>
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            {/* Left Column: Progress Steps */}
+            <div className="flex-1 space-y-6">
+              {couponDiscount > 0 && (
+                <div className="bg-[#e7f9f3] p-4 rounded-xl flex items-center gap-3 border border-[#c3f2e3]">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
+                    <BiSolidOffer className="text-[#00a871] text-xl" />
                   </div>
+                  <span className="text-[#00a871] font-bold text-sm">Saving ₹{couponDiscount?.toFixed(0)} on this order</span>
+                </div>
+              )}
 
-                  {/* Address */}
-                  <div>
-                    <div className="flex justify-between items-center mb-4 -mt-8">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                          <HiOutlineLocationMarker className="text-2xl text-[#0463ac]" />
-                        </div>
-                        <h2 className="text-xl font-semibold -ml-2">Delivery Address</h2>
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                {/* Step 1: Booking Details */}
+                <div className="p-6 border-b border-gray-100">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
+                      <MdOutlineSendToMobile className="text-gray-600 text-lg" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold mb-1">Send booking details to</h3>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-sm text-gray-500 font-medium">{user?.mobile}</p>
+                        {String(user?.email || selectedAddrs?.email || "").trim() !== "" && (
+                          <>
+                            <span className="text-gray-300">•</span>
+                            <p className="text-sm text-gray-500 font-medium">
+                              {String(user?.email || selectedAddrs?.email || "").trim()}
+                            </p>
+                          </>
+                        )}
                       </div>
-                      <button
-                        onClick={openAddressModal}
-                        className="px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-                      >
-                        {selectedAddrs ? "Edit" : "Add"}
-                      </button>
-                    </div>
-                    <div className="ml-7">
-                      {selectedAddrs ? (
-                        <div className="space-y-2 text-gray-600 mb-4">
-                          <p className="font-medium text-black">{selectedAddrs.name}</p>
-                          <p className="text-gray-700">
-                            {showFullAddress
-                              ? `${selectedAddrs.address}, ${selectedAddrs.landmark}, ${selectedAddrs.pincode}`
-                              : `${selectedAddrs.address}, ${selectedAddrs.landmark}, ${selectedAddrs.pincode}`.slice(0, 60) + '...'}
-                            {`${selectedAddrs.address}, ${selectedAddrs.landmark}, ${selectedAddrs.pincode}`.length > 60 && (
-                              <button
-                                onClick={() => setShowFullAddress(!showFullAddress)}
-                                className="text-[#249370] font-medium ml-2 underline"
-                              >
-                                {showFullAddress ? "View Less" : "View More"}
-                              </button>
-                            )}
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 -mt-4 mb-3 ml-2">Please select a delivery address</p>
-                      )}
-                    </div>
-                    <div className="border-t border-gray-100"></div>
-                  </div>
-
-                  {/* Slot */}
-                  <div>
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="w-full">
-                        <div className="flex items-center gap-3 -mt-5">
-                          <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                            <RiTimerLine className="text-2xl text-[#0463ac]" />
-                          </div>
-                          <h2 className="text-xl font-semibold -ml-1">Select Your Slot</h2>
-                        </div>
-                        <div className="mt-4 ml-7">
-                          {!selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                            <button
-                              onClick={() => { if (selectedAddrs) openDateTimeModal(); }}
-                              disabled={!selectedAddrs}
-                              className={`w-full px-4 py-2 border-2 rounded-lg transition-colors
-                                ${selectedAddrs
-                                  ? "text-[#249370] border-[#249370] hover:bg-[#0463ac] hover:text-white"
-                                  : "text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
-                                }`}
-                            >
-                              Select Date and Time
-                            </button>
-                          ) : (
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 px-4 py-3 rounded-lg mt-2 mb-4">
-                              <p className="text-gray-700">
-                                {selectedDayTime?.date?.day} - {selectedDayTime?.date?.date} {selectedDayTime?.date?.month} @ {selectedDayTime?.time}
-                              </p>
-                              <button
-                                onClick={() => { if (selectedAddrs) openDateTimeModal(); }}
-                                className="mt-2 sm:mt-0 px-4 py-2 text-[#249370] border-2 border-[#249370] rounded-lg hover:bg-[#249370] hover:text-white transition-colors"
-                              >
-                                Edit
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                        {/* UPDATED: validation messages only when there are items */}
-                        {(cart?.length || 0) > 0 ? (
-                          !selectedAddrs ? (
-                            <p className="text-red-400 ml-8 mt-3">Please select a delivery address first</p>
-                          ) : !selectedDayTime?.date?.day || !selectedDayTime?.time ? (
-                            <p className="text-red-500">Please select delivery date and time</p>
-                          ) : null
-                        ) : null}
-                        <div className="border-t border-gray-100 pt-4"></div>
-                      </div>
-                    </div>
-
-                    {/* Payment */}
-                    <h3 ref={paymentRef} className="text-xl -mt-3 mb-3 font-semibold flex items-center gap-2">
-                      <div className="bg-gray-100 p-2 rounded-medium inline-block -ml-2">
-                        <FaCreditCard className="text-[#249370]" />
-                      </div>
-                      Payment Method
-                    </h3>
-                    <div
-                      className={`flex flex-col sm:grid sm:grid-cols-2 gap-3 px-4 sm:ml-7 ${(!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time) ? 'opacity-50 pointer-events-none' : ''
-                        }`}
-                    >
-                      {paymentList?.map((payment) => (
-                        <label key={payment.id}
-                          className={`w-full flex items-center px-3 py-2 rounded-lg border-2 cursor-pointer text-sm transition-colors
-                            ${paymentType?.id === payment.id ? "border-[#249370] bg-green-50" : "border-gray-200 hover:border-[#249370]"}`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value={payment.id}
-                            checked={paymentType?.id === payment.id}
-                            onChange={handlePaymentChange}
-                            disabled={!selectedAddrs || !selectedDayTime?.date?.day || !selectedDayTime?.time}
-                            className="mr-2 text-[#249370] focus:ring-[#249370]"
-                          />
-                          {payment.payment_name}
-                        </label>
-                      ))}
-                      <button
-                        className="w-[280px] sm:w-[360px] md:w-[480px] lg:w-[520px] py-4 bg-[#0463ac] text-white font-medium rounded-lg hover:bg-[#52852d] transition-colors mx-auto sm:col-span-2"
-                        disabled={isLoading}
-                        onClick={handleProceed}
-                      >
-                        {isLoading ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                              </path>
-                            </svg>
-                            <span>PLACING ORDER...</span>
-                          </div>
-                        ) : ("PLACE ORDER")}
-                      </button>
-                    </div>
-
-                    {/* Secure */}
-                    <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
-                      <img src={secureIcon} alt="Secure Payment" className="w-8 h-8" />
-                      <p className="text-sm text-gray-500">Safe and Secure Payments</p>
                     </div>
                   </div>
                 </div>
+
+                {/* Step 2: Address */}
+                <div className="p-6 border-b border-gray-100">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
+                      <HiOutlineLocationMarker className="text-gray-600 text-lg" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold mb-4">Address</h3>
+                      {selectedAddrs ? (
+                        <div className="relative group">
+                          <div className="p-4 rounded-lg bg-gray-50 border border-gray-100 group-hover:border-[#6759ff]/30 transition-all">
+                            <p className="font-bold text-sm mb-1">{selectedAddrs.name}</p>
+                            <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                              {selectedAddrs.address}, {selectedAddrs.landmark}, {selectedAddrs.pincode}
+                            </p>
+                          </div>
+                          <button onClick={openAddressModal} className="mt-3 text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                            Change Address
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={openAddressModal}
+                          className="w-full py-4 bg-[#6759ff] text-white font-bold rounded-lg hover:bg-[#5446e5] shadow-md shadow-[#6759ff]/20 transition-all active:scale-[0.98]"
+                        >
+                          Select address
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 3: Slot */}
+                <div className="p-6 border-b border-gray-100">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
+                      <RiTimerLine className="text-gray-400 text-lg" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={`text-base font-bold ${!selectedDayTime?.date?.day ? 'text-gray-300' : 'text-[#212121]'}`}>Slot</h3>
+                      {selectedDayTime?.date?.day ? (
+                        <div className="mt-4 flex items-center justify-between">
+                          <div>
+                            <p className="font-bold text-sm">{selectedDayTime.date.day}, {selectedDayTime.date.month} {selectedDayTime.date.date}</p>
+                            <p className="text-xs text-[#6759ff] font-bold mt-1">{selectedDayTime.time}</p>
+                          </div>
+                          <button onClick={openDateTimeModal} className="text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                            Reschedule
+                          </button>
+                        </div>
+                      ) : (
+                        selectedAddrs && (
+                          <button onClick={openDateTimeModal} className="mt-4 text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                            Select date & time
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 4: Payment Method */}
+                <div className="p-6">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
+                      <FaCreditCard className="text-gray-400 text-lg" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={`text-base font-bold ${!paymentType ? 'text-gray-300' : 'text-[#212121]'}`}>Payment Method</h3>
+                      {paymentType && selectedDayTime?.date?.day ? (
+                        <div className="mt-4 flex items-center justify-between">
+                          <div>
+                            <p className="font-bold text-sm">{paymentType.payment_name}</p>
+                            <p className="text-[10px] text-gray-400 font-medium">Secure Transaction</p>
+                          </div>
+                          <button onClick={() => setPaymentType(null)} className="text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                            Change
+                          </button>
+                        </div>
+                      ) : (
+                        !paymentType && selectedDayTime?.date?.day && (
+                          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {paymentList?.map((pm) => (
+                              <button
+                                key={pm.id}
+                                onClick={() => handlePaymentChange({ target: { value: pm.id } })}
+                                className="p-4 border rounded-xl text-left hover:border-[#6759ff] transition-all group"
+                              >
+                                <span className="block font-bold text-sm group-hover:text-[#6759ff]">{pm.payment_name}</span>
+                                <span className="block text-[10px] text-gray-400 uppercase tracking-widest font-bold">Secure Payment</span>
+                              </button>
+                            ))}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Book Now Action */}
+                {paymentType && (
+                  <div className="p-6 bg-gray-50 border-t border-gray-100 uppercase">
+                    <button
+                      onClick={handleProceed}
+                      disabled={isLoading}
+                      className="w-full py-4 bg-[#6759ff] text-white font-bold rounded-xl shadow-lg shadow-[#6759ff]/20 hover:bg-[#5446e5] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:grayscale disabled:hover:translate-y-0"
+                    >
+                      {isLoading ? (
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <span className="uppercase tracking-widest text-sm">Book and pay</span>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                    <p className="text-center text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-4">
+                      Secure encrypted transaction
+                    </p>
+                  </div>
+                )}
               </div>
 
-              {/* Right column */}
-              <div className="sm:mr-10  w-full lg:w-[460px] space-y-5 order-1 lg:order-2">
+              {/* Cancellation Policy */}
+              <div className="pt-4">
+                <h4 className="text-lg font-bold mb-2">Cancellation policy</h4>
+                <p className="text-xs text-gray-500 font-medium leading-relaxed max-w-lg">
+                  Free cancellations if done more than 12 hrs before the service. A fee will be charged otherwise.
+                </p>
+                <button
+                  onClick={() => navigate(`${config.VITE_BASE_URL}/privacy-policy`)}
+                  className="text-xs font-bold underline mt-2 hover:text-[#6759ff] transition-colors"
+                >
+                  Read full policy
+                </button>
+              </div>
+            </div>
 
-                <div className="bg-white rounded-xl shadow-sm p-4 transition-all border border-black">
-                  {cart?.map((pd) => (
-                    <div
-                      key={pd.id}
-                      className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 border border-gray-100 rounded-lg p-4 mb-2"
-                    >
-                      {/* Left: title + meta */}
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-900 leading-snug">
-                          {pd.product_name}
-                        </h3>
-
-                        <div className="mt-1 text-sm text-gray-600 flex flex-wrap items-center gap-x-3 gap-y-1">
-                          {/* Combine all meta details in one line */}
-                          {pd?.attribute_name && <span>{pd.attribute_name}</span>}
-                          {pd?.variation_name && <span>{pd.variation_name}</span>}
-                          {pd?.duration && <span>{pd.duration}</span>}
-                          {pd?.bhk && <span>{pd.bhk} BHK</span>}
+            {/* Right Column: Review Pane */}
+            <div className="w-full lg:w-[380px] space-y-4">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                <div className="p-6 space-y-6">
+                  {cart.map((pd) => (
+                    <div key={pd.id} className="flex flex-col gap-4">
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="flex-1">
+                          <h4 className="text-base font-bold text-gray-900 leading-tight">{pd.product_name}</h4>
+                          <div className="mt-1">
+                            {pd.variation_name && <p className="text-xs text-gray-500 font-medium">{pd.variation_name}</p>}
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Right: price + qty */}
-                      <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center gap-2">
-                        <span className="text-lg font-semibold text-[#249370] whitespace-nowrap">
-                          ₹{pd.price * pd.qty}
-                        </span>
-
-                        <div className="flex items-center border border-[#249370] rounded-lg overflow-hidden">
-                          <button
-                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty - 1)}
-                            className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
-                            disabled={isLoading && loadingItemId === pd?.id}
-                            aria-label="Decrease quantity"
-                          >
-                            –
-                          </button>
-                          <span className="px-3 text-sm font-medium min-w-6 text-center">
-                            {pd?.qty}
-                          </span>
-                          <button
-                            onClick={() => handleQtyUpdate(pd?.id, pd?.qty + 1)}
-                            className="px-2 py-1 text-[#249370] text-sm font-semibold hover:bg-[#249370] hover:text-white transition"
-                            disabled={isLoading && loadingItemId === pd?.id}
-                            aria-label="Increase quantity"
-                          >
-                            +
-                          </button>
+                        <div className="flex flex-col items-end gap-2">
+                          <div className="flex items-center bg-[#f2f4f6] rounded px-1 py-1 h-8 border border-gray-100 shadow-inner">
+                            <button
+                              onClick={() => handleQtyUpdate(pd.id, pd.qty - 1)}
+                              className="w-6 h-6 flex items-center justify-center text-[#6759ff] text-lg font-bold hover:bg-white rounded transition-colors"
+                            >–</button>
+                            <span className="w-6 text-center text-xs font-bold">{pd.qty}</span>
+                            <button
+                              onClick={() => handleQtyUpdate(pd.id, pd.qty + 1)}
+                              className="w-6 h-6 flex items-center justify-center text-[#6759ff] text-lg font-bold hover:bg-white rounded transition-colors"
+                            >+</button>
+                          </div>
+                          <p className="text-sm font-bold">₹{pd.price * pd.qty}</p>
                         </div>
                       </div>
                     </div>
                   ))}
-                </div>
 
-                <div className="sticky top-[100px] space-y-6">
-                  {/* Summary */}
-                  <div className="bg-white rounded-xl shadow-sm p-6 transition-all border border-black">
-                    <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-                    <div className="space-y-4">
-                      <div className="flex justify-between text-gray-600">
-                        <span>Items ({itemCount})</span>
-                        <span>₹{totalItemPrice?.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between text-gray-600">
-                        <span>Platform Fee</span>
-                        <span>₹{tax?.toFixed(2)}</span>
-                      </div>
-                      {couponDiscount > 0 && (
-                        <div className="flex justify-between text-green-600">
-                          <span>Coupon Discount</span>
-                          <span>-₹{couponDiscount.toFixed(2)}</span>
-                        </div>
-                      )}
-                      {tipAmount > 0 && (
-                        <div className="flex justify-between text-gray-600">
-                          <span>Tip</span>
-                          <span>+₹{tipAmount.toFixed(2)}</span>
-                        </div>
-                      )}
-
-                      {/* Coupon section */}
-                      <div className="bg-white rounded-xl shadow-sm p-6 transition-all border border-black">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            <BiSolidOffer className="text-xl text-[#249370]" />
-                            <span className="font-medium">Apply Coupon</span>
-                          </div>
-                          <button onClick={openCouponModal} className="text-[#249370] hover:underline">
-                            View Coupons
-                          </button>
-                        </div>
-                        {selectedCoupon && (
-                          <div className="flex justify-between items-center bg-green-50 p-3 rounded-lg mt-4">
-                            <div className="flex items-center gap-2">
-                              <IoCheckmarkCircle className="text-[#249370]" />
-                              <span className="font-medium">{selectedCoupon?.coupon_name}</span>
-                            </div>
-                            <button onClick={handleRemoveCoupon} className="text-red-500 text-sm hover:underline">
-                              Remove
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Wallet */}
-                      <div className="flex justify-between items-center text-gray-700 mt-3">
-                        <span className="flex items-center">
-                          <FaWallet className="mr-2 text-[#249370]" />
-                          Wallet Balance: ₹{(walletBalance - (walletApplied ? effectiveWalletUse : 0)).toFixed(2)}
-                        </span>
-                        <button
-                          className={`px-3 py-1 rounded-lg text-sm font-medium ${walletApplied ? "bg-red-500 text-white" : "bg-[#0463ac] text-white"
-                            } ${walletBalance <= 0 || payableBeforeWallet <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-                          onClick={handleWalletToggle}
-                          disabled={walletBalance <= 0 || payableBeforeWallet <= 0}
-                        >
-                          {walletApplied ? "Remove" : "Apply"}
-                        </button>
-                      </div>
-
-                      {/* Show deduction only if > 0 */}
-                      {walletApplied && effectiveWalletUse > 0 && (
-                        <div className="flex justify-between text-green-600">
-                          <span>Wallet Applied</span>
-                          <span>-₹{effectiveWalletUse.toFixed(2)}</span>
-                        </div>
-                      )}
-
-                      <div className="border-t border-gray-200 pt-4">
-                        <div className="flex justify-between text-lg font-semibold">
-                          <span>Total Amount</span>
-                          <span className="text-[#249370]">₹{totalAmount?.toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Tips */}
-                  <div className="bg-white rounded-xl shadow-sm p-6 border border-black">
-                    <h3 className="text-base font-semibold mb-3">Add a tip to thank the Professional</h3>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      {[50, 75, 100].map((amount) => (
-                        <div key={amount} className="relative">
-                          <button
-                            onClick={() => { setTipAmount(amount); setCustomTipActive(false); setCustomInput(""); }}
-                            className={`border px-4 py-2 rounded-lg font-medium text-sm min-w-[60px] ${tipAmount === amount ? "bg-[#249370] text-white border-[#249370]" : "border-gray-300 text-black"
-                              }`}
-                          >
-                            ₹{amount}
-                          </button>
-                          {amount === 75 && (
-                            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-md">
-                              POPULAR
-                            </span>
-                          )}
-                        </div>
-                      ))}
-
-                      <div
-                        className={`flex items-center border rounded-lg px-3 py-2 min-w-[70px] ${tipAmount !== 50 && tipAmount !== 75 && tipAmount !== 100 && tipAmount > 0
-                          ? "border-[#249370] bg-[#2493701a]"
-                          : "border-gray-300"
-                          }`}
-                      >
-                        <span className="text-sm mr-1">₹</span>
-                        {customTipActive ? (
-                          <input
-                            type="number"
-                            className="w-12 text-sm outline-none bg-transparent"
-                            value={customInput}
-                            onChange={(e) => {
-                              const val = parseInt(e.target.value);
-                              setCustomInput(e.target.value);
-                              if (!isNaN(val) && val >= 0) setTipAmount(val);
-                            }}
-                            onBlur={() => {
-                              if (!customInput || parseInt(customInput) === 0) {
-                                setTipAmount(0); setCustomTipActive(false); setCustomInput("");
-                              }
-                            }}
-                            autoFocus
-                          />
-                        ) : (
-                          <button
-                            className="text-sm text-gray-600"
-                            onClick={() => { setCustomTipActive(true); setTipAmount(0); setCustomInput(""); }}
-                          >
-                            Custom
-                          </button>
-                        )}
-                      </div>
-
-                      {tipAmount > 0 && (
-                        <button
-                          onClick={() => { setTipAmount(0); setCustomTipActive(false); setCustomInput(""); }}
-                          className="border border-red-400 text-red-500 px-3 py-2 rounded-lg font-medium text-sm hover:bg-red-50"
-                        >
-                          Clear Tip
-                        </button>
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-6">100% of the tip goes to the professional.</p>
-                  </div>
-
-                  {/* Refund Policy */}
-                  <div className="hidden lg:block">
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-black">
-                      <div className="flex items-center gap-3 mb-4">
-                        <CiDeliveryTruck className="text-2xl text-[#249370]" />
-                        <h3 className="font-semibold text-xl">Refund Policy</h3>
-                      </div>
-                      <a href={`${config.VITE_BASE_URL}/privacy-policy`} className="text-gray-600 hover:underline">
-                        Learn More
-                      </a>
-                    </div>
-                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Order confirmed */}
-            {isOrderConfirmed && (
-              <div className="bg-white min-h-screen py-10 px-4 md:px-0">
-                <div className="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-md">
-                  <div className="text-center">
-                    <IoCheckmarkCircle className="text-green-500 text-5xl mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-[#035240] mb-2">Booking Confirmed!</h2>
-                    <p className="text-gray-700 mb-4">
-                      Thank you for booking with Hommlie. Your order has been placed successfully.
-                    </p>
-                    {tempOrderNumber && (
-                      <div className="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200 text-left">
-                        <p className="font-semibold text-gray-600 mb-1">Order ID:</p>
-                        <p className="text-lg text-[#035240] font-bold">{tempOrderNumber}</p>
-                      </div>
-                    )}
-                    <button
-                      onClick={() => { setIsOrderConfirmed(false); navigate(`${config.VITE_BASE_URL}/`); }}
-                      className="inline-block px-6 py-2 bg-[#035240] text-white rounded-lg hover:bg-[#024535] mb-6"
-                    >
-                      Go to Homepage
-                    </button>
+              <button
+                onClick={openCouponModal}
+                className="w-full bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#eef5ff] rounded flex items-center justify-center">
+                    <BiSolidOffer className="text-[#6759ff] text-xl" />
                   </div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold">{selectedCoupon ? selectedCoupon.coupon_name : "Coupons and offers"}</p>
+                    <p className="text-[10px] text-[#00a871] font-bold">Offer available</p>
+                  </div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+
+              <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4 shadow-sm">
+                <h3 className="text-base font-bold text-gray-900 border-b border-gray-50 pb-3">Payment summary</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center text-sm font-medium text-gray-600">
+                    <span>Item total</span>
+                    <span className="text-[#212121] font-bold">₹{totalItemPrice?.toFixed(0)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm font-medium text-gray-600">
+                    <span className="border-b border-dashed border-gray-300">Taxes and Fee</span>
+                    <span className="text-[#212121] font-bold">₹{tax?.toFixed(0)}</span>
+                  </div>
+                  {couponDiscount > 0 && (
+                    <div className="flex justify-between items-center text-sm font-bold text-[#00a871]">
+                      <span>Coupon Discount</span>
+                      <span>-₹{couponDiscount.toFixed(0)}</span>
+                    </div>
+                  )}
+                  {walletApplied && effectiveWalletUse > 0 && (
+                    <div className="flex justify-between items-center text-sm font-bold text-[#6759ff]">
+                      <span>Wallet Credit</span>
+                      <span>-₹{effectiveWalletUse.toFixed(0)}</span>
+                    </div>
+                  )}
+                  <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
+                    <span className="text-base font-bold text-gray-900">Total amount</span>
+                    <span className="text-lg font-black text-gray-900">₹{totalAmount?.toFixed(0)}</span>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center bg-gray-50 -mx-6 -mb-6 px-6 py-4">
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Recently Booked Services</h3>
-                    <div className="space-y-4">
-                      {cart?.map((pd) => (
-                        <div key={pd.id} className="border p-4 rounded-lg flex items-center justify-between">
-                          <div>
-                            <p className="font-semibold">{pd.product_name}</p>
-                            {pd.attribute_name && <p className="text-sm text-gray-600">{pd.attribute_name}</p>}
-                            {pd.variation_name && <p className="text-sm text-gray-600">{pd.variation_name}</p>}
-                          </div>
-                          <div className="text-[#249370] font-bold">₹{pd.price * pd.qty}</div>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-lg font-bold text-gray-900 leading-none">₹{totalAmount?.toFixed(0)}</p>
+
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-gray-900">Amount to pay</p>
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* Similar */}
-            {prodRelatedProds?.length > 0 && (
-              <section className="mt-12 p-4">
-                <ProdSection title="Similar Services" items={visibleItems || []} btnHidden />
-              </section>
-            )}
-          </>
-        )}
-
-        <div className="block lg:hidden mt-6 px-4">
-          <div className="-ml-4 bg-white rounded-xl shadow-sm p-6 w-[110%] mx-auto">
-            <div className="flex items-center gap-3 mb-4">
-              <CiDeliveryTruck className="text-2xl text-[#249370]" />
-              <h3 className="font-semibold">Return Policy</h3>
+              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                <h3 className="text-sm font-bold text-gray-900 mb-6">Add a tip to thank the Professional</h3>
+                <div className="grid grid-cols-4 gap-2 mb-4">
+                  {[50, 75, 100].map((amount) => (
+                    <button
+                      key={amount}
+                      onClick={() => { setTipAmount(amount); setCustomTipActive(false); setCustomInput(""); }}
+                      className={`relative flex flex-col items-center justify-center py-2.5 px-1 rounded border transition-all
+                        ${tipAmount === amount ? "bg-[#fff2f2] border-[#ff5a5a] text-[#ff5a5a]" : "bg-white border-gray-200 text-gray-500 hover:border-gray-300"}`}
+                    >
+                      <span className="text-xs font-bold">₹{amount}</span>
+                      {amount === 75 && (
+                        <span className="absolute -bottom-2 text-[8px] font-black uppercase tracking-tighter bg-[#e7f9f3] text-[#00a871] border border-[#c3f2e3] px-1 rounded">POPULAR</span>
+                      )}
+                    </button>
+                  ))}
+                  <button onClick={() => { setCustomTipActive(true); setTipAmount(0); }} className="flex items-center justify-center py-2.5 rounded border border-gray-200 text-gray-500 text-xs font-bold">Custom</button>
+                </div>
+                {customTipActive && (
+                  <div className="mb-4">
+                    <input type="number" placeholder="Enter amount" className="w-full text-center py-2 text-sm border-b-2 border-[#6759ff] outline-none" onChange={(e) => setTipAmount(Number(e.target.value))} />
+                  </div>
+                )}
+                <p className="text-[10px] text-gray-400 font-medium text-center">100% of the tip goes to the professional.</p>
+              </div>
             </div>
-            <a href={`${config.VITE_BASE_URL}/privacy-policy`} className="text-gray-600 hover:underline">
-              Learn More
-            </a>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Modals */}
+      {/* Sticky Mobile Proceed Button */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-[90] flex items-center justify-between shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <div>
+          <p className="text-xl font-bold text-gray-900">₹{totalAmount?.toFixed(0)}</p>
+
+        </div>
+        <button
+          onClick={handleProceed}
+          disabled={!selectedAddrs || !selectedDayTime || !paymentType}
+          className="bg-[#6759ff] text-white px-8 py-3 rounded-lg font-bold text-sm shadow-lg shadow-[#6759ff]/20 disabled:bg-gray-300 disabled:shadow-none"
+        >
+          {isLoading ? "Processing..." : "Proceed to Payment"}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {isOrderConfirmed && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center p-6 text-center">
+            <div className="w-20 h-20 bg-[#e7f9f3] rounded-full flex items-center justify-center mb-6">
+              <IoCheckmarkCircle className="text-6xl text-[#00a871]" />
+            </div>
+            <h2 className="text-3xl font-bold mb-2">Booking Confirmed!</h2>
+            <p className="text-gray-500 font-medium mb-8">Professional will be assigned shortly.</p>
+            <button onClick={() => { setIsOrderConfirmed(false); navigate(`${config.VITE_BASE_URL}/`); }} className="bg-[#6759ff] text-white px-10 py-4 rounded-lg font-bold">GO TO HOME</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <DateTimeModal isOpen={isDateTimeModalOpen} onClose={closeDateTimeModal} order_type="AMC" />
       <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} />
-      <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalItemPrice + tax} />
+      <CouponModal isOpen={isCouponModalOpen} onClose={closeCouponModal} totalAmount={totalItemPrice} />
     </div>
   );
 }

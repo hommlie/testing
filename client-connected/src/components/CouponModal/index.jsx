@@ -8,6 +8,7 @@ import axios from "axios";
 import config from "../../config/config";
 import couponSucess from "../Lotties/couponSuccess.json";
 import NoResultFoundImg from "../../assets/images/noresultfound.svg";
+import { motion } from "framer-motion";
 
 const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
   const { selectedCoupon, setSelectedCoupon } = useCont();
@@ -160,7 +161,7 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-20 flex items-center justify-center">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center">
       <div
         className="fixed inset-0 opacity-60"
         style={{ backgroundColor: "black" }}
@@ -177,132 +178,139 @@ const CouponModal = ({ isOpen, onClose, totalAmount, cat_id }) => {
       )}
 
       <div
-        style={{ backgroundColor: "#F6F1F7" }}
-        className="relative w-[80%] md:w-full max-w-[25rem] max-h-[35rem] pb-4 overflow-y-scroll rounded-2xl overflow-hidden z-30 scrollbar-hide"
+        className="relative w-[90%] md:w-full max-w-[25rem] max-h-[90vh] pb-4 overflow-y-auto bg-white rounded-[2rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] z-30 scrollbar-hide"
       >
-        <div className="relative flex flex-row gap-2 items-center justify-center w-full bg-white p-4">
-          <button onClick={onClose}>
-            <IoMdArrowRoundBack className="absolute left-4 w-4 h-4" />
+        <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-gray-50 p-6 flex items-center">
+          <button
+            onClick={onClose}
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-50 transition-colors"
+          >
+            <IoMdArrowRoundBack className="w-5 h-5 text-gray-900" />
           </button>
-          <h2 className="font-bold text-center">Apply Coupon</h2>
+          <h2 className="flex-1 text-center font-black text-gray-900 mr-10 uppercase tracking-widest text-sm">Apply Coupon</h2>
         </div>
 
         {/* If a coupon was just applied, show success card (like the reference UI) */}
         {appliedCoupon ? (
-          <div className="flex flex-col items-center justify-center p-6">
-            <div className="bg-white rounded-xl shadow-xl w-full p-6 text-center" style={{ borderRadius: 16 }}>
-              <div className="flex justify-center mb-2">
-                {/* simple confetti emoji/icon */}
-                <div className="text-4xl" aria-hidden>
-                  🎉
+          <div className="flex flex-col items-center justify-center p-6 bg-white min-h-[320px]">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="w-full flex flex-col items-center"
+            >
+              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4 shadow-inner border border-green-100">
+                <div className="text-3xl animate-bounce" aria-hidden>🎉</div>
+              </div>
+
+              <h2 className="text-2xl font-black text-gray-900 mb-1 tracking-tight">Congratulations!</h2>
+
+              <div className="bg-gray-50 px-3 py-1.5 rounded-full mb-4 border border-gray-100">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                  Coupon <span className="text-[#6759ff]">"{appliedCoupon.coupon_name}"</span> Applied
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 bg-green-50/50 px-5 py-3 rounded-2xl border border-green-100 mb-6 w-full justify-center shadow-sm">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-lg shadow-lg shadow-green-200">
+                  ₹
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] font-black text-green-600 uppercase tracking-tighter leading-none mb-1">Total Savings</p>
+                  <p className="text-xl font-black text-green-700 leading-none">
+                    Saved ₹{Number(appliedCoupon.calculatedDiscount || 0).toFixed(0)}!
+                  </p>
                 </div>
               </div>
 
-              <h2 className="text-2xl font-bold mb-2">Congratulations!</h2>
+              <div className="w-full space-y-3">
+                <button
+                  onClick={handleContinue}
+                  className="w-full py-4 rounded-xl text-white font-black text-sm uppercase tracking-widest shadow-lg shadow-green-200 transition-all hover:shadow-green-300 hover:-translate-y-0.5 active:translate-y-0"
+                  style={{ backgroundColor: "#1E9A56" }}
+                >
+                  Continue
+                </button>
 
-              <p className="text-sm text-gray-700 mb-2">
-                Your coupon <strong>"{appliedCoupon.coupon_name}"</strong> has been successfully applied.
-              </p>
-
-              <p className="text-base font-semibold text-green-700 mb-4 flex items-center justify-center gap-2">
-                <span style={{ fontSize: 18 }}>💰</span>
-                You saved ₹{Number(appliedCoupon.calculatedDiscount || 0)} on this order!
-              </p>
-
-              <button
-                onClick={handleContinue}
-                className="w-full py-3 rounded-md text-white font-semibold"
-                style={{ backgroundColor: "#1E9A56" }}
-              >
-                Continue
-              </button>
-
-              <button
-                onClick={handleRemoveCoupon}
-                className="mt-3 text-sm text-gray-500"
-                style={{ background: "transparent" }}
-              >
-                Remove Coupon
-              </button>
-            </div>
+                <button
+                  onClick={handleRemoveCoupon}
+                  className="w-full py-2 text-xs font-bold text-gray-400 hover:text-red-500 transition-colors uppercase tracking-widest"
+                >
+                  Remove Coupon
+                </button>
+              </div>
+            </motion.div>
           </div>
         ) : (
           <>
-            <div className="flex flex-row gap-2 items-center justify-center w-full px-4 my-4">
-              <input
-                type="text"
-                onChange={(e) => handleSearch(e.target.value)}
-                value={searchTerm}
-                className="w-4/5 h-10 rounded-md pl-4"
-                placeholder="Enter Coupon Code"
-              />
-              <button
-                onClick={handleApply}
-                className="w-1/5 font-bold"
-                style={{ color: "#FF3269" }}
-              >
-                APPLY
-              </button>
+            <div className="px-6 py-4">
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  value={searchTerm}
+                  className="w-full h-14 rounded-2xl pl-6 pr-24 border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#6759ff]/20 focus:border-[#6759ff] transition-all outline-none text-sm font-bold placeholder:text-gray-300 shadow-inner"
+                  placeholder="Enter Coupon Code"
+                />
+                <button
+                  onClick={handleApply}
+                  className="absolute right-2 h-10 px-6 bg-white text-[#6759ff] font-black text-[10px] uppercase tracking-widest rounded-xl shadow-sm border border-gray-100 hover:bg-[#6759ff] hover:text-white transition-all active:scale-95"
+                >
+                  APPLY
+                </button>
+              </div>
             </div>
 
             {errorMsg && (
-              <div className="px-4">
-                <p className="text-sm text-red-500">{errorMsg}</p>
+              <div className="px-8 mb-2">
+                <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errorMsg}</p>
               </div>
             )}
 
             {/* List of coupons from server */}
-            <div className="flex flex-col gap-4 justify-center w-full px-4 my-2">
-              <h3 className="font-bold">Available Coupons</h3>
+            <div className="flex flex-col gap-4 justify-center w-full px-6 my-4">
+              <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-1">Available Coupons</h3>
 
               {(!coupons || coupons.length === 0) && (
-                <div className="p-4">
-                  <img src={NoResultFoundImg} alt="No coupons" />
+                <div className="p-8 flex flex-col items-center">
+                  <img src={NoResultFoundImg} alt="No coupons" className="w-32 h-32 opacity-20 mb-4" />
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">No active offers</p>
                 </div>
               )}
 
               {coupons?.map((cp, index) => (
                 <div
                   key={index}
-                  className="relative bg-white rounded-md shadow-md p-2 px-8 space-y-3"
+                  className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group overflow-hidden"
                 >
-                  <div className="flex flex-row justify-between">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-[#6759ff]" />
+                  <div className="flex flex-row justify-between items-start">
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold">{cp.coupon_name}</span>
+                      <span className="text-lg font-black text-gray-900 group-hover:text-[#6759ff] transition-colors">{cp.coupon_name}</span>
+                      <div className="mt-1">
+                        {cp?.amount != null && cp.amount !== "" ? (
+                          <span className="text-[10px] font-black bg-green-50 text-green-600 px-2 py-0.5 rounded-full border border-green-100 uppercase tracking-tighter">
+                            ₹{Number(cp.amount)} FLAT DISCOUNT
+                          </span>
+                        ) : cp?.percentage != null && cp.percentage !== "" ? (
+                          <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-tighter">
+                            {cp.percentage}% OFF ON TOTAL
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
-                    <div className="w-1/5">
-                      <button
-                        onClick={() => validateAndApply(cp.coupon_name)}
-                        className="font-bold"
-                        style={{ color: "#FF3269" }}
-                      >
-                        APPLY
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => validateAndApply(cp.coupon_name)}
+                      className="text-xs font-black text-[#6759ff] uppercase tracking-widest bg-[#eef5ff] px-4 py-2 rounded-lg hover:bg-[#6759ff] hover:text-white transition-all shadow-sm active:scale-95"
+                    >
+                      APPLY
+                    </button>
                   </div>
 
-                  <div className="" style={{ border: "1px dashed #E5E7EB" }}></div>
-
-                  <div>
-                    {cp?.amount != null && cp.amount !== "" ? (
-                      <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>
-                        ₹{Number(cp.amount)} OFF
-                      </p>
-                    ) : cp?.percentage != null && cp.percentage !== "" ? (
-                      <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>
-                        {cp.percentage}% OFF
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div
-                    className="absolute top-4 -left-4 w-3 h-3 md:w-7 md:h-7 rounded-full"
-                    style={{ backgroundColor: "#F6F1F7" }}
-                  ></div>
-                  <div
-                    className="absolute top-4 -right-4 w-3 h-3 md:w-7 md:h-7 rounded-full"
-                    style={{ backgroundColor: "#F6F1F7" }}
-                  ></div>
+                  {cp.description && (
+                    <p className="mt-3 text-[10px] text-gray-400 font-medium leading-relaxed italic">
+                      {cp.description}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from "react";
 import Cookies from "js-cookie";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -91,6 +91,7 @@ const Header = ({
     setCurrentLocation,
     pincode,
     prodData,
+    selectedAddrs,
   } = useCont();
 
   const [isListening, setIsListening] = useState(false);
@@ -267,6 +268,7 @@ const Header = ({
 
   useEffect(() => {
     getCurrentLocation();
+    getSearchProdData();
   }, []);
 
   const fetchSearchResults = async (term) => {
@@ -458,28 +460,52 @@ const Header = ({
     };
   }, [isSearchFocused]);
 
-  const offers = [
-    {
-      label: "RoachX Gel Treatment – ₹399*",
-      link: "/product/roachx-gel-treatment"
-    },
-    {
-      label: "General Pest Control – ₹899*",
-      link: "/subcategory/general-pest-control"
-    },
-    {
-      label: "Standard Cockroach Control – ₹999*",
-      link: "/subcategory/cockroach-control-services-in-bangalore"
-    },
-    {
-      label: "6D Prime Cockroach – ₹1199*",
-      link: "/product/cockroach-control-services-in-bangalore"
-    },
-    {
-      label: "Bedbugs Standard – ₹2499*",
-      link: "/subcategory/bed-bug-control-services-in-bangalore"
-    }
-  ];
+  const offers = useMemo(() => {
+    const staticOffers = [
+      {
+        name: "RoachX Gel Treatment",
+        link: "/product/roachx-gel-treatment",
+        defaultPrice: 399,
+        slug: "roachx-gel-treatment"
+      },
+      {
+        name: "General Pest Control",
+        link: "/subcategory/general-pest-control",
+        defaultPrice: 899,
+        slug: "general-pest-control"
+      },
+      {
+        name: "Standard Cockroach Control",
+        link: "/subcategory/cockroach-control-services-in-bangalore",
+        defaultPrice: 999,
+        slug: "cockroach-control-services-in-bangalore"
+      },
+      {
+        name: "6D Prime Cockroach",
+        link: "/product/cockroach-control-services-in-bangalore",
+        defaultPrice: 1199,
+        slug: "cockroach-control-services-in-bangalore"
+      },
+      {
+        name: "Bedbugs Standard",
+        link: "/subcategory/bed-bug-control-services-in-bangalore",
+        defaultPrice: 2499,
+        slug: "bed-bug-control-services-in-bangalore"
+      }
+    ];
+
+    return staticOffers.map(offer => {
+      const match = prodData?.find(p => p.slug === offer.slug);
+      let price = offer.defaultPrice;
+      if (match) {
+        price = match.discounted_price || match.product_price || offer.defaultPrice;
+      }
+      return {
+        label: `${offer.name} – ₹${price}*`,
+        link: offer.link
+      };
+    });
+  }, [prodData]);
 
 
   const [current, setCurrent] = useState(0);
@@ -934,16 +960,19 @@ const Header = ({
 
                         {/* Menu items */}
                         <div className="py-2">
-                          <NavLink
-                            to="/add-to-cart"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
+
+                          <button
+                            onClick={() => {
+                              setIsAddressModalOpen(true);
+                              setIsLoginOpen(false);
+                            }}
+                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 w-full group/item text-left"
                           >
                             <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <IoCartOutline className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
+                              <MdLocationOn className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
                             </div>
-                            <span className="font-medium">My Cart</span>
-                          </NavLink>
+                            <span className="font-medium">My Address</span>
+                          </button>
 
                           <NavLink
                             to="/my-bookings"
@@ -978,18 +1007,6 @@ const Header = ({
                             <span className="font-medium">My Wallet</span>
                           </NavLink>
 
-                          <button
-                            onClick={() => {
-                              setIsAddressModalOpen(true);
-                              setIsLoginOpen(false);
-                            }}
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 w-full group/item"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <MdLocationOn className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Your Addresses</span>
-                          </button>
 
                           <NavLink
                             to="/services"
@@ -1002,27 +1019,7 @@ const Header = ({
                             <span className="font-medium">Services</span>
                           </NavLink>
 
-                          <NavLink
-                            to="/register-free-listing"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <FaHandshake className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Join ONDC</span>
-                          </NavLink>
 
-                          <NavLink
-                            to="/help-us"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <FaHeadset className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Help</span>
-                          </NavLink>
 
                           <button
                             onClick={() => {
