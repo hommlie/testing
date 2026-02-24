@@ -156,7 +156,7 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
               whileHover={{ y: -5 }}
               className="flex flex-col items-center group cursor-pointer"
             >
-              <div className="relative mb-3 w-full aspect-square bg-[#FCF6E0] border border-[#eee4c5] rounded-2xl flex items-center justify-center p-1 shadow-sm transition-all duration-500 group-hover:brightness-95 group-hover:shadow-md">
+              <div className="relative mb-3 w-full aspect-square bg-[#FCF6E0] border border-[#eee4c5] rounded-2xl flex items-center justify-center p-1 shadow-sm transition-all duration-500 group-hover:border-[#035240] group-hover:shadow-md">
                 <img
                   src={sub.image}
                   alt={sub.name}
@@ -164,11 +164,11 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
                 />
               </div>
 
-              <div className="flex flex-col items-center text-center px-0.5">
-                <h3 className="text-[11px] sm:text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors leading-tight uppercase tracking-tight">
+              <div className="flex flex-col items-center text-center px-0.5 relative group/text">
+                <h3 className="text-[11px] sm:text-[14px] font-semibold text-[#033053]/90 group-hover:text-[#035240] transition-all duration-300 leading-tight uppercase tracking-tight">
                   {sub.name}
                 </h3>
-                <div className="h-0.5 w-0 group-hover:w-6 bg-[#0463ac]/40 rounded-full mt-1.5 transition-all duration-500" />
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#035240] transition-all duration-300 group-hover:w-[90%] opacity-0 group-hover:opacity-100" />
               </div>
 
               {sub.price && (
@@ -372,7 +372,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                       ease: "easeInOut",
                       delay: index * 0.1
                     }}
-                    className="w-full h-28 sm:h-36 bg-[#FCF6E0] border border-[#eee4c5] shadow-sm rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:brightness-95 group-hover:shadow-md"
+                    className="w-full h-28 sm:h-36 bg-[#FCF6E0] border border-[#eee4c5] shadow-sm rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:border-[#035240] group-hover:shadow-md"
                   >
                     <img
                       src={(() => {
@@ -390,9 +390,12 @@ const ServiceGrid = ({ categories: propCategories }) => {
                 </div>
 
                 <div className="flex flex-col items-center text-center z-10 w-full px-1">
-                  <span className="text-[10px] sm:text-[13px] font-bold text-[#033053]/90 group-hover:text-[#0463ac] transition-all duration-300 leading-tight uppercase tracking-tight whitespace-nowrap overflow-hidden text-ellipsis w-full">
-                    {name}
-                  </span>
+                  <div className="relative group/text">
+                    <span className="text-[10px] sm:text-[13px] font-bold text-[#033053]/90 group-hover:text-[#035240] transition-all duration-300 leading-tight uppercase tracking-tight whitespace-nowrap overflow-hidden text-ellipsis w-full">
+                      {name}
+                    </span>
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#035240] transition-all duration-300 group-hover:w-full opacity-0 group-hover:opacity-100" />
+                  </div>
 
 
                 </div>

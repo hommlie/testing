@@ -122,7 +122,7 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
                 whileHover={{ y: -5 }}
                 className="flex flex-col items-center group w-full"
               >
-                <div className="w-full aspect-square bg-[#FCF6E0] border border-[#eee4c5] rounded-2xl flex items-center justify-center p-1 mb-3 shadow-sm transition-all duration-300 group-hover:brightness-95 group-hover:shadow-md">
+                <div className="w-full aspect-square bg-[#FCF6E0] border border-[#eee4c5] rounded-2xl flex items-center justify-center p-1 mb-3 shadow-sm transition-all duration-300 group-hover:border-[#035240] group-hover:shadow-md">
                   <img
                     className="w-[95%] h-[95%] object-contain transition-transform duration-500 group-hover:scale-110"
                     src={category?.image_url}
@@ -130,9 +130,12 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
                     loading="lazy"
                   />
                 </div>
-                <h5 className="text-[11px] md:text-sm font-bold text-[#033053] text-center line-clamp-2 transition-colors duration-300 group-hover:text-[#0463ac] leading-tight px-1">
-                  {category?.subcategory_name}
-                </h5>
+                <div className="relative group/text">
+                  <h5 className="text-[11px] md:text-sm font-bold text-[#033053]/90 text-center line-clamp-2 transition-all duration-300 group-hover:text-[#035240] leading-tight px-1">
+                    {category?.subcategory_name}
+                  </h5>
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#035240] transition-all duration-300 group-hover:w-[80%] opacity-0 group-hover:opacity-100" />
+                </div>
               </motion.div>
             </motion.div>
           ))}
