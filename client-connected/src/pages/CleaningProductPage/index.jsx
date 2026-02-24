@@ -775,27 +775,27 @@ const CleaningProductPage = () => {
                 </div>
 
                 <section className="bg-white md:bg-white rounded-none md:rounded-2xl p-4 md:p-6 space-y-4 shadow-none md:shadow-[0_4px_20px_rgba(0,0,0,0.03)] mt-0 md:mt-0 border-none md:border md:border-gray-100 mx-0 md:mx-0 border-b border-gray-200 pb-2 md:pb-6">
-                  <div className="flex justify-between items-center mb-1">
+                  <div className="flex justify-between items-center mb-4">
                     <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] text-gray-900">Services</span>
                     <span className="text-[9px] md:text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-bold">
                       {innerSubCategoryData?.products?.length} Items
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 max-h-[calc(100vh-22rem)] overflow-y-auto custom-scrollbar pr-1.5">
+                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 max-h-[calc(100vh-22rem)] overflow-y-auto overflow-x-hidden custom-scrollbar pr-1.5">
                     {innerSubCategoryData?.products?.map((product, index) => (
                       <motion.div
                         key={product.id}
                         whileHover={{
-                          x: index === currentProductIndex ? 0 : 6,
+                          x: index === currentProductIndex ? 0 : 4,
                         }}
-                        className={`group flex flex-col md:flex-row items-center gap-2.5 md:gap-4 p-1.5 md:p-3 rounded-xl cursor-pointer transition-all duration-300 border ${index === currentProductIndex
+                        className={`group flex flex-col md:flex-row items-center gap-2.5 md:gap-3 p-1.5 md:p-2 rounded-xl cursor-pointer transition-all duration-300 border ${index === currentProductIndex
                           ? "bg-white border-[#0463ac]/30 shadow-sm"
                           : "border-transparent hover:bg-gray-50/50"
                           }`}
                         onClick={() => handleProductClick(index)}
                       >
-                        <div className={`w-full md:w-20 md:h-20 aspect-square rounded-lg md:rounded-xl flex items-center justify-center overflow-hidden shrink-0 transition-all duration-300 bg-gray-50 ${index === currentProductIndex ? "shadow-sm" : ""}`}>
+                        <div className={`w-full md:w-24 md:h-24 aspect-square rounded-lg md:rounded-xl flex items-center justify-center overflow-hidden shrink-0 transition-all duration-300 bg-gray-50 ${index === currentProductIndex ? "shadow-sm" : ""}`}>
                           {product.productimages && product.productimages.length > 0 ? (
                             <img
                               src={product.productimages[0]?.image_url}
@@ -806,7 +806,7 @@ const CleaningProductPage = () => {
                             <ShoppingBag className="w-6 h-6 md:w-8 md:h-8 text-gray-200" />
                           )}
                         </div>
-                        <p className={`w-full text-[12px] md:text-[13px] font-semibold text-center md:text-left break-words px-1 leading-tight transition-all duration-300 ${index === currentProductIndex ? "text-black scale-[1.02] origin-left" : "text-gray-900 group-hover:text-black group-hover:translate-x-1"}`}>
+                        <p className={`flex-1 min-w-0 text-[12px] md:text-[13px] font-semibold text-center md:text-left px-1 mt-1 md:mt-0 leading-snug transition-all duration-300 ${index === currentProductIndex ? "text-black" : "text-gray-600 group-hover:text-black group-hover:translate-x-1"}`}>
                           {product.product_name}
                         </p>
                       </motion.div>

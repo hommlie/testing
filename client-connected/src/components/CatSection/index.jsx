@@ -120,15 +120,17 @@ export default function CategorySlider({ title, categories, openSubCatModal }) {
             >
               <motion.div
                 whileHover={{ y: -5 }}
-                className="flex flex-col items-center group"
+                className="flex flex-col items-center group w-full"
               >
-                <img
-                  className="w-full aspect-square object-contain transition-transform duration-500 group-hover:scale-105"
-                  src={category?.image_url}
-                  alt={category?.subcategory_name}
-                  loading="lazy"
-                />
-                <h5 className="text-[11px] md:text-sm font-bold text-[#033053] text-center mt-3 line-clamp-2 transition-colors duration-300 group-hover:text-[#0463ac] leading-tight px-1">
+                <div className="w-full aspect-square bg-[#FCF6E0] border border-[#eee4c5] rounded-2xl flex items-center justify-center p-1 mb-3 shadow-sm transition-all duration-300 group-hover:brightness-95 group-hover:shadow-md">
+                  <img
+                    className="w-[95%] h-[95%] object-contain transition-transform duration-500 group-hover:scale-110"
+                    src={category?.image_url}
+                    alt={category?.subcategory_name}
+                    loading="lazy"
+                  />
+                </div>
+                <h5 className="text-[11px] md:text-sm font-bold text-[#033053] text-center line-clamp-2 transition-colors duration-300 group-hover:text-[#0463ac] leading-tight px-1">
                   {category?.subcategory_name}
                 </h5>
               </motion.div>

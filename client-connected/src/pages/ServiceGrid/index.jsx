@@ -156,11 +156,11 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
               whileHover={{ y: -5 }}
               className="flex flex-col items-center group cursor-pointer"
             >
-              <div className="relative mb-1 w-full aspect-square flex items-center justify-center p-0 transition-all duration-500">
+              <div className="relative mb-3 w-full aspect-square bg-[#FCF6E0] border border-[#eee4c5] rounded-2xl flex items-center justify-center p-1 shadow-sm transition-all duration-500 group-hover:brightness-95 group-hover:shadow-md">
                 <img
                   src={sub.image}
                   alt={sub.name}
-                  className="w-24 h-24 sm:w-32 sm:h-32 object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-md"
+                  className="w-[95%] h-[95%] object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-sm"
                 />
               </div>
 
@@ -372,7 +372,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                       ease: "easeInOut",
                       delay: index * 0.1
                     }}
-                    className="w-full aspect-[1.7/1] sm:aspect-[2/1] bg-[#f5f5f5] sm:bg-gray-50 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:bg-blue-50 group-hover:shadow-md group-hover:shadow-[#0463ac]/10"
+                    className="w-full h-28 sm:h-36 bg-[#FCF6E0] border border-[#eee4c5] shadow-sm rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:brightness-95 group-hover:shadow-md"
                   >
                     <img
                       src={(() => {
@@ -384,7 +384,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                         return rawImage;
                       })()}
                       alt={name}
-                      className="w-20 h-20 sm:w-24 sm:h-24 object-contain transition-transform duration-500 group-hover:scale-110"
+                      className="w-[90%] h-[90%] object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-sm"
                     />
                   </motion.div>
                 </div>
@@ -394,16 +394,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
                     {name}
                   </span>
 
-                  {name.toLowerCase().includes("home pest control") && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-1 mt-1.5 bg-gradient-to-r from-[#0463ac] to-[#03528b] px-2 py-0.5 rounded-full shadow-lg shadow-[#0463ac]/20"
-                    >
-                      <Zap size={8} className="text-white fill-white animate-pulse" />
-                      <span className="text-[7px] font-black text-white uppercase tracking-widest whitespace-nowrap">Insta Service</span>
-                    </motion.div>
-                  )}
+
                 </div>
               </motion.div>
             );

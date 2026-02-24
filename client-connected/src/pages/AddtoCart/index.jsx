@@ -578,7 +578,7 @@ export default function AddtoCart() {
   return (
     <div className="bg-white min-h-screen font-sans text-[#212121]">
 
-      <div className="max-w-[1100px] mx-auto px-4 py-8 pb-32 lg:pb-8">
+      <div className="max-w-[1100px] mx-auto px-4 py-8 pb-10 lg:pb-8">
         <LoginSignup isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
 
         {cart.length === 0 ? (
@@ -594,15 +594,15 @@ export default function AddtoCart() {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="flex flex-col-reverse lg:flex-row gap-8 items-start">
             {/* Left Column: Progress Steps */}
             <div className="flex-1 space-y-6">
               {couponDiscount > 0 && (
-                <div className="bg-[#e7f9f3] p-4 rounded-xl flex items-center gap-3 border border-[#c3f2e3]">
+                <div className="bg-[#eef2ff] p-4 rounded-xl flex items-center gap-3 border border-[#dee8ff]">
                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
-                    <BiSolidOffer className="text-[#00a871] text-xl" />
+                    <BiSolidOffer className="text-[#0463ac] text-xl" />
                   </div>
-                  <span className="text-[#00a871] font-bold text-sm">Saving ₹{couponDiscount?.toFixed(0)} on this order</span>
+                  <span className="text-[#0463ac] font-bold text-sm">Saving ₹{couponDiscount?.toFixed(0)} on this order</span>
                 </div>
               )}
 
@@ -610,8 +610,8 @@ export default function AddtoCart() {
                 {/* Step 1: Booking Details */}
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex gap-4">
-                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
-                      <MdOutlineSendToMobile className="text-gray-600 text-lg" />
+                    <div className="w-8 h-8 bg-blue-50 rounded flex items-center justify-center shrink-0">
+                      <MdOutlineSendToMobile className="text-[#0463ac] text-lg" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-base font-bold mb-1">Send booking details to</h3>
@@ -633,27 +633,27 @@ export default function AddtoCart() {
                 {/* Step 2: Address */}
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex gap-4">
-                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
-                      <HiOutlineLocationMarker className="text-gray-600 text-lg" />
+                    <div className="w-8 h-8 bg-blue-50 rounded flex items-center justify-center shrink-0">
+                      <HiOutlineLocationMarker className="text-[#0463ac] text-lg" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-base font-bold mb-4">Address</h3>
                       {selectedAddrs ? (
                         <div className="relative group">
-                          <div className="p-4 rounded-lg bg-gray-50 border border-gray-100 group-hover:border-[#6759ff]/30 transition-all">
+                          <div className="p-4 rounded-lg bg-gray-50 border border-gray-100 group-hover:border-[#0463ac]/30 transition-all">
                             <p className="font-bold text-sm mb-1">{selectedAddrs.name}</p>
-                            <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                            <p className="text-xs text-gray-500 leading-relaxed font-semibold">
                               {selectedAddrs.address}, {selectedAddrs.landmark}, {selectedAddrs.pincode}
                             </p>
                           </div>
-                          <button onClick={openAddressModal} className="mt-3 text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                          <button onClick={openAddressModal} className="mt-3 text-[#0463ac] text-sm font-bold uppercase tracking-wider hover:underline">
                             Change Address
                           </button>
                         </div>
                       ) : (
                         <button
                           onClick={openAddressModal}
-                          className="w-full py-4 bg-[#6759ff] text-white font-bold rounded-lg hover:bg-[#5446e5] shadow-md shadow-[#6759ff]/20 transition-all active:scale-[0.98]"
+                          className="w-full py-4 bg-[#0463ac] text-white font-bold rounded-lg hover:bg-[#03528b] shadow-md shadow-[#0463ac]/20 transition-all active:scale-[0.98]"
                         >
                           Select address
                         </button>
@@ -665,8 +665,8 @@ export default function AddtoCart() {
                 {/* Step 3: Slot */}
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex gap-4">
-                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
-                      <RiTimerLine className="text-gray-400 text-lg" />
+                    <div className="w-8 h-8 bg-blue-50 rounded flex items-center justify-center shrink-0">
+                      <RiTimerLine className="text-[#0463ac] text-lg" />
                     </div>
                     <div className="flex-1">
                       <h3 className={`text-base font-bold ${!selectedDayTime?.date?.day ? 'text-gray-300' : 'text-[#212121]'}`}>Slot</h3>
@@ -674,15 +674,15 @@ export default function AddtoCart() {
                         <div className="mt-4 flex items-center justify-between">
                           <div>
                             <p className="font-bold text-sm">{selectedDayTime.date.day}, {selectedDayTime.date.month} {selectedDayTime.date.date}</p>
-                            <p className="text-xs text-[#6759ff] font-bold mt-1">{selectedDayTime.time}</p>
+                            <p className="text-xs text-[#0463ac] font-bold mt-1">{selectedDayTime.time}</p>
                           </div>
-                          <button onClick={openDateTimeModal} className="text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                          <button onClick={openDateTimeModal} className="text-[#0463ac] text-sm font-bold uppercase tracking-wider hover:underline">
                             Reschedule
                           </button>
                         </div>
                       ) : (
                         selectedAddrs && (
-                          <button onClick={openDateTimeModal} className="mt-4 text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                          <button onClick={openDateTimeModal} className="mt-4 text-[#0463ac] text-sm font-bold uppercase tracking-wider hover:underline">
                             Select date & time
                           </button>
                         )
@@ -694,8 +694,8 @@ export default function AddtoCart() {
                 {/* Step 4: Payment Method */}
                 <div className="p-6">
                   <div className="flex gap-4">
-                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center shrink-0">
-                      <FaCreditCard className="text-gray-400 text-lg" />
+                    <div className="w-8 h-8 bg-blue-50 rounded flex items-center justify-center shrink-0">
+                      <FaCreditCard className="text-[#0463ac] text-lg" />
                     </div>
                     <div className="flex-1">
                       <h3 className={`text-base font-bold ${!paymentType ? 'text-gray-300' : 'text-[#212121]'}`}>Payment Method</h3>
@@ -703,9 +703,9 @@ export default function AddtoCart() {
                         <div className="mt-4 flex items-center justify-between">
                           <div>
                             <p className="font-bold text-sm">{paymentType.payment_name}</p>
-                            <p className="text-[10px] text-gray-400 font-medium">Secure Transaction</p>
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Secure Transaction</p>
                           </div>
-                          <button onClick={() => setPaymentType(null)} className="text-[#6759ff] text-sm font-bold uppercase tracking-wider hover:underline">
+                          <button onClick={() => setPaymentType(null)} className="text-[#0463ac] text-sm font-bold uppercase tracking-wider hover:underline">
                             Change
                           </button>
                         </div>
@@ -718,7 +718,7 @@ export default function AddtoCart() {
                                 onClick={() => handlePaymentChange({ target: { value: pm.id } })}
                                 className="p-4 border rounded-xl text-left hover:border-[#6759ff] transition-all group"
                               >
-                                <span className="block font-bold text-sm group-hover:text-[#6759ff]">{pm.payment_name}</span>
+                                <span className="block font-bold text-sm group-hover:text-[#0463ac]">{pm.payment_name}</span>
                                 <span className="block text-[10px] text-gray-400 uppercase tracking-widest font-bold">Secure Payment</span>
                               </button>
                             ))}
@@ -735,7 +735,7 @@ export default function AddtoCart() {
                     <button
                       onClick={handleProceed}
                       disabled={isLoading}
-                      className="w-full py-4 bg-[#6759ff] text-white font-bold rounded-xl shadow-lg shadow-[#6759ff]/20 hover:bg-[#5446e5] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:grayscale disabled:hover:translate-y-0"
+                      className="w-full py-4 bg-[#0463ac] text-white font-bold rounded-xl shadow-lg shadow-[#0463ac]/20 hover:bg-[#03528b] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:grayscale disabled:hover:translate-y-0"
                     >
                       {isLoading ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -788,12 +788,12 @@ export default function AddtoCart() {
                           <div className="flex items-center bg-[#f2f4f6] rounded px-1 py-1 h-8 border border-gray-100 shadow-inner">
                             <button
                               onClick={() => handleQtyUpdate(pd.id, pd.qty - 1)}
-                              className="w-6 h-6 flex items-center justify-center text-[#6759ff] text-lg font-bold hover:bg-white rounded transition-colors"
+                              className="w-6 h-6 flex items-center justify-center text-[#0463ac] text-lg font-bold hover:bg-white rounded transition-colors"
                             >–</button>
                             <span className="w-6 text-center text-xs font-bold">{pd.qty}</span>
                             <button
                               onClick={() => handleQtyUpdate(pd.id, pd.qty + 1)}
-                              className="w-6 h-6 flex items-center justify-center text-[#6759ff] text-lg font-bold hover:bg-white rounded transition-colors"
+                              className="w-6 h-6 flex items-center justify-center text-[#0463ac] text-lg font-bold hover:bg-white rounded transition-colors"
                             >+</button>
                           </div>
                           <p className="text-sm font-bold">₹{pd.price * pd.qty}</p>
@@ -810,8 +810,8 @@ export default function AddtoCart() {
                 className="w-full bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#eef5ff] rounded flex items-center justify-center">
-                    <BiSolidOffer className="text-[#6759ff] text-xl" />
+                  <div className="w-10 h-10 bg-[#eef2ff] rounded flex items-center justify-center">
+                    <BiSolidOffer className="text-[#0463ac] text-xl" />
                   </div>
                   <div className="text-left">
                     <p className="text-sm font-bold">{selectedCoupon ? selectedCoupon.coupon_name : "Coupons and offers"}</p>
@@ -839,14 +839,14 @@ export default function AddtoCart() {
                     </div>
                   )}
                   {walletApplied && effectiveWalletUse > 0 && (
-                    <div className="flex justify-between items-center text-sm font-bold text-[#6759ff]">
+                    <div className="flex justify-between items-center text-sm font-bold text-[#0463ac]">
                       <span>Wallet Credit</span>
                       <span>-₹{effectiveWalletUse.toFixed(0)}</span>
                     </div>
                   )}
                   <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
                     <span className="text-base font-bold text-gray-900">Total amount</span>
-                    <span className="text-lg font-black text-gray-900">₹{totalAmount?.toFixed(0)}</span>
+                    <span className="text-lg font-bold text-gray-900">₹{totalAmount?.toFixed(0)}</span>
                   </div>
                 </div>
 
@@ -900,7 +900,7 @@ export default function AddtoCart() {
         <button
           onClick={handleProceed}
           disabled={!selectedAddrs || !selectedDayTime || !paymentType}
-          className="bg-[#6759ff] text-white px-8 py-3 rounded-lg font-bold text-sm shadow-lg shadow-[#6759ff]/20 disabled:bg-gray-300 disabled:shadow-none"
+          className="bg-[#0463ac] text-white px-8 py-3 rounded-lg font-bold text-sm shadow-lg shadow-[#0463ac]/20 disabled:bg-gray-300 disabled:shadow-none"
         >
           {isLoading ? "Processing..." : "Proceed to Payment"}
         </button>
