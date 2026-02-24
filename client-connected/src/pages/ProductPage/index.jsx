@@ -10,6 +10,7 @@ import {
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { CiClock1 } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { ChevronDown } from "lucide-react";
 import LoginSignup from "../../components/LoginModal";
 import cartBag from "../../assets/images/cart-bag.png";
 import "./index.css";
@@ -31,6 +32,8 @@ import { BiSolidOffer } from "react-icons/bi";
 import Rating from "../../components/Rating";
 import ShareButton from "../ShareButtonservcies";
 import Breadcrumb from "../../components/Breadcrumb";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShoppingBag, ArrowRight } from "lucide-react";
 
 export default function ProductPage() {
   const {
@@ -97,6 +100,7 @@ export default function ProductPage() {
     sqft: null,
     total_amount: 0,
   });
+  const [isCartExpanded, setIsCartExpanded] = useState(false);
 
   const timeSlots = [
     "9 to 11 AM",
@@ -1601,6 +1605,53 @@ export default function ProductPage() {
         isOpen={isInspectionModalOpen}
         onClose={() => setIsInspectionModalOpen(false)}
       />
+
+      {/* Mobile Floating Cart Summary */}
+      <AnimatePresence>
+        {cart?.length > 0 && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="lg:hidden fixed bottom-6 left-0 right-0 z-[40] flex justify-center px-4"
+          >
+            <motion.div
+              whileTap={{ scale: 0.96 }}
+              onClick={() => navigate('/add-to-cart')}
+              className="bg-[#008000] rounded-full shadow-[0_12px_30px_rgba(0,128,0,0.4)] overflow-hidden flex items-center gap-[10px] p-1.5 pl-1.5 pr-3.5 cursor-pointer border border-white/10 max-w-max"
+            >
+              {/* Left: Thumbnail Circle */}
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden shrink-0 border-2 border-white/15 shadow-sm">
+                {cart[cart.length - 1]?.product_image ? (
+                  <img
+                    src={`${config.API_URL}/public/product_images/${cart[cart.length - 1].product_image}`}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <ShoppingBag className="w-4 h-4 text-[#008000]" />
+                )}
+              </div>
+
+              {/* Center: Info */}
+              <div className="text-left py-0.5">
+                <h4 className="text-[14px] font-extrabold text-white leading-tight">View cart</h4>
+                <p className="text-[11px] font-medium text-white/80 leading-none">
+                  {cart.length} {cart.length > 1 ? 'items' : 'item'}
+                </p>
+              </div>
+
+              {/* Right: Price & Arrow */}
+              <div className="flex items-center gap-2 pl-2 border-l border-white/15">
+                <span className="text-[15px] font-black text-white">₹{cart.reduce((acc, curr) => acc + (Number(curr.price) * curr.qty), 0)}</span>
+                <div className="bg-white/20 p-1 rounded-full">
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

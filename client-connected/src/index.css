@@ -68,3 +68,11 @@
   top: var(--header-height);
   position: sticky;
 }
+
+/* Nudge third-party WhatsApp widget (AISensy) higher to clear cart bar */
+#aisensy-wa-widget,
+#aisensy-wa-widget-container,
+[id^='aisensy-wa-widget'] {
+  bottom: 75px !important;
+  z-index: 100 !important;
+}
