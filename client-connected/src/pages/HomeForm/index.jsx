@@ -132,22 +132,27 @@ const HomeForm = () => {
       </motion.div>
 
       {/* Premium Success Popup */}
-      <AnimatePresence>
-        {showPopup &&
-          typeof document !== "undefined" &&
-          createPortal(
+      {showPopup &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
             <motion.div
+              key="homeform-popup-overlay"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 flex items-center justify-center bg-[#033053]/40 backdrop-blur-md z-[999999]"
+              className="fixed inset-0 flex items-center justify-center bg-[#033053]/50 backdrop-blur-sm z-[9999999]"
+              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+              onClick={() => setShowPopup(false)}
             >
               <motion.div
-                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                key="homeform-popup-card"
+                initial={{ scale: 0.8, opacity: 0, y: 30 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                exit={{ scale: 0.8, opacity: 0, y: 30 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_-15px_rgba(0,0,0,0.5)] p-8 sm:p-12 w-[92%] max-w-md text-center border border-white relative overflow-hidden"
+                className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_-15px_rgba(0,0,0,0.5)] p-8 sm:p-12 w-[92%] max-w-md text-center border border-white relative overflow-hidden mx-4"
+                onClick={(e) => e.stopPropagation()}
               >
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0463ac] to-[#25D366]" />
 
@@ -175,15 +180,15 @@ const HomeForm = () => {
 
                 <button
                   onClick={() => setShowPopup(false)}
-                  className="w-full py-4 bg-[#0463ac] hover:bg-[#03528b] text-white font-black text-[12px] uppercase tracking-widest rounded-2l shadow-lg shadow-[#0463ac]/20 transition-all duration-300"
+                  className="w-full py-4 bg-[#0463ac] hover:bg-[#03528b] text-white font-black text-[12px] uppercase tracking-widest rounded-2xl shadow-lg shadow-[#0463ac]/20 transition-all duration-300"
                 >
                   GOT IT
                 </button>
               </motion.div>
-            </motion.div>,
-            document.body
-          )}
-      </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>,
+          document.body
+        )}
     </div>
   );
 };

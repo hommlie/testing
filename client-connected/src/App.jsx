@@ -17,6 +17,7 @@ import "./App.css";
 // import FloatingPromoDrawer from "./pages/FloatingPromoDrawer";
 // import MobileBottomLeftCTA from "./pages/MobileBottomLeftCTA";
 import NewYearPopup from "./components/NewYearPopup";
+import WhatsAppWidget from "./components/WhatsAppWidget";
 
 function SEOHelmet({ settings }) {
   const location = useLocation();
@@ -115,6 +116,8 @@ function App() {
               {/* <HomeOnlyCTA /> */}
 
               {/* <NewYearPopup /> */}
+
+              <WhatsAppWidget />
 
               <Footer
                 logo={settings?.logo}
