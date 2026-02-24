@@ -57,6 +57,13 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     }
   }, [isOtpSent]);
 
+  useEffect(() => {
+    const otpString = otp.join("");
+    if (otpString.length === 4 && name.trim() !== "" && isOtpSent && !isLoading) {
+      handleProceed();
+    }
+  }, [otp, name, isOtpSent]);
+
   if (!isOpen) return null;
 
   const isLoginButtonEnabled = phone.length === 10 && termsAccepted;
@@ -134,7 +141,8 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   };
 
   const handleProceed = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    if (isLoading) return;
     setIsLoading(true);
     try {
       const newOtp = Number(otp.join(""));
@@ -316,14 +324,14 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
                 (isOtpSent ? !isOtpButtonEnabled : !isLoginButtonEnabled)
               }
               className={`w-full py-3.5 px-4 rounded-lg font-semibold text-white transition-all ${isLoading
-                  ? "bg-[#02876A] cursor-wait"
-                  : isOtpSent
-                    ? isOtpButtonEnabled && termsAccepted
-                      ? "bg-[#035240] hover:bg-[#024235]"
-                      : "bg-gray-300 cursor-not-allowed"
-                    : isLoginButtonEnabled
-                      ? "bg-[#035240] hover:bg-[#024235]"
-                      : "bg-gray-300 cursor-not-allowed"
+                ? "bg-[#02876A] cursor-wait"
+                : isOtpSent
+                  ? isOtpButtonEnabled && termsAccepted
+                    ? "bg-[#035240] hover:bg-[#024235]"
+                    : "bg-gray-300 cursor-not-allowed"
+                  : isLoginButtonEnabled
+                    ? "bg-[#035240] hover:bg-[#024235]"
+                    : "bg-gray-300 cursor-not-allowed"
                 }`}
             >
               {isLoading ? (
@@ -542,14 +550,14 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
                     (isOtpSent ? !isOtpButtonEnabled : !isLoginButtonEnabled)
                   }
                   className={`w-full py-3.5 px-4 rounded-lg font-semibold text-white transition-all ${isLoading
-                      ? "bg-[#02876A] cursor-wait"
-                      : isOtpSent
-                        ? isOtpButtonEnabled && termsAccepted
-                          ? "bg-[#035240] hover:bg-[#024235]"
-                          : "bg-gray-300 cursor-not-allowed"
-                        : isLoginButtonEnabled
-                          ? "bg-[#035240] hover:bg-[#024235]"
-                          : "bg-gray-300 cursor-not-allowed"
+                    ? "bg-[#02876A] cursor-wait"
+                    : isOtpSent
+                      ? isOtpButtonEnabled && termsAccepted
+                        ? "bg-[#035240] hover:bg-[#024235]"
+                        : "bg-gray-300 cursor-not-allowed"
+                      : isLoginButtonEnabled
+                        ? "bg-[#035240] hover:bg-[#024235]"
+                        : "bg-gray-300 cursor-not-allowed"
                     }`}
                 >
                   {isLoading ? (

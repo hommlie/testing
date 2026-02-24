@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CheckCircle, Phone, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 import axios from "axios";
 import config from "../../config/config";
 
@@ -132,53 +133,56 @@ const HomeForm = () => {
 
       {/* Premium Success Popup */}
       <AnimatePresence>
-        {showPopup && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-[#033053]/30 backdrop-blur-md z-[9999]"
-          >
+        {showPopup &&
+          typeof document !== "undefined" &&
+          createPortal(
             <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-white rounded-[3rem] shadow-[0_30px_80px_-15px_rgba(0,0,0,0.3)] p-12 w-[90%] max-w-md text-center border border-white relative overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 flex items-center justify-center bg-[#033053]/40 backdrop-blur-md z-[999999]"
             >
-              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0463ac] to-[#25D366]" />
-
-              <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8 relative">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: "spring" }}
-                >
-                  <CheckCircle className="text-green-500 w-12 h-12" strokeWidth={3} />
-                </motion.div>
-                <motion.div
-                  className="absolute inset-0 rounded-full border-4 border-green-100"
-                  animate={{ scale: [1, 1.2, 1], opacity: [1, 0, 1] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                />
-              </div>
-
-              <h3 className="text-3xl font-bold text-[#033053] mb-4 tracking-tighter text-center">
-                REQUEST SENT!
-              </h3>
-              <p className="text-gray-500 font-bold text-[15px] leading-relaxed mb-8">
-                We've received your request. One of our experts will call you back shortly.
-              </p>
-
-              <button
-                onClick={() => setShowPopup(false)}
-                className="w-full py-4 bg-gray-50 hover:bg-gray-100 text-[#033053] font-black text-[12px] uppercase tracking-widest rounded-2xl transition-all duration-300"
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_-15px_rgba(0,0,0,0.5)] p-8 sm:p-12 w-[92%] max-w-md text-center border border-white relative overflow-hidden"
               >
-                GOT IT
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0463ac] to-[#25D366]" />
+
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 relative">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: "spring" }}
+                  >
+                    <CheckCircle className="text-green-500 w-10 h-10 sm:w-12 sm:h-12" strokeWidth={3} />
+                  </motion.div>
+                  <motion.div
+                    className="absolute inset-0 rounded-full border-4 border-green-100"
+                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0, 1] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                  />
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#033053] mb-4 tracking-tighter text-center">
+                  REQUEST SENT!
+                </h3>
+                <p className="text-gray-500 font-bold text-[14px] sm:text-[15px] leading-relaxed mb-8">
+                  We've received your request. One of our experts will call you back shortly.
+                </p>
+
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="w-full py-4 bg-[#0463ac] hover:bg-[#03528b] text-white font-black text-[12px] uppercase tracking-widest rounded-2l shadow-lg shadow-[#0463ac]/20 transition-all duration-300"
+                >
+                  GOT IT
+                </button>
+              </motion.div>
+            </motion.div>,
+            document.body
+          )}
       </AnimatePresence>
     </div>
   );

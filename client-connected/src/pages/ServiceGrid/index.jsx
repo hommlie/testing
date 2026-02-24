@@ -331,7 +331,7 @@ const ServiceGrid = ({ categories: propCategories }) => {
               }
             }}
           >
-            Premium Home PestControl Services
+            Premium Home Pest Control Services
           </motion.span>
           <motion.div
             className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"

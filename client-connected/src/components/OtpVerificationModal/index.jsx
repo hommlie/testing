@@ -7,6 +7,7 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
     const [otp, setOtp] = useState(['', '', '', '']);
     const [counter, setCounter] = useState(60);
     const [isOtpSent, setIsOtpSent] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const otpRefs = useRef([]);
 
     useEffect(() => {
@@ -48,10 +49,10 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
 
     const handleSendOtp = async () => {
         try {
-            const response = await axios.post(`${config.API_URL}/api/register`, { 
+            const response = await axios.post(`${config.API_URL}/api/register`, {
                 mobile: `+91${phone}`
             });
-            
+
             if (response.data.status === 1) {
                 setIsOtpSent(true);
                 setCounter(60);
@@ -67,10 +68,10 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
 
     const handleResendOtp = async () => {
         try {
-            const response = await axios.post(`${config.API_URL}/api/resendotp`, { 
+            const response = await axios.post(`${config.API_URL}/api/resendotp`, {
                 mobile: `+91${phone}`
             });
-            
+
             if (response.data.status === 1) {
                 setCounter(60);
                 setIsOtpSent(true);
@@ -83,14 +84,18 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
         }
     };
 
-    const handleVerifyOtp = async () => {
+    const handleVerifyOtp = async (otpToVerify) => {
+        const verifyOtpValue = otpToVerify || otp.join("");
+        if (verifyOtpValue.length !== 4 || isLoading) return;
+
+        setIsLoading(true);
         try {
-            const otpNumber = Number(otp.join(""));
-            const response = await axios.post(`${config.API_URL}/api/verifyotp`, { 
-                mobile: `+91${phone}`, 
+            const otpNumber = Number(verifyOtpValue);
+            const response = await axios.post(`${config.API_URL}/api/verifyotp`, {
+                mobile: `+91${phone}`,
                 otp: otpNumber,
             });
-            
+
             if (response.data.status === 1) {
                 onVerificationSuccess();
             } else {
@@ -102,8 +107,17 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
             alert(error.response?.data?.message || "Failed to verify OTP");
             setOtp(['', '', '', '']);
             otpRefs.current[0].focus();
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        const otpString = otp.join("");
+        if (otpString.length === 4) {
+            handleVerifyOtp(otpString);
+        }
+    }, [otp]);
 
     if (!isOpen) return null;
 
@@ -135,8 +149,8 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
                 </div>
 
                 <div className="flex justify-between items-center mb-6">
-                    <button 
-                        onClick={handleResendOtp} 
+                    <button
+                        onClick={handleResendOtp}
                         className={`text-sm ${counter === 0 ? 'text-[#035240] hover:underline' : 'text-gray-400'}`}
                         disabled={counter > 0}
                     >
@@ -148,13 +162,12 @@ const OtpVerificationModal = ({ isOpen, phone, onVerificationSuccess }) => {
                 </div>
 
                 <button
-                    className={`w-full py-3 rounded-lg text-white font-semibold transition-colors ${
-                        otp.every(digit => digit) ? 'bg-[#035240] hover:bg-green-700' : 'bg-gray-300'
-                    }`}
-                    disabled={!otp.every(digit => digit)}
-                    onClick={handleVerifyOtp}
+                    className={`w-full py-3 rounded-lg text-white font-semibold transition-colors ${otp.every(digit => digit) && !isLoading ? 'bg-[#035240] hover:bg-green-700' : 'bg-gray-300'
+                        }`}
+                    disabled={!otp.every(digit => digit) || isLoading}
+                    onClick={() => handleVerifyOtp()}
                 >
-                    Verify OTP
+                    {isLoading ? "Verifying..." : "Verify OTP"}
                 </button>
             </div>
         </div>
