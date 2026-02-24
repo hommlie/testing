@@ -46,103 +46,77 @@ exports.addToCart = async (req, res) => {
       return res.status(400).json({ status: 0, message: "Price is required" });
     }
 
-    const existingCart = await Cart.findOne({ where: { user_id } });
-
-    if (!existingCart) {
-      const url = image;
-      const parts = url.split("/");
-      const image_url = parts[parts.length - 1];
-
-      let attributeData = null;
-      if (attribute) {
-        attributeData = await Attribute.findOne({
-          where: { id: attribute },
-        });
-      }
-
-      let variationData = null;
-      if (variation) {
-        variationData = await Variation.findOne({
-          where: { id: variation },
-        });
-      }
-
-      const cartData = await Cart.create({
-        user_id,
-        product_id,
-        vendor_id,
-        product_name,
-        image: image_url,
-        qty,
-        price,
-        attribute,
-        attribute_name: attributeData && attributeData.attribute,
-        variation,
-        variation_name: variationData && variationData.variation,
-        tax,
-        shipping_cost,
-        wallet_amount,
-        tip_amount,
+    // Check if a different vendor's item is already in the cart
+    const anyCartItem = await Cart.findOne({ where: { user_id } });
+    if (anyCartItem && anyCartItem.vendor_id !== vendor_id) {
+      return res.status(400).json({
+        status: 0,
+        message: "First empty your Cart, Then add new product in Cart",
       });
+    }
 
-      if (cartData) {
+    // Check if the EXACT same product+variation is already in the cart
+    const whereClause = { user_id, product_id };
+    if (variation) {
+      whereClause.variation = variation;
+    } else {
+      whereClause.variation = null;
+    }
+
+    const existingItem = await Cart.findOne({ where: whereClause });
+
+    if (existingItem) {
+      // Increment quantity instead of creating a duplicate
+      const updated = await Cart.update(
+        { qty: existingItem.qty + 1 },
+        { where: { id: existingItem.id } }
+      );
+      if (updated) {
         return res.status(200).json({ status: 1, message: "Success" });
       } else {
-        return res
-          .status(200)
-          .json({ status: 0, message: "Something went wrong" });
+        return res.status(200).json({ status: 0, message: "Something went wrong" });
       }
+    }
+
+    // New item — insert it
+    const url = image;
+    const parts = url.split("/");
+    const image_url = parts[parts.length - 1];
+
+    let attributeData = null;
+    if (attribute) {
+      attributeData = await Attribute.findOne({ where: { id: attribute } });
+    }
+
+    let variationData = null;
+    if (variation) {
+      variationData = await Variation.findOne({ where: { id: variation } });
+    }
+
+    const cartData = await Cart.create({
+      user_id,
+      product_id,
+      vendor_id,
+      product_name,
+      image: image_url,
+      qty,
+      price,
+      attribute,
+      attribute_name: attributeData && attributeData.attribute,
+      variation,
+      variation_name: variationData && variationData.variation,
+      tax,
+      shipping_cost,
+      wallet_amount,
+      tip_amount,
+    });
+
+    if (cartData) {
+      return res.status(200).json({ status: 1, message: "Success" });
     } else {
-      if (existingCart.vendor_id !== vendor_id && existingCart.user_id === user_id) {
-        return res.status(400).json({
-          status: 0,
-          message: "First empty your Cart, Then add new product in Cart",
-        });
-      } else {
-        const url = image;
-        const parts = url.split("/");
-        const image_url = parts[parts.length - 1];
-
-        let attributeData = null;
-        if (attribute) {
-          attributeData = await Attribute.findOne({
-            where: { id: attribute },
-          });
-        }
-
-        let variationData = null;
-        if (variation) {
-          variationData = await Variation.findOne({
-            where: { id: variation },
-          });
-        }
-
-        const cartData = await Cart.create({
-          user_id,
-          product_id,
-          vendor_id,
-          product_name,
-          image: image_url,
-          qty,
-          price,
-          attribute,
-          attribute_name: attributeData && attributeData.attribute,
-          variation,
-          variation_name: variationData && variationData.variation,
-          tax,
-          shipping_cost,
-          wallet_amount,
-          tip_amount,
-        });
-
-        if (cartData) {
-          return res.status(200).json({ status: 1, message: "Success" });
-        } else {
-          return res
-            .status(200)
-            .json({ status: 0, message: "Something went wrong" });
-        }
-      }
+      return res
+        .status(200)
+        .json({ status: 0, message: "Something went wrong" });
     }
   } catch (error) {
     return res.status(500).json({

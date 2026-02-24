@@ -1593,7 +1593,7 @@ exports.generateServiceReport = async (req, res) => {
         60,
         { width: 400 }
       )
-      .text("Website: www.hommlie.com    Customer Care: +91 633866558", 40, 100);
+      .text("Website: www.hommlie.com    Customer Care: +91 8884445855", 40, 100);
 
     // ===== SERVICE CONTRACT FORM =====
     doc

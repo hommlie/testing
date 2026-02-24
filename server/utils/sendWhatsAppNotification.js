@@ -13,11 +13,11 @@ const sendWhatsAppNotification = async ({
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-  // "X-AiSensy-Partner-API-Key": "", // Not required for this API, remove or set if needed
+        // "X-AiSensy-Partner-API-Key": "", // Not required for this API, remove or set if needed
       },
       data: {
         apiKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZjRkOGUxZmEwY2E3MGMwMzUyZGE4NiIsIm5hbWUiOiJIb21tbGllIFBlc3QgQ29udHJvbCIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NzM0M2QzYTgzMDczYjBiZWViZDZhZWUiLCJhY3RpdmVQbGFuIjoiRlJFRV9GT1JFVkVSIiwiaWF0IjoxNzQ0MDk5NTUzfQ.ZXeK_5N7yaFvDSfSnTyFg-fOtP6DocAtCwAddUJJhyk",
+          "44dd2888bc5d524699f92a48208cb4f880496467e48b5d27cdda1eef5ba546",
         campaignName: campaignName,
         destination: phoneNumber,
         userName: userName,
