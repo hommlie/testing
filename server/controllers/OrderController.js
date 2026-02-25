@@ -1517,11 +1517,104 @@ exports.raiseComplaint = async (req, res) => {
     if (!order) {
       return res.status(404).json({ error: "Order not found." });
     }
+    // Update original order's complaint remark as well
     order.complaint_remark = complaintText;
     await order.save();
+
+    const complaintOrderPayload = {
+      user_id: order.user_id,
+      product_id: order.product_id,
+      vendor_id: order.vendor_id,
+      order_number: order.order_number,
+      service_number: order.service_number || null,
+      product_name: order.product_name,
+      image: order.image,
+      qty: order.qty || 1,
+      status: order.status || null,
+      price: 0.00,
+      attribute: order.attribute,
+      variation: order.variation,
+      tax: 0.00,
+      wallet_amount: 0.00,
+      shipping_cost: 0.00,
+      tip_amount: 0.00,
+      coupon_name: order.coupon_name || null,
+      discount_amount: 0.00,
+      order_total: order.order_total || 0.00,
+      order_status: order.order_status,
+      order_notes: order.order_notes || null,
+      payment_type: order.payment_type,
+      full_name: order.full_name,
+      email: order.email,
+      mobile: order.mobile,
+      landmark: order.landmark,
+      street_address: order.street_address,
+      pincode: order.pincode,
+      latitude: order.latitude,
+      longitude: order.longitude,
+      desired_time: order.desired_time,
+      desired_date: order.desired_date,
+      assigned_to: order.assigned_to,
+      complaint_remark: complaintText,
+      // mark this new row as a complaint
+      order_type: 1,
+      contract_start_date: order.contract_start_date,
+      contract_end_date: order.contract_end_date,
+      // mark as booked from website (0) — frontend expects 0 or 1
+      is_booked_by: typeof order.is_booked_by !== 'undefined' ? order.is_booked_by : 0,
+      created_at: new Date(),
+    };
+
+    const complaintOrder = await Order.create(complaintOrderPayload);
+    // Create a notification and send WhatsApp/email to the user
+    try {
+      const user = await User.findByPk(order.user_id, { attributes: ["id", "name", "email", "mobile"] });
+      if (user) {
+        await Notification.create({
+          user_id: user.id,
+          order_id: complaintOrder.id,
+          order_number: complaintOrder.order_number,
+          order_status: String(complaintOrder.order_status || 0),
+          message: `Complaint received for Order ${complaintOrder.order_number}`,
+          is_read: "0",
+          type: "complaint",
+        });
+
+        // WhatsApp notification (best-effort)
+        try {
+          await sendWhatsAppNotification({
+            campaignName: "Complaint Received",
+            phoneNumber: user.mobile,
+            userName: user.name,
+            templateParams: [user.name?.toString() || "", complaintOrder.order_number?.toString() || "", complaintText?.toString() || ""],
+          });
+        } catch (waErr) {
+          console.error("WhatsApp notification error:", waErr);
+        }
+
+        // Email notification (best-effort)
+        if (user.email) {
+          try {
+            const subject = `Complaint Received - Order #${complaintOrder.order_number}`;
+            const html = `
+              <h3>We have received your complaint</h3>
+              <p>Order: ${complaintOrder.order_number}</p>
+              <p>Remark: ${complaintText}</p>
+              <p>Our support team will contact you shortly.</p>
+            `;
+            await sendEmail(user.email, subject, html);
+          } catch (emailErr) {
+            console.error("Email send error:", emailErr);
+          }
+        }
+      }
+    } catch (notifErr) {
+      console.error("Notification creation/send error:", notifErr);
+    }
+
     res.status(200).json({
       message: "Complaint received and saved successfully.",
-      complaintText,
+      complaint: complaintOrder,
     });
   } catch (error) {
     console.error("Error in raiseComplaint:", error);

@@ -156,6 +156,11 @@ Order.init(
     assigned_to: {
       type: DataTypes.INTEGER,
     },
+    is_booked_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
     complaint_remark: {
       type: DataTypes.STRING,
       allowNull: true,
