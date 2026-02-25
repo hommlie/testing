@@ -799,25 +799,25 @@ exports.getHomePageData = async (req, res) => {
             "slug",
             [
               sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', \`Subcategories\`.\`icon\`)`
               ),
               "app_icon",
             ],
             [
               sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', \`Subcategories\`.\`sub_cat_banner\`)`
               ),
               "banner",
             ],
             [
               sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.icon)`
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', \`Subcategories\`.\`icon\`)`
               ),
               "icon_url",
             ],
             [
               sequelize.literal(
-                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', Subcategory.sub_cat_banner)`
+                `CONCAT('${apiUrl}/storage/app/public/images/subcategory/', \`Subcategories\`.\`sub_cat_banner\`)`
               ),
               "image_url",
             ],
