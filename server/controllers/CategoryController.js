@@ -212,6 +212,11 @@ exports.getSubcategory = async (req, res) => {
       order: [["id", "DESC"]],
     });
 
+    // Guard: if no category found for this slug, return early
+    if (!categoryData) {
+      return res.status(404).json({ status: 0, message: "Category not found" });
+    }
+
     const subcategoryData = await Subcategory.findAll({
       attributes: [
         "id",
@@ -563,6 +568,8 @@ exports.getCleaningSubcategory = async (req, res) => {
         // Group variations by attribute_id
         const groupedVariations = plainProduct.variations.reduce(
           (acc, variation) => {
+            // Skip orphaned variations (no linked attribute)
+            if (!variation.attribute) return acc;
             // Create variation object without attribute info
             const variationData = {
               id: variation.id,
@@ -598,11 +605,11 @@ exports.getCleaningSubcategory = async (req, res) => {
               // Create new attribute group
               existingGroup = {
                 attribute_id: variation.attribute_id,
-                attribute_name: variation.attribute.attribute,
-                specifications: variation.attribute.specifications,
-                image: variation.attribute.image,
-                total_reviews: variation.attribute.total_reviews,
-                avg_rating: variation.attribute.avg_rating,
+                attribute_name: variation.attribute?.attribute || null,
+                specifications: variation.attribute?.specifications || null,
+                image: variation.attribute?.image || null,
+                total_reviews: variation.attribute?.total_reviews || 0,
+                avg_rating: variation.attribute?.avg_rating || 0,
                 variations: [variationData],
                 reviewsData,
               };

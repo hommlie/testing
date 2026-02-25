@@ -1,4 +1,4 @@
-const sequelize = require("sequelize");
+const sequelize = require("../config/connection");
 const LandingPage = require("../models/LandingPage");
 const { fetchProductReviews } = require("../middleware/getCommonData");
 const { Subcategory, Category, Product, Variation } = require("../models");
@@ -139,14 +139,14 @@ exports.getLandingPageBySlug = async (req, res) => {
         validDiscountedPrices.length > 0
           ? Math.min(...validDiscountedPrices)
           : allVariations.length > 0
-          ? Math.min(
+            ? Math.min(
               ...allVariations
                 .map((v) => v.price)
                 .filter(
                   (price) => price !== null && price !== undefined && price > 0
                 )
             )
-          : 0;
+            : 0;
 
       return {
         id: sub.id,

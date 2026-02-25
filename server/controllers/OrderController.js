@@ -1552,8 +1552,8 @@ exports.raiseComplaint = async (req, res) => {
       pincode: order.pincode,
       latitude: order.latitude,
       longitude: order.longitude,
-      desired_time: order.desired_time,
-      desired_date: order.desired_date,
+      desired_time: null,
+      desired_date: null,
       assigned_to: order.assigned_to,
       complaint_remark: complaintText,
       // mark this new row as a complaint
