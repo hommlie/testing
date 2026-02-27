@@ -558,7 +558,11 @@ const ServiceSection = ({ categories }) => {
                     else if (subNameLower.includes("rodent")) displayIcon = "🐀";
                     else if (subNameLower.includes("mosquito")) displayIcon = "🦟";
                     else if (subNameLower.includes("termite")) displayIcon = "🪵";
-                    else if (subNameLower.includes("bed bug") || subNameLower.includes("bedbug")) displayIcon = "🪲";
+                    else if (subNameLower.includes("bed bug") || subNameLower.includes("bedbug")) displayIcon = "🐞";
+                    else if (subNameLower.includes("flies") || subNameLower.includes("fly")) displayIcon = "🪰";
+                    else if (subNameLower.includes("general pest")) displayIcon = "🕷️";
+                    else if (subNameLower.includes("weed")) displayIcon = "🌿";
+                    else if (subNameLower.includes("wood borer")) displayIcon = "🪱";
 
                     let displayName = sub.subcategory_name || "";
                     displayName = displayName.replace(/\s*Control\s*$/i, "");
@@ -594,9 +598,9 @@ const ServiceSection = ({ categories }) => {
                         key={index}
                         type="button"
                         onClick={() => setSelectedBhk(variation)}
-                        className={`px-5 py-2 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                          ? "bg-[#165ba8] text-white border-[#165ba8] shadow-sm ring-1 ring-[#165ba8]/20 bg-gradient-to-r from-[#165ba8] to-[#1a66b5]"
-                          : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
+                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                           }`}
                       >
                         {variation}
@@ -620,8 +624,8 @@ const ServiceSection = ({ categories }) => {
                           key={prod.id}
                           type="button"
                           onClick={() => setSelectedProduct(prod.id)}
-                          className={`px-6 py-3.5 rounded-xl font-medium text-[15px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                            ? "bg-[#165ba8] text-white border-[#165ba8] shadow-sm ring-1 ring-[#165ba8]/20 bg-gradient-to-r from-[#165ba8] to-[#1a66b5]"
+                          className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                            ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
                             : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                         >
@@ -648,8 +652,8 @@ const ServiceSection = ({ categories }) => {
                           key={attr.id}
                           type="button"
                           onClick={() => setSelectedAttribute(attr.id)}
-                          className={`px-6 py-3.5 rounded-xl font-medium text-[15px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                            ? "bg-[#165ba8] text-white border-[#165ba8] shadow-sm ring-1 ring-[#165ba8]/20 bg-gradient-to-r from-[#165ba8] to-[#1a66b5]"
+                          className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                            ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
                             : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                         >
