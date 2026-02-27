@@ -458,8 +458,8 @@ const ServiceSection = ({ categories }) => {
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-start gap-1"
           >
-            <span className="text-[12px] font-black text-[#0463ac] tracking-[0.2em] uppercase opacity-70">Expert Solutions</span>
-            <h2 className="text-3xl font-bold text-[#033053] tracking-tight">
+            <span className="text-[12px] font-black text-black tracking-[0.2em] uppercase opacity-70">Expert Solutions</span>
+            <h2 className="text-3xl font-semibold text-black tracking-tight">
               Quick Booking - Pest Control
             </h2>
             <div className="h-1.5 w-16 bg-gradient-to-r from-[#0463ac] to-green-400 rounded-full mt-1" />
@@ -515,339 +515,205 @@ const ServiceSection = ({ categories }) => {
             className="rounded-3xl px-0 py-0 mt-4 relative overflow-hidden"
           >
 
-            <div className="flex justify-center mb-3 relative z-10">
-              <motion.h3
-                className="text-2xl font-bold text-center relative inline-block"
+            <div className="mb-5 relative z-10 pl-1">
+              <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                }}
               >
-                <motion.span
-                  className="bg-clip-text text-transparent bg-gradient-to-r from-[#033053] via-[#0463ac] to-[#033053] bg-[length:200%_auto] block pb-1"
-                  variants={{
-                    hidden: { opacity: 0, y: 10 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      backgroundPosition: ["0% 50%", "200% 50%"],
-                      transition: {
-                        opacity: { duration: 0.5 },
-                        y: { duration: 0.5 },
-                        backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear", repeatType: "loop" }
-                      }
-                    }
-                  }}
-                >
-                  Book a Service
-                </motion.span>
-                <motion.div
-                  className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: 64 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                />
-              </motion.h3>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-[22px] font-bold text-[#033053] tracking-tight">
+                    Quick Booking ⚡
+                  </h3>
+                </div>
+                <p className="text-[13px] text-gray-500 font-medium">
+                  Book pest control service in just a few taps.
+                </p>
+              </motion.div>
             </div>
 
-            {/* Check Serviceability */}
-            <div className={`mb-4 relative transition-all duration-300 z-10 ${!mbIsInBangalore && pincode.length >= 3 ? 'mb-8' : ''}`}>
-              <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                <MapPin className="w-4 h-4 text-[#0463ac]" />
-                Check Serviceability
-              </label>
-              <div className="relative group">
-                <input
-                  type="text"
-                  placeholder="Enter Pincode"
-                  className="w-full pl-4 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all shadow-sm group-hover:shadow-md"
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  {pincode.length === 6 ? (
-                    <Check className="w-5 h-5 text-green-500" />
-                  ) : (
-                    <MapPin className="w-5 h-5 text-gray-400" />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-5 relative z-10"
+            >
+
+              {/* Pest Type / Subcategory */}
+              <div>
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
+                  Select Pest
+                </label>
+                <div className="flex overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                  {getCurrentSubcategories().map((sub) => {
+                    const isSelected = selectedSubCategory === sub.id;
+                    let displayIcon = "🛡️";
+                    const subNameLower = (sub.subcategory_name || "").toLowerCase();
+                    if (subNameLower.includes("cockroach")) displayIcon = "🪳";
+                    else if (subNameLower.includes("ant")) displayIcon = "🐜";
+                    else if (subNameLower.includes("rodent")) displayIcon = "🐀";
+                    else if (subNameLower.includes("mosquito")) displayIcon = "🦟";
+                    else if (subNameLower.includes("termite")) displayIcon = "🪵";
+                    else if (subNameLower.includes("bed bug") || subNameLower.includes("bedbug")) displayIcon = "🪲";
+
+                    let displayName = sub.subcategory_name || "";
+                    displayName = displayName.replace(/\s*Control\s*$/i, "");
+
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => setSelectedSubCategory(sub.id)}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
+                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                      >
+                        <span className="text-lg leading-none">{displayIcon}</span>
+                        <span>{displayName}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Property Size */}
+              <div>
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
+                  Select Home Size
+                </label>
+                <div className="flex overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                  {getVariationOptions().map((variation, index) => {
+                    const isSelected = selectedBhk === variation;
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => setSelectedBhk(variation)}
+                        className={`px-5 py-2 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                          ? "bg-[#165ba8] text-white border-[#165ba8] shadow-sm ring-1 ring-[#165ba8]/20 bg-gradient-to-r from-[#165ba8] to-[#1a66b5]"
+                          : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                      >
+                        {variation}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Product Selection */}
+              <div>
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
+                  Select Service
+                </label>
+                <div className="flex overflow-x-auto gap-3 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                  {getCurrentProducts() && getCurrentProducts().length > 0 ? (
+                    getCurrentProducts().map((prod) => {
+                      const isSelected = selectedProduct === prod.id;
+                      return (
+                        <button
+                          key={prod.id}
+                          type="button"
+                          onClick={() => setSelectedProduct(prod.id)}
+                          className={`px-6 py-3.5 rounded-xl font-medium text-[15px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                            ? "bg-[#165ba8] text-white border-[#165ba8] shadow-sm ring-1 ring-[#165ba8]/20 bg-gradient-to-r from-[#165ba8] to-[#1a66b5]"
+                            : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
+                        >
+                          {prod.product_name}
+                        </button>
+                      );
+                    })
+                  ) : null}
+                </div>
+              </div>
+
+              {/* Service Variant */}
+              <div>
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
+                  Select Service Type
+                </label>
+                <div className="flex overflow-x-auto gap-3 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                  {getCurrentAttributes() && getCurrentAttributes().length > 0 ? (
+                    getCurrentAttributes().map((attr) => {
+                      const isSelected = selectedAttribute === attr.id;
+                      const attrName = attr.attribute_name || attr.attribute;
+                      return (
+                        <button
+                          key={attr.id}
+                          type="button"
+                          onClick={() => setSelectedAttribute(attr.id)}
+                          className={`px-6 py-3.5 rounded-xl font-medium text-[15px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                            ? "bg-[#165ba8] text-white border-[#165ba8] shadow-sm ring-1 ring-[#165ba8]/20 bg-gradient-to-r from-[#165ba8] to-[#1a66b5]"
+                            : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
+                        >
+                          {attrName}
+                        </button>
+                      );
+                    })
+                  ) : null}
+                </div>
+              </div>
+
+
+              {/* Optimized Price Display */}
+              <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-100/50 flex flex-col gap-1">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">Total Estimate</span>
+                  {getCurrentProduct()?.slug && (
+                    <button
+                      onClick={() => navigate(`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`)}
+                      className="text-xs font-bold text-[#0463ac] hover:text-[#034d85] flex items-center gap-1 group/link"
+                    >
+                      View Details <ChevronRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
+                    </button>
                   )}
                 </div>
-                {/* Mobile 'coming soon' banner removed as per request */}
-              </div>
-            </div>
-
-            {pincode.length === 6 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-5 relative z-10"
-              >
-                {/* Premise Type */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                    <Building2 className="w-4 h-4 text-[#0463ac]" />
-                    Premise Type *
-                  </label>
-                  <div className="flex bg-gray-100 p-1 rounded-xl">
-                    <button
-                      onClick={() => setPremiseType("Residential")}
-                      className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all shadow-sm
-                        ${premiseType === "Residential" ? "bg-white text-[#0463ac] shadow-md ring-1 ring-black/5" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                      <Home className="w-4 h-4" />
-                      Residential
-                    </button>
-                    <button
-                      onClick={() => setPremiseType("Commercial")}
-                      className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all shadow-sm
-                        ${premiseType === "Commercial" ? "bg-white text-[#0463ac] shadow-md ring-1 ring-black/5" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                      <Building2 className="w-4 h-4" />
-                      Commercial
-                    </button>
-                  </div>
+                <div className="text-3xl font-extrabold text-[#033053]">
+                  ₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}<span className="text-lg text-gray-400 font-medium ml-1">+ GST</span>
                 </div>
+              </div>
 
-                {/* Conditional Fields based on Premise Type */}
-                {premiseType === "Residential" ? (
-                  <>
-                    {/* Category Selection */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                        <RxCross1 className="w-4 h-4 text-[#0463ac] rotate-45" /> {/* Using generic icon representation */}
-                        Service Category *
-                      </label>
-                      <div
-                        className="relative cursor-pointer group"
-                        onClick={() => {
-                          if (categories && categories.length > 0) {
-                            setSelectionModal({
-                              isOpen: true,
-                              title: "Select Service Category",
-                              options: categories.map(cat => ({ id: cat.id, name: cat.category_name })),
-                              onSelect: (value) => {
-                                setSelectedCategory(value.id);
-                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
-                              },
-                              selectedValue: categories.find(c => c.id === selectedCategory)
-                            });
-                          }
-                        }}
-                      >
-                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
-                          <span className="truncate">{categories?.find(c => c.id === selectedCategory)?.category_name || "Select Category"}</span>
-                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Pest Type / Subcategory */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                        <FaBug className="w-4 h-4 text-[#0463ac]" />
-                        Pest Type *
-                      </label>
-                      <div
-                        className="relative cursor-pointer group"
-                        onClick={() => {
-                          const subs = getCurrentSubcategories();
-                          if (subs && subs.length > 0) {
-                            setSelectionModal({
-                              isOpen: true,
-                              title: "Select Pest Type",
-                              options: subs.map(sub => ({ id: sub.id, name: sub.subcategory_name })),
-                              onSelect: (value) => {
-                                setSelectedSubCategory(value.id);
-                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
-                              },
-                              selectedValue: subs.find(s => s.id === selectedSubCategory)
-                            });
-                          }
-                        }}
-                      >
-                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
-                          <span className="truncate">{getCurrentSubcategories().find(s => s.id === selectedSubCategory)?.subcategory_name || "Select Pest Type"}</span>
-                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Product Selection */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                        <Star className="w-4 h-4 text-[#0463ac]" />
-                        Select Your Services *
-                      </label>
-                      <div
-                        className="relative cursor-pointer group"
-                        onClick={() => {
-                          const prods = getCurrentProducts();
-                          if (prods && prods.length > 0) {
-                            setSelectionModal({
-                              isOpen: true,
-                              title: "Select Product",
-                              options: prods.map(prod => ({ id: prod.id, name: prod.product_name })),
-                              onSelect: (value) => {
-                                setSelectedProduct(value.id);
-                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
-                              },
-                              selectedValue: prods.find(p => p.id === selectedProduct)
-                            });
-                          }
-                        }}
-                      >
-                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
-                          <span className="truncate">{getCurrentProducts().find(p => p.id === selectedProduct)?.product_name || "Select Product"}</span>
-                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Property Size */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                        <Home className="w-4 h-4 text-[#0463ac]" />
-                        Select Your BHK *
-                      </label>
-                      <div
-                        className="relative cursor-pointer group"
-                        onClick={() => {
-                          const options = getVariationOptions();
-                          if (options.length > 0) {
-                            setSelectionModal({
-                              isOpen: true,
-                              title: "Select Property Size",
-                              options: options,
-                              onSelect: (value) => {
-                                setSelectedBhk(value);
-                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
-                              },
-                              selectedValue: selectedBhk
-                            });
-                          }
-                        }}
-                      >
-                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
-                          <span className="truncate">{selectedBhk || "Select Property Size"}</span>
-                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Service Variant */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-2">
-                        <FaShieldAlt className="w-4 h-4 text-[#0463ac]" />
-                        Service Variant *
-                      </label>
-                      <div
-                        className="relative cursor-pointer group"
-                        onClick={() => {
-                          const attrs = getCurrentAttributes();
-                          if (attrs && attrs.length > 0) {
-                            setSelectionModal({
-                              isOpen: true,
-                              title: "Select Service Variant",
-                              options: attrs.map(attr => ({ id: attr.id, name: attr.attribute_name || attr.attribute })),
-                              onSelect: (value) => {
-                                setSelectedAttribute(value.id);
-                                setSelectionModal({ isOpen: false, title: "", options: [], onSelect: null, selectedValue: null });
-                              },
-                              selectedValue: attrs.find(a => a.id === selectedAttribute)
-                            });
-                          }
-                        }}
-                      >
-                        <div className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-800 flex justify-between items-center group-hover:bg-white group-hover:shadow-md transition-all">
-                          <span className="truncate">
-                            {getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute_name ||
-                              getCurrentAttributes().find(a => a.id === selectedAttribute)?.attribute ||
-                              "Select Service Variant"}
-                          </span>
-                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0463ac] transition-colors" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Optimized Price Display */}
-                    <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-100/50 flex flex-col gap-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">Total Estimate</span>
-                        {getCurrentProduct()?.slug && (
-                          <button
-                            onClick={() => navigate(`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`)}
-                            className="text-xs font-bold text-[#0463ac] hover:text-[#034d85] flex items-center gap-1 group/link"
-                          >
-                            View Details <ChevronRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
-                      </div>
-                      <div className="text-3xl font-extrabold text-[#033053]">
-                        ₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}<span className="text-lg text-gray-400 font-medium ml-1">+ GST</span>
-                      </div>
-                    </div>
-
-                    {/* BOOK NOW Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => {
-                        const variation = getCurrentVariation();
-                        const product = getCurrentProduct();
-                        if (variation && product) {
-                          handleAddToCart(variation, product);
-                        }
-                      }}
-                      disabled={!getCurrentVariation() || isAddingToCart}
-                      className={`w-full py-4 relative overflow-hidden text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group
+              {/* BOOK NOW Button */}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  const variation = getCurrentVariation();
+                  const product = getCurrentProduct();
+                  if (variation && product) {
+                    handleAddToCart(variation, product);
+                  }
+                }}
+                disabled={!getCurrentVariation() || isAddingToCart}
+                className={`w-full py-4 relative overflow-hidden text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group
                         ${(!getCurrentVariation() || isAddingToCart)
-                          ? "bg-gray-300 cursor-not-allowed"
-                          : "bg-gradient-to-r from-[#0463ac] to-[#034d85]"}`}
-                    >
-                      {(!getCurrentVariation() || isAddingToCart) ? null : (
-                        <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out skew-x-12" />
-                      )}
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-gradient-to-r from-[#0463ac] to-[#034d85]"}`}
+              >
+                {(!getCurrentVariation() || isAddingToCart) ? null : (
+                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out skew-x-12" />
+                )}
 
-                      {isAddingToCart ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <span className="tracking-wide z-10">BOOK NOW</span>
-                          <ChevronRight className="w-5 h-5 z-10" />
-                        </>
-                      )}
-                    </motion.button>
+                {isAddingToCart ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Processing...
                   </>
                 ) : (
-                  <div className="pt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={handleDirectInspectionBooking}
-                      className="w-full py-4 bg-[#0463ac] text-white font-bold text-lg rounded-2xl shadow-lg hover:bg-[#034d85] transition-all flex items-center justify-center gap-2"
-                    >
-                      BOOK INSPECTION <ChevronRight className="w-5 h-5" />
-                    </motion.button>
-                  </div>
+                  <>
+                    <span className="tracking-wide z-10">BOOK NOW</span>
+                    <ChevronRight className="w-5 h-5 z-10" />
+                  </>
                 )}
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mt-6 py-8 px-6 bg-gray-50/80 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center text-center gap-3"
-              >
-                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md mb-2">
-                  <MapPin className="w-7 h-7 text-gray-300" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-gray-600">Enter Pincode</h4>
-                  <p className="text-xs text-gray-400 font-medium">Please enter your 6-digit pincode above to unlock customized services for your location.</p>
-                </div>
-              </motion.div>
-            )}
+              </motion.button>
+            </motion.div>
           </motion.div>
 
           {/* Request a Callback Button - Mobile View Bottom */}

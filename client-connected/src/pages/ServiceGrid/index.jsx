@@ -8,7 +8,7 @@ import { useCont } from "../../context/MyContext";
 import config from "../../config/config";
 import axios from "axios";
 import Requestacallback from "../Requestacallback";
-import { ChevronRight, Zap } from "lucide-react";
+import { ChevronRight, Zap, ShoppingBag, Building2 } from "lucide-react";
 
 const serviceData = {
   "Pest Control": [
@@ -190,11 +190,13 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
   );
 };
 
-const ServiceGrid = ({ categories: propCategories }) => {
+const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => {
   const [showModal, setShowModal] = useState(null);           // category drilldown modal (e.g., Pest Control)
   const [showComingSoon, setShowComingSoon] = useState(false); // "Coming Soon" modal for placeholder services
   const [fullCategories, setFullCategories] = useState([]);    // Stores rich data from /api/category
   const [isCallbackOpen, setIsCallbackOpen] = useState(false); // Callback modal state
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 640 : false);
+  const [activeTab, setActiveTab] = useState("services");
 
   const navigate = useNavigate();
   const { categoryData } = useCont();
@@ -219,16 +221,35 @@ const ServiceGrid = ({ categories: propCategories }) => {
 
   const locationSearch = useLocation();
 
-  // Close modal on route change
+  // Close modal on route change and keep tab in sync
   useEffect(() => {
     setShowModal(null);
     setShowComingSoon(false);
+
+    if (locationSearch.pathname.startsWith("/product")) {
+      setActiveTab("products");
+    } else {
+      setActiveTab("services");
+    }
   }, [locationSearch.pathname]);
+
+  // Track mobile viewport
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === "undefined") return;
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Lock body scroll when any modal is open on mobile
   useEffect(() => {
-    const isMobile = window.innerWidth < 640;
-    if ((showModal || showComingSoon) && isMobile) {
+    const isMobileView = typeof window !== "undefined" ? window.innerWidth < 640 : false;
+    if ((showModal || showComingSoon) && isMobileView) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -303,109 +324,211 @@ const ServiceGrid = ({ categories: propCategories }) => {
   // If the list is empty (loading), show fallback services
   const finalServices = categoriesList.length > 0 ? displayServices : fallbackServices;
 
+  // Extract Pest Control subcategories directly
+  // Uses the same `all_categories` data from /api/homepage that ServiceSection uses
+  // Try to align with the same Pest category used in the mobile booking form
+  const pestControlCategory = categoriesList.find(c => {
+    const label = (c.category_name || c.name || '').toLowerCase();
+    return label === 'pest control' || label === 'home pest control' || label.includes('pest');
+  });
+  const pestSubcats = pestControlCategory
+    ? (pestControlCategory.subcategories || pestControlCategory.Subcategories || [])
+    : [];
 
+  const pestControlItems = pestSubcats.map(sub => {
+    const rawImage = sub.app_icon || sub.subcategory_icon || sub.icon_url || sub.image_url || sub.image || sub.subcategory_icon_url;
+    let finalImage = null;
+    if (rawImage) {
+      if (typeof rawImage === 'string' && (rawImage.startsWith('http') || rawImage.startsWith('data:'))) {
+        finalImage = rawImage;
+      } else {
+        const baseUrl = config.API_URL.replace(/\/hommlieserver\/?$/, '');
+        finalImage = `${baseUrl}${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
+      }
+    } else if (sub.slug) {
+      finalImage = `https://www.hommlie.com/storage/app/public/images/subcategory/${sub.slug}.png`;
+    }
+    const isPage = sub.is_page ?? (sub.category?.is_page) ?? (pestControlCategory?.is_page) ?? 1;
+    const routePrefix = isPage === 1 ? '/subcategory' : '/products';
+    return {
+      name: sub.subcategory_name || sub.name,
+      image: finalImage || '/assets/images/placeholder.png',
+      slug: sub.slug,
+      url: sub.slug ? `${config.VITE_BASE_URL}${routePrefix}/${sub.slug}` : sub.url,
+    };
+  }).sort((a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase()));
 
+  // Fallback pest control items (static)
+  const fallbackPestItems = [
+    { name: "General Pest Control", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
+    { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
+    { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
+    { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
+    { name: "Mosquito Control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
+    { name: "Termite Control", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
+  ];
+
+  const displayPestItems = pestControlItems.length > 0 ? pestControlItems : fallbackPestItems;
 
   return (
     <div className="w-full sm:w-fit ml-0 sm:ml-4 px-0 py-0 sm:px-0 sm:py-4 sm:-mt-3 bg-cover bg-center bg-no-repeat">
+      {/* Mobile Services / Products toggle */}
+      {isMobile && (
+        <div className="w-full px-4 mb-3 sm:hidden flex justify-center">
+          <div className="w-full max-w-[420px] grid grid-cols-3 gap-3">
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              whileHover={{ y: -1 }}
+              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm ${activeTab === "services"
+                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }`}
+              onClick={() => {
+                setActiveTab("services");
+              }}
+            >
+              <Zap className="w-4 h-4" />
+              Services
+            </motion.button>
+
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              whileHover={{ y: -1 }}
+              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm ${activeTab === "products"
+                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }`}
+              onClick={() => {
+                setActiveTab("products");
+                navigate("/product");
+              }}
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Products
+            </motion.button>
+
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              whileHover={{ y: -1 }}
+              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm ${activeTab === "commercial"
+                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }`}
+              onClick={() => {
+                setActiveTab("commercial");
+                window.open("https://b2b.hommlie.com/", "_blank");
+              }}
+            >
+              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-white/20">
+                <Building2 className="w-4 h-4" />
+              </div>
+              Commercial
+            </motion.button>
+          </div>
+        </div>
+      )}
+
+      {/* Optional mobile content placed below tabs */}
+      {isMobile && mobileAfterTabs ? (
+        <div className="w-full px-4 mb-3 sm:hidden">
+          {mobileAfterTabs}
+        </div>
+      ) : null}
+
       <div className="flex justify-center mb-4 relative z-10 sm:-mt-6">
-        <motion.h1
-          className="text-[17px] sm:text-xl font-bold text-center relative inline-block whitespace-nowrap"
+        <motion.div
+          className="text-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <motion.span
-            className="mt-2 sm:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-[#033053] via-[#0463ac] to-[#033053] bg-[length:200%_auto] block pb-1"
+          <motion.h1
+            className="text-[18px] sm:text-[32px] font-semibold text-[#033053] tracking-tight"
             variants={{
               hidden: { opacity: 0, y: 10 },
               visible: {
                 opacity: 1,
                 y: 0,
-                backgroundPosition: ["0% 50%", "200% 50%"],
-                transition: {
-                  opacity: { duration: 0.5 },
-                  y: { duration: 0.5 },
-                  backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear", repeatType: "loop" }
-                }
+                transition: { duration: 0.5 }
               }
             }}
           >
-            Premium Home Pest Control Services
-          </motion.span>
-          <motion.div
-            className="h-1 w-16 bg-gradient-to-r from-[#0463ac] to-[#034d85] mx-auto rounded-full"
-            initial={{ width: 0 }}
-            whileInView={{ width: 64 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          />
-        </motion.h1>
+            What pest problem are you facing?
+          </motion.h1>
+          <motion.p
+            className="mt-1 text-[11px] sm:text-sm text-gray-500"
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.5, delay: 0.1 }
+              }
+            }}
+          >
+            Select a pest to see instant pricing &amp; plans.
+          </motion.p>
+        </motion.div>
       </div>
 
       <div className="bg-transparent sm:bg-white border-0 sm:border border-gray-100 rounded-none sm:rounded-3xl p-0.5 sm:p-4 shadow-none sm:shadow-sm mb-0 w-full sm:w-full">
-        {/* Premium Super-Compact Grid */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-0">
-          {finalServices.map((service, index) => {
-            const name = service.category_name || service.name;
+        {/* Pest Control Subcategory Grid - consistently 3 per row */}
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 mb-0">
+          {displayPestItems.map((sub, index) => (
+            <motion.div
+              key={sub.slug || sub.name}
+              onClick={() => {
+                if (sub.url) {
+                  if (sub.url.startsWith('http')) {
+                    window.open(sub.url, '_blank');
+                  } else {
+                    navigate(sub.url.startsWith('/') ? sub.url : `/${sub.url}`);
+                  }
+                }
+              }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              whileHover={{ y: -3 }}
+              className="relative flex flex-col items-center py-2 px-1 sm:py-3 sm:px-2 md:py-2 cursor-pointer group transition-all duration-300"
+            >
+              <div className="relative mb-2 z-10 w-full px-1 sm:px-2">
+                <motion.div
+                  animate={{ y: [0, -2, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.1 }}
+                  className="w-full h-20 sm:h-28 md:h-24 lg:h-24 bg-white border border-gray-200 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:border-[#0463ac]/60"
+                >
+                  <img
+                    src={sub.image}
+                    alt={sub.name}
+                    className="w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-110"
+                  />
+                </motion.div>
+              </div>
 
-            return (
-              <motion.div
-                key={service.id || service.name}
-                onClick={() => handleServiceClick(service)}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                whileHover={{ y: -3 }}
-                className="relative flex flex-col items-center py-2 px-0.5 sm:py-5 sm:px-1 cursor-pointer group transition-all duration-300"
-              >
-
-
-                <div className="relative mb-2 z-10 w-full px-1 sm:px-2">
-                  <motion.div
-                    animate={{
-                      y: [0, -2, 0],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: index * 0.1
-                    }}
-                    className="w-full h-28 sm:h-36 bg-[#F3E8D0] border border-[#eee4c5] shadow-sm rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:border-[#035240] group-hover:shadow-md"
-                  >
-                    <img
-                      src={(() => {
-                        const rawImage = service.icon_url || service.image_url || service.image || service.app_icon || service.category_icon;
-                        if (rawImage && !rawImage.startsWith('http') && !rawImage.startsWith('data:')) {
-                          const baseUrl = config.API_URL.replace(/\/hommlieserver\/?$/, '');
-                          return `${baseUrl}${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
-                        }
-                        return rawImage;
-                      })()}
-                      alt={name}
-                      className="w-[90%] h-[90%] object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-sm"
-                    />
-                  </motion.div>
+              <div className="flex flex-col items-center text-center z-10 w-full px-0.5">
+                <div className="relative group/text">
+                  <span className="text-[11px] sm:text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-all duration-300 leading-tight text-center block w-full">
+                    {sub.name}
+                  </span>
                 </div>
-
-                <div className="flex flex-col items-center text-center z-10 w-full px-1">
-                  <div className="relative group/text">
-                    <span className="text-[10px] sm:text-[13px] font-bold text-[#033053]/90 group-hover:text-[#035240] transition-all duration-300 leading-tight uppercase tracking-tight whitespace-nowrap overflow-hidden text-ellipsis w-full">
-                      {name}
-                    </span>
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#035240] transition-all duration-300 group-hover:w-full opacity-0 group-hover:opacity-100" />
-                  </div>
-
-
-                </div>
-              </motion.div>
-            );
-          })}
+              </div>
+            </motion.div>
+          ))}
         </div>
+      </div>
 
-
-
+      {/* Mobile-only full-height image below Premium Pest Control Services */}
+      <div className="block sm:hidden w-full h-[464px] mt-4">
+        <img
+          src="/images/homebg.jpeg"
+          alt="Premium Pest Control Services"
+          className="w-full h-[464px] object-cover"
+        />
       </div>
 
       {/* Category modal - PORTAL */}

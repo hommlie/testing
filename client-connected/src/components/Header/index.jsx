@@ -716,24 +716,7 @@ const Header = ({
                   Commercial
                 </a>
 
-                <a
-                  href="https://www.ecospherewm.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
-                >
-                  Waste Management
-                </a>
-
-                {/* Product */}
-                <a
-                  href="https://hommlie.store"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
-                >
-                  Product
-                </a>
+                {/* Removed: Waste Management & Product links per request */}
 
               </div>
             </span>
@@ -743,7 +726,7 @@ const Header = ({
               <div className="relative" ref={getAppDropdownRef}>
                 <button
                   onClick={() => setIsGetAppOpen(!isGetAppOpen)}
-                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isGetAppOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isGetAppOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
                 >
                   <FaMobileAlt className={`text-lg transition-colors duration-300 ${isGetAppOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
                   Get App
@@ -803,7 +786,7 @@ const Header = ({
                     scale: [1, 1.02, 1],
                   } : {}}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className={`flex items-center gap-2 transition-all duration-300 px-3 py-1.5 rounded-full relative ${isOfferOpen ? 'text-[#0463ac] bg-blue-50/50' : 'hover:text-[#0463ac] hover:bg-gray-50'}`}
+                  className={`flex items-center gap-2 transition-all duration-300 px-3 py-1.5 rounded-full relative text-black ${isOfferOpen ? 'text-[#0463ac] bg-blue-50/50' : 'hover:text-[#0463ac] hover:bg-gray-50'}`}
                 >
                   <div className="relative">
                     <FaTag className={`text-lg transition-colors duration-300 ${isOfferOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
@@ -914,21 +897,21 @@ const Header = ({
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               {user?.length === 0 ? (
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-                >
-                  <FaSignInAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                  Login
-                </button>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group text-black"
+                  >
+                    <FaSignInAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
+                    <span className="text-black">Login</span>
+                  </button>
               ) : (
                 <div className="relative" ref={loginDropdownRef}>
                   <button
                     onClick={() => setIsLoginOpen(!isLoginOpen)}
-                    className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isLoginOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                    className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isLoginOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
                   >
                     <FaUser className={`text-lg transition-colors duration-300 ${isLoginOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                    <span className="whitespace-nowrap">Account</span>
+                    <span className="whitespace-nowrap text-black">Account</span>
                     <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isLoginOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
                   </button>
 
@@ -1064,17 +1047,17 @@ const Header = ({
               <div className="relative" ref={cartDropdownRef}>
                 <button
                   onClick={() => setIsCartOpen(!isCartOpen)}
-                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isCartOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isCartOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
                 >
                   <div className="relative">
                     <FaShoppingCart className={`text-lg transition-colors duration-300 ${isCartOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                    {cart?.length > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
-                        {cart?.length}
-                      </span>
-                    )}
+                            {cart?.length > 0 && (
+                              <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
+                                {cart?.length}
+                              </span>
+                            )}
                   </div>
-                  <span className="whitespace-nowrap">Cart</span>
+                  <span className="whitespace-nowrap text-black">Cart</span>
                   <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isCartOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
                 </button>
 
@@ -1206,10 +1189,10 @@ const Header = ({
               <div className="relative" ref={helpDropdownRef}>
                 <button
                   onClick={() => setIsHelpOpen(!isHelpOpen)}
-                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group ${isHelpOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
+                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isHelpOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
                 >
                   <FaQuestionCircle className={`text-lg transition-colors duration-300 ${isHelpOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                  <span className="whitespace-nowrap">Help</span>
+                  <span className="whitespace-nowrap text-black">Help</span>
                   <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isHelpOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
                 </button>
 
@@ -1343,7 +1326,7 @@ const Header = ({
                       Location
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate">{currentLocation}</span>
+                      <span className="truncate text-black">{currentLocation}</span>
                       <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
                     </div>
                   </div>
@@ -1367,7 +1350,7 @@ const Header = ({
                       Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate">{currentLocation}</span>
+                      <span className="truncate text-black">{currentLocation}</span>
                       <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
                     </div>
                   </div>
@@ -1385,7 +1368,7 @@ const Header = ({
                     <div className="flex flex-col text-left">
                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 ml-0.5">Location</span>
                       <div className="flex items-center text-sm font-bold text-gray-800">
-                        <span className="max-w-[140px] truncate leading-none">{currentLocation}</span>
+                        <span className="max-w-[140px] truncate leading-none text-black">{currentLocation}</span>
                         <MdKeyboardArrowDown className={`transition-transform duration-300 ${isLocationOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400'}`} />
                       </div>
                     </div>
@@ -1603,7 +1586,7 @@ const Header = ({
             >
               <FaShoppingCart size={22} />
               {cart?.length > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-amber-300 text-emerald-900 text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
+                <span className="absolute -top-1.5 -right-2 bg-amber-300 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
                   {cart?.length}
                 </span>
               )}
@@ -1976,12 +1959,12 @@ const Header = ({
           <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
             <nav className="space-y-4">
               {/* Mobile 'Coming Soon' banner removed */}
-              <div className="relative mb-4">
+              <div className="relative mb-4 max-w-[264px] mx-auto w-full">
                 <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-emerald-600" />
                 <input
                   type="text"
                   placeholder="What Service do you Need?"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />

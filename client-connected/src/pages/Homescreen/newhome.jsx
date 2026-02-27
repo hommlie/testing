@@ -411,197 +411,200 @@ const HomePage = () => {
         <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start">
           {/* Left Container - Services & Form (Sticky) */}
           <div className="w-full md:w-[460px] md:sticky md:top-32 flex-shrink-0">
-            {/* Search Bar - Mobile only */}
-            <div className="sm:block md:hidden mb-3">
-              <AnimatePresence>
-                {!isInBangalore && currentLocation !== "Get Current Location" && (
-                  <motion.div
-                    key="bangalore-alert"
-                    initial={{ height: 0, opacity: 0, y: -10 }}
-                    animate={{ height: "auto", opacity: 1, y: 0 }}
-                    exit={{ height: 0, opacity: 0, y: -10 }}
-                    className="overflow-hidden mb-3"
-                  >
-                    <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl animate-bounce">📍</span>
-                        <div>
-                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
-                          <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">
-                            We're coming soon to {
-                              currentLocation.split(',').find(part => !/^\d+$/.test(part.trim()))?.trim() ||
-                              currentLocation.split(',')[0]
-                            }!
-                          </p>
+            {/* Services grid (with Services / Products / Commercial tabs) */}
+            <ServiceGrid
+              categories={categories}
+              mobileAfterTabs={
+                <div className="relative">
+                  <AnimatePresence>
+                    {!isInBangalore && currentLocation !== "Get Current Location" && (
+                      <motion.div
+                        key="bangalore-alert"
+                        initial={{ height: 0, opacity: 0, y: -10 }}
+                        animate={{ height: "auto", opacity: 1, y: 0 }}
+                        exit={{ height: 0, opacity: 0, y: -10 }}
+                        className="overflow-hidden mb-3"
+                      >
+                        <div className="bg-gradient-to-r from-[#0463ac] to-[#035240] text-white p-3 rounded-xl shadow-lg flex items-center justify-between gap-2 overflow-hidden relative">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl animate-bounce">📍</span>
+                            <div>
+                              <p className="text-[10px] uppercase tracking-wider font-bold opacity-90 text-white/90 text-left">Coming Soon</p>
+                              <p className="text-sm font-bold leading-tight text-white drop-shadow-sm text-left">
+                                We're coming soon to {
+                                  currentLocation.split(',').find(part => !/^\d+$/.test(part.trim()))?.trim() ||
+                                  currentLocation.split(',')[0]
+                                }!
+                              </p>
+                            </div>
+                          </div>
+                          <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <div className="relative max-w-[360px] mx-auto w-full">
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder={`Search ${services[placeholderIndex]}...`}
+                      className="w-full pl-11 pr-11 py-3.5 text-sm bg-white rounded-full shadow-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all duration-300"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      onFocus={() => setIsSearchFocused(true)}
+                      onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                    />
+
+                    {/* Left search icon */}
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0463ac] text-xl">
+                      <BiSearchAlt
+                        className="cursor-pointer transition-transform duration-200 group-hover:scale-105"
+                        onClick={() => {
+                          setIsSearchFocused(true);
+                          searchInputRef.current?.focus();
+                        }}
+                      />
+                    </div>
+
+                    {/* Right mic icon */}
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0463ac] text-xl">
+                      <BsMicFill
+                        className={`cursor-pointer transition-colors duration-200 ${isListening ? "text-red-500 animate-pulse" : "hover:text-emerald-900"}`}
+                        onClick={handleMicClick}
+                      />
+                    </div>
+
+                    {!isSupported && (
+                      <p className="text-red-600 mt-2 text-sm">
+                        Your browser does not support voice search. Please try using Chrome on desktop or Android.
+                      </p>
+                    )}
+
+                    {isSearchFocused && searchTerm.length === 0 && (
+                      <div className="absolute top-full left-0 w-full bg-white rounded-2xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-40 mt-2">
+                        <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 7H7v6h6V7z" />
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
+                          </svg>
+                          Trending Searches
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                          {trendingSearches.map((item, idx) => (
+                            <button
+                              key={idx}
+                              onMouseDown={() => {
+                                setSearchTerm(item);
+                                fetchSearchResults(item);
+                                setIsSearchOpen(true);
+                                searchInputRef.current?.focus();
+                              }}
+                              className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
+                            >
+                              {item}
+                            </button>
+                          ))}
                         </div>
                       </div>
-                      {/* Subtitle pulse */}
-                      <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-white/30 animate-pulse"></div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <div className="relative">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder={`Search ${services[placeholderIndex]}...`}
-                  className="w-full pl-4 pr-20 py-3 text-base border border-black bg-[#f7f7f7] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-[#0463ac] text-xl">
-                  <BiSearchAlt
-                    className="cursor-pointer hover:text-emerald-900 transition-colors"
-                    onClick={() => {
-                      setIsSearchFocused(true);
-                      searchInputRef.current?.focus();
-                    }}
-                  />
-                  <BsMicFill
-                    className={`cursor-pointer hover:text-emerald-900 transition-colors ${isListening ? 'text-red-500 animate-pulse' : ''
-                      }`}
-                    onClick={handleMicClick}
-                  />
-                </div>
-              </div>
-              {!isSupported && (
-                <p className="text-red-600 mt-2 text-sm">
-                  Your browser does not support voice search. Please try using Chrome on desktop or Android.
-                </p>
-              )}
-              {/* Trending Search Dropdown */}
-              <div className="relative w-full">
-                {isSearchFocused && searchTerm.length === 0 && (
-                  <div className="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-40 md:z-0">
-                    <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                      <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M13 7H7v6h6V7z" />
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
-                      </svg>
-                      Trending Searches
-                    </h3>
-                    <div className="flex flex-wrap gap-3">
-                      {trendingSearches.map((item, idx) => (
-                        <button
-                          key={idx}
-                          onMouseDown={() => {
-                            setSearchTerm(item); // Show in search bar
-                            fetchSearchResults(item); // Optional: Show matching products
-                            setIsSearchOpen(true); // Show dropdown
-                            searchInputRef.current?.focus(); // Refocus input
-                          }}
-                          className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
-                        >
-                          {item}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <AnimatePresence>
-              {isSearchOpen && (
-                <motion.div
-                  key="search-dropdown"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute left-0 right-0 mt-1 bg-white shadow-lg rounded-lg z-20 max-h-96 overflow-y-auto mx-4 border border-gray-200"
-                >
-                  {isLoading ? (
-                    <div className="flex justify-center items-center py-6">
-                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-emerald-600"></div>
-                    </div>
-                  ) : pincode && pincode.length === 6 ? (
-                    searchResults.length > 0 ? (
-                      searchResults.map((result, index) => (
+                    )}
+
+                    <AnimatePresence>
+                      {isSearchOpen && (
                         <motion.div
-                          key={result.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
+                          key="search-dropdown"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg rounded-2xl z-30 max-h-96 overflow-y-auto border border-gray-200"
                         >
-                          <div
-                            className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
-                            onClick={() => {
-                              setIsSearchOpen(false);
-                              setSearchTerm("");
-                              navigate(`${config.VITE_BASE_URL}/product/${result.slug}`);
-                            }}
-                          >
-                            {result.productimage && (
-                              <img
-                                src={result.productimage.image_url}
-                                alt={result.product_name}
-                                className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
-                              />
-                            )}
-                            <div className="flex-1">
-                              <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
-                              <p className="flex gap-2 text-gray-600">
-                                <span className="font-semibold text-emerald-700">
-                                  ₹{Number(result.discounted_price ?? 0).toFixed(2)}
-                                </span>
-                                <span className="line-through text-gray-400">
-                                  ₹{Number(result.product_price ?? 0).toFixed(2)}
-                                </span>
-                              </p>
-                              {result.rating && (
-                                <div className="flex items-center mt-1">
-                                  <div className="flex items-center">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                      <svg
-                                        key={star}
-                                        className={`w-3 h-3 ${star <= Math.round(result.rating)
-                                          ? "text-amber-400"
-                                          : "text-gray-300"
-                                          }`}
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                      >
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                      </svg>
-                                    ))}
-                                  </div>
-                                  <span className="text-xs text-gray-500 ml-1">
-                                    ({result.total_reviews})
-                                  </span>
-                                </div>
-                              )}
+                          {isLoading ? (
+                            <div className="flex justify-center items-center py-6">
+                              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-emerald-600"></div>
                             </div>
-                            <IoIosArrowForward className="text-gray-400 text-lg" />
-                          </div>
+                          ) : pincode && pincode.length === 6 ? (
+                            searchResults.length > 0 ? (
+                              searchResults.map((result, index) => (
+                                <motion.div
+                                  key={result.id}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.05 }}
+                                >
+                                  <div
+                                    className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
+                                    onClick={() => {
+                                      setIsSearchOpen(false);
+                                      setSearchTerm("");
+                                      navigate(`${config.VITE_BASE_URL}/product/${result.slug}`);
+                                    }}
+                                  >
+                                    {result.productimage && (
+                                      <img
+                                        src={result.productimage.image_url}
+                                        alt={result.product_name}
+                                        className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
+                                      />
+                                    )}
+                                    <div className="flex-1">
+                                      <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
+                                      <p className="flex gap-2 text-gray-600">
+                                        <span className="font-semibold text-emerald-700">
+                                          ₹{Number(result.discounted_price ?? 0).toFixed(2)}
+                                        </span>
+                                        <span className="line-through text-gray-400">
+                                          ₹{Number(result.product_price ?? 0).toFixed(2)}
+                                        </span>
+                                      </p>
+                                      {result.rating && (
+                                        <div className="flex items-center mt-1">
+                                          <div className="flex items-center">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                              <svg
+                                                key={star}
+                                                className={`w-3 h-3 ${star <= Math.round(result.rating) ? "text-amber-400" : "text-gray-300"}`}
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                              >
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                              </svg>
+                                            ))}
+                                          </div>
+                                          <span className="text-xs text-gray-500 ml-1">
+                                            ({result.total_reviews})
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                    <IoIosArrowForward className="text-gray-400 text-lg" />
+                                  </div>
+                                </motion.div>
+                              ))
+                            ) : (
+                              <div className="py-4 px-6 text-center text-gray-500">
+                                No products found for "{searchTerm}"
+                              </div>
+                            )
+                          ) : (
+                            <div className="p-8 text-center bg-gray-50 flex flex-col items-center gap-3">
+                              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                <MdLocationOn className="w-6 h-6 text-[#0463ac]" />
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-bold text-[#033053]">Serviceability Required</h4>
+                                <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto leading-relaxed">
+                                  Please enter your 6-digit pincode in the service section below to view matching services in your area.
+                                </p>
+                              </div>
+                            </div>
+                          )}
                         </motion.div>
-                      ))
-                    ) : (
-                      <div className="py-4 px-6 text-center text-gray-500">
-                        No products found for "{searchTerm}"
-                      </div>
-                    )
-                  ) : (
-                    <div className="p-8 text-center bg-gray-50 flex flex-col items-center gap-3">
-                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                        <MdLocationOn className="w-6 h-6 text-[#0463ac]" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-[#033053]">Serviceability Required</h4>
-                        <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto leading-relaxed">
-                          Please enter your 6-digit pincode in the service section below to view matching services in your area.
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-
-            {/* Always show on both desktop and mobile */}
-            <ServiceGrid categories={categories} />
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              }
+            />
 
             {/* HomeForm in flow (Desktop Only as per request) */}
             <div className="hidden md:block mt-3">

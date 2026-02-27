@@ -431,36 +431,29 @@ const Header = ({
             <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-sm text-black mr-3 font-semibold z-20">
               <button
                 onClick={() => setIsGetAppModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors text-black"
               >
                 <FaMobileAlt className="text-inherit" />
-                Get App
+                <span className="text-black">Get App</span>
               </button>
               <span className="hidden md:inline-block text-black">|</span>
 
               <button
                 onClick={() => setIsOfferModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors text-black"
               >
                 <FaTag className="text-inherit" />
-                Offer
+                <span className="text-black">Offer</span>
               </button>
               <span className="hidden md:inline-block text-black">|</span>
-              {/* <button
-                onClick={() => setIsComingSoonOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
-              >
-                <FaShoppingCart className="text-inherit" />
-                Product
-              </button> */}
-              {/* <span className="hidden md:inline-block text-black">|</span> */}
+              {/* Removed Product link per request */}
               {user?.length === 0 ? (
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                  className="flex items-center gap-1 hover:text-[#52852d] transition-colors text-black"
                 >
                   <FaSignInAlt className="text-inherit" />
-                  Login
+                  <span className="text-black">Login</span>
                 </button>
               ) : (
                 <button
@@ -475,12 +468,12 @@ const Header = ({
 
               <button
                 onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors text-black"
               >
                 <FaShoppingCart className="text-inherit" />
-                Cart
+                <span className="text-black">Cart</span>
                 {cart?.length > 0 && (
-                  <span className="ml-1 bg-amber-200 text-emerald-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+                  <span className="ml-1 bg-amber-200 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
                     {cart?.length}
                   </span>
                 )}
@@ -489,10 +482,10 @@ const Header = ({
 
               <button
                 onClick={() => setIsHelpModalOpen(true)}
-                className="flex items-center gap-1 hover:text-[#52852d] transition-colors"
+                className="flex items-center gap-1 hover:text-[#52852d] transition-colors text-black"
               >
                 <FaQuestionCircle className="text-inherit" />
-                Help
+                <span className="text-black">Help</span>
               </button>
             </div>
           </div>
@@ -540,7 +533,7 @@ const Header = ({
                       Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate">{currentLocation}</span>
+                      <span className="truncate text-black">{currentLocation}</span>
                       <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
                     </div>
                   </div>
@@ -564,7 +557,7 @@ const Header = ({
                       Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate">{currentLocation}</span>
+                      <span className="truncate text-black">{currentLocation}</span>
                       <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
                     </div>
                   </div>
@@ -581,7 +574,7 @@ const Header = ({
                       Delivery in 60 min
                     </div>
                     <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate">{currentLocation}</span>
+                      <span className="truncate text-black">{currentLocation}</span>
                       <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
                     </div>
                   </div>
@@ -816,7 +809,7 @@ const Header = ({
               >
                 <FaShoppingCart />
                 {cart?.length > 0 && (
-                  <span className="absolute -top-1 -right-2 bg-amber-300 text-emerald-900 text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-2 bg-amber-300 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
                     {cart?.length}
                   </span>
                 )}
@@ -957,12 +950,12 @@ const Header = ({
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 border-t shadow-inner">
           <nav className="space-y-4">
-            <div className="relative mb-4">
+            <div className="relative mb-4 max-w-[264px] mx-auto w-full">
               <BiSearchAlt className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-emerald-600" />
               <input
                 type="text"
                 placeholder="What Service do you Need?"
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />

@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import config from "../../config/config";
+import { Zap, ShoppingBag, Briefcase } from "lucide-react";
 
 /* ================== DATA ================== */
 
@@ -147,6 +150,9 @@ const ProductCard = ({ p }) => {
 /* ================== MAIN PAGE ================== */
 
 const Product = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [filters, setFilters] = useState({
     category: "All",
     under1000: false,
@@ -154,6 +160,29 @@ const Product = () => {
   });
 
   const [sort, setSort] = useState("popular");
+
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 640 : false);
+  const [activeTab, setActiveTab] = useState("products");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === "undefined") return;
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/product")) {
+      setActiveTab("products");
+    } else {
+      setActiveTab("services");
+    }
+  }, [location.pathname]);
 
   const filteredProducts = useMemo(() => {
     let data = [...PRODUCTS];
@@ -190,6 +219,58 @@ const Product = () => {
 
   return (
     <>
+      {/* Mobile Services / Products toggle */}
+      {isMobile && (
+        <div className="w-full px-4 pt-3 pb-2 sm:hidden flex justify-center bg-white">
+          <div className="w-full max-w-[420px] grid grid-cols-3 gap-3">
+            <button
+              type="button"
+              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm active:scale-[0.98] ${activeTab === "services"
+                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }`}
+              onClick={() => {
+                setActiveTab("services");
+                navigate(`${config.VITE_BASE_URL || ""}/`);
+              }}
+            >
+              <Zap className="w-4 h-4" />
+              Services
+            </button>
+            <button
+              type="button"
+              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm active:scale-[0.98] ${activeTab === "products"
+                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }`}
+              onClick={() => {
+                if (activeTab !== "products") {
+                  setActiveTab("products");
+                  navigate("/product");
+                }
+              }}
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Products
+            </button>
+            <button
+              type="button"
+              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm active:scale-[0.98] ${activeTab === "commercial"
+                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }`}
+              onClick={() => {
+                setActiveTab("commercial");
+                window.open("https://b2b.hommlie.com/", "_blank");
+              }}
+            >
+              <Briefcase className="w-4 h-4" />
+              Commercial
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* HERO */}
       <section className="relative h-[380px]">
         <img
