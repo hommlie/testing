@@ -17,7 +17,7 @@ const MobileNavigation = () => {
     { path: "/", label: "Home", iconImage: "/images/logoh.png" },
     { path: "https://b2b.hommlie.com/", label: "B2B", IconOutline: RiBuilding2Line, IconFill: RiBuilding2Fill },
     { path: "/product", label: "Product", IconOutline: MdProductionQuantityLimits, IconFill: MdProductionQuantityLimits },
-    { path: "/community", label: "Community", IconOutline: RiTeamLine, IconFill: RiTeamFill },
+    { path: "/edit-profile", label: "Account", IconOutline: FaUser, IconFill: FaUser },
   ];
 
   const { user, handleLogout, setIsAddressModalOpen, setIsReferAndEarnOpen } = useCont();
