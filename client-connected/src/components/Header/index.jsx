@@ -649,17 +649,16 @@ const Header = ({
     return (
       <button
         onClick={onClick}
-        className={`flex flex-col items-center justify-center bg-transparent transition-all active:scale-95 ${className}`}
+        className={`flex flex-col items-center justify-center bg-transparent transition-all ${className}`}
         type="button"
       >
         <img
           src="/wallet-luxe.png"
           alt="Wallet"
-          className="w-13 h-13 object-contain mb-0"
-          style={{ mixBlendMode: "multiply" }}
+          className="w-11 h-11 object-contain mb-0"
           draggable="false"
         />
-        <span className="text-[13px] font-black text-[#212121] leading-none -mt-1.5 drop-shadow-sm">
+        <span className="text-[12px] font-extrabold text-[#212121] leading-none -mt-1">
           ₹{fmt}
         </span>
       </button>
@@ -1308,7 +1307,7 @@ const Header = ({
               </NavLink>
             </div>
             {/* Mobile View: Blinkit Style Unified Header */}
-            <div className={`flex sm:hidden flex-col w-screen -mx-4 px-4 pt-4 pb-1 bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white transition-all duration-300 ${isHomePage ? 'h-auto' : 'pb-4'}`}>
+            <div className={`flex sm:hidden flex-col w-screen -mx-4 px-4 pt-4 pb-1 bg-gradient-to-b from-[#81D4FA] via-[#B3E5FC] to-white transition-all duration-300 ${isHomePage ? 'h-auto' : 'pb-4'}`}>
               {/* Top Row: Time, Location, Stats, Profile */}
               <div className="flex justify-between items-start w-full mb-4">
                 <div className="flex flex-col">
@@ -1329,35 +1328,17 @@ const Header = ({
                 </div>
 
                 {/* Right side icons */}
-                <div className="flex items-center gap-1.5 pt-1">
+                <div className="flex items-center gap-4 pt-1">
                   <WalletPill
                     amount={walletBalance}
                     onClick={() => setIsWalletModalOpen(true)}
-                    className=""
+                    className="!bg-white shadow-sm"
                   />
-                  <NavLink to="/add-to-cart">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-95 relative">
-                      <FaShoppingCart className="text-[#212121] text-2xl" />
-                      {cart?.length > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-[11px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-white z-10">
-                          {cart?.length}
-                        </span>
-                      )}
+                  <NavLink to="/edit-profile">
+                    <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+                      <FaUser className="text-[#212121] text-base" />
                     </div>
                   </NavLink>
-                  <button
-                    onClick={() => {
-                      if (user?.length === 0) {
-                        setIsModalOpen(true);
-                      } else {
-                        setIsLoginOpen(!isLoginOpen);
-                      }
-                    }}
-                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-95"
-                    aria-label="Account profile"
-                  >
-                    <FaUser className="text-[#212121] text-2xl" />
-                  </button>
                 </div>
               </div>
 
@@ -1666,9 +1647,36 @@ const Header = ({
 
 
 
-          </div>
-          <div className="md:hidden">
+          </div><div className="md:hidden flex items-center gap-4">
+            {/* Cart Button - Uniform Color */}
+            <button
+              onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
+              className="relative text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
+              aria-label="Go to cart"
+            >
+              <FaShoppingCart size={22} />
+              {cart?.length > 0 && (
+                <span className="absolute -top-1.5 -right-2 bg-amber-300 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
+                  {cart?.length}
+                </span>
+              )}
+            </button>
+
+            {/* Account/Profile Button - Uniform Color */}
             <div className="relative">
+              <button
+                onClick={() => {
+                  if (user?.length === 0) {
+                    setIsModalOpen(true);
+                  } else {
+                    setIsLoginOpen(!isLoginOpen);
+                  }
+                }}
+                className={`text-2xl transition-colors ${isLoginOpen ? 'text-[#0463ac]' : 'text-[#033053] hover:text-[#0463ac]'}`}
+                aria-label="Account profile"
+              >
+                <FaUser size={22} />
+              </button>
 
               {/* Account Dropdown for Mobile */}
               <div className="md:hidden">
