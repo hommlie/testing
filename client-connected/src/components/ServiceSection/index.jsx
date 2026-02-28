@@ -451,6 +451,16 @@ const ServiceSection = ({ categories }) => {
         {/* Modal for callback */}
         <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
 
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
+
         {/* Desktop Header - Only visible on md+ */}
         <div className="hidden md:block mb-0 -mt-8">
           <motion.div
@@ -546,7 +556,7 @@ const ServiceSection = ({ categories }) => {
               {/* Pest Type / Subcategory */}
               <div>
                 <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Pest</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
                   {getCurrentSubcategories().map((sub) => {
                     const isSelected = selectedSubCategory === sub.id;
                     let displayIcon = "🛡️";
@@ -586,7 +596,7 @@ const ServiceSection = ({ categories }) => {
               {/* Property Size */}
               <div>
                 <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Home Size</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
                   {getVariationOptions().map((variation, index) => {
                     const isSelected = selectedBhk === variation;
                     return (
@@ -609,51 +619,47 @@ const ServiceSection = ({ categories }) => {
               {/* Product Selection */}
               <div>
                 <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Service</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                  {getCurrentProducts() && getCurrentProducts().length > 0 ? (
-                    getCurrentProducts().map((prod) => {
-                      const isSelected = selectedProduct === prod.id;
-                      return (
-                        <button
-                          key={prod.id}
-                          type="button"
-                          onClick={() => setSelectedProduct(prod.id)}
-                          className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                            ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
-                            : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                            }`}
-                        >
-                          {prod.product_name}
-                        </button>
-                      );
-                    })
-                  ) : null}
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
+                  {getCurrentProducts()?.map((prod) => {
+                    const isSelected = selectedProduct === prod.id;
+                    return (
+                      <button
+                        key={prod.id}
+                        type="button"
+                        onClick={() => setSelectedProduct(prod.id)}
+                        className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
+                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                      >
+                        {prod.product_name}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Service Variant */}
               <div>
                 <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Service Type</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                  {getCurrentAttributes() && getCurrentAttributes().length > 0 ? (
-                    getCurrentAttributes().map((attr) => {
-                      const isSelected = selectedAttribute === attr.id;
-                      const attrName = attr.attribute_name || attr.attribute;
-                      return (
-                        <button
-                          key={attr.id}
-                          type="button"
-                          onClick={() => setSelectedAttribute(attr.id)}
-                          className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                            ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
-                            : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                            }`}
-                        >
-                          {attrName}
-                        </button>
-                      );
-                    })
-                  ) : null}
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
+                  {getCurrentAttributes()?.map((attr) => {
+                    const isSelected = selectedAttribute === attr.id;
+                    const attrName = attr.attribute_name || attr.attribute;
+                    return (
+                      <button
+                        key={attr.id}
+                        type="button"
+                        onClick={() => setSelectedAttribute(attr.id)}
+                        className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
+                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                      >
+                        {attrName}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
