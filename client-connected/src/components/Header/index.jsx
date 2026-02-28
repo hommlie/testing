@@ -112,6 +112,19 @@ const Header = ({
   const [isLoading, setIsLoading] = useState(false);
   const [mobileSearchTerm, setMobileSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("services");
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 120) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -649,17 +662,19 @@ const Header = ({
     return (
       <button
         onClick={onClick}
-        className={`flex flex-col items-center justify-center bg-transparent transition-all active:scale-95 ${className}`}
+        className={`flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 ${className}`}
         type="button"
       >
-        <img
-          src="/wallet-luxe.png"
-          alt="Wallet"
-          className="w-12 h-12 object-contain mb-0"
-          style={{ mixBlendMode: "multiply" }}
-          draggable="false"
-        />
-        <span className="text-[13px] font-extrabold text-[#212121] leading-none -mt-1 tracking-tight">
+        <div className="relative">
+          <img
+            src="/wallet-luxe.png"
+            alt="Wallet"
+            className="w-11 h-11 object-contain"
+            style={{ mixBlendMode: "multiply" }}
+            draggable="false"
+          />
+        </div>
+        <span className="text-[12px] font-black text-[#212121] leading-none tracking-tight -mt-1 bg-white/40 px-1.5 py-0.5 rounded-full backdrop-blur-[2px]">
           ₹{fmt}
         </span>
       </button>
@@ -1308,105 +1323,154 @@ const Header = ({
               </NavLink>
             </div>
             {/* Mobile View: Blinkit Style Unified Header */}
-            <div className={`flex sm:hidden flex-col w-screen -mx-4 px-4 pt-4 pb-1 bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white transition-all duration-300 ${isHomePage ? 'h-auto' : 'pb-4'}`}>
-              {/* Top Row: Time, Location, Stats, Profile */}
-              <div className="flex justify-between items-start w-full mb-4">
-                <div className="flex flex-col">
-                  {/* Delivery Info */}
-                  <h1 className="text-lg font-extrabold text-[#212121] leading-none mb-0.5">Hommlie in</h1>
-                  <h2 className="text-3xl font-extrabold text-[#212121] leading-none mb-2.5">4 hours</h2>
+            <div
+              className={`flex sm:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-500 ease-in-out ${isScrolled
+                ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md bg-white/95'
+                : 'bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white pt-4 pb-1 shadow-sm'
+                }`}
+            >
+              <div className="relative">
+                {/* Top Row: Info & Icons - Animates out on scroll */}
+                <motion.div
+                  animate={{
+                    height: isScrolled ? 0 : "auto",
+                    opacity: isScrolled ? 0 : 1,
+                    marginBottom: isScrolled ? 0 : 16,
+                    scale: isScrolled ? 0.95 : 1
+                  }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  className="flex justify-between items-start w-full"
+                >
+                  <div className="flex justify-between items-center w-full mb-4">
+                    <div className="flex flex-col">
+                      <h1 className="text-lg font-extrabold text-[#212121] leading-none mb-0.5">Hommlie in</h1>
+                      <h2 className="text-3xl font-extrabold text-[#212121] leading-none mb-2">4 hours</h2>
 
-                  {/* Location Dropdown */}
-                  <button
-                    onClick={() => setIsLocationModalOpen(true)}
-                    className="flex items-center text-[12px] font-extrabold text-[#212121]/80 leading-none"
-                  >
-                    <span className="uppercase tracking-wide">HOME</span>
-                    <span className="mx-1">•</span>
-                    <span className="max-w-[180px] truncate">{currentLocation}</span>
-                    <MdKeyboardArrowDown className="ml-0.5 text-lg" />
-                  </button>
-                </div>
-
-                {/* Right side icons */}
-                <div className="flex items-center gap-1.5 pt-1">
-                  <WalletPill
-                    amount={walletBalance}
-                    onClick={() => setIsWalletModalOpen(true)}
-                    className=""
-                  />
-                  <NavLink to="/add-to-cart">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-95 relative">
-                      <FaShoppingCart className="text-[#212121] text-2xl" />
-                      {cart?.length > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-[11px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-white z-10">
-                          {cart?.length}
-                        </span>
-                      )}
+                      <button
+                        onClick={() => setIsLocationModalOpen(true)}
+                        className="flex items-center text-[12px] font-bold text-[#212121]/70 leading-none"
+                      >
+                        <span className="uppercase tracking-wide">HOME</span>
+                        <span className="mx-1 text-[10px]">•</span>
+                        <span className="max-w-[160px] truncate">{currentLocation}</span>
+                        <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60" />
+                      </button>
                     </div>
-                  </NavLink>
+
+                    <div className="flex items-center gap-4 pt-1 pr-2">
+                      <WalletPill
+                        amount={walletBalance}
+                        onClick={() => setIsWalletModalOpen(true)}
+                      />
+                      <NavLink to="/add-to-cart" className="relative transition-all hover:scale-110 active:scale-95 group">
+                        <div className="p-1">
+                          <FaShoppingCart className="text-[#212121] text-2xl group-hover:text-[#0463ac] transition-colors" />
+                          {cart?.length > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-[#4ade80] z-10 transition-transform scale-110">
+                              {cart?.length}
+                            </span>
+                          )}
+                        </div>
+                      </NavLink>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Search Row: Morphs size and position */}
+                <div className="flex items-center gap-3 w-full">
+                  <motion.div
+                    layout
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="flex-1 relative group"
+                  >
+                    <input
+                      type="text"
+                      placeholder={isScrolled ? "Search services..." : `Search ${services[placeholderIndex]}...`}
+                      className={`w-full transition-all duration-300 font-medium placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 ${isScrolled
+                        ? 'pl-10 pr-4 py-2.5 text-sm bg-gray-50 rounded-xl border border-gray-100 shadow-none'
+                        : 'pl-12 pr-12 py-3.5 text-base bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-gray-100 focus:border-[#0463ac]/20'
+                        }`}
+                      value={mobileSearchTerm}
+                      onChange={(e) => setMobileSearchTerm(e.target.value)}
+                    />
+                    <div className={`absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-300 ${isScrolled ? 'w-10 text-gray-400 text-lg' : 'w-12 text-gray-500 text-xl font-bold'}`}>
+                      <BiSearchAlt />
+                    </div>
+
+                    {!isScrolled && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center pr-4"
+                      >
+                        <div className="w-px h-6 bg-gray-200 mr-3" />
+                        <BsMicFill
+                          onClick={handleMobileMicClick}
+                          className={`text-xl transition-colors ${isListening ? "text-[#0463ac] animate-pulse" : "text-gray-500"}`}
+                        />
+                      </motion.div>
+                    )}
+                  </motion.div>
+
+                  {/* Sticky Icons Panel: Visible only on scroll */}
+                  {isScrolled && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="flex items-center gap-2"
+                    >
+                      <div onClick={() => setIsWalletModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50/50 rounded-full border border-blue-100/50">
+                        <span className="text-[14px] font-bold text-[#0463ac]">₹{walletBalance}</span>
+                      </div>
+                      <NavLink to="/add-to-cart" className="relative p-1.5">
+                        <FaShoppingCart className="text-[#212121] text-xl" />
+                        {cart?.length > 0 && (
+                          <span className="absolute top-0 right-0 bg-amber-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm ring-1 ring-white">
+                            {cart?.length}
+                          </span>
+                        )}
+                      </NavLink>
+                    </motion.div>
+                  )}
                 </div>
               </div>
 
               {isHomePage && (
-                <>
-                  {/* Search Bar Row */}
-                  <div className="w-full mb-2">
-                    <div className="relative w-full group">
-                      <input
-                        type="text"
-                        placeholder={`Search ${services[placeholderIndex]}...`}
-                        className="w-full pl-12 pr-12 py-3.5 text-base bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 focus:border-[#0463ac]/20 transition-all duration-300 font-medium placeholder:text-gray-400"
-                        value={mobileSearchTerm}
-                        onChange={(e) => setMobileSearchTerm(e.target.value)}
-                      />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl font-bold">
-                        <BiSearchAlt />
-                      </div>
-                      <div className="absolute right-12 top-1/2 -translate-y-1/2 w-px h-6 bg-gray-200" />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl">
-                        <BsMicFill onClick={handleMobileMicClick} className={isListening ? "text-[#0463ac] animate-pulse" : ""} />
-                      </div>
-                    </div>
-                  </div>
+                <div className={`w-full flex items-center justify-around px-1 relative transition-all duration-300 ${isScrolled ? 'pt-2 pb-1' : 'pt-1 pb-2'}`}>
+                  {[
+                    { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
+                    { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
+                    { id: "commercial", label: "Commercial", Icon: Building2, active: activeTab === "commercial" }
+                  ].map((tab) => (
+                    <motion.button
+                      key={tab.id}
+                      type="button"
+                      whileTap={{ scale: 0.95 }}
+                      className={`relative flex items-center gap-1.5 py-2 transition-all ${tab.active
+                        ? "text-[#0463ac]"
+                        : "text-gray-500 hover:text-[#0463ac]"
+                        }`}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        if (tab.id === "products") navigate("/product");
+                        if (tab.id === "commercial") window.open("https://b2b.hommlie.com/", "_blank");
+                      }}
+                    >
+                      <tab.Icon className={`w-[16px] h-[16px] ${tab.active ? "text-[#0463ac]" : "text-gray-400"}`} />
+                      <span className="text-[12px] font-bold whitespace-nowrap">
+                        {tab.label}
+                      </span>
 
-                  {/* Category Tabs Row */}
-                  <div className="w-full flex items-center justify-around pb-2 px-1 relative">
-                    {[
-                      { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
-                      { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
-                      { id: "commercial", label: "Commercial", Icon: Building2, active: activeTab === "commercial" }
-                    ].map((tab) => (
-                      <motion.button
-                        key={tab.id}
-                        type="button"
-                        whileTap={{ scale: 0.95 }}
-                        className={`relative flex items-center gap-1.5 py-2.5 transition-all ${tab.active
-                          ? "text-[#0463ac]"
-                          : "text-gray-500 hover:text-[#0463ac]"
-                          }`}
-                        onClick={() => {
-                          setActiveTab(tab.id);
-                          if (tab.id === "products") navigate("/product");
-                          if (tab.id === "commercial") window.open("https://b2b.hommlie.com/", "_blank");
-                        }}
-                      >
-                        <tab.Icon className={`w-[18px] h-[18px] ${tab.active ? "text-[#0463ac]" : "text-gray-400"}`} />
-                        <span className="text-[13px] font-bold whitespace-nowrap">
-                          {tab.label}
-                        </span>
-
-                        {tab.active && (
-                          <motion.div
-                            layoutId="mobileActiveTabLine"
-                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0463ac] rounded-full"
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                          />
-                        )}
-                      </motion.button>
-                    ))}
-                  </div>
-                </>
+                      {tab.active && (
+                        <motion.div
+                          layoutId="mobileActiveTabLine"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0463ac] rounded-full"
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
               )}
             </div>
 
