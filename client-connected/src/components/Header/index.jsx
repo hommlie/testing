@@ -1375,7 +1375,7 @@ const Header = ({
                     {[
                       { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
                       { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
-                      { id: "commercial", label: "Commercial use", Icon: Building2, active: activeTab === "commercial" }
+                      { id: "commercial", label: "Commercial", Icon: Building2, active: activeTab === "commercial" }
                     ].map((tab) => (
                       <motion.button
                         key={tab.id}
