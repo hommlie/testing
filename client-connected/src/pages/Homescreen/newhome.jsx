@@ -77,13 +77,23 @@ const HomePage = () => {
   const { location } = useParams();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const { cartLength, prodData, currentLocation, setCurrentLocation, pincode, setGlobalPincode } = useCont();
+  const {
+    cartLength,
+    prodData,
+    currentLocation,
+    setCurrentLocation,
+    pincode,
+    setGlobalPincode,
+    isLoginModalOpen,
+    setIsLoginModalOpen,
+  } = useCont();
+
   const [searchResults, setSearchResults] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   const searchTimeoutRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 

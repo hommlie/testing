@@ -5,6 +5,8 @@ import {
   useState,
   useCallback,
 } from "react";
+import { toast } from "react-toastify";
+
 import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -83,6 +85,12 @@ export function ContProvider({ children }) {
   const [selectedCoupon, setSelectedCoupon] = useState(() =>
     getLocalStorageItem(`HommlieselectedCoupon`, null)
   );
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isReferAndEarnOpen, setIsReferAndEarnOpen] = useState(false);
+  const [isWalletBonusModalOpen, setIsWalletBonusModalOpen] = useState(false);
+
+
   const [currentLocation, setCurrentLocation] = useState("Get Current Location");
   const [pincode, setPincode] = useState(() =>
     localStorage.getItem("HommliePincode") || ""
@@ -386,6 +394,20 @@ export function ContProvider({ children }) {
     // getSearchProdData();
   }, [getHomeFeeds]);
 
+  const handleLogout = useCallback(() => {
+    setUser([]);
+    Cookies.remove("HommlieUserjwtToken");
+    localStorage.removeItem("Hommlieuser");
+    localStorage.removeItem("HommlieselectedAddrs");
+    localStorage.removeItem("Hommliecart");
+    getUser();
+    getCart();
+    setCart([]);
+    setCartLength(0);
+    toast.success("Successfully logged out");
+  }, [getUser, getCart]);
+
+
   const fetchAllData = async () => {
     incrementApiCall();
     try {
@@ -465,9 +487,20 @@ export function ContProvider({ children }) {
     setCurrentLocation,
     pincode,
     setPincode: setGlobalPincode,
+    handleLogout,
+    isLoginModalOpen,
+    setIsLoginModalOpen,
+    isAddressModalOpen,
+    setIsAddressModalOpen,
+    isReferAndEarnOpen,
+    setIsReferAndEarnOpen,
+    isWalletBonusModalOpen,
+    setIsWalletBonusModalOpen,
+
     startLoading: () => setIsLoading(true),
     stopLoading: () => setIsLoading(false),
   };
+
 
   return (
     <MyContext.Provider value={states}>

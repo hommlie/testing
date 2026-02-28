@@ -33,6 +33,8 @@ import cartIcon from "../../assets/images/cart-icon.svg";
 import { jwtDecode } from "jwt-decode";
 import { useCont } from "../../context/MyContext";
 import LoginSignup from "../LoginModal";
+import WalletBonusModal from "../WalletBonusModal";
+
 import AddressModal from "../AddressModal";
 import ReferAndEarn from "../ReferAndEarnModal";
 import { motion, AnimatePresence } from "framer-motion";
@@ -95,6 +97,15 @@ const Header = ({
     pincode,
     prodData,
     selectedAddrs,
+    isLoginModalOpen,
+    setIsLoginModalOpen,
+    isAddressModalOpen,
+    setIsAddressModalOpen,
+    isReferAndEarnOpen,
+    setIsReferAndEarnOpen,
+    isWalletBonusModalOpen,
+    setIsWalletBonusModalOpen,
+    handleLogout: contextLogout,
   } = useCont();
 
   const [isListening, setIsListening] = useState(false);
@@ -104,11 +115,9 @@ const Header = ({
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [isReferAndEarnOpen, setIsReferAndEarnOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [mobileSearchTerm, setMobileSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("services");
@@ -174,20 +183,12 @@ const Header = ({
   const isHomePage = ["/", "/home"].includes(location.pathname);
 
   const handleLogout = () => {
-    setUser([]);
-    Cookies.remove("HommlieUserjwtToken");
-    localStorage.removeItem("Hommlieuser");
-    localStorage.removeItem("HommlieselectedAddrs");
-    localStorage.removeItem("Hommliecart");
-    getUser();
-    getCart();
-    setCart([]);
-    setCartLength(0);
+    contextLogout();
     setIsLoginOpen(false);
     setIsMobileMenuOpen(false);
-    notify("Successfully logged out", "success");
     navigate("/");
   };
+
 
   const handleMicClick = () => {
     if (!SpeechRecognition) {
@@ -1314,7 +1315,7 @@ const Header = ({
           <div className="flex items-center gap-3">
             {/* Logo Section */}
             <div className="hidden sm:flex flex-shrink-0">
-              <NavLink to="/" className="group">
+              <NavLink to="/" className="group" onClick={() => window.scrollTo(0, 0)}>
                 <img
                   src={logo}
                   alt={logoAlt}
@@ -1322,62 +1323,66 @@ const Header = ({
                 />
               </NavLink>
             </div>
-            {/* Mobile View: Blinkit Style Unified Header */}
+            {/* Mobile View: Unified Header */}
             <div
-              className={`flex sm:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-500 ease-in-out ${isScrolled
-                ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md bg-white/95'
-                : 'bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white pt-4 pb-1 shadow-sm'
+              className={`flex sm:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-500 ease-in-out ${!isHomePage
+                ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md'
+                : isScrolled
+                  ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md bg-white/95'
+                  : 'bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white pt-4 pb-1 shadow-sm'
                 }`}
             >
               <div className="relative">
-                {/* Top Row: Info & Icons - Animates out on scroll */}
-                <motion.div
-                  animate={{
-                    height: isScrolled ? 0 : "auto",
-                    opacity: isScrolled ? 0 : 1,
-                    marginBottom: isScrolled ? 0 : 16,
-                    scale: isScrolled ? 0.95 : 1
-                  }}
-                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                  className="flex justify-between items-start w-full"
-                >
-                  <div className="flex justify-between items-center w-full mb-4">
-                    <div className="flex flex-col">
-                      <h1 className="text-lg font-extrabold text-[#212121] leading-none mb-0.5">Hommlie in</h1>
-                      <h2 className="text-3xl font-extrabold text-[#212121] leading-none mb-2">4 hours</h2>
+                {/* Top Row: Info & Icons - Only on Home Page */}
+                {isHomePage && (
+                  <motion.div
+                    animate={{
+                      height: isScrolled ? 0 : "auto",
+                      opacity: isScrolled ? 0 : 1,
+                      marginBottom: isScrolled ? 0 : 6,
+                      scale: isScrolled ? 0.95 : 1
+                    }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                    className="flex justify-between items-start w-full"
+                  >
+                    <div className="flex justify-between items-center w-full">
+                      <div className="flex flex-col">
+                        <h1 className="text-lg font-extrabold text-[#212121] leading-none mb-0.5">Hommlie in</h1>
+                        <h2 className="text-3xl font-extrabold text-[#212121] leading-none mb-1">4 hours</h2>
 
-                      <button
-                        onClick={() => setIsLocationModalOpen(true)}
-                        className="flex items-center text-[12px] font-bold text-[#212121]/70 leading-none"
-                      >
-                        <span className="uppercase tracking-wide">HOME</span>
-                        <span className="mx-1 text-[10px]">•</span>
-                        <span className="max-w-[160px] truncate">{currentLocation}</span>
-                        <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60" />
-                      </button>
-                    </div>
+                        <button
+                          onClick={() => setIsLocationModalOpen(true)}
+                          className="flex items-center text-[12px] font-bold text-[#212121]/70 leading-none"
+                        >
+                          <span className="uppercase tracking-wide">HOME</span>
+                          <span className="mx-1 text-[10px]">•</span>
+                          <span className="max-w-[160px] truncate">{currentLocation}</span>
+                          <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60" />
+                        </button>
+                      </div>
 
-                    <div className="flex items-center gap-4 pt-1 pr-2">
-                      <WalletPill
-                        amount={walletBalance}
-                        onClick={() => setIsWalletModalOpen(true)}
-                      />
-                      <NavLink to="/add-to-cart" className="relative transition-all hover:scale-110 active:scale-95 group">
-                        <div className="p-1">
-                          <FaShoppingCart className="text-[#212121] text-2xl group-hover:text-[#0463ac] transition-colors" />
-                          {cart?.length > 0 && (
-                            <span className="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-[#4ade80] z-10 transition-transform scale-110">
-                              {cart?.length}
-                            </span>
-                          )}
-                        </div>
-                      </NavLink>
+                      <div className="flex items-center gap-4 pt-1 pr-2">
+                        <WalletPill
+                          amount={walletBalance}
+                          onClick={() => setIsWalletModalOpen(true)}
+                        />
+                        <NavLink to="/add-to-cart" className="relative transition-all hover:scale-110 active:scale-95 group">
+                          <div className="p-1">
+                            <FaShoppingCart className="text-[#212121] text-2xl group-hover:text-[#0463ac] transition-colors" />
+                            {cart?.length > 0 && (
+                              <span className="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-[#4ade80] z-10 transition-transform scale-110">
+                                {cart?.length}
+                              </span>
+                            )}
+                          </div>
+                        </NavLink>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                )}
 
                 {/* Search Row: Morphs size and position */}
-                <div className="flex items-center gap-3 w-full">
+                <div className="flex items-center gap-3 w-full mb-2">
                   <motion.div
                     layout
                     transition={{ duration: 0.3, ease: "easeOut" }}
@@ -1412,8 +1417,8 @@ const Header = ({
                     )}
                   </motion.div>
 
-                  {/* Sticky Icons Panel: Visible only on scroll */}
-                  {isScrolled && (
+                  {/* Sticky Icons Panel: Visible on scroll OR on non-home pages */}
+                  {(isScrolled || !isHomePage) && (
                     <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -1443,7 +1448,7 @@ const Header = ({
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden w-full flex items-center justify-around px-1 relative pt-1 pb-2"
+                    className="overflow-hidden w-full flex items-center justify-between relative pt-0.5 pb-2"
                   >
                     {[
                       { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
@@ -1454,7 +1459,7 @@ const Header = ({
                         key={tab.id}
                         type="button"
                         whileTap={{ scale: 0.95 }}
-                        className={`relative flex items-center gap-1.5 py-2 transition-all ${tab.active
+                        className={`relative flex items-center gap-1.5 py-2 transition-all ${tab.id === "services" ? "ml-2" : ""} ${tab.id === "commercial" ? "mr-2" : ""} ${tab.active
                           ? "text-[#0463ac]"
                           : "text-gray-500 hover:text-[#0463ac]"
                           }`}
@@ -2147,9 +2152,10 @@ const Header = ({
                 {user?.length === 0 ? (
                   <button
                     onClick={() => {
-                      setIsModalOpen(true);
+                      setIsLoginModalOpen(true);
                       setIsMobileMenuOpen(false);
                     }}
+
                     className="w-full py-2 px-3 bg-amber-100 text-emerald-800 rounded-lg text-center font-medium hover:bg-amber-200 transition-colors"
                   >
                     Login / Register
@@ -2231,7 +2237,10 @@ const Header = ({
 
 
       {/* Modals */}
-      <LoginSignup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <LoginSignup isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      <WalletBonusModal isOpen={isWalletBonusModalOpen} onClose={() => setIsWalletBonusModalOpen(false)} />
+
+
       <AddressModal
         isOpen={isAddressModalOpen}
         onClose={() => setIsAddressModalOpen(false)}

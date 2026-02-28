@@ -23,7 +23,16 @@ const MobileNavigation = () => {
     { path: "#", label: "Account", IconOutline: FaUser, IconFill: FaUser, isDrawer: true },
   ];
 
-  const { user, handleLogout, setIsAddressModalOpen, setIsReferAndEarnOpen } = useCont();
+  const {
+    user,
+    handleLogout,
+    setIsAddressModalOpen,
+    setIsReferAndEarnOpen,
+    isLoginModalOpen,
+    setIsLoginModalOpen,
+  } = useCont();
+  const isLoggedIn = user && Object.keys(user).length > 0;
+
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
   const loginDropdownRef = useRef(null);
@@ -98,6 +107,7 @@ const MobileNavigation = () => {
             <NavLink
               key={path}
               to={path}
+              onClick={() => window.scrollTo(0, 0)}
               className={({ isActive }) =>
                 [
                   "flex flex-col items-center justify-center flex-1 py-1.5 min-h-[58px] transition-all duration-300",
@@ -111,19 +121,16 @@ const MobileNavigation = () => {
         })}
       </nav>
 
-      {/* Coming Soon Modal */}
       <ComingSoonModal
         isOpen={isComingSoonOpen}
         onClose={() => setIsComingSoonOpen(false)}
         source="Hommlie Chat"
       />
 
-      {/* Account Drawer Portal */}
       {createPortal(
         <AnimatePresence>
           {isLoginOpen && (
             <>
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -132,7 +139,6 @@ const MobileNavigation = () => {
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] md:hidden"
               />
 
-              {/* Drawer */}
               <motion.div
                 ref={loginDropdownRef}
                 initial={{ x: "-100%" }}
@@ -141,7 +147,6 @@ const MobileNavigation = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="fixed top-0 left-0 h-full w-[75%] max-w-sm bg-white z-[9999] shadow-2xl overflow-hidden flex flex-col md:hidden"
               >
-                {/* Close Button */}
                 <div className="absolute top-4 right-4 z-20">
                   <button
                     onClick={() => setIsLoginOpen(false)}
@@ -151,7 +156,6 @@ const MobileNavigation = () => {
                   </button>
                 </div>
 
-                {/* Premium Header */}
                 <div className="relative bg-gradient-to-br from-[#0463ac] to-[#0580ca] px-6 py-8 flex-shrink-0">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full -ml-10 -mb-5 blur-xl"></div>
@@ -161,63 +165,66 @@ const MobileNavigation = () => {
                       <FaUser className="text-white text-2xl" />
                     </div>
                     <div>
-                      <h3 className="text-white font-bold text-xl tracking-tight">Hello, {user?.name || user?.[0]?.name || "User"}!</h3>
+                      <h3 className="text-white font-bold text-xl tracking-tight">Hello, {user?.name || user?.username || "User"}!</h3>
                       <p className="text-blue-100 text-sm font-medium opacity-90">Welcome back to Hommlie</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 py-2">
                   <div className="grid grid-cols-1 gap-1 p-2">
-                    <NavLink
-                      to="/edit-profile"
-                      className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                        <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="font-semibold text-sm">Edit Profile</span>
-                    </NavLink>
+                    {isLoggedIn && (
+                      <>
+                        <NavLink
+                          to="/edit-profile"
+                          className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                          onClick={() => setIsLoginOpen(false)}
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                            <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
+                          </div>
+                          <span className="font-semibold text-sm">Edit Profile</span>
+                        </NavLink>
 
-                    <NavLink
-                      to="/my-bookings"
-                      className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                        <MdEmail className="text-[#0463ac] group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="font-semibold text-sm">My Bookings</span>
-                    </NavLink>
+                        <NavLink
+                          to="/my-bookings"
+                          className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                          onClick={() => setIsLoginOpen(false)}
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                            <MdEmail className="text-[#0463ac] group-hover:text-white transition-colors" />
+                          </div>
+                          <span className="font-semibold text-sm">My Bookings</span>
+                        </NavLink>
 
-                    <NavLink
-                      to="/my-wallet"
-                      className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                      onClick={() => setIsLoginOpen(false)}
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                        <FaWallet className="text-[#0463ac] group-hover:text-white transition-colors" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-sm">My Wallet</span>
-                        <span className="text-[10px] text-gray-400 font-medium">Balance & Transactions</span>
-                      </div>
-                    </NavLink>
+                        <NavLink
+                          to="/my-wallet"
+                          className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                          onClick={() => setIsLoginOpen(false)}
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                            <FaWallet className="text-[#0463ac] group-hover:text-white transition-colors" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-sm">My Wallet</span>
+                            <span className="text-[10px] text-gray-400 font-medium">Balance & Transactions</span>
+                          </div>
+                        </NavLink>
 
-                    <button
-                      onClick={() => {
-                        setIsAddressModalOpen(true);
-                        setIsLoginOpen(false);
-                      }}
-                      className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                        <MdLocationOn className="text-[#0463ac] group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="font-semibold text-sm">Your Addresses</span>
-                    </button>
+                        <button
+                          onClick={() => {
+                            setIsAddressModalOpen(true);
+                            setIsLoginOpen(false);
+                          }}
+                          className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                            <MdLocationOn className="text-[#0463ac] group-hover:text-white transition-colors" />
+                          </div>
+                          <span className="font-semibold text-sm">Your Addresses</span>
+                        </button>
+                      </>
+                    )}
 
                     <div className="my-3 px-4">
                       <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Explore</p>
@@ -256,18 +263,33 @@ const MobileNavigation = () => {
                       <span className="font-semibold text-sm">Help & Support</span>
                     </NavLink>
 
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsLoginOpen(false);
-                      }}
-                      className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group mt-4 border-t border-gray-100 pt-6"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center group-hover:bg-red-500 group-hover:shadow-md transition-all duration-200">
-                        <FaSignOutAlt className="text-red-500 group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="font-semibold text-sm text-red-500">Log Out</span>
-                    </button>
+                    {isLoggedIn ? (
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsLoginOpen(false);
+                        }}
+                        className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group mt-4 border-t border-gray-100 pt-6"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center group-hover:bg-red-500 group-hover:shadow-md transition-all duration-200">
+                          <FaSignOutAlt className="text-red-500 group-hover:text-white transition-colors" />
+                        </div>
+                        <span className="font-semibold text-sm text-red-500">Log Out</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setIsLoginModalOpen(true);
+                          setIsLoginOpen(false);
+                        }}
+                        className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group mt-4 border-t border-gray-100 pt-6"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                          <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
+                        </div>
+                        <span className="font-semibold text-sm">Log In / Register</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>

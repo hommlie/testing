@@ -38,7 +38,9 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     getBookings,
     getAddresses,
     getPaymentList,
+    setIsWalletBonusModalOpen,
   } = useCont();
+
 
   useEffect(() => {
     if (user?.length !== 0) onClose();
@@ -170,8 +172,14 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         getBookings();
         getAddresses();
         getPaymentList();
-        // call onClose then invoke onLoginSuccess if provided
+
+        // Trigger Wallet Bonus Modal if it's a new user registration
+        if (response.data.is_new_user === 1 || response.data.status === 1 && !response.data?.user_name) {
+          setIsWalletBonusModalOpen(true);
+        }
+
         onClose();
+
         if (typeof onLoginSuccess === "function") {
           try {
             onLoginSuccess();

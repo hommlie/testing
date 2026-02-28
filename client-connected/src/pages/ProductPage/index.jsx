@@ -688,7 +688,7 @@ export default function ProductPage() {
   const [isDescOpen, setIsDescOpen] = useState(false);
 
   return (
-    <main className="bg-white container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex flex-col lg:space-x-8 mb-12 scroll-smooth"
+    <main className="bg-white container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex flex-col lg:space-x-8 pt-2 sm:pt-4 mb-12 scroll-smooth"
     >
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -712,10 +712,7 @@ export default function ProductPage() {
                 label: prodData?.category?.category_name,
                 link: `${config.VITE_BASE_URL}/category/${prodData?.category?.slug}`
               },
-              {
-                label: prodData?.subcategory?.subcategory_name,
-                link: `${config.VITE_BASE_URL}/subcategory/${prodData?.subcategory?.slug}`
-              },
+              { label: prodData?.subcategory?.subcategory_name },
               { label: prodData?.product_name }
             ]}
           />
@@ -848,10 +845,7 @@ export default function ProductPage() {
               <section className="block md:hidden  space-y-4">
                 {variations.length > 0 && (
                   <div className="space-y-4">
-                    <div className="px-2 md:px-0 block md:hidden p-2 space-y-2">
-                      <p className="text-[20px] sm:text-4xl font-bold mb-1 -mt-4">
-                        {prodData?.product_name}
-                      </p>
+                    <div className="px-0 py-1 space-y-2">
 
                       {/* one single row: rating | price | time */}
                       <div className="flex flex-wrap items-center gap-4 py-1">
@@ -1269,9 +1263,7 @@ export default function ProductPage() {
             <div className="hidden md:block lg:w-5/12 h-fit space-y-8 mt-10 lg:min-w-[420px]">
               <div className="bg-transparent p-0 mb-4 border-none shadow-none hidden md:block">
                 <div className="space-y-4">
-                  <h1 className="text-3xl font-bold text-gray-900 leading-tight tracking-tight">
-                    {prodData?.product_name}
-                  </h1>
+                  {/* Title handled by breadcrumb */}
 
                   <div className="flex flex-wrap items-center gap-5">
                     <div className="flex items-baseline gap-2.5">
