@@ -1435,43 +1435,52 @@ const Header = ({
                 </div>
               </div>
 
-              {isHomePage && (
-                <div className={`w-full flex items-center justify-around px-1 relative transition-all duration-300 ${isScrolled ? 'pt-2 pb-1' : 'pt-1 pb-2'}`}>
-                  {[
-                    { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
-                    { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
-                    { id: "commercial", label: "Commercial", Icon: Building2, active: activeTab === "commercial" }
-                  ].map((tab) => (
-                    <motion.button
-                      key={tab.id}
-                      type="button"
-                      whileTap={{ scale: 0.95 }}
-                      className={`relative flex items-center gap-1.5 py-2 transition-all ${tab.active
-                        ? "text-[#0463ac]"
-                        : "text-gray-500 hover:text-[#0463ac]"
-                        }`}
-                      onClick={() => {
-                        setActiveTab(tab.id);
-                        if (tab.id === "products") navigate("/product");
-                        if (tab.id === "commercial") window.open("https://b2b.hommlie.com/", "_blank");
-                      }}
-                    >
-                      <tab.Icon className={`w-[16px] h-[16px] ${tab.active ? "text-[#0463ac]" : "text-gray-400"}`} />
-                      <span className="text-[12px] font-bold whitespace-nowrap">
-                        {tab.label}
-                      </span>
+              {/* Category Tabs: Smooth height/opacity collapse on scroll */}
+              <AnimatePresence>
+                {isHomePage && !isScrolled && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden w-full flex items-center justify-around px-1 relative pt-1 pb-2"
+                  >
+                    {[
+                      { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
+                      { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
+                      { id: "commercial", label: "Commercial", Icon: Building2, active: activeTab === "commercial" }
+                    ].map((tab) => (
+                      <motion.button
+                        key={tab.id}
+                        type="button"
+                        whileTap={{ scale: 0.95 }}
+                        className={`relative flex items-center gap-1.5 py-2 transition-all ${tab.active
+                          ? "text-[#0463ac]"
+                          : "text-gray-500 hover:text-[#0463ac]"
+                          }`}
+                        onClick={() => {
+                          setActiveTab(tab.id);
+                          if (tab.id === "products") navigate("/product");
+                          if (tab.id === "commercial") window.open("https://b2b.hommlie.com/", "_blank");
+                        }}
+                      >
+                        <tab.Icon className={`w-[16px] h-[16px] ${tab.active ? "text-[#0463ac]" : "text-gray-400"}`} />
+                        <span className="text-[12px] font-bold whitespace-nowrap">
+                          {tab.label}
+                        </span>
 
-                      {tab.active && (
-                        <motion.div
-                          layoutId="mobileActiveTabLine"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0463ac] rounded-full"
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        />
-                      )}
-                    </motion.button>
-                  ))}
-                </div>
-              )}
+                        {tab.active && (
+                          <motion.div
+                            layoutId="mobileActiveTabLine"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0463ac] rounded-full"
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          />
+                        )}
+                      </motion.button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <div className="hidden sm:block h-8 w-px bg-gray-200 mx-1"></div>
