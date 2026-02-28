@@ -372,71 +372,12 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
 
   return (
     <div className="w-full sm:w-fit ml-0 sm:ml-4 px-0 py-0 sm:px-0 sm:py-4 sm:-mt-3 bg-cover bg-center bg-no-repeat">
-      {/* Mobile Services / Products toggle */}
-      {isMobile && (
-        <div className="w-full px-4 mb-3 sm:hidden flex justify-center">
-          <div className="w-full max-w-[420px] grid grid-cols-3 gap-3">
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.98 }}
-              whileHover={{ y: -1 }}
-              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm ${activeTab === "services"
-                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
-                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
-                }`}
-              onClick={() => {
-                setActiveTab("services");
-              }}
-            >
-              <Zap className="w-4 h-4" />
-              Services
-            </motion.button>
-
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.98 }}
-              whileHover={{ y: -1 }}
-              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm ${activeTab === "products"
-                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
-                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
-                }`}
-              onClick={() => {
-                setActiveTab("products");
-                navigate("/product");
-              }}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              Products
-            </motion.button>
-
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.98 }}
-              whileHover={{ y: -1 }}
-              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-2xl border transition-all duration-300 shadow-sm ${activeTab === "commercial"
-                ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
-                : "bg-white text-gray-800 border-gray-200 hover:border-gray-300 hover:shadow-md"
-                }`}
-              onClick={() => {
-                setActiveTab("commercial");
-                window.open("https://b2b.hommlie.com/", "_blank");
-              }}
-            >
-              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-white/20">
-                <Building2 className="w-4 h-4" />
-              </div>
-              Commercial
-            </motion.button>
-          </div>
-        </div>
-      )}
-
-      {/* Optional mobile content placed below tabs */}
-      {isMobile && mobileAfterTabs ? (
-        <div className="w-full px-4 mb-3 sm:hidden">
+      {/* Mobile Alerts - Only show if provided */}
+      {isMobile && mobileAfterTabs && (
+        <div className="w-full px-4 mb-4 sm:hidden">
           {mobileAfterTabs}
         </div>
-      ) : null}
+      )}
 
       <div className="flex justify-center mb-4 relative z-10 sm:-mt-6">
         <motion.div

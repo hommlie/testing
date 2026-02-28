@@ -139,6 +139,8 @@ const HomePage = () => {
   });
   const [heroSlides, setHeroSlides] = useState([]);
   const [heroSections, setHeroSections] = useState([]);
+
+
   const [categories, setCategories] = useState([]);
   const [offers, setOffers] = useState([]);
   const [mostBooked, setMostBooked] = useState([]);
@@ -406,7 +408,7 @@ const HomePage = () => {
       {/* Typewriter Hero Headline - Desktop Only */}
 
       <section
-        className="max-w-[1440px] mx-auto px-1 md:px-6 pt-4 pb-4 md:py-12 bg-[#ffffff] min-h-screen"
+        className="max-w-[1440px] mx-auto px-1 md:px-6 pt-0 pb-4 md:py-12 bg-transparent sm:bg-[#ffffff] min-h-screen"
       >
         <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start">
           {/* Left Container - Services & Form (Sticky) */}
@@ -443,205 +445,31 @@ const HomePage = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
-
-                  <div className="relative max-w-[360px] mx-auto w-full">
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      placeholder={`Search ${services[placeholderIndex]}...`}
-                      className="w-full pl-11 pr-11 py-3.5 text-sm bg-white rounded-full shadow-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all duration-300"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      onFocus={() => setIsSearchFocused(true)}
-                      onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                    />
-
-                    {/* Left search icon */}
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0463ac] text-xl">
-                      <BiSearchAlt
-                        className="cursor-pointer transition-transform duration-200 group-hover:scale-105"
-                        onClick={() => {
-                          setIsSearchFocused(true);
-                          searchInputRef.current?.focus();
-                        }}
-                      />
-                    </div>
-
-                    {/* Right mic icon */}
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0463ac] text-xl">
-                      <BsMicFill
-                        className={`cursor-pointer transition-colors duration-200 ${isListening ? "text-red-500 animate-pulse" : "hover:text-emerald-900"}`}
-                        onClick={handleMicClick}
-                      />
-                    </div>
-
-                    {!isSupported && (
-                      <p className="text-red-600 mt-2 text-sm">
-                        Your browser does not support voice search. Please try using Chrome on desktop or Android.
-                      </p>
-                    )}
-
-                    {isSearchFocused && searchTerm.length === 0 && (
-                      <div className="absolute top-full left-0 w-full bg-white rounded-2xl shadow-xl border border-gray-200 p-4 max-h-80 overflow-y-auto z-40 mt-2">
-                        <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                          <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M13 7H7v6h6V7z" />
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
-                          </svg>
-                          Trending Searches
-                        </h3>
-                        <div className="flex flex-wrap gap-3">
-                          {trendingSearches.map((item, idx) => (
-                            <button
-                              key={idx}
-                              onMouseDown={() => {
-                                setSearchTerm(item);
-                                fetchSearchResults(item);
-                                setIsSearchOpen(true);
-                                searchInputRef.current?.focus();
-                              }}
-                              className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
-                            >
-                              {item}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    <AnimatePresence>
-                      {isSearchOpen && (
-                        <motion.div
-                          key="search-dropdown"
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg rounded-2xl z-30 max-h-96 overflow-y-auto border border-gray-200"
-                        >
-                          {isLoading ? (
-                            <div className="flex justify-center items-center py-6">
-                              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-emerald-600"></div>
-                            </div>
-                          ) : pincode && pincode.length === 6 ? (
-                            searchResults.length > 0 ? (
-                              searchResults.map((result, index) => (
-                                <motion.div
-                                  key={result.id}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: index * 0.05 }}
-                                >
-                                  <div
-                                    className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
-                                    onClick={() => {
-                                      setIsSearchOpen(false);
-                                      setSearchTerm("");
-                                      navigate(`${config.VITE_BASE_URL}/product/${result.slug}`);
-                                    }}
-                                  >
-                                    {result.productimage && (
-                                      <img
-                                        src={result.productimage.image_url}
-                                        alt={result.product_name}
-                                        className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
-                                      />
-                                    )}
-                                    <div className="flex-1">
-                                      <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
-                                      <p className="flex gap-2 text-gray-600">
-                                        <span className="font-semibold text-emerald-700">
-                                          ₹{Number(result.discounted_price ?? 0).toFixed(2)}
-                                        </span>
-                                        <span className="line-through text-gray-400">
-                                          ₹{Number(result.product_price ?? 0).toFixed(2)}
-                                        </span>
-                                      </p>
-                                      {result.rating && (
-                                        <div className="flex items-center mt-1">
-                                          <div className="flex items-center">
-                                            {[1, 2, 3, 4, 5].map((star) => (
-                                              <svg
-                                                key={star}
-                                                className={`w-3 h-3 ${star <= Math.round(result.rating) ? "text-amber-400" : "text-gray-300"}`}
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                              >
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                              </svg>
-                                            ))}
-                                          </div>
-                                          <span className="text-xs text-gray-500 ml-1">
-                                            ({result.total_reviews})
-                                          </span>
-                                        </div>
-                                      )}
-                                    </div>
-                                    <IoIosArrowForward className="text-gray-400 text-lg" />
-                                  </div>
-                                </motion.div>
-                              ))
-                            ) : (
-                              <div className="py-4 px-6 text-center text-gray-500">
-                                No products found for "{searchTerm}"
-                              </div>
-                            )
-                          ) : (
-                            <div className="p-8 text-center bg-gray-50 flex flex-col items-center gap-3">
-                              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
-                                <MdLocationOn className="w-6 h-6 text-[#0463ac]" />
-                              </div>
-                              <div>
-                                <h4 className="text-sm font-bold text-[#033053]">Serviceability Required</h4>
-                                <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto leading-relaxed">
-                                  Please enter your 6-digit pincode in the service section below to view matching services in your area.
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
                 </div>
               }
             />
 
-            {/* HomeForm in flow (Desktop Only as per request) */}
+            {/* HomeForm in flow (Desktop Only) */}
             <div className="hidden md:block mt-3">
               <HomeForm />
             </div>
           </div>
 
-          <div className="w-full md:flex-1 md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8">
-            <ServiceSection categories={data.all_categories} />
+          {/* Right Container - Hero & Offers (Desktop) / Main Content (Mobile) */}
+          <div className="flex-1 w-full space-y-4 md:space-y-8 overflow-x-hidden pt-4 sm:pt-0">
+            {/* Main Category Banner */}
+            <BannerImage categories={categories} />
+
+            <div className="w-full md:flex-1 md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8 bg-white shadow-sm sm:shadow-none rounded-3xl mt-4 sm:mt-0">
+              <ServiceSection categories={data.all_categories} />
+            </div>
           </div>
         </div>
-
-        {/* <ServiceSection categories={data.all_categories} />
-        <Roadmap />   
-        <section className="px-2 sm:px-7">
-          <BannerImageMobile />
-          <BannerImage />
-        </section>
-        
-        <section className=" px-6 py-5 md:py-10">
-          <SnabbitTasksUI />
-        </section> 
-        <section className="px-6 sm:px-7">
-          <Testimonials />
-        </section>
-        <section className="px-2 sm:px-7">
-          <Scrapbanner />
-          <Scrapmobile />
-        </section>
-        <section id="inspection-section" className="px-0 py-0 md:py-10">
-          <InspectionFormSection />
-        </section> */}
       </section>
       {/* <Roadmap />    */}
       {/* Moved to ServiceSection
       <section className="px-2 sm:px-12" style={{
-        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
+        // background: "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e8f3fd 75%, #e6faec 100%)",
       }}>
         <BannerImageMobile />
         <BannerImage />
@@ -848,12 +676,14 @@ const HomePage = () => {
 
 
       {/* Location Modal */}
-      {isLocationModalOpen && (
-        <LocationModal
-          onClose={() => setIsLocationModalOpen(false)}
-          setCurrentLocation={setCurrentLocation}
-        />
-      )}
+      {
+        isLocationModalOpen && (
+          <LocationModal
+            onClose={() => setIsLocationModalOpen(false)}
+            setCurrentLocation={setCurrentLocation}
+          />
+        )
+      }
 
       <InspectionModal
         isOpen={isInspectionModalOpen}
@@ -868,7 +698,8 @@ const HomePage = () => {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
       />
-    </div>
+      <MobileNavigation />
+    </div >
   );
 };
 

@@ -17,7 +17,7 @@ const WhatsAppWidget = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={toggleChat}
-                className="fixed bottom-6 right-6 w-16 h-16 bg-[#25D366] text-white rounded-full cursor-pointer shadow-lg z-[999] flex items-center justify-center text-3xl transition-shadow hover:shadow-2xl"
+                className="fixed bottom-20 md:bottom-6 right-6 w-16 h-16 bg-[#25D366] text-white rounded-full cursor-pointer shadow-lg z-[999] flex items-center justify-center text-3xl transition-shadow hover:shadow-2xl"
             >
                 💬
             </motion.div>
@@ -29,7 +29,7 @@ const WhatsAppWidget = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className="fixed bottom-24 right-6 w-72 bg-white rounded-2xl shadow-2xl font-sans z-[999] overflow-hidden border border-gray-100"
+                        className="fixed bottom-[152px] md:bottom-24 right-6 w-72 bg-white rounded-2xl shadow-2xl font-sans z-[999] overflow-hidden border border-gray-100"
                     >
                         <div className="bg-[#075E54] text-white p-4 flex justify-between items-center">
                             <div className="flex items-center space-x-3">

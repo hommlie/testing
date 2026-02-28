@@ -545,10 +545,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Pest Type / Subcategory */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
-                  Select Pest
-                </label>
-                <div className="flex overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Pest</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                   {getCurrentSubcategories().map((sub) => {
                     const isSelected = selectedSubCategory === sub.id;
                     let displayIcon = "🛡️";
@@ -587,10 +585,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Property Size */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
-                  Select Home Size
-                </label>
-                <div className="flex overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Home Size</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                   {getVariationOptions().map((variation, index) => {
                     const isSelected = selectedBhk === variation;
                     return (
@@ -612,10 +608,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Product Selection */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
-                  Select Service
-                </label>
-                <div className="flex overflow-x-auto gap-3 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Service</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                   {getCurrentProducts() && getCurrentProducts().length > 0 ? (
                     getCurrentProducts().map((prod) => {
                       const isSelected = selectedProduct === prod.id;
@@ -639,10 +633,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Service Variant */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">
-                  Select Service Type
-                </label>
-                <div className="flex overflow-x-auto gap-3 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Service Type</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-2 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                   {getCurrentAttributes() && getCurrentAttributes().length > 0 ? (
                     getCurrentAttributes().map((attr) => {
                       const isSelected = selectedAttribute === attr.id;

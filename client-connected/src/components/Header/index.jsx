@@ -50,8 +50,11 @@ import HelpModal from "../HelpModal";
 import { FaTag, FaFire } from 'react-icons/fa';
 import { HiFire, HiBadgeCheck, HiLightningBolt } from "react-icons/hi";
 import ComingSoonModal from "../../pages/ComingSoonPage";
+import { Zap, ShoppingBag, Building2 } from "lucide-react";
 
 
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const Header = ({
   logo,
@@ -107,9 +110,43 @@ const Header = ({
   const [isReferAndEarnOpen, setIsReferAndEarnOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [mobileSearchTerm, setMobileSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("services");
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Sync activeTab with path
+  useEffect(() => {
+    if (location.pathname.startsWith("/product")) {
+      setActiveTab("products");
+    } else if (location.pathname.startsWith("/b2b")) {
+      setActiveTab("commercial");
+    } else {
+      setActiveTab("services");
+    }
+  }, [location.pathname]);
+
+  const handleMobileMicClick = () => {
+    if (!SpeechRecognition) {
+      alert("Voice recognition is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-IN";
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setMobileSearchTerm(transcript);
+    };
+    recognition.onerror = () => alert("Error occurred during speech recognition.");
+    recognition.onend = () => setIsListening(false);
+    recognition.start();
+  };
   const headerRef = useRef(null);
   const loginDropdownRef = useRef(null);
   const cartDropdownRef = useRef(null);
@@ -603,55 +640,27 @@ const Header = ({
 
 
 
-  // Wallet pill styled like the screenshot (amount + overlapping money.png on the right)
-  const WalletPill = ({ amount = 0, onClick, size = "md", className = "" }) => {
-    // format & safe number
+  // Wallet pill styled like the screenshot (Vertical Layout: Icon top, Amount bottom)
+  const WalletPill = ({ amount = 0, onClick, className = "" }) => {
     const fmt = new Intl.NumberFormat("en-IN").format(
       Math.max(0, Math.floor(Number(amount) || 0))
     );
 
-    // size tokens so text/img/padding stay proportionate
-    const S = {
-      sm: { h: "h-8", text: "text-sm", pad: "pl-3 pr-10", img: "w-5 h-5", shift: "-right-2" },
-      md: { h: "h-8", text: "text-base", pad: "pl-3 pr-7", img: "w-7 h-7", shift: "-right-2.5" },
-      lg: { h: "h-12", text: "text-lg", pad: "pl-4 pr-8", img: "w-8 h-8", shift: "-right-3" },
-    }[size] || {};
-
-
     return (
       <button
         onClick={onClick}
-        className={[
-          "relative inline-flex items-center rounded-full bg-white",
-          "border border-gray-200 shadow-sm hover:shadow-md transition-all",
-          "whitespace-nowrap",
-          S.h,
-          S.pad,
-          className,
-        ].join(" ")}
-        aria-label={`Wallet balance ${fmt}`}
+        className={`flex flex-col items-center justify-center bg-transparent transition-all active:scale-95 ${className}`}
         type="button"
       >
-        {/* amount (no ₹) */}
-        <span className={`text-[#0B1727] font-semibold tracking-tight leading-none tabular-nums ${S.text}`}>
+        <img
+          src="/wallet-luxe.png"
+          alt="Wallet"
+          className="w-13 h-13 object-contain mb-0"
+          style={{ mixBlendMode: "multiply" }}
+          draggable="false"
+        />
+        <span className="text-[13px] font-black text-[#212121] leading-none -mt-1.5 drop-shadow-sm">
           ₹{fmt}
-        </span>
-
-        {/* money.png badge overlapping the right edge */}
-        <span
-          aria-hidden
-          className={[
-            "pointer-events-none absolute top-1/2 -translate-y-1/2",
-            S.shift,
-            "rounded-xl ring-2 ring-white shadow-md rotate-6",
-          ].join(" ")}
-        >
-          <img
-            src="/money.png"  // from public/
-            alt=""
-            className={`${S.img} object-contain`}
-            draggable="false"
-          />
         </span>
       </button>
     );
@@ -659,7 +668,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-50 font-sans bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50/30 lg:backdrop-blur-sm lg:shadow-lg lg:border-b lg:border-gray-100/50 transition-all duration-300"
+      className="w-full sticky top-0 z-50 font-sans bg-transparent sm:bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50/30 lg:backdrop-blur-sm lg:shadow-lg lg:border-b lg:border-gray-100/50 transition-all duration-300"
     >
 
 
@@ -897,13 +906,13 @@ const Header = ({
               <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
 
               {user?.length === 0 ? (
-                  <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group text-black"
-                  >
-                    <FaSignInAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                    <span className="text-black">Login</span>
-                  </button>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group text-black"
+                >
+                  <FaSignInAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
+                  <span className="text-black">Login</span>
+                </button>
               ) : (
                 <div className="relative" ref={loginDropdownRef}>
                   <button
@@ -1051,11 +1060,11 @@ const Header = ({
                 >
                   <div className="relative">
                     <FaShoppingCart className={`text-lg transition-colors duration-300 ${isCartOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                            {cart?.length > 0 && (
-                              <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
-                                {cart?.length}
-                              </span>
-                            )}
+                    {cart?.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
+                        {cart?.length}
+                      </span>
+                    )}
                   </div>
                   <span className="whitespace-nowrap text-black">Cart</span>
                   <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isCartOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
@@ -1286,7 +1295,7 @@ const Header = ({
       </div>
       <div className="max-w-7xl mx-auto px-4 lg:px-10">
         {/* Main Header */}
-        <div className="flex items-center justify-between h-[74px]">
+        <div className="flex items-center justify-between h-auto sm:h-[74px]">
           <div className="flex items-center gap-3">
             {/* Logo Section */}
             <div className="hidden sm:flex flex-shrink-0">
@@ -1298,40 +1307,120 @@ const Header = ({
                 />
               </NavLink>
             </div>
-            <div className="flex sm:hidden items-center gap-3 px-1">
-              {/* Logo aligned left */}
-              <div className="flex items-center flex-shrink-0">
-                <NavLink to="/">
-                  <img
-                    src="/images/logoh.png"
-                    alt="Hommlie Logo"
-                    className="h-12 w-auto object-contain"
+            {/* Mobile View: Blinkit Style Unified Header */}
+            <div className={`flex sm:hidden flex-col w-screen -mx-4 px-4 pt-4 pb-1 bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white transition-all duration-300 ${isHomePage ? 'h-auto' : 'pb-4'}`}>
+              {/* Top Row: Time, Location, Stats, Profile */}
+              <div className="flex justify-between items-start w-full mb-4">
+                <div className="flex flex-col">
+                  {/* Delivery Info */}
+                  <h1 className="text-lg font-extrabold text-[#212121] leading-none mb-0.5">Hommlie in</h1>
+                  <h2 className="text-3xl font-extrabold text-[#212121] leading-none mb-2.5">15 minutes</h2>
+
+                  {/* Location Dropdown */}
+                  <button
+                    onClick={() => setIsLocationModalOpen(true)}
+                    className="flex items-center text-xs font-bold text-[#212121] leading-none"
+                  >
+                    <span className="uppercase opacity-70">HOME</span>
+                    <span className="mx-1">-</span>
+                    <span className="max-w-[160px] truncate">{currentLocation}</span>
+                    <MdKeyboardArrowDown className="ml-0.5 text-lg" />
+                  </button>
+                </div>
+
+                {/* Right side icons */}
+                <div className="flex items-center gap-1.5 pt-1">
+                  <WalletPill
+                    amount={walletBalance}
+                    onClick={() => setIsWalletModalOpen(true)}
+                    className=""
                   />
-                </NavLink>
+                  <NavLink to="/add-to-cart">
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-95 relative">
+                      <FaShoppingCart className="text-[#212121] text-2xl" />
+                      {cart?.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-[11px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-white z-10">
+                          {cart?.length}
+                        </span>
+                      )}
+                    </div>
+                  </NavLink>
+                  <button
+                    onClick={() => {
+                      if (user?.length === 0) {
+                        setIsModalOpen(true);
+                      } else {
+                        setIsLoginOpen(!isLoginOpen);
+                      }
+                    }}
+                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-95"
+                    aria-label="Account profile"
+                  >
+                    <FaUser className="text-[#212121] text-2xl" />
+                  </button>
+                </div>
               </div>
 
-              {/* Divider and Location grouped together */}
-              <div className="flex items-center space-x-3">
-                {/* Vertical Line */}
-                <div className="h-8 w-px bg-gray-300" />
-
-                {/* Location aligned right */}
-                <button
-                  onClick={() => setIsLocationModalOpen(true)}
-                  className="flex items-center rounded-md hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex flex-col text-left">
-                    <div className="text-sm font-medium text-black flex items-center">
-                      <MdLocationOn className="text-[#0463ac] mr-1 text-lg" />
-                      Location
-                    </div>
-                    <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate text-black">{currentLocation}</span>
-                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
+              {isHomePage && (
+                <>
+                  {/* Search Bar Row */}
+                  <div className="w-full mb-2">
+                    <div className="relative w-full group">
+                      <input
+                        type="text"
+                        placeholder={`Search ${services[placeholderIndex]}...`}
+                        className="w-full pl-12 pr-12 py-3.5 text-base bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 focus:border-[#0463ac]/20 transition-all duration-300 font-medium placeholder:text-gray-400"
+                        value={mobileSearchTerm}
+                        onChange={(e) => setMobileSearchTerm(e.target.value)}
+                      />
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl font-bold">
+                        <BiSearchAlt />
+                      </div>
+                      <div className="absolute right-12 top-1/2 -translate-y-1/2 w-px h-6 bg-gray-200" />
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl">
+                        <BsMicFill onClick={handleMobileMicClick} className={isListening ? "text-[#0463ac] animate-pulse" : ""} />
+                      </div>
                     </div>
                   </div>
-                </button>
-              </div>
+
+                  {/* Category Tabs Row */}
+                  <div className="w-full flex items-center justify-around pb-2 px-1 relative">
+                    {[
+                      { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
+                      { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
+                      { id: "commercial", label: "Commercial use", Icon: Building2, active: activeTab === "commercial" }
+                    ].map((tab) => (
+                      <motion.button
+                        key={tab.id}
+                        type="button"
+                        whileTap={{ scale: 0.95 }}
+                        className={`relative flex items-center gap-1.5 py-2.5 transition-all ${tab.active
+                          ? "text-[#0463ac]"
+                          : "text-gray-500 hover:text-[#0463ac]"
+                          }`}
+                        onClick={() => {
+                          setActiveTab(tab.id);
+                          if (tab.id === "products") navigate("/product");
+                          if (tab.id === "commercial") window.open("https://b2b.hommlie.com/", "_blank");
+                        }}
+                      >
+                        <tab.Icon className={`w-[18px] h-[18px] ${tab.active ? "text-[#0463ac]" : "text-gray-400"}`} />
+                        <span className="text-[13px] font-bold whitespace-nowrap">
+                          {tab.label}
+                        </span>
+
+                        {tab.active && (
+                          <motion.div
+                            layoutId="mobileActiveTabLine"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0463ac] rounded-full"
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          />
+                        )}
+                      </motion.button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="hidden sm:block h-8 w-px bg-gray-200 mx-1"></div>
@@ -1577,36 +1666,9 @@ const Header = ({
 
 
 
-          </div><div className="md:hidden flex items-center gap-4">
-            {/* Cart Button - Uniform Color */}
-            <button
-              onClick={() => navigate(`${config.VITE_BASE_URL}/add-to-cart`)}
-              className="relative text-2xl text-[#033053] hover:text-[#0463ac] transition-colors"
-              aria-label="Go to cart"
-            >
-              <FaShoppingCart size={22} />
-              {cart?.length > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-amber-300 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-sm">
-                  {cart?.length}
-                </span>
-              )}
-            </button>
-
-            {/* Account/Profile Button - Uniform Color */}
+          </div>
+          <div className="md:hidden">
             <div className="relative">
-              <button
-                onClick={() => {
-                  if (user?.length === 0) {
-                    setIsModalOpen(true);
-                  } else {
-                    setIsLoginOpen(!isLoginOpen);
-                  }
-                }}
-                className={`text-2xl transition-colors ${isLoginOpen ? 'text-[#0463ac]' : 'text-[#033053] hover:text-[#0463ac]'}`}
-                aria-label="Account profile"
-              >
-                <FaUser size={22} />
-              </button>
 
               {/* Account Dropdown for Mobile */}
               <div className="md:hidden">
@@ -1788,7 +1850,7 @@ const Header = ({
 
       {/* Mobile Contact Info Bar - updated for premium look */}
       <div
-        className="w-full py-1 sm:hidden shadow-sm border-b border-white/10"
+        className="w-full py-1 hidden sm:hidden shadow-sm border-b border-white/10"
         style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}
       >
         <div className="max-w-3xl mx-auto grid grid-cols-3 gap-0 px-1">
