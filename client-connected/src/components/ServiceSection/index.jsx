@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Star, ChevronRight, Check, Phone, MapPin, Home, Building2, ArrowUp, X } from "lucide-react";
 import { RxCross1 } from "react-icons/rx";
 import { FaBug, FaShieldAlt } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import BannerImage from "../../pages/BannerImage";
 import BannerImageMobile from "../../pages/BannerImageMobile";
@@ -58,7 +59,7 @@ const ServiceSection = ({ categories }) => {
     if (options.length > 0) {
       setSelectedBhk(options[0]);
     }
-  }, [selectedAttribute]);
+  }, [selectedAttribute, selectedProduct]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingAdd, setPendingAdd] = useState(null);
@@ -461,57 +462,9 @@ const ServiceSection = ({ categories }) => {
           }
         `}</style>
 
-        {/* Desktop Header - Only visible on md+ */}
-        <div className="hidden md:block mb-0 -mt-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-start gap-1"
-          >
-            <span className="text-[12px] font-black text-black tracking-[0.2em] uppercase opacity-70">Expert Solutions</span>
-            <h2 className="text-3xl font-semibold text-black tracking-tight">
-              Quick Booking - Pest Control
-            </h2>
-            <div className="h-1.5 w-16 bg-gradient-to-r from-[#0463ac] to-green-400 rounded-full mt-1" />
-          </motion.div>
-
-          {/* Desktop Pincode Check - Mandatory (Hidden on Desktop UI as per request) */}
-          <div className="max-w-md mx-auto mb-8 hidden">
-            {/* ... pincode input ... */}
-          </div>
-
-          {/* Hidden category selection buttons on desktop as requested */}
-          <div className="hidden">
-            <div className="flex flex-wrap justify-center gap-4">
-              {categories?.filter(c => c.category_name !== "Waste Management" && c.category_name !== "Product").map((category) => (
-                <motion.button
-                  key={category.id}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleCategorySelect(category)}
-                  className={`w-40 h-16 flex items-center justify-center gap-2 rounded-lg transition-all border font-bold text-sm
-                    ${selectedCategory === category.id
-                      ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
-                      : "bg-white text-[#033053] border-gray-300 hover:border-gray-400"
-                    }`}
-                >
-                  {category.icon_url && (
-                    <img
-                      loading="lazy"
-                      src={category.icon_url}
-                      alt=""
-                      className={`w-5 h-5 object-contain ${selectedCategory === category.id ? "brightness-0 invert" : ""}`}
-                    />
-                  )}
-                  <span>{category.category_name}</span>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        </div>
 
         {/* Mobile Header - Hidden on md+ */}
-        <div className="md:hidden">
+        <div className="md:hidden w-full overflow-x-hidden">
           {/* Modal for callback triggers here if needed, but keeping original request flow */}
           {/* Request a Callback Button - Top Centered */}
 
@@ -522,41 +475,13 @@ const ServiceSection = ({ categories }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="rounded-3xl px-0 py-0 mt-4 relative overflow-hidden"
+            className="px-0 py-0 mt-2 relative"
           >
-
-            <div className="mb-5 relative z-10 pl-1">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-                }}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-[22px] font-bold text-[#033053] tracking-tight">
-                    Quick Booking ⚡
-                  </h3>
-                </div>
-                <p className="text-[13px] text-gray-500 font-medium">
-                  Book pest control service in just a few taps.
-                </p>
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              className="space-y-5 relative z-10"
-            >
-
+            <div className="space-y-6 relative z-10 pl-2 pr-4 w-full min-w-0 font-sans">
               {/* Pest Type / Subcategory */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Pest</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
+                <label className="block text-[15px] font-bold text-[#033053] mb-2">Select Pest</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-1 no-scrollbar">
                   {getCurrentSubcategories().map((sub) => {
                     const isSelected = selectedSubCategory === sub.id;
                     let displayIcon = "🛡️";
@@ -580,9 +505,9 @@ const ServiceSection = ({ categories }) => {
                         key={sub.id}
                         type="button"
                         onClick={() => setSelectedSubCategory(sub.id)}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
-                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[14px] whitespace-nowrap transition-all duration-300 border ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                          : "bg-white text-gray-700 border-gray-200"
                           }`}
                       >
                         <span className="text-lg leading-none">{displayIcon}</span>
@@ -595,8 +520,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Property Size */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Home Size</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
+                <label className="block text-[15px] font-bold text-[#033053] mb-2">Select Home Size</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-1 no-scrollbar">
                   {getVariationOptions().map((variation, index) => {
                     const isSelected = selectedBhk === variation;
                     return (
@@ -604,9 +529,9 @@ const ServiceSection = ({ categories }) => {
                         key={index}
                         type="button"
                         onClick={() => setSelectedBhk(variation)}
-                        className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
-                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        className={`px-6 py-3 rounded-xl font-bold text-[14px] whitespace-nowrap transition-all duration-300 border ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                          : "bg-white text-gray-700 border-gray-200"
                           }`}
                       >
                         {variation}
@@ -618,8 +543,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Product Selection */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Service</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
+                <label className="block text-[15px] font-bold text-[#033053] mb-2">Select Service</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-1 no-scrollbar">
                   {getCurrentProducts()?.map((prod) => {
                     const isSelected = selectedProduct === prod.id;
                     return (
@@ -627,12 +552,12 @@ const ServiceSection = ({ categories }) => {
                         key={prod.id}
                         type="button"
                         onClick={() => setSelectedProduct(prod.id)}
-                        className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
-                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        className={`w-[75%] flex-shrink-0 px-4 py-3 rounded-xl font-bold text-[14px] transition-all duration-300 border text-left ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                          : "bg-white text-gray-700 border-gray-200"
                           }`}
                       >
-                        {prod.product_name}
+                        <span className="block truncate">{prod.product_name}</span>
                       </button>
                     );
                   })}
@@ -641,8 +566,8 @@ const ServiceSection = ({ categories }) => {
 
               {/* Service Variant */}
               <div>
-                <label className="block text-[15px] font-bold text-[#033053] mb-3 px-4">Select Service Type</label>
-                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 px-4 scroll-pl-4 snap-x snap-mandatory no-scrollbar">
+                <label className="block text-[15px] font-bold text-[#033053] mb-2">Select Service Type</label>
+                <div className="flex w-full justify-start items-center overflow-x-auto gap-2.5 pb-1 no-scrollbar">
                   {getCurrentAttributes()?.map((attr) => {
                     const isSelected = selectedAttribute === attr.id;
                     const attrName = attr.attribute_name || attr.attribute;
@@ -651,12 +576,12 @@ const ServiceSection = ({ categories }) => {
                         key={attr.id}
                         type="button"
                         onClick={() => setSelectedAttribute(attr.id)}
-                        className={`px-4 py-2.5 rounded-xl font-medium text-[14px] whitespace-nowrap transition-all duration-300 snap-start shrink-0 border ${isSelected
-                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md ring-1 ring-[#0463ac]/20"
-                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        className={`w-[75%] flex-shrink-0 px-4 py-3 rounded-xl font-bold text-[14px] transition-all duration-300 border text-left ${isSelected
+                          ? "bg-[#0463ac] text-white border-[#0463ac] shadow-md"
+                          : "bg-white text-gray-700 border-gray-200"
                           }`}
                       >
-                        {attrName}
+                        <span className="block truncate">{attrName}</span>
                       </button>
                     );
                   })}
@@ -664,58 +589,53 @@ const ServiceSection = ({ categories }) => {
               </div>
 
 
-              {/* Optimized Price Display */}
-              <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-100/50 flex flex-col gap-1">
+              {/* Optimized Price Display & Book Now Button (Transparent & Full Width) */}
+              <div className="flex flex-col gap-6 -mx-4 px-4 py-2 mb-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">Total Estimate</span>
+                  <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Total Estimate</span>
                   {getCurrentProduct()?.slug && (
                     <button
                       onClick={() => navigate(`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`)}
-                      className="text-xs font-bold text-[#0463ac] hover:text-[#034d85] flex items-center gap-1 group/link"
+                      className="text-[12px] font-black text-[#0463ac] uppercase tracking-widest flex items-center gap-1 group/link"
                     >
-                      View Details <ChevronRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
+                      View Details <ChevronRight className="w-4 h-4" />
                     </button>
                   )}
                 </div>
-                <div className="text-3xl font-extrabold text-[#033053]">
-                  ₹ {getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}<span className="text-lg text-gray-400 font-medium ml-1">+ GST</span>
+
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[48px] leading-none font-black text-[#033053]">
+                    ₹{getCurrentVariation()?.discounted_variation_price || getCurrentVariation()?.price || "0.00"}
+                  </span>
+                  <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">+ GST</span>
                 </div>
+
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const variation = getCurrentVariation();
+                    const product = getCurrentProduct();
+                    if (variation && product) {
+                      handleAddToCart(variation, product);
+                    }
+                  }}
+                  disabled={!getCurrentVariation() || isAddingToCart}
+                  className={`w-full py-4 text-white font-bold text-lg rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2
+                    ${(!getCurrentVariation() || isAddingToCart)
+                      ? "bg-gray-200 cursor-not-allowed text-gray-400 shadow-none"
+                      : "bg-[#0463ac] hover:bg-[#03528b]"}`}
+                >
+                  {isAddingToCart ? (
+                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <span>BOOK NOW</span>
+                      <ChevronRight className="w-5 h-5" />
+                    </>
+                  )}
+                </motion.button>
               </div>
-
-              {/* BOOK NOW Button */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  const variation = getCurrentVariation();
-                  const product = getCurrentProduct();
-                  if (variation && product) {
-                    handleAddToCart(variation, product);
-                  }
-                }}
-                disabled={!getCurrentVariation() || isAddingToCart}
-                className={`w-full py-4 relative overflow-hidden text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group
-                        ${(!getCurrentVariation() || isAddingToCart)
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-gradient-to-r from-[#0463ac] to-[#034d85]"}`}
-              >
-                {(!getCurrentVariation() || isAddingToCart) ? null : (
-                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out skew-x-12" />
-                )}
-
-                {isAddingToCart ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <span className="tracking-wide z-10">BOOK NOW</span>
-                    <ChevronRight className="w-5 h-5 z-10" />
-                  </>
-                )}
-              </motion.button>
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* Request a Callback Button - Mobile View Bottom */}
@@ -789,80 +709,109 @@ const ServiceSection = ({ categories }) => {
           </section>
         </div>
 
-        {/* Dropdowns Container - Hidden on Mobile */}
+        {/* Redesigned Desktop View (Image 3) */}
         <div className="hidden md:block">
-          <div className="max-w-3xl mb-8 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              {/* Service Type */}
-              <div className="md:col-span-4">
-                <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your Services</label>
-                <Dropdown
-                  label="Select Subcategory"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full max-w-[1000px] flex flex-col gap-6"
+          >
+            {/* Desktop Header */}
+            <div>
+              <span className="text-[11px] -mt-10 font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5 block">EXPERT SOLUTIONS</span>
+              <h2 className="text-3xl font-black text-[#033053] flex items-center gap-3">
+                Quick Booking - Pest Control
+                <span className="text-teal-400 text-2xl animate-pulse">⚡</span>
+              </h2>
+            </div>
+
+            {/* Selection Bar Row */}
+            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-2">
+              <div className="w-[27%] px-1">
+                <CompactDropdown
                   value={selectedSubCategory}
                   options={getCurrentSubcategories()}
                   onChange={setSelectedSubCategory}
                   disabled={!selectedCategory}
+                  placeholder="Select Service"
                 />
               </div>
 
-              {/* Property Size */}
-              <div className="md:col-span-3">
-                <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your BHK</label>
-                <Dropdown
-                  label="Select BHK"
+              <div className="w-[17%] px-1">
+                <CompactDropdown
                   value={selectedBhk}
-                  options={getVariationOptions().map((variation) => ({ id: variation, attribute: variation, subcategory_name: variation }))}
+                  options={getVariationOptions().map((v) => ({ id: v, name: v }))}
                   onChange={setSelectedBhk}
                   disabled={!selectedProduct}
+                  placeholder="Home Size"
                 />
               </div>
 
-              {/* Service Variant */}
-              <div className="md:col-span-5">
-                <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Variant</label>
-                <Dropdown
-                  label="Select Variant"
+              <div className="w-[32%] px-1">
+                <CompactDropdown
                   value={selectedAttribute}
-                  options={getCurrentAttributes()}
+                  options={(() => {
+                    const attrs = getCurrentAttributes();
+                    const source = attrs.length > 0 ? attrs : ([...recommended, ...regular][0]?.attributes || []);
+                    return source.map(a => ({
+                      id: a.id,
+                      name: a.attribute_name || a.attribute || "Service Option",
+                      is_recommended: a.is_recommended
+                    }));
+                  })()}
                   onChange={setSelectedAttribute}
-                  disabled={!selectedProduct}
+                  disabled={!selectedSubCategory}
+                  placeholder="Service Type"
                   showRecommended
                 />
               </div>
-            </div>
-          </div>
 
-
-          <div className="mb-0">
-            <>
-              <h3 className="text-[12px] md:text-[16px] font-bold text-[#033053] tracking-wider uppercase mb-4 flex items-center whitespace-nowrap">
-                Available Service Packages
-              </h3>
-
-              <div className="flex justify-start">
-                {recommended.length + regular.length === 0 ? (
-                  <div className="text-center text-gray-500 py-10">Loading service packages...</div>
+              <div className="flex-1 flex items-center justify-end px-3">
+                {getCurrentProduct()?.slug ? (
+                  <a
+                    href={`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`}
+                    className="flex items-center gap-2 text-[13px] font-black text-[#0463ac] hover:text-[#03528b] transition-colors group/vd"
+                  >
+                    View Details
+                    <ChevronRight size={15} className="group-hover/vd:translate-x-1 transition-transform" />
+                  </a>
                 ) : (
-                  <div className={`grid gap-6 px-0 max-w-3xl grid-cols-1 place-items-stretch`}>
-                    {[...recommended, ...regular].map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        isSelected={selectedProduct === product.id}
-                        onClick={() => setSelectedProduct(product.id)}
-                        currentAttributes={getCurrentAttributes()}
-                        selectedAttribute={selectedAttribute}
-                        selectedBhk={selectedBhk}
-                        handleAddToCart={handleAddToCart}
-                        isAddingToCart={isAddingToCart}
-                        categoryName={categories?.find(c => c.id === selectedCategory)?.category_name || "pest"}
-                      />
-                    ))}
-                  </div>
+                  <span className="text-[13px] text-gray-300 font-bold">Select a service</span>
                 )}
               </div>
-            </>
-          </div>
+            </div>
+
+            {/* Available Service Packages Section */}
+            <div className="mt-1">
+              <div className="flex flex-col gap-2">
+                {[...recommended, ...regular].map((product) => (
+                  <CompactProductRow
+                    key={product.id}
+                    product={product}
+                    selectedAttribute={selectedAttribute}
+                    selectedBhk={selectedBhk}
+                    handleAddToCart={handleAddToCart}
+                    isAddingToCart={isAddingToCart}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Stepper Guide */}
+            <div className="-mt-8 border-t border-gray-50 pt-8 flex items-center justify-center gap-10 text-[13px] font-black text-[#033053]/30 uppercase tracking-[0.15em]">
+              <div className="flex items-center gap-3">
+                <span className="text-[#0463ac]">1. Select Pest Problem </span>
+                <IoIosArrowForward />
+              </div>
+              <div className="flex items-center gap-3">
+                <span>2. Select Home Size </span>
+                <IoIosArrowForward />
+              </div>
+              <div className="flex items-center gap-3">
+                <span>3. See Plans & Book</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section >
 
@@ -1148,12 +1097,9 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
             )}
             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">+ GST</span>
           </div>
-
-          {/* Hidden dynamic content */}
         </div>
 
         <div className="text-left w-full space-y-3">
-
           <a
             href={`${config.VITE_BASE_URL}/product/${product?.slug}`}
             className="flex items-center gap-2 text-xs font-black text-[#0463ac] uppercase tracking-widest group/link hover:gap-3 transition-all duration-300"
@@ -1163,7 +1109,6 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
         </div>
       </div>
 
-      {/* Divider Line */}
       <div className="hidden sm:flex items-center justify-center">
         <div className="w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent" />
       </div>
@@ -1179,7 +1124,6 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
                 onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/3237/3237472.png" }}
               />
             </div>
-            {/* Dynamic Rating Badge */}
             <div className="absolute -bottom-2 -right-2 bg-white px-2 py-1 rounded-lg shadow-lg border border-gray-50 flex items-center gap-1">
               <Star size={10} className="text-yellow-400 fill-current" />
               <span className="text-[10px] font-black text-[#033053]">4.9</span>
@@ -1214,6 +1158,111 @@ const ProductCard = ({ product, isSelected, onClick, currentAttributes, selected
         </div>
       </div>
     </motion.div>
+  );
+};
+
+const CompactDropdown = ({ value, options, onChange, disabled, placeholder, showRecommended }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setIsOpen(false);
+    };
+    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  const selectedOption = options.find(opt => opt.id === value || opt.name === value);
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <button
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        type="button"
+        className={`w-full flex items-center justify-between px-4 py-2 bg-white border rounded-xl text-left transition-all duration-300
+          ${disabled ? "bg-gray-50 text-gray-400 border-gray-100 cursor-not-allowed" : "border-gray-100 hover:border-blue-200 hover:bg-white cursor-pointer"}`}
+      >
+        <span className="text-[12px] font-bold truncate">
+          {selectedOption ? (selectedOption.subcategory_name || selectedOption.product_name || selectedOption.name || selectedOption.attribute) : placeholder}
+        </span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            className="absolute z-50 mt-1 w-full bg-white border border-gray-100 rounded-xl shadow-xl p-1 max-h-60 overflow-y-auto"
+          >
+            {options.map((option) => (
+              <button
+                key={option.id || option.name}
+                type="button"
+                onClick={() => { onChange(option.id || option.name); setIsOpen(false); }}
+                className="w-full text-left px-3 py-2 text-[11px] font-bold text-[#033053] hover:bg-blue-50 rounded-lg transition-colors flex flex-col gap-0.5"
+              >
+                {showRecommended && option.is_recommended === 1 && (
+                  <span className="text-[7px] text-green-600 font-black uppercase tracking-widest">Recommended</span>
+                )}
+                {option.subcategory_name || option.product_name || option.name || option.attribute}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const CompactProductRow = ({ product, selectedAttribute, selectedBhk, handleAddToCart, isAddingToCart }) => {
+  const displayAttr = product.attributes?.find(a => a.id === selectedAttribute) || product.attributes?.[0];
+  const matchedVar = displayAttr?.variations?.find(v => v.variation === selectedBhk) || displayAttr?.variations?.[0];
+  const cPrice = matchedVar?.discounted_variation_price || matchedVar?.price || product.discounted_price || product.price;
+  const oPrice = matchedVar?.price || product.price;
+
+  return (
+    <div className="bg-white border border-gray-100 rounded-xl p-3 flex flex-row items-center justify-between gap-3 hover:shadow-lg hover:shadow-blue-900/5 transition-all duration-300 group">
+      <div className="flex items-center gap-3 flex-1">
+        <div className="w-8 h-8 rounded-lg bg-blue-50/50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0463ac] transition-colors">
+          <FaShieldAlt className="text-[#0463ac] group-hover:text-white transition-colors text-sm" />
+        </div>
+        <div className="flex flex-col">
+          <h4 className="text-[14px] font-black text-[#033053] group-hover:text-[#0463ac] transition-colors">{product.product_name}</h4>
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="text-[8px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded-full uppercase tracking-widest border border-green-100">
+              {product.is_recommended === 1 ? "30-365 Days Warranty" : "30 Days Warranty"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {product?.slug && (
+        <a
+          href={`${config.VITE_BASE_URL}/product/${product.slug}`}
+          className="text-[11px] font-black text-[#0463ac] hover:text-[#03528b] transition-colors flex items-center gap-1 group/vd whitespace-nowrap"
+        >
+          View Details <ChevronRight size={14} className="group-hover/vd:translate-x-0.5 transition-transform" />
+        </a>
+      )}
+
+      <div className="flex items-center gap-4">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[18px] font-black text-[#033053]">₹{cPrice}</span>
+          {oPrice > cPrice && (
+            <span className="text-gray-300 line-through text-xs">₹{oPrice}</span>
+          )}
+        </div>
+        <button
+          onClick={() => matchedVar && handleAddToCart(matchedVar, product)}
+          className="bg-[#0463ac] hover:bg-[#03528b] text-white px-5 py-2 rounded-xl font-bold text-[12px] transition-all shadow-md active:scale-95 flex items-center gap-2"
+        >
+          {isAddingToCart ? "..." : "Book Now"} <ChevronRight size={14} />
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -496,8 +496,8 @@ const HomePage = () => {
       </section> 
       */}
 
-      <section className="px-4 md:px-11 py-5 md:py-10">
-        <div className="max-w-7xl mx-auto md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8 bg-white shadow-sm sm:shadow-none rounded-3xl">
+      <section className="px-4 md:px-11 py-2 md:py-4">
+        <div className="max-w-7xl mx-auto">
           <ServiceSection categories={data.all_categories} />
         </div>
       </section>

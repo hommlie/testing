@@ -1355,12 +1355,12 @@ const Header = ({
 
                         <button
                           onClick={() => setIsLocationModalOpen(true)}
-                          className="flex items-center text-[12px] font-bold text-[#212121]/70 leading-none"
+                          className="flex items-center text-[12px] font-bold text-[#212121]/70 leading-none ml-0"
                         >
-                          <span className="uppercase tracking-wide">HOME</span>
-                          <span className="mx-1 text-[10px]">•</span>
-                          <span className="">{currentLocation}</span>
-                          <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60" />
+                          <span className="uppercase tracking-wide flex-shrink-0">HOME</span>
+                          <span className="mx-1 text-[10px] flex-shrink-0">•</span>
+                          <span className="truncate whitespace-nowrap overflow-hidden max-w-[150px]">{currentLocation}</span>
+                          <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60 flex-shrink-0" />
                         </button>
                       </div>
 
