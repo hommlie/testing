@@ -792,9 +792,9 @@ const ServiceSection = ({ categories }) => {
         {/* Dropdowns Container - Hidden on Mobile */}
         <div className="hidden md:block">
           <div className="max-w-3xl mb-8 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
               {/* Service Type */}
-              <div className="col-span-1">
+              <div className="md:col-span-4">
                 <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your Services</label>
                 <Dropdown
                   label="Select Subcategory"
@@ -806,7 +806,7 @@ const ServiceSection = ({ categories }) => {
               </div>
 
               {/* Property Size */}
-              <div className="col-span-1">
+              <div className="md:col-span-3">
                 <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Select Your BHK</label>
                 <Dropdown
                   label="Select BHK"
@@ -818,7 +818,7 @@ const ServiceSection = ({ categories }) => {
               </div>
 
               {/* Service Variant */}
-              <div className="col-span-1">
+              <div className="md:col-span-5">
                 <label className="block text-[12px] font-medium text-gray-500 mb-1.5">Service Variant</label>
                 <Dropdown
                   label="Select Variant"

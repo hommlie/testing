@@ -415,9 +415,9 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
         </motion.div>
       </div>
 
-      <div className="bg-transparent sm:bg-white border-0 sm:border border-gray-100 rounded-none sm:rounded-3xl p-0.5 sm:p-4 shadow-none sm:shadow-sm mb-0 w-full sm:w-full">
+      <div className="bg-transparent sm:bg-white border-0 sm:border border-gray-100 rounded-none sm:rounded-3xl p-0.5 sm:p-2 shadow-none sm:shadow-sm mb-0 w-full sm:w-full">
         {/* Pest Control Subcategory Grid - consistently 3 per row */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 mb-0">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3 mb-0">
           {displayPestItems.map((sub, index) => (
             <motion.div
               key={sub.slug || sub.name}
@@ -435,13 +435,13 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               whileHover={{ y: -3 }}
-              className="relative flex flex-col items-center py-2 px-1 sm:py-3 sm:px-2 md:py-2 cursor-pointer group transition-all duration-300"
+              className="relative flex flex-col items-center py-2 px-1 sm:py-1 sm:px-1 cursor-pointer group transition-all duration-300"
             >
-              <div className="relative mb-2 z-10 w-full px-1 sm:px-2">
+              <div className="relative mb-1 z-10 w-full px-1 sm:px-1.5">
                 <motion.div
                   animate={{ y: [0, -2, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.1 }}
-                  className="w-full h-20 sm:h-28 md:h-24 lg:h-24 bg-white border border-gray-200 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:border-[#0463ac]/60"
+                  className="w-full h-16 sm:h-20 md:h-20 lg:h-20 bg-white border border-gray-200 rounded-xl flex items-center justify-center transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:border-[#0463ac]/60"
                 >
                   <img
                     src={sub.image}

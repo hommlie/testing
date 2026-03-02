@@ -70,6 +70,7 @@ import Roadmap from "../../components/Roadmap";
 import CityServiceLinks from "../CityServiceLinks";
 import HomeForm from "../HomeForm";
 import PestControlCarousel from "../../components/PestControlCarousel";
+import ImpactStats from "../../components/ImpactStats";
 
 
 const HomePage = () => {
@@ -421,9 +422,8 @@ const HomePage = () => {
         className="max-w-[1440px] mx-auto px-1 md:px-6 pt-0 pb-4 md:py-12 bg-transparent sm:bg-[#ffffff] min-h-screen"
       >
         <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start">
-          {/* Left Container - Services & Form (Sticky) */}
+          {/* Left Container - Services Grid & Form (Sticky) */}
           <div className="w-full md:w-[460px] md:sticky md:top-32 flex-shrink-0">
-            {/* Services grid (with Services / Products / Commercial tabs) */}
             <ServiceGrid
               categories={categories}
               mobileAfterTabs={
@@ -465,13 +465,23 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Right Container - Hero & Offers (Desktop) / Main Content (Mobile) */}
-          <div className="flex-1 w-full space-y-4 md:space-y-8 overflow-x-hidden pt-4 sm:pt-0">
-            {/* Main Category Banner */}
-            {/* <BannerImage categories={categories} /> */}
+          {/* Right Container - Hero Banner Image (Desktop) */}
+          <div className="hidden md:block w-[58%] flex-shrink-0 mt-[60px]">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="w-full rounded-[6px] overflow-hidden shadow-2xl border border-gray-100"
+            >
+              <img
+                src="/homebanner.jpeg"
+                alt="Premium Home Services Banner"
+                className="w-full h-auto transform hover:scale-105 transition-transform duration-1000"
+              />
+            </motion.div>
 
-            <div className="w-full md:flex-1 md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8 bg-white shadow-sm sm:shadow-none rounded-3xl mt-4 sm:mt-0">
-              <ServiceSection categories={data.all_categories} />
+            <div className="mt-28">
+              <ImpactStats />
             </div>
           </div>
         </div>
@@ -485,6 +495,12 @@ const HomePage = () => {
         <BannerImage />
       </section> 
       */}
+
+      <section className="px-4 md:px-11 py-5 md:py-10">
+        <div className="max-w-7xl mx-auto md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8 bg-white shadow-sm sm:shadow-none rounded-3xl">
+          <ServiceSection categories={data.all_categories} />
+        </div>
+      </section>
 
       <section className="px-10 py-1">
         <SnabbitTasksUI />

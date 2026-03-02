@@ -1359,7 +1359,7 @@ const Header = ({
                         >
                           <span className="uppercase tracking-wide">HOME</span>
                           <span className="mx-1 text-[10px]">•</span>
-                          <span className="max-w-[160px] truncate">{currentLocation}</span>
+                          <span className="">{currentLocation}</span>
                           <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60" />
                         </button>
                       </div>
@@ -1515,7 +1515,7 @@ const Header = ({
                     <div className="flex flex-col text-left">
                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 ml-0.5">Location</span>
                       <div className="flex items-center text-sm font-bold text-gray-800">
-                        <span className="max-w-[140px] truncate leading-none text-black">{currentLocation}</span>
+                        <span className="leading-none text-black">{currentLocation}</span>
                         <MdKeyboardArrowDown className={`transition-transform duration-300 ${isLocationOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400'}`} />
                       </div>
                     </div>
@@ -1538,7 +1538,7 @@ const Header = ({
                             </div>
                             <div>
                               <p className="text-white font-semibold text-sm">Location Settings</p>
-                              <p className="text-white/70 text-xs text-ellipsis overflow-hidden whitespace-nowrap max-w-[180px]">{currentLocation}</p>
+                              <p className="text-white/70 text-xs">{currentLocation}</p>
                             </div>
                           </div>
                         </div>
