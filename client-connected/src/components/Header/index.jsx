@@ -1383,42 +1383,29 @@ const Header = ({
 
                 {/* Search Row: Morphs size and position */}
                 <div className="flex items-center gap-3 w-full mb-2">
-                  <motion.div
-                    layout
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="flex-1 relative group"
-                  >
+                  <div className="flex-1 relative group">
                     <input
                       type="text"
-                      placeholder={isScrolled ? "Search services..." : `Search ${services[placeholderIndex]}...`}
-                      className={`w-full transition-all duration-300 font-medium placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 ${isScrolled
-                        ? 'pl-10 pr-4 py-2.5 text-sm bg-gray-50 rounded-xl border border-gray-100 shadow-none'
-                        : 'pl-12 pr-12 py-3.5 text-base bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-gray-100 focus:border-[#0463ac]/20'
-                        }`}
+                      placeholder={`Search ${services[placeholderIndex]}...`}
+                      className="w-full font-medium placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 pl-12 pr-12 py-3.5 text-base bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-gray-100 focus:border-[#0463ac]/20"
                       value={mobileSearchTerm}
                       onChange={(e) => setMobileSearchTerm(e.target.value)}
                     />
-                    <div className={`absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-300 ${isScrolled ? 'w-10 text-gray-400 text-lg' : 'w-12 text-gray-500 text-xl font-bold'}`}>
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 text-gray-500 text-xl font-bold">
                       <BiSearchAlt />
                     </div>
 
-                    {!isScrolled && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center pr-4"
-                      >
-                        <div className="w-px h-6 bg-gray-200 mr-3" />
-                        <BsMicFill
-                          onClick={handleMobileMicClick}
-                          className={`text-xl transition-colors ${isListening ? "text-[#0463ac] animate-pulse" : "text-gray-500"}`}
-                        />
-                      </motion.div>
-                    )}
-                  </motion.div>
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center pr-4">
+                      <div className="w-px h-6 bg-gray-200 mr-3" />
+                      <BsMicFill
+                        onClick={handleMobileMicClick}
+                        className={`text-xl transition-colors ${isListening ? "text-[#0463ac] animate-pulse" : "text-gray-500"}`}
+                      />
+                    </div>
+                  </div>
 
                   {/* Sticky Icons Panel: Visible on scroll OR on non-home pages */}
-                  {(isScrolled || !isHomePage) && (
+                  {!isHomePage && (
                     <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -1442,7 +1429,7 @@ const Header = ({
 
               {/* Category Tabs: Smooth height/opacity collapse on scroll */}
               <AnimatePresence>
-                {isHomePage && !isScrolled && (
+                {isHomePage && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
