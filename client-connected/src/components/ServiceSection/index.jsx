@@ -718,8 +718,8 @@ const ServiceSection = ({ categories }) => {
           >
             {/* Desktop Header */}
             <div>
-              <span className="text-[11px] -mt-10 font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5 block">EXPERT SOLUTIONS</span>
-              <h2 className="text-3xl font-black text-[#033053] flex items-center gap-3">
+              <span className="text-[11px] -mt-10 font-semibold text-gray-400 uppercase tracking-[0.2em] mb-1.5 block">EXPERT SOLUTIONS</span>
+              <h2 className="text-3xl font-semibold text-[#033053] flex items-center gap-3">
                 Quick Booking - Pest Control
                 <span className="text-teal-400 text-2xl animate-pulse">⚡</span>
               </h2>
@@ -770,13 +770,13 @@ const ServiceSection = ({ categories }) => {
                 {getCurrentProduct()?.slug ? (
                   <a
                     href={`${config.VITE_BASE_URL}/product/${getCurrentProduct().slug}`}
-                    className="flex items-center gap-2 text-[13px] font-black text-[#0463ac] hover:text-[#03528b] transition-colors group/vd"
+                    className="flex items-center gap-2 text-[13px] font-semibold text-[#0463ac] hover:text-[#03528b] transition-colors group/vd"
                   >
                     View Details
                     <ChevronRight size={15} className="group-hover/vd:translate-x-1 transition-transform" />
                   </a>
                 ) : (
-                  <span className="text-[13px] text-gray-300 font-bold">Select a service</span>
+                  <span className="text-[13px] text-gray-300 font-semibold">Select a service</span>
                 )}
               </div>
             </div>
@@ -1183,7 +1183,7 @@ const CompactDropdown = ({ value, options, onChange, disabled, placeholder, show
         className={`w-full flex items-center justify-between px-4 py-2 bg-white border rounded-xl text-left transition-all duration-300
           ${disabled ? "bg-gray-50 text-gray-400 border-gray-100 cursor-not-allowed" : "border-gray-100 hover:border-blue-200 hover:bg-white cursor-pointer"}`}
       >
-        <span className="text-[12px] font-bold truncate">
+        <span className="text-[12px] font-semibold truncate">
           {selectedOption ? (selectedOption.subcategory_name || selectedOption.product_name || selectedOption.name || selectedOption.attribute) : placeholder}
         </span>
         <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
@@ -1230,7 +1230,7 @@ const CompactProductRow = ({ product, selectedAttribute, selectedBhk, handleAddT
           <FaShieldAlt className="text-[#0463ac] group-hover:text-white transition-colors text-sm" />
         </div>
         <div className="flex flex-col">
-          <h4 className="text-[14px] font-black text-[#033053] group-hover:text-[#0463ac] transition-colors">{product.product_name}</h4>
+          <h4 className="text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors">{product.product_name}</h4>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-[8px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded-full uppercase tracking-widest border border-green-100">
               {product.is_recommended === 1 ? "30-365 Days Warranty" : "30 Days Warranty"}
@@ -1250,14 +1250,14 @@ const CompactProductRow = ({ product, selectedAttribute, selectedBhk, handleAddT
 
       <div className="flex items-center gap-4">
         <div className="flex items-baseline gap-2">
-          <span className="text-[18px] font-black text-[#033053]">₹{cPrice}</span>
+          <span className="text-[18px] font-semibold text-[#033053]">₹{cPrice}</span>
           {oPrice > cPrice && (
             <span className="text-gray-300 line-through text-xs">₹{oPrice}</span>
           )}
         </div>
         <button
           onClick={() => matchedVar && handleAddToCart(matchedVar, product)}
-          className="bg-[#0463ac] hover:bg-[#03528b] text-white px-5 py-2 rounded-xl font-bold text-[12px] transition-all shadow-md active:scale-95 flex items-center gap-2"
+          className="bg-[#0463ac] hover:bg-[#03528b] text-white px-5 py-2 rounded-xl font-semibold text-[12px] transition-all shadow-md active:scale-95 flex items-center gap-2"
         >
           {isAddingToCart ? "..." : "Book Now"} <ChevronRight size={14} />
         </button>

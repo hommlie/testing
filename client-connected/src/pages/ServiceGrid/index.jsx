@@ -121,7 +121,7 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
       >
         <div className="flex justify-between items-center mb-6 px-2">
           <div>
-            <h2 className="text-xl font-black text-[#033053] tracking-tight">
+            <h2 className="text-xl font-semibold text-[#033053] tracking-tight">
               {categoryName}
             </h2>
             <div className="h-1 w-8 bg-[#0463ac] rounded-full mt-1" />
@@ -172,7 +172,7 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
               </div>
 
               {sub.price && (
-                <p className="text-[11px] text-[#0463ac] font-bold mt-1">
+                <p className="text-[11px] text-[#0463ac] font-semibold mt-1">
                   {typeof sub.price === "number" || !isNaN(Number(sub.price))
                     ? `₹${Number(sub.price).toFixed(0)}`
                     : sub.price}

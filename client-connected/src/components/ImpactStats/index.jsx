@@ -48,11 +48,11 @@ const ImpactStats = () => {
                 <motion.h2
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    className="text-[12px] font-black uppercase text-[#033053]/60 tracking-[0.4em] mb-1"
+                    className="text-[12px] font-semibold uppercase text-[#033053]/60 tracking-[0.3em] mb-1"
                 >
                     Our Impact
                 </motion.h2>
-                <h2 className="text-xl md:text-2xl font-black uppercase text-[#033053] tracking-tighter">
+                <h2 className="text-xl md:text-2xl font-semibold uppercase text-[#033053] tracking-normal">
                     WHY TRUST <span className="text-[#0463ac]">HOMMLIE</span>
                 </h2>
             </div>
@@ -76,11 +76,11 @@ const ImpactStats = () => {
                             transition={{ delay: idx * 0.1 }}
                             className="flex-shrink-0 md:flex-shrink w-[140px] md:w-full snap-center bg-transparent p-2 md:p-1 flex flex-col items-center text-center group cursor-default"
                         >
-                            <div className="w-12 h-12 md:w-10 md:h-10 mb-3 p-3 bg-blue-50/50 rounded-full group-hover:scale-110 transition-transform duration-500">
+                            <div className="w-12 h-12 md:w-10 md:h-10 mb-3 p-3 bg-blue-50/50 rounded-full group-hover:scale-105 transition-transform duration-500">
                                 <img src={stat.icon} alt={stat.title} className="w-full h-full object-contain" />
                             </div>
-                            <h3 className={`text-xl md:text-lg font-black ${stat.color} mb-0.5 tracking-tighter italic`}>{stat.count}</h3>
-                            <p className="text-gray-700 text-[8px] md:text-[9px] font-extrabold uppercase tracking-widest md:tracking-wider leading-tight">
+                            <h3 className={`text-xl md:text-lg font-semibold ${stat.color} mb-0.5 tracking-normal`}>{stat.count}</h3>
+                            <p className="text-gray-700 text-[10px] md:text-[11px] font-semibold uppercase tracking-wider leading-tight">
                                 {stat.title}
                             </p>
                         </motion.div>

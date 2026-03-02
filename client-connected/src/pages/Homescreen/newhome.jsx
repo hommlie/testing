@@ -468,15 +468,15 @@ const HomePage = () => {
           {/* Right Container - Hero Banner Image (Desktop) */}
           <div className="hidden md:block w-[58%] flex-shrink-0 mt-[60px]">
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="w-full rounded-[6px] overflow-hidden shadow-2xl border border-gray-100"
+              className="w-full rounded-2xl overflow-hidden"
             >
               <img
                 src="/homebanner.jpeg"
                 alt="Premium Home Services Banner"
-                className="w-full h-auto transform hover:scale-105 transition-transform duration-1000"
+                className="w-full h-auto"
               />
             </motion.div>
 
@@ -751,7 +751,7 @@ const FaqSection = ({ data }) => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-5xl font-black text-[#033053] tracking-tighter leading-tight"
+          className="text-3xl sm:text-5xl font-semibold text-[#033053] tracking-tighter leading-tight"
         >
           Frequently Asked <span className="text-[#0463ac]">Questions</span>
         </motion.h2>
@@ -792,7 +792,7 @@ const FaqSection = ({ data }) => {
                   className="absolute left-0 top-0 w-1.5 bg-[#0463ac]"
                 />
 
-                <span className={`font-bold text-base sm:text-lg transition-colors pr-8 ${isOpen ? "text-[#033053]" : "text-[#4A5568] group-hover:text-[#033053]"
+                <span className={`font-semibold text-base sm:text-lg transition-colors pr-8 ${isOpen ? "text-[#033053]" : "text-[#4A5568] group-hover:text-[#033053]"
                   }`}>
                   {faq.question}
                 </span>
