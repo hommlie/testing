@@ -468,7 +468,7 @@ const HomePage = () => {
           {/* Right Container - Hero & Offers (Desktop) / Main Content (Mobile) */}
           <div className="flex-1 w-full space-y-4 md:space-y-8 overflow-x-hidden pt-4 sm:pt-0">
             {/* Main Category Banner */}
-            <BannerImage categories={categories} />
+            {/* <BannerImage categories={categories} /> */}
 
             <div className="w-full md:flex-1 md:border md:border-gray-200 md:rounded-[2.5rem] md:p-8 bg-white shadow-sm sm:shadow-none rounded-3xl mt-4 sm:mt-0">
               <ServiceSection categories={data.all_categories} />
@@ -491,7 +491,7 @@ const HomePage = () => {
       </section>
 
       <section className="hidden md:block px-2 sm:px-12 py-1">
-        <BannerImage />
+        {/* <BannerImage /> */}
       </section>
 
       {/* Pest Control Carousel */}

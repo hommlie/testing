@@ -387,7 +387,7 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
           viewport={{ once: true }}
         >
           <motion.h1
-            className="text-[18px] sm:text-[32px] font-semibold text-[#033053] tracking-tight"
+            className="text-[18px] sm:text-[24px] font-semibold text-[#033053] tracking-tight whitespace-nowrap"
             variants={{
               hidden: { opacity: 0, y: 10 },
               visible: {

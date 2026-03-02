@@ -1325,7 +1325,7 @@ const Header = ({
             </div>
             {/* Mobile View: Unified Header */}
             <div
-              className={`flex sm:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-500 ease-in-out ${!isHomePage
+              className={`flex sm:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-400 ease-in-out ${!isHomePage
                 ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md'
                 : isScrolled
                   ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md bg-white/95'
@@ -1342,8 +1342,11 @@ const Header = ({
                       marginBottom: isScrolled ? 0 : 6,
                       scale: isScrolled ? 0.95 : 1
                     }}
-                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                    className="flex justify-between items-start w-full"
+                    transition={{
+                      duration: 0.4,
+                      ease: [0.4, 0, 0.2, 1]
+                    }}
+                    className="flex justify-between items-start w-full overflow-hidden"
                   >
                     <div className="flex justify-between items-center w-full">
                       <div className="flex flex-col">
@@ -1382,7 +1385,10 @@ const Header = ({
                 )}
 
                 {/* Search Row: Morphs size and position */}
-                <div className="flex items-center gap-3 w-full mb-2">
+                <motion.div
+                  layout
+                  className="flex items-center gap-3 w-full mb-2"
+                >
                   <div className="flex-1 relative group">
                     <input
                       type="text"
@@ -1424,7 +1430,7 @@ const Header = ({
                       </NavLink>
                     </motion.div>
                   )}
-                </div>
+                </motion.div>
               </div>
 
               {/* Category Tabs: Smooth height/opacity collapse on scroll */}
@@ -1898,10 +1904,10 @@ const Header = ({
 
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Mobile Contact Info Bar - updated for premium look */}
-      <div
+      < div
         className="w-full py-1 hidden sm:hidden shadow-sm border-b border-white/10"
         style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}
       >
@@ -1939,10 +1945,10 @@ const Header = ({
             </div>
           </button>
         </div>
-      </div>
+      </div >
 
       {/* Search Results */}
-      <AnimatePresence>
+      < AnimatePresence >
         {isSearchOpen && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -2026,7 +2032,7 @@ const Header = ({
             )}
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence >
 
       {
         isGetAppModalOpen && (
@@ -2255,14 +2261,16 @@ const Header = ({
       }
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
 
-      {createPortal(
-        <ComingSoonModal
-          isOpen={isComingSoonOpen}
-          onClose={() => setIsComingSoonOpen(false)}
-          source={comingSoonSource}
-        />,
-        document.body
-      )}
+      {
+        createPortal(
+          <ComingSoonModal
+            isOpen={isComingSoonOpen}
+            onClose={() => setIsComingSoonOpen(false)}
+            source={comingSoonSource}
+          />,
+          document.body
+        )
+      }
 
       {
         isWalletModalOpen && (
@@ -2442,7 +2450,7 @@ const Header = ({
         )
       }
 
-    </header>
+    </header >
   );
 };
 
