@@ -25,15 +25,15 @@ import ReferEarnImg from "/assets/bg/refer-earn.svg";
 // import discoverImg1 from "../../assets/images/discover-1.png";
 // import discoverImg3 from "../../assets/images/discover-3.png";
 // import discoverImg4 from "../../assets/images/discover-4.png";
-import { 
-  FaBug, 
-  FaBroom, 
-  FaSprayCan, 
-  FaShieldAlt, 
-  FaFan, 
-  FaTools, 
-  FaPaintRoller, 
-  FaEllipsisH 
+import {
+  FaBug,
+  FaBroom,
+  FaSprayCan,
+  FaShieldAlt,
+  FaFan,
+  FaTools,
+  FaPaintRoller,
+  FaEllipsisH
 } from 'react-icons/fa';
 import { FaHammer } from 'react-icons/fa';
 import photo1 from '../../assets/images/photo1.webp';
@@ -66,7 +66,7 @@ import BannerImageMobile from "../BannerImageMobile";
 import Offermobile from '../Offermobile'
 import Scrapbanner from '../Scrapbanner'
 import Scrapmobile from '../Scrapmobile'
-import Refermobile  from '../Refermobile'
+import Refermobile from '../Refermobile'
 import Roadmap from "../../components/Roadmap";
 import CityServiceLinks from "../CityServiceLinks";
 
@@ -88,43 +88,43 @@ const HomePage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const searchTimeoutRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const handleMicClick = () => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-    alert("Voice recognition is not supported in this browser.");
-    return;
-  }
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+      alert("Voice recognition is not supported in this browser.");
+      return;
+    }
 
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false; // stop after one phrase
-  recognition.interimResults = false;
-  recognition.lang = "en-IN";
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // stop after one phrase
+    recognition.interimResults = false;
+    recognition.lang = "en-IN";
 
-  recognition.onstart = () => {
-    setIsListening(true);
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchTerm(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      alert("Error occurred during speech recognition.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    setSearchTerm(transcript);
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    alert("Error occurred during speech recognition.");
-  };
-
-  recognition.onend = () => {
-    setIsListening(false);
-  };
-
-  recognition.start();
-};
-  
   const searchInputRef = useRef(null);
 
   // Add states for all dynamic data
@@ -264,10 +264,10 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-  if (!SpeechRecognition) {
-    setIsSupported(false);
-  }
-}, []);
+    if (!SpeechRecognition) {
+      setIsSupported(false);
+    }
+  }, []);
 
 
   const handleSearchChange = (e) => {
@@ -306,58 +306,58 @@ const HomePage = () => {
 
   // FAQ Section
   const FaqSection = () => {
-  const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
+    const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
+    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
-  const displayedFaqs = isMobile
-    ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
-    : data?.faqs;
+    const displayedFaqs = isMobile
+      ? data?.faqs?.slice(0, Math.ceil(data?.faqs?.length / 2))
+      : data?.faqs;
 
-   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-10">
-      <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 md:mb-8 text-center leading-tight">
-        Frequently Asked <span className="text-[#0463ac]">Questions</span>
-      </h2>
+    return (
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-10">
+        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 md:mb-8 text-center leading-tight">
+          Frequently Asked <span className="text-[#0463ac]">Questions</span>
+        </h2>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {displayedFaqs?.map((faq, index) => (
-          <motion.div
-            key={index}
-            className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
-            initial={false}
-          >
-            <button
-              className="w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-gray-50 transition-colors"
-              onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+        <div className="grid gap-6 md:grid-cols-2">
+          {displayedFaqs?.map((faq, index) => (
+            <motion.div
+              key={index}
+              className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
+              initial={false}
             >
-              <span className="font-semibold text-base md:text-lg text-[#033053]">
-                {faq.question}
-              </span>
-              <span className="text-2xl font-extrabold text-[#0463ac]">
-                {openFaqIndex === index ? "−" : "+"}
-              </span>
-            </button>
+              <button
+                className="w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-gray-50 transition-colors"
+                onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+              >
+                <span className="font-semibold text-base md:text-lg text-[#033053]">
+                  {faq.question}
+                </span>
+                <span className="text-2xl font-extrabold text-[#0463ac]">
+                  {openFaqIndex === index ? "−" : "+"}
+                </span>
+              </button>
 
-            <AnimatePresence>
-              {openFaqIndex === index && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="p-5 md:p-6 bg-gray-50 text-sm md:text-base text-gray-700 leading-relaxed">
-                    {faq.answer}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        ))}
+              <AnimatePresence>
+                {openFaqIndex === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-5 md:p-6 bg-gray-50 text-sm md:text-base text-gray-700 leading-relaxed">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 
   // App Download Section
@@ -424,48 +424,44 @@ const HomePage = () => {
   };
 
   const services = [
-  "Pest Control",
-  "Home Cleaning",
-  "Sofa Shampooing",
-  "Kitchen Deep Cleaning",
-  "Mosquito Net Installation",
-  "Sanitization Services",
-];
+    "Pest Control",
+    "Home Cleaning",
+    "Sofa Shampooing",
+    "Kitchen Deep Cleaning",
+    "Mosquito Net Installation",
+    "Sanitization Services",
+  ];
 
-const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setPlaceholderIndex((prev) => (prev + 1) % services.length);
-  }, 4000); // rotates every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % services.length);
+    }, 4000); // rotates every 4 seconds
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
 
-const trendingSearches = [
-  "Standard Cockroach Control",
-  "Bedbugs",
-  "Termite Control",
-  "Car disinfection",
-  "Rodent Management Service",
-  "Home Disinfection",
-  "6D Prime -Cockroach Control And Ant Control",
-];
+  const trendingSearches = [
+    "Standard Cockroach Control",
+    "Bedbugs",
+    "Termite Control",
+    "Car disinfection",
+    "Rodent Management Service",
+    "Home Disinfection",
+    "6D Prime -Cockroach Control And Ant Control",
+  ];
 
-const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 
   return (
     <div
-      className="bg-cover bg-center bg-no-repeat font-headerFont"
-      style={{
-            background:
-              "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-          }}
+      className="bg-white font-headerFont min-h-screen pt-4"
     >
-  
-    <ServiceSection categories={data.all_categories} />
+
+      <ServiceSection categories={data.all_categories} />
 
     </div>
   );

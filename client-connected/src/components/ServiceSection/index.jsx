@@ -447,7 +447,7 @@ const ServiceSection = ({ categories }) => {
     <>
 
 
-      <section className="w-full pt-0 pb-5 md:py-8">
+      <section className="w-full pt-0 pb-5 md:pt-2 md:pb-8">
 
         {/* Modal for callback */}
         <Requestacallback isOpen={isCallbackOpen} onClose={() => setIsCallbackOpen(false)} source="homepage" />
@@ -475,9 +475,9 @@ const ServiceSection = ({ categories }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="px-0 py-0 mt-2 relative"
+            className="px-4 py-4 relative"
           >
-            <div className="space-y-6 relative z-10 pl-2 pr-4 w-full min-w-0 font-sans">
+            <div className="space-y-8 relative z-10 w-full min-w-0 font-sans">
               {/* Pest Type / Subcategory */}
               <div>
                 <label className="block text-[15px] font-bold text-[#033053] mb-2">Select Pest</label>
@@ -709,25 +709,24 @@ const ServiceSection = ({ categories }) => {
           </section>
         </div>
 
-        {/* Redesigned Desktop View (Image 3) */}
         <div className="hidden md:block">
           <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-[1000px] flex flex-col gap-6"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full max-w-[1100px] mx-auto flex flex-col gap-5 py-0"
           >
             {/* Desktop Header */}
             <div>
-              <span className="text-[11px] -mt-10 font-semibold text-gray-400 uppercase tracking-[0.2em] mb-1.5 block">EXPERT SOLUTIONS</span>
-              <h2 className="text-3xl font-semibold text-[#033053] flex items-center gap-3">
+              <span className="text-[12px] font-bold text-[#0463ac] uppercase tracking-[0.2em] mb-3 block">EXPERT SOLUTIONS</span>
+              <h2 className="text-4xl font-bold text-[#033053] flex items-center gap-3">
                 Quick Booking - Pest Control
-                <span className="text-teal-400 text-2xl animate-pulse">⚡</span>
+                <span className="text-teal-400 text-3xl animate-pulse">⚡</span>
               </h2>
             </div>
 
             {/* Selection Bar Row */}
-            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-2">
-              <div className="w-[27%] px-1">
+            <div className="bg-white p-3 rounded-2xl border border-gray-100 shadow-xl shadow-[#033053]/5 flex items-center gap-4">
+              <div className="w-[28%]">
                 <CompactDropdown
                   value={selectedSubCategory}
                   options={getCurrentSubcategories()}
@@ -1224,43 +1223,50 @@ const CompactProductRow = ({ product, selectedAttribute, selectedBhk, handleAddT
   const oPrice = matchedVar?.price || product.price;
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-3 flex flex-row items-center justify-between gap-3 hover:shadow-lg hover:shadow-blue-900/5 transition-all duration-300 group">
-      <div className="flex items-center gap-3 flex-1">
-        <div className="w-8 h-8 rounded-lg bg-blue-50/50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0463ac] transition-colors">
-          <FaShieldAlt className="text-[#0463ac] group-hover:text-white transition-colors text-sm" />
+    <div className="bg-white border border-gray-100 rounded-2xl p-5 flex flex-row items-center justify-between gap-6 hover:shadow-2xl hover:shadow-[#033053]/10 transition-all duration-500 group border-l-4 border-l-transparent hover:border-l-[#0463ac] translate-y-0 hover:-translate-y-1">
+      <div className="flex items-center gap-5 flex-1 min-w-0">
+        <div className="w-12 h-12 rounded-xl bg-blue-50/80 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0463ac] transition-all duration-300">
+          <FaShieldAlt className="text-[#0463ac] group-hover:text-white transition-colors text-lg" />
         </div>
-        <div className="flex flex-col">
-          <h4 className="text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-colors">{product.product_name}</h4>
-          <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[8px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded-full uppercase tracking-widest border border-green-100">
-              {product.is_recommended === 1 ? "30-365 Days Warranty" : "30 Days Warranty"}
+        <div className="flex flex-col min-w-0">
+          <h4 className="text-[16px] font-bold text-[#033053] group-hover:text-[#0463ac] transition-colors truncate">{product.product_name}</h4>
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+            <span className="text-[9px] font-black text-green-600 bg-green-50 px-2.5 py-1 rounded-full uppercase tracking-widest border border-green-100/50">
+              {product.is_recommended === 1 ? "Premium Warranty" : "Standard Warranty"}
             </span>
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Verified Expert</span>
           </div>
         </div>
       </div>
 
-      {product?.slug && (
-        <a
-          href={`${config.VITE_BASE_URL}/product/${product.slug}`}
-          className="text-[11px] font-black text-[#0463ac] hover:text-[#03528b] transition-colors flex items-center gap-1 group/vd whitespace-nowrap"
-        >
-          View Details <ChevronRight size={14} className="group-hover/vd:translate-x-0.5 transition-transform" />
-        </a>
-      )}
+      <div className="flex items-center gap-8">
+        {product?.slug && (
+          <a
+            href={`${config.VITE_BASE_URL}/product/${product.slug}`}
+            className="text-[12px] font-bold text-[#0463ac] hover:text-[#03528b] transition-colors flex items-center gap-1.5 group/vd whitespace-nowrap"
+          >
+            Details <ChevronRight size={14} className="group-hover/vd:translate-x-1 transition-transform" />
+          </a>
+        )}
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[18px] font-semibold text-[#033053]">₹{cPrice}</span>
-          {oPrice > cPrice && (
-            <span className="text-gray-300 line-through text-xs">₹{oPrice}</span>
-          )}
+        <div className="flex items-center gap-6 border-l border-gray-100 pl-6">
+          <div className="flex flex-col items-end">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[22px] font-black text-[#033053]">₹{cPrice}</span>
+              {oPrice > cPrice && (
+                <span className="text-gray-300 line-through text-sm font-medium">₹{oPrice}</span>
+              )}
+            </div>
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter leading-none">+ GST</span>
+          </div>
+
+          <button
+            onClick={() => matchedVar && handleAddToCart(matchedVar, product)}
+            className="bg-[#0463ac] hover:bg-[#03528b] text-white px-6 py-3 rounded-xl font-bold text-[13px] transition-all shadow-md hover:shadow-xl active:scale-95 flex items-center gap-2 whitespace-nowrap"
+          >
+            {isAddingToCart ? "..." : "Book Now"} <ChevronRight size={15} />
+          </button>
         </div>
-        <button
-          onClick={() => matchedVar && handleAddToCart(matchedVar, product)}
-          className="bg-[#0463ac] hover:bg-[#03528b] text-white px-5 py-2 rounded-xl font-semibold text-[12px] transition-all shadow-md active:scale-95 flex items-center gap-2"
-        >
-          {isAddingToCart ? "..." : "Book Now"} <ChevronRight size={14} />
-        </button>
       </div>
     </div>
   );

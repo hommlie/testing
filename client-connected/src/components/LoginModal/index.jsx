@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
+  const [isOldUser, setIsOldUser] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(true);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -61,10 +62,11 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   useEffect(() => {
     const otpString = otp.join("");
-    if (otpString.length === 4 && name.trim() !== "" && isOtpSent && !isLoading) {
+    // Automatic login only for existing users when OTP is complete
+    if (otpString.length === 4 && isOldUser && name.trim() !== "" && isOtpSent && !isLoading) {
       handleProceed();
     }
-  }, [otp, name, isOtpSent]);
+  }, [otp, isOtpSent, isOldUser, isLoading]);
 
   if (!isOpen) return null;
 
@@ -107,7 +109,11 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       });
       if (response.data.status === 1) {
         if (response.data?.user_name) {
-          setName(response.data?.user_name);
+          setName(response.data?.user_name || "");
+          setIsOldUser(true);
+        } else {
+          setName("");
+          setIsOldUser(false);
         }
         setIsOtpSent(true);
         setCounter(60);
@@ -275,7 +281,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
             </>
           )}
 
-          {isOtpSent && !name && (
+          {isOtpSent && !isOldUser && (
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                 Full Name
@@ -492,7 +498,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
               )}
 
               {/* Name Field (visible when OTP sent and name not pre-filled) */}
-              {isOtpSent && !name && (
+              {isOtpSent && !isOldUser && (
                 <div className="animate-fadeIn">
                   <label
                     htmlFor="name"

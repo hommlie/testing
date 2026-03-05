@@ -211,6 +211,10 @@ export default function AddtoCart() {
     (acc, item) => acc + Number(item.tax) * Number(item.qty),
     0
   );
+  const totalWalletEarnings = cart.reduce(
+    (acc, item) => acc + Number(item.wallet_amount || 0) * Number(item.qty || 1),
+    0
+  );
 
   const [customTipActive, setCustomTipActive] = useState(false);
   const [customInput, setCustomInput] = useState("");
@@ -805,9 +809,29 @@ export default function AddtoCart() {
                 </div>
               </div>
 
+              {walletBalance > 0 && (
+                <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between shadow-sm mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#eef2ff] rounded flex items-center justify-center">
+                      <FaWallet className="text-[#0463ac] text-lg" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">Use Wallet Balance</p>
+                      <p className="text-[10px] text-[#00a871] font-bold">Available: ₹{walletBalance.toFixed(0)}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleWalletToggle}
+                    className={`w-12 h-6 rounded-full relative transition-all duration-300 ${walletApplied ? 'bg-[#0463ac]' : 'bg-gray-200'}`}
+                  >
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-all duration-300 ${walletApplied ? 'left-7' : 'left-1'}`} />
+                  </button>
+                </div>
+              )}
+
               <button
                 onClick={openCouponModal}
-                className="w-full bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm"
+                className="w-full bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm mb-4"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#eef2ff] rounded flex items-center justify-center">
@@ -838,16 +862,28 @@ export default function AddtoCart() {
                       <span>-₹{couponDiscount.toFixed(0)}</span>
                     </div>
                   )}
+                  {tipAmount > 0 && (
+                    <div className="flex justify-between items-center text-sm font-medium text-gray-600">
+                      <span>Tip for Professional</span>
+                      <span className="text-[#212121] font-bold">₹{tipAmount}</span>
+                    </div>
+                  )}
+                  {totalWalletEarnings > 0 && (
+                    <div className="flex justify-between items-center text-sm font-bold text-[#00a67e]">
+                      <span>Earn in Wallet</span>
+                      <span>+₹{totalWalletEarnings.toFixed(0)}</span>
+                    </div>
+                  )}
+                  <div className="pt-3 border-t border-gray-100 flex justify-between items-center text-sm font-bold text-gray-900">
+                    <span>Total</span>
+                    <span>₹{payableBeforeWallet?.toFixed(0)}</span>
+                  </div>
                   {walletApplied && effectiveWalletUse > 0 && (
                     <div className="flex justify-between items-center text-sm font-bold text-[#0463ac]">
-                      <span>Wallet Credit</span>
+                      <span>Used from Wallet</span>
                       <span>-₹{effectiveWalletUse.toFixed(0)}</span>
                     </div>
                   )}
-                  <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
-                    <span className="text-base font-bold text-gray-900">Total amount</span>
-                    <span className="text-lg font-bold text-gray-900">₹{totalAmount?.toFixed(0)}</span>
-                  </div>
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center bg-gray-50 -mx-6 -mb-6 px-6 py-4">

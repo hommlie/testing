@@ -692,7 +692,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-50 font-sans bg-transparent sm:bg-white lg:bg-gradient-to-b lg:from-white lg:to-gray-50/30 lg:backdrop-blur-sm lg:shadow-lg lg:border-b lg:border-gray-100/50 transition-all duration-300"
+      className="w-full sticky top-0 z-50 font-sans bg-transparent sm:bg-white lg:bg-white border-b border-gray-100 transition-all duration-300"
     >
 
 
@@ -718,9 +718,36 @@ const Header = ({
                 <img
                   src={logo}
                   alt={logoAlt}
-                  className="h-9 xl:h-11 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                  className="h-9 xl:h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
                 />
               </NavLink>
+            </div>
+
+            {/* Desktop NavLinks - Left Aligned */}
+            <div className="hidden lg:flex items-center gap-6 xl:gap-8 ml-8">
+              <NavLink
+                to="/"
+                className={({ isActive }) => `text-[14px] font-medium transition-all duration-300 ${isActive ? 'text-[#0463ac]' : 'text-gray-500 hover:text-gray-900'}`}
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                Residential
+              </NavLink>
+              <a
+                href="https://b2b.hommlie.com"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[14px] font-medium text-gray-500 hover:text-gray-900 transition-all duration-300"
+              >
+                Commercial
+              </a>
+              <a
+                href="https://hommlie.shop"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[14px] font-medium text-gray-500 hover:text-gray-900 transition-all duration-300"
+              >
+                Product
+              </a>
             </div>
 
             {/* Mobile View: Unified Header (Sticky) */}
@@ -784,276 +811,261 @@ const Header = ({
             </div>
           </div>
 
-          {/* Main Desktop Navigation & Grouping */}
-          <div className="hidden lg:flex items-center flex-1 justify-start gap-4 xl:gap-8 min-w-0">
-
-            {/* Location Selector */}
-            <div ref={locationDropdownRef} className="relative flex-shrink-0 ml-2 xl:ml-6">
-              <button onClick={() => setIsLocationOpen(!isLocationOpen)} className="flex items-center gap-1.5 rounded-full hover:bg-gray-50 px-2 py-1.5 transition-all border border-transparent hover:border-gray-100 group">
-                <div className="w-8 h-8 rounded-full bg-blue-50 text-[#0463ac] flex items-center justify-center text-lg group-hover:bg-blue-100 transition-colors"><MdLocationOn /></div>
-                <div className="flex flex-col text-left">
-                  <span className="text-[9px] font-bold text-gray-400 uppercase leading-none mb-0.5">Location</span>
-                  <div className="flex items-center text-xs font-bold text-gray-800 leading-none">
-                    <span className="truncate max-w-[140px]">{currentLocation}</span>
-                    <MdKeyboardArrowDown className={`transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''}`} />
-                  </div>
-                </div>
-              </button>
-              <AnimatePresence>
-                {isLocationOpen && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl z-50 border border-gray-100 overflow-hidden">
-                    <div className="bg-gradient-to-r from-[#0463ac] to-[#0580ca] p-4 text-white font-bold text-sm text-center">Location Settings</div>
-                    <div className="py-1">
-                      <button onClick={() => { setIsLocationOpen(false); getCurrentLocation(); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMyLocation className="text-[#0463ac]" /> Use Current Location</button>
-                      <button onClick={() => { setIsLocationOpen(false); setIsLocationModalOpen(true); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMap className="text-[#0463ac]" /> Edit Address</button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Compact Search Bar */}
-            <div className="w-[150px] xl:w-[240px] relative group h-10 flex-shrink-1">
-              <input ref={searchInputRef} type="text" placeholder={`Search ${services[placeholderIndex]}...`} className="w-full h-full pl-9 pr-10 text-[11px] border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white rounded-full outline-none focus:ring-2 focus:ring-blue-100 transition-all font-medium" value={searchTerm} onChange={handleSearchChange} onFocus={() => setIsSearchFocused(true)} onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} />
-              <BiSearchAlt className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg group-hover:text-blue-500 transition-colors" />
-              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2 text-gray-400">
-                <BsMicFill className={`cursor-pointer transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'hover:text-blue-500'}`} onClick={handleMicClick} />
-              </div>
-              {isSearchFocused && searchTerm.length === 0 && createPortal(
-                <div style={{ position: 'fixed', left: searchPanelStyle?.left ?? 0, top: searchPanelStyle?.top ?? 0, width: searchPanelStyle?.width ?? 'auto', zIndex: 9999 }} className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 mt-2 transition-all">
-                  <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">Trending Searches</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {trendingSearches.map((item, idx) => (
-                      <button key={idx} onMouseDown={() => { setSearchTerm(item); fetchSearchResults(item); setIsSearchOpen(true); }} className="px-3 py-1.5 bg-gray-50 text-xs text-gray-600 rounded-full hover:bg-blue-50 transition-colors border border-gray-100">{item}</button>
-                    ))}
-                  </div>
-                </div>, document.body
-              )}
-            </div>
-
-            {/* Service Navigation Links */}
-            <div className="hidden lg:flex items-center gap-5 xl:gap-8 text-[11px] font-semibold tracking-widest flex-shrink-0 ml-auto mr-4">
-              <NavLink
-                to="/"
-                className={({ isActive }) => `transition-all duration-300 hover:text-[#0463ac] ${isActive ? 'text-[#0463ac] scale-105' : 'text-gray-400'}`}
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                RESIDENTIAL
-              </NavLink>
-              <a
-                href="https://b2b.hommlie.com"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-400 hover:text-[#0463ac] transition-all duration-300"
-              >
-                COMMERCIAL
-              </a>
-              <a
-                href="https://hommlie.shop"
-                target="_blank"
-                rel="noreferrer"
-                className="text-gray-400 hover:text-[#0463ac] transition-all duration-300"
-              >
-                PRODUCT
-              </a>
-            </div>
-
-            {/* Right Icons: Account, Wallet, Cart */}
-            <div className="hidden lg:flex items-center gap-1.5 xl:gap-3 flex-shrink-0">
-              <div className="relative" ref={loginDropdownRef}>
-                {user?.length === 0 ? (
-                  <button onClick={() => setIsLoginModalOpen(true)} className="flex items-center gap-2 text-[13px] font-semibold text-gray-800 hover:text-[#0463ac] transition-colors"><FaSignInAlt className="text-gray-400" /> LOGIN</button>
-                ) : (
-                  <>
-                    <button onClick={() => setIsLoginOpen(!isLoginOpen)} className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-800 hover:text-[#0463ac] transition-colors uppercase">
-                      <FaUser className="text-gray-400" /> {user?.name || user?.[0]?.name || "Account"} <MdKeyboardArrowDown className={`transition-transform duration-200 ${isLoginOpen ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    <AnimatePresence>
-                      {isLoginOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 z-[100] overflow-hidden"
-                        >
-                          <div className="p-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Signed in as</p>
-                            <p className="text-sm font-bold text-[#0463ac] truncate">{user?.name || user?.[0]?.name || "User"}</p>
-                          </div>
-
-                          <div className="py-2">
-                            <NavLink to="/edit-profile" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
-                              <FaUser className="text-gray-400 w-4" /> Edit Profile
-                            </NavLink>
-                            <NavLink to="/my-bookings" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
-                              <MdEmail className="text-gray-400 w-4 text-base" /> My Bookings
-                            </NavLink>
-                            <NavLink to="/my-wallet" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
-                              <FaWallet className="text-gray-400 w-4" /> My Wallet
-                            </NavLink>
-                            <button onClick={() => { setIsAddressModalOpen(true); setIsLoginOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
-                              <MdLocationOn className="text-gray-400 w-4 text-base" /> Your Addresses
-                            </button>
-                            <button
-                              onClick={() => {
-                                setIsReferAndEarnOpen(true);
-                                setIsLoginOpen(false);
-                              }}
-                              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors"
-                            >
-                              <FaGift className="text-[#0463ac] w-4" /> Refer a Friend
-                            </button>
-                          </div>
-
-                          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 m-2 rounded-xl border border-blue-100/50">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-[10px] font-black text-blue-600/60 uppercase tracking-widest">Your Code</span>
-                              <span className="px-2 py-0.5 bg-blue-600 text-white rounded text-[9px] font-bold antialiased shadow-sm uppercase tracking-tighter">Copy</span>
-                            </div>
-                            <div className="flex items-center gap-2 group/code bg-white border border-blue-100 p-2 rounded-lg cursor-pointer hover:border-blue-300 transition-colors shadow-sm" onClick={() => {
-                              navigator.clipboard.writeText(referralCode || user?.referral_code || user?.[0]?.referral_code || "");
-                            }}>
-                              <span className="text-sm font-black text-[#0463ac] truncate font-mono tracking-wider">{referralCode || user?.referral_code || user?.[0]?.referral_code || "CODE"}</span>
-                            </div>
-                            <p className="text-[9px] text-gray-400 font-bold mt-2 leading-tight">Share this code with your friends to earn rewards on every signup! 🎁</p>
-                          </div>
-
-                          <div className="border-t border-gray-50 py-2">
-                            <NavLink to="/help-us" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
-                              <FaHeadset className="text-gray-400 w-4" /> Help & Support
-                            </NavLink>
-                            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors mt-1">
-                              <FaSignOutAlt className="w-4" /> Log out
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </>
-                )}
-              </div>
-
-              {user?.length !== 0 && (
-                <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} className="scale-90" />
-              )}
-
-              <div className="relative" ref={cartDropdownRef}>
-                <button
-                  onClick={() => setIsCartOpen(!isCartOpen)}
-                  className="flex items-center group"
-                >
-                  <div className="relative w-10 h-10 rounded-full border border-gray-100 bg-white flex items-center justify-center transition-all group-hover:border-blue-300 shadow-sm">
-                    <IoCartOutline className="text-xl text-gray-700 group-hover:text-[#0463ac]" />
-                    {cart?.length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-[#e11d48] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white antialiased">
-                        {cart.length}
-                      </span>
-                    )}
+          {/* Center: Search & Location - Unified Bar Style */}
+          <div className="hidden lg:flex items-center flex-1 justify-center max-w-2xl mx-auto px-4">
+            <div className="flex items-center w-full bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors shadow-sm overflow-hidden h-[46px]">
+              {/* Location Selector */}
+              <div ref={locationDropdownRef} className="relative flex-shrink-0">
+                <button onClick={() => setIsLocationOpen(!isLocationOpen)} className="flex items-center gap-2 px-4 h-full hover:bg-gray-50 transition-all group min-w-[160px]">
+                  <MdLocationOn className="text-lg text-gray-400 group-hover:text-blue-500" />
+                  <div className="flex items-center text-[13px] font-medium text-gray-700 truncate max-w-[150px]">
+                    {currentLocation}
+                    <MdKeyboardArrowDown className={`ml-1 transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''}`} />
                   </div>
                 </button>
-
                 <AnimatePresence>
-                  {isCartOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                      className="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl border border-blue-50/50 overflow-hidden z-[100]"
-                    >
-                      <div className="bg-gradient-to-r from-blue-50/50 to-white px-5 py-4 border-b border-gray-50">
-                        <h3 className="text-sm font-black text-[#0463ac] uppercase tracking-wider flex items-center gap-2">
-                          <FaShoppingCart className="text-xs" /> My Shopping Cart
-                        </h3>
+                  {isLocationOpen && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute left-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl z-50 border border-gray-100 overflow-hidden">
+                      <div className="bg-[#0463ac] p-3 text-white font-bold text-xs text-center">Location Settings</div>
+                      <div className="py-1">
+                        <button onClick={() => { setIsLocationOpen(false); getCurrentLocation(); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMyLocation className="text-[#0463ac]" /> Use Current Location</button>
+                        <button onClick={() => { setIsLocationOpen(false); setIsLocationModalOpen(true); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMap className="text-[#0463ac]" /> Edit Address</button>
                       </div>
-
-                      <div className="max-h-[360px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-100">
-                        {cart?.length > 0 ? (
-                          <div className="divide-y divide-gray-50">
-                            {cart.map((item, index) => (
-                              <motion.div
-                                key={item.id || index}
-                                initial={{ opacity: 0, x: 10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.05 }}
-                                className="px-5 py-4 flex gap-4 hover:bg-gray-50/50 transition-colors group/item"
-                              >
-                                <div className="w-16 h-16 rounded-xl bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 group-hover/item:border-blue-200 transition-colors">
-                                  {item.image_url ? (
-                                    <img src={item.image_url} alt={item.product_name} className="w-full h-full object-cover" />
-                                  ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-300">
-                                      <FaShoppingCart />
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                  <h4 className="text-[13px] font-bold text-gray-800 truncate mb-0.5">{item.product_name}</h4>
-                                  <p className="text-[11px] font-semibold text-gray-400 mb-2">Qty: {item.qty}</p>
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-sm font-black text-[#0463ac]">₹{item.price * item.qty}</span>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // handleRemoveFromCart(item.id); 
-                                        // Note: handleRemoveFromCart might need to be passed or accessed via context
-                                      }}
-                                      className="text-gray-300 hover:text-red-500 transition-colors"
-                                    >
-                                      <FaTimes className="text-[10px]" />
-                                    </button>
-                                  </div>
-                                </div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="py-12 px-5 text-center">
-                            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <FaShoppingCart className="text-blue-300 text-2xl" />
-                            </div>
-                            <h4 className="text-sm font-bold text-gray-800 mb-1">Your cart is empty</h4>
-                            <p className="text-xs text-gray-400 font-medium">Add some services to get started!</p>
-                          </div>
-                        )}
-                      </div>
-
-                      {cart?.length > 0 && (
-                        <div className="p-5 bg-gray-50/50 border-t border-gray-100">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Subtotal</span>
-                            <span className="text-lg font-black text-gray-800">
-                              ₹{cart.reduce((sum, item) => sum + (item.price * item.qty), 0)}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-3">
-                            <button
-                              onClick={() => {
-                                setIsCartOpen(false);
-                                navigate("/add-to-cart");
-                              }}
-                              className="py-2.5 rounded-xl border border-blue-200 text-[#0463ac] text-xs font-black uppercase tracking-wider hover:bg-blue-50 transition-all"
-                            >
-                              View Cart
-                            </button>
-                            <button
-                              onClick={() => {
-                                setIsCartOpen(false);
-                                navigate("/add-to-cart"); // Or direct to review-booking if logic allows
-                              }}
-                              className="py-2.5 rounded-xl bg-gradient-to-r from-[#0463ac] to-[#0580ca] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95"
-                            >
-                              Checkout
-                            </button>
-                          </div>
-                        </div>
-                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
+
+              {/* Vertical Divider */}
+              <div className="w-[1px] h-6 bg-gray-200 flex-shrink-0"></div>
+
+              {/* Search Bar */}
+              <div className="relative flex-1 group h-full">
+                <BiSearchAlt className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg group-hover:text-blue-500 transition-colors" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder={`Search for '${services[placeholderIndex]}'`}
+                  className="w-full h-full pl-10 pr-10 text-[13px] bg-transparent outline-none font-medium text-gray-700 placeholder:text-gray-400"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <BsMicFill className={`cursor-pointer text-lg transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-gray-300 hover:text-blue-500'}`} onClick={handleMicClick} />
+                </div>
+              </div>
+            </div>
+
+            {/* Trending Searches Portal Placeholder - Keeping logic available */}
+            {isSearchFocused && searchTerm.length === 0 && createPortal(
+              <div style={{ position: 'fixed', left: searchPanelStyle?.left ?? 0, top: searchPanelStyle?.top ?? 0, width: searchPanelStyle?.width ?? 'auto', zIndex: 9999 }} className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 mt-2 transition-all">
+                <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">Trending Searches</h3>
+                <div className="flex flex-wrap gap-2">
+                  {trendingSearches.map((item, idx) => (
+                    <button key={idx} onMouseDown={() => { setSearchTerm(item); fetchSearchResults(item); setIsSearchOpen(true); }} className="px-3 py-1.5 bg-gray-50 text-xs text-gray-600 rounded-full hover:bg-blue-50 transition-colors border border-gray-100">{item}</button>
+                  ))}
+                </div>
+              </div>, document.body
+            )}
+          </div>
+
+          {/* Right Icons: Account, Wallet, Cart */}
+          <div className="hidden lg:flex items-center gap-1.5 xl:gap-3 flex-shrink-0">
+            <div className="relative" ref={loginDropdownRef}>
+              {user?.length === 0 ? (
+                <button onClick={() => setIsLoginModalOpen(true)} className="flex items-center gap-2 text-[13px] font-semibold text-gray-800 hover:text-[#0463ac] transition-colors"><FaSignInAlt className="text-gray-400" /> LOGIN</button>
+              ) : (
+                <>
+                  <button onClick={() => setIsLoginOpen(!isLoginOpen)} className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-800 hover:text-[#0463ac] transition-colors uppercase">
+                    <FaUser className="text-gray-400" /> {user?.name || user?.[0]?.name || "Account"} <MdKeyboardArrowDown className={`transition-transform duration-200 ${isLoginOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isLoginOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 z-[100] overflow-hidden"
+                      >
+                        <div className="p-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Signed in as</p>
+                          <p className="text-sm font-bold text-[#0463ac] truncate">{user?.name || user?.[0]?.name || "User"}</p>
+                        </div>
+
+                        <div className="py-2">
+                          <NavLink to="/edit-profile" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                            <FaUser className="text-gray-400 w-4" /> Edit Profile
+                          </NavLink>
+                          <NavLink to="/my-bookings" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                            <MdEmail className="text-gray-400 w-4 text-base" /> My Bookings
+                          </NavLink>
+                          <NavLink to="/my-wallet" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                            <FaWallet className="text-gray-400 w-4" /> My Wallet
+                          </NavLink>
+                          <button onClick={() => { setIsAddressModalOpen(true); setIsLoginOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                            <MdLocationOn className="text-gray-400 w-4 text-base" /> Your Addresses
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsReferAndEarnOpen(true);
+                              setIsLoginOpen(false);
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors"
+                          >
+                            <FaGift className="text-[#0463ac] w-4" /> Refer a Friend
+                          </button>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 m-2 rounded-xl border border-blue-100/50">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-black text-blue-600/60 uppercase tracking-widest">Your Code</span>
+                            <span className="px-2 py-0.5 bg-blue-600 text-white rounded text-[9px] font-bold antialiased shadow-sm uppercase tracking-tighter">Copy</span>
+                          </div>
+                          <div className="flex items-center gap-2 group/code bg-white border border-blue-100 p-2 rounded-lg cursor-pointer hover:border-blue-300 transition-colors shadow-sm" onClick={() => {
+                            navigator.clipboard.writeText(referralCode || user?.referral_code || user?.[0]?.referral_code || "");
+                          }}>
+                            <span className="text-sm font-black text-[#0463ac] truncate font-mono tracking-wider">{referralCode || user?.referral_code || user?.[0]?.referral_code || "CODE"}</span>
+                          </div>
+                          <p className="text-[9px] text-gray-400 font-bold mt-2 leading-tight">Share this code with your friends to earn rewards on every signup! 🎁</p>
+                        </div>
+
+                        <div className="border-t border-gray-50 py-2">
+                          <NavLink to="/help-us" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                            <FaHeadset className="text-gray-400 w-4" /> Help & Support
+                          </NavLink>
+                          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors mt-1">
+                            <FaSignOutAlt className="w-4" /> Log out
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              )}
+            </div>
+
+            {user?.length !== 0 && (
+              <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} className="scale-90" />
+            )}
+
+            <div className="relative" ref={cartDropdownRef}>
+              <button
+                onClick={() => setIsCartOpen(!isCartOpen)}
+                className="flex items-center group"
+              >
+                <div className="relative w-10 h-10 rounded-full border border-gray-100 bg-white flex items-center justify-center transition-all group-hover:border-blue-300 shadow-sm">
+                  <IoCartOutline className="text-xl text-gray-700 group-hover:text-[#0463ac]" />
+                  {cart?.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-[#e11d48] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white antialiased">
+                      {cart.length}
+                    </span>
+                  )}
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {isCartOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl border border-blue-50/50 overflow-hidden z-[100]"
+                  >
+                    <div className="bg-gradient-to-r from-blue-50/50 to-white px-5 py-4 border-b border-gray-50">
+                      <h3 className="text-sm font-black text-[#0463ac] uppercase tracking-wider flex items-center gap-2">
+                        <FaShoppingCart className="text-xs" /> My Shopping Cart
+                      </h3>
+                    </div>
+
+                    <div className="max-h-[360px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-100">
+                      {cart?.length > 0 ? (
+                        <div className="divide-y divide-gray-50">
+                          {cart.map((item, index) => (
+                            <motion.div
+                              key={item.id || index}
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              className="px-5 py-4 flex gap-4 hover:bg-gray-50/50 transition-colors group/item"
+                            >
+                              <div className="w-16 h-16 rounded-xl bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 group-hover/item:border-blue-200 transition-colors">
+                                {item.image_url ? (
+                                  <img src={item.image_url} alt={item.product_name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                    <FaShoppingCart />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                <h4 className="text-[13px] font-bold text-gray-800 truncate mb-0.5">{item.product_name}</h4>
+                                <p className="text-[11px] font-semibold text-gray-400 mb-2">Qty: {item.qty}</p>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-black text-[#0463ac]">₹{item.price * item.qty}</span>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      // handleRemoveFromCart(item.id); 
+                                      // Note: handleRemoveFromCart might need to be passed or accessed via context
+                                    }}
+                                    className="text-gray-300 hover:text-red-500 transition-colors"
+                                  >
+                                    <FaTimes className="text-[10px]" />
+                                  </button>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="py-12 px-5 text-center">
+                          <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <FaShoppingCart className="text-blue-300 text-2xl" />
+                          </div>
+                          <h4 className="text-sm font-bold text-gray-800 mb-1">Your cart is empty</h4>
+                          <p className="text-xs text-gray-400 font-medium">Add some services to get started!</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {cart?.length > 0 && (
+                      <div className="p-5 bg-gray-50/50 border-t border-gray-100">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Subtotal</span>
+                          <span className="text-lg font-black text-gray-800">
+                            ₹{cart.reduce((sum, item) => sum + (item.price * item.qty), 0)}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            onClick={() => {
+                              setIsCartOpen(false);
+                              navigate("/add-to-cart");
+                            }}
+                            className="py-2.5 rounded-xl border border-blue-200 text-[#0463ac] text-xs font-black uppercase tracking-wider hover:bg-blue-50 transition-all"
+                          >
+                            View Cart
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsCartOpen(false);
+                              navigate("/add-to-cart"); // Or direct to review-booking if logic allows
+                            }}
+                            className="py-2.5 rounded-xl bg-gradient-to-r from-[#0463ac] to-[#0580ca] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95"
+                          >
+                            Checkout
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -1734,7 +1746,7 @@ const Header = ({
         )
       }
 
-    </header>
+    </header >
   );
 };
 
