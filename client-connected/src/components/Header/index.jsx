@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from "react";
+﻿import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from "react";
 import Cookies from "js-cookie";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -108,6 +108,7 @@ const Header = ({
     handleLogout: contextLogout,
   } = useCont();
 
+  const [showReferralInWallet, setShowReferralInWallet] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -148,6 +149,19 @@ const Header = ({
       setActiveTab("services");
     }
   }, [location.pathname]);
+
+  const [referralCode, setReferralCode] = useState("");
+  useEffect(() => {
+    const jwtToken = Cookies.get("HommlieUserjwtToken");
+    if (jwtToken) {
+      try {
+        const decoded = jwtDecode(jwtToken);
+        setReferralCode(decoded.referral_code || "");
+      } catch (err) {
+        console.error("Error decoding JWT:", err);
+      }
+    }
+  }, [user]);
 
   const handleMobileMicClick = () => {
     if (!SpeechRecognition) {
@@ -666,16 +680,10 @@ const Header = ({
         className={`flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 ${className}`}
         type="button"
       >
-        <div className="relative">
-          <img
-            src="/wallet-luxe.png"
-            alt="Wallet"
-            className="w-11 h-11 object-contain"
-            style={{ mixBlendMode: "multiply" }}
-            draggable="false"
-          />
+        <div className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center shadow-sm mb-0.5">
+          <FaWallet className="text-xl text-gray-700" />
         </div>
-        <span className="text-[12px] font-black text-[#212121] leading-none tracking-tight -mt-1 bg-white/40 px-1.5 py-0.5 rounded-full backdrop-blur-[2px]">
+        <span className="text-[10px] font-bold text-gray-800 leading-none tracking-tight">
           ₹{fmt}
         </span>
       </button>
@@ -690,691 +698,69 @@ const Header = ({
 
 
 
-      {/* Top Header with contact and social info */}
+      {/* Top Header hidden to merge into single line */}
+      {/* 
       <div className="">
         <div className="hidden lg:block max-w-7xl mx-auto w-full relative">
-          <div
-            className="text-gray-700 text-sm w-full px-2 lg:px-10 py-2.5 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 relative"
-          // style={{
-          //   backgroundImage: `url(${bannerBg})`,
-          //   backgroundSize: 'cover',
-          //   backgroundRepeat: 'no-repeat',
-          //   backgroundPosition: 'center',
-          // }}
-          >
-            {/* Centered Offer Line */}
-
-            {/* <div className="absolute left-[48%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full px-4 text-center pointer-events-none">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={offers[current].label}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="text-[#035240] font-semibold text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis mr-72"
-                  >
-                    <NavLink to={offers[current].link} className=" pointer-events-auto">
-                      🛡️ {offers[current].label}
-                    </NavLink>
-                  </motion.p>
-                </AnimatePresence>
-              </div> */}
-            {/* Left: Brand + Message */}
-            <span className="font-normal text-gray-800 z-20">
-              <div className="inline-flex rounded-full bg-gray-100/50 p-1 text-xs font-semibold relative shadow-inner">
-                {/* Residential */}
-                <button
-                  type="button"
-                  onClick={() => navigate("/")}
-                  className={`relative group inline-flex items-center px-5 py-2 rounded-full transition-all duration-300 ${isHomePage ? 'bg-[#0463ac] text-white shadow-md' : 'text-gray-600 hover:bg-white hover:text-[#0463ac]'}`}
-                >
-                  Residential
-                </button>
-
-                {/* Commercial (external) */}
-                <a
-                  href="https://b2b.hommlie.com"
-                  target="_blank" rel="noopener noreferrer"
-                  className="relative group inline-flex items-center px-5 py-2 rounded-full text-gray-600 hover:bg-white hover:text-[#0463ac] transition-all duration-300"
-                >
-                  Commercial
-                </a>
-
-                {/* Removed: Waste Management & Product links per request */}
-
-              </div>
-            </span>
-
-
-            <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 text-[13px] text-gray-600 font-medium z-20">
-              <div className="relative" ref={getAppDropdownRef}>
-                <button
-                  onClick={() => setIsGetAppOpen(!isGetAppOpen)}
-                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isGetAppOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
-                >
-                  <FaMobileAlt className={`text-lg transition-colors duration-300 ${isGetAppOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                  Get App
-                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isGetAppOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                </button>
-
-                <AnimatePresence>
-                  {isGetAppOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute -left-5 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
-                    >
-                      <div className="absolute -top-2 left-10 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
-                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
-                            <FaMobileAlt className="text-white text-sm" />
-                          </div>
-                          <div>
-                            <p className="text-white font-semibold text-sm">Download App</p>
-                            <p className="text-white/70 text-xs">For faster booking</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="py-2">
-                        <a href="https://play.google.com/store/apps/details?id=com.hommlie.user&pcampaignid=web_share" target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          onClick={() => setIsGetAppOpen(false)}>
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                            <FaGooglePlay className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                          </div>
-                          <span className="font-medium">Google Play</span>
-                        </a>
-                        <a href="https://apps.apple.com/in/app/hommile/id6744694127" target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          onClick={() => setIsGetAppOpen(false)}>
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                            <FaAppStore className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                          </div>
-                          <span className="font-medium">App Store</span>
-                        </a>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
-
-              <div className="relative" ref={offerDropdownRef}>
-                <motion.button
-                  onClick={() => setIsOfferOpen(!isOfferOpen)}
-                  animate={!isOfferOpen ? {
-                    backgroundColor: ["rgba(255, 255, 255, 0)", "rgba(239, 68, 68, 0.05)", "rgba(255, 255, 255, 0)"],
-                    scale: [1, 1.02, 1],
-                  } : {}}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className={`flex items-center gap-2 transition-all duration-300 px-3 py-1.5 rounded-full relative text-black ${isOfferOpen ? 'text-[#0463ac] bg-blue-50/50' : 'hover:text-[#0463ac] hover:bg-gray-50'}`}
-                >
-                  <div className="relative">
-                    <FaTag className={`text-lg transition-colors duration-300 ${isOfferOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                    {!isOfferOpen && (
-                      <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                      </span>
-                    )}
-                  </div>
-                  <span className="flex items-center gap-1.5">
-                    Offer
-                    {!isOfferOpen && (
-                      <span className="bg-red-500 text-white text-[8px] px-1.5 py-0.5 rounded-full font-extrabold uppercase animate-bounce tracking-tighter">Hot</span>
-                    )}
-                  </span>
-                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isOfferOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                </motion.button>
-
-                <AnimatePresence>
-                  {isOfferOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute -left-10 top-full mt-3 w-80 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
-                    >
-                      <div className="absolute -top-2 left-14 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
-                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
-                            <FaGift className="text-white text-sm" />
-                          </div>
-                          <div>
-                            <p className="text-white font-semibold text-sm">Special Offers</p>
-                            <p className="text-white/70 text-xs">Grab them before they expire</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="py-2 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
-                        {offers.map((offer, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="px-4 py-2"
-                          >
-                            <button
-                              onClick={() => {
-                                setIsOfferOpen(false);
-                                navigate(offer.link);
-                              }}
-                              className="w-full text-left flex flex-col gap-2 p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/80 hover:to-white border border-transparent hover:border-blue-100 transition-all duration-300 group/item relative overflow-hidden"
-                            >
-                              <div className="flex items-center justify-between w-full">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform duration-300 shadow-sm font-bold text-orange-600">
-                                    {index === 0 || index === 3 ? <HiFire className="text-xl" /> : <FaTag className="text-lg" />}
-                                  </div>
-                                  <div>
-                                    <span className="font-bold text-gray-800 block text-[13px] leading-tight group-hover/item:text-[#0463ac] transition-colors">{offer.label.split('–')[0]}</span>
-                                    <div className="flex items-center gap-2 mt-1">
-                                      <span className="text-[10px] items-center gap-1 flex px-2 py-0.5 rounded-full bg-blue-50 text-[#0463ac] font-bold uppercase tracking-tighter border border-blue-100/50 whitespace-nowrap">
-                                        <HiBadgeCheck className="text-xs" /> Verified Deal
-                                      </span>
-                                      {(index === 0 || index === 2) && (
-                                        <span className="text-[10px] items-center gap-1 flex px-2 py-0.5 rounded-full bg-red-50 text-red-500 font-bold uppercase tracking-tighter border border-red-100/50 animate-pulse">
-                                          <HiFire className="text-xs" /> Hot
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="text-right">
-                                  <span className="text-sm font-extrabold text-[#0463ac] block">
-                                    {offer.label.split('–')[1] || 'T&C Apply'}
-                                  </span>
-                                  <span className="text-[9px] text-gray-400 line-through">₹{(parseInt(offer.label.split('–')[1]?.replace(/[^\d]/g, '') || '0') * 1.5).toFixed(0)}*</span>
-                                </div>
-                              </div>
-
-                              <div className="mt-2 w-full flex items-center justify-between">
-                                <div className="flex-1 mr-4">
-                                  <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden">
-                                    <motion.div
-                                      initial={{ width: 0 }}
-                                      animate={{ width: index % 2 === 0 ? "85%" : "60%" }}
-                                      transition={{ duration: 1, delay: 0.5 }}
-                                      className={`h-full rounded-full ${index % 2 === 0 ? 'bg-orange-500' : 'bg-blue-500'}`}
-                                    />
-                                  </div>
-                                  <span className="text-[8px] text-gray-500 mt-1 block uppercase tracking-wide font-medium">Limited Time Offer • {index % 2 === 0 ? '85%' : '60%'} Claimed</span>
-                                </div>
-                                <div className="flex items-center gap-1 text-[#0463ac] font-bold text-[11px] group-hover/item:translate-x-1 transition-transform">
-                                  Book <IoIosArrowForward />
-                                </div>
-                              </div>
-                            </button>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
-
-              {user?.length === 0 ? (
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group text-black"
-                >
-                  <FaSignInAlt className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                  <span className="text-black">Login</span>
-                </button>
-              ) : (
-                <div className="relative" ref={loginDropdownRef}>
-                  <button
-                    onClick={() => setIsLoginOpen(!isLoginOpen)}
-                    className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isLoginOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
-                  >
-                    <FaUser className={`text-lg transition-colors duration-300 ${isLoginOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                    <span className="whitespace-nowrap text-black">Account</span>
-                    <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isLoginOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                  </button>
-
-                  {/* Premium Account Dropdown */}
-                  <AnimatePresence>
-                    {isLoginOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
-                      >
-                        {/* Top arrow */}
-                        <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
-
-                        {/* User greeting header */}
-                        <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
-                              <FaUser className="text-white text-sm" />
-                            </div>
-                            <div>
-                              <p className="text-white font-semibold text-sm">Welcome back!</p>
-                              <p className="text-white/70 text-xs">Manage your account</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Menu items */}
-                        <div className="py-2">
-
-                          <button
-                            onClick={() => {
-                              setIsAddressModalOpen(true);
-                              setIsLoginOpen(false);
-                            }}
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 w-full group/item text-left"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <MdLocationOn className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">My Address</span>
-                          </button>
-
-                          <NavLink
-                            to="/my-bookings"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <MdEmail className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">My Bookings</span>
-                          </NavLink>
-
-                          <NavLink
-                            to="/edit-profile"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <FaUser className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Edit Profile</span>
-                          </NavLink>
-
-                          <NavLink
-                            to="/my-wallet"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <FaWallet className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">My Wallet</span>
-                          </NavLink>
-
-
-                          <NavLink
-                            to="/services"
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                            onClick={() => setIsLoginOpen(false)}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <FaTools className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Services</span>
-                          </NavLink>
-
-
-
-                          <button
-                            onClick={() => {
-                              setIsReferAndEarnOpen(true);
-                              setIsLoginOpen(false);
-                            }}
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 w-full group/item"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <FaGift className="text-[#0463ac] text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Refer & Earn</span>
-                          </button>
-                        </div>
-
-                        {/* Logout section */}
-                        <div className="border-t border-gray-100 py-2">
-                          <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-3 px-5 py-3 text-sm text-red-500 hover:bg-red-50/60 transition-all duration-200 w-full group/item"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center group-hover/item:bg-red-500 transition-colors duration-200">
-                              <FaSignOutAlt className="text-red-500 text-xs group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <span className="font-medium">Log out</span>
-                          </button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <div ref={referAndEarnDropdownRef} className="hidden md:block">
-                    <ReferAndEarn
-                      isOpen={isReferAndEarnOpen}
-                      onClose={() => setIsReferAndEarnOpen(false)}
-                    />
-                  </div>
-                </div>
-              )}
-              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
-
-              <div className="relative" ref={cartDropdownRef}>
-                <button
-                  onClick={() => setIsCartOpen(!isCartOpen)}
-                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isCartOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
-                >
-                  <div className="relative">
-                    <FaShoppingCart className={`text-lg transition-colors duration-300 ${isCartOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                    {cart?.length > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-[#0463ac] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold ring-2 ring-white">
-                        {cart?.length}
-                      </span>
-                    )}
-                  </div>
-                  <span className="whitespace-nowrap text-black">Cart</span>
-                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isCartOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                </button>
-
-                {/* Premium Cart Dropdown */}
-                <AnimatePresence>
-                  {isCartOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute right-0 top-full mt-3 w-80 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
-                    >
-                      {/* Top arrow */}
-                      <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
-
-                      {/* Cart header */}
-                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
-                            <FaShoppingCart className="text-white text-sm" />
-                          </div>
-                          <div>
-                            <p className="text-white font-semibold text-sm">
-                              {cart?.length > 0 ? `${cart.length} Service${cart.length > 1 ? 's' : ''} Added` : 'Your Cart'}
-                            </p>
-                            <p className="text-white/70 text-xs">
-                              {cart?.length > 0 ? `Total: ₹${totalPrice?.toFixed(2)}` : 'No items yet'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Cart items */}
-                      {cart?.length > 0 ? (
-                        <>
-                          <div className="max-h-[280px] overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-200">
-                            {cart.map((item, index) => (
-                              <div
-                                key={item.id}
-                                className={`flex items-center gap-3 px-5 py-3 hover:bg-blue-50/40 transition-all duration-200 ${index !== cart.length - 1 ? 'border-b border-gray-50' : ''}`}
-                              >
-                                {/* Service icon */}
-                                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                  <IoCartOutline className="text-[#0463ac] text-lg" />
-                                </div>
-
-                                {/* Service details */}
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-800 truncate">{item.product_name}</p>
-                                  <div className="flex items-center gap-2 mt-0.5">
-                                    <span className="text-xs text-gray-500">Qty: {item.qty}</span>
-                                    <span className="text-xs text-gray-300">•</span>
-                                    <span className="text-xs font-semibold text-[#0463ac]">₹{(item.price * item.qty).toFixed(2)}</span>
-                                  </div>
-                                </div>
-
-                                {/* Remove button */}
-                                <button
-                                  onClick={async (e) => {
-                                    e.stopPropagation();
-                                    const jwtToken = Cookies.get("HommlieUserjwtToken");
-                                    if (!jwtToken) return;
-                                    const user_id = jwtDecode(jwtToken);
-                                    try {
-                                      const response = await axios.post(
-                                        `${config.API_URL}/api/deleteproduct`,
-                                        { user_id: user_id.id, cart_id: item.id },
-                                        { headers: { Authorization: `Bearer ${jwtToken}` } }
-                                      );
-                                      if (response.data.status === 1) {
-                                        await getCart();
-                                      }
-                                    } catch (error) {
-                                      console.log("error removing from cart:", error);
-                                    }
-                                  }}
-                                  className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center hover:bg-red-500 transition-colors duration-200 group/del flex-shrink-0"
-                                  title="Remove item"
-                                >
-                                  <RiDeleteBin5Line className="text-red-500 text-xs group-hover/del:text-white transition-colors duration-200" />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Total & Go to Cart */}
-                          <div className="border-t border-gray-100 px-5 py-4 bg-gray-50/50">
-                            <div className="flex justify-between items-center mb-3">
-                              <span className="text-sm text-gray-600 font-medium">Subtotal</span>
-                              <span className="text-base font-bold text-gray-900">₹{totalPrice?.toFixed(2)}</span>
-                            </div>
-                            <button
-                              onClick={() => {
-                                setIsCartOpen(false);
-                                navigate(`${config.VITE_BASE_URL}/add-to-cart`);
-                              }}
-                              className="w-full py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-xl font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
-                            >
-                              Go to Cart →
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        /* Empty cart state */
-                        <div className="px-5 py-8 text-center">
-                          <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-3">
-                            <FaShoppingCart className="text-[#0463ac] text-xl" />
-                          </div>
-                          <p className="text-sm font-semibold text-gray-700 mb-1">Your cart is empty</p>
-                          <p className="text-xs text-gray-400 mb-4">Browse services and add them to your cart</p>
-                          <button
-                            onClick={() => {
-                              setIsCartOpen(false);
-                              navigate(`${config.VITE_BASE_URL}/`);
-                            }}
-                            className="px-6 py-2 bg-gradient-to-r from-[#0463ac] to-[#0580ca] text-white rounded-xl font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
-                          >
-                            Browse Services
-                          </button>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
-
-              <div className="relative" ref={helpDropdownRef}>
-                <button
-                  onClick={() => setIsHelpOpen(!isHelpOpen)}
-                  className={`flex items-center gap-2 transition-all duration-300 hover:scale-105 group text-black ${isHelpOpen ? 'text-[#0463ac]' : 'hover:text-[#0463ac]'}`}
-                >
-                  <FaQuestionCircle className={`text-lg transition-colors duration-300 ${isHelpOpen ? 'text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                  <span className="whitespace-nowrap text-black">Help</span>
-                  <MdKeyboardArrowDown className={`text-lg transition-transform duration-300 ${isHelpOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400 group-hover:text-[#0463ac]'}`} />
-                </button>
-
-                <AnimatePresence>
-                  {isHelpOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
-                    >
-                      <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
-                      <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
-                            <FaHeadset className="text-white text-sm" />
-                          </div>
-                          <div>
-                            <p className="text-white font-semibold text-sm">Help & Support</p>
-                            <p className="text-white/70 text-xs">We are here to help</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="py-2">
-                        <a href="https://wa.me/917483860408" target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          onClick={() => setIsHelpOpen(false)}>
-                          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200 flex-shrink-0">
-                            <FaWhatsapp className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="font-bold text-gray-800">WhatsApp Us</span>
-                            <span className="text-[11px] text-[#0463ac] font-bold">+91 74838 60408</span>
-                          </div>
-                        </a>
-                        <a href="tel:6363865658"
-                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          onClick={() => setIsHelpOpen(false)}>
-                          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200 flex-shrink-0">
-                            <FaPhoneAlt className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="font-bold text-gray-800">Call Us</span>
-                            <span className="text-[11px] text-[#0463ac] font-bold">63638 65658</span>
-                          </div>
-                        </a>
-                        <NavLink to="/contact-us"
-                          className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          onClick={() => setIsHelpOpen(false)}>
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                            <MdEmail className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                          </div>
-                          <span className="font-medium">Contact Form</span>
-                        </NavLink>
-                        <button
-                          onClick={() => {
-                            setIsHelpOpen(false);
-                            setIsHelpModalOpen(true);
-                          }}
-                          className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item border-t border-gray-50"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                            <FaInfoCircle className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                          </div>
-                          <span className="font-medium">More Help Options</span>
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <div className="h-4 w-px bg-gray-200 hidden md:block"></div>
-
-              {user?.length === 0 ? (
-                // Not signed in: show normal button that opens login
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 hover:text-[#0463ac] transition-all duration-300 hover:scale-105 group"
-                >
-                  <FaWallet className="text-gray-400 group-hover:text-[#0463ac] text-lg" />
-                  Wallet
-                </button>
-              ) : (
-                // Signed in: show pill with amount and money note icon
-                <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} />
-              )}
-            </div>
-          </div>
+          ... Top Header Content ...
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 lg:px-10">
-        {/* Main Header */}
-        <div className="flex items-center justify-between h-auto sm:h-[74px]">
-          <div className="flex items-center gap-3">
-            {/* Logo Section */}
+      */}
+      <div className="max-w-[1400px] mx-auto px-4 lg:px-8">
+        {/* Consolidated Header Row */}
+        <div className="flex items-center justify-between h-auto lg:h-[80px] gap-2 lg:gap-4">
+
+          {/* Left: Logo & Mobile Container */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            {/* Desktop Logo */}
             <div className="hidden sm:flex flex-shrink-0">
               <NavLink to="/" className="group" onClick={() => window.scrollTo(0, 0)}>
                 <img
                   src={logo}
                   alt={logoAlt}
-                  className="h-11 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                  className="h-9 xl:h-11 w-auto object-contain transition-all duration-300 group-hover:scale-105"
                 />
               </NavLink>
             </div>
-            {/* Mobile View: Unified Header */}
+
+            {/* Mobile View: Unified Header (Sticky) */}
             <div
-              className={`flex sm:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-400 ease-in-out ${!isHomePage
-                ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md'
+              className={`flex lg:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-400 ease-in-out ${!isHomePage
+                ? 'bg-white py-3 shadow-sm'
                 : isScrolled
-                  ? 'bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md bg-white/95'
-                  : 'bg-gradient-to-b from-[#4ade80] via-[#bbf7d0] to-white pt-4 pb-1 shadow-sm'
+                  ? 'bg-white pt-5 pb-3 shadow-md bg-white/98'
+                  : 'bg-gradient-to-b from-[#4ade80] to-white pt-7 pb-4'
                 }`}
             >
               <div className="relative">
-                {/* Top Row: Info & Icons - Only on Home Page */}
                 {isHomePage && (
                   <motion.div
                     animate={{
                       height: isScrolled ? 0 : "auto",
                       opacity: isScrolled ? 0 : 1,
-                      marginBottom: isScrolled ? 0 : 6,
-                      scale: isScrolled ? 0.95 : 1
+                      marginBottom: isScrolled ? 0 : 14
                     }}
-                    transition={{
-                      duration: 0.4,
-                      ease: [0.4, 0, 0.2, 1]
-                    }}
-                    className="flex justify-between items-start w-full overflow-hidden"
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
                   >
                     <div className="flex justify-between items-center w-full">
                       <div className="flex flex-col">
-                        <h1 className="text-lg font-extrabold text-[#212121] leading-none mb-0.5">Hommlie in</h1>
-                        <h2 className="text-3xl font-extrabold text-[#212121] leading-none mb-1">4 hours</h2>
-
-                        <button
-                          onClick={() => setIsLocationModalOpen(true)}
-                          className="flex items-center text-[12px] font-bold text-[#212121]/70 leading-none ml-0"
-                        >
-                          <span className="uppercase tracking-wide flex-shrink-0">HOME</span>
-                          <span className="mx-1 text-[10px] flex-shrink-0">•</span>
-                          <span className="truncate whitespace-nowrap overflow-hidden max-w-[150px]">{currentLocation}</span>
-                          <MdKeyboardArrowDown className="ml-0.5 text-lg opacity-60 flex-shrink-0" />
+                        <div className="flex flex-col mb-1">
+                          <span className="text-[11px] font-black text-[#212121]/70 uppercase tracking-widest leading-none mb-1">Hommlie in</span>
+                          <h1 className="text-[32px] font-black text-[#212121] leading-none tracking-tighter">4 hours</h1>
+                        </div>
+                        <button onClick={() => setIsLocationModalOpen(true)} className="flex items-center text-[10px] font-extrabold text-[#212121]/60 uppercase tracking-tight">
+                          Home <span className="mx-1 font-normal opacity-50">•</span> <span className="truncate max-w-[150px]">{currentLocation}</span> <MdKeyboardArrowDown className="text-base" />
                         </button>
                       </div>
-
-                      <div className="flex items-center gap-4 pt-1 pr-2">
-                        <WalletPill
-                          amount={walletBalance}
-                          onClick={() => setIsWalletModalOpen(true)}
-                        />
-                        <NavLink to="/add-to-cart" className="relative transition-all hover:scale-110 active:scale-95 group">
-                          <div className="p-1">
-                            <FaShoppingCart className="text-[#212121] text-2xl group-hover:text-[#0463ac] transition-colors" />
+                      <div className="flex items-center gap-2">
+                        <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} className="scale-100" />
+                        <NavLink to="/add-to-cart" className="relative group mr-1.5">
+                          <div className="w-11 h-11 rounded-full border border-white/40 bg-white/90 shadow-lg flex items-center justify-center transition-transform active:scale-95 backdrop-blur-sm">
+                            <IoCartOutline className="text-2xl text-gray-800" />
                             {cart?.length > 0 && (
-                              <span className="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold shadow-md ring-2 ring-[#4ade80] z-10 transition-transform scale-110">
-                                {cart?.length}
+                              <span className="absolute -top-1 -right-1 bg-[#e11d48] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white antialiased">
+                                {cart.length}
                               </span>
                             )}
                           </div>
@@ -1383,534 +769,475 @@ const Header = ({
                     </div>
                   </motion.div>
                 )}
-
-                {/* Search Row: Morphs size and position */}
-                <motion.div
-                  layout
-                  className="flex items-center gap-3 w-full mb-2"
-                >
-                  <div className="flex-1 relative group">
-                    <input
-                      type="text"
-                      placeholder={`Search ${services[placeholderIndex]}...`}
-                      className="w-full font-medium placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0463ac]/10 pl-12 pr-12 py-3.5 text-base bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-gray-100 focus:border-[#0463ac]/20"
-                      value={mobileSearchTerm}
-                      onChange={(e) => setMobileSearchTerm(e.target.value)}
-                    />
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 text-gray-500 text-xl font-bold">
-                      <BiSearchAlt />
-                    </div>
-
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center pr-4">
-                      <div className="w-px h-6 bg-gray-200 mr-3" />
-                      <BsMicFill
-                        onClick={handleMobileMicClick}
-                        className={`text-xl transition-colors ${isListening ? "text-[#0463ac] animate-pulse" : "text-gray-500"}`}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Sticky Icons Panel: Visible on scroll OR on non-home pages */}
-                  {!isHomePage && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="flex items-center gap-2"
-                    >
-                      <div onClick={() => setIsWalletModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50/50 rounded-full border border-blue-100/50">
-                        <span className="text-[14px] font-bold text-[#0463ac]">₹{walletBalance}</span>
-                      </div>
-                      <NavLink to="/add-to-cart" className="relative p-1.5">
-                        <FaShoppingCart className="text-[#212121] text-xl" />
-                        {cart?.length > 0 && (
-                          <span className="absolute top-0 right-0 bg-amber-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm ring-1 ring-white">
-                            {cart?.length}
-                          </span>
-                        )}
-                      </NavLink>
-                    </motion.div>
-                  )}
-                </motion.div>
+                <div className="relative group">
+                  <input
+                    type="text"
+                    placeholder={`Search ${services[placeholderIndex]}...`}
+                    className="w-full font-semibold pl-11 pr-10 py-3.5 text-sm bg-white rounded-2xl shadow-xl border-none ring-1 ring-gray-100/30 focus:ring-2 focus:ring-[#4ade80]/50 outline-none transition-all placeholder:text-gray-400"
+                    value={mobileSearchTerm}
+                    onChange={(e) => setMobileSearchTerm(e.target.value)}
+                  />
+                  <BiSearchAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+                  <BsMicFill onClick={handleMobileMicClick} className={`absolute right-4 top-1/2 -translate-y-1/2 text-xl ${isListening ? "text-green-500 animate-pulse" : "text-gray-400 hover:text-green-500 transition-colors"}`} />
+                </div>
               </div>
+            </div>
+          </div>
 
-              {/* Category Tabs: Smooth height/opacity collapse on scroll */}
+          {/* Main Desktop Navigation & Grouping */}
+          <div className="hidden lg:flex items-center flex-1 justify-start gap-4 xl:gap-8 min-w-0">
+
+            {/* Location Selector */}
+            <div ref={locationDropdownRef} className="relative flex-shrink-0 ml-2 xl:ml-6">
+              <button onClick={() => setIsLocationOpen(!isLocationOpen)} className="flex items-center gap-1.5 rounded-full hover:bg-gray-50 px-2 py-1.5 transition-all border border-transparent hover:border-gray-100 group">
+                <div className="w-8 h-8 rounded-full bg-blue-50 text-[#0463ac] flex items-center justify-center text-lg group-hover:bg-blue-100 transition-colors"><MdLocationOn /></div>
+                <div className="flex flex-col text-left">
+                  <span className="text-[9px] font-bold text-gray-400 uppercase leading-none mb-0.5">Location</span>
+                  <div className="flex items-center text-xs font-bold text-gray-800 leading-none">
+                    <span className="truncate max-w-[140px]">{currentLocation}</span>
+                    <MdKeyboardArrowDown className={`transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                </div>
+              </button>
               <AnimatePresence>
-                {isHomePage && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden w-full flex items-center justify-between relative pt-0.5 pb-2"
-                  >
-                    {[
-                      { id: "services", label: "Services", Icon: Zap, active: activeTab === "services" },
-                      { id: "products", label: "Products", Icon: ShoppingBag, active: activeTab === "products" },
-                      { id: "commercial", label: "Commercial", Icon: Building2, active: activeTab === "commercial" }
-                    ].map((tab) => (
-                      <motion.button
-                        key={tab.id}
-                        type="button"
-                        whileTap={{ scale: 0.95 }}
-                        className={`relative flex items-center gap-1.5 py-2 transition-all ${tab.id === "services" ? "ml-2" : ""} ${tab.id === "commercial" ? "mr-2" : ""} ${tab.active
-                          ? "text-[#0463ac]"
-                          : "text-gray-500 hover:text-[#0463ac]"
-                          }`}
-                        onClick={() => {
-                          setActiveTab(tab.id);
-                          if (tab.id === "products") navigate("/product");
-                          if (tab.id === "commercial") window.open("https://b2b.hommlie.com/", "_blank");
-                        }}
-                      >
-                        <tab.Icon className={`w-[16px] h-[16px] ${tab.active ? "text-[#0463ac]" : "text-gray-400"}`} />
-                        <span className="text-[12px] font-bold whitespace-nowrap">
-                          {tab.label}
-                        </span>
-
-                        {tab.active && (
-                          <motion.div
-                            layoutId="mobileActiveTabLine"
-                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0463ac] rounded-full"
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                          />
-                        )}
-                      </motion.button>
-                    ))}
+                {isLocationOpen && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl z-50 border border-gray-100 overflow-hidden">
+                    <div className="bg-gradient-to-r from-[#0463ac] to-[#0580ca] p-4 text-white font-bold text-sm text-center">Location Settings</div>
+                    <div className="py-1">
+                      <button onClick={() => { setIsLocationOpen(false); getCurrentLocation(); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMyLocation className="text-[#0463ac]" /> Use Current Location</button>
+                      <button onClick={() => { setIsLocationOpen(false); setIsLocationModalOpen(true); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMap className="text-[#0463ac]" /> Edit Address</button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            <div className="hidden sm:block h-8 w-px bg-gray-200 mx-1"></div>
-
-            {/* Location and Search Section */}
-            <div className="hidden sm:flex items-center w-full gap-3">
-              {/* Location Button */}
-              {/* <div className="flex-1 max-w-md">
-                <button
-                  onClick={() => setIsLocationModalOpen(true)}
-                  className="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors w-full group"
-                >
-                  <div className="flex flex-col text-left">
-                    <div className="text-sm font-medium text-black flex items-center">
-                      <MdLocationOn className="text-black mr-1 text-lg" />
-                      Delivery in 60 min
-                    </div>
-                    <div className="flex items-center text-xs text-gray-700 max-w-[170px] truncate">
-                      <span className="truncate text-black">{currentLocation}</span>
-                      <MdKeyboardArrowDown className="ml-1 text-gray-500 text-lg" />
-                    </div>
+            {/* Compact Search Bar */}
+            <div className="w-[150px] xl:w-[240px] relative group h-10 flex-shrink-1">
+              <input ref={searchInputRef} type="text" placeholder={`Search ${services[placeholderIndex]}...`} className="w-full h-full pl-9 pr-10 text-[11px] border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white rounded-full outline-none focus:ring-2 focus:ring-blue-100 transition-all font-medium" value={searchTerm} onChange={handleSearchChange} onFocus={() => setIsSearchFocused(true)} onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} />
+              <BiSearchAlt className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg group-hover:text-blue-500 transition-colors" />
+              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2 text-gray-400">
+                <BsMicFill className={`cursor-pointer transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'hover:text-blue-500'}`} onClick={handleMicClick} />
+              </div>
+              {isSearchFocused && searchTerm.length === 0 && createPortal(
+                <div style={{ position: 'fixed', left: searchPanelStyle?.left ?? 0, top: searchPanelStyle?.top ?? 0, width: searchPanelStyle?.width ?? 'auto', zIndex: 9999 }} className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 mt-2 transition-all">
+                  <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">Trending Searches</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {trendingSearches.map((item, idx) => (
+                      <button key={idx} onMouseDown={() => { setSearchTerm(item); fetchSearchResults(item); setIsSearchOpen(true); }} className="px-3 py-1.5 bg-gray-50 text-xs text-gray-600 rounded-full hover:bg-blue-50 transition-colors border border-gray-100">{item}</button>
+                    ))}
                   </div>
-                </button>
-              </div> */}
-              <div className="flex-shrink-0" ref={locationDropdownRef}>
-                <div className="relative">
-                  <button
-                    onClick={() => setIsLocationOpen(!isLocationOpen)}
-                    className={`flex items-center gap-3 rounded-full hover:bg-gray-50 px-2 py-1.5 pr-4 transition-all duration-300 group border ${isLocationOpen ? 'border-blue-200 bg-blue-50/50' : 'border-transparent hover:border-gray-100'}`}
-                  >
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-lg transition-colors shadow-sm ${isLocationOpen ? 'bg-[#0463ac] text-white' : 'bg-blue-50 text-[#0463ac] group-hover:bg-[#0463ac] group-hover:text-white'}`}>
-                      <MdLocationOn />
-                    </div>
-                    <div className="flex flex-col text-left">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 ml-0.5">Location</span>
-                      <div className="flex items-center text-sm font-bold text-gray-800">
-                        <span className="leading-none text-black">{currentLocation}</span>
-                        <MdKeyboardArrowDown className={`transition-transform duration-300 ${isLocationOpen ? 'rotate-180 text-[#0463ac]' : 'text-gray-400'}`} />
-                      </div>
-                    </div>
-                  </button>
+                </div>, document.body
+              )}
+            </div>
 
-                  <AnimatePresence>
-                    {isLocationOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-50 border border-gray-100/80 overflow-hidden"
-                      >
-                        <div className="absolute -top-2 left-6 w-4 h-4 bg-white border-l border-t border-gray-100/80 rotate-45 z-10" />
-                        <div className="relative bg-gradient-to-r from-[#0463ac] to-[#0580ca] px-5 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
-                              <MdLocationOn className="text-white text-sm" />
-                            </div>
-                            <div>
-                              <p className="text-white font-semibold text-sm">Location Settings</p>
-                              <p className="text-white/70 text-xs">{currentLocation}</p>
-                            </div>
+            {/* Service Navigation Links */}
+            <div className="hidden lg:flex items-center gap-5 xl:gap-8 text-[11px] font-semibold tracking-widest flex-shrink-0 ml-auto mr-4">
+              <NavLink
+                to="/"
+                className={({ isActive }) => `transition-all duration-300 hover:text-[#0463ac] ${isActive ? 'text-[#0463ac] scale-105' : 'text-gray-400'}`}
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                RESIDENTIAL
+              </NavLink>
+              <a
+                href="https://b2b.hommlie.com"
+                target="_blank"
+                rel="noreferrer"
+                className="text-gray-400 hover:text-[#0463ac] transition-all duration-300"
+              >
+                COMMERCIAL
+              </a>
+              <a
+                href="https://hommlie.shop"
+                target="_blank"
+                rel="noreferrer"
+                className="text-gray-400 hover:text-[#0463ac] transition-all duration-300"
+              >
+                PRODUCT
+              </a>
+            </div>
+
+            {/* Right Icons: Account, Wallet, Cart */}
+            <div className="hidden lg:flex items-center gap-1.5 xl:gap-3 flex-shrink-0">
+              <div className="relative" ref={loginDropdownRef}>
+                {user?.length === 0 ? (
+                  <button onClick={() => setIsLoginModalOpen(true)} className="flex items-center gap-2 text-[13px] font-semibold text-gray-800 hover:text-[#0463ac] transition-colors"><FaSignInAlt className="text-gray-400" /> LOGIN</button>
+                ) : (
+                  <>
+                    <button onClick={() => setIsLoginOpen(!isLoginOpen)} className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-800 hover:text-[#0463ac] transition-colors uppercase">
+                      <FaUser className="text-gray-400" /> {user?.name || user?.[0]?.name || "Account"} <MdKeyboardArrowDown className={`transition-transform duration-200 ${isLoginOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    <AnimatePresence>
+                      {isLoginOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 z-[100] overflow-hidden"
+                        >
+                          <div className="p-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Signed in as</p>
+                            <p className="text-sm font-bold text-[#0463ac] truncate">{user?.name || user?.[0]?.name || "User"}</p>
                           </div>
-                        </div>
-                        <div className="py-2">
-                          <button
-                            onClick={() => {
-                              setIsLocationOpen(false);
-                              getCurrentLocation();
-                            }}
-                            className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <MdMyLocation className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <div>
-                              <span className="font-medium block">Use Current Location</span>
-                              <span className="text-xs text-gray-500">Using GPS</span>
-                            </div>
-                          </button>
 
-                          <button
-                            onClick={() => {
-                              setIsLocationOpen(false);
-                              setIsLocationModalOpen(true);
-                            }}
-                            className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                              <MdMap className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                            </div>
-                            <div>
-                              <span className="font-medium block">Change Location</span>
-                              <span className="text-xs text-gray-500">Select on Map</span>
-                            </div>
-                          </button>
-
-                          {user?.length !== 0 && (
+                          <div className="py-2">
+                            <NavLink to="/edit-profile" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                              <FaUser className="text-gray-400 w-4" /> Edit Profile
+                            </NavLink>
+                            <NavLink to="/my-bookings" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                              <MdEmail className="text-gray-400 w-4 text-base" /> My Bookings
+                            </NavLink>
+                            <NavLink to="/my-wallet" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                              <FaWallet className="text-gray-400 w-4" /> My Wallet
+                            </NavLink>
+                            <button onClick={() => { setIsAddressModalOpen(true); setIsLoginOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                              <MdLocationOn className="text-gray-400 w-4 text-base" /> Your Addresses
+                            </button>
                             <button
                               onClick={() => {
-                                setIsLocationOpen(false);
-                                setIsAddressModalOpen(true);
+                                setIsReferAndEarnOpen(true);
+                                setIsLoginOpen(false);
                               }}
-                              className="w-full text-left flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-blue-50/60 transition-all duration-200 group/item border-t border-gray-50"
+                              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors"
                             >
-                              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover/item:bg-[#0463ac] transition-colors duration-200">
-                                <MdLocationOn className="text-[#0463ac] group-hover/item:text-white transition-colors duration-200" />
-                              </div>
-                              <span className="font-medium">Manage Addresses</span>
-                            </button>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-
-              <div className="hidden lg:block h-8 w-px bg-gray-200 mx-1"></div>
-
-              {/* Search Bar */}
-              <div className="w-[480px] hidden lg:block">
-                <div className="relative group">
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    placeholder={`Search ${services[placeholderIndex]}...`}
-                    className="w-full pl-6 pr-24 py-3 text-sm border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white rounded-full shadow-sm hover:shadow-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0463ac]/20 focus:border-[#0463ac] transition-all duration-300 placeholder:text-gray-400"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                  />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-3 text-gray-400 text-xl">
-                    <BiSearchAlt
-                      className="cursor-pointer hover:text-[#0463ac] transition-all duration-300 hover:scale-110"
-                      onClick={() => {
-                        setIsSearchFocused(true);
-                        searchInputRef.current?.focus();
-                      }}
-                    />
-                    <BsMicFill
-                      className={`cursor-pointer transition-all duration-300 ${isListening ? 'text-red-500 animate-pulse' : !isSupported ? 'text-gray-400 cursor-not-allowed' : 'hover:text-[#0463ac] hover:scale-110'
-                        }`}
-                      onClick={isSupported ? handleMicClick : () => alert("Voice search is not supported in this browser.")}
-                    />
-                  </div>
-                  {!isSupported && (
-                    <p className="text-sm text-red-600 mt-2">
-                      Your browser does not support voice search. Please try using Chrome on desktop or Android.
-                    </p>
-                  )}
-                  {isSearchFocused && searchTerm.length === 0 && createPortal(
-                    <div
-                      style={{
-                        position: 'fixed',
-                        left: searchPanelStyle?.left ?? 0,
-                        top: searchPanelStyle?.top ?? 0,
-                        width: searchPanelStyle?.width ?? 'auto',
-                        zIndex: 2147483647,
-                        pointerEvents: 'auto',
-                      }}
-                      className="bg-white rounded-2xl shadow-xl border border-gray-200 p-5 max-h-96 overflow-y-auto transition-all duration-200"
-                    >
-                      <h3 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                        <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M13 7H7v6h6V7z" />
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5-8a5 5 0 1110 0A5 5 0 015 10z" clipRule="evenodd" />
-                        </svg>
-                        Trending Searches
-                      </h3>
-                      <div className="flex flex-wrap gap-3">
-                        {trendingSearches.map((item, idx) => (
-                          <button
-                            key={idx}
-                            onMouseDown={() => {
-                              setSearchTerm(item);
-                              fetchSearchResults(item);
-                              setIsSearchOpen(true);
-                              searchInputRef.current?.focus();
-                            }}
-                            className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 shadow-sm"
-                          >
-                            {item}
-                          </button>
-                        ))}
-                      </div>
-                    </div>,
-                    document.body
-                  )}
-
-                </div>
-              </div>
-
-              {/* Actions Group: AI Bot & Partner */}
-              <div className="flex-1 flex items-center justify-end gap-6">
-                <div className="relative hidden md:block" ref={aiChatDropdownRef}>
-                  <button
-                    onClick={() => setIsAiChatOpen(!isAiChatOpen)}
-                    className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-[#0463ac] to-[#0693e3] text-white shadow-lg hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
-                  >
-                    <RiRobot2Line className="text-xl group-hover:rotate-12 transition-transform duration-300" />
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
-                  </button>
-
-                  <AnimatePresence>
-                    {isAiChatOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute right-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] z-50 border border-gray-100 overflow-hidden"
-                      >
-                        <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-10" />
-
-                        <div className="p-6 text-center">
-                          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-tr from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center shadow-inner">
-                            <RiRobot2Line className="text-3xl text-[#0463ac]" />
-                          </div>
-
-                          <h3 className="text-lg font-bold text-gray-800 mb-2">AI Assistant</h3>
-                          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                            Our intelligent AI support is currently under development. Stay tuned for a smarter experience!
-                          </p>
-                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-[#0463ac] text-xs font-bold uppercase tracking-wider border border-blue-100">
-                            Coming Soon 🚀
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <NavLink
-                  to="/register-free-listing"
-                  className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#0463ac] to-[#0580ca] hover:from-[#0580ca] hover:to-[#0463ac] text-white rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap text-[13px] tracking-wider"
-                >
-                  <span>PARTNER WITH US</span>
-                </NavLink>
-              </div>
-            </div>
-
-
-
-
-          </div>
-          <div className="md:hidden">
-            <div className="relative">
-
-              {/* Account Dropdown for Mobile */}
-              <div className="md:hidden">
-                {/* Mobile Drawer Portal */}
-                {createPortal(
-                  <AnimatePresence>
-                    {isLoginOpen && (
-                      <>
-                        {/* Backdrop */}
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          onClick={() => setIsLoginOpen(false)}
-                          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] md:hidden"
-                        />
-
-                        {/* Drawer */}
-                        <motion.div
-                          ref={loginDropdownRef}
-                          initial={{ x: "-100%" }}
-                          animate={{ x: 0 }}
-                          exit={{ x: "-100%" }}
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                          className="fixed top-0 left-0 h-full w-[75%] max-w-sm bg-white z-[9999] shadow-2xl overflow-hidden flex flex-col md:hidden"
-                        >
-                          {/* Close Button */}
-                          <div className="absolute top-4 right-4 z-20">
-                            <button
-                              onClick={() => setIsLoginOpen(false)}
-                              className="w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
-                            >
-                              <FaTimes />
+                              <FaGift className="text-[#0463ac] w-4" /> Refer a Friend
                             </button>
                           </div>
 
-                          {/* Premium Header */}
-                          <div className="relative bg-gradient-to-br from-[#0463ac] to-[#0580ca] px-6 py-8 flex-shrink-0">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
-                            <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full -ml-10 -mb-5 blur-xl"></div>
-
-                            <div className="relative flex flex-col gap-4">
-                              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center ring-4 ring-white/10 shadow-lg">
-                                <FaUser className="text-white text-2xl" />
-                              </div>
-                              <div>
-                                <h3 className="text-white font-bold text-xl tracking-tight">Hello, {user?.name || user?.[0]?.name || "User"}!</h3>
-                                <p className="text-blue-100 text-sm font-medium opacity-90">Welcome back to Hommlie</p>
-                              </div>
+                          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 m-2 rounded-xl border border-blue-100/50">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-[10px] font-black text-blue-600/60 uppercase tracking-widest">Your Code</span>
+                              <span className="px-2 py-0.5 bg-blue-600 text-white rounded text-[9px] font-bold antialiased shadow-sm uppercase tracking-tighter">Copy</span>
                             </div>
+                            <div className="flex items-center gap-2 group/code bg-white border border-blue-100 p-2 rounded-lg cursor-pointer hover:border-blue-300 transition-colors shadow-sm" onClick={() => {
+                              navigator.clipboard.writeText(referralCode || user?.referral_code || user?.[0]?.referral_code || "");
+                            }}>
+                              <span className="text-sm font-black text-[#0463ac] truncate font-mono tracking-wider">{referralCode || user?.referral_code || user?.[0]?.referral_code || "CODE"}</span>
+                            </div>
+                            <p className="text-[9px] text-gray-400 font-bold mt-2 leading-tight">Share this code with your friends to earn rewards on every signup! 🎁</p>
                           </div>
 
-                          {/* Scrollable Content */}
-                          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 py-2">
-                            <div className="grid grid-cols-1 gap-1 p-2">
-                              <NavLink
-                                to="/edit-profile"
-                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                                onClick={() => setIsLoginOpen(false)}
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">Edit Profile</span>
-                              </NavLink>
-
-                              <NavLink
-                                to="/my-bookings"
-                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                                onClick={() => setIsLoginOpen(false)}
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <MdEmail className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">My Bookings</span>
-                              </NavLink>
-
-                              <NavLink
-                                to="/my-wallet"
-                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                                onClick={() => setIsLoginOpen(false)}
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <FaWallet className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="font-semibold text-sm">My Wallet</span>
-                                  <span className="text-[10px] text-gray-400 font-medium">Balance & Transactions</span>
-                                </div>
-                              </NavLink>
-
-                              <button
-                                onClick={() => {
-                                  setIsAddressModalOpen(true);
-                                  setIsLoginOpen(false);
-                                }}
-                                className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <MdLocationOn className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">Your Addresses</span>
-                              </button>
-
-                              <div className="my-3 px-4">
-                                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Explore</p>
-                              </div>
-
-                              <NavLink
-                                to="/services"
-                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                                onClick={() => setIsLoginOpen(false)}
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <FaTools className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">Services</span>
-                              </NavLink>
-
-                              <NavLink
-                                to="/register-free-listing"
-                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                                onClick={() => setIsLoginOpen(false)}
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <FaHandshake className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">Join ONDC</span>
-                              </NavLink>
-
-                              <NavLink
-                                to="/help-us"
-                                className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                                onClick={() => setIsLoginOpen(false)}
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <FaHeadset className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">Help & Support</span>
-                              </NavLink>
-
-                              <button
-                                onClick={() => {
-                                  setIsReferAndEarnOpen(true);
-                                  setIsLoginOpen(false);
-                                }}
-                                className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
-                                  <FaGift className="text-[#0463ac] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="font-semibold text-sm">Refer & Earn</span>
-                              </button>
-                            </div>
-
-                            <div className="p-4 mt-2">
-                              <button
-                                onClick={handleLogout}
-                                className="flex w-full items-center justify-center gap-3 px-4 py-3.5 text-sm text-white bg-red-500 hover:bg-red-600 rounded-xl shadow-lg shadow-red-500/30 transition-all duration-200"
-                              >
-                                <FaSignOutAlt className="text-lg" />
-                                <span className="font-bold">Log out</span>
-                              </button>
-                              <p className="text-center text-[10px] text-gray-400 mt-4">v1.2.0 • Made with ❤️ in India</p>
-                            </div>
+                          <div className="border-t border-gray-50 py-2">
+                            <NavLink to="/help-us" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                              <FaHeadset className="text-gray-400 w-4" /> Help & Support
+                            </NavLink>
+                            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors mt-1">
+                              <FaSignOutAlt className="w-4" /> Log out
+                            </button>
                           </div>
                         </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>,
-                  document.body
+                      )}
+                    </AnimatePresence>
+                  </>
                 )}
               </div>
-            </div>
 
+              {user?.length !== 0 && (
+                <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} className="scale-90" />
+              )}
+
+              <div className="relative" ref={cartDropdownRef}>
+                <button
+                  onClick={() => setIsCartOpen(!isCartOpen)}
+                  className="flex items-center group"
+                >
+                  <div className="relative w-10 h-10 rounded-full border border-gray-100 bg-white flex items-center justify-center transition-all group-hover:border-blue-300 shadow-sm">
+                    <IoCartOutline className="text-xl text-gray-700 group-hover:text-[#0463ac]" />
+                    {cart?.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-[#e11d48] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white antialiased">
+                        {cart.length}
+                      </span>
+                    )}
+                  </div>
+                </button>
+
+                <AnimatePresence>
+                  {isCartOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      className="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl border border-blue-50/50 overflow-hidden z-[100]"
+                    >
+                      <div className="bg-gradient-to-r from-blue-50/50 to-white px-5 py-4 border-b border-gray-50">
+                        <h3 className="text-sm font-black text-[#0463ac] uppercase tracking-wider flex items-center gap-2">
+                          <FaShoppingCart className="text-xs" /> My Shopping Cart
+                        </h3>
+                      </div>
+
+                      <div className="max-h-[360px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-100">
+                        {cart?.length > 0 ? (
+                          <div className="divide-y divide-gray-50">
+                            {cart.map((item, index) => (
+                              <motion.div
+                                key={item.id || index}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className="px-5 py-4 flex gap-4 hover:bg-gray-50/50 transition-colors group/item"
+                              >
+                                <div className="w-16 h-16 rounded-xl bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 group-hover/item:border-blue-200 transition-colors">
+                                  {item.image_url ? (
+                                    <img src={item.image_url} alt={item.product_name} className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                      <FaShoppingCart />
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                  <h4 className="text-[13px] font-bold text-gray-800 truncate mb-0.5">{item.product_name}</h4>
+                                  <p className="text-[11px] font-semibold text-gray-400 mb-2">Qty: {item.qty}</p>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-sm font-black text-[#0463ac]">₹{item.price * item.qty}</span>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        // handleRemoveFromCart(item.id); 
+                                        // Note: handleRemoveFromCart might need to be passed or accessed via context
+                                      }}
+                                      className="text-gray-300 hover:text-red-500 transition-colors"
+                                    >
+                                      <FaTimes className="text-[10px]" />
+                                    </button>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="py-12 px-5 text-center">
+                            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                              <FaShoppingCart className="text-blue-300 text-2xl" />
+                            </div>
+                            <h4 className="text-sm font-bold text-gray-800 mb-1">Your cart is empty</h4>
+                            <p className="text-xs text-gray-400 font-medium">Add some services to get started!</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {cart?.length > 0 && (
+                        <div className="p-5 bg-gray-50/50 border-t border-gray-100">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Subtotal</span>
+                            <span className="text-lg font-black text-gray-800">
+                              ₹{cart.reduce((sum, item) => sum + (item.price * item.qty), 0)}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <button
+                              onClick={() => {
+                                setIsCartOpen(false);
+                                navigate("/add-to-cart");
+                              }}
+                              className="py-2.5 rounded-xl border border-blue-200 text-[#0463ac] text-xs font-black uppercase tracking-wider hover:bg-blue-50 transition-all"
+                            >
+                              View Cart
+                            </button>
+                            <button
+                              onClick={() => {
+                                setIsCartOpen(false);
+                                navigate("/add-to-cart"); // Or direct to review-booking if logic allows
+                              }}
+                              className="py-2.5 rounded-xl bg-gradient-to-r from-[#0463ac] to-[#0580ca] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95"
+                            >
+                              Checkout
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
         </div>
-      </div >
+      </div>
+      <div className="md:hidden">
+        <div className="relative">
 
-      {/* Mobile Contact Info Bar - updated for premium look */}
-      < div
-        className="w-full py-1 hidden sm:hidden shadow-sm border-b border-white/10"
-        style={{ backgroundImage: 'linear-gradient(90deg, #041228 0%, #074b82 100%)' }}
-      >
+          {/* Account Dropdown for Mobile */}
+          <div className="md:hidden">
+            {/* Mobile Drawer Portal */}
+            {createPortal(
+              <AnimatePresence>
+                {isLoginOpen && (
+                  <>
+                    {/* Backdrop */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setIsLoginOpen(false)}
+                      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] md:hidden"
+                    />
+
+                    {/* Drawer */}
+                    <motion.div
+                      ref={loginDropdownRef}
+                      initial={{ x: "-100%" }}
+                      animate={{ x: 0 }}
+                      exit={{ x: "-100%" }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      className="fixed top-0 left-0 h-full w-[75%] max-w-sm bg-white z-[9999] shadow-2xl overflow-hidden flex flex-col md:hidden"
+                    >
+                      {/* Close Button */}
+                      <div className="absolute top-4 right-4 z-20">
+                        <button
+                          onClick={() => setIsLoginOpen(false)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+
+                      {/* Premium Header */}
+                      <div className="relative bg-gradient-to-br from-[#0463ac] to-[#0580ca] px-6 py-8 flex-shrink-0">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full -ml-10 -mb-5 blur-xl"></div>
+
+                        <div className="relative flex flex-col gap-4">
+                          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center ring-4 ring-white/10 shadow-lg">
+                            <FaUser className="text-white text-2xl" />
+                          </div>
+                          <div>
+                            <h3 className="text-white font-bold text-xl tracking-tight">Hello, {user?.name || user?.[0]?.name || "User"}!</h3>
+                            <p className="text-blue-100 text-sm font-medium opacity-90">Welcome back to Hommlie</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Scrollable Content */}
+                      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 py-2">
+                        <div className="grid grid-cols-1 gap-1 p-2">
+                          <NavLink
+                            to="/edit-profile"
+                            className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">Edit Profile</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/my-bookings"
+                            className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <MdEmail className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">My Bookings</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/my-wallet"
+                            className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <FaWallet className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-sm">My Wallet</span>
+                              <span className="text-[10px] text-gray-400 font-medium">Balance & Transactions</span>
+                            </div>
+                          </NavLink>
+
+                          <button
+                            onClick={() => {
+                              setIsAddressModalOpen(true);
+                              setIsLoginOpen(false);
+                            }}
+                            className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <MdLocationOn className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">Your Addresses</span>
+                          </button>
+
+                          <div className="my-3 px-4">
+                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Explore</p>
+                          </div>
+
+                          <NavLink
+                            to="/services"
+                            className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <FaTools className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">Services</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/register-free-listing"
+                            className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <FaHandshake className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">Join ONDC</span>
+                          </NavLink>
+
+                          <NavLink
+                            to="/help-us"
+                            className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsLoginOpen(false)}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <FaHeadset className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">Help & Support</span>
+                          </NavLink>
+
+                          <button
+                            onClick={() => {
+                              setIsReferAndEarnOpen(true);
+                              setIsLoginOpen(false);
+                            }}
+                            className="flex w-full text-left items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
+                              <FaGift className="text-[#0463ac] group-hover:text-white transition-colors" />
+                            </div>
+                            <span className="font-semibold text-sm">Refer & Earn</span>
+                          </button>
+                        </div>
+
+                        <div className="p-4 mt-2">
+                          <button
+                            onClick={handleLogout}
+                            className="flex w-full items-center justify-center gap-3 px-4 py-3.5 text-sm text-white bg-red-500 hover:bg-red-600 rounded-xl shadow-lg shadow-red-500/30 transition-all duration-200"
+                          >
+                            <FaSignOutAlt className="text-lg" />
+                            <span className="font-bold">Log out</span>
+                          </button>
+                          <p className="text-center text-[10px] text-gray-400 mt-4">v1.2.0 • Made with ❤️ in India</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>,
+              document.body
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Contact Info Bar */}
+      <div className="w-full py-1 hidden sm:hidden shadow-sm border-b border-white/10 bg-gradient-to-r from-[#041228] to-[#074b82]">
         <div className="max-w-3xl mx-auto grid grid-cols-3 gap-0 px-1">
           <a href="tel:6363865658" className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full">
             <FaPhoneAlt className="text-white text-sm flex-shrink-0" />
@@ -1919,25 +1246,14 @@ const Header = ({
               <span className="text-[11px] font-bold text-white leading-none">6363865658</span>
             </div>
           </a>
-
-          <button
-            onClick={() => {
-              setComingSoonSource("Hommlie Chat");
-              setIsComingSoonOpen(true);
-            }}
-            className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full"
-          >
+          <button onClick={() => { setComingSoonSource("Hommlie Chat"); setIsComingSoonOpen(true); }} className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full">
             <RiRobot2Line className="text-white text-sm flex-shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[9px] text-white/80 leading-tight">Hommlie Chat</span>
               <span className="text-[11px] font-bold text-white leading-none">With Us</span>
             </div>
           </button>
-
-          <button
-            onClick={() => navigate(`${config.VITE_BASE_URL}/quickservice`)}
-            className="flex items-center justify-center gap-2 py-1 px-1 w-full"
-          >
+          <button onClick={() => navigate(`${config.VITE_BASE_URL}/quickservice`)} className="flex items-center justify-center gap-2 py-1 px-1 w-full">
             <MdEmail className="text-white text-sm flex-shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[9px] text-white/80 leading-tight">Schedule Service</span>
@@ -1945,94 +1261,36 @@ const Header = ({
             </div>
           </button>
         </div>
-      </div >
+      </div>
 
       {/* Search Results */}
-      < AnimatePresence >
+      <AnimatePresence>
         {isSearchOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute left-0 right-0 mt-1 bg-white shadow-lg rounded-lg z-20 max-h-96 overflow-y-auto mx-4 md:mx-8 border border-gray-200"
-          >
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="absolute left-0 right-0 mt-1 bg-white shadow-lg rounded-xl z-20 max-h-96 overflow-y-auto mx-4 md:mx-8 border border-gray-200">
             {isLoading ? (
-              <div className="flex justify-center items-center py-6">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-emerald-600"></div>
-              </div>
+              <div className="flex justify-center items-center py-6"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-emerald-600"></div></div>
             ) : searchResults.length > 0 ? (
               searchResults?.map((result, index) => (
-                <motion.div
-                  key={result.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <div
-                    className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors"
-                    onClick={() => {
-                      setIsSearchOpen(false);
-                      setSearchTerm("");
-                      navigate(
-                        `${config.VITE_BASE_URL}/product/${result.slug}`
-                      );
-                    }}
-                  >
-                    {result.productimage && result.productimage && (
-                      <img
-                        src={result.productimage.image_url}
-                        alt={result.product_name}
-                        className="w-14 h-14 object-cover rounded mr-3 border border-gray-200"
-                      />
-                    )}
+                <motion.div key={result.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05 }}>
+                  <div className="flex items-center p-3 hover:bg-emerald-50 border-b border-gray-100 cursor-pointer transition-colors" onClick={() => { setIsSearchOpen(false); setSearchTerm(""); navigate(`${config.VITE_BASE_URL}/product/${result.slug}`); }}>
+                    {result.productimage && <img src={result.productimage.image_url} alt={result.product_name} className="w-14 h-14 object-cover rounded mr-3 border border-gray-200" />}
                     <div className="flex-1">
-                      <h4 className="text-gray-800 font-medium">
-                        {result.product_name}
-                      </h4>
+                      <h4 className="text-gray-800 font-medium">{result.product_name}</h4>
                       <p className="flex gap-2 text-gray-600">
-                        <span className="font-semibold text-emerald-700">
-                          ₹{Number(result.discounted_price ?? 0).toFixed(2)}
-                        </span>
-                        <span className="line-through text-gray-400">
-                          ₹{Number(result.product_price ?? 0).toFixed(2)}
-                        </span>
+                        <span className="font-semibold text-emerald-700">₹{Number(result.discounted_price ?? 0).toFixed(2)}</span>
+                        <span className="line-through text-gray-400">₹{Number(result.product_price ?? 0).toFixed(2)}</span>
                       </p>
-
-                      {result.rating && (
-                        <div className="flex items-center mt-1">
-                          <div className="flex items-center">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <svg
-                                key={star}
-                                className={`w-3 h-3 ${star <= Math.round(result.rating)
-                                  ? "text-amber-400"
-                                  : "text-gray-300"
-                                  }`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ))}
-                          </div>
-                          <span className="text-xs text-gray-500 ml-1">
-                            ({result.total_reviews})
-                          </span>
-                        </div>
-                      )}
                     </div>
                     <IoIosArrowForward className="text-gray-400 text-lg" />
                   </div>
                 </motion.div>
               ))
             ) : (
-              <div className="py-4 px-6 text-center text-gray-500">
-                No products found for "{searchTerm}"
-              </div>
+              <div className="py-4 px-6 text-center text-gray-500">No products found for "{searchTerm}"</div>
             )}
           </motion.div>
         )}
-      </AnimatePresence >
+      </AnimatePresence>
 
       {
         isGetAppModalOpen && (
@@ -2298,7 +1556,10 @@ const Header = ({
                     <div className="relative bg-gradient-to-br from-[#0CA87B] to-[#0A6FA1] p-7 sm:p-8">
                       {/* Close */}
                       <button
-                        onClick={() => setIsWalletModalOpen(false)}
+                        onClick={() => {
+                          setIsWalletModalOpen(false);
+                          setShowReferralInWallet(false);
+                        }}
                         className="absolute top-4 right-4 text-white/85 hover:text-white text-xl"
                         aria-label="Close"
                       >
@@ -2386,36 +1647,59 @@ const Header = ({
 
                       {/* CTAs */}
                       <div className="mt-6 grid grid-cols-1 gap-3">
-                        {walletBalance > 0 ? (
-                          <>
-                            <button
-                              onClick={() => {
-                                setIsWalletModalOpen(false);
-                                navigate("/quickservice");
-                              }}
-                              className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-                            >
-                              Book a Service
-                            </button>
+                        {walletBalance > 0 && (
+                          <button
+                            onClick={() => {
+                              setIsWalletModalOpen(false);
+                              navigate("/quickservice");
+                            }}
+                            className="w-full rounded-xl bg-white text-emerald-700 py-3.5 font-black shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 uppercase tracking-tight"
+                          >
+                            Book a Service
+                          </button>
+                        )}
 
+                        {showReferralInWallet ? (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="w-full space-y-4"
+                          >
+                            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-inner">
+                              <p className="text-[10px] font-black text-white/60 uppercase tracking-widest mb-2 text-center">Share this code to earn</p>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="flex-1 bg-white/10 border border-white/20 p-3 rounded-xl cursor-pointer hover:bg-white/20 transition-all flex items-center justify-between"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(referralCode || "CODE");
+                                  }}
+                                >
+                                  <span className="text-xl font-black text-white font-mono tracking-widest">{referralCode || "CODE"}</span>
+                                  <span className="text-[10px] font-bold bg-white text-[#0CA87B] px-2 py-1 rounded-lg uppercase shadow-sm">Copy</span>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    const message = encodeURIComponent(`Hey! 👋 Use my referral code ${referralCode || "CODE"} to sign up on Hommlie and get rewards! 🎉`);
+                                    window.open(`https://wa.me/?text=${message}`, "_blank");
+                                  }}
+                                  className="w-12 h-12 bg-white flex items-center justify-center rounded-xl shadow-lg text-[#25D366] hover:scale-105 active:scale-95 transition-transform"
+                                >
+                                  <FaWhatsapp className="text-2xl" />
+                                </button>
+                              </div>
+                            </div>
                             <button
-                              onClick={() => {
-                                setIsWalletModalOpen(false);
-                                navigate("/my-wallet");
-                              }}
-                              className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                              onClick={() => setShowReferralInWallet(false)}
+                              className="w-full py-2 text-white/70 text-sm font-bold hover:text-white transition-colors"
                             >
-                              View Transactions
+                              ← Back to Balance
                             </button>
-                          </>
+                          </motion.div>
                         ) : (
                           <>
                             <button
-                              onClick={() => {
-                                setIsWalletModalOpen(false);
-                                setIsReferAndEarnOpen(true);
-                              }}
-                              className="w-full rounded-xl bg-white text-emerald-700 py-3 font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                              onClick={() => setShowReferralInWallet(true)}
+                              className="w-full rounded-xl bg-white text-[#0A6FA1] py-3.5 font-black shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 uppercase tracking-tight"
                             >
                               Refer a Friend & Earn
                             </button>
@@ -2425,9 +1709,9 @@ const Header = ({
                                 setIsWalletModalOpen(false);
                                 navigate("/my-wallet");
                               }}
-                              className="w-full rounded-xl bg-white/15 text-white py-3 font-semibold shadow-md hover:bg-white/20 transition"
+                              className="w-full rounded-xl bg-white/20 text-white py-3.5 font-bold shadow-md hover:bg-white/30 transition-all uppercase tracking-tight"
                             >
-                              Add Money
+                              {walletBalance > 0 ? "View Transactions" : "Add Money"}
                             </button>
                           </>
                         )}
@@ -2450,7 +1734,7 @@ const Header = ({
         )
       }
 
-    </header >
+    </header>
   );
 };
 

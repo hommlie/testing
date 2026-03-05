@@ -173,8 +173,8 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         getAddresses();
         getPaymentList();
 
-        // Trigger Wallet Bonus Modal if it's a new user registration
-        if (response.data.is_new_user === 1 || response.data.status === 1 && !response.data?.user_name) {
+        // Trigger Wallet Bonus Modal only for brand-new users
+        if (response.data.is_new_user === 1) {
           setIsWalletBonusModalOpen(true);
         }
 

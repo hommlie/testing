@@ -20,8 +20,8 @@ const serviceData = {
     { name: "Termite Control", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
   ],
   "Deep Cleaning": [
-    { name: "Full Home Cleaning – Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
-    { name: "Full Home Cleaning – Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
+    { name: "Full Home Cleaning \u2013 Apartment", image: "/images/apartmenticon.png", url: "/subcategory/home-cleaning-services-in-bangalore" },
+    { name: "Full Home Cleaning \u2013 Bungalow/Duplex", image: "/images/bunglowicon.png", url: "/subcategory/top-home-cleaning-services-in-bangalore" },
   ],
   "Bird Control": [
     { name: "Anti Bird Spikes", image: "/images/antibridicon.png", url: "/subcategory/anti-bird-spikes" },
@@ -78,7 +78,7 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
       };
     });
   } else {
-    items = serviceData[categoryName] || [];
+    items = [];
   }
 
   // Alphabetical Sorting
@@ -174,7 +174,7 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
               {sub.price && (
                 <p className="text-[11px] text-[#0463ac] font-semibold mt-1">
                   {typeof sub.price === "number" || !isNaN(Number(sub.price))
-                    ? `₹${Number(sub.price).toFixed(0)}`
+                    ? `\u20b9${Number(sub.price).toFixed(0)}`
                     : sub.price}
                 </p>
               )}
@@ -193,31 +193,15 @@ const ServiceModal = ({ data, onClose, fullCategories }) => {
 const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => {
   const [showModal, setShowModal] = useState(null);           // category drilldown modal (e.g., Pest Control)
   const [showComingSoon, setShowComingSoon] = useState(false); // "Coming Soon" modal for placeholder services
-  const [fullCategories, setFullCategories] = useState([]);    // Stores rich data from /api/category
-  const [isCallbackOpen, setIsCallbackOpen] = useState(false); // Callback modal state
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 640 : false);
+  const [isCallbackOpen, setIsCallbackOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("services");
-
   const navigate = useNavigate();
   const { categoryData } = useCont();
 
-  // Fetch full category data (same source as /services) to ensure we have app_icon and correct image URLs
-  useEffect(() => {
-    const fetchFullCategories = async () => {
-      try {
-        const response = await axios.get(`${config.API_URL}/api/category`);
-        if (response.data && response.data.data) {
-          setFullCategories(response.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching full category data in ServiceGrid:", error);
-      }
-    };
-    fetchFullCategories();
-  }, []);
-
-  // Use categories from props/context for the GRID display
+  // Use derived categories from context or props to avoid redundant state/fetches
   const categoriesList = (categoryData?.data && categoryData.data.length > 0) ? categoryData.data : (propCategories || []);
+  const fullCategories = categoriesList;
 
   const locationSearch = useLocation();
 
@@ -358,17 +342,9 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
     };
   }).sort((a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase()));
 
-  // Fallback pest control items (static)
-  const fallbackPestItems = [
-    { name: "General Pest Control", image: "/images/genralpestcontrol.png", url: "/subcategory/general-pest-control" },
-    { name: "Cockroach Control", image: "/images/cockicon.png", url: "/subcategory/cockroach-control-services-in-bangalore" },
-    { name: "Bedbugs Control", image: "/images/bedbugicon.png", url: "/subcategory/bed-bug-control-services-in-bangalore" },
-    { name: "Rodent Control", image: "/images/rodenticon.png", url: "/subcategory/rodent-control-in-bangalore" },
-    { name: "Mosquito Control", image: "/images/mosquitoicon.png", url: "/subcategory/mosquito-control-in-bangalore" },
-    { name: "Termite Control", image: "/images/termiteicon.png", url: "/subcategory/termite-control-services-in-bangalore" },
-  ];
+  const displayPestItems = pestControlItems;
 
-  const displayPestItems = pestControlItems.length > 0 ? pestControlItems : fallbackPestItems;
+  if (displayPestItems.length === 0) return null;
 
   return (
     <div className="w-full sm:w-fit ml-0 sm:ml-4 px-0 py-0 sm:px-0 sm:py-4 sm:-mt-3 bg-cover bg-center bg-no-repeat">
@@ -502,7 +478,7 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
         onClose={() => setIsCallbackOpen(false)}
         source="homepage_grid"
       />
-    </div >
+    </div>
   );
 };
 

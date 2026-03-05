@@ -96,13 +96,7 @@ const LandingPage = () => {
   const canonicalUrl = `https://www.hommlie.com/service/${slug}`;
 
   return (
-    <main
-    className="container mx-auto px-3 sm:px-5 lg:px-6 max-w-7xl font-sans space-y-16 sm:space-y-20"
-      style={{
-        background:
-          "linear-gradient(135deg, #e6f6f1 0%, #fdf4f4 25%, #f0e6f9 50%, #e8f3fd 75%, #e6faec 100%)",
-      }}
-    >
+    <main className="bg-white min-h-screen text-gray-900 font-sans selection:bg-hommlie/10">
       <Helmet>
         <title>{pageData?.landing_page?.meta_title}</title>
         <meta
@@ -113,182 +107,193 @@ const LandingPage = () => {
         <link rel="canonical" href={canonicalUrl} key="canonical" />
       </Helmet>
 
-     
+
       {/* Hero Section */}
-<section className="relative px-3 sm:px-6 lg:px-8 -mt-0 sm:-mt-16">
-  <div className="relative w-full max-w-7xl mx-auto">
-    {/* Image */}
-    <img
-      src={pageData?.landing_page?.hero_image}
-      alt={pageData?.landing_page?.alt_tag}
-      className="w-full h-52 sm:h-auto object-cover max-h-[300px] sm:max-h-[400px] md:max-h-[500px] rounded-lg sm:mt-0 mt-2"
-    />
+      <section className="relative pt-6 sm:pt-12">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="relative rounded-[3rem] overflow-hidden bg-[#02513E] min-h-[500px] lg:min-h-[600px] flex flex-col justify-center">
+            {/* Background Image with sophisticated overlay */}
+            <div className="absolute inset-0">
+              <img
+                src={pageData?.landing_page?.hero_image}
+                alt={pageData?.landing_page?.alt_tag}
+                className="w-full h-full object-cover mix-blend-overlay opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#02513E] via-[#02513E]/40 to-transparent" />
+            </div>
 
-    {/* === Desktop: Form Overlay === */}
-    <div className="absolute top-1/2 right-4 sm:right-8 transform -translate-y-1/2 hidden md:block w-80 lg:w-96 z-10">
-      <LandingPageForm />
-    </div>
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-10 items-center px-6 md:px-12 lg:px-20 py-16">
+              {/* Hero Text Content */}
+              <div className="md:col-span-12 lg:col-span-7 text-left">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-green-300 text-xs font-bold uppercase tracking-widest mb-6">
+                    Professional Care for Your Home
+                  </span>
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-8 tracking-tighter shadow-sm">
+                    {displayText}
+                  </h1>
+                  <p className="text-lg md:text-xl text-green-50/80 font-medium leading-relaxed max-w-xl mb-10">
+                    {pageData?.landing_page?.sub_title}
+                  </p>
 
-    {/* === Mobile: Stack layout === */}
-    <div className="mt-4 flex flex-col space-y-6  md:hidden">
-      {/* Form */}
-      <LandingPageForm />
+                  <div className="flex flex-wrap gap-5">
+                    <button
+                      onClick={scrollToForm}
+                      className="group relative bg-white text-[#02513E] px-10 py-5 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300 flex items-center gap-3 active:scale-95"
+                    >
+                      <span>Book Free Quote</span>
+                      <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </button>
 
-      {/* Text Content */}
-      <div className="w-full text-left">
-        <h1 className="text-xl sm:text-3xl font-bold text-gray-900 mb-3 leading-snug">
-          {displayText}
-        </h1>
-        <p className="text-sm sm:text-lg text-gray-600 mb-5">
-          {pageData?.landing_page?.sub_title}
-        </p>
-        <button
-          onClick={scrollToForm}
-          className="bg-hommlie text-white px-5 sm:px-8 py-2.5 rounded-md hover:bg-green-700 transition-colors duration-300 text-sm sm:text-base"
-        >
-          Book Now
-        </button>
-      </div>
-    </div>
+                    <button className="px-10 py-5 rounded-full font-bold text-white bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all text-lg">
+                      Our Portfolio
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
 
-    {/* === Desktop: Text Content (below image + form) === */}
-    <div className="absolute left-4 bottom-4 sm:left-8 sm:bottom-8 md:static md:mt-8 hidden md:block text-left md:text-center">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-snug">
-        {displayText}
-      </h1>
-      <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8">
-        {pageData?.landing_page?.sub_title}
-      </p>
-      <button
-        onClick={scrollToForm}
-        className="bg-hommlie text-white px-6 sm:px-8 py-3 rounded-md hover:bg-green-700 transition-colors duration-300 text-sm sm:text-base md:text-lg"
-      >
-        Book Now
-      </button>
-    </div>
-  </div>
-</section>
+              {/* Desktop Form Section */}
+              <div className="hidden lg:block lg:col-span-5">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  <LandingPageForm />
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile/Tablet Form: Moved below hero for better clarity on smaller screens */}
+          <div className="mt-[-80px] px-4 md:mt-10 lg:hidden">
+            <LandingPageForm />
+          </div>
+        </div>
+      </section>
 
 
       {/* Services Section */}
-      <section className="px-3 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-2">
-            <p className="text-hommlie font-semibold text-sm sm:text-base">
-              SERVICES
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 sm:mb-12 gap-2">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Our Services
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="mb-10 lg:mb-16">
+            <span className="text-hommlie font-bold tracking-widest text-xs uppercase bg-green-50 px-3 py-1 rounded-full mb-4 inline-block">
+              Premium Pest Solutions
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mt-2">
+              Our Professional Services
             </h2>
           </div>
-          <div className="mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-  {pageData?.subcategories
-    ?.slice(0, showAllServices ? undefined : 4)
-    ?.map((service) => (
-      <div
-        key={service.id}
-        className="bg-white rounded-3xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col"
-      >
-        {/* Image with overlay */}
-        <div className="relative w-full h-52 sm:h-44 lg:h-52 overflow-hidden">
-          <img
-            src={service.image_url}
-            alt={service.subcategory_name}
-            className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
-          />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {pageData?.subcategories
+              ?.slice(0, showAllServices ? undefined : 4)
+              ?.map((service) => (
+                <div
+                  key={service.id}
+                  className="group bg-white rounded-[2.5rem] p-4 border border-gray-100 hover:border-green-100 shadow-sm hover:shadow-2xl hover:shadow-green-900/5 transition-all duration-500 flex flex-col"
+                >
+                  {/* Image with overlay */}
+                  <div className="relative w-full h-60 rounded-[2rem] overflow-hidden mb-6">
+                    <img
+                      src={service.image_url}
+                      alt={service.subcategory_name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
 
-        {/* Content */}
-        <div className="p-5 flex flex-col flex-1">
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-            {service.subcategory_name}
-          </h3>
+                  {/* Content */}
+                  <div className="px-2 flex flex-col flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-hommlie transition-colors duration-300">
+                      {service.subcategory_name}
+                    </h3>
 
-          <div className="flex items-center mb-4 space-x-3">
-            {/* Rating badge */}
-            <div className="flex items-center bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-medium">
-              <span className="mr-1">★</span>
-              {service.avg_rating || "New"}
-            </div>
+                    <div className="flex flex-wrap items-center gap-3 mb-6">
+                      {/* Rating badge */}
+                      <div className="flex items-center bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">
+                        <span className="mr-1 text-sm">★</span>
+                        {service.avg_rating || "New"}
+                      </div>
 
-            {/* Price badge */}
-            <div className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm font-medium">
-              From ₹{Number(service.starting_price ?? 0).toFixed(2)}/service
-            </div>
+                      {/* Price badge */}
+                      <div className="bg-gray-50 text-gray-600 px-3 py-1 rounded-full text-xs font-bold">
+                        From ₹{Number(service.starting_price ?? 0).toFixed(0)}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleServiceClick(service.slug, service.id)}
+                      className="mt-auto w-full py-4 text-[#02513E] font-bold rounded-2xl bg-gray-50 group-hover:bg-[#02513E] group-hover:text-white transition-all duration-300 shadow-sm"
+                    >
+                      Book Free Inspection
+                    </button>
+                  </div>
+                </div>
+              ))}
           </div>
 
-          <button
-            onClick={() => handleServiceClick(service.slug, service.id)}
-            className="mt-auto w-full py-3 text-white font-semibold rounded-lg bg-gradient-to-r from-hommlie to-yellow-500 hover:from-yellow-500 hover:to-hommlie transition-all duration-300 shadow-md"
-          >
-            Book Now
-          </button>
-        </div>
-      </div>
-    ))}
-</div>
-
-          <div className="w-full flex justify-center">
+          <div className="mt-12 flex justify-center">
             <button
               onClick={() => setShowAllServices(!showAllServices)}
-              className="px-4 border border-hommlie text-hommlie py-2 rounded hover:bg-hommlie hover:text-white transition-colors duration-300 text-sm sm:text-base"
+              className="px-10 py-4 border-2 border-[#02513E] text-[#02513E] rounded-full font-bold hover:bg-[#02513E] hover:text-white transition-all duration-300 shadow-lg hover:shadow-green-900/10"
             >
-              {showAllServices ? "Show Less" : "View All"}
+              {showAllServices ? "Show Less" : "View All Services"}
             </button>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="px-3 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
+      <section className="py-24 bg-gray-50/50">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="max-w-3xl mb-16">
+            <span className="text-hommlie font-bold tracking-widest text-xs uppercase bg-green-100/50 px-3 py-1 rounded-full mb-4 inline-block">
+              Why Hommlie?
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight">
               {pageData?.landing_page?.why_choose_title}
             </h2>
-            <p className="mt-2 sm:mt-4 text-gray-600 text-sm sm:text-base">
-              {pageData?.landing_page?.why_choose_subtitle}
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="relative"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="relative group"
             >
+              <div className="absolute -inset-4 bg-green-500/5 rounded-[2.5rem] -rotate-2 group-hover:rotate-0 transition-transform duration-500" />
               <img
                 src={pageData?.landing_page?.why_choose_banner}
                 alt={pageData?.landing_page?.why_choose_title}
-                className="rounded-lg shadow-xl w-full h-56 sm:h-72 md:h-96 object-cover"
+                className="relative rounded-[2rem] shadow-2xl w-full aspect-[4/3] object-cover"
               />
             </motion.div>
 
-            <div className="space-y-6 sm:space-y-8">
+            <div className="grid gap-8 sm:gap-10">
               {pageData?.landing_page?.why_choose_content?.map(
                 (feature, index) => (
                   <motion.div
                     key={feature.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.2 }}
-                    className="flex gap-4 sm:gap-6 pb-2 border-b last:border-none"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="flex gap-6 group"
                   >
-                    <div className="flex-shrink-0">
-                      <span className="text-2xl sm:text-4xl font-light text-gray-300">
-                        {String(index + 1).padStart(2, "0")}.
-                      </span>
+                    <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-xl font-bold text-hommlie group-hover:bg-hommlie group-hover:text-white transition-all duration-300">
+                      {index + 1}
                     </div>
                     <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-hommlie mb-1 sm:mb-2">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                      <p className="text-gray-500 leading-relaxed font-medium">
                         {feature.description}
                       </p>
                     </div>
@@ -301,57 +306,58 @@ const LandingPage = () => {
       </section>
 
       {/* Schedule Section */}
-      <section
-        className="bg-hommlie-gradient px-3 sm:px-6 lg:px-8 rounded-lg"
-        style={{
-          backgroundImage: `url(${pageData?.landing_page?.banner})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
-          backgroundBlendMode: "multiply",
-          backgroundOrigin: "border-box",
-          backgroundClip: "border-box",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-        }}
-      >
-        <div className="max-w-6xl mx-auto py-8 sm:py-12">
-          <div className="flex flex-col md:flex-row items-center justify-between text-center md:text-left">
-            <div className="md:w-1/2 mb-6 md:mb-0">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
-                Schedule Your Inspection Today!
+      <section className="py-20">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div
+            className="relative rounded-[3rem] overflow-hidden py-16 px-8 md:px-20 text-center md:text-left"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(2, 81, 62, 0.95), rgba(2, 81, 62, 0.8)), url(${pageData?.landing_page?.banner})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <div className="max-w-2xl relative z-10">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+                Ready to reclaim your space from pests?
               </h2>
-              <p className="text-white opacity-90 text-sm sm:text-base mb-5 sm:mb-6">
-                Fill out the form below to book your inspection and reclaim your
-                space.
+              <p className="text-green-50/90 text-lg md:text-xl mb-10 font-medium">
+                Schedule your professional inspection today and get a custom treatment plan.
               </p>
-              <button
-                onClick={scrollToForm}
-                className="bg-white text-green-600 px-6 sm:px-8 py-2.5 sm:py-3 rounded-md hover:bg-gray-100 transition-colors duration-300 text-sm sm:text-base"
-              >
-                Book Now
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={scrollToForm}
+                  className="bg-white text-hommlie px-10 py-5 rounded-full font-bold text-lg hover:bg-green-50 transition-colors shadow-xl"
+                >
+                  Book Free Inspection
+                </button>
+                <a
+                  href="tel:+911234567890"
+                  className="bg-transparent border-2 border-white/30 text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white/10 transition-colors"
+                >
+                  Call Support
+                </a>
+              </div>
             </div>
+            {/* Abstract Shape Overlay */}
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/10 to-transparent pointer-events-none" />
           </div>
         </div>
       </section>
 
-      {/* Inspection Form Section */}
-      <section id="contact-form" className="px-3 sm:px-6 lg:px-8">
-        <InspectionFormSection />
-      </section>
+      {/* Bottom Sections Spacing */}
+      <div className="pb-20 space-y-32">
+        <section id="contact-form">
+          <InspectionFormSection />
+        </section>
 
-      {/* Stats Section */}
-      <section className="px-3 sm:px-6 lg:px-8">
-        <StatsSection />
-      </section>
+        <section>
+          <StatsSection />
+        </section>
 
-      {/* Popular Categories Section with Tabs */}
-      <section className="px-3 sm:px-6 lg:px-8">
-        <PopularCategorySection data={pageData?.all_categories} />
-      </section>
+        <section>
+          <PopularCategorySection data={pageData?.all_categories} />
+        </section>
+      </div>
     </main>
   );
 };
