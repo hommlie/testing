@@ -332,7 +332,9 @@ const SubCategoryPage = () => {
           items={[
             {
               label: data?.categoryData?.category_name,
-              link: `${config.VITE_BASE_URL}/category/${data?.categoryData?.slug}`
+              link: data?.categoryData?.category_name?.toLowerCase() === "home pest control"
+                ? `${config.VITE_BASE_URL}/category/pest-control-services`
+                : `${config.VITE_BASE_URL}/category/${data?.categoryData?.slug || categorySlug}`
             },
             { label: location ? location : data?.categoryData?.category_name }
           ]}

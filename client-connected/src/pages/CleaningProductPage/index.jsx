@@ -625,7 +625,9 @@ const CleaningProductPage = () => {
               items={[
                 {
                   label: innerSubCategoryData?.category?.category_name,
-                  link: `${config.VITE_BASE_URL}/category/${innerSubCategoryData?.category?.slug}`
+                  link: innerSubCategoryData?.category?.category_name?.toLowerCase() === "home pest control"
+                    ? `${config.VITE_BASE_URL}/category/pest-control-services`
+                    : `${config.VITE_BASE_URL}/category/${innerSubCategoryData?.category?.slug || innerSubCategoryData?.category?.category_name?.toLowerCase().replace(/\s+/g, '-')}`
                 },
                 { label: innerSubCategoryData?.subcategory_name }
               ]}
@@ -675,7 +677,7 @@ const CleaningProductPage = () => {
 
                     {/* Desktop Promotional Offers - Grid Layout (No Scrolling) */}
                     <div className="hidden md:block pt-3 border-t border-gray-100/50">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                      <div className="grid grid-cols-4 gap-3 md:gap-4">
                         {[
                           { title: "Up to ₹150 cashback", subtitle: "Via Paytm UPI only" },
                           { title: "Up to ₹100 cashback", subtitle: "Valid for BHIM app only" },
@@ -743,7 +745,7 @@ const CleaningProductPage = () => {
             </div>
             {/* Left Sidebar */}
             <div className="lg:col-span-3 lg:row-span-2">
-              <div className="sticky top-44 transition-all duration-300 ease-in-out">
+              <div className="sticky top-16 transition-all duration-300 ease-in-out">
 
                 {/* Promotional Offers Section */}
                 <div className="mt-1 md:hidden border-b border-gray-200 pb-2">
@@ -981,7 +983,7 @@ const CleaningProductPage = () => {
 
             {/* Right Cart */}
             <div className="lg:col-start-9 lg:col-span-4 lg:row-start-2 px-0 md:px-0">
-              <div className="sticky h-fit top-8 transition-all duration-300 ease-in-out mt-1 lg:mt-0">
+              <div className="sticky h-fit top-16 transition-all duration-300 ease-in-out mt-1 lg:mt-0">
                 <CartSection
                   cart={cart}
                   onUpdateQty={handleQtyUpdate}

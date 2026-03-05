@@ -710,7 +710,9 @@ export default function ProductPage() {
             items={[
               {
                 label: prodData?.category?.category_name,
-                link: `${config.VITE_BASE_URL}/category/${prodData?.category?.slug}`
+                link: prodData?.category?.category_name?.toLowerCase() === "home pest control"
+                  ? `${config.VITE_BASE_URL}/category/pest-control-services`
+                  : `${config.VITE_BASE_URL}/category/${prodData?.category?.slug || prodData?.subcategory?.category?.slug}`
               },
               { label: prodData?.subcategory?.subcategory_name },
               { label: prodData?.product_name }
