@@ -523,9 +523,16 @@ export default function ProductPage() {
     }
   };
 
-  const handleTagClick = (tag) => {
-    const slug = prodData?.product_name?.toLowerCase().replace(/ /g, "-");
-    navigate(`${config.VITE_BASE_URL}/product/${slug}/tag/${tag.trim()}`);
+  const handleTagClick = (clickedTag) => {
+    // Convert the tag to an SEO-friendly format
+    const seoFriendlyTag = clickedTag
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+      .replace(/\s+/g, "-");        // Replace spaces with hyphens
+
+    // Use the existing, validated 'slug' from the URL rather than generating a potentially invalid one.
+    navigate(`${config.VITE_BASE_URL}/product/${slug}/tag/${seoFriendlyTag}`);
     window.location.reload();
   };
 
