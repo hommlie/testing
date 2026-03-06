@@ -413,23 +413,21 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
               whileHover={{ y: -3 }}
               className="relative flex flex-col items-center py-2 px-1 sm:py-1 sm:px-1 cursor-pointer group transition-all duration-300"
             >
-              <div className="relative mb-1 z-10 w-full px-1 sm:px-1.5">
+              <div className="relative mb-2 z-10 w-full px-1 sm:px-1.5">
                 <motion.div
-                  animate={{ y: [0, -2, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.1 }}
-                  className="w-full h-16 sm:h-20 md:h-20 lg:h-20 bg-white border border-gray-200 rounded-xl flex items-center justify-center transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:border-[#0463ac]/60"
+                  className="w-full h-16 sm:h-20 md:h-20 lg:h-20 bg-[#f5f5f5] rounded-xl flex items-center justify-center transition-all duration-300 group-hover:bg-[#ebebeb]"
                 >
                   <img
                     src={sub.image}
                     alt={sub.name}
-                    className="w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-110"
+                    className="w-[85%] h-[85%] object-contain transition-transform duration-500 group-hover:scale-105"
                   />
                 </motion.div>
               </div>
 
               <div className="flex flex-col items-center text-center z-10 w-full px-0.5">
                 <div className="relative group/text">
-                  <span className="text-[11px] sm:text-[14px] font-semibold text-[#033053] group-hover:text-[#0463ac] transition-all duration-300 leading-tight text-center block w-full">
+                  <span className="text-[11px] sm:text-[13px] font-normal text-gray-700 group-hover:text-black transition-all duration-300 leading-tight text-center block w-full">
                     {sub.name}
                   </span>
                 </div>

@@ -46,6 +46,7 @@ import axios from "axios";
 import ServicesNavDropdown from "../ServicesNavDropdown";
 import { FaMobileAlt, FaSignInAlt, FaShoppingCart, FaQuestionCircle } from 'react-icons/fa';
 import bannerBg from '../../assets/images/navbarimage4.png';
+import hommlieLogo from '../../assets/images/hommlie-logo.png';
 import ondc from '../../assets/images/ondc.png';
 import { BsMicFill } from "react-icons/bs";
 import HelpModal from "../HelpModal";
@@ -692,7 +693,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className="w-full sticky top-0 z-50 font-sans bg-transparent sm:bg-white lg:bg-white border-b border-gray-100 transition-all duration-300"
+      className="w-full sticky top-0 z-50 font-sans bg-white border-b border-gray-100 transition-all duration-300"
     >
 
 
@@ -750,64 +751,117 @@ const Header = ({
               </a>
             </div>
 
-            {/* Mobile View: Unified Header (Sticky) */}
-            <div
-              className={`flex lg:hidden flex-col w-screen -mx-4 px-4 sticky top-0 z-50 transition-all duration-400 ease-in-out ${!isHomePage
-                ? 'bg-white py-3 shadow-sm'
-                : isScrolled
-                  ? 'bg-white pt-5 pb-3 shadow-md bg-white/98'
-                  : 'bg-gradient-to-b from-[#4ade80] to-white pt-7 pb-4'
-                }`}
-            >
-              <div className="relative">
-                {isHomePage && (
-                  <motion.div
-                    animate={{
-                      height: isScrolled ? 0 : "auto",
-                      opacity: isScrolled ? 0 : 1,
-                      marginBottom: isScrolled ? 0 : 14
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="flex justify-between items-center w-full">
-                      <div className="flex flex-col">
-                        <div className="flex flex-col mb-1">
-                          <span className="text-[11px] font-black text-[#212121]/70 uppercase tracking-widest leading-none mb-1">Hommlie in</span>
-                          <h1 className="text-[32px] font-black text-[#212121] leading-none tracking-tighter">4 hours</h1>
-                        </div>
-                        <button onClick={() => setIsLocationModalOpen(true)} className="flex items-center text-[10px] font-extrabold text-[#212121]/60 uppercase tracking-tight">
-                          Home <span className="mx-1 font-normal opacity-50">•</span> <span className="truncate max-w-[150px]">{currentLocation}</span> <MdKeyboardArrowDown className="text-base" />
-                        </button>
+            {/* Mobile View: Redesigned Header matching Image 2 */}
+            <div className="flex lg:hidden flex-col w-screen -mx-4">
+
+              {/* ── Rows 1 & 2: collapse when scrolled ── */}
+              <motion.div
+                animate={{
+                  height: isScrolled ? 0 : "auto",
+                  opacity: isScrolled ? 0 : 1,
+                }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                {/* Row 1: Logo | Location  ←→  Cart + User */}
+                <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100">
+                  {/* Left: Logo + divider + Location */}
+                  <div className="flex items-center gap-3">
+                    <NavLink to="/" onClick={() => window.scrollTo(0, 0)}>
+                      <img src="/images/logoh.png" alt="Hommlie" className="h-[52px] w-auto object-contain rounded-md" />
+                    </NavLink>
+                    <div className="w-px h-8 bg-gray-200" />
+                    <button
+                      onClick={() => setIsLocationModalOpen(true)}
+                      className="flex flex-col items-start leading-tight"
+                    >
+                      <div className="flex items-center gap-1 text-[13px] font-bold text-gray-900">
+                        <MdLocationOn className="text-[#0463ac] text-base flex-shrink-0" />
+                        Location
                       </div>
-                      <div className="flex items-center gap-2">
-                        <WalletPill amount={walletBalance} onClick={() => setIsWalletModalOpen(true)} className="scale-100" />
-                        <NavLink to="/add-to-cart" className="relative group mr-1.5">
-                          <div className="w-11 h-11 rounded-full border border-white/40 bg-white/90 shadow-lg flex items-center justify-center transition-transform active:scale-95 backdrop-blur-sm">
-                            <IoCartOutline className="text-2xl text-gray-800" />
-                            {cart?.length > 0 && (
-                              <span className="absolute -top-1 -right-1 bg-[#e11d48] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white antialiased">
-                                {cart.length}
-                              </span>
-                            )}
-                          </div>
-                        </NavLink>
+                      <div className="flex items-center gap-1 text-[11px] font-medium text-gray-500">
+                        <span className="truncate max-w-[140px]">
+                          {currentLocation && currentLocation !== "Get Current Location"
+                            ? currentLocation
+                            : "Get Current Location"}
+                        </span>
+                        <MdKeyboardArrowDown className="text-base flex-shrink-0" />
                       </div>
+                    </button>
+                  </div>
+
+                  {/* Right: Cart + User */}
+                  <div className="flex items-center gap-3">
+                    <NavLink to="/add-to-cart" className="relative">
+                      <IoCartOutline className="text-[28px] text-gray-800" />
+                      {cart?.length > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 bg-[#f5b800] text-gray-900 text-[10px] font-black w-[18px] h-[18px] rounded-full flex items-center justify-center ring-2 ring-white antialiased">
+                          {cart.length}
+                        </span>
+                      )}
+                    </NavLink>
+                    {user?.length === 0 ? (
+                      <button onClick={() => setIsLoginModalOpen(true)}>
+                        <FaUser className="text-[24px] text-gray-800" />
+                      </button>
+                    ) : (
+                      <button onClick={() => setIsLoginOpen(!isLoginOpen)}>
+                        <FaUser className="text-[24px] text-[#0463ac]" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Row 2: Dark navy info bar */}
+                <div className="flex items-stretch bg-[#0f2d4e] text-white divide-x divide-white/10">
+                  <a href="tel:6363865658" className="flex items-center gap-2 flex-1 justify-center py-2.5 px-2 hover:bg-white/5 transition-colors">
+                    <FaPhoneAlt className="text-[11px] flex-shrink-0" />
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-[9px] font-medium text-white/70">Call us</span>
+                      <span className="text-[11px] font-bold tracking-wide">6363865658</span>
                     </div>
-                  </motion.div>
-                )}
-                <div className="relative group">
+                  </a>
+                  <button
+                    onClick={() => setIsComingSoonOpen(true)}
+                    className="flex items-center gap-2 flex-1 justify-center py-2.5 px-2 hover:bg-white/5 transition-colors"
+                  >
+                    <RiRobot2Line className="text-[13px] flex-shrink-0" />
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-[9px] font-medium text-white/70">Hommlie Chat</span>
+                      <span className="text-[11px] font-bold">With Us</span>
+                    </div>
+                  </button>
+                  <button
+                    onClick={scrollToBooking}
+                    className="flex items-center gap-2 flex-1 justify-center py-2.5 px-2 hover:bg-white/5 transition-colors"
+                  >
+                    <MdEmail className="text-[13px] flex-shrink-0" />
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-[9px] font-medium text-white/70">Schedule Service</span>
+                      <span className="text-[11px] font-bold">Book Online</span>
+                    </div>
+                  </button>
+                </div>
+              </motion.div>
+
+              {/* ── Row 3: Search bar — always visible, full width ── */}
+              <div className={`px-4 py-3 bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
+                <div className="relative">
                   <input
                     type="text"
                     placeholder={`Search ${services[placeholderIndex]}...`}
-                    className="w-full font-semibold pl-11 pr-10 py-3.5 text-sm bg-white rounded-2xl shadow-xl border-none ring-1 ring-gray-100/30 focus:ring-2 focus:ring-[#4ade80]/50 outline-none transition-all placeholder:text-gray-400"
+                    className="w-full font-semibold pl-11 pr-12 py-3.5 text-sm bg-white rounded-2xl border border-gray-200 focus:border-[#0463ac] focus:ring-2 focus:ring-[#0463ac]/10 outline-none transition-all placeholder:text-gray-400 shadow-sm"
                     value={mobileSearchTerm}
                     onChange={(e) => setMobileSearchTerm(e.target.value)}
                   />
-                  <BiSearchAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                  <BsMicFill onClick={handleMobileMicClick} className={`absolute right-4 top-1/2 -translate-y-1/2 text-xl ${isListening ? "text-green-500 animate-pulse" : "text-gray-400 hover:text-green-500 transition-colors"}`} />
+                  <BiSearchAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0463ac] text-xl" />
+                  <BsMicFill
+                    onClick={handleMobileMicClick}
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 text-xl ${isListening ? "text-[#0463ac] animate-pulse" : "text-[#0463ac] opacity-70 hover:opacity-100 transition-opacity"}`}
+                  />
                 </div>
               </div>
+
             </div>
           </div>
 

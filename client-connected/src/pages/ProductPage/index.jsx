@@ -1593,7 +1593,7 @@ export default function ProductPage() {
         isOpen={isCouponModalOpen}
         onClose={closeCouponModal}
         totalAmount={totalAmount + taxAmount}
-        cat_id={prodData.cat_id}
+        cat_id={prodData?.cat_id}
       />
       <InspectionModal
         isOpen={isInspectionModalOpen}

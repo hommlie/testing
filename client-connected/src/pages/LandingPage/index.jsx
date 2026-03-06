@@ -345,13 +345,9 @@ const LandingPage = () => {
       </section>
 
       {/* Bottom Sections Spacing */}
-      <div className="pb-20 space-y-32">
+      <div className="pb-20 space-y-24">
         <section id="contact-form">
           <InspectionFormSection />
-        </section>
-
-        <section>
-          <StatsSection />
         </section>
 
         <section>
