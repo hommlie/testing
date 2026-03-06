@@ -44,6 +44,13 @@ import ScrapPrices from "./pages/ScrapPrices";
 import Product from "./pages/Product";
 import WasteManagement from "./pages/WasteManagement";
 
+const RedirectExternal = ({ url }) => {
+  useEffect(() => {
+    window.location.href = url;
+  }, [url]);
+  return null;
+};
+
 const ProjectRoutes = () => {
   const notify = useToast();
   const navigate = useNavigate();
@@ -265,7 +272,7 @@ const ProjectRoutes = () => {
     },
     {
       path: `${config.VITE_BASE_URL}/product`,
-      element: <Product />,
+      element: <RedirectExternal url="https://hommlie.shop" />,
     },
     {
       path: `${config.VITE_BASE_URL}/wastemanagement`,

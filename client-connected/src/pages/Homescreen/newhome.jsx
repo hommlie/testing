@@ -409,8 +409,7 @@ const HomePage = () => {
 
   return (
     <div
-      className="sm:max-w-7xl sm:mx-auto bg-cover bg-center bg-no-repeat font-headerFont bg-white"
-
+      className="w-full bg-cover bg-center bg-no-repeat font-headerFont bg-white"
     >
       <SchemaMarkup />
       <Helmet>
