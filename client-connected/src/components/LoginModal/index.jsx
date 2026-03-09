@@ -43,6 +43,63 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   } = useCont();
 
 
+  const handleProceed = async (e) => {
+    if (e) e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const newOtp = Number(otp.join(""));
+      const response = await axios.post(`${config.API_URL}/api/verifyotp`, {
+        mobile: `+91${phone}`,
+        otp: newOtp,
+        name: name.trim(),
+        referral_code: referralCode,
+      });
+      if (response.data.status === 1) {
+        const jwtToken = response.data.token;
+        Cookies.set("HommlieUserjwtToken", jwtToken, {
+          expires: 30,
+          path: "/",
+          secure: true,
+          sameSite: "strict",
+        });
+        setToken(jwtToken);
+        const decodedToken = jwtDecode(jwtToken);
+        setUser(decodedToken);
+        localStorage.setItem("HommlieUser", JSON.stringify(decodedToken));
+        successNotify("Welcome to Hommlie");
+        getUser();
+        getCart();
+        getBookings();
+        getAddresses();
+        getPaymentList();
+
+        // Trigger Wallet Bonus Modal only for brand-new users
+        if (response.data.is_new_user === 1) {
+          setIsWalletBonusModalOpen(true);
+        }
+
+        onClose();
+
+        if (typeof onLoginSuccess === "function") {
+          try {
+            onLoginSuccess();
+          } catch (e) {
+            // ignore errors from callback
+            console.error("onLoginSuccess callback error:", e);
+          }
+        }
+      } else {
+        errorNotify(response.data.message);
+      }
+    } catch (error) {
+      errorNotify(error.response?.data?.message || "An error occurred");
+      setOtp(["", "", "", ""]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (user?.length !== 0) onClose();
     let timer;
@@ -148,62 +205,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     }
   };
 
-  const handleProceed = async (e) => {
-    if (e) e.preventDefault();
-    if (isLoading) return;
-    setIsLoading(true);
-    try {
-      const newOtp = Number(otp.join(""));
-      const response = await axios.post(`${config.API_URL}/api/verifyotp`, {
-        mobile: `+91${phone}`,
-        otp: newOtp,
-        name: name.trim(),
-        referral_code: referralCode,
-      });
-      if (response.data.status === 1) {
-        const jwtToken = response.data.token;
-        Cookies.set("HommlieUserjwtToken", jwtToken, {
-          expires: 30,
-          path: "/",
-          secure: true,
-          sameSite: "strict",
-        });
-        setToken(jwtToken);
-        const decodedToken = jwtDecode(jwtToken);
-        setUser(decodedToken);
-        localStorage.setItem("HommlieUser", JSON.stringify(decodedToken));
-        successNotify("Welcome to Hommlie");
-        getUser();
-        getCart();
-        getBookings();
-        getAddresses();
-        getPaymentList();
 
-        // Trigger Wallet Bonus Modal only for brand-new users
-        if (response.data.is_new_user === 1) {
-          setIsWalletBonusModalOpen(true);
-        }
-
-        onClose();
-
-        if (typeof onLoginSuccess === "function") {
-          try {
-            onLoginSuccess();
-          } catch (e) {
-            // ignore errors from callback
-            console.error("onLoginSuccess callback error:", e);
-          }
-        }
-      } else {
-        errorNotify(response.data.message);
-      }
-    } catch (error) {
-      errorNotify(error.response?.data?.message || "An error occurred");
-      setOtp(["", "", "", ""]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   if (typeof document === 'undefined') return null;
 
   return createPortal(
