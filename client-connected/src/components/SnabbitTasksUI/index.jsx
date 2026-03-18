@@ -13,15 +13,36 @@ const tasks = [
   { title: 'Plumbing', image: '/images/bird-netting.webp', link: '/services/bathroom-cleaning' },
 ];
 
-export default function QuickHeroSection() {
+export default function QuickHeroSection({ categories }) {
   const containerRef = useRef(null);
+  const [dynamicTasks, setDynamicTasks] = React.useState(tasks); // Fallback to initial static tasks
+
+  React.useEffect(() => {
+    if (categories && categories.length > 0) {
+      // Find Pest Control category
+      const pestCat = categories.find(c => (c.category_name || '').toLowerCase().includes('pest control'));
+      if (pestCat) {
+        const subcats = pestCat.Subcategories || pestCat.subcategories || pestCat.Subcategory || pestCat.subcategory || [];
+        if (subcats.length > 0) {
+          const mapped = subcats.map(sub => ({
+            title: sub.subcategory_name,
+            image: sub.app_icon || '/assets/images/placeholder.png',
+            link: `/subcategory/${sub.slug}`
+          }));
+          setDynamicTasks(mapped);
+        }
+      }
+    }
+  }, [categories]);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end']
   });
 
-  const duplicatedTasks = [...tasks, ...tasks];
-
+  // Use dynamicTasks for the scrolling list
+  const duplicatedTasks = [...dynamicTasks, ...dynamicTasks];
+  
   const [phoneRef, phoneInView] = useInView({ threshold: 0.3 });
   const [cardsRef, cardsInView] = useInView({ threshold: 0.2 });
 
@@ -131,7 +152,7 @@ export default function QuickHeroSection() {
               transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
             >
               {duplicatedTasks.map((task, index) => {
-                const delay = (index % tasks.length) * 0.2;
+                const delay = (index % dynamicTasks.length) * 0.2;
                 return (
                   <a
                     key={`${task.title}-${index}`}

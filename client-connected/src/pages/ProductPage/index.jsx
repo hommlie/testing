@@ -33,7 +33,7 @@ import Rating from "../../components/Rating";
 import ShareButton from "../ShareButtonservcies";
 import Breadcrumb from "../../components/Breadcrumb";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, ArrowRight } from "lucide-react";
+import { ShoppingBag, ArrowRight, Plus, Minus } from "lucide-react";
 
 export default function ProductPage() {
   const {
@@ -695,7 +695,7 @@ export default function ProductPage() {
   const [isDescOpen, setIsDescOpen] = useState(false);
 
   return (
-    <main className="bg-white container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex flex-col lg:space-x-8 pt-2 sm:pt-4 mb-12 scroll-smooth"
+    <main className="relative bg-white container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex flex-col lg:space-x-8 pt-2 sm:pt-4 mb-12 scroll-smooth"
     >
       {isLoading ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -1591,6 +1591,84 @@ export default function ProductPage() {
                   )}
                 </div>
               )}
+            </section>
+
+            {/* FAQs & Testimonials Section */}
+            <section className="w-full bg-white rounded-[20px] md:rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.02)] px-4 py-6 md:px-10 md:py-10 mb-16">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Questions & Reviews</h2>
+                  <p className="text-gray-500 mt-2 text-sm md:text-base font-medium">Find answers and read what our customers say.</p>
+                </div>
+
+                <div className="flex bg-gray-50 p-1.5 rounded-2xl border border-gray-100 overflow-hidden w-fit">
+                  <button
+                    onClick={() => setSelectedTab("testimonials")}
+                    className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${selectedTab === "testimonials"
+                        ? "bg-[#0463ac] text-white shadow-lg shadow-[#0463ac]/20"
+                        : "text-gray-500 hover:text-gray-900"
+                      }`}
+                  >
+                    Testimonials
+                  </button>
+                  <button
+                    onClick={() => setSelectedTab("faqs")}
+                    className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${selectedTab === "faqs"
+                        ? "bg-[#0463ac] text-white shadow-lg shadow-[#0463ac]/20"
+                        : "text-gray-500 hover:text-gray-900"
+                      }`}
+                  >
+                    FAQs
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid gap-4">
+                {currentList.map((item, index) => {
+                  const isOpen = openIndex === index;
+                  return (
+                    <div
+                      key={index}
+                      className={`group overflow-hidden rounded-2xl transition-all duration-300 border ${isOpen
+                          ? "bg-white border-blue-100 shadow-[0_10px_30px_rgba(4,99,172,0.05)]"
+                          : "bg-gray-50/30 border-gray-100 hover:border-gray-200"
+                        }`}
+                    >
+                      <button
+                        className="w-full flex justify-between items-center p-5 md:p-6 text-left transition-colors"
+                        onClick={() => toggleFAQ(index)}
+                      >
+                        <span className={`font-bold text-base md:text-lg transition-colors pr-8 ${isOpen ? "text-[#0463ac]" : "text-gray-700 group-hover:text-gray-900"
+                          }`}>
+                          {item.question}
+                        </span>
+                        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? "bg-[#0463ac] text-white" : "bg-white border border-gray-200 text-gray-400 group-hover:border-[#0463ac] group-hover:text-[#0463ac]"
+                          }`}>
+                          {isOpen ? <Minus size={16} strokeWidth={3} /> : <Plus size={16} strokeWidth={3} />}
+                        </div>
+                      </button>
+
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                          >
+                            <div className="px-5 pb-5 md:px-6 md:pb-6">
+                              <div className="h-px w-full bg-gray-100 mb-4" />
+                              <p className="text-gray-600 text-sm md:text-base leading-relaxed font-medium">
+                                {item.answer}
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </div>
             </section>
           </div>
         </>

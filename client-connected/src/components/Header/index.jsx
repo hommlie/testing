@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from "react";
 import Cookies from "js-cookie";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -190,7 +190,6 @@ const Header = ({
   const getAppDropdownRef = useRef(null);
   const offerDropdownRef = useRef(null);
   const helpDropdownRef = useRef(null);
-  const locationDropdownRef = useRef(null);
   const aiChatDropdownRef = useRef(null);
   const referAndEarnDropdownRef = useRef(null);
   const searchTimeoutRef = useRef(null);
@@ -420,9 +419,6 @@ const Header = ({
       }
       if (helpDropdownRef.current && !helpDropdownRef.current.contains(event.target)) {
         setIsHelpOpen(false);
-      }
-      if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
-        setIsLocationOpen(false);
       }
       if (aiChatDropdownRef.current && !aiChatDropdownRef.current.contains(event.target)) {
         setIsAiChatOpen(false);
@@ -869,25 +865,17 @@ const Header = ({
           <div className="hidden lg:flex items-center flex-1 justify-center max-w-2xl mx-auto px-4">
             <div className="flex items-center w-full bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors shadow-sm overflow-hidden h-[46px]">
               {/* Location Selector */}
-              <div ref={locationDropdownRef} className="relative flex-shrink-0">
-                <button onClick={() => setIsLocationOpen(!isLocationOpen)} className="flex items-center gap-2 px-4 h-full hover:bg-gray-50 transition-all group min-w-[160px]">
+              <div className="relative flex-shrink-0">
+                <button 
+                  onClick={() => setIsLocationModalOpen(true)} 
+                  className="flex items-center gap-2 px-4 h-full hover:bg-gray-50 transition-all group min-w-[160px]"
+                >
                   <MdLocationOn className="text-lg text-gray-400 group-hover:text-blue-500" />
                   <div className="flex items-center text-[13px] font-medium text-gray-700 truncate max-w-[150px]">
                     {currentLocation}
-                    <MdKeyboardArrowDown className={`ml-1 transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''}`} />
+                    <MdKeyboardArrowDown className={`ml-1 transition-transform duration-200 ${isLocationModalOpen ? 'rotate-180' : ''}`} />
                   </div>
                 </button>
-                <AnimatePresence>
-                  {isLocationOpen && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute left-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl z-50 border border-gray-100 overflow-hidden">
-                      <div className="bg-[#0463ac] p-3 text-white font-bold text-xs text-center">Location Settings</div>
-                      <div className="py-1">
-                        <button onClick={() => { setIsLocationOpen(false); getCurrentLocation(); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMyLocation className="text-[#0463ac]" /> Use Current Location</button>
-                        <button onClick={() => { setIsLocationOpen(false); setIsLocationModalOpen(true); }} className="w-full text-left px-5 py-3 hover:bg-gray-50 flex items-center gap-3 text-sm font-semibold transition-colors"><MdMap className="text-[#0463ac]" /> Edit Address</button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
 
               {/* Vertical Divider */}
@@ -951,15 +939,15 @@ const Header = ({
                         </div>
 
                         <div className="py-2">
-                          <NavLink to="/edit-profile" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                          <div onClick={() => { navigate("/edit-profile"); setIsLoginOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors cursor-pointer">
                             <FaUser className="text-gray-400 w-4" /> Edit Profile
-                          </NavLink>
-                          <NavLink to="/my-bookings" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                          </div>
+                          <div onClick={() => { navigate("/my-bookings"); setIsLoginOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors cursor-pointer">
                             <MdEmail className="text-gray-400 w-4 text-base" /> My Bookings
-                          </NavLink>
-                          <NavLink to="/my-wallet" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                          </div>
+                          <div onClick={() => { navigate("/my-wallet"); setIsLoginOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors cursor-pointer">
                             <FaWallet className="text-gray-400 w-4" /> My Wallet
-                          </NavLink>
+                          </div>
                           <button onClick={() => { setIsAddressModalOpen(true); setIsLoginOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
                             <MdLocationOn className="text-gray-400 w-4 text-base" /> Your Addresses
                           </button>
@@ -988,9 +976,9 @@ const Header = ({
                         </div>
 
                         <div className="border-t border-gray-50 py-2">
-                          <NavLink to="/help-us" onClick={() => setIsLoginOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors">
+                          <div onClick={() => { navigate("/help-us"); setIsLoginOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0463ac] transition-colors cursor-pointer">
                             <FaHeadset className="text-gray-400 w-4" /> Help & Support
-                          </NavLink>
+                          </div>
                           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors mt-1">
                             <FaSignOutAlt className="w-4" /> Log out
                           </button>
@@ -1098,8 +1086,8 @@ const Header = ({
                         <div className="grid grid-cols-2 gap-3">
                           <button
                             onClick={() => {
-                              setIsCartOpen(false);
                               navigate("/add-to-cart");
+                              setIsCartOpen(false);
                             }}
                             className="py-2.5 rounded-xl border border-blue-200 text-[#0463ac] text-xs font-black uppercase tracking-wider hover:bg-blue-50 transition-all"
                           >
@@ -1107,8 +1095,8 @@ const Header = ({
                           </button>
                           <button
                             onClick={() => {
+                              navigate("/add-to-cart");
                               setIsCartOpen(false);
-                              navigate("/add-to-cart"); // Or direct to review-booking if logic allows
                             }}
                             className="py-2.5 rounded-xl bg-gradient-to-r from-[#0463ac] to-[#0580ca] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95"
                           >
@@ -1184,7 +1172,6 @@ const Header = ({
                           <NavLink
                             to="/edit-profile"
                             className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                            onClick={() => setIsLoginOpen(false)}
                           >
                             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
                               <FaUser className="text-[#0463ac] group-hover:text-white transition-colors" />
@@ -1195,7 +1182,6 @@ const Header = ({
                           <NavLink
                             to="/my-bookings"
                             className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                            onClick={() => setIsLoginOpen(false)}
                           >
                             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
                               <MdEmail className="text-[#0463ac] group-hover:text-white transition-colors" />
@@ -1206,7 +1192,6 @@ const Header = ({
                           <NavLink
                             to="/my-wallet"
                             className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                            onClick={() => setIsLoginOpen(false)}
                           >
                             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
                               <FaWallet className="text-[#0463ac] group-hover:text-white transition-colors" />
@@ -1259,7 +1244,6 @@ const Header = ({
                           <NavLink
                             to="/help-us"
                             className="flex items-center gap-4 px-4 py-3.5 text-gray-700 hover:bg-blue-50/50 rounded-xl transition-all duration-200 group"
-                            onClick={() => setIsLoginOpen(false)}
                           >
                             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0463ac] group-hover:shadow-md transition-all duration-200">
                               <FaHeadset className="text-[#0463ac] group-hover:text-white transition-colors" />
@@ -1446,21 +1430,18 @@ const Header = ({
               <NavLink
                 to="/services"
                 className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
               >
                 Services
               </NavLink>
               <NavLink
                 to="/help"
                 className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
               >
                 Help
               </NavLink>
               <NavLink
                 to="/register-free-listing"
                 className="block py-2 px-3 text-gray-700 hover:bg-emerald-50 rounded-lg transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
               >
                 Join ONDC
               </NavLink>
@@ -1571,7 +1552,8 @@ const Header = ({
         />
       </div>
 
-      {/* Location Modal */}
+
+
       {
         isLocationModalOpen && (
           typeof document !== 'undefined' && createPortal(

@@ -130,8 +130,8 @@ export default function MyBookings() {
     };
 
     switch (sortOption) {
-      case "oldest": filtered.sort((a, b) => parseDate(a) - parseDate(b)); break;
-      case "newest": filtered.sort((a, b) => parseDate(b) - parseDate(a)); break;
+      case "oldest": filtered.sort((a, b) => (a.id || 0) - (b.id || 0)); break;
+      case "newest": filtered.sort((a, b) => (b.id || 0) - (a.id || 0)); break;
       case "priceHighToLow": filtered.sort((a, b) => parseFloat(b.grand_total) - parseFloat(a.grand_total)); break;
       case "priceLowToHigh": filtered.sort((a, b) => parseFloat(a.grand_total) - parseFloat(b.grand_total)); break;
       default: break;

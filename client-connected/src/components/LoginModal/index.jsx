@@ -91,6 +91,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         }
       } else {
         errorNotify(response.data.message);
+        setOtp(["", "", "", ""]);
       }
     } catch (error) {
       errorNotify(error.response?.data?.message || "An error occurred");

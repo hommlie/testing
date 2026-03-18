@@ -47,7 +47,7 @@ export function ContProvider({ children }) {
   const [prodData, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeApiCalls, setActiveApiCalls] = useState(0);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => Cookies.get("HommlieUserjwtToken") || "");
   const [user, setUser] = useState(() =>
     getLocalStorageItem(`Hommlieuser`, {})
   );
@@ -331,24 +331,21 @@ export function ContProvider({ children }) {
     if (jwtToken) {
       const user_id = 1;
       await axios
-        .post(`${config.API_URL}/api/paymentlist`, {
-          user_id,
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        })
+        .post(`${config.API_URL}/api/paymentlist`, 
+          { user_id },
+          { headers: { Authorization: `Bearer ${jwtToken}` } }
+        )
         .then((response) => {
           if (response.data.status === 1) {
             setPaymentList(response.data.paymentlist);
-            // setWalletAmount(response.data.walletamount);
             localStorage.setItem(
               `HommliepaymentList`,
-              JSON.stringify(response.data.paymentList)
+              JSON.stringify(response.data.paymentlist)
             );
           }
         })
         .catch((error) => {
-          console.log("error getting coupons:", error);
+          console.log("error getting payment list:", error);
         });
     }
   }

@@ -502,7 +502,7 @@ const HomePage = () => {
       </section>
 
       <section className="px-10 py-1">
-        <SnabbitTasksUI />
+        <SnabbitTasksUI categories={categories} />
       </section>
 
       <section className="hidden md:block px-2 sm:px-12 py-1">

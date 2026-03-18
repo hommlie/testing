@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Search, X, MapPin, Navigation, Map } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import config from '../../config/config';
 
 const LocationModal = ({ onClose, setCurrentLocation }) => {
@@ -112,8 +113,6 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
               }
             };
 
-            // Handle the selected location
-            console.log('Selected location:', locationData);
             const locationStings = locationData?.address?.split(',');
             if (locationStings.length > 4) {
               setCurrentLocation(locationStings?.slice(0, 5)?.join(','));
@@ -121,8 +120,6 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
               setCurrentLocation(locationData?.address);
             }
             onClose();
-            // You can call a parent callback here
-            // onLocationSelect(locationData);
 
             setSearchQuery(result.fullText);
             setSearchResults([]);
@@ -167,8 +164,6 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
               }
             };
 
-            // Handle the selected location
-            console.log('Selected location:', locationData);
             const locationStings = locationData?.address?.split(',');
             if (locationStings.length > 3) {
               setCurrentLocation(locationStings?.slice(0, 4)?.join(','));
@@ -176,8 +171,6 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
               setCurrentLocation(locationData?.address);
             }
             onClose();
-            // You can call a parent callback here
-            // onLocationSelect(locationData);
 
             setSearchQuery(data.results[0].formatted_address);
             setSearchResults([]);
@@ -209,32 +202,47 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-md rounded-lg overflow-hidden">
-        <div className="bg-white flex justify-between items-center p-4 border-b">
-          <h2 className="text-lg font-semibold">Select Location</h2>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+      />
+
+      {/* Modal Content */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        className="relative bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl z-10"
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#0463ac] to-[#0580ca] p-6 text-white text-center relative">
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full"
+            className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </button>
+          <MapPin className="text-3xl mx-auto mb-2 opacity-90" />
+          <h2 className="text-xl font-bold">Select Your Location</h2>
+          <p className="text-xs text-blue-100 opacity-80 mt-1">Search for your area to see services nearby</p>
         </div>
 
-        <div className="p-4">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-3 flex items-center">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+        <div className="p-6">
+          {/* Search Input */}
+          <div className="relative mb-4 group">
+            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+              <Search className="w-5 h-5 text-gray-400 group-focus-within:text-[#0463ac] transition-colors" />
             </div>
             <input
               ref={inputRef}
               type="text"
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              placeholder="Search for your location/society/apartment"
+              className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#0463ac] focus:ring-4 focus:ring-[#0463ac]/5 transition-all font-medium text-gray-700"
+              placeholder="Search for colony, street, or city..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -244,59 +252,59 @@ const LocationModal = ({ onClose, setCurrentLocation }) => {
                   setSearchQuery('');
                   setSearchResults([]);
                 }}
-                className="absolute inset-y-0 right-3 flex items-center"
+                className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-gray-600"
               >
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-5 h-5" />
               </button>
             )}
           </div>
-        </div>
 
-        <button
-          onClick={getCurrentLocation}
-          className="flex items-center px-4 py-3 text-blue-600 hover:bg-gray-50 w-full border-t border-b"
-        >
-          <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          Use current location
-          {isLoading && <Loader2 className="w-5 h-5 ml-2 animate-spin" />}
-        </button>
-
-        {locationError && (
-          <div className="p-4 flex flex-col items-center">
-            <div className="mb-4">
-              <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
+          <button
+            onClick={getCurrentLocation}
+            className="flex items-center gap-4 w-full p-4 bg-blue-50/50 hover:bg-blue-50 rounded-2xl transition-all group border border-blue-100/50"
+          >
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+              <Navigation className="w-5 h-5 text-[#0463ac]" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Location Error</h3>
-            <p className="mt-1 text-gray-500">{locationError}</p>
-          </div>
-        )}
+            <div className="text-left flex-1">
+              <p className="text-sm font-bold text-[#0463ac]">Use Current Location</p>
+              <p className="text-[11px] text-blue-400 font-medium tracking-tight">Detect via GPS for better accuracy</p>
+            </div>
+            {isLoading && <Loader2 className="w-5 h-5 text-[#0463ac] animate-spin" />}
+          </button>
 
-        <div className="max-h-64 overflow-y-auto">
-          {searchResults.map((result) => (
-            <button
-              key={result.placeId}
-              onClick={() => handleLocationSelect(result)}
-              className="w-full px-4 py-3 flex items-start hover:bg-gray-50 border-t first:border-t-0"
-            >
-              <svg className="w-5 h-5 mr-3 mt-1 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              </svg>
-              <div className="text-left">
-                <div className="font-medium text-gray-900">{result.name}</div>
-                <div className="text-sm text-gray-500">{result.address}</div>
-              </div>
-            </button>
-          ))}
+          {locationError && (
+            <div className="mt-4 p-4 bg-red-50 rounded-2xl border border-red-100 flex items-center gap-3 text-red-600">
+              <X className="w-5 h-5 flex-shrink-0" />
+              <p className="text-xs font-bold leading-tight">{locationError}</p>
+            </div>
+          )}
+
+          {/* Results List */}
+          <div className="mt-4 max-h-64 overflow-y-auto custom-scrollbar">
+            <AnimatePresence>
+              {searchResults.map((result, idx) => (
+                <motion.button
+                  key={result.placeId}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  onClick={() => handleLocationSelect(result)}
+                  className="w-full p-4 flex items-start gap-4 hover:bg-gray-50 rounded-2xl transition-all text-left border-b border-gray-50 last:border-0 group"
+                >
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0463ac]/10 group-hover:text-[#0463ac] transition-colors">
+                    <Map className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm text-gray-800 group-hover:text-[#0463ac] transition-colors">{result.name}</div>
+                    <div className="text-[11px] text-gray-400 font-medium mt-0.5 line-clamp-1">{result.address}</div>
+                  </div>
+                </motion.button>
+              ))}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

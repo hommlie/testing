@@ -144,7 +144,7 @@ const CategoryPage = () => {
   }
 
   return (
-    <main className="bg-white text-slate-900 md:min-h-screen">
+    <main className="relative bg-white text-slate-900 md:min-h-screen">
       <div className="mx-auto w-full max-w-6xl px-4 pt-4 pb-10 md:pt-8 md:pb-10">
         <motion.section
           initial={{ opacity: 0, y: 20 }}
