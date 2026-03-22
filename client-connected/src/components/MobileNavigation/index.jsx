@@ -13,12 +13,13 @@ import { MdEmail, MdLocationOn } from "react-icons/md";
 import { useCont } from "../../context/MyContext";
 import { createPortal } from "react-dom";
 import { AnimatePresence } from "framer-motion";
+import { ShoppingBag } from "lucide-react";
 import ComingSoonModal from "../../pages/ComingSoonPage";
 
 const MobileNavigation = () => {
   const navItems = [
     { path: "/", label: "Home", iconImage: "/images/logoh.png" },
-    { path: "#", label: "AI Chat", IconOutline: RiRobot2Line, IconFill: RiRobot2Fill, isComingSoon: true },
+    { path: "https://hommlie.shop/", label: "Product", IconOutline: ShoppingBag, IconFill: ShoppingBag, isExternal: true },
     { path: "/help", label: "Help", IconOutline: FaQuestionCircle, IconFill: FaQuestionCircle },
     { path: "#", label: "Account", IconOutline: FaUser, IconFill: FaUser, isDrawer: true },
   ];
@@ -56,7 +57,7 @@ const MobileNavigation = () => {
       aria-label="Bottom navigation"
     >
       <nav className="flex justify-between items-center px-0 py-1">
-        {navItems.map(({ path, label, IconOutline, IconFill, iconImage, isDrawer, isComingSoon }, index) => {
+        {navItems.map(({ path, label, IconOutline, IconFill, iconImage, isDrawer, isComingSoon, isExternal }, index) => {
           const Content = ({ isActive = false }) => (
             <motion.div whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-0.5">
               {iconImage && index === 0 ? (
@@ -88,6 +89,18 @@ const MobileNavigation = () => {
               >
                 <Content isActive={isLoginOpen} />
               </button>
+            );
+          }
+
+          if (isExternal) {
+            return (
+              <a
+                key={label}
+                href={path}
+                className="flex flex-col items-center justify-center flex-1 py-1.5 min-h-[58px] transition-all duration-300 text-gray-500"
+              >
+                <Content isActive={false} />
+              </a>
             );
           }
 

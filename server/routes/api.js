@@ -57,6 +57,7 @@ app.get("/vendors", UserController.vendors);
 //Homefeeds
 app.get("/homefeeds", HomeController.homeFeeds);
 app.get("/homepage", HomeController.getHomePageData);
+app.get("/chatbot-faqs", HomeController.getChatbotFaqs);
 
 //Product
 app.post("/products", ProductsController.products);

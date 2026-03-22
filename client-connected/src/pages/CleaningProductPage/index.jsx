@@ -110,15 +110,24 @@ const QuickLinkSection = ({ title, isOpen, onToggle, children }) => {
 
 const VariationScroller = ({ attribute, product, cart, onUpdateQty, onAddToCart, onViewDetails, isQtyLoading, loadingItemId }) => {
   const containerRef = useRef(null);
+  const [activeDot, setActiveDot] = useState(0);
 
   const scroll = (direction) => {
     if (containerRef.current) {
-      const scrollAmount = 181; // card width (165) + gap (16)
+      const scrollAmount = 152; // card width (140) + gap (12)
       containerRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
       });
     }
+  };
+
+  const handleScroll = (e) => {
+    const element = e.target;
+    const scrollLeft = element.scrollLeft;
+    const itemWidth = 152; // 140 width + 12 gap
+    const index = Math.round(scrollLeft / itemWidth);
+    setActiveDot(index);
   };
 
   const sortedVariations = [...(attribute?.variations || [])].sort((a, b) => {
@@ -164,7 +173,8 @@ const VariationScroller = ({ attribute, product, cart, onUpdateQty, onAddToCart,
 
         <div
           ref={containerRef}
-          className="flex gap-4 overflow-x-auto no-scrollbar pb-3 snap-x scroll-smooth relative px-1"
+          onScroll={handleScroll}
+          className="flex items-stretch gap-3 overflow-x-auto no-scrollbar pb-3 snap-x scroll-smooth relative px-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {sortedVariations.map((variation) => {
@@ -175,7 +185,7 @@ const VariationScroller = ({ attribute, product, cart, onUpdateQty, onAddToCart,
               <motion.div
                 key={variation.id}
                 viewport={{ once: true }}
-                className={`flex-shrink-0 w-[165px] bg-white border rounded-2xl p-4 snap-start transition-all duration-300 ${inCart ? 'border-[#0463ac] ring-1 ring-[#0463ac]/10 shadow-[0_8px_20px_rgba(4,99,172,0.15)]' : 'border-gray-100 hover:border-[#0463ac]/30 hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)]'}`}
+                className={`flex-shrink-0 w-[140px] flex flex-col justify-between bg-white border rounded-2xl p-3 snap-start transition-all duration-300 ${inCart ? 'border-[#0463ac] ring-1 ring-[#0463ac]/10 shadow-[0_8px_20px_rgba(4,99,172,0.15)]' : 'border-gray-100 hover:border-[#0463ac]/30 hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)]'}`}
               >
                 <h4 className="text-[15px] font-bold text-gray-900 mb-2 truncate leading-tight tracking-tight">{variation.variation}</h4>
 
@@ -232,6 +242,20 @@ const VariationScroller = ({ attribute, product, cart, onUpdateQty, onAddToCart,
           {/* Invisible spacer at the end for padding */}
           <div className="flex-shrink-0 w-2" />
         </div>
+      </div>
+
+      {/* Dots Indicator - Mobile Only */}
+      <div className="flex justify-center gap-1.5 mt-2 md:hidden">
+        {sortedVariations.map((_, idx) => (
+          <div
+            key={idx}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeDot === idx 
+                ? "w-4 bg-[#0463ac]" 
+                : "w-1.5 bg-gray-200"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
@@ -409,7 +433,18 @@ const CleaningProductPage = () => {
         { slug }
       );
       if (response.data.status === 1) {
-        setInnerSubCategoryData(response.data.data);
+        const cleaningData = response.data.data;
+        if (cleaningData?.faqs && typeof cleaningData.faqs === "string") {
+          const trimmedFaqs = cleaningData.faqs.trim();
+          if (trimmedFaqs.startsWith("[") || trimmedFaqs.startsWith("{")) {
+            try {
+              cleaningData.faqs = JSON.parse(trimmedFaqs);
+            } catch (e) {
+              console.error("Error parsing FAQs:", e);
+            }
+          }
+        }
+        setInnerSubCategoryData(cleaningData);
 
         // Meta tags are handled by <Helmet> component automatically
         setIsLoading(false);
@@ -784,14 +819,14 @@ const CleaningProductPage = () => {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 max-h-[calc(100vh-22rem)] overflow-y-auto overflow-x-hidden custom-scrollbar pr-1.5">
+                  <div className="flex md:grid md:grid-cols-1 gap-3 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden no-scrollbar pb-4 md:pb-0 snap-x scroll-smooth max-h-[calc(100vh-22rem)] custom-scrollbar pr-1.5">
                     {innerSubCategoryData?.products?.map((product, index) => (
                       <motion.div
                         key={product.id}
                         whileHover={{
                           x: index === currentProductIndex ? 0 : 4,
                         }}
-                        className={`group flex flex-col md:flex-row items-center gap-2.5 md:gap-3 p-1.5 md:p-2 rounded-xl cursor-pointer transition-all duration-300 border ${index === currentProductIndex
+                        className={`group flex-shrink-0 w-[140px] md:w-full flex flex-col md:flex-row items-center gap-2.5 md:gap-3 p-1.5 md:p-2 rounded-xl cursor-pointer transition-all duration-300 border snap-start ${index === currentProductIndex
                           ? "bg-white border-[#0463ac]/30 shadow-sm"
                           : "border-transparent hover:bg-gray-50/50"
                           }`}
@@ -1016,11 +1051,31 @@ const CleaningProductPage = () => {
 
             {/* FAQs Section */}
             {innerSubCategoryData?.faqs && (
-              <CollapsibleSection
-                title="Frequently Asked Questions"
-                content={innerSubCategoryData.faqs}
-                isHtml={true}
-              />
+              <div className="space-y-4">
+                {Array.isArray(innerSubCategoryData.faqs) ? (
+                  <>
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight px-4 mt-8 mb-4">
+                      Frequently Asked Questions
+                    </h2>
+                    <div className="grid gap-4">
+                      {innerSubCategoryData.faqs.map((faq, index) => (
+                        <CollapsibleSection
+                          key={index}
+                          title={faq.question}
+                          content={faq.answer}
+                          isHtml={true}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <CollapsibleSection
+                    title="Frequently Asked Questions"
+                    content={innerSubCategoryData.faqs}
+                    isHtml={true}
+                  />
+                )}
+              </div>
             )}
 
             {/* Quick Links Header */}

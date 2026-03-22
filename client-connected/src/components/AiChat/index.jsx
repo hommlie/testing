@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RiRobot2Line } from 'react-icons/ri';
 import { BsArrowLeft, BsCheckCircleFill, BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import { FaWhatsapp } from 'react-icons/fa';
 import { useCont } from '../../context/MyContext';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -84,7 +85,7 @@ const getNext7Days = () => {
         const month = String(d.getMonth() + 1).padStart(2, "0");
         const day = String(d.getDate()).padStart(2, "0");
         const formattedDate = `${year}-${month}-${day}`;
-        
+
         return {
             label: i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }),
             value: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
@@ -207,36 +208,36 @@ const ExpertForm = ({ name, mobile, onNameChange, onMobileChange, onSubmit, isLo
     <div className="mt-3 space-y-3 bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
         <div className="space-y-1">
             <label className="text-xs font-semibold text-gray-500 ml-1">Full Name</label>
-            <input 
-                type="text" 
-                value={name} 
+            <input
+                type="text"
+                value={name}
                 onChange={e => onNameChange(e.target.value)}
-                placeholder="Enter your full name" 
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 outline-none focus:border-blue-300 transition-all font-medium" 
+                placeholder="Enter your full name"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 outline-none focus:border-blue-300 transition-all font-medium"
             />
         </div>
         <div className="space-y-1">
             <label className="text-xs font-semibold text-gray-500 ml-1">Mobile Number</label>
             <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:border-blue-300 transition-all">
                 <span className="px-3 text-sm text-gray-500 border-r border-gray-200 py-3">+91</span>
-                <input 
-                    type="tel" 
-                    maxLength={10} 
-                    value={mobile} 
+                <input
+                    type="tel"
+                    maxLength={10}
+                    value={mobile}
                     onChange={e => onMobileChange(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    placeholder="Enter mobile number" 
-                    className="flex-1 px-3 py-3 text-sm text-gray-700 bg-transparent outline-none" 
+                    placeholder="Enter mobile number"
+                    className="flex-1 px-3 py-3 text-sm text-gray-700 bg-transparent outline-none"
                 />
             </div>
         </div>
-        <motion.button 
-            whileHover={{ scale: 1.02 }} 
-            whileTap={{ scale: 0.98 }} 
+        <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={onSubmit}
             disabled={isLoading || (name.trim().length < 3) || (mobile.length !== 10)}
             className={`w-full py-3 rounded-xl font-bold text-sm shadow-sm transition-colors flex items-center justify-center gap-2 
-                ${(name.trim().length >= 3 && mobile.length === 10) 
-                    ? 'bg-[#0463ac] text-white hover:bg-[#0352a0]' 
+                ${(name.trim().length >= 3 && mobile.length === 10)
+                    ? 'bg-[#0463ac] text-white hover:bg-[#0352a0]'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
         >
             {isLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : '📞 Request Callback'}
@@ -262,8 +263,8 @@ const SuccessCard = ({ title, subtitle, color = 'green', onReset }) => (
 const AiChatDrawer = ({ isOpen, onClose }) => {
     const INIT_MSGS = [{ type: 'bot', text: 'Hello! 👋 Welcome to Hommlie AI Support. How can I help you today?' }];
 
-    const { 
-        categoryData, user, addresses, getAddresses, token, 
+    const {
+        categoryData, user, addresses, getAddresses, token,
         paymentList, getPaymentList, bookings, getBookings, getCart,
         setToken, setUser, getUser
     } = useCont();
@@ -282,16 +283,27 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
     const [counter, setCounter] = useState(60);
     const [isLoading, setIsLoading] = useState(false);
     const [hasSubmittedExpert, setHasSubmittedExpert] = useState(false);
+    const [dynamicFaqs, setDynamicFaqs] = useState(FAQS);
     const bottomRef = useRef(null);
 
     useEffect(() => {
-        const fetchAllPestServices = async () => {
+        const fetchAllServicesAndFaqs = async () => {
             let catsFromApi = [];
             try {
                 // Fetch same data source as homepage for exact mirroring
                 const res = await axios.get(`${config.API_URL}/api/homepage`);
                 if (res.data.status === 1) {
                     catsFromApi = res.data.data.all_categories || [];
+
+                    // Dynamic Chatbot FAQs from same homepage call
+                    const chatbotFaqsFromApi = res.data.data.chatbot_faqs || [];
+                    if (chatbotFaqsFromApi.length > 0) {
+                        const mappedFaqs = chatbotFaqsFromApi.map(item => ({
+                            q: item.questions,
+                            a: item.answers
+                        }));
+                        setDynamicFaqs(mappedFaqs);
+                    }
                 }
             } catch (err) {
                 console.warn("AI Chat: Failed to fetch homepage data, using context fallback", err);
@@ -299,42 +311,52 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             }
 
             if (catsFromApi.length > 0) {
-                let allSubcats = [];
+                let allProds = [];
                 catsFromApi.forEach(cat => {
-                    const subcats = cat.Subcategories || cat.subcategories || cat.Subcategory || cat.subcategory || [];
-                    const catName = (cat.category_name || '').toLowerCase();
-                    
+                    const subcats = cat.subcategories || cat.Subcategories || cat.Subcategory || cat.subcategory || [];
                     subcats.forEach(sub => {
-                        const subName = (sub.subcategory_name || '').toLowerCase();
-                        // Mirror the broad logic: anything pest-related
-                        if (catName.includes('pest') || subName.includes('pest')) {
-                            allSubcats.push(sub);
-                        }
+                        const products = sub.products || sub.Products || [];
+                        products.forEach(prod => {
+                            allProds.push(prod);
+                        });
                     });
                 });
 
-                if (allSubcats.length > 0) {
-                    const uniqueSubcats = allSubcats.filter((s, index, self) =>
-                        index === self.findIndex((t) => (t.id === s.id && t.id) || t.slug === s.slug)
-                    );
+                if (allProds.length > 0) {
+                    const getEmoji = (name) => {
+                        const lower = name.toLowerCase();
+                        if (lower.includes('cockroach')) return '🪳';
+                        if (lower.includes('bedbug')) return '🐛';
+                        if (lower.includes('termite')) return '🐜';
+                        if (lower.includes('rodent')) return '🐁';
+                        if (lower.includes('mosquito')) return '🦟';
+                        if (lower.includes('pest')) return '🛡️';
+                        if (lower.includes('lizard')) return '🦎';
+                        if (lower.includes('flies')) return '🪰';
+                        if (lower.includes('sanitization')) return '🧼';
+                        if (lower.includes('cleaning')) return '🧼';
+                        if (lower.includes('ac')) return '❄️';
+                        return '📦';
+                    };
 
-                    const mapped = uniqueSubcats.map(sub => ({
-                        label: `${PEST_EMOJIS[sub.subcategory_name] || '🛡️'} ${sub.subcategory_name}`,
-                        name: sub.subcategory_name,
-                        slug: sub.slug
+                    const mapped = allProds.map(prod => ({
+                        label: `${getEmoji(prod.product_name)} ${prod.product_name}`,
+                        name: prod.product_name,
+                        slug: prod.slug,
+                        data: prod
                     }));
                     mapped.sort((a, b) => a.name.localeCompare(b.name));
                     setDynamicServices(mapped);
                 }
             }
         };
-        fetchAllPestServices();
+        fetchAllServicesAndFaqs();
     }, [categoryData]);
 
     const fetchProductDetails = async (slug, nextStep, userMsg, botMsgBase, data = {}) => {
         setIsLoadingProduct(true);
         let products = [];
-        
+
         try {
             // 1. Try to fetch product details for the subcategory slug
             const res = await axios.post(`${config.API_URL}/api/cleaningsubcategory`, { slug });
@@ -360,7 +382,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
         try {
             if (products.length > 0) {
                 setCurrentProducts(products);
-                
+
                 // Extract unique BHKs/Variations
                 const productBhks = [];
                 products.forEach(product => {
@@ -370,10 +392,10 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                         if (vName && !productBhks.includes(vName)) productBhks.push(vName);
                     });
                 });
-                
+
                 // Smart sort for BHKs
                 productBhks.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0));
-                
+
                 if (productBhks.length > 0) {
                     go(nextStep, userMsg, botMsgBase, { ...data, productSlug: slug, availableBhks: productBhks });
                 } else {
@@ -443,11 +465,11 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                 const next = step === 'track_mobile' ? 'track_otp' : 'book_otp';
                 setIsOtpSent(true);
                 setCounter(60);
-                go(next, `📱 +91 ${inputVal}`, `OTP sent to +91 ${inputVal}. Please enter it below.`, { 
+                go(next, `📱 +91 ${inputVal}`, `OTP sent to +91 ${inputVal}. Please enter it below.`, {
                     ...flowData,
-                    mobile: inputVal, 
-                    isOldUser: !!response.data?.user_name, 
-                    userName: response.data?.user_name || "" 
+                    mobile: inputVal,
+                    isOldUser: !!response.data?.user_name,
+                    userName: response.data?.user_name || ""
                 });
             } else {
                 setMessages(prev => [...prev, { type: 'bot', text: response.data.message || "Failed to send OTP. Try again." }]);
@@ -492,12 +514,12 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             if (response.data.status === 1) {
                 const jwtToken = response.data.token;
                 Cookies.set("HommlieUserjwtToken", jwtToken, { expires: 30, path: "/", secure: true, sameSite: "strict" });
-                
+
                 setToken(jwtToken);
                 const decoded = jwtDecode(jwtToken);
                 setUser(decoded);
                 localStorage.setItem("HommlieUser", JSON.stringify(decoded));
-                
+
                 // Refresh global data
                 getUser();
                 getCart();
@@ -530,18 +552,18 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
 
     const handleExpertRequest = async () => {
         setIsLoading(true);
-        
+
         // Ensure we only send the 10-digit number
         const rawMobile = inputVal || flowData.mobile;
         const mobileToUse = String(rawMobile).replace(/\D/g, '').slice(-10);
-        
+
         try {
             const { expertName, serviceName, service } = flowData;
-            
+
             // Clean strings of non-ASCII characters that might break the backend
             const cleanName = String(expertName || user?.name || "Customer").replace(/[^\x00-\x7F]/g, "").trim();
             const cleanService = String(serviceName || service || "General").replace(/[^\x00-\x7F]/g, "").trim();
-            
+
             // payload exact match with HomeForm logic
             const payload = {
                 fullName: cleanName,
@@ -554,7 +576,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             };
 
             const response = await axios.post(`${config.API_URL}/api/createInspection`, payload);
-            
+
             if (response.data.status === 1 || response.data.status === true || response.status === 200) {
                 go('talk_expert_done', null, `Our expert will call ${cleanName} at +91 ${mobileToUse} shortly!`, { mobile: mobileToUse });
             } else {
@@ -586,7 +608,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
 
         const u = jwtDecode(jwtToken);
         const { selectedVariation, address, formattedDate, timeSlot, paymentType, tipAmount, selectedAddress } = flowData;
-        
+
         // Parse price and totals robustly
         const basePrice = Number(String(flowData.price || "0").replace(/[₹, \-]/g, '')) || 0;
         const total = basePrice + (Number(tipAmount) || 0);
@@ -624,13 +646,13 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             // 3. Prepare clean address and time for Order
             const addr = selectedAddress || {};
             const cleanTime = (timeSlot || "").includes(" - ") ? timeSlot.split(" - ")[0] : timeSlot;
-            
+
             const payload = {
                 user_id: Number(u.id),
                 payment_type: Number(paymentType?.id),
                 payment_id: razorpayId || Math.random().toString(36).substring(2, 12),
                 grand_total: total,
-                discount_amount: 0, 
+                discount_amount: 0,
                 coupon_name: null,
                 coupon_id: null,
                 order_notes: "Booked via AI Chat",
@@ -656,15 +678,15 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             if (res.data.status === 1) {
                 await getCart();
                 await getBookings();
-                go('track_status', null, `🎉 Order placed successfully! Here are your booking details:`, { 
-                    selectedBooking: { 
-                        order_number: res.data.order_number, 
-                        service: currentProduct?.product_name || service, 
-                        desired_date: formattedDate, 
-                        desired_time: timeSlot, 
+                go('track_status', null, `🎉 Order placed successfully! Here are your booking details:`, {
+                    selectedBooking: {
+                        order_number: res.data.order_number,
+                        service: currentProduct?.product_name || service,
+                        desired_date: formattedDate,
+                        desired_time: timeSlot,
                         grand_total: total,
-                        order_status: 1 
-                    } 
+                        order_status: 1
+                    }
                 });
             } else {
                 setMessages(prev => [...prev, { type: 'bot', text: res.data.message || "Failed to place order." }]);
@@ -685,14 +707,14 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
         setIsLoading(true);
         try {
             const jwtToken = token || Cookies.get("HommlieUserjwtToken");
-            const headers = { 
-                "Content-Type": "application/json", 
-                Authorization: jwtToken ? `Bearer ${jwtToken}` : undefined 
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: jwtToken ? `Bearer ${jwtToken}` : undefined
             };
-            
-            const res = await axios.post(`${config.API_URL}/api/raisecomplaint`, { 
-                orderId: flowData.selectedBooking?.id, 
-                complaintText: msg 
+
+            const res = await axios.post(`${config.API_URL}/api/raisecomplaint`, {
+                orderId: flowData.selectedBooking?.id,
+                complaintText: msg
             }, { headers });
 
             if (res.data && res.data.message) {
@@ -723,9 +745,9 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
         const total = basePrice + (flowData.tipAmount || 0);
 
         try {
-            const res = await axios.post(`${config.API_URL}/api/initiatePayment`, 
+            const res = await axios.post(`${config.API_URL}/api/initiatePayment`,
                 { amount: total, currency: "INR", user_id: u.id },
-                { headers: { Authorization: `Bearer ${jwtToken}` }}
+                { headers: { Authorization: `Bearer ${jwtToken}` } }
             );
 
             if (res.data.status === 1) {
@@ -774,26 +796,30 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                 return <OptionList options={[
                     { label: '📅 Book Service', onClick: () => go('book_service', 'Book a Service', 'Great! Which service would you like to book?') },
                     { label: '💰 Check Price', onClick: () => go('price_service', 'Check Price', 'Sure! Which service would you like to check price for?') },
-                    { label: '📦 Track Booking', onClick: () => {
-                        if (user && user.mobile) {
-                            if (!bookings || bookings.length === 0) {
-                                getBookings();
+                    {
+                        label: '📦 Track Booking', onClick: () => {
+                            if (user && user.mobile) {
+                                if (!bookings || bookings.length === 0) {
+                                    getBookings();
+                                }
+                                go('track_bookings', 'Track My Booking', 'Here are your recent bookings:');
+                            } else {
+                                go('track_mobile', 'Track My Booking', 'Please enter your registered mobile number.');
                             }
-                            go('track_bookings', 'Track My Booking', 'Here are your recent bookings:');
-                        } else {
-                            go('track_mobile', 'Track My Booking', 'Please enter your registered mobile number.');
                         }
-                    }},
-                    { label: '🚨 Raise Complaint', onClick: () => {
-                        if (user && user.mobile) {
-                            if (!bookings || bookings.length === 0) {
-                                getBookings();
+                    },
+                    {
+                        label: '🚨 Raise Complaint', onClick: () => {
+                            if (user && user.mobile) {
+                                if (!bookings || bookings.length === 0) {
+                                    getBookings();
+                                }
+                                go('complaint_select_order', 'Raise a Complaint', 'Please select the booking you have an issue with:');
+                            } else {
+                                go('track_mobile', 'Raise a Complaint', 'Please login to raise a complaint.', { nextStepAfterLogin: 'complaint_select_order' });
                             }
-                            go('complaint_select_order', 'Raise a Complaint', 'Please select the booking you have an issue with:');
-                        } else {
-                            go('track_mobile', 'Raise a Complaint', 'Please login to raise a complaint.', { nextStepAfterLogin: 'complaint_select_order' });
                         }
-                    }},
+                    },
                     { label: '❓ Ask a Question', onClick: () => go('faq', 'Ask a Question', 'Here are some FAQs. Tap any to expand 👇') },
                 ]} />;
 
@@ -824,7 +850,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                                     if (hasVar && !serviceTypes.includes('Standard Service')) serviceTypes.push('Standard Service');
                                 }
                             });
-                            
+
                             if (serviceTypes.length > 0) {
                                 go('book_service_type', p, `Excellent! Please choose which service variant you want for ${p}:`, { property: p, availableServiceTypes: serviceTypes });
                             } else {
@@ -840,7 +866,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                     onClick: () => {
                         const p = flowData.property;
                         let productVariants = [];
-                        
+
                         currentProducts.forEach(product => {
                             if (product.attributes) {
                                 product.attributes.filter(attr => attr.attribute_name === type).forEach(attr => {
@@ -866,7 +892,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                                 }
                             }
                         });
-                        
+
                         if (productVariants.length > 0) {
                             go('book_variant', type, `Excellent! Please choose which service package you want:`, { serviceType: type, availableVariants: productVariants });
                         } else {
@@ -881,10 +907,10 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                     onClick: () => {
                         const price = `₹${v.full_price}`;
                         setCurrentProduct(v.parentProduct);
-                        go('book_price_show', v.label, `Great choice! Here are your plan details:`, { 
-                            variant: `${v.label} (${flowData.serviceType})`, 
-                            price, 
-                            selectedVariation: v 
+                        go('book_price_show', v.label, `Great choice! Here are your plan details:`, {
+                            variant: `${v.label} (${flowData.serviceType})`,
+                            price,
+                            selectedVariation: v
                         });
                     }
                 }))} />;
@@ -914,8 +940,8 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             /* ═══════ EXPERT FLOW ═══════ */
             case 'talk_expert_form':
                 return (
-                    <ExpertForm 
-                        name={flowData.expertName || ''} 
+                    <ExpertForm
+                        name={flowData.expertName || ''}
                         mobile={flowData.mobile || ''}
                         onNameChange={val => setFlowData(prev => ({ ...prev, expertName: val }))}
                         onMobileChange={val => setFlowData(prev => ({ ...prev, mobile: val }))}
@@ -981,9 +1007,9 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                         <ChipGrid chips={[
                             ...addresses.map(addr => ({
                                 label: `📍 ${addr.name || 'Home'}: ${addr.house_number || ''} ${addr.address || ''}`.replace(/undefined/g, '').trim(),
-                                onClick: () => go('book_date', addr.address, 'Select your preferred date 📅', { 
+                                onClick: () => go('book_date', addr.address, 'Select your preferred date 📅', {
                                     address: `${addr.house_number || ''} ${addr.address || ''}, ${addr.landmark || ''}`.replace(/undefined/g, '').replace(/, ,/g, ',').trim(),
-                                    selectedAddress: addr, 
+                                    selectedAddress: addr,
                                     addressId: addr.id
                                 })
                             })),
@@ -1211,7 +1237,7 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
             case 'faq':
                 return (
                     <div className="mt-3 space-y-2">
-                        {FAQS.map((faq, i) => (
+                        {dynamicFaqs.map((faq, i) => (
                             <div key={i} className="bg-white border border-blue-100 rounded-xl shadow-sm overflow-hidden">
                                 <button onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                                     className="w-full text-left px-4 py-3 text-sm font-medium text-gray-800 flex justify-between items-center hover:bg-blue-50 transition-colors">
@@ -1311,8 +1337,18 @@ const AiChatDrawer = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Footer */}
-                        <div className="px-4 py-2 bg-white border-t border-gray-100 flex-shrink-0">
+                        <div className="px-4 py-2 bg-white border-t border-gray-100 flex-shrink-0 relative">
                             <p className="text-center text-xs text-gray-400">Powered by Hommlie AI ✨</p>
+
+                            {/* Persistent WhatsApp floating icon inside bot */}
+                            <a
+                                href="https://wa.me/918884445855"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="absolute bottom-16 right-4 w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform z-[1100] text-3xl no-underline"
+                            >
+                                <FaWhatsapp className="text-2xl" />
+                            </a>
                         </div>
                     </motion.div>
                 )}

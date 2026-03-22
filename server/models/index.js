@@ -42,6 +42,7 @@ const BlogCategory = require("./BlogCategory");
 const Comment = require("./Comment");
 const LandingPage = require("./LandingPage");
 const HomepageSection = require("./HomePageSections");
+const ChatbotFaq = require("./ChatbotFaq");
 
 // const apiUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
 
@@ -266,4 +267,5 @@ module.exports = {
   BlogCategory,
   Comment,
   HomepageSection,
+  ChatbotFaq,
 };

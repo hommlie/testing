@@ -171,18 +171,28 @@ const HomePage = () => {
     try {
       const response = await axios.get(`${config.API_URL}/api/homepage`);
       if (response.data.status === 1) {
+        const homeData = response.data.data;
+
+        // Parse FAQs if it's a string
+        if (typeof homeData.faqs === "string") {
+          try {
+            homeData.faqs = JSON.parse(homeData.faqs);
+          } catch (e) {
+            console.error("Error parsing FAQs:", e);
+            homeData.faqs = [];
+          }
+        }
+
+        setData(homeData);
+
         const {
           sliders,
           heroSections,
-          banners,
+          all_categories,
           offerBanners,
           most_booked_services,
           thoughtfulVideos,
-          testimonials,
-          faqs,
-          all_categories,
-        } = response.data.data;
-        setData(response.data.data);
+        } = homeData;
 
         setHeroSlides(sliders);
         setHeroSections(heroSections);

@@ -54,6 +54,7 @@ import { FaTag, FaFire } from 'react-icons/fa';
 import { HiFire, HiBadgeCheck, HiLightningBolt } from "react-icons/hi";
 import ComingSoonModal from "../../pages/ComingSoonPage";
 import { Zap, ShoppingBag, Building2 } from "lucide-react";
+import AiChatDrawer from "../AiChat";
 
 
 
@@ -818,7 +819,7 @@ const Header = ({
                     </div>
                   </a>
                   <button
-                    onClick={() => setIsComingSoonOpen(true)}
+                    onClick={() => setIsAiChatOpen(true)}
                     className="flex items-center gap-2 flex-1 justify-center py-2.5 px-2 hover:bg-white/5 transition-colors"
                   >
                     <RiRobot2Line className="text-[13px] flex-shrink-0" />
@@ -828,7 +829,7 @@ const Header = ({
                     </div>
                   </button>
                   <button
-                    onClick={scrollToBooking}
+                    onClick={() => navigate(`${config.VITE_BASE_URL}/quickservice`)}
                     className="flex items-center gap-2 flex-1 justify-center py-2.5 px-2 hover:bg-white/5 transition-colors"
                   >
                     <MdEmail className="text-[13px] flex-shrink-0" />
@@ -866,8 +867,8 @@ const Header = ({
             <div className="flex items-center w-full bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors shadow-sm overflow-hidden h-[46px]">
               {/* Location Selector */}
               <div className="relative flex-shrink-0">
-                <button 
-                  onClick={() => setIsLocationModalOpen(true)} 
+                <button
+                  onClick={() => setIsLocationModalOpen(true)}
                   className="flex items-center gap-2 px-4 h-full hover:bg-gray-50 transition-all group min-w-[160px]"
                 >
                   <MdLocationOn className="text-lg text-gray-400 group-hover:text-blue-500" />
@@ -1296,7 +1297,7 @@ const Header = ({
               <span className="text-[11px] font-bold text-white leading-none">6363865658</span>
             </div>
           </a>
-          <button onClick={() => { setComingSoonSource("Hommlie Chat"); setIsComingSoonOpen(true); }} className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full">
+          <button onClick={() => { setIsAiChatOpen(true); }} className="flex items-center justify-center gap-2 py-1 px-1 border-r border-white/10 w-full">
             <RiRobot2Line className="text-white text-sm flex-shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[9px] text-white/80 leading-tight">Hommlie Chat</span>
@@ -1577,6 +1578,8 @@ const Header = ({
           document.body
         )
       }
+
+      <AiChatDrawer isOpen={isAiChatOpen} onClose={() => setIsAiChatOpen(false)} />
 
       {
         isWalletModalOpen && (

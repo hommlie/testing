@@ -19,18 +19,25 @@ export default function QuickHeroSection({ categories }) {
 
   React.useEffect(() => {
     if (categories && categories.length > 0) {
-      // Find Pest Control category
-      const pestCat = categories.find(c => (c.category_name || '').toLowerCase().includes('pest control'));
-      if (pestCat) {
-        const subcats = pestCat.Subcategories || pestCat.subcategories || pestCat.Subcategory || pestCat.subcategory || [];
-        if (subcats.length > 0) {
-          const mapped = subcats.map(sub => ({
-            title: sub.subcategory_name,
-            image: sub.app_icon || '/assets/images/placeholder.png',
-            link: `/subcategory/${sub.slug}`
-          }));
-          setDynamicTasks(mapped);
-        }
+      let allProducts = [];
+      categories.forEach(cat => {
+        const subcats = cat.subcategories || cat.Subcategories || cat.Subcategory || cat.subcategory || [];
+        subcats.forEach(sub => {
+          const products = sub.products || sub.Products || [];
+          products.forEach(prod => {
+            // Get image from productimage object (hasOne relationship)
+            const imageUrl = prod.productimage?.image_url || prod.image_url || '/assets/images/placeholder.png';
+            allProducts.push({
+              title: prod.product_name,
+              image: imageUrl,
+              link: `/product/${prod.slug}`
+            });
+          });
+        });
+      });
+
+      if (allProducts.length > 0) {
+        setDynamicTasks(allProducts);
       }
     }
   }, [categories]);
@@ -175,11 +182,11 @@ export default function QuickHeroSection({ categories }) {
                       className="h-full"
                     >
                       <div className="bg-white text-black rounded-xl overflow-hidden shadow-lg flex flex-col border-2 border-transparent group-hover:border-[#F3E8D3] transition-all duration-300 h-full">
-                        <div className="h-40 bg-gray-100 overflow-hidden relative">
+                        <div className="h-40 bg-white overflow-hidden relative">
                           <img
                             src={task.image}
                             alt=""
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
                         <div className="p-4 text-center font-medium bg-white group-hover:bg-[#F3E8D3] group-hover:text-black flex-1 flex items-center justify-center transition-all duration-300">

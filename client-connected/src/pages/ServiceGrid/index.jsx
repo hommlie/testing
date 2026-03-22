@@ -413,14 +413,14 @@ const ServiceGrid = ({ categories: propCategories, mobileAfterTabs = null }) => 
               whileHover={{ y: -3 }}
               className="relative flex flex-col items-center py-2 px-1 sm:py-1 sm:px-1 cursor-pointer group transition-all duration-300"
             >
-              <div className="relative mb-2 z-10 w-full px-1 sm:px-1.5">
+              <div className="relative mb-2 z-10 w-full">
                 <motion.div
-                  className="w-full h-16 sm:h-20 md:h-20 lg:h-20 bg-[#f5f5f5] rounded-xl flex items-center justify-center transition-all duration-300 group-hover:bg-[#ebebeb]"
+                  className="w-full h-16 sm:h-20 md:h-20 lg:h-20 bg-[#f5f5f5] rounded-xl flex items-center justify-center transition-all duration-300 group-hover:bg-[#ebebeb] overflow-hidden"
                 >
                   <img
                     src={sub.image}
                     alt={sub.name}
-                    className="w-[85%] h-[85%] object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-contain p-1 transition-transform duration-500 group-hover:scale-105"
                   />
                 </motion.div>
               </div>

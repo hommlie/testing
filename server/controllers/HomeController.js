@@ -19,6 +19,7 @@ const {
   HomepageSection,
   Banner,
   Attribute,
+  ChatbotFaq,
 } = require("../models");
 const apiUrl = process.env.apiUrl;
 
@@ -978,8 +979,9 @@ exports.getHomePageData = async (req, res) => {
           most_booked_services: most_booked_services || [],
           thoughtfulVideos: thoughtfulVideos || [],
           testimonials: testimonials || [],
-          faqs: data.faqs || [],
-          all_categories: manipulatedResponse,
+      faqs: data.faqs || [],
+      chatbot_faqs: (await ChatbotFaq.findAll({ attributes: ['questions', 'answers'] })) || [],
+      all_categories: manipulatedResponse,
         },
       });
     } else {
@@ -994,6 +996,35 @@ exports.getHomePageData = async (req, res) => {
       status: 0,
       message: "Internal server error",
       error: error,
+    });
+  }
+};
+
+exports.getChatbotFaqs = async (req, res) => {
+  try {
+    const faqs = await ChatbotFaq.findAll({
+      attributes: ["id", "questions", "answers"],
+    });
+
+    if (faqs && faqs.length > 0) {
+      return res.status(200).json({
+        status: 1,
+        message: "Success",
+        data: faqs,
+      });
+    }
+
+    return res.status(200).json({
+      status: 0,
+      message: "No FAQs found",
+      data: [],
+    });
+  } catch (error) {
+    console.error("Error fetching chatbot FAQs:", error);
+    return res.status(500).json({
+      status: 0,
+      message: "Internal server error",
+      error: error.message,
     });
   }
 };

@@ -200,7 +200,21 @@ const SubCategoryPage = () => {
         { slug: categorySlug }
       );
 
-      setData(subCatResponse.data.data);
+      const subCatData = subCatResponse.data.data;
+      if (
+        subCatData?.categoryData?.faqs &&
+        typeof subCatData.categoryData.faqs === "string"
+      ) {
+        const trimmedFaqs = subCatData.categoryData.faqs.trim();
+        if (trimmedFaqs.startsWith("[") || trimmedFaqs.startsWith("{")) {
+          try {
+            subCatData.categoryData.faqs = JSON.parse(trimmedFaqs);
+          } catch (e) {
+            console.error("Error parsing FAQs:", e);
+          }
+        }
+      }
+      setData(subCatData);
       console.log(subCatResponse.data?.data?.categoryData?.meta_title);
       console.log(subCatResponse.data?.data?.categoryData?.meta_description);
 
@@ -541,12 +555,30 @@ const SubCategoryPage = () => {
 
             {/* FAQs Section */}
             {data?.categoryData?.faqs && (
-              <div className="mt-4 md:mt-8">
-                <CollapsibleSection
-                  title="Frequently Asked Questions"
-                  content={data.categoryData.faqs}
-                  isHtml={true}
-                />
+              <div className="mt-4 md:mt-8 space-y-4">
+                {Array.isArray(data.categoryData.faqs) ? (
+                  <>
+                    <h2 className="text-lg md:text-2xl font-semibold px-2 mb-4">
+                      Frequently Asked Questions
+                    </h2>
+                    <div className="grid gap-4">
+                      {data.categoryData.faqs.map((faq, index) => (
+                        <CollapsibleSection
+                          key={index}
+                          title={faq.question}
+                          content={faq.answer}
+                          isHtml={true}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <CollapsibleSection
+                    title="Frequently Asked Questions"
+                    content={data.categoryData.faqs}
+                    isHtml={true}
+                  />
+                )}
               </div>
             )}
 
