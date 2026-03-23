@@ -9,7 +9,20 @@ import {
   ShoppingBag,
   Info,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Search,
+  Shield,
+  HelpCircle,
+  Award,
+  FlaskConical,
+  ShieldAlert,
+  Maximize,
+  PlusCircle,
+  MinusCircle,
+  ClipboardList,
+  BookOpen,
+  AlertTriangle,
+  Settings
 } from "lucide-react";
 import axios from "axios";
 import config from "../../config/config";
@@ -605,6 +618,26 @@ const ProductDetailModal = ({
     );
   };
 
+  const serviceSections = [
+    { key: "service_details", label: "Service Details", icon: <Info className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "inspection_process", label: "Inspection Process", icon: <Search className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "treatment_method", label: "Treatment Method", icon: <Settings className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "benefits", label: "Benefits", icon: <Star className="w-5 h-5 text-yellow-500" /> },
+    { key: "safety", label: "Safety", icon: <Shield className="w-5 h-5 text-green-500" /> },
+    { key: "why_hommlie", label: "Why Hommlie", icon: <HelpCircle className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "service_duration", label: "Service Duration", icon: <Clock className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "service_waranty", label: "Service Warranty", icon: <Award className="w-5 h-5 text-orange-500" /> },
+    { key: "number_of_visits", label: "Number of Visits", icon: <Calendar className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "chemicals_used", label: "Chemicals Used", icon: <FlaskConical className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "safety_level", label: "Safety Level", icon: <ShieldAlert className="w-5 h-5 text-red-500" /> },
+    { key: "area_coverage", label: "Area Coverage", icon: <Maximize className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "service_includes", label: "Service Includes", icon: <PlusCircle className="w-5 h-5 text-green-500" /> },
+    { key: "service_excludes", label: "Service Excludes", icon: <MinusCircle className="w-5 h-5 text-red-500" /> },
+    { key: "preparation_before_service", label: "Preparation Before Service", icon: <ClipboardList className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "instructions_after_service", label: "Instructions After Service", icon: <BookOpen className="w-5 h-5 text-[#0463ac]" /> },
+    { key: "do_and_donts", label: "Do's and Don'ts", icon: <AlertTriangle className="w-5 h-5 text-yellow-600" /> },
+  ];
+
   /* ====== ANIMATED MODAL RENDER ====== */
 
   return (
@@ -792,16 +825,33 @@ const ProductDetailModal = ({
                     {/* VIEW MODE: Details then Reviews */}
                     {localMode !== "add" && (
                       <>
-                        <section className="space-y-5 sm:space-y-4">
-                          <div className="prose max-w-none">
-                            <div className="service-details-html">
-                              <div
-                                className="service-details-content"
-                                translate="no"
-                                dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(product?.service_details) }}
-                              />
-                            </div>
-                          </div>
+                        <section className="space-y-4">
+                          {serviceSections.map((section) => {
+                            const content = product?.[section.key];
+                            if (!content || content === "" || content === "<p><br></p>" || content === "null") return null;
+
+                            return (
+                              <div key={section.key} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+                                <div className="bg-gray-50/50 px-5 py-3 border-b border-gray-100 flex items-center gap-3">
+                                  {section.icon}
+                                  <h3 className="text-base font-bold text-gray-800 uppercase tracking-tight">
+                                    {section.label}
+                                  </h3>
+                                </div>
+                                <div className="p-5">
+                                  <div className="prose max-w-none prose-sm sm:prose-base text-gray-600 leading-relaxed">
+                                    <div className="service-details-html">
+                                      <div
+                                        className="service-details-content"
+                                        translate="no"
+                                        dangerouslySetInnerHTML={{ __html: prepareServiceDetailsHtml(content) }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </section>
 
                         <section className="space-y-6 mt-6">
