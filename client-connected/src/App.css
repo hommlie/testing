@@ -27,7 +27,7 @@ html {
 }
 
 main {
-  max-width: 96rem;
+  width: 100%;
   margin: 0 auto;
   padding: 0;
 }
@@ -39,7 +39,7 @@ main {
 }
 
 section {
-  max-width: 80rem;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -71,15 +71,11 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* customizing react toastify */
-.Toastify__toast--warning {
-  /* background: #FFE8BC !important; */
-}
-.Toastify__toast--error {
-  /* background: #FCA7A9 !important; */
-}
+/* Removed empty rulesets for warning and error toasts */
 .toastBody {
   /* font-family: "Atlas Grotesk Web", Arial, Helvetica, sans-serif; */
   /* color: #10171D; */

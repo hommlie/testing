@@ -49,7 +49,7 @@ const HomeForm = () => {
   };
 
   return (
-    <div className="relative ml-0 sm:ml-8 mt-0 sm:max-w-md">
+    <div className="relative ml-0 sm:ml-2 mt-0 sm:max-w-md">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

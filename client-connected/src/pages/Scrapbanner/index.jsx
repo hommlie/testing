@@ -10,7 +10,7 @@ const BannerImage = () => {
         <img
           src="/images/scrap.png"
           alt="Banner Desktop"
-          className="w-[1250px] h-auto object-cover"
+          className="w-[1332px] h-auto object-cover"
         />
         <div className="absolute bottom-14 left-10">
           <button

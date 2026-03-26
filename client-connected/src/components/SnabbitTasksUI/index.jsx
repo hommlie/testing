@@ -62,10 +62,10 @@ export default function QuickHeroSection({ categories }) {
       <section className="relative pb-12 text-center overflow-hidden" >
         <div className="text-center relative py-2">
           {/* Sparkles */}
-          <div className="absolute top-4 left-4 text-[#133215] text-5xl animate-pulse">✦</div>
-          <div className="absolute top-4 right-4 text-[#133215] text-5xl animate-pulse">✦</div>
-          <div className="absolute bottom-4 left-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
-          <div className="absolute bottom-4 right-1/3 text-[#133215] text-3xl animate-pulse">✦</div>
+          <div className="absolute top-4 left-[4%] text-[#133215] text-6xl animate-pulse">✦</div>
+          <div className="absolute top-4 right-[4%] text-[#133215] text-6xl animate-pulse">✦</div>
+          <div className="absolute bottom-4 left-[30%] text-[#133215] text-4xl animate-pulse">✦</div>
+          <div className="absolute bottom-4 right-[30%] text-[#133215] text-4xl animate-pulse">✦</div>
 
           {/* Heading */}
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#2a0014] leading-tight mb-3 uppercase">
@@ -149,7 +149,7 @@ export default function QuickHeroSection({ categories }) {
           />
 
           {/* Scroll Track positioned above phone */}
-          <div className="w-full max-w-6xl mx-auto relative h-[320px] overflow-hidden">
+          <div className="w-full max-w-[1332px] mx-auto relative h-[320px] overflow-hidden">
             <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" />
 

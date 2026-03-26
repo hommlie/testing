@@ -432,7 +432,7 @@ const HomePage = () => {
       >
         <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start">
           {/* Left Container - Services Grid & Form (Sticky) */}
-          <div className="w-full md:w-[460px] md:sticky md:top-32 flex-shrink-0">
+          <div className="w-full md:w-[460px] md:sticky md:top-32 flex-shrink-0 ml-6">
             <ServiceGrid
               categories={categories}
               mobileAfterTabs={
@@ -480,7 +480,7 @@ const HomePage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="w-full rounded-2xl overflow-hidden"
+              className="w-full rounded-2xl overflow-hidden ml-10"
             >
               <img
                 src="/homebanner.jpeg"
@@ -505,8 +505,8 @@ const HomePage = () => {
       </section> 
       */}
 
-      <section className="px-4 md:px-11 py-2 md:py-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-2 md:py-4">
+        <div style={{ maxWidth: '100%' }} className="w-full px-4 lg:px-8 mx-auto">
           <ServiceSection categories={data.all_categories} />
         </div>
       </section>
@@ -705,7 +705,7 @@ const HomePage = () => {
 
 
 
-      <section className="bg-white py-6 md:py-10 -mt-4 sm:-mt-2">
+      <section className="bg-white py-6 md:py-10 px-0 sm:px-0 -mt-4 sm:-mt-2">
         <FaqSection data={data} />
       </section>
 
@@ -752,7 +752,7 @@ const FaqSection = ({ data }) => {
   displayedFaqs = Array.isArray(displayedFaqs) ? displayedFaqs : [];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-2 md:py-4 sm:-mt-28">
+    <div className="max-w-[1370px] mx-auto px-4 sm:px-6 py-2 md:py-4 sm:-mt-28">
       <div className="text-center mb-6 md:mb-8">
         <div className="w-full border-t border-gray-100 mb-6" />
 

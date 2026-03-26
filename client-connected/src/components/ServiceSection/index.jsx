@@ -639,7 +639,6 @@ const ServiceSection = ({ categories }) => {
           </motion.div>
 
           {/* Request a Callback Button - Mobile View Bottom */}
-          {/* Request a Callback Button - Mobile View Bottom */}
           <div className="flex justify-center my-4">
             <motion.a
               href="tel:6363865658"
@@ -713,7 +712,8 @@ const ServiceSection = ({ categories }) => {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-[1100px] mx-auto flex flex-col gap-5 py-0"
+            style={{ maxWidth: '1297px' }}
+            className="w-full mx-auto flex flex-col gap-5 p-4 md:p-6 lg:p-8 bg-gradient-to-b from-blue-50/50 to-white rounded-[40px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-blue-50/60 relative overflow-hidden"
           >
             {/* Desktop Header */}
             <div>
@@ -796,20 +796,7 @@ const ServiceSection = ({ categories }) => {
               </div>
             </div>
 
-            {/* Stepper Guide */}
-            <div className="-mt-8 border-t border-gray-50 pt-8 flex items-center justify-center gap-10 text-[13px] font-black text-[#033053]/30 uppercase tracking-[0.15em]">
-              <div className="flex items-center gap-3">
-                <span className="text-[#0463ac]">1. Select Pest Problem </span>
-                <IoIosArrowForward />
-              </div>
-              <div className="flex items-center gap-3">
-                <span>2. Select Home Size </span>
-                <IoIosArrowForward />
-              </div>
-              <div className="flex items-center gap-3">
-                <span>3. See Plans & Book</span>
-              </div>
-            </div>
+
           </motion.div>
         </div>
       </section >

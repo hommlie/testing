@@ -62,7 +62,7 @@ const PestControlCarousel = () => {
 
     return (
         <div className="pt-0 pb-10 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-[1332px] mx-auto px-4">
                 {/* Header Section */}
                 <div className="text-center -mt-1 mb-10">
                     <div className="flex justify-center mb-0 relative z-10">
